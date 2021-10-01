@@ -1,0 +1,35 @@
+<% @title = "feature.custom_themes.header.add_theme".translate %>
+<% @page_action = { label: "feature.custom_themes.content.view_all_themes".translate, url:  themes_path, class: "btn btn-primary" } %>
+
+<div>
+  <%= ibox nil do %>
+    <%= simple_form_for @theme, html: { multipart: true, class: "form-horizontal" } do |f| %>
+      <%= formatted_form_error(f, object_name: 'feature.custom_themes.label.theme'.translate) %>
+      <%= f.input :name, as: :string, input_html: { class: 'form-control' }, label_html: { class: "col-sm-2 control-label" }, input_wrapper_html: { class: "col-sm-10" } %>
+      <%= f.input :css, as: :file, wrapper: :bootstrap_with_label_wrapper, input_html: { class: 'form-control' }, input_wrapper_html: { class: "col-sm-10" }, label_wrapper_html: { class: "col-sm-2" } %>
+
+      <div id="scope_buttons">
+        <%= control_group do %>
+          <% label = "feature.custom_themes.label.scope".translate %>
+          <div class="false-label control-label col-sm-2" id="scope"><%= label %></div>
+          <%= controls(class: "col-sm-10") do %>
+            <%= choices_wrapper(label) do %>
+              <label class="radio inline">
+                <%= radio_button_tag :scope, 'global', @theme.program_id.nil? -%><%= "feature.custom_themes.label.global".translate %>
+              </label>
+              <label class="radio inline">
+                <%= radio_button_tag :scope, 'private', @theme.program_id.present? -%><%= "feature.custom_themes.label.private".translate %>
+              </label>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+      <% action_set do %>
+        <div class="pull-right">
+          <%= cancel_link themes_path %>
+          <%= f.button :submit, "display_string.Add".translate %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

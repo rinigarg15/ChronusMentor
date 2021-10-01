@@ -1,0 +1,73 @@
+<% if options[:show_fullscreen_icon] %>
+  <div id='<%= "#{options[:ibox_id].to_s}_fullscreen_wrapper" %>'>
+<% end %>
+
+<div class="ibox <%= options[:ibox_class] %>" <%= options[:ibox_id] ? "id=#{options[:ibox_id]}" : "" %>>
+  <% if header_title.present? || options[:header_content].present? %>
+    <div <%= options[:ibox_header_id] ? "id=#{options[:ibox_header_id]}" : "" %> class="ibox-title table-bordered clearfix <%= options[:title_class] %>">
+      <div class="ibox-tools pull-right <%= options[:right_links_class] %>">
+        <% if options[:show_edit_link] %>
+          <%= link_to((options[:edit_url] || "javascript:void(0)"), {:class => "p-xxs " + options[:edit_link_class].to_s}.merge(options[:edit_html_options] || {})) do %>
+            <%= get_icon_content("fa fa-pencil fa-lg no-margins") + set_screen_reader_only_content("display_string.Edit".translate) %>
+          <% end %>
+        <% end %>
+
+        <% if options[:show_delete_link] %>
+          <%= link_to((options[:delete_url] || "javascript:void(0)"), {:class => "p-xxs " + options[:delete_link_class].to_s}.merge(options[:delete_html_options] || {})) do %>
+            <%= get_icon_content("fa fa-trash fa-lg no-margins") + set_screen_reader_only_content("display_string.Delete".translate) %>
+          <% end %>
+        <% end %>
+
+        <% unless options[:no_collapse] %>
+          <%= link_to((options[:collapse_url] || "javascript:void(0)"), {:class => "collapse-link p-xxs " + options[:collapse_link_class].to_s}.merge(options[:collapse_html_options] || {})) do %>
+            <%= get_icon_content("fa fa-chevron-up fa-lg no-margins") + set_screen_reader_only_content("display_string.expand_collapse".translate) %>
+          <% end %>
+        <% end %>
+
+        <% if options[:show_close_link] %>
+          <%= link_to((options[:close_url] || "javascript:void(0)"), {:class => "close-link p-xxs " + options[:close_link_class].to_s}.merge(options[:close_html_options] || {})) do %>
+            <%= get_icon_content("fa fa-times fa-lg no-margins")  + set_screen_reader_only_content("display_string.Close".translate) %>
+          <% end %>
+        <% end %>
+        <% if options[:show_fullscreen_icon] %>
+          <%= link_to("javascript:void(0)", { :class => "fullscreen-link p-xxs" } ) do %>
+            <%= get_icon_content("fa fa-expand fa-lg no-margins") + set_screen_reader_only_content("display_string.Full_Screen".translate) %>
+          <% end %>
+        <% end %>
+        <%= (options[:additional_right_links] || "").html_safe %>
+      </div>
+      <div class='ibox-title-content'>
+        <% if header_title.present? && !options[:hide_header_title] %>
+          <h5 class="col-xs-8 no-padding font-600">
+            <% if options[:icon_class] %>
+              <%= get_icon_content(options[:icon_class], :container_class => options[:icon_container_class]) %>
+            <% end %>
+            <%= header_title.html_safe %>
+          </h5>
+        <% elsif options[:header_content].present? %>
+          <%= (options[:header_content] || "").html_safe %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <% if options[:scroll_required] %>
+    <div class="cjs_ibox_content_scroll <%= options[:scroll_height_class] %> clearfix" data-slim-scroll="true" data-slim-scroll-height="">
+      <div <%= options[:ibox_content_id] ? "id=#{options[:ibox_content_id]}" : "" %> class="ibox-content clearfix <%= options[:content_class] %>" >
+        <%= content_block %>
+      </div>
+    </div>
+  <% else %>
+    <div <%= options[:ibox_content_id] ? "id=#{options[:ibox_content_id]}" : "" %> class="ibox-content clearfix <%= options[:content_class] %>" >
+      <%= content_block %>
+    </div>
+  <% end %>
+  <% if options[:footer] %>
+    <div class="ibox-footer clearfix <%= options[:footer_class] %>">
+      <%= options[:footer] %>
+    </div>
+  <% end %>
+</div>
+
+<% if options[:show_fullscreen_icon] %>
+  </div>
+<% end %>

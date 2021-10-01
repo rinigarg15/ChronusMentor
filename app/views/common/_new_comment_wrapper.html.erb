@@ -1,0 +1,47 @@
+<% form_options = local_assigns[:form_options].presence || {} %>
+<% form_html_options = local_assigns[:form_html_options].presence || {} %>
+<% form_options[:html] = { id: "cjs_comment_form_#{form_html_options[:id_suffix]}", class: "cjs_comment_form #{form_html_options[:class]}" }.merge(form_html_options.except(:id_suffix, :class)) %>
+<% input_options = { rows: 1, class: "cjs_comment_body form-control no_autosize #{local_assigns[:input_class]}" } %>
+<% input_options.merge!(id: local_assigns[:input_id]) if local_assigns[:input_id] %>
+
+<div class="list-group-item cjs_comment_form_container clearfix no-borders p-t-m p-b-m <%= local_assigns[:wrapper_class]%>" id="<%= local_assigns[:wrapper_id]%>">
+  <%= simple_form_for local_assigns[:object], form_options do |f| %>
+    <% if local_assigns[:formatted_error_options] %>
+      <%= formatted_form_error(f, local_assigns[:formatted_error_options]) %>
+    <% end %>
+
+    <%= f.input local_assigns[:attribute], as: :text, placeholder: (local_assigns[:placeholder].presence || "display_string.write_something".translate), input_html: input_options, label_html: { class: "sr-only" }, wrapper_html: { class: "no-margins" } %>
+    <% if local_assigns[:checkbox_object] %>
+      <%= f.input local_assigns[:checkbox_object], :as => :boolean, :wrapper_html => {:class => "pull-md-right no-margins cjs_comment_form_checkbox hide"}, input_html: {checked: local_assigns[:checkbox_status]}, :label => false, :inline_label => local_assigns[:checkbox_label] %>
+    <% end %>
+    <%= yield %>
+
+    <% if local_assigns[:hidden_fields].presence %>
+      <% local_assigns[:hidden_fields].each do |key, options| %>
+        <%= f.hidden_field(key, options) %>
+      <% end %>
+    <% end %>
+
+    <% if local_assigns[:other_options].presence %>
+      <%= hidden_field_tag :home_page, local_assigns[:other_options][:home_page], id:  local_assigns[:other_options][:html_id]%>
+    <% end %>
+
+    <% attachment =  local_assigns[:attachment] %>
+    <% if attachment.present? %>
+      <%= attachment %>
+    <% end %>
+    
+    <% action_set(class: "hide col-xs-12 no-padding m-t cjs_comment_actions") do %>
+      <% if local_assigns[:action_buttons].presence %>
+        <%= render_comments_button_group(local_assigns[:action_buttons]) %>
+      <% else %>
+        <div class="pull-right">
+          <% submit_button = content_tag(:span, get_icon_content("fa fa-paper-plane-o") + (local_assigns[:button_text].presence || "display_string.Send".translate), :class => "hidden-xs") + content_tag(:span, get_icon_content("fa fa-paper-plane-o no-margins") + set_screen_reader_only_content("display_string.Send".translate), :class => "visible-xs") %>
+          <%= button_tag(submit_button, class: "btn btn-sm btn-primary cjs_comment_button pull-right", data: {disable_with: "#{submit_button}"}) %>
+          <% cancel_button = content_tag(:span, get_icon_content("fa fa-times text-default") + "display_string.Cancel".translate, :class => "hidden-xs") + content_tag(:span, get_icon_content("fa fa-times text-default no-margins") + set_screen_reader_only_content("display_string.Cancel".translate), :class => "visible-xs") %>
+          <%= link_to cancel_button, "javascript:void(0)", class: "btn btn-sm btn-white cjs_comment_cancel pull-right" %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

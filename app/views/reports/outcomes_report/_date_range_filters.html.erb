@@ -1,0 +1,26 @@
+<% formatted_start_date = DateTime.localize(start_date, format: :full_display_no_time) %>
+<% formatted_end_date = DateTime.localize(end_date, format: :full_display_no_time) %>
+<% daterange_options_details = get_outcomes_report_date_range_options_details(program_start_date, start_date, end_date) %>
+<%= ibox nil, :content_class => "no-padding" do %>
+  <div class="panel m-b-0 filter_item cui-outcomes-report-daterange" ng-cloak>
+    <a href="javascript:void(0)" class="btn-link " data-target="#date_range_content" data-toggle="collapse">
+      <div class="panel-heading p-sm" id="date_range_header">
+          <div class="pull-right m-l-xs vertical-align-top">
+              <i class="cjs_collapse_icon fa fa fa-chevron-up"></i>
+          </div>
+          <div class="h5 font-600 panel-title no-margins cjs-daterange-display-container">
+              {{startDate}} - {{endDate}}
+          </div>
+      </div>
+    </a>
+    <div class="collapse in" id="date_range_content">
+      <div class="panel-body p-t-0">
+        <div class="filter_box clearfix">
+          <div class="fields">
+            <%= construct_daterange_picker("date_range", { start: start_date, end: end_date }, presets: [DateRangePresets::PROGRAM_TO_DATE, DateRangePresets::MONTH_TO_DATE, DateRangePresets::QUARTER_TO_DATE, DateRangePresets::YEAR_TO_DATE, DateRangePresets::LAST_MONTH, DateRangePresets::LAST_QUARTER, DateRangePresets::LAST_YEAR, DateRangePresets::CUSTOM], date_format: "kendo_date_picker.formats.full_display_no_time".translate, min_date: current_program.created_at, right_addon: { type: "btn", btn_options: { "ng-click" => "applyFilter()", "ng-init" => "defaultStartDate = \"#{formatted_start_date}\"; defaultEndDate = \"#{formatted_end_date}\"; defaultDateRange = \"#{formatted_start_date}#{DATE_RANGE_SEPARATOR}#{formatted_end_date}\"" , class: "btn btn-primary" }, content: "display_string.Go".translate } ) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

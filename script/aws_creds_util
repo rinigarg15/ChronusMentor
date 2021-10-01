@@ -1,0 +1,77 @@
+#!/usr/bin/env ruby
+
+require "rubygems"
+require "optiflag"
+require 'fileutils'
+require File.expand_path('../lib/aws_creds', __FILE__)
+
+module CommandLineArgs extend OptiFlagSet
+
+  optional_flag "u" do
+    description "Specifies the owner of the credentials. Defaults to value specified in #{AWSCredential::Manager::DEFAULT_USER_ENV_NAME} environment variable. Defaults to \"#{AWSCredential::Manager::DEFAULT_USER}\" if #{AWSCredential::Manager::DEFAULT_USER_ENV_NAME} environment variable is not set"
+  end
+
+  optional_flag "d" do
+    description "Fully qualified path name of the credentials directory. Defaults to value specified in #{AWSCredential::Manager::DEFAULT_USER_CRED_DIR_ENV_NAME} environment variable. Defaults to \"#{AWSCredential::Manager::DEFAULT_USER_CRED_DIR}\" if #{AWSCredential::Manager::DEFAULT_USER_CRED_DIR_ENV_NAME} environment variable is not set"
+  end
+
+  optional_flag "op" do
+    description "Specifies the credential operation. Supported operations are \"bootstrap\", \"sync\" and \"rotate\". Defaults to \"sync\""
+  end
+
+  optional_flag "op_u" do
+    description "Specifies the user of credential operation. Needed for bootstrap, sync and rotate operations"
+  end
+
+  optional_flag "op_d" do
+    description "Specifies the directory of credential operation. Needed for sync operation"
+  end
+
+  usage_flag "h", "help"
+  and_process!
+end
+
+user_name = ARGV.flags.u
+creds_dir = ARGV.flags.d
+
+creds_oper = ARGV.flags.op
+creds_oper ||= "sync"
+
+cred_mgr = AWSCredential::Manager.new(user_name, creds_dir)
+
+creds_oper_user = ARGV.flags.op_u
+creds_oper_dir = ARGV.flags.op_d
+
+creds_oper_user ||= cred_mgr.user
+creds_oper_dir ||= cred_mgr.creds_dir
+
+def sync_all_dev_users
+  AWSCredential::Manager::DEPLOYMENT_ENVS.each do |env|
+    env_user = "dev_#{env}"
+    env_cred_dir = "#{AWSCredential::Manager::DEFAULT_USER_CRED_DIR}/#{env_user}"
+    if Dir.exist?(env_cred_dir)
+      puts "Synchronizing credential for #{env_user}"
+      env_cred_mgr = AWSCredential::Manager.new(env_user, env_cred_dir)
+      env_cred_mgr.sync_self_access_keys
+    end
+  end
+end
+
+case creds_oper
+when "sync"
+  if user_name.nil? && creds_dir.nil?
+    sync_all_dev_users
+  else
+    if creds_oper_user == cred_mgr.user && creds_oper_dir == cred_mgr.creds_dir
+      cred_mgr.sync_self_access_keys
+    else
+      cred_mgr.sync_user_access_keys(creds_oper_user, creds_oper_dir)
+    end
+  end
+when "rotate"
+  cred_mgr.rotate_access_keys(creds_oper_user)
+when "bootstrap"
+  cred_mgr.bootstrap_access_keys(creds_oper_user)
+else
+  puts "Unsupported credential operation specified : #{creds_oper}"
+end

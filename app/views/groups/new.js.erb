@@ -1,0 +1,4 @@
+jQuery("#group_new").remove();
+<% content = render partial: "groups/new", locals: { show_new: false, view: @view, is_clone: @is_clone, inconsistent_roles: @inconsistent_roles } %>
+jQuery("<%= j(content) %>").insertBefore('#cjs_groups_listing');
+jQuery("#group_new").modal('show');

@@ -1,0 +1,28 @@
+<% @my_filters << {label: "feature.messaging.label.search".translate, reset_suffix: "search"} if @messages_presenter.search_params_hash[:search_content].present? %>
+
+jQuery('#loading_results').hide();
+
+<% if @messages_presenter.search_params_hash[:search_content].present? %>
+  jQuery('.cancel-search').removeClass('hidden');
+<% else %>
+  jQuery('.cancel-search').addClass('hidden');
+<% end %>
+
+<% @messages_presenter.tabs_data.each do |tab_number, tab_data| %>
+  <% tab_id = "#cjs_#{tab_number}_messages_tab" %>
+  <% is_inbox = tab_number == MessageConstants::Tabs::INBOX %>
+  <% content = render "messages/messages_list", {tab_number: tab_number, tab_data: tab_data, is_inbox: is_inbox} %>
+  jQuery("#cjs_<%= tab_number %>_messages_list").html("<%= j(content) %>");
+  jQuery("<%= tab_id %> .cjs_messages_count").html(" (<%= tab_data.total_messages_count %>)");
+  jQuery("#cjs_see_n_results").data("<%= tab_number %>-tab-count", "<%= 'display_string.see_n_results'.translate(count: tab_data.total_messages_count) %>");
+<% end %>
+jQuery("#cjs_<%= @messages_presenter.active_tab %>_messages_tab").click();
+jQuery('#messages_filter').removeClass('open');
+initialize.setDatePicker();
+initialize.initializeTooltip();
+initialize.initializeStopFilterPropogation();
+
+<% content = render('common/your_filters', onclick_function: "MessageSearch.clearFilter", results_count: @messages_presenter.tabs_data[@messages_presenter.active_tab].total_messages_count) %>
+jQuery('#your_filters').replaceWith("<%= j(content) %>");
+
+MessageSearch.setFilterCount("<%= @messages_presenter.active_tab %>");

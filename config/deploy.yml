@@ -1,0 +1,165 @@
+common: &common
+  region: "us-east-1"
+  s3_backup_region: "us-west-1"
+  global_assets_region: "us-east-1"
+  global_assets_backup_region: "us-west-1"
+  maintenance_ip: "54.165.116.7"
+
+production:
+  <<: *common
+  app_name: groups
+  sftpserver: 107.23.94.143
+  branch: master
+  backup:
+    app:
+      - 54.152.27.119
+    web:
+      - 52.1.169.236
+    sftpserver:
+      - 52.0.195.33
+
+productioneu:
+  <<: *common
+  region: "eu-central-1"
+  s3_backup_region: "eu-west-1"
+  maintenance_ip: "35.157.27.151"
+  app_name: groups_productioneu
+  sftpserver: 52.28.232.118
+  branch: master
+  backup:
+    app:
+      - 18.197.123.126
+    web:
+      - 52.28.245.202
+    sftpserver:
+      - 54.93.40.81
+
+generalelectric:
+  <<: *common
+  app_name: groups_generalelectric
+  branch: generalelectric_deploy
+  backup:
+    app:
+      - 52.6.83.92
+    web:
+      - 52.22.24.159
+
+veteransadmin:
+  <<: *common
+  app_name: groups_veteransadmin
+  type: "collapsed"
+  branch: master
+  backup:
+    app:
+      - 52.7.242.128
+    web:
+      - 52.7.242.128
+
+nch:
+  <<: *common
+  app_name: groups_nch
+  type: "collapsed"
+  branch: nch_deploy
+  backup:
+    app:
+      - 52.21.124.247
+    web:
+      - 52.21.124.247
+
+staging:
+  <<: *common
+  default: true
+  app_name: groups_staging
+  sftpserver: 107.23.229.220
+  branch: staging1
+  backup:
+    app:
+      - 34.198.231.95
+    web:
+      - 54.172.143.57
+    sftpserver:
+      - 34.198.231.95
+
+standby:
+  <<: *common
+  app_name: groups_standby
+  type: "collapsed"
+  app:
+    - 54.86.95.115
+  web:
+    - 54.86.95.115
+  primary_db: 54.86.95.115
+  branch: develop
+
+demo:
+  <<: *common
+  app_name: groups_demo
+  type: "collapsed"
+  branch: master
+  backup:
+    app:
+      - 52.5.23.1
+    web:
+      - 52.5.23.1
+
+performance:
+  <<: *common
+  app_name: groups_performance
+  app:
+    - 54.208.7.184
+  web:
+    - 107.23.184.213
+  primary_db: 54.208.7.184
+  branch: performance_deploy
+
+
+opstesting:
+  <<: *common
+  type: "collapsed"
+  app_name: groups_opstesting
+  branch: master
+  backup:
+    app:
+      - 52.6.238.178
+    web:
+      - 52.6.238.178
+
+
+scanner:
+  <<: *common
+  app_name: groups_scanner
+  type: "collapsed"
+  branch: scanner_deploy
+
+training:
+  <<: *common
+  app_name: groups_training
+  type: "collapsed"
+  app:
+    - 54.85.140.228
+  web:
+    - 54.85.140.228
+  primary_db: 54.85.140.228
+  branch: master
+
+releasestaging1:
+  <<: *common
+  app_name: groups_releasestaging1
+  type: "collapsed"
+  app:
+    - 52.4.40.121
+  web:
+    - 52.4.40.121
+  primary_db: 52.4.40.121
+  branch: nch_staging
+
+releasestaging2:
+  <<: *common
+  app_name: groups_releasestaging2
+  type: "collapsed"
+  app:
+    - 54.164.103.71
+  web:
+    - 54.164.103.71
+  primary_db: 54.164.103.71
+  branch: master

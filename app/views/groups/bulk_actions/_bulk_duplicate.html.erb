@@ -1,0 +1,54 @@
+<% modal_v3_popup "feature.connection.header.create_duplicate".translate(Mentoring_Connection: _Mentoring_Connections) do %>
+  <%= form_tag update_bulk_actions_groups_path(format: :js), remote: true, id: "bulk_groups_duplicate", class: "cjs-groups-bulk-action-qtip-popup" do %>
+    <%= hidden_field_tag "bulk_actions[action_type]", Group::BulkAction::DUPLICATE %>
+    <%= hidden_field_tag "bulk_actions[group_ids]", @group_ids %>
+    <% if @current_program.mentoring_connections_v2_enabled? %>
+      <%= control_group do %>
+        <%= label_tag(:mentoring_model, "feature.multiple_templates.header.connection_multiple_templates_title_v1".translate(Mentoring_Connection: _Mentoring_Connection),  for: "cjs_assign_mentoring_model", class: "control-label") %>
+        <%= control_group do %>
+          <%= choices_wrapper("feature.connection.action.Assign_Template_v1".translate(Mentoring_Connection: _Mentoring_Connection)) do %>
+            <%= controls do %>
+              <label class="radio">
+                <%= radio_button_tag("bulk_actions[assign_new_template]", false, false, class: "cjs_assign_existing_template") %><%= "feature.connection.content.assign_previous_template".translate(mentoring_connections: _mentoring_connections) %>
+              </label>
+              <label class="radio">
+                <%= radio_button_tag("bulk_actions[assign_new_template]", true, true, class: "cjs_assign_new_template") %><%= "feature.connection.content.assign_new_template".translate(mentoring_connections: _mentoring_connections) %>
+              </label>
+            <% end %>
+          <% end %>
+        <% end %>
+        <%= controls do %>
+          <%= render_mentoring_model_selector(mentoring_models, without_label: true) %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= control_group do %>
+      <label class="control-label" for="bulk_actions_message">
+        <%= "feature.connection.content.message".translate %>
+      </label>
+      <%= controls do %>
+        <%= text_area_tag("bulk_actions[message]", nil, id: "bulk_actions_message", rows: "5", class: "form-control") %>
+      <% end %>
+    <% end %>
+    <%= control_group do %>
+      <label class="control-label" for="bulk_actions_notes">
+        <%= group_notes_label(mentoring_connections: _mentoring_connections, admins: _admins, bulk: true) %>
+      </label>
+      <%= controls do %>
+        <%= text_area_tag("bulk_actions[notes]", nil, id: "bulk_actions_notes", rows: "5", class: "form-control") %>
+      <% end %>
+    <% end %>
+    <span class="help-block m-t-0">
+      <%= group_creation_email_notification_consequences_html %>
+    </span>
+
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", data: { dismiss: "modal" } %>
+      <%= submit_tag "display_string.Save_as_draft".translate, name: "draft", class: "btn btn-white", data: { disable_with: "display_string.Please_Wait".translate } %>
+      <%= submit_tag "feature.connection.action.duplicate".translate, name: "publish", class: 'btn btn-primary cjs_groups_assign_template_submit_button', data: { disable_with: "display_string.Please_Wait".translate } %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= javascript_tag do %>
+  GroupSearch.enableDisableMentoringModelPicker();
+<% end %>

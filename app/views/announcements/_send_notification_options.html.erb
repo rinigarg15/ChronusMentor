@@ -1,0 +1,16 @@
+<% test_email_link = link_to_function "feature.announcements.action.test_email".translate, "AnnouncementTestmail.beforeShowPopup('#{j(example_email_list)}');", id: "show_popup_link", data: { toggle: "modal", target: "#modal_show_popup_link" } %>
+<% email_link = email_notification_consequences_on_action_html(mailer_klass, div_enclose: false, return_email_link_only: true) %>
+
+<div class="control-label col-sm-3">
+  <%= label_tag "announcement_email_notification", set_required_field_label("email_translations.announcement_notification.enabled_html".translate(email: "display_string.email".translate)), class: "control-label" %>
+</div>
+<%= controls(class: 'col-sm-9') do %>
+  <%= f.select :email_notification, get_options_for_email_notifications( @announcement.email_notification), { prompt: "common_text.prompt_text.Select".translate }, { id: "announcement_email_notification", class: "form-control" } %>
+  <div id="test_email_detail" class="help-block" style="display:none;">
+    <span>
+      <%= "feature.announcements.content.caution_msg_v1_html".translate(email_link: email_link, test_email_link: test_email_link) %>
+    </span>
+  </div>
+<% end %>
+
+<%= javascript_tag "AnnouncementTestmail.init();" %>

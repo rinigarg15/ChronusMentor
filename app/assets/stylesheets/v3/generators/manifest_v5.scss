@@ -1,0 +1,279 @@
+$button-bg-color: #00bc8c;
+$button-font-color: white;
+$header-bg-color: #375a7f;
+$header-font-color: white;
+
+@function darken_color($color, $amount) {
+  @if($color == 'none' or $color == 'transparent'){
+    @return transparent;
+  }
+  @else if($color == 0){
+    @return initial;
+  }
+  @else{
+    @return darken($color, $amount);
+  }
+}
+
+@function lighten_color($color, $amount) {
+  @if($color == 'none' or $color == 'transparent'){
+    @return transparent;
+  }
+  @else if($color == 0){
+    @return initial;
+  }
+  @else{
+    @return lighten($color, $amount);
+  }
+}
+
+@mixin v5-theme-color {
+  $primary-button-bg-color: $button-bg-color !default;
+  $primary-button-font-color: $button-font-color !default;
+  $chronus-header-bg-color: $header-bg-color !default;
+  $chronus-header-font-color: $header-font-color !default;
+
+  .btn-primary.btn-outline {
+    color: $primary-button-bg-color;
+    background-color: white;
+    border-color: $primary-button-bg-color;
+  }
+
+  .btn-primary.btn-outline.active {
+    color: $primary-button-font-color;
+    background-color: darken($primary-button-bg-color, 3%);
+    border-color: darken($primary-button-bg-color, 3%);
+  }
+
+  .btn-primary.btn-outline:hover{
+    color: $primary-button-font-color;
+  }
+
+  .btn-primary {
+    background-color: $primary-button-bg-color;
+    border-color: $primary-button-bg-color;
+    color: $primary-button-font-color;
+  }
+
+  .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary, .btn-primary:active:focus, .btn-primary:active:hover, .btn-primary.active:hover, .btn-primary.active:focus  {
+    background-color: darken($primary-button-bg-color, 3%);
+    border-color: darken($primary-button-bg-color, 3%);
+    color: $primary-button-font-color;
+  }
+
+  .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+    background-image: none;
+  }
+
+  .btn-primary.disabled, .btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled:active, .btn-primary.disabled.active, .btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled]:active, .btn-primary.active[disabled], fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary:hover, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary.active {
+    background-color: lighten($primary-button-bg-color, 4%);
+    border-color: lighten($primary-button-bg-color, 4%);
+  }
+  button.btn-primary.dim {
+    box-shadow: inset 0px 0px 0px darken($primary-button-bg-color, 6%), 0px 5px 0px 0px darken($primary-button-bg-color, 6%), 0px 10px 5px #999999;
+  }
+
+  button.btn-primary.dim:active {
+    box-shadow: inset 0px 0px 0px darken($primary-button-bg-color, 6%), 0px 2px 0px 0px darken($primary-button-bg-color, 6%), 0px 5px 3px #999999;
+  }
+
+  .theme-bg {
+    &::-webkit-input-placeholder {
+      color: darken($chronus-header-font-color, 10%);
+    }
+    &::-moz-placeholder {
+      color: darken($chronus-header-font-color, 10%);
+    }
+    &:-ms-input-placeholder {
+      color: darken($chronus-header-font-color, 10%);
+    }
+  }
+
+  .md-skin {
+    .navbar-fixed-top, .navbar-static-top {
+      background-color: $chronus-header-bg-color !important;
+    }
+    .nav.navbar-right > li > a{
+      color: $chronus-header-font-color;
+    }
+
+    .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+      background-color: $chronus-header-bg-color;
+    }
+
+    #top-search.theme-bg {
+      &::-webkit-input-placeholder {
+        color: darken($chronus-header-font-color, 10%);
+      }
+      &::-moz-placeholder {
+        color: darken($chronus-header-font-color, 10%);
+      }
+      &:-ms-input-placeholder {
+        color: darken($chronus-header-font-color, 10%);
+      }
+    }
+  }
+
+  a.navbar-minimalize {
+    background-color: $chronus-header-bg-color;
+    border-color: $chronus-header-bg-color;
+    color: $chronus-header-font-color;
+  }
+
+  a.navbar-minimalize:hover, a.navbar-minimalize:focus, a.navbar-minimalize:active, a.navbar-minimalize.active, a.navbar-minimalize:focus, a.navbar-minimalize:active:hover, a.navbar-minimalize.active:hover, a.navbar-minimalize.active:focus {
+    background-color: darken_color($chronus-header-bg-color, 3%);
+    border-color: darken_color($chronus-header-bg-color, 3%);
+    color: $chronus-header-font-color;
+  }
+
+  .nav.nav-tabs > li > a::after {
+    background: $button-bg-color;
+  }
+  .nav.nav-tabs > li.active > a::after, .nav.nav-tabs > li:hover > a::after {
+    background: $button-bg-color !important;
+  }
+
+  .nav > li.active {
+    border-left-color: darken($button-bg-color, 2%);
+  }
+
+  .form-control:focus {
+    border-color: $chronus-header-bg-color !important;
+  }
+
+  @media (max-width: 480px) {
+    .modal-header {
+      background-color: $chronus-header-bg-color;
+      color: $chronus-header-font-color;
+    }
+  }
+
+  .sweet-alert .sa-button-container .sa-confirm-button-container button {
+    @extend .btn-primary;
+  }
+
+  .sweet-alert .sa-button-container .sa-confirm-button-container button:focus {
+    @extend .btn-primary:focus;
+  }
+
+  .sweet-alert .sa-button-container .sa-confirm-button-container button:hover {
+    @extend .btn-primary:hover;
+  }
+
+  .sweet-alert .sa-button-container .sa-confirm-button-container button:active {
+    @extend .btn-primary:active;
+  }
+
+  #mobile_header_links input:-webkit-autofill, #search_wrapper input:-webkit-autofill {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-box-shadow: 0 0 0px 1000px darken_color($chronus-header-bg-color, 5%) inset;
+    -webkit-text-fill-color: $chronus-header-font-color !important;
+  }
+
+  /** IMPORTANT!!! ORDER AND LOCATION OF THESE CLASSES SHOULD NOT BE CHANGED */
+
+  .theme-btn-bg {
+    background-color: $primary-button-bg-color;
+  }
+
+  .theme-lighter-btn-bg {
+    background-color: lighten($primary-button-bg-color, 10%);
+  }
+
+  .theme-light-btn-bg {
+    background-color: lighten($primary-button-bg-color, 5%);
+  }
+
+  .theme-dark-btn-bg {
+    background-color: darken($primary-button-bg-color, 5%);
+  }
+
+  .theme-darker-btn-bg {
+    background-color: darken($primary-button-bg-color, 10%);
+  }
+
+  .theme-btn-font-color {
+    color: $primary-button-font-color;
+  }
+
+  .theme-lighter-btn-font-color {
+    color: lighten($primary-button-font-color, 10%);
+  }
+
+  .theme-light-btn-font-color {
+    color: lighten($primary-button-font-color, 5%);
+  }
+
+  .theme-dark-btn-font-color {
+    color: darken($primary-button-font-color, 5%);
+  }
+
+  .theme-darker-btn-font-color {
+    color: darken($primary-button-font-color, 10%);
+  }
+
+  .theme-font-color {
+    color: $chronus-header-font-color;
+  }
+
+  .theme-lighter-font-color {
+    color: lighten($chronus-header-font-color, 10%);
+  }
+
+  .theme-light-font-color {
+    color: lighten($chronus-header-font-color, 5%);
+  }
+
+  .theme-dark-font-color {
+    color: darken($chronus-header-font-color, 5%);
+  }
+
+  .theme-darker-font-color {
+    color: darken($chronus-header-font-color, 10%);
+  }
+
+  .theme-bg {
+    background-color: $chronus-header-bg-color;
+  }
+
+  .theme-lighter-bg {
+    background-color: lighten_color($chronus-header-bg-color, 10%);
+  }
+
+  .theme-light-bg {
+    background-color: lighten_color($chronus-header-bg-color, 5%);
+  }
+
+  .theme-dark-bg {
+    background-color: darken_color($chronus-header-bg-color, 5%);
+  }
+
+  .theme-darker-bg {
+    background-color: darken_color($chronus-header-bg-color, 10%);
+  }
+  /** IMPORTANT!!! ORDER AND LOCATION OF THESE CLASSES SHOULD NOT BE CHANGED */
+
+
+  /** awesome bootstrap classes */
+
+  .checkbox-primary input[type="checkbox"]:checked + label::before {
+    background-color: $primary-button-bg-color !important;
+    border-color: $primary-button-bg-color !important;
+  }
+
+  .checkbox-primary input[type="checkbox"]:checked + label::after {
+    color: $primary-button-font-color !important;
+  }
+
+  .radio-primary input[type="radio"]:checked + label::before {
+    border-color: $primary-button-bg-color !important;
+  }
+
+  .radio-primary input[type="radio"]:checked + label::after {
+    background-color: $primary-button-bg-color !important;
+  }
+
+  .radio-primary input[type="radio"] + label::after {
+    background-color: $primary-button-bg-color !important;
+  }
+}

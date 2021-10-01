@@ -1,0 +1,74 @@
+organization_common: &organization_common
+  programs_count: 2
+  portals_count: 0
+  translation_locales: ["en"]
+  users_count: [80, 20]
+  campaign_management_feature_models: [user_campaign, user_campaign_message, user_campaign_status, user_campaign_admin_message, user_campaign_message_job, user_campaign_message_analytics, email_event_log]
+  three_sixty_survey_feature_models: [three_sixty_competency, three_sixty_question, three_sixty_reviewer_group, three_sixty_survey, three_sixty_survey_question, three_sixty_survey_competency, three_sixty_survey_reviewer_group, three_sixty_survey_assessee, three_sixty_survey_reviewer, three_sixty_survey_answer, three_sixty_survey_assessee_question_info, three_sixty_survey_assessee_competency_info]
+  program_event_feature_models: [program_event, program_event_user]
+  project_request_feature_models: [project_request]
+  group_mentoring_feature_models: [group_mentoring_mentor_intensive, group_mentoring_mentee_intensive, group_mentoring_equal_mentor_mentee]
+  spot_meeting_feature_models: []
+  mentor_recommendation_feature_models: [mentor_recommendation, recommendation_preference]
+organization:
+  small:
+    <<: *organization_common
+    count: 1
+    members_count: 100
+    programs_count: 2
+    users_count: [80, 20]
+    pending_users_count: [0, 0]
+    group_mentoring_enabled?: true
+    campaign_management_enabled?: true
+  careerdev:
+    <<: *organization_common
+    count: 1
+    members_count: 120
+    dormant_members_count: 60
+    programs_count: 2
+    portals_count: 1
+    users_count: [10, 10, 40]
+    pending_users_count: [0, 0, 0]
+  medium:
+    <<: *organization_common
+    count: 1
+    members_count: 100
+    programs_count: 2
+    users_count: [80, 20]
+    pending_users_count: [0, 0]
+    three_sixty_survey_enabled?: true
+    project_request_enabled?: true
+  large:
+    <<: *organization_common
+    count: 0
+  globalization:
+    <<: *organization_common
+    count: 1
+    members_count: 100
+    programs_count: 2
+    users_count: [80, 20]
+    pending_users_count: [0, 0]
+  pbe:
+    <<: *organization_common
+    count: 0
+  career:
+    <<: *organization_common
+    count: 0
+  huge:
+    <<: *organization_common
+    count: 0
+  mentorreco:
+    <<: *organization_common
+    count: 1
+    members_count: 100
+    users_count: [80, 20]
+    pending_users_count: [0, 0]
+group_mentoring_mentor_intensive:
+  mentor: 3
+  mentee: 2
+group_mentoring_equal_mentor_mentee:
+  mentor: 2
+  mentee: 2
+group_mentoring_mentee_intensive:
+  mentor: 2
+  mentee: 3

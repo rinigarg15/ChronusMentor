@@ -1,0 +1,17 @@
+<% if can_invite_both_roles %>
+  <%= control_group do %>
+    <%= content_tag(:div, "feature.program_invitations.label.roles".translate, :class => "false-control-label control-label") %>
+    <%= controls(class: "form-control cjs_roles_list") do %>
+      <%= choices_wrapper("display_string.Roles".translate) do %>
+        <label class="checkbox inline">
+          <%= check_box_tag 'role_names[]', RoleConstants::MENTOR_NAME, @role==RoleConstants::MENTOR_NAME, :id => 'Mentor' %> <%= _Mentor %>
+        </label>
+        <label class="checkbox inline">
+          <%= check_box_tag 'role_names[]', RoleConstants::STUDENT_NAME, @role==RoleConstants::STUDENT_NAME, :id => 'Student' %> <%= _Mentee %>
+        </label>
+      <% end %>
+    <% end %>
+  <% end %>
+<% else %>
+  <%= hidden_field_tag :role, @role %>
+<%  end %>

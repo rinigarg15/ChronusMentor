@@ -1,0 +1,11 @@
+<% membership_options = group.memberships.collect { |membership| [membership.user.name, membership.id] } %>
+<% membership_of_current_user = group.membership_of(current_user) %>
+
+<%= control_group do %>
+  <label class="col-sm-3 control-label" for="mentoring_model_task_connection_membership_id">
+    <%= "feature.mentoring_model.label.assign_to".translate %>
+  </label>
+  <div class="col-sm-5">
+    <%= select_tag("mentoring_model_task[connection_membership_id]", options_for_select(membership_options, (task.connection_membership_id || membership_of_current_user.id)), class: "form-control cjs-connection-membership-input", id: "mentoring_model_task_connection_membership_id") %>
+  </div>
+<% end %>

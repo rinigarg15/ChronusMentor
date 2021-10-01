@@ -1,0 +1,24 @@
+en:
+  email_translations:
+    three_sixty_survey_assessee_notification:
+      title_v1: Request to an assessee to take 360 Self-Assessment Survey
+      description_v1: This email is sent to the survey assessees asking them to complete the self-assessment. It contains link to the survey and, if appropriate, the expiry date.
+      subject: "{{survey_title}}: Invitation to self-assess"
+      content_v2_html: As part of your 360 degree feedback review, you are requested to complete a self-assessment. The questions in the self-assessment will be the same as those posed to your reviewers.<br/><br/>{{add_reviewers_text}} {{survey_expiry_text}}<br/>{{complete_survey_button}}<br/>Thank you for your participation.<br/>
+      complete_your_survey_html: Complete the survey
+      tags:
+        survey_title:
+          description: Title of the survey
+          example: Middle Manager Survey
+        survey_expiry_text:
+          tag_content_html: Please note that the survey expires on %{date} and will not be accessible to you or the reviewers after that.
+          description_v1: Survey expiration message if expiration date is set
+          example: Please note that the survey expires on October 30, 2013 and will not be accessible to you or the reviewers after that.
+        url_survey:
+          description: Url to access the survey
+        add_reviewers_text:
+          tag_content_html: At the end of the survey you will need to enter a list of reviewers who will provide feedback.
+          description: Letting the assessee know he needs to add reviewers at the end if setting enables assessees to add reviewers
+          example: At the end of the survey you will need to enter a list of reviewers who will provide feedback.
+        complete_survey_button:
+          description: Complete survey button

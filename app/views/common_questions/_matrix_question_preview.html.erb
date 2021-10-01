@@ -1,0 +1,44 @@
+<% if mobile_view %>
+  <div class="<%= element_class %> cjs_matrix_rating_container">
+    <% rating_questions.each do |question| %>
+      <div class="cui_rating_question_container m-b-md">
+        <h4 class="cjs_rating_question_label"><%= question.question_text %></h4>
+        <%= choices_wrapper("feature.profile_question.label.choices".translate) do %>
+          <% choices.each do |choice| %>
+            <% selected_choice = matrix_question_answers_map[question].present? ? matrix_question_answers_map[question].answer_value : "" %>
+            <%= content_tag(:label, :class => "radio") do %>
+              <label for="survey_answers_<%= question.id %>_<%= choice %>" class="sr-only"><%= choice %></label>
+              <%= radio_button_tag("survey_answers[#{question.id}]", choice, (selected_choice == choice), :class => "#{'cjs_forced_matrix_rating_radio' if forced_ranking}", :id => "survey_answers_#{question.id}_#{choice}") + choice %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+      <hr/>
+    <% end %>
+  </div>
+<% else %>
+  <table class="table word_break table-fixed table-striped <%= element_class %> cjs_matrix_rating_container">
+    <thead>
+      <tr>
+        <td></td>
+        <% choices.each do |rating_text| %>
+          <td class="text-center"> <%= rating_text %></td>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% rating_questions.each do |question| %>
+        <tr role="group" aria-label="<%= "feature.profile_question.label.choices".translate %>">
+          <td class="cjs_rating_question_label col-md-2"> <%= question.question_text %> </td>
+          <% choices.each do |choice| %>
+            <td class="text-center">
+              <% selected_choice = matrix_question_answers_map[question].present? ? matrix_question_answers_map[question].answer_value : "" %>
+              <label for="survey_answers_<%= question.id %>_<%= choice %>" class="sr-only"><%= choice %></label>
+              <%= radio_button_tag("survey_answers[#{question.id}]", choice, (selected_choice == choice), :id => "survey_answers_#{question.id}_#{choice}", :class => "#{'cjs_forced_matrix_rating_radio' if forced_ranking}") %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

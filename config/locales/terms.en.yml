@@ -1,0 +1,33 @@
+en:
+  terms:
+    acceptable_use_policy:
+      heading: Acceptable Use Policy
+      content:
+        intro: This Acceptable Use Policy (“AUP”) applies to your use of the Chronus Services (“Services”) and any content you contribute (“Content”). You agree you will not use the Services for any purpose that is unlawful or prohibited by this AUP. You may not use the Services in any manner that could damage, disable, overburden, or impair the Services, networks connected to the Services or interfere with any other party's use and enjoyment of any Services. You may not attempt to gain unauthorized access to any Services, other accounts, computer systems or networks through any other means. You may not obtain or attempt to obtain any materials or information through any means not intentionally made available through the Services.
+        user_conduct:
+          heading: User Conduct.
+          content:
+            intro: 'The Services allow you to submit Content. You agree to only submit Content that is proper. By way of example, and not as a limitation, you agree that when submitting Content, you will not:'
+            point_1: Defame, abuse, harass, stalk, threaten or otherwise violate the legal rights (such as rights of privacy and publicity) of others.
+            point_2: Publish, post, upload, distribute or disseminate any inappropriate, profane, defamatory, obscene, indecent or unlawful topic, name, material or information.
+            point_3: Submit Content in connection with surveys, contests, pyramid schemes, chain letters, junk email, spamming or any duplicative or unsolicited messages (commercial or otherwise).
+            point_4: Upload, or otherwise make available, files that contain images, photographs, software or other material protected by intellectual property laws, including, by way of example, and not as limitation, copyright or trademark laws (or by rights of privacy or publicity) unless you own or control the rights thereto or have received all necessary consent to do the same.
+            point_5: Upload files that contain viruses, Trojan horses, worms, time bombs, cancelbots, corrupted files, or any other similar software or programs that may damage the operation of another's computer or property of another.
+            point_6: Download any file posted by another user of the Services that you know, or reasonably should know, cannot be legally reproduced, displayed, performed, and/or distributed in such manner.
+            point_7: Advertise or offer to sell or buy any goods or services for any business purpose, unless such Submission Tool specifically allows such messages.
+            point_8: Violate any applicable laws or regulations.
+            point_9: Create a false identity for the purpose of misleading others.
+            para_1: Chronus has no obligation to monitor your Content. However, we reserve the right to review materials posted and to remove any materials in our sole discretion.
+            para_2: Chronus reserves the right to terminate your access to any or all of the Services at any time, without notice, for any reason whatsoever.
+            para_3: Chronus reserves the right at all times to disclose any information as we deem necessary to satisfy any applicable law, regulation, legal process or governmental request, or to edit, refuse to post or to remove any information or materials, in whole or in part, in our sole discretion.
+            para_4: Use caution when giving out any personally identifiable information. Chronus does not control or endorse the content, messages or information submitted in the Services and, therefore, Chronus specifically disclaims any liability with regard to any submissions in the Services and any actions resulting from your submission of Content and participation in any areas where content may be submitted in the Services.
+        use_of_content:
+          heading: Use of Content.
+          content:
+            intro: Your Content will be able to be viewed by other users of the Services. You should only provide your Content if you are comfortable sharing it with others.
+            para_1: You understand that Chronus does not guarantee the confidentiality of your Content and you shall be solely responsible for your Content and the consequences of submitting and publishing your Content on the Services. You represent, and warrant that you own or have the necessary licenses, rights, consents, and permissions to publish your Content.
+            para_2: You retain all right in your Content. By submitting your Content through the Services you hereby grant Chronus a worldwide, non-exclusive, royalty-free, sublicenseable and transferable license to use, reproduce, distribute, prepare derivative works of, display, and perform your Content in connection with the Services.
+        feedback:
+          heading: Feedback.
+          content:
+            intro: Any suggestions, comments, or other input you give to Chronus (“Feedback”), even if designated as confidential, will not create any confidentiality obligation for Chronus. Chronus will be free to use, reproduce, license or otherwise distribute, and exploit Feedback to improve and enhance Chronus products, technology, services, documentation or otherwise. Chronus’ use of Feedback does not create any obligation to you. You agree not to provide Chronus with any Feedback that is subject to license terms that seek to require any Chronus products, technologies, services or documentation incorporating or derived from such Feedback, or any of Chronus intellectual property, to be licensed or otherwise shared with any third party.

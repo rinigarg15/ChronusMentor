@@ -1,0 +1,29 @@
+a.text-danger:hover {
+  color: darken($red, 10%);
+}
+
+a.text-navy:hover {
+  color: darken($navy, 10%);
+}
+
+textarea {
+  resize: none;
+  overflow-y: auto !important;
+}
+
+.file{
+  background: transparent;
+  border: none;
+}
+
+.radio.inline + .radio.inline, .checkbox.inline + .checkbox.inline {
+  margin-left: 10px;
+}
+
+input[type="radio"], input[type="checkbox"] {
+  margin: 3px 0 0;
+}
+
+.checkbox, .radio {
+  font-weight: normal;
+}

@@ -1,0 +1,13 @@
+en:
+  feature:
+    group_closure_reasons:
+      default:
+        accomplished_goals_of_mentorship: "Accomplished goals of %{mentoring_connection}"
+        lack_of_communication: "Lack of communication or availability between participants"
+        needs_changed: "Needs changed and no longer seeking this particular %{mentoring_connection}"
+        other: "Other"
+        auto_terminated: Auto terminated due to inactivity
+        connection_ended: "%{Mentoring_Connection} has ended"
+      category:
+        completed_connections: "Completed %{Mentoring_Connections}"
+        incomplete_connections: "Incomplete %{Mentoring_Connections}"

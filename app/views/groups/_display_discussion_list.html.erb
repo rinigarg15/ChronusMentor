@@ -1,0 +1,12 @@
+<% add_new_message = @page_controls_allowed ? link_to(get_icon_content("fa fa-plus-circle") + "feature.mentoring_model.button.new_mm_message".translate, "javascript:void(0)", :class => "btn btn-primary btn-sm pull-right cjs-new-scrap-link-#{@ref_obj.id}") : "" %>
+<div id="cjs_paginated_scraps">
+  <% scrap_pagination_params = {collection: scraps_ids, ajax: true, :param_name => 'scrap_page', :params => {:format => :js, :controller => :scraps, :action => :index, :group_id => @group.try(:id)}} %>
+
+  <%= top_bar_in_listing( { collection: scraps_ids }, {}, {}, {:right_most_content => add_new_message} ) unless scraps_ids.blank? %>
+  <% no_scraps = scraps_ids.blank? ? '' : 'hide' %>
+  <%= content_tag(:div, content_tag(:div, add_new_message, :class => "clearfix p-b-sm") + "feature.mentoring_model.description.no_messages_v1".translate, :class => "p-sm cjs-no-scraps text-muted text-center #{no_scraps}") %>
+  <div class="display-scraps panel-group clearfix no-margins b-t">
+    <%= render :partial => 'scraps/scrap', :collection => scraps_ids, locals: {home_page: false} %>
+  </div>
+  <%= bottom_bar_in_listing(scrap_pagination_params) %>
+</div>

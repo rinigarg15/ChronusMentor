@@ -1,0 +1,39 @@
+<% can_edit = @page_controls_allowed && !milestone.from_template? && manage_mm_milestones_at_end_user_level? && !@home_page_view %>
+<% can_delete = @page_controls_allowed && manage_mm_milestones_at_end_user_level? && !milestone.from_template && !@home_page_view %>
+<% if milestone.description.present? && !@home_page_view %>
+  <% milestone_description = content_tag(:div, content_tag(:span, render_more_less(chronus_auto_link(milestone.description), 80), :class => "visible-xs") + content_tag(:span, chronus_auto_link(milestone.description), :class => "hidden-xs"), :class => "cjs-milestone-attrs cjs_show_on_collapse_milestone hide m-b-xs") %>
+<% end %>
+<% checkin_duration = display_checkin_duration(milestone.group_checkins_duration, :hour_format => true) %>
+<% checkin_duration_mobile = content_tag(:span, checkin_duration, class: "m-t-xs small text-muted visible-xs cjs-milestone-" + milestone.id.to_s + "-checkin-duration") %>
+<% checkin_duration_web = content_tag(:span, checkin_duration, class: "m-r-xs pull-left m-t-xxs small text-muted hidden-xs cjs-milestone-" + milestone.id.to_s + "-checkin-duration") %>
+<% header_content = content_tag(:div) do
+  content_tag(:div, get_milestone_bar_content(milestone.id, milestone.title, milestone.group_checkins_duration, local_assigns[:completed] ? completed : false), :class => "font-600 word_break h5 m-t-0 m-b-xs") + milestone_description + checkin_duration_mobile
+end %>
+
+<div class="cjs_milestone_container b-b" id="cjs_milestone_container_<%= milestone.id %>">
+  <% ibox_options = {
+    show_delete_link: can_delete,
+    delete_url: group_mentoring_model_milestone_path(@group, milestone, format: :js),
+    delete_html_options: { data: { method: :delete, remote: true, params: { target_user_id: params[:target_user_id], target_user_type: params[:target_user_type] }.to_param, confirm: "feature.mentoring_model.description.Delete_message".translate(title: h(milestone.title)) } },
+    delete_link_class: "hide cjs_show_on_collapse_milestone cjs_milestone_remove_link no-margins",
+    show_edit_link: can_edit,
+    edit_html_options: { data: { url: edit_group_mentoring_model_milestone_path(@group, milestone, format: :js, target_user_id: @target_user, target_user_type: @target_user_type) } },
+    edit_link_class: "hide cjs_show_on_collapse_milestone cjs_edit_milestone no-margins",
+    ibox_class: "collapsed no-margins noshadow",
+    title_class: "light-gray-bg small  #{local_assigns[:home_page_view] ? "hide" : ""}",
+    content_class: "word_break cjs_milestone_description no-padding",
+    ibox_content_id: "cjs_milestone_tasks_list_#{milestone.id}",
+    show_collapse_link: true,
+    collapse_link_class: "no-margins cjs_milestone_description_handler cjs_milestone_description_handler_#{milestone.id}",
+    collapse_html_options: { data: { url: fetch_tasks_group_mentoring_model_milestone_path(@group, milestone, format: :js, milestone_link_id: "#cjs_milestone_tasks_list_#{milestone.id}", target_user_id: target_user_id, target_user_type: target_user_type, home_page_view: @home_page_view), milestone_id: milestone.id } },
+    additional_right_links: checkin_duration_web,
+    header_content: header_content
+  } %>
+
+  <%= ibox nil, ibox_options do %>
+    <div id="loading_results_<%= milestone.id %>" class="filter_loading_results text-center p-sm" style="display: none;">
+      <span><%= "feature.milestones.label.tasks.loading".translate %></span>
+      <i class="fa fa-spinner fa-pulse fa-fw"></i>
+    </div>
+  <% end %>
+</div>

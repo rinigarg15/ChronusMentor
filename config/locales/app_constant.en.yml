@@ -1,0 +1,83 @@
+en:
+  app_constant:
+    default_name:
+      mentor: Mentor
+      mentee: Mentee
+      mentor_forum: "%{Mentor} Forum"
+      mentee_forum: "%{Mentee} Forum"
+    city_town_name: City/town name
+    n_days:
+      one: a day
+      other: "%{count} days"
+    a_week: a week
+    question_type:
+      Single_line: Single line
+      Multi_line: Multi line
+      Multiple_entries: Multiple entries
+      Pick_one_answer: Pick one answer
+      Pick_multiple_answers: Pick multiple answers
+      Email: Email
+      Name: Name
+      Text_Entry: Text Entry
+      Multiple_Text_Entry: Multiple Text Entry
+      Ordered_Options: Ordered Options
+      Education: Education
+      Experience: Experience
+      publication: Publication
+      manager: Manager
+      Skype_ID: Skype ID
+      Rating_Scale: Rating Scale
+      matrix_rating: Matrix Rating Scale (Multiple Rows)
+      Upload_File: Upload File
+      Location: Location
+      Date: Date
+    mentor_limit:
+      No_limit: No limit
+      n_mentors:
+        one: 1 %{mentor}
+        other: "%{count} %{mentors}"
+    request_limit:
+      No_limit: No limit
+      n_requests:
+        one: 1 request
+        other: "%{count} requests"
+    circle_limit:
+      No_limit: No limit
+      n_circles:
+        one: 1 %{mentoring_connection}
+        other: "%{count} %{mentoring_connections}"
+    connection_tracking_period:
+      Never: Never
+      n_weeks:
+        one: 1 week
+        other: "%{count} weeks"
+      n_months:
+        one: 1 month
+        other: "%{count} months"
+    rsvp_terms:
+      yes_v1: Confirmed
+      no_v1: Declined
+      no_response_v1: Not Responded
+    admin_view:
+      connection_status:
+        Never_connected: Never connected
+        Currently_connected: Currently connected
+        Currently_not_connected: Currently not connected
+      draft_status:
+        with_draft_connections: Users with draft connections
+        without_draft_connections: Users without draft connections
+      mentor_availability:
+        slots_less_than: Have connection slots less than
+        slots_greater_than: Have connection slots greater than
+      profile_completion_score:
+        Less_than: Less than
+        Greater_than: Greater than
+      timeline:
+        Join_date: Join date
+        Last_login_date: Last login date
+        terms_and_conditions: T&C accepted date
+        last_deactivated_at_v1: Last deactivated on
+      profile_filter:
+        Contains: Contains
+        Answered_v1: Filled
+        Not_Answered_v1: Not Filled

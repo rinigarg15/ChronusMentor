@@ -1,0 +1,140 @@
+<% id = @match_config.new_record? ? 0 : @match_config.id %>
+<%= ibox nil do %>
+  <%= simple_form_for @match_config, :html => {:class => 'cjs_match_config_form form-horizontal'} do |f| %>
+    <%= f.error_messages %>
+    <%= control_group do %>
+      <%= label_tag 'feature.match_config.label.mentor_question'.translate(mentor: _Mentor), nil, :class => "col-sm-3 control-label", :for => "match_config_mentor_question_id" %>
+      <%= controls(class: "col-sm-9") do %>
+        <%= mentor_question_form_column(@match_config) %>
+      <% end %>
+    <% end %>
+
+    <%= control_group do %>
+      <%= label_tag 'feature.match_config.label.student_question'.translate(student: _Mentee), nil, :class => "col-sm-3 control-label", :for => "match_config_student_question_id" %>
+      <%= controls(class: "col-sm-9") do %>
+        <%= student_question_form_column(@match_config) %>
+      <% end %>
+    <% end %>
+
+    <div class="cjs_matching_type">
+      <%= control_group do %>
+        <% label = 'feature.match_config.label.Matching_Type'.translate %>
+        <%= content_tag(:div, label, :class => 'false-label col-sm-3 control-label') %>
+        <%= controls(class: "col-sm-9") do %>
+          <%= choices_wrapper(label) do %>
+            <label class="radio">
+              <%= f.radio_button :matching_type, MatchConfig::MatchingType::DEFAULT, :class => 'cjs_default_radio_button radio_button' %>
+              <%= 'feature.match_config.label.normal_matching'.translate %>
+            </label>
+            <label class="radio">
+              <%= f.radio_button :matching_type, MatchConfig::MatchingType::SET_MATCHING, :class => 'cjs_set_matching_radio_button radio_button' %>
+              <%= 'feature.match_config.label.set_matching'.translate %>
+            </label>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="cjs_matching_arena">
+      <%= control_group do %>
+        <%= content_tag(:div, 'feature.match_config.label.Matching_Sets'.translate, :class => "col-sm-3 control-label false-label") %>
+          <div class="clearfix has-below" id="matching_sets">
+            <div class="has-below">
+              <%= controls(class: "col-sm-9") do %>
+                <div class="row">
+                  <div class="col-xs-5">
+                    <label class="form-control strong larger text-center inline"><%= 'feature.match_config.label.role_choices'.translate(role: _Mentee) %></label>
+                  </div>
+                  <div class="col-xs-5">
+                    <label class="form-control strong larger text-center inline"><%= 'feature.match_config.label.role_choices'.translate(role: _Mentor) %></label>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <%= controls(class: "col-sm-offset-3 col-sm-9") do %>
+            <%= link_to get_icon_content('fa fa-plus-circle') +  'feature.match_config.label.new_set'.translate, "javascript:void(0);", :class => 'cjs_add_another_set' %>
+          <% end %>
+      <% end %>
+    </div>
+
+    <div class="hide cjs_for_copy">
+      <%= controls(class: "col-sm-offset-3 col-sm-9") do %>
+        <div class="row">
+          <div class="col-xs-5">
+            <label class="sr-only cjs_mentee_label" for="mentee_choice_box_"><%= 'feature.match_config.label.role_choices'.translate(role: _Mentee) %></label>
+            <input class="col-xs-12 no-padding cjs_mentee_selectbox" id="mentee_choice_box_"/>
+          </div>
+          <div class="col-xs-5">
+            <label class="sr-only cjs_mentor_label" for="mentor_choice_box_"><%= 'feature.match_config.label.role_choices'.translate(role: _Mentor) %></label>
+            <input class="col-xs-12 no-padding has-prev-2 cjs_mentor_selectbox" id="mentor_choice_box_"  />
+          </div>
+          <div class="col-xs-2">
+            <%= link_to(get_icon_content("fa fa-times") + set_screen_reader_only_content("display_string.Remove".translate), "javascript:void(0);", class: "pull-right cjs_remove_set") %>
+          </div>
+        </div>
+        <hr class="m-b-xs m-t-xs"/>
+      <% end %>
+    </div>
+
+    <%= control_group do %>
+      <%= content_tag(:div, 'feature.match_config.label.threshold'.translate(mentor: _mentor), :class => 'false-label col-sm-3 control-label') %>
+      <%= controls(class: "col-sm-9") do %>
+        <% select_values = [
+          ['feature.match_config.label.gt'.translate, MatchConfig::Operator.gt],
+          ['feature.match_config.label.lt'.translate, MatchConfig::Operator.lt]] %>
+          <div class="row">
+            <div class="col-sm-6">
+              <%= f.label(:operator, "feature.match_config.label.threshold_operator".translate(mentor: _mentor), :class => "sr-only") %>
+              <%= f.select :operator, select_values, {}, class: 'form-control inline' %>    
+            </div>
+            <div class="col-sm-6">
+              <%= f.label(:threshold, "feature.match_config.label.threshold_value".translate(mentor: _mentor), :class => "sr-only") %>
+              <%= f.number_field :threshold, min: 0.0, step: 0.1, max: 1.0, class: 'form-control inline' %>
+            </div>
+          </div>
+      <% end %>
+    <% end %>
+
+    <%= control_group do %>
+      <%= f.label :weight, :class => "control-label col-sm-3" %>
+      <%= controls(class: "col-sm-9") do %>
+        <%= weight_form_column(@match_config) %>
+      <% end %>
+    <% end %>
+
+    <div class="cjs_show_matching_labels">
+      <%= control_group do %>
+        <% match_label = 'feature.match_config.label.match_labels'.translate %>
+        <%= content_tag(:div, match_label, :class => 'false-label col-sm-3 control-label') %>
+        <%= choices_wrapper(match_label) do %>
+          <%= controls(class: "col-sm-9") do %>
+            <label class="radio">
+              <%= f.radio_button :show_match_label, true, :class => 'cjs_show_match_label_radio_button radio_button' %>
+              <%= 'display_string.Yes'.translate %>
+            </label>
+            <label class="radio">
+              <%= f.radio_button :show_match_label, false, :class => 'cjs_hide_match_label_radio_button radio_button' %>
+              <%= 'display_string.No'.translate %>
+            </label>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <div class="cjs_matching_prefix <%= 'hide' if !@match_config.show_match_label %>">
+        <%= control_group do %>
+          <%= f.label :prefix, 'feature.match_config.label.prefix'.translate, class: "control-label col-sm-3" %>
+            <%= controls(class: "col-sm-9") do %>
+              <%= f.input_field :prefix, :class => 'form-control', :as => :string %>
+            <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <% action_set(class: "pull-right") do %>
+      <%= cancel_link match_configs_path %>
+      <%= f.button :submit, 'feature.match_config.label.set_configuration'.translate, :class => "cjs_submit" %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[MatchConfig.initializeQuestionSelection(#{id}, #{@mentee_single_ordered_question_ids}, #{@mentor_single_ordered_question_ids}, #{@mentee_single_show_match_label_question_ids}, #{@mentor_single_show_match_label_question_ids}, '#{question_choices_match_configs_path(:format => :js)}', "#{j "feature.match_config.label.confirmation_message".translate(mentee: "#{_mentee}", Mentee: "#{_Mentee}")}", "#{QuestionChoiceExtensions::SELECT2_SEPARATOR}", "#{MatchConfig::MUTLTISET_SEPARATOR}", #{RoleQuestion::MatchType::COMPATIBILITY_MAP.to_json}, #{ProfileQuestion::Type.set_matching_types.to_json});] %>

@@ -1,0 +1,30 @@
+<div class="hide cjs_replace_member_handler cjs_replace_member_handler_<%= user.id %>_<%= role.id %>">
+  <%= simple_form_for group, :url => replace_member_group_path(group), html: { id: nil }, :remote => true do |f| %>
+    <% role_custom_term = role.customized_term.term %>
+    <label class="s2id_autogen_label hide"><%= "feature.group.label.search_role_name".translate(role_name: role_custom_term) %></label>
+    <%= content_tag(:div, class: "col-xs-12 no-padding m-t-sm m-b-sm") do
+      label_tag("replace_member[#{role.name}]", role_custom_term , for: "replace_member_#{role.name}_#{user.id}", class: "sr-only") +
+      text_field_tag_with_auto_complete("replace_member", "", nil,
+                      {class: "form-control replace_member", id: "replace_member_#{role.name}_#{user.id}", placeholder: "feature.preferred_mentoring.content.enter_mentor_name".translate(mentor: role_custom_term), autocomplete: "off"},
+                      {url: auto_complete_for_name_users_path(format: :json, role: role.name, show_all_users: true, for_autocomplete: true), param_name: "search", highlight: true})
+    end %>
+    <%= hidden_field_tag "user_id", user.id, id: nil %>
+    <%= hidden_field_tag "role_id", role.id, id: nil %>
+    <%= hidden_field_tag "group_id", group.id, id: nil %>
+    <% current_program.roles.for_mentoring.each do |role| %>
+      <%= hidden_field_tag "selected_user_ids[#{role.id}]", nil, id: nil, class: "selected_user_ids_#{role.id}" %>
+    <% end %>
+
+    <% user_id = user.id.to_s %>
+    <% role_id = role.id.to_s %>
+    <p>
+      <% unless drafted_or_pending_group %>
+        <%= "feature.group.action.replace_member_desc_v1".translate(name: user.name(name_only: true), role_name: role_custom_term) %>
+      <% end %>
+    </p>
+    <% action_set do %>
+      <%= f.button :submit, "display_string.replace_member_v1.one".translate, class: "cjs_replace_member_submit btn-xs", onclick: %Q[jQuery(".cjs_display_member_handler_#{user_id}_#{role_id}").removeClass("well white-bg");] %>
+      <%= button_tag "display_string.Cancel".translate, :type => 'button', :onclick => %Q[jQuery(".cjs_replace_member_handler_#{user_id}_#{role_id}").addClass("hide");jQuery(".cjs_remove_replace_#{user_id}").removeClass("hide");jQuery(".cjs_display_member_handler_#{user_id}_#{role_id}").removeClass("well white-bg");], :class => "btn btn-white btn-xs cancel" %>
+      <% end %>
+    <% end %>
+</div>

@@ -1,0 +1,6 @@
+<% content = render partial: "signup_options" %>
+jQuery("#cjs_signup_options").html("<%= j content %>").slideDown();
+jQuery(".cjs_signup_options_loader").hide();
+<% if is_mobile_app? %>
+  cordovaNetworkHelper.handleExternalURLs();
+<% end %>

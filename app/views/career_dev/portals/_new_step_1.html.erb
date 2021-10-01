@@ -1,0 +1,58 @@
+<div id="step_1">
+  
+  <%= wizard_wrapper(tab_captions, CareerDev::PortalsHelper::Headers::PORTAL_DETAILS, :content_ibox_content_class => "p-xl p-t-m p-b-m") do %>
+    <%= f.input :name, :wrapper => :horizontal_input, :label => "feature.portal.label.portal_name".translate(:portal => _Program),
+        :input_html => {:class => 'form-control', :id => 'program_name', :onblur => "newProgram.inferRoot()"} %>  
+
+    <% if @current_organization.can_update_root? %>
+      <%= control_group do %>
+        <%= f.label :root, "feature.program.label.web_address".translate, :class => "control-label col-sm-3", :for => "tmp_new_root" %>
+        <%= controls(class: "col-sm-9") do %>
+          <%- root_value = @program.root || "secondary" %>
+          <%= render 'programs/root_editor', :prefix => 'new', :default_value => root_value, :attr_name => 'career_dev_portal[root]' %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= f.input :description, :wrapper => :horizontal_input, :input_html => {:class => 'form-control', :id => 'program_description', :rows => 4 } %>
+
+    <%= f.input :number_of_licenses, :wrapper => :horizontal_input, :label => "feature.portal.label.number_of_licenses".translate, :hint => "feature.portal.content.number_of_licenses_help_text".translate(:portal => _program), :input_html => {:class => "form-control"} %>
+
+    <%= f.hidden_field :program_type %>
+
+    <%= control_group do %>
+      <%= content_tag(:div, "feature.portal.label.configure_portal".translate(portal: _program), :class => "control-label col-sm-3 false-label") %>
+      <%= controls(:class => "cui_creation_way col-sm-9") do %>
+        <%= choices_wrapper("feature.portal.label.configure_portal".translate(portal: _program)) do %>
+          <% if super_console? %>
+            <label class="radio">
+              <%= radio_button_tag :creation_way, CareerDev::Portal::CreationWay::SOLUTION_PACK %>
+              <%= "feature.portal.content_pack.use_solution_pack".translate %>
+            </label>
+          <% end %>
+          <label class="radio">
+            <%= radio_button_tag :creation_way, CareerDev::Portal::CreationWay::MANUAL %>
+            <%= "feature.portal.will_do_myself".translate %>
+          </label>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <div id="solution_pack_file_path" style="display: none;" class="cui_file_chooser"> 
+    	<%= f.input :solution_pack_file, :wrapper => :horizontal_input, as: :file, label: "feature.portal.content_pack.upload_solution_pack".translate %>
+  	</div>
+
+    <% action_set(class: "pull-right") do %>
+    <%= cancel_link %>
+    <% if @current_organization.standalone? %>
+      <%= link_to_function "display_string.Next_raquo_html".translate, "newProgram.stepThree();", :class => 'btn btn-primary'  %>
+    <% else %>
+      <%= f.button :submit, "display_string.Done".translate %>
+    <% end %>
+
+    
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag %Q[ProgramSettings.setupPageSolutionPackOptions('#{Program::CreationWay::SOLUTION_PACK}'), ProgramSettings.setupPageManualOptions('#{Program::CreationWay::MANUAL}');] %>

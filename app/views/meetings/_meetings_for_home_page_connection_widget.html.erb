@@ -1,0 +1,25 @@
+<% if meetings.present? %>
+  <%= render :partial => 'meetings/meetings', :locals => { meetings: meetings, group_admin_view: group_admin_view, ei_src: ei_src, from_connection_home_page_widget: true, rsvp_src: MemberMeeting::RSVP_SOURCE::HOME_PAGE_WIDGET } %>
+  <% if show_view_all %>
+    <div class="well well-sm light-yellow-bg clearfix text-center no-margins">
+      <%= content_tag(:span, "feature.group.content.meetings_footer_text_homepage_v1_html".translate(Mentoring_Area: link_to("feature.connection.action.Visit_Mentoring_Area_v1".translate(Mentoring_Area: _Mentoring_Connection), meetings_path(group_id: group.id, src: EngagementIndex::Src::AccessMentoringArea::HOME_PAGE_FOOTNOTE, sub_src: EngagementIndex::Src::AccessMentoringArea::SubSource::MEETINGS_TAB), class: "m-l-xs font-bold btn btn-outline btn-xs btn-primary hidden-xs") + link_to("feature.connection.action.Visit_Mentoring_Area_v1".translate(Mentoring_Area: _Mentoring_Connection), meetings_path(group_id: group.id, src: EngagementIndex::Src::AccessMentoringArea::HOME_PAGE_FOOTNOTE, sub_src: EngagementIndex::Src::AccessMentoringArea::SubSource::MEETINGS_TAB), class: "font-bold visible-xs"), meetings: _meetings)) %>
+    </div>
+  <% end %>
+<% else %>
+  <div class="p-md text-center clearfix">
+    <span class="fa-stack fa-lg fa-3x text-warning">
+      <i class="fa fa-circle fa-stack-2x"></i>
+      <i class="fa fa-calendar fa-stack-1x fa-inverse"></i>
+    </span>
+
+    <div class="m">
+      <span class="text-muted">
+        <%= "feature.meetings.content.no_upcoming_meetings_text".translate(meetings: _meetings) %>
+      </span>
+      <%= link_to "feature.meetings.content.add_new_meeting".translate(Meeting: _Meeting), "javascript:void(0)", class: "font-bold cjs_no_meetings_add_meeting", data: { url: new_connection_widget_meeting_meetings_path(group_id: group.id) } if can_show_meetings && page_controls_allowed %>
+    </div>
+  </div>
+  <%= javascript_tag do %>
+    GroupTabs.initializeConnectionWidgetMeetingPopup("cjs_no_meetings_add_meeting");
+  <% end %>
+<% end %>

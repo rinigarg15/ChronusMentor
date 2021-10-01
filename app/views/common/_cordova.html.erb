@@ -1,0 +1,14 @@
+<%= link_to("", root_path , class: "hidden cjs_iab_logout_redirect") %>
+<% if is_ios_app? %>
+  <%= javascript_include_tag 'cordova/ios' %>
+<% elsif is_android_app? %>
+  <%= javascript_include_tag 'cordova/android' %>
+<% end %>
+<script type="text/javascript">
+  var mobileIntermediateHost = '<%= APP_CONFIG[:cors_origin].first %>';
+  cordovaPluginsHelper.onLoad('<%= header_id %>', <%= cordova_onload_arguments(@current_organization) %>, "<%= "verify_organization_page.label.select_organization".translate %>");
+  <% if session[:track_mobile_app_login] %>
+    <% session[:track_mobile_app_login] = nil %>
+    MobileAppTracking.gaTrackLoggedIn("", "");
+  <% end %>
+</script>

@@ -1,0 +1,65 @@
+<% col = (format == FORMAT::HTML) ? "col-sm" : "col-xs" %>
+
+<%= ibox "feature.reports.label.summary".translate do %>
+  <div id='growth_and_overview' class='clearfix'>
+    <div id='growth_graph' class="<%= col %>-7 <%= 'b-r' if (format == FORMAT::HTML) %>">
+      <div>
+        <%= link_to_function "feature.reports.actions.more_details_html".translate, "jQueryScrollTo('#growth_box', true)", :class => 'pull-right' %>
+        <h3 id='about_graph'><%= "feature.reports.header.program_growth".translate %></h3>
+      </div>
+      <% if health_report.growth.no_graph_data? %>
+        <div class="no_graph text-muted text-center">
+          <%= "common_text.info.No_data_available".translate %>
+        </div>
+      <% else %>
+        <div id="health_report_growth_chart" class="trend_chart"></div>          
+        <%= javascript_tag do %>
+          <%= render :partial => 'reports/trend_chart.js', :locals => {:render_to => "health_report_growth_chart", :chart_series_data => health_report_growth_chart_data(health_report.growth), :start_time => @start_time, :format => format, :width => is_pdf_request ? 550 : ''} %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="<%= col %>-5" id='overview'>
+      <div>
+        <h3><%= "feature.reports.header.program_health".translate %></h3>
+        <p>
+          <%= "feature.reports.content.program_health_directions_to_use".translate %>
+        </p>
+
+        <% if is_pdf_request %>
+          <%= render :partial => 'reports/metric_item', :locals => {
+            :name => "feature.reports.header.connectivity".translate, :percent_metric => health_report.connectivity.cumulative_value,
+            :opts => {
+              :help_text => "feature.reports.content.connectivity_help_text".translate(mentors: _mentors,  mentees: _mentees),
+              :detailed_report_anchor => "connectivity_box",
+              :point_scale => true
+            }
+          } if @current_program.ongoing_mentoring_enabled? %>
+
+          <%= render :partial => 'reports/metric_item', :locals => {
+            :name => "feature.reports.label.engagement".translate, :percent_metric => health_report.engagement.cumulative_value,
+            :opts => {
+              :help_text => "feature.reports.content.effectiveness_of_interactions_v1".translate(:mentoring_area => _mentoring_connection, mentor: _Mentor,  mentee: _Mentee),
+              :detailed_report_anchor => "engagement_box",
+              :point_scale => true
+            }
+          } if @current_program.ongoing_mentoring_enabled? %>
+
+          <%= render :partial => 'reports/metric_item', :locals => {
+            :name => "feature.reports.label.content".translate, :percent_metric => health_report.content_overview.cumulative_value,
+            :opts => {
+              :help_text => "feature.reports.content.content_help_text".translate(artilces: _Articles),
+              :detailed_report_anchor => "content_overview_box",
+              :point_scale => true
+            }
+          } %>
+        <% else %>
+          <% loader_class = "" %>
+          <% cumulative_reports = @current_program.ongoing_mentoring_enabled? ? HealthReports.cumulative_reports : HealthReports.cumulative_reports_if_ongoing_mentoring_is_disabled %>
+          <% cumulative_reports.each do |id| %>
+            <%= get_loader "#{id}_overview_loader", :class => loader_class %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

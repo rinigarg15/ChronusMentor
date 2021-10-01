@@ -1,0 +1,21 @@
+en:
+  email_translations:
+    membership_request_not_accepted:
+      enabled_with_count_html:
+        one: An %{email} with the message will be sent to the user if you complete this action.
+        other: An %{email} with the message will be sent to the selected %{count} users if you complete this action.
+      disabled_with_count_html:
+        one: An %{email} with the message is usually sent to the user as part of completing this action, but has been disabled. No email will be sent.
+        other: An %{email} with the message is usually sent to the selected %{count} users as part of completing this action, but has been disabled. No email will be sent.
+      title_v1: Membership request declined notification to the applicant
+      description_v3: If the %{_admins} do not accept a membership request, this email is sent out to the applicant and includes a custom message from the %{_admin}.
+      subject_v1: Your membership request has been declined
+      content_v3_html: Thank you for your interest in joining <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a>. We are unable to accept your request at this time.<br/>{{message_from_admin_as_quote}}<br/>If you have any questions, please feel free to <a href='{{url_contact_admin}}'>contact the {{customized_admin_term}}</a>.<br/>
+      tags:
+        message_from_admin:
+          description: Reason for rejection from the administrator
+          example: Your request did not have much details. Please resubmit with full details.
+        url_contact_admin:
+          description: Url for the user to contact administrator
+        message_from_admin_as_quote:
+          description: Reason for rejection quoted by administrator

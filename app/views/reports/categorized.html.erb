@@ -1,0 +1,22 @@
+<% default_params = { root: current_program.root, category: @category, report: true } %>
+
+<% if @category == Report::Customization::Category::USER %>
+  <% source_info = params.to_unsafe_h.pick(:controller, :action, :id).merge(category: @category) %>
+  <% @page_action = { label: "feature.admin_view.header.create_new_view".translate, url: new_admin_view_path(source_info: source_info), class: "btn btn-primary btn-large" } %>
+<% end %>
+
+<% if @reports_attributes_list.present? %>
+  <div id="reports">
+    <% @reports_by_subcategory_hash.each do |subcategory, reports_in_subcategory| %>
+      <%= ibox ReportsController.get_translated_report_subcategory_name(subcategory).call(current_program_or_organization), ibox_id: "report_subcategory_#{subcategory}", content_class: "no-padding" do %>
+        <% reports_in_subcategory.each do |report_hash| %>
+          <% if report_hash[:collection].present? %>
+            <%= render_reports_from_collection(report_hash, current_program, default_params: default_params) %>
+          <% else %>
+            <%= render partial: "report", locals: { path: report_hash[:path].call(default_params), title: report_hash[:title].call(current_program), description: report_hash[:description].call(current_program), icon: report_hash[:icon] || "fa-file" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

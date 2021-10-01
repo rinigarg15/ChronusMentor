@@ -1,0 +1,10 @@
+<%= hidden_field_tag :email, @email %>
+<% program_questions_for_user = @current_program.profile_questions_for(@roles, :default => false, :skype => @current_organization.skype_enabled?, user: current_user, pq_translation_include: true) %>
+<%= display_error_flash(@user) %>
+
+<%= content_tag(:div) do %>
+  <%= render :partial => "profile_basic_section", :locals => {:person => person, :program_questions_for_user => program_questions_for_user} %>
+<% end %>
+
+<%# -- custom fields -- #%>
+<%= render :partial => "profile_sections", :locals => {:program_questions_for_user => program_questions_for_user} %>

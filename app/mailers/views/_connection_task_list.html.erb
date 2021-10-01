@@ -1,0 +1,10 @@
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody>
+    <% tasks.each do |task| %>
+      <tr>
+        <td style="padding:5px 0; width:70px; "><%= email_red_alert_text(DateTime.localize(task.due_date, format: :month_day)) %></td>
+        <td align="left" style="padding-left: 10px; width:90%;"><%= task.title %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

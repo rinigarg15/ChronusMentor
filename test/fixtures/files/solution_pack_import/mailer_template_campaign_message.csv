@@ -1,0 +1,27 @@
+id,program_id,uid,enabled,source,subject,created_at,updated_at,campaign_message_id,content_changer_member_id,content_updated_at
+1,2,,true,"Dear {{user_firstname}},<br />
+<br />
+We see you have not yet completed the sign-up process in the program. Click on the following link to get started with mentoring:<br />
+<br />
+{{url_signup}}<br />
+<br />
+If you have any trouble signing up or have any questions, feel free to reply to this email.<br />
+<br />","{{user_firstname}}, finish signing up today!",2014-12-01 14:50:51 +0530,2014-12-01 14:50:51 +0530,1,1,2014-12-01 14:50:51 +0530
+2,2,,true,"Dear {{user_firstname}},<br />
+<br />
+We see your profile is&nbsp;{{profile_completion_score}} complete. It is important that your profile is complete and detailed as it heps find better matches in the program. To complete your profile, please click on the link below. <br />
+<br />
+{{url_profile_completion}}<br />
+<br />","{{user_firstname}}, complete your profile today!",2014-12-01 14:50:51 +0530,2014-12-01 14:50:51 +0530,2,2,2014-12-01 14:50:51 +0530
+3,2,,true,"Dear {{user_firstname}},<br />
+<br />
+We see you have not yet completed the sign-up process in the program. Click on the following link to get started with mentoring:<br />
+<br />
+{{url_signup}}<br />
+<br />
+If you have any trouble signing up or have any questions, feel free to reply to this email.<br />
+<br />","{{user_firstname}}, finish signing up today!",2014-12-01 14:50:55 +0530,2014-12-01 14:50:55 +0530,3
+4,2,,true,"Dear,<br />
+<br />
+We see you have not yet completed the sign-up process in the program. Click on the following link to get started with mentoring. If you have any trouble signing up or have any questions, feel free to reply to this email. From, {{invitor_name}}<br />
+<br />","finish signing up today!",2014-12-01 14:50:55 +0530,2014-12-01 14:50:55 +0530,4,3,2014-12-01 14:50:55 +0530

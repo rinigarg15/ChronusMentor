@@ -1,0 +1,51 @@
+<%= javascript_include_tag "//cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js" %>
+<%= javascript_include_tag "//cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js" %>
+<%= stylesheet_link_tag "//cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css" %>
+
+<% @title = get_icon_content("fa fa-sitemap") + content_tag(:span, "Organizations") %>
+<%= ibox nil do %>
+  <table id="orgs" datatable class="boxshadow-sm table table-striped table-responsive table-bordered table-hover dataTable">
+    <thead>
+      <tr>
+        <th class="hide">Id</th>
+        <th >Account Name</th>
+        <th >Name</th>
+        <th >Url</th>
+        <th class="text-center" >Status</th>
+        <th >Programs count</th>
+        <th class="text-center" >Member active at least in one track</th>
+        <th class="text-center" >Total Members</th>
+        <th >Administrators</th>
+        <th >Created on</th>
+        <th >Last Login</th>
+      </tr>
+    </thead>
+    <tbody>
+    	<% @organizations.each do |org| %>
+        <tr>
+          <td nowrap class="hide"><%= org.id %></td>
+          <td nowrap><%= org.account_name %></td>
+          <td nowrap><%= org.name %></td>
+          <% url = root_organization_url(:domain => org.domain, :subdomain => org.subdomain, protocol: org.get_protocol) %>
+          <td nowrap><%= link_to(url, url, :target => "_blank") %></td>
+          <td class="text-center" nowrap><%= org.active ? 'Active' : 'Closed' %></td>
+          <td nowrap><%= org.tracks.size %> Subprograms<br/><%= org.portals.size %> Subportals</td>
+          <td class="text-center" nowrap><%= @active_member_count[org.id] %></td>
+          <td class="text-center" nowrap><%= @member_count[org.id] %></td>
+          <td nowrap><%= @admins[org.id].collect(&:email).join("<br/>").html_safe %></td>
+          <td nowrap><%= DateTime.localize(org.created_at, format: :abbr_short) %></td>
+          <td nowrap><%= @org_last_seen_at_map[org.id].last.last_seen_at.present? ? DateTime.localize(@org_last_seen_at_map[org.id].last.last_seen_at, format: :abbr_short) : "Inactive" %></td>
+        </tr>
+      <% end %>  
+    </tbody>
+  </table>
+<% end %>
+
+
+<script type="text/javascript">
+  homeTableSearch.searchTable('#orgs');
+  var inline_edit = <%= @inline_edit || false %>;
+  if(inline_edit){
+    orgListingPage.inlineEditAccountName();
+  }
+</script>

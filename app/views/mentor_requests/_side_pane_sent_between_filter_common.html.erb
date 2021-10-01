@@ -1,0 +1,19 @@
+<% expires_in_collapse = (params_to_use[:search_filters].present? && params_to_use[:search_filters][:expiry_date].present?) ? false : true %>
+<% profile_filter_wrapper "feature.mentor_request.label.SentBy".translate, expires_in_collapse do %>
+  <% right = [{ type: "btn",
+    btn_options: {
+      class:'btn btn-primary btn-sm filter_actions form-actions',
+      onclick: %Q[jQuery("#search_filter_form").submit();]
+    },
+    content: "display_string.Go".translate
+  }, { type: "btn",
+    btn_options: {
+      class:'clear_filter btn btn-sm btn-white',
+      onclick: %Q[jQuery("#search_filters_expiry_date").val(""); jQuery('#search_filter_form').submit();],
+      id: "reset_filter_expiry_date"
+    },
+    content: "display_string.Clear".translate
+  }] %>
+  <% daterange_values = @start_time.present? ? { start: @start_time.to_date, end: @end_time.to_date } : {} %>
+  <%= construct_daterange_picker("search_filters[expiry_date]", daterange_values, max_date: Date.current, right_addon: right, input_size_class: "input-sm") %>
+<% end %>

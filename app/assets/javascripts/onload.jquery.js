@@ -1,0 +1,51 @@
+// Add all the initialization functions to be run after the page loads here:
+
+jQuery(document).ready(function() {
+  BBQPlugin.addHashChangeListener();
+
+  initializeShowHide();
+  initialize.animateWrapper();
+  initialize.tabDropdowns();
+  initialize.CheckBoxStopPropagation();
+  initialize.navigationChecker();
+  initialize.autoResizeTextAreas();
+  initialize.jQueryAutoComplete();
+  initialize.scrollToFromParams();
+  initialize.dropDownButton();
+  initialize.tagList();
+  initialize.showOnScroll();
+  initialize.editPageTitle();
+  initialize.columnize();
+  initialize.renderOmbeded();
+  initialize.initializeQtipOnHover();
+  initialize.displayOnHover();
+  initialize.popupCloseBox();
+  initialize.increaseHeightonScroll();
+  initialize.initializeTooltip();
+  initialize.initializeStopFilterPropogation();
+  initialize.initializeBlindHide();
+  initialize.initializeMoreLessLinks();
+  initialize.initializeHoverCard();
+  initialize.fixCkeditorAttachmentLinks();
+  initialize.initializeCkAttachmentLinksForAndroid();
+  initialize.initializeToggleButton();
+  initialize.setSlimScroll();
+  initialize.setDatePicker();
+  initialize.initializeDatePicker();
+  initialize.toggleCollapseIcon();
+  initialize.initializeDateRangePicker();
+  initialize.initializePagination();
+  initialize.disableNavTabClick();
+  initialize.dismissableAlert();
+  initialize.initializeFileinput();
+  initialize.initializeWaves();
+  initialize.fixIOSkeypadHeaderPosition();
+  initialize.fixAndroidFooterPosition();
+  initialize.initializePlaceholder();
+  initialize.initializeWrapperVisibility();
+  initialize.initializeProgramHeaderTile();
+  initialize.initializeAjaxLinks();
+  initialize.initializeLinksToRemoteModal();
+  initialize.addListenerToSignout();
+  initialize.initializeMobileModalOnClick();
+});

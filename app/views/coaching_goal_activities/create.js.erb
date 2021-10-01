@@ -1,0 +1,17 @@
+var coachingGoalId = "#<%= get_coaching_goal_scoping_id(@coaching_goal) %>";
+<% coaching_goal_content = render(:partial => "coaching_goals/coaching_goal", :locals => {:is_show_page => @from_coaching_goals_show, :coaching_goal => @coaching_goal}) %>
+CoachingGoals.refreshCoachingGoal(coachingGoalId, "<%= j coaching_goal_content %>");
+if(jQuery(".cjs_side_pane_coaching_goals").length > 0){
+  <% side_pane_content = render :partial => "groups/side_pane_coaching_goals_list" %>
+  CoachingGoals.refreshGoalsSidePane("<%= j side_pane_content %>");
+}
+if(jQuery(".cjs_coaching_goal_activity_feed").length > 0){
+  <% ra_content = format_recent_activity(@recent_activity, nil, true, hide_links: true) %>
+  CoachingGoals.appendContent("<%= j ra_content %>");  
+}
+<% unless @is_message_post %>
+  closeQtip();
+  jQueryScrollTo(coachingGoalId, true);
+<% else %>
+  jQueryHighlight("#activity_" + <%= @recent_activity.id %>);
+<% end %>

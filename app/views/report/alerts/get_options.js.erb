@@ -1,0 +1,39 @@
+<% content = get_alert_filter_operator_for_display(@view, @filter_name, @index) %>
+var element = jQuery("#report_alert_filter_params_<%= @index %>_operator");
+var content = "<%= j(content) %>";
+element.empty();
+element.append(content);
+
+<% if @filter_name.present? %>
+  <% filter_type = "FilterUtils::#{@view.class.to_s}Filters::FILTERS".constantize[@filter_name.to_sym][:type] %>
+  <% case filter_type %>
+    <% when FilterUtils::FILTER_TYPE::DateRange %>
+      var value_element = jQuery("#report_alert_filter_params_<%= @index %>_value");
+      var element_name = value_element.attr("name");
+      var element_id = value_element.attr("id");
+      value_element.attr('id','cjs_dummy_id');
+      value_element.after('<input class="required numeric form-control alert-filter-value-input" id='+element_id+' name='+element_name+' size="50" type="number">');
+      var filter_container = value_element.closest(".alert_filters_container");
+      if(filter_container.find(".days-text").length){
+      }
+      else{
+        filter_container.find(".alert-filter-operators-container").append("<div class='days-text'><%= j content_tag(:span, "display_string.days".translate, class: "pull-left m-l-0 m-sm") %></div>");
+      }
+      value_element.remove();
+    <% when FilterUtils::FILTER_TYPE::Equals %>
+      var value_element = jQuery("#report_alert_filter_params_<%= @index %>_value");
+      var element_name = value_element.attr("name");
+      var element_id = value_element.attr("id");
+      value_element.attr('id','cjs_dummy_id');
+      value_element.after('<select class="required form-control has_background alert-filter-operator-select" id='+element_id+' name='+element_name+'>');
+      var filter_container = value_element.closest(".alert_filters_container");
+      if(filter_container.find(".days-text").length){
+        filter_container.find(".days-text").remove();
+      }
+      <% content = options_for_select(FilterUtils::AdminViewFilters.connection_status_filter_translated_options) %>
+      value_element.remove();
+      var value_element = jQuery("#report_alert_filter_params_<%= @index %>_value");
+      content = "<%= j(content) %>";
+      value_element.append(content);
+  <% end %>
+<% end %>

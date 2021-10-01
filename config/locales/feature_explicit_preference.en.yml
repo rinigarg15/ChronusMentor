@@ -1,0 +1,45 @@
+en:
+  feature:
+    explicit_preference:
+      placeholder:
+        select_question: Select Profile Field
+        select_option: Select Preferences
+        select_location: Select Location
+      title:
+        your_preferences: Your Preferences
+        change_preferences: Change Preferences
+      content:
+        start_over: Start Over
+        show_recommendations: Show Recommendations
+        delete_message: This will remove all the existing preferences and begin with an empty template. This cannot be rolled back. Continue?
+        preference_delete_message: Are you sure you want to delete your preference?
+        preference_delete_message_v2: Are you sure you want to delete this preference?
+        customize_mentors_you_see: Would you like to customize the %{mentors} you see?
+        no_recommendations_available: Looks like there are no recommendations available.
+      label:
+        preferences: Preferences
+        profile_field: Profile Field
+        location: Location
+        add_new: Add New
+        add: Add
+        priority: Priority
+        very_important: Very Important
+        fairly_important: Fairly Important
+        important: Important
+        slightly_important: Slightly Important
+        nice_to_have: Nice to have
+        matched_preferences_label: Matches on %{count} out of %{total_count} preferences
+        no_matched_preferences_label: Doesn't match on any of your preferences
+        explicit_preferences_recommendations_home_page_label: Recommendations based on your preferences
+        explicit_preferences_recommendations_home_page_label_mobile: Featured Recommendations
+        sytem_recommendations_home_page_label: Recommendations based on system preferences
+        sytem_recommendations_home_page_label_v2: Featured %{mentor} Recommendations
+        admin_recommendations_home_page_label: Recommendations from %{administrator}
+        auto_populate_help_text: We have auto-saved your preferences based on your profile. You can also click on the 'Start Over' button to reset your preferences.
+        auto_populate_help_text_v2: We have auto populated your preferences based on your profile. Feel free to add, edit, remove one or more preferences that you care about in %{a_mentor}. You can also click the 'Start Over' link to begin from scratch.
+        no_preferences_label: You have not configured any personal preferences.
+        browse_default_recommendations: Browse Default Recommendations
+        add_preferences: Add Preferences
+        personalize_recommendations: Personalize Recommendations
+        personalize_matching_criteria: Personalize Matching Criteria
+        personalize: Personalize

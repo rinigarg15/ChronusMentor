@@ -1,0 +1,8 @@
+<div class="item" style="<%= tab_in_store == tab_order ? '':'display:none'%>" >
+  <div class="list list-group <%= tab_in_store == tab_order ? 'loaded':''%>" id="<%= "recent_activities_get_#{div_suffix}" %>" load_url="<%= load_url %>" update_url="<%=  update_url %>">
+    <div id="<%= "show_more_#{div_suffix}_activities" %>" class="p-sm text-center">
+      <%= get_icon_content("fa fa-spinner fa-spin fa-fw") %>
+    </div>
+    <%= get_content_after_page_load(load_url) if tab_in_store == tab_order %>
+  </div>
+</div>

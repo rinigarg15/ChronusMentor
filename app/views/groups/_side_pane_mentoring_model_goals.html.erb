@@ -1,0 +1,34 @@
+<% mentoring_model_goals_count = @mentoring_model_goals.count %>
+
+<div class="cjs_side_pane_mentoring_model_goals">
+  <%= ibox "feature.connection.header.Goals".translate, content_class: "p-xxs", show_collapse_link: true do %>
+    <% if @mentoring_model_goals.present? %>
+      <ul class="list-group">
+        <% if @group.get_mentoring_model.manual_progress_goals? %>
+          <% @mentoring_model_goals.first(MentoringModel::GoalsHelper::DISPLAY_SIDE_PANE_GOALS_LENGTH).each do |mentoring_model_goal| %>
+            <li class="list-group-item">
+              <%= render partial: "groups/display_mentoring_model_manual_goal_progress", locals: { goal: mentoring_model_goal, group: @group } %>
+            </li>
+          <% end %>
+        <% else %>
+          <% @mentoring_model_goals.first(MentoringModel::GoalsHelper::DISPLAY_SIDE_PANE_GOALS_LENGTH).each do |mentoring_model_goal| %>
+            <li class="list-group-item">
+              <%= render partial: "groups/display_mentoring_model_goal_progress", locals: { goal: mentoring_model_goal, required_tasks: @required_tasks, group: @group } %>
+            </li>
+          <% end %>
+        <% end %>
+        <li class="list-group-item text-center">
+          <%= link_to("display_string.See_all_raquo_html".translate, group_mentoring_model_goals_path(@group), class: "font-bold") if mentoring_model_goals_count > 0 %>
+        </li>
+      </ul>
+    <% else %>
+      <div class="text-center p-sm">
+        <%= content_tag(:span, "feature.mentoring_model.header.no_goals_yet".translate)%>
+        <% if manage_mm_goals_at_end_user_level? && @page_controls_allowed %>
+          <%= circle_separator %>
+          <%= content_tag(:span, link_to("feature.mentoring_model.header.add_goal_plan".translate, group_mentoring_model_goals_path(@group)), :class => "font-bold") %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

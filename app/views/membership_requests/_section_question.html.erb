@@ -1,0 +1,21 @@
+<% section = section_question %>
+<% hide_default_membership_questions = new_request && wob_member.present? %>
+<div class="has-below-1">
+  <% section_questions = @section_id_questions_map[section.id] %>
+  <% non_default_questions = section_questions.select(&:non_default_type?) %>
+  <div class='cjs_section <%= "hide" if (hide_default_membership_questions && section.default_field? && non_default_questions.blank?) %>'>
+    <%= field_set_tag nil do %>
+      <h4><%= section.title %></h4>
+      <%= get_section_description(section, class: "m-b-sm") %>
+      <% if (new_request || (@is_edit_action && @is_self_view)) && has_importable_question?(section_questions) %>
+        <%= render partial: "users/edu_exp_form", locals: { section: section, is_membership_request: true, membership_request_member_id: local_assigns[:membership_request_member_id] } %>
+      <% end %>
+      <% if section.default_field? %>
+        <div class='<%= "hide" if hide_default_membership_questions %>'>
+          <%= render partial: "membership_requests/default_membership_questions", locals: { form: form, membership_request: membership_request, new_request: new_request } %>
+        </div>
+      <% end %>
+      <%= render :partial => 'membership_requests/membership_answer_field', collection: section_questions, locals: { answer_map: answer_map, new_request: new_request } if @roles %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+<% @back_link = {:label => "feature.reports.content.dashboard".translate, :link => management_report_path} if @src_path == ReportConst::ManagementReport::SourcePage %>
+
+<% @title = set_view_title(@metric, "feature.flag.header.Flags".translate) %>
+<% @skip_rounded_white_box_for_content = true %>
+
+<div>
+<div class="tabs-container">
+  <ul class="nav nav-tabs h5 no-margins">
+    <li class="<%= unresolved_tab? ? 'active' : '' %>">
+      <%= link_to "feature.flag.header.Pending".translate(pending_count: @unresolved_flags_count), flags_path(:tab => Flag::Tabs::UNRESOLVED) %>
+    </li>
+    <li class="<%= resolved_tab? ? 'active' : '' %>">
+      <%= link_to "feature.flag.header.Resolved".translate, flags_path(:tab => Flag::Tabs::RESOLVED) %>
+    </li>
+  </ul>
+</div>
+
+<% if @flags.empty? %>
+  <%= ibox nil do %>
+    <%= "common_text.empty_list".translate %>
+  <% end %>
+<% else %>
+  <% if @pagination_required %>
+    <%= top_bar_in_listing({collection: @flags}) %>
+  <% end %>
+  <div class="table-responsive">
+    <table class="table table-striped white-bg <%= 'm-t-0' unless @pagination_required %>">
+      <thead>
+        <tr>
+          <th><%= "feature.flag.header.Type".translate %></th>
+          <th><%= "feature.flag.header.Preview".translate %></th>
+          <th><%= "display_string.Reason".translate %></th>
+          <% if resolved_tab? %>
+            <%= content_tag(:th, "feature.flag.header.Status".translate) %>
+            <%= content_tag(:th, "feature.flag.header.Resolved_by".translate) %>
+            <%= content_tag(:th, "feature.flag.header.Resolved_at".translate) %>
+          <% end %>
+          <%= content_tag(:th, "display_string.Actions".translate) if unresolved_tab? %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @flags.each do |flag| %>
+          <tr>
+            <td><%= flag.content_type_name %></td>
+            <td><%= flag_content_preview(flag) %></td>
+            <td><%= render partial: 'flag_reason', locals: {flag: flag} %></td>
+            <% if resolved_tab? %>
+              <%= content_tag(:td, flag_status_text(flag)) %>
+              <%= content_tag(:td, (flag.resolver ? link_to_user(flag.resolver) : "feature.flag.content.unresolved_deleted".translate)) %>
+              <%= content_tag(:td, (flag.resolved_at ? formatted_time_in_words(flag.resolved_at) : "feature.flag.content.unresolved_deleted".translate)) %>
+            <% end %>
+            <%= content_tag(:td, flag_content_view_links(flag), class: 'font-600') if unresolved_tab? %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if @pagination_required %>
+    <%= bottom_bar_in_listing({collection: @flags}) %>
+  <% end %>
+<% end %>
+
+</div>

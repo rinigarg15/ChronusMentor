@@ -1,0 +1,35 @@
+<% mentor_user = @mentor.user_in_program(current_program) %>
+<% student_can_connect_to_mentor = current_user.can_connect_to_mentor?(mentor_user) %>
+<% request_meeting_text = "feature.user.label.request_meeting_v1".translate(:Meeting => _Meeting) %>
+
+<% modal_v3_popup request_meeting_text do %>
+  <% if @mentor.has_upcoming_meeting_with?(wob_member) %>
+    <div class="panel panel-default col-xs-12 p-xs gray-bg text-center">
+      <i class="fa fa-info-circle m-l-xxs fa-fw m-r-xs"></i>
+      <span><%= "feature.user.label.meeting_information_with_mentor".translate(meetings: _meetings, mentor: _mentor) %></span>
+    </div>
+  <% end %>
+  <div id="mentor_<%= @mentor.id %>" class="cjs_mentor_info">
+    <% if student_can_connect_to_mentor %>
+      <% meeting_form_content = render(partial: "meetings/new", locals: {src: @src, from_mentoring_calendar: true}) %>
+      <%= link_to_function request_meeting_text, %Q[replaceRemoteModalContent("#{j meeting_form_content}");chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.GA_MEETING_ACTIVITY_CATEGORY, chrGoogleAnalytics.action.GA_MENTORING_CALENDAR_INITIATED_REQUEST_MEETING, chrGoogleAnalytics.eventLabel.GA_FLASH_MENTORING_CALENDAR_EVENTS_LABEL, chrGoogleAnalytics.eventLabelId.GA_FLASH_MENTORING_CALENDAR_EVENTS_LABEL_ID);], class: "btn btn-primary pull-right" %>
+    <% else %>
+      <%= link_to request_meeting_text, "javascript:void(0)", data: { toggle: "tooltip", title: tooltip_double_escape(current_program.zero_match_score_message) }, class: "btn btn-primary pull-right disabled" %>
+    <% end %>
+
+    <div class="media-left">
+      <%= member_picture_v3(@mentor, { no_name: true, size: :medium, outer_class: "pull-left no-margins" }, { class: "img-circle"} ) %>
+    </div>
+    <div class="media-body">
+      <h4><%= link_to_user @mentor %></h4>
+      <%= display_match_score(@score, in_listing: true) if @current_program.allow_user_to_see_match_score?(current_user) %>
+    </div>
+    <% if program_view? && @mentor != wob_member %>
+      <%= render partial: "users/show_profile_summary_fields", locals: { user: mentor_user, role: RoleConstants::MENTOR_NAME } %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery('[data-toggle="tooltip"]').tooltip();
+<% end %>

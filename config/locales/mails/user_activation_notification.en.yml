@@ -1,0 +1,19 @@
+en:
+  email_translations:
+    user_activation_notification:
+      enabled_with_count_html:
+        zero: An %{email} will be sent to the selected users if you complete this action.
+        one: An %{email} will be sent to the user if you complete this action.
+      disabled_with_count_html:
+        zero: An %{email} is usually sent to the selected users as part of completing this action, but has been disabled. No email will be sent.
+        one: An %{email} is usually sent to the user as part of completing this action, but has been disabled. No email will be sent.
+      title_v2: Reactivation notification to user
+      description_v3: The email is sent to a participant who was deactivated at the %{_program} level when their participation is reactivated by the %{_admin}.
+      subject_v1: Your account is now reactivated!
+      content_v1_html: Welcome back, {{receiver_first_name}}!<br/><br/>Your account in <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a> has been reactivated.<br/><br/>Thank you for your continued participation - you can login and review your profile to ensure it is up to date.<br/>{{login_button}}
+      login_text: Login
+      tags:
+        administrator_name:
+          description: Name of the administrator who reactivated the user
+        login_button:
+          description: Login button

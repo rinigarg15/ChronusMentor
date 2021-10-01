@@ -1,0 +1,53 @@
+<% @title = "csv_import.header.create_users".translate %>
+<% @skip_rounded_white_box_for_content = true %>
+<%= wizard_headers(create_users_wizard(@user_csv_import, @standalone_dormant_import), CsvImportsHelper::Headers::CREATE_USERS) do %>
+  <div>
+    <% user_csv_import_id = @user_csv_import.id %>
+    <div class="font-600 p-b-sm"><%= "csv_import.content.validation_information.message".translate %></div>
+    <% unless @result[:total_added].zero? %>
+      <div class="m-t-xs m-b-xs">
+        <%= append_text_to_icon("fa fa-check-circle text-navy", csv_imports_total_added_information(user_csv_import_id, @result, _program, @current_organization.name, @standalone_dormant_import)) %>
+        <%= tooltip("unpublished_help_text", "csv_import.content.unpublished_tooltip".translate) %>
+      </div>
+    <% end %>
+    <% if @program_level_import %>
+      <% unless @result[:invited_users].zero? %>
+        <div class="m-t-xs m-b-xs">
+          <%= append_text_to_icon("fa fa-check-circle text-navy", "csv_import.content.validation_information.invited_users_html".translate(count: @result[:invited_users], count_link: csv_imports_users_to_invite_link(user_csv_import_id, @result[:invited_users], @standalone_dormant_import), org_name: @current_organization.name, program: _program)) %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% unless @result[:updated_users].zero? %>
+      <div class="m-t-xs m-b-xs">
+        <% text_key = @program_level_import ? "update_users_html" : "update_members_html" %>
+        <%= append_text_to_icon("fa fa-check-circle text-navy", "csv_import.content.validation_information.#{text_key}".translate(count: @result[:updated_users], count_link: csv_imports_users_to_update_link(user_csv_import_id, @result[:updated_users], @standalone_dormant_import), program: _program, org_name: @current_organization.name)) %>
+      </div>
+    <% end %>
+
+    <% unless @result[:suspended_members].zero? %>
+      <div class="m-t-xs m-b-xs">
+        <%= append_text_to_icon("fa fa-exclamation-circle", "csv_import.content.validation_information.suspended_users_html".translate(count: @result[:suspended_members], count_link: csv_imports_suspended_members_link(user_csv_import_id, @result[:suspended_members], @standalone_dormant_import), org_name: @current_organization.name)) %>
+      </div>
+    <% end %>
+    <% unless @result[:errors_count].zero? %>
+      <div class="m-t-xs m-b-xs text-danger">
+        <%= append_text_to_icon("fa fa-times-circle", "csv_import.content.validation_information.errors".translate(count: @result[:errors_count], error_link: csv_imports_error_link(user_csv_import_id, @result[:errors_count], @standalone_dormant_import))) %>
+      </div>
+    <% end %>
+    <% if @program_level_import && !@result[:imported_users].zero? %>
+      <div class="text-muted m-b-sm">
+        <%= "csv_import.content.validation_information.emails_note_v1_html".translate(catogory_link: link_to_admin_adding_users) %>
+      </div>
+    <% end %>    
+    <div class="pull-right">
+      <%= link_to("display_string.Cancel".translate, map_csv_columns_csv_import_path(@user_csv_import, :organization_level => @standalone_dormant_import), :class => 'btn btn-white') %>
+      <%= link_to("display_string.Complete".translate, import_data_csv_import_path(user_csv_import_id, :organization_level => @standalone_dormant_import), remote: true, class: 'btn btn-primary cjs_init_import', data: {disable_with: "display_string.Please_Wait".translate}) unless @result[:imported_users].zero? %>
+    </div>
+    <%= render(partial: "progress_statuses/modal_progress_status", locals: {text: "csv_import.content.progress_status.import".translate, id: "cjs_import_progress", data_url: completed_csv_import_path(user_csv_import_id, :organization_level => @standalone_dormant_import)}) %>
+  </div>
+<% end %>
+
+<%= javascript_tag do  %>
+  QtipPopup.generateForm();
+<% end %>

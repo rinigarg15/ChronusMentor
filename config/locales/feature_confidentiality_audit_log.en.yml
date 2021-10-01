@@ -1,0 +1,16 @@
+en:
+  feature:
+    confidentiality_audit_log:
+      header:
+        reason_to_visit: Enter a reason to view confidential area
+        Visitor: Visitor
+        When: When
+        Reason: Reason
+      action:
+        Proceed_raquo_html: Proceed &raquo;
+      content:
+        help_text_html: You are about to view a page with %{confidential_content}
+        confidential_content: confidential content
+        give_reason_html: Please provide a reason as to why you want to view this page, which will be added to %{audit_log}.
+        audit_log: audit log
+        no_logs: There are no logs.

@@ -1,0 +1,11 @@
+<% @title = 'feature.member.content.welcome_terms_v4'.translate(:member_name => wob_member.name) %>
+
+<% wrapper_proc = Proc.new do |programs, options, &block| %>
+  	<% ibox options[:title] do %>
+  		<% content_tag(:div, block.call(programs, options)).html_safe %>
+	<% end %>
+<% end %>
+
+<%= ProgramsListingService.list_programs self, wrapper_proc, :enforce_wrapper => true do |programs, opts| %>
+	<%= listing_page(programs, :partial => "programs/program", :collection_key => :program, :list_group_item_padding => "p-xs") %>
+<% end %>

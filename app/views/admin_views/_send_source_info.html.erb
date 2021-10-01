@@ -1,0 +1,4 @@
+<!-- category param is passed from user reports page -->
+<% ["controller", "action", "id", "category", "section"].each do |type| %>
+  <%= form_object.input "#{type}_source_info", as: :hidden, input_html: {value: @source_info[type.to_sym], name: "source_info[#{type}]", id: "source_info_#{type}"} if @source_info[type.to_sym] %>  
+<% end %>

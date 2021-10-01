@@ -1,0 +1,23 @@
+<% project_request_count = project_request_ids.size %>
+<% messages_hash = get_reject_or_withdraw_project_request_messages_hash(status, project_request_count) %>
+<% modal_v3_popup messages_hash[:modal_header] do %>
+  <p>
+    <%= "feature.project_request.content.bulk_reject_request_popup.help_text".translate(count: project_request_count, mentoring_connection: _mentoring_connection) if status == AbstractRequest::Status::REJECTED %>
+  </p>
+  <%= simple_form_for @project_request, url: update_actions_project_requests_path(src: ga_src, is_manage_view: is_manage_view), :remote => true, html: {id: "bulk_reject_project_requests"} do |f| %>
+    <%= f.input :response_text, as: :text, label: messages_hash[:label_for_reason], input_html: {rows: "5", class: "form-control", id: "bulk_actions_reason", placeholder: messages_hash[:placeholder_for_reason]} %>
+      <% if current_user.is_admin? && status == AbstractRequest::Status::REJECTED %>
+        <%= control_group do %>
+          <%= controls do %>
+            <%= content_tag(:p, email_notification_consequences_on_action_html(ProjectRequestRejected, div_enclose: false, with_count: true, count: project_request_count, translation_extras: {mentoring_connection: _mentoring_connection}), class: "help-block small dim attach-top") %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <%= hidden_field_tag "request_type", status %>
+    <%= hidden_field_tag "project_request_ids", project_request_ids.join(ProjectRequestsController::SEPARATOR) %>
+    <% action_set(:class => "pull-right") do %>
+      <%= cancel_link nil, qtip: true, additional_class: "popup_closebox btn-white" %>
+      <%= f.button :submit, messages_hash[:submit_text] %>
+    <% end %>
+  <% end %>
+<% end %>

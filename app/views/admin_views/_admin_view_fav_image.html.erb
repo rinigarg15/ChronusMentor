@@ -1,0 +1,5 @@
+<% fav_icon = view.favourite_image_path %>
+<% tooltip_text = ( view.favourite ? "feature.admin_view.header.unmark_favourite_text".translate : "feature.admin_view.header.mark_favourite_text".translate) %>
+<%= link_to toggle_favourite_admin_view_path(view), data: { remote: true, toggle: "tooltip", title: tooltip_text, placement: "right" } do %>
+  <% content_tag(:span, get_icon_content("text-warning #{fav_icon}"), id: "admin_view_fav_or_unfav_icon", class: "m-b-xs") + set_screen_reader_only_content(tooltip_text) %>
+<% end %>

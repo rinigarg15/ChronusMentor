@@ -1,0 +1,9 @@
+<% if @last_question_for_meeting_cancelled_or_completed_scenario %>
+	ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", "<%= last_question_of_completed_or_cancelled_type_error_flash(@last_question_for_meeting_cancelled_or_completed_scenario) %>", false)
+<% elsif @common_question.errors.blank? %>
+  jQuery("#common_question_<%=@common_question.id%>").remove()
+  jQuery("#survey_questions_count").html("<%= (@survey.try(:survey_questions) || []).count %>")
+  <% if @common_question.is_a?(Connection::Question) %>
+    CustomizeQuestions.handleConnectionQuestionDelete("<%= @common_question.id %>", <%= @summary_present %>);
+  <% end %>
+<% end %>

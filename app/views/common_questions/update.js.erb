@@ -1,0 +1,16 @@
+<% if @last_question_for_meeting_cancelled_or_completed_scenario %>
+	ChronusValidator.ErrorManager.ShowResponseFlash("flash_#{@common_question.id}", "<%= last_question_of_completed_or_cancelled_type_error_flash(@last_question_for_meeting_cancelled_or_completed_scenario) %>", false)
+<% elsif @common_question.errors[:rating_questions].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("flash_new", '<%= "feature.common_questions.content.rows_blank_error".translate %>')
+<% elsif @common_question.errors[:matrix_setting].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("flash_new", '<%= "feature.common_questions.content.invalid_choices_count_error_v1".translate %>')
+<% elsif @common_question.errors.blank? %>
+  jQuery("#common_question_<%=@common_question.id%>").replaceWith("<%= j preview_and_edit_common_question(@common_question) %>");
+  <%= render partial: "connection/questions/handle_connection_summary_questions", locals: {common_question: @common_question} %>
+<% elsif @common_question.errors[:question_text].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("flash_#{@common_question.id}", '<%= "feature.common_questions.content.field_blank_error".translate %>')
+<% elsif @common_question.errors[:question_info].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("flash_#{@common_question.id}", '<%= "feature.common_questions.content.choices_blank_error".translate %>')
+<% elsif @common_question.errors[:question_choices].present? %>
+    ChronusValidator.ErrorManager.ShowResponseFlash('<%= "flash_#{@common_question.id}" %>', '<%= @common_question.errors[:question_choices].to_sentence %>');
+<% end %>

@@ -1,0 +1,5 @@
+var win = window.open();
+var doc = win.document;
+doc.open();
+doc.write('<%= j(@sanitized_content) %>');
+doc.close();

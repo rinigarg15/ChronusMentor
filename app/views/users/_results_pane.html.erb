@@ -1,0 +1,15 @@
+<%= get_result_pane_alert %>
+<%= ibox nil, content_class: "no-padding" do %>
+  <%= render(:partial => 'users/pagination_and_filter_bar', :locals => {:users => @users, :sort_url => users_path(src: EngagementIndex::Src::BrowseMentors::MENTOR_LISTING_PAGE), :match_view => @match_view, :relevance_view => @search_filters_param.present?, :filter_field => @filter_field, :search_query => @search_query, :role => @role, :sort_field => @sort_field, :sort_order => @sort_order, :user_reference_plural => @user_reference_plural}) %>
+  <%= render(:partial => 'users/result_listing_pane', :locals => {:view_params => users_view_params(@role), show_favorite_ignore_links: show_favorite_ignore_links, favorite_preferences_hash: favorite_preferences_hash, ignore_preferences_hash: ignore_preferences_hash, my_filters: my_filters}) %>
+<% end %>
+
+<% mobile_view = mobile_browser? || is_mobile_app? %>
+<%= javascript_tag do %>
+  <% if local_assigns[:highlight_filters] %>
+     jQuery(window).load(function(){
+      GroupTabs.showFilterPane(<%= mobile_view %>);
+    });
+  <% end %>
+  UserListing.paginationRequest();
+<% end %>

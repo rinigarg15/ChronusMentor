@@ -1,0 +1,82 @@
+<% @angularjs_page = {app: 'detailedConnectionOutcomesReportApp', controller: 'detailedConnectionOutcomesReportCtrl'} %>
+<% @skip_rounded_white_box_for_content = true %>
+<% @back_link = { label: "feature.reports.header.program_outcomes_report".translate(Program: _Program), link: outcomes_report_path(category: Report::Customization::Category::OUTCOME, report: true) } %>
+<% @title = "feature.outcomes_report.header.connection_outcomes_report".translate(:Mentoring_Connection => _Mentoring_Connection) %>
+
+<%= render :partial => "reports/high_charts" %>
+<%= render partial: "reports/outcomes_report/js_routes" %>
+<%= render partial: "reports/outcomes_report/applied_filters" %>
+<%= render partial: "reports/outcomes_report/loading_results" %>
+<% content_for_sidebar do %>
+  <%= render partial: "reports/outcomes_report/filter_pane", :locals => {:start_date => @start_date, :end_date => @end_date, program_start_date: @program_start_date} %>
+<% end %>
+
+<div id="cjs-share-data" class="hide"
+  data-tab=<%= @tab.present? ? @tab : 2 %>
+  data-user-graph-ongoing-label='<%= "feature.outcomes_report.header.user_graph_ongoing_connection_label".translate(:mentoring_connection => _mentoring_connection) %>'
+  data-user-graph-completed-label='<%= "feature.outcomes_report.header.user_graph_completed_connection_label".translate(:mentoring_connection => _mentoring_connection) %>'
+  data-user-graph-positive-outcomes-label='<%= "feature.outcomes_report.header.user_graph_positive_outcomes_connection_label".translate(:mentoring_connection => _mentoring_connection) %>'
+  data-connection-term='<%= _Mentoring_Connection %>'
+  data-connection-graph-ongoing-label='<%= "feature.outcomes_report.title.ongoing_connections_graph_title".translate(:Mentoring_Connections => _Mentoring_Connections) %>'
+  data-connection-graph-completed-label='<%= "feature.outcomes_report.title.completed_connections_graph_title".translate(:Mentoring_Connections => _Mentoring_Connections) %>'
+  data-connection-graph-positive-outcomes-label='<%= "feature.outcomes_report.title.connections_with_positive_outcome_graph_title".translate(:Mentoring_Connections => _Mentoring_Connections) %>'
+>
+</div>
+
+<div class="cui-detailed-report-container">
+  <div>
+    <loading-results ng-show="loadingData" ng-cloak></loading-results>
+    <%= ibox nil do %>
+      <div class="cui-funnel-container clearfix">
+        <%= render partial: "reports/outcomes_report/detailed_connection_report/role_filter" %>
+        <%= render partial: "reports/outcomes_report/detailed_connection_report/section_one" %>
+      </div>
+    <% end %>
+    <div class="tabs-container">
+      <ul class="nav nav-tabs" id="tab-box">
+        <li ng-class="{'active': (showUsers == true)}" id="cui-users-tab">
+          <a href ng-click="onTabChange(true)" id="cui-users-tab-link"> <%= "feature.outcomes_report.title.users".translate %> </a>
+        </li>
+        <li ng-class="{'active': (showUsers == false)}" id="cui-groups-tab">
+          <a href ng-click="onTabChange(false)" id="cui-groups-tab-link"> <%= _Mentoring_Connections %> </a>
+        </li>
+      </ul>
+    </div>
+
+    <%= ibox nil do %>
+      <div>
+        <h3 ng-show="showUsers">
+          <%= "feature.outcomes_report.header.connection_report_user_graph_header_html".translate(:role => "{{userGraphPrefix}}") %>
+        </h3>
+        <h3 ng-show="!showUsers">
+          <%= "feature.outcomes_report.header.connection_report_connection_graph_header".translate(:Mentoring_Connections => _Mentoring_Connections) %>
+        </h3>
+      </div>
+
+      <div class="clearfix">
+        <div class="col-sm-12">
+          <div class="clearfix" ng-show="!showUsers">
+            <highchart id="total-connections-chart" config="totalConnectionsChartConfig" class="col-md-12 cui-outcomes-dashboard-chart has-below-2"></highchart>
+          </div>
+          <div class="clearfix p-t-sm b-t m-t-xs" ng-show="!showUsers">
+            <highchart id="positive-connections-chart" config="positiveConnectionsChartConfig" class="col-md-12 cui-outcomes-dashboard-chart"></highchart>
+          </div>
+          <div class="clearfix" ng-show="showUsers">
+            <highchart id="total-users-chart" config="totalUsersChartConfig" class="col-md-12 cui-outcomes-dashboard-chart has-below-2"></highchart>
+          </div>
+          <div class="clearfix p-t-sm b-t m-t-xs" ng-show="showUsers">
+            <highchart id="positive-users-chart" config="positiveUsersChartConfig" class="col-md-12 cui-outcomes-dashboard-chart"></highchart>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="clearfix m-t-sm">
+        <%= render :partial => 'reports/outcomes_report/detailed_connection_report/table_data' %>
+      </div>
+    <% end %>
+
+  </div>
+</div>
+
+<%= javascript_tag %Q[jQuery(function() {isProgramOutcomesReportSearch = true;});] %>

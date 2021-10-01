@@ -1,0 +1,10 @@
+<% label_text = is_mentor_to_mentee_view?(orientation_type) ? _Mentors : "feature.bulk_match.label.selected_role".translate(role: _Mentor) %>
+<th class="<%= is_mentee_to_mentor_view?(orientation_type) ? 'col-xs-4' : 'col-xs-3' %> cjs-td-mentors pointer" ng-class="getTableHeaderClass('mentorName')" ng-click="getSortOptions('mentorName', <%= orientation_type %>)">
+  <div class="col-xs-7 no-padding pointer">
+    <span class="pull-left"><%= label_text %></span>
+    <span class="text-muted small p-r-m" ng-class="getSortClass('mentorName')"></span>
+  </div>
+  <div class="col-xs-5 no-padding" ng-click="$event.stopPropagation();">
+    <%= render partial: 'bulk_matches/find_matches_header_mentor_search', locals: {orientation_type: orientation_type} %>
+  </div>
+</th>

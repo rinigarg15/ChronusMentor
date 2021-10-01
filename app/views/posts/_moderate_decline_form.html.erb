@@ -1,0 +1,19 @@
+<% modal_v3_popup "display_string.Decline_Post".translate do %>
+  <%= simple_form_for [@forum, @topic, @post], :url => forum_topic_post_path(@forum, @topic, @post, :redirect_back_to => params[:redirect_back_to], from_moderate_content: params[:from_moderate_content]), method: :delete, :html => { :id => "decline_form" } do |f| %>
+    <p>
+      <%= "feature.moderate.message_header.Decline_Header_v1".translate %>
+      <%= email_notification_consequences_on_action_html(ContentModerationUserNotification, div_enclose: false) %>
+    </p>
+    <%= control_group do %>
+      <%= label_tag(:reason, "display_string.Reason".translate, :class => "sr-only") %>
+      <%= controls do %>
+        <%= text_area_tag(:reason, nil, class: "form-control", rows: "5", placeholder: "feature.moderate.content.reason_for_declining".translate) %>
+      <% end %>
+    <% end %>
+    <% action_set class: "pull-right" do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "display_string.Send".translate, :id => 'cjs_popup_send_msg_button' %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= javascript_tag %Q[Posts.declineFormValidation();] %>

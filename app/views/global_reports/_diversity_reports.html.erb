@@ -1,0 +1,16 @@
+<div class="row cjs-no-diversity-reports-container">
+  <div class="col-xs-12">
+    <div class="clearfix m-b-xs"><div class="pull-left"><h3 class="m-t-0 m-b-sm font-normal"><%= "feature.diversity_reports.impact_on_diversity".translate %></h3></div></div>
+    <%= ibox(nil, content_class: "text-muted") { "feature.diversity_reports.content.no_member_diversity".translate } %>
+  </div>
+</div>
+
+<%= render partial: "diversity_reports/index", locals: {diversity_reports: diversity_reports} %>
+
+<div class="row">
+  <div class="col-xs-12">
+    <%= link_to_function(append_text_to_icon("fa fa-plus", "feature.diversity_reports.add_diversity_report".translate), "jQueryShowQtip('', 600, '#{new_diversity_report_path}', '', {modal: true});", class: "btn btn-primary pull-right") %>
+  </div>
+</div>
+
+<%= javascript_tag "jQuery(function(){ jQuery('.cjs-no-diversity-reports-container').toggle(#{diversity_reports.blank?}) });" %>

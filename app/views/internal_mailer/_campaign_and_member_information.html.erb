@@ -1,0 +1,19 @@
+<% if campaign_information.any? %>
+  <h3>Campaign Information:</h3>
+  <% if campaign_information[:name].present? %>
+    <p><%= "Name : #{campaign_information[:name]}" %></p>
+  <% end %>
+  <% if campaign_information[:id].present? %>
+    <p><%= "Id : #{campaign_information[:id]}" %></p>
+  <% end %>
+<% end %>
+
+<% if member_information.any? %>
+  <h3>Member Information:</h3>
+  <% if member_information[:organization].present? %>
+    <p><%= "Organization Url : #{member_information[:organization]}" %></p>
+  <% end %>
+  <% if member_information[:state].present? %>
+    <p><%= "Member state : #{member_information[:state]}" %></p>
+  <% end %>
+<% end %>

@@ -1,0 +1,41 @@
+<% @title = set_view_title(@metric, "feature.messaging.title.admin_messages_v2".translate(Admin: _Admin)) %>
+<% @back_link = {:label => "feature.reports.content.dashboard".translate, :link => management_report_path} if @src_path == ReportConst::ManagementReport::SourcePage %>
+
+<% drop_down_array = [{:label => "feature.messaging.label.send_message_to_members".translate, :url => new_admin_message_path}] %>
+<% drop_down_array << {:label => "feature.messaging.label.send_message_to_mentoring_connections".translate(:mentoring_connections => _Mentoring_Connections), :url => new_admin_message_path(:for_groups => true), :class => 'cui_send_message_to_connections'} if program_view? && @current_program.ongoing_mentoring_enabled? %>
+<% @page_action = drop_down_array %>
+<% @skip_rounded_white_box_for_content = true %>
+
+<% content_for_sidebar do %>
+  <% mobile_footer_actions = { see_n_results: {results_count: @messages_presenter.tabs_data[@messages_presenter.active_tab].total_messages_count, "data-#{MessageConstants::Tabs::INBOX}-tab-count" => "display_string.see_n_results".translate(count: @messages_presenter.tabs_data[MessageConstants::Tabs::INBOX].total_messages_count), "data-#{MessageConstants::Tabs::SENT}-tab-count" => "display_string.see_n_results".translate(count: @messages_presenter.tabs_data[MessageConstants::Tabs::SENT].total_messages_count), "data-icon-class" => "fa fa-chevron-left"} } %>
+  <%= filter_container_wrapper(mobile_footer_actions) do %>
+    <%= render partial: "messages/filter_pane" %>
+  <% end %>
+<% end %>
+
+
+<div>
+  <div class="tabs-container">
+    <ul class="nav nav-tabs h5 no-margins" id="cjs_messages_tabs">
+      <li class="active" id="cjs_<%= MessageConstants::Tabs::INBOX %>_messages_tab" data-tab="<%= MessageConstants::Tabs::INBOX %>">
+        <%= link_to messages_tab_title(@messages_presenter.tabs_data[MessageConstants::Tabs::INBOX].total_messages_count, MessageConstants::Tabs::INBOX), "javascript:void(0)" %>
+      </li>
+      <li id="cjs_<%= MessageConstants::Tabs::SENT %>_messages_tab" data-tab="<%= MessageConstants::Tabs::SENT %>">
+        <%= link_to messages_tab_title(@messages_presenter.tabs_data[MessageConstants::Tabs::SENT].total_messages_count, MessageConstants::Tabs::SENT), "javascript:void(0)" %>
+      </li>
+    </ul>
+  </div>
+
+  <div id="cjs_messages_listing">
+    <%= render "admin_messages/admin_messages_listing", {:messages_presenter => @messages_presenter} %>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(function(){
+    jQuery(document).on('ajax:beforeSend', "#cjs_messages_listing", function(){
+      MessageSearch.showLoading();
+    });
+    MessageSearch.initializeTabs(<%= @messages_presenter.active_tab %>);
+  });
+<% end %>

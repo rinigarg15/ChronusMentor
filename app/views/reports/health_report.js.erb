@@ -1,0 +1,7 @@
+<% locals_hash = {@sub_report.to_sym => @health_report.send(@sub_report), :format => FORMAT::HTML, :is_pdf_request => false} %>
+
+<% content = render(:partial => "reports/health_report/overview_#{@sub_report}", :locals => locals_hash) %>
+jQuery("#<%= @sub_report %>_overview_loader").replaceWith("<%= j(content) %>");
+
+<% content = render(:partial => "reports/health_report/#{@sub_report}", :locals => locals_hash) %>
+jQuery("#<%= @sub_report %>_loader").replaceWith("<%= j(content) %>");

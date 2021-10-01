@@ -1,0 +1,178 @@
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.boxed-layout #wrapper {
+    background: #FFF;
+}
+
+// Variable Background/ Text color classes
+.navy-bg {
+  ::-webkit-input-placeholder {
+    color: darken($tab-color, 10%);
+  }
+  ::-moz-placeholder {
+    color: darken($tab-color, 10%);
+  }
+  :-ms-input-placeholder {
+    color: darken($tab-color, 10%);
+  }
+}
+
+.navy-dark-bg {
+  background: darken($tab-bgcolor, 5%);
+  color: $tab-color;
+}
+
+.navy-darker-bg {
+  background: darken($tab-bgcolor, 10%);
+  color: $tab-color;
+}
+
+.black-bg {
+  background: #333333;
+  color: #FFF;
+}
+
+.light-gray-bg {
+  background: lighten($gray, 2%);
+}
+
+.light-yellow-bg {
+  background: #FFFFEE;
+}
+
+.text-navy-dark {
+  color: darken($navy, 5%);
+}
+
+.text-default{
+  color: $text-color;
+}
+
+.text-white{
+  color: #FFF !important;
+}
+
+.text-nav-item {
+  color: $text-color;
+}
+
+// Modal Overrides
+.modal-body{
+  padding: 20px;
+}
+
+.modal-dialog {
+  margin: 140px auto; // Accounting for the fixed header
+  z-index: 2100 !important; //should be same as cke baseFloatZIndex
+}
+
+@media (max-width: 480px) {
+
+  .modal-dialog {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .modal-content {
+    min-height: 100%;
+    border-radius: 0;
+    border: none;
+  }
+
+  .modal-header {
+    background-color: $navy;
+    color: #ffffff;
+  }
+
+  .text-white-mobile{
+    color: #ffffff;
+  }
+}
+
+@media (max-width: 767px) {
+  .cui-non-full-page-modal {
+    top: auto;
+
+    .modal-dialog {
+      width: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    .modal-header {
+      background-color: white;
+      color: $text-color;
+    }
+  }
+}
+
+.dropdown-menu {
+  @extend .flat-border;
+}
+
+.dropdown-menu.menu-wide {
+  min-width: 350px;
+}
+
+.btn:not(.btn-circle):not(.btn-rounded) {
+  @extend .flat-border;
+  @extend .boxshadow-sm;
+}
+
+.btn-white, .btn-white:hover {
+  border-bottom: 0;
+  border-collapse: separate;
+}
+
+.noshadow.btn-white, .btn-white:disabled, .btn-white.disabled {
+  border-bottom: 1px solid $border-color;
+  &:hover, &:active, &.active, &:focus {
+    border: 1px solid #d2d2d2;
+  }
+}
+
+.progress-bar-black {
+  background-color: #000000;
+}
+
+.progress-bar-dark-gray {
+  background-color: $dark-gray;
+}
+
+ul.unstyled, ol.unstyled {
+  padding-left: 0;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.text-left-imp {
+  text-align: left !important;
+}
+
+.popover-title {
+  @extend .no-margins;
+}
+
+html, body {
+  height: auto;
+}
+
+.panel-title {
+  color: $text-color;
+}
+
+.ibox.fullscreen {
+  @extend .no-margins;
+}

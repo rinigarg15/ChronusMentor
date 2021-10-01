@@ -1,0 +1,57 @@
+<% unless @group.proposed? || @group.rejected? %>
+  <% if @group.published? %>
+    <% @sub_title = "feature.connection.header.Edit_Profile".translate unless @group.closed? %>
+  <% else %>
+    <% @title_badge = render_group_status_logo(@group) %>
+  <% end %>
+<% end %>
+<%=render layout: 'groups/show_layout' do %>
+  <%= ibox nil, :ibox_id => "edit_profile" do %>
+    <%= simple_form_for @group, :url => update_answers_group_path(@group), :html => {:class => "form-horizontal", :multipart => true}, wrapper: :horizontal_input do |f| %>
+
+      <%= formatted_form_error f, :header_message => "flash_message.group_flash.update_answers_failure_v1".translate, :message => nil %>
+      <%= f.input :name, :label => "feature.connection.name_v1".translate(Mentoring_Connection: _Mentoring_Connection), :as => :string, :input_html => {:class => "form-control"}, :input_wrapper_html => {:class => "m-t-xs"} %>
+      <%= f.input :logo, :as => :file, label: "feature.connection.Picture".translate %>
+
+      <% if @current_program.project_based? && @current_program.allow_circle_start_date? %>
+        <%= control_group do %>
+          <%= content_tag(:div, "feature.connection.content.circle_start_date_label".translate(Mentoring_Connection: _Mentoring_Connection), :class => "control-label col-sm-3") %>
+          <%= controls(class: "col-sm-9") do %>
+            <%= content_tag(:label, "feature.meetings.form.date".translate, class: "sr-only", for: "circle_start_date_form") %>
+            <%= construct_input_group([ { type: "addon", icon_class: "fa fa-calendar" } ], [], {:input_group_class => "m-b-xs"}) do %>
+              <%= text_field_tag("[group][start_date]", (@group.start_date.present? ? DateTime.localize(@group.start_date, format: :short) : ""), :class => "form-control", :id => "circle_start_date_form", data: date_picker_options({ min_date: Date.current })) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% if @current_program.project_based? %>
+        <% @current_program.roles.for_mentoring.each do |role| %>
+          <% max_limit = @group.setting_for_role_id(role.id, false).try(:max_limit) %>
+          <%= max_number_of_users_in_group_field(@current_program, :role => role, :max_limit => max_limit, :show_help_text => (@group.has_member?(@current_user) && (role == @group.membership_of(@current_user).role))) %>
+        <% end %>
+      <% end %>
+      <% if @current_program.connection_profiles_enabled? %>
+        <%# IE7 Fix needed blank label and :label => "" doesnot work in simple form %>
+        <% if !@current_program.project_based? && @current_program.allow_users_to_mark_connection_public? %>
+
+          <%= f.input :global, :label => false, :inline_label => "feature.connection.header.public_connection_html".translate(mentoring_connection: _mentoring_connection, embed_icon: embed_icon('fa fa-info-circle', '', id: "group_profile_public")), :input_wrapper_html => {:class => "col-sm-offset-3 col-sm-9"}, wrapper: :bootstrap %>
+
+          <%= tooltip("group_profile_public", "feature.connection.content.help_text.public_connection_v1".translate(program: _program, mentoring_connection: _mentoring_connection)) %>
+        <% end %>
+        <%= render :partial => "groups/edit_connection_questions_answers", :locals => { :connection_questions => @connection_questions, :group => @group} %>
+      <% end %>
+
+      <%= f.input :notes, :label => group_notes_label(mentoring_connection: _mentoring_connection, admins: _admins), :as => :text, :input_html => {:class => "form-control", :rows => 5} if display_notes(@user_edit_view) %>
+      <% action_set class: "pull-right" do %>
+        <%= cancel_link group_path(@group) %>
+        <%= f.button :submit, "display_string.Save".translate, class: "cjs-form-submit-validation", :disable_with => "display_string.Please_Wait".translate %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    GroupSearch.initializeEditGroup();
+  });
+<% end %>

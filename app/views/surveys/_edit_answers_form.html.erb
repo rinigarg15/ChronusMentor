@@ -1,0 +1,72 @@
+<% survey = survey_response.survey %>
+<% question_answer_map = survey_response.question_answer_map %>
+<% matrix_question_answers_map = survey_response.matrix_question_answers_map %>
+
+<%= simple_form_for current_user, :url => update_answers_survey_path(survey, :src => @from_src), :html => { :id => "survey_answers_form"} do |user| %>
+  <%= hidden_field_tag  :response_id, @response.id %>
+  <%= hidden_field_tag :is_draft, false, id: 'cjs_draft_survey' %>
+  <%  if @survey.engagement_survey? %>
+    <%= hidden_field_tag :task_id, params[:task_id] %>
+    <%= hidden_field_tag :group_id, params[:group_id] %>
+  <% elsif @survey.meeting_feedback_survey? %>
+    <%= hidden_field_tag :member_meeting_id, params[:member_meeting_id] %>
+    <%= hidden_field_tag :meeting_occurrence_time, params[:meeting_occurrence_time] %>
+    <%= hidden_field_tag :meeting_area, params[:meeting_area] %>
+  <% end %>
+  <% if question_answer_map.empty? %>
+    <div class="text-muted p-sm text-center">
+      <%= "feature.survey.content.no_question_v1".translate %>
+    </div>
+  <% else %>
+    <% question_answer_map.each do |question, answer| %>
+      <% if question.can_be_shown?(params[:member_meeting_id]) %>
+        <div class="well flat-border white-bg clearfix no-vertical-margins <%= 'no-border' if @from_src == Survey::SurveySource::POPUP %>">
+          <%= control_group do %>
+            <%= content_tag(:big, common_answer_label(question, :class => "font-noraml big")) %>
+            <div >
+              <%= content_tag(:span, "", :class => "m-t-sm fa #{hidden_on_web}") %>
+              <% view_options = question.matrix_question_type? ? {:mobile_view => mobile_browser? || mobile_device?} : {} %>
+              <%= edit_common_answer_field(answer, question, {:matrix_question_answers_map => matrix_question_answers_map}.merge(view_options)) %>
+              <% if question.required? %>
+                <% scoped_field_text = question.matrix_question_type? ? "matrix_answers_#{question.id}" : "common_answers_#{question.id}" %>
+                <%= javascript_tag("RequiredFields.addScopedField('survey_answers','#{scoped_field_text}')") %>
+                <% if @error_question_ids.include?(question.id.to_s) %>
+                  <%= javascript_tag("ChronusValidator.ErrorManager.ShowFieldError('#common_answers_#{question.id}')") %>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if @survey.allowed_to_attend?(current_user, @task, @group, @feedback_survey_group, {member_meeting: @member_meeting, meeting_timing: @meeting_timing}) %>
+
+      <%= render_share_progress_report_checkbox(@survey, @group) %>
+
+      <% action_set :fields_required => true, :class => "m pull-right" do %>
+        <% if @from_src == Survey::SurveySource::POPUP || @from_src == Survey::SurveySource::MEETING_AREA %>
+          <%= cancel_link(nil, {:qtip => true, :additional_class => "cjs_dismiss_survey_popup"}) %>
+        <% else %>
+          <% cancel_url = @group.present? ? group_path(@group) : program_root_path %>
+          <%= cancel_link cancel_url %>
+        <% end %>
+
+        <%= link_to("display_string.Save_as_draft".translate, "javascript:void(0)", :id=> "cjs_survey_save_draft_btn", :class => "btn btn-white", data: {:disable_with => "display_string.Please_Wait".translate}) if @survey.program_survey? || (@survey.engagement_survey? && (!@response.id.present? || @response.was_draft)) %>
+        <%= user.submit "display_string.Submit".translate, :class => "btn btn-primary cjs-survey-form-submit-validation", :onclick => "return RequiredFields.validate('survey_answers');", :disable_with => "display_string.Please_Wait".translate %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  Survey.setDraftTrue();
+  Survey.handleMatrixForcedRanking();
+  <% if @survey.engagement_survey? || @survey.meeting_feedback_survey? %>
+    GroupsShow.trackDismissSurveyPopup(<%= @from_src %>, "<%= Survey::SurveySource::GA_NAME[@from_src] %>", <%= @survey.meeting_feedback_survey? %>);
+    GroupsShow.trackSurveyAnswerSubmit(<%= @from_src %>, "<%= Survey::SurveySource::GA_NAME[@from_src] %>", <%= @survey.meeting_feedback_survey? %>);
+  <% end %>
+  jQuery(function(){
+    CustomizeSelect.selectExpandContract();
+  });
+<% end %>

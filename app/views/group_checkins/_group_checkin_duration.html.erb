@@ -1,0 +1,7 @@
+<div class="text-navy small m-t-xs">
+  <%= get_icon_content("fa fa-clock-o no-margins text-default") %>
+  <%= "feature.group_checkin.label.checked_in".translate %>
+  <span class="font-600"> <%= display_checkin_duration(checkin.duration, hide_clock: true) %> </span>
+  <span> <%= "feature.group_checkin.label.on".translate %> </span>
+  <span class="font-600"> <%=  DateTime.localize(checkin.date, format: :full_display_no_time) %> </span>
+</div>

@@ -1,0 +1,22 @@
+<%= field_set_wrapper("feature.admin_view.label.language".translate, false) do %>
+  <%= control_group do %>
+    <% label = "feature.admin_view.label.language_filter".translate(program: _program) %>
+    <div class="false-label control-label col-sm-2"><%= label %></div>
+    <%= controls(class: "col-sm-10") do %>
+      <%= choices_wrapper(label) do %>
+        <div class="well white-bg">
+          <label class="checkbox">
+            <%= check_box_tag("admin_view[language][]", Language.for_english.id.to_i, @filter_params.try(:[], :language).try(:include?, Language.for_english.id.to_i.to_s)) %>
+            <%= Language.for_english.title %>
+          </label>
+          <% Language.supported_for(super_console?, wob_member, program_context).each do |language| %>
+            <label class="checkbox">
+              <%= check_box_tag("admin_view[language][]", language.id, @filter_params.try(:[], :language).try(:include?, language.id.to_s), id: "admin_view_language_#{language.id}") %>
+              <%= language.get_title_in_organization(@current_organization) %>
+            </label>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

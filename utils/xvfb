@@ -1,0 +1,38 @@
+#!/bin/bash
+XVFB=/usr/bin/Xvfb
+XVFBARGS="$DISPLAY -ac -screen 0 1024x768x16"
+PIDFILE=/var/run/hudson/xvfb_${DISPLAY:1}.pid
+case "$1" in
+  start)
+    /sbin/start-stop-daemon --stop --signal 0 --quiet --pidfile $PIDFILE
+    if [ $? -ne 0 ]; then 
+       echo -n "Starting virtual X frame buffer: Xvfb"
+       /sbin/start-stop-daemon --start --quiet --pidfile $PIDFILE --make-pidfile --background --exec $XVFB -- $XVFBARGS
+    else 
+       echo -n "Status of virtual X frame buffer: Xvfb -- Already running"
+    fi
+    echo "."
+    ;;
+  status)
+    /sbin/start-stop-daemon --stop --signal 0 --quiet --pidfile $PIDFILE
+    if [ $? -ne 0 ]; then 
+       echo -n "Status of virtual X frame buffer: Xvfb -- NOT RUNNING"
+    else 
+       echo -n "Status of virtual X frame buffer: Xvfb -- Running"
+    fi
+    echo "."
+    ;;
+  stop)
+    echo -n "Stopping virtual X frame buffer: Xvfb"
+    /sbin/start-stop-daemon --stop --quiet --pidfile $PIDFILE
+    echo "."
+    ;;
+  restart)
+    $0 stop
+    $0 start
+    ;;
+  *)
+  echo "Usage: /etc/init.d/xvfb {start|stop|restart}"
+  exit 1
+esac
+exit 0

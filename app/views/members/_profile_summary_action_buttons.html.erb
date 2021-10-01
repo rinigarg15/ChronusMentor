@@ -1,0 +1,95 @@
+<% buttons = [] %>
+<% groups = (Group.involving(@profile_user, current_user) + Group.involving(current_user, @profile_user)) if logged_in_program? && @profile_user.present? %>
+
+<% unless @dormant_view %>
+  <% if @is_self_view && program_view? %>
+    <% if is_edit %>
+      <% buttons << {:label => embed_icon('fa fa-user m-r-xs',"feature.profile.actions.view_your_profile".translate), :url => member_path(@profile_member)} %>
+    <% else %>
+      <% buttons << {:label => embed_icon('fa fa-user m-r-xs', "feature.profile.actions.edit_your_profile".translate), :url => edit_member_path(@profile_member, ei_src: EngagementIndex::Src::EditProfile::PROFILE_ACTION_BUTTON)} %>
+    <% end %>
+    <% if current_program.calendar_enabled? && @profile_member.ask_to_set_availability? %>
+      <% buttons << {:label => embed_icon('fa fa-calendar m-r-xs', "feature.profile.actions.edit_availability".translate), :url => member_path(@profile_member, :tab => MembersController::ShowTabs::AVAILABILITY)} %>
+    <% end %>
+    <% buttons << { label: embed_icon('fa fa-download m-r-xs', "feature.profile.content.download_as_pdf".translate), url: member_url(@profile_user.member, format: :pdf, subdomain: @current_organization.subdomain), target: "_blank", class: "#{mobile_app_class_for_download_files}", data: { filename: pdf_name, targeturl: member_url(@profile_user.member, format: :pdf, subdomain: @current_organization.subdomain, cjs_skip_mobile_prompt: true) } } %>
+    <% to_add_role = @profile_user.get_applicable_role_to_add_without_approval(current_program) %>
+    <% buttons << { label: embed_icon('fa fa-plus-circle m-r-xs', "feature.profile.actions.become_role".translate(to_add_role: to_add_role.customized_term.articleized_term)), js: "jQueryShowQtip('#confirm_add_role', 600, '#{add_role_popup_user_path(current_user)}', '', {modal: true});"} if to_add_role.present? %>
+  <% else %>
+    <% if is_admin_editing %>
+      <% buttons << {:label => embed_icon('fa fa-user m-r-xs',"feature.profile.actions.view_profile".translate), :url => member_path(@profile_member)} %>
+    <% end %>
+    <!-- DELETE false -->
+    <% if @logged_in_program_and_not_dormant_view && groups.select(&:active?).present? %>
+      <% buttons += group_links_hash(groups) %>
+    <% else %>
+      <% if !is_edit && program_view? && @current_program.matching_by_mentee_alone? && mentor_request = current_user.try(:pending_mentor_request_of?, @profile_user) %>
+        <% @existing_connections_of_mentor = current_user.mentoring_groups.active %>
+      <% end %>
+      <% if logged_in_program?  && current_user.opting_for_ongoing_mentoring? && program_view? && current_user.can_offer_mentoring_to?(@profile_user) %>
+        <% @pending_mentor_offers_student_ids = current_user.sent_mentor_offers.pending.pluck(:student_id) %>
+        <% @existing_connections_of_mentor = current_user.mentoring_groups.active %>
+        <% if @pending_mentor_offers_student_ids.include?(@profile_user.id) %>
+          <% buttons << {:label => embed_icon('fa fa-user-plus text-muted m-r-xs', "feature.profile.content.your_offer_is_pending".translate), :url => "javascript:void(0);"} %>
+        <% elsif current_program.ongoing_mentoring_enabled? %>
+          <% offer_mentoring_hash = {:label => embed_icon('fa fa-user-plus m-r-xs', "feature.profile.content.offer_mentoring_v1".translate(:Mentoring => _Mentoring)), :js => "OfferMentoring.renderPopup('#{new_mentor_offer_path(student_id: @profile_user.id, src: EngagementIndex::Src::SendRequestOrOffers::USER_PROFILE_PAGE)}');"} %>
+          <% offer_mentoring_hash.merge!(disabled: true) if @side_pane_connection_requests && @side_pane_connection_requests.size > 0 %>
+          <% buttons << offer_mentoring_hash %>
+        <% end %>
+      <% end %>
+
+      <% if (program_view? && @is_student_view && current_program.matching_by_mentee_alone?) %>
+        <% request_mentoring_action_hash = get_request_mentoring_action_hash(current_user, @profile_user, { analytics_param: EngagementIndex::Src::SendRequestOrOffers::USER_PROFILE_PAGE } ) %>
+        <% buttons << request_mentoring_action_hash if request_mentoring_action_hash.present? %>
+      <% end %>
+    <% end %>
+
+    <% if logged_in_program? && !@is_self_view %>
+      <% request_meeting_action_hash = get_request_meeting_action_hash(current_user, @profile_user, {:analytics_param => EngagementIndex::Src::SendRequestOrOffers::USER_PROFILE_PAGE}) %>
+      <% buttons << request_meeting_action_hash if request_meeting_action_hash.present? %>
+    <% end %>
+
+    <% if logged_in_organization? && @profile_member != wob_member && show_send_message_link?(@profile_user || @profile_member) %>
+      <% buttons << {:label => embed_icon('fa fa-envelope m-r-xs',"display_string.Send_Message".translate), :url => get_send_message_link(@profile_user || @profile_member, current_user_or_member, :receiver_id => @profile_member.id, src: EngagementIndex::Src::MessageUsers::USER_PROFILE_PAGE)} %>
+    <% end %>
+  <% end %>
+<% end %>
+<% buttons_for_mobile = Marshal.load(Marshal.dump(buttons)) %>
+<div class='pull-right hidden-xs cjs_profile_summary_action_buttons'>
+  <% if show_favorite_ignore_links %>
+    <div class="btn-md btn btn-default btn-outline m-r-xs waves-effect mentor_ignore_<%= profile_user.id %>">
+      <%= render partial: "users/show_ignore_links", locals: {mentor_id: profile_user.id, ignore_preferences_hash: ignore_preferences_hash, recommendations_view: AbstractPreference::Source::PROFILE, show_match_config_matches: false} %>
+    </div>
+  <% end %>
+  <%= dropdown_buttons_or_button(buttons, {dropdown_title: title_for_user_actions_dropdown(@show_connect)}.merge({dropdown_menu_class: "pull-right", btn_class: " cjs_mentor_actions"})) if buttons.present? %>
+</div>
+<% request_text = @side_pane_requests_count ? "feature.user.content.view_request".translate(count: @side_pane_requests_count) : "" %>
+<%= link_to(request_text, "javascript:void(0)", {class: "cjs_pending_requests btn btn-primary visible-sm pull-right m-r-xs"}) if (@side_pane_requests_count && @side_pane_requests_count > 0) %>
+
+<%= yield %>
+
+<div class='col-xs-12 visible-xs cjs_profile_summary_action_buttons'>
+  <% if buttons.present? %>
+    <div class='no-padding col-xs-12 cjs_connect_button'>
+      <%= dropdown_buttons_or_button(buttons_for_mobile, dropdown_title: title_for_user_actions_dropdown(@show_connect), btn_class: "btn-block m-t-sm cjs_mentor_actions_block", btn_group_btn_class: "btn-block", dropdown_menu_class: "col-xs-12")  %>
+    </div>
+  <% end %>
+  <% if show_favorite_ignore_links %>
+    <div class="btn-md btn btn-default btn-outline m-t-sm waves-effect col-xs-12 mentor_ignore_<%= profile_user.id %> cjs_profile_ignore_button">
+      <%= render partial: "users/show_ignore_links", locals: {mentor_id: profile_user.id, ignore_preferences_hash: ignore_preferences_hash, recommendations_view: AbstractPreference::Source::PROFILE, show_match_config_matches: false} %>
+    </div>
+  <% end %>
+</div>
+<%= link_to(request_text, "javascript:void(0)", {class: "cjs_pending_requests btn btn-primary col-xs-12 visible-xs btn-block m-t-sm"}) if (@side_pane_requests_count && @side_pane_requests_count > 0) %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    MentorRequests.showRequestConnectionPopup();
+    MentorRequests.showPendingRequestsPane();
+    <% if local_assigns[:open_connect_popup] %>
+      MentorRequests.showConnectPopup(".<%= open_connect_popup %>");
+    <% end %>
+    <% if show_favorite_ignore_links %>
+      IgnorePreference.ignoreProfile("<%= profile_user.id %>");
+    <% end %>
+  });
+<% end %>

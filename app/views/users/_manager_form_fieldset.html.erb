@@ -1,0 +1,11 @@
+<div id="edit_manager_<%=question.id%>" class="edit_manager clearfix">
+  <div id="managers">
+    <%= hidden_field_tag "profile_answers[#{question.id}][hidden]" %>
+    <div id="manager_cur_list_<%=question.id%>" class="clearfix panel-body">
+      <%= render :partial => "managers/new_manager", :object => answer.manager || Manager.new, :locals => {:question => question, :required => local_assigns[:required]} %>
+      <% unless question.help_text.blank? %>
+        <%= help_text_content(question.help_text.html_safe, question.id) %>
+      <% end %>
+    </div>
+  </div>
+</div>

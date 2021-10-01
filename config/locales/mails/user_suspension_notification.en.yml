@@ -1,0 +1,17 @@
+en:
+  email_translations:
+    user_suspension_notification:
+      title_v3: Deactivation notification to user
+      description_v3: The email is sent to a participant when they are deactivated at the %{_program} level by the %{_admin}.
+      subject_v1: Your membership has been deactivated
+      content_v3_html: This is to inform you that the {{customized_subprogram_term}} {{customized_admin_term}} has deactivated your membership in {{subprogram_or_program_name}}.<br/>{{reason_as_quote}}<br/>Contact the {{customized_subprogram_term}} {{customized_admin_term}} <a href='{{url_contact_admin}}'>here</a> for more information or to request to reactivate your membership.<br/>
+      tags:
+        administrator_name:
+          description: Name of the administrator who had suspended the member
+        reason:
+          description: Reason for suspending the member
+          example: Due to inactivity for more than 6 months.
+        url_contact_admin:
+          description: Url for the user to contact administrator
+        reason_as_quote:
+          description: Reason for suspending the member quoted by administrator

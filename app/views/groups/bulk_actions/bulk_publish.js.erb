@@ -1,0 +1,3 @@
+closeQtip();
+jQuery(".progress_data_url").data(JSON.parse('<%= j(@data.to_json.html_safe) %>'));
+progressBar.initializeProgressBar('<%= progress_status_path(@progress.id) %>', 'cjs_bulk_group_publish_progress', BulkGroupPublish.onPublishComplete);

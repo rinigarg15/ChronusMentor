@@ -1,0 +1,12 @@
+<%= form_tag(bulk_destroy_program_invitations_path, remote: true, method: :delete) do %>
+  <%= hidden_field_tag("selected_ids", @selected_ids.join(COMMON_SEPARATOR), id: nil) %>
+  <%= content_tag(:p, "common_text.confirmation.sure_to_delete_these".translate(title: "feature.program_invitations.header.invitations".translate), class: "m-b-md") %>
+  <%= content_tag(:div, render_invitation_emails(@resend_emails)) %>
+  <%= horizontal_line(class: "m-b-sm m-t-xs") %>
+  <% action_set(class: "form-group") do %>
+    <div class="pull-right">
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", data: { dismiss: "modal" } %>
+      <%= submit_tag("feature.campaign.delete".translate, :class => 'btn btn-primary', data: { disable_with: "display_string.Please_Wait".translate }) %>
+    </div>
+  <% end %>
+<% end %>

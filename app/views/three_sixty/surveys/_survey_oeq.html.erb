@@ -1,0 +1,9 @@
+<% question = survey_oeq.question %>
+<div id="cjs_three_sixty_survey_oeq_<%= survey_oeq.id %>" class="animated fadeInDown well square-well clearfix no-borders no-margins cjs-alt-color-actions cjs_three_sixty_parent">
+  <div class="col-md-10">
+    <%= question.title %>
+  </div>
+  <div class="col-md-2 no-padding">
+    <%= link_to(get_icon_content("fa fa-trash m-r-0") + set_screen_reader_only_content("display_string.Delete".translate), three_sixty_survey_question_path(survey ,survey_oeq), :remote => true, :method => :delete, data: {:confirm => "feature.three_sixty.survey_question.delete_warning_v1".translate}, :class => "pull-right btn btn-white btn-xs") %>
+  </div>
+</div>

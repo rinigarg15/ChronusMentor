@@ -1,0 +1,47 @@
+<% @is_first_visit = j chronus_sanitize(@is_first_visit, sanitization_version: @current_organization.security_setting.sanitization_version) if (@is_first_visit && @is_first_visit != !!@is_first_visit) %>
+<%= response_flash "mentoring_slot_flash", class: "error", message: formatted_form_error(form, dont_indent: true) %>
+<% basic_information_form_content_wrapper do %>
+  <%= get_section_description(section, class: "m-b-sm") %>
+  <%= render partial: "users/edu_exp_form", locals: { profile_user: profile_user, section: section } if has_edu_exp_ques %>
+  <% options = { skip_validation_hash: true, disable: {} } %>
+  <% options[:disable][@current_organization.name_question.id] = options[:disable][@current_organization.email_question.id] = disable_name_or_email_field(profile_member) %>
+
+  <% content, skip_validation_hash = render_default_questions(profile_user, grouped_role_questions, form, options) %>
+  <%= content %>
+  <%= member_photo_select(form, profile_member, true) if @is_first_visit %>
+
+  <%= render partial: "members/edit/profile_fields", locals: { role: RoleConstants::MENTOR_NAME, person: form, questions: basic_questions, no_action: true, section: section } unless basic_questions.nil? %>
+
+  <% validate_basic_info = "(EditUser.validateBasicInformation(#{section.id}, '#{j("common_text.error_msg.fill_appropriate_values".translate)}', {skip_email_validation: #{skip_validation_hash[ProfileQuestion::Type::EMAIL]}, skip_name_validation: #{skip_validation_hash[ProfileQuestion::Type::NAME]}, admin_user: '#{@is_admin_view}', first_visit: '#{@is_first_visit}'}) && ProfileFields.validateTextOnly('#{section.id}'))" %>
+  <% onclick_content = "EditUser.renameEducationExperienceFields();" %>
+  <% onclick_content += if(program_context.calendar_enabled? && profile_user.is_mentor? && @is_first_visit)
+     %Q{
+       var boundaries = #{(Meeting.valid_start_time_boundaries + [Meeting.valid_end_time_boundaries.last]).to_json};
+       var slot_diff = #{(@allowed_individual_slot_duration/Meeting::SLOT_TIME_IN_MINUTES).to_json};
+       var errorMsg = #{'feature.calendar.content.end_time_mustbe_greater'.translate(allowed_slot_time: @allowed_individual_slot_duration).to_json};
+       calendarSlot.renameMentSlotFields();
+       return (#{validate_basic_info} && validateTimesForAllSlotsAndSubmit(boundaries, slot_diff, errorMsg, 'mentoring_slot_flash', '#{j(DateTime.localize(Time.now.at_midnight, format: :short_time_small))}', '#{j(DateTime.localize(Time.now.at_midnight + 1.hour, format: :short_time_small))}')) && validateDateForAllSlotsAndSubmit('mentoring_slot_flash')
+     }
+   else
+     "return #{validate_basic_info}"
+   end
+  %>
+
+  <% if @is_first_visit %>
+    <% action_set do %>
+      <div class="pull-right">
+        <%= hidden_field_tag :first_visit, @is_first_visit, id: nil %>
+        <%= hidden_field_tag :last_section, last_section %>
+        <%= hidden_field_tag :section_id, section.id %>
+        <%= form.submit "display_string.Save_Proceed_html".translate, class: "btn btn-primary", id: "submit_general", onclick: onclick_content %>
+      </div>
+    <% end %>
+  <% else %>
+    <% action_set do %>
+      <div class="pull-right">
+        <%= link_to('display_string.Cancel'.translate, "javascript:void(0)", class: 'cjs-cancel-ibox btn btn-white') %>
+        <%= form.submit "display_string.Save".translate, class: "btn btn-primary", id: "submit_general", onclick: (onclick_content) %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

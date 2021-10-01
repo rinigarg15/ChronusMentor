@@ -1,0 +1,24 @@
+<% meeting = @meeting.build_recurring_meeting(Meeting.parse_occurrence_time(@current_occurrence_time)) %>
+<%= render :layout => 'meetings/meeting_area_common_content', :locals => {meeting: meeting, :tab => Meeting::Tabs::DETAILS, is_admin_view: @is_admin_view, :src => @src} do %>
+  <div class="tab-content no-padding clearfix">
+    <div id="meeting_details" class="tab-pane no-padding active">
+      <%= render partial: "meetings/meeting_area", locals: { meeting: meeting, show_actions: true, is_admin_view: @is_admin_view, meeting_feedback_survey: @meeting_feedback_survey, src: @src, src_path: @src_path } %>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do  %>
+  jQuery(document).ready(function() {
+    <% if params[:meeting_updated].present? %>
+      Meetings.trackMeetingUpdatedTime(<%= params[:edit_time_only].to_boolean %>);
+    <% end %>
+  });
+<% end %>
+
+<% if @src_path == EngagementIndex::Src::AccessFlashMeetingArea::MEETING_REQUEST_ACCEPTANCE %>
+  <%=  render partial: "meetings/accept_msg_popup", locals: { meeting: meeting } %>
+  <%= javascript_tag do %>
+    jQuery("#remoteModal").modal('hide'); 
+    Meetings.showAcceptPopup("#modal_meeting_request_<%= @meeting.meeting_request.id %>");
+  <% end %>
+<% end %>

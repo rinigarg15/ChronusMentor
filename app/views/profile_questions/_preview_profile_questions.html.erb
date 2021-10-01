@@ -1,0 +1,93 @@
+<%= form_tag nil, :class => 'form-horizontal' do %>
+  <% program = @current_program || @preview_program %>
+  <% profile_questions.each do |profile_question| %>
+    <% q_id = profile_question.id %>
+    <% required = @required_questions[q_id].present? %>
+    <% is_conditional_question_set = (profile_question.conditional_question_id.present? && profile_question.conditional_text_choices.present?) %>    
+    <% match_texts = is_conditional_question_set ? profile_question.conditional_text_choices : [] %>
+    <div id='profile_question_value_<%= q_id %>' class='cjs_question_<%= q_id %> clearfix <%="cjs_dependent_#{profile_question.conditional_question_id}" if profile_question.conditional_question_id %>' style=<%='display:none' if is_conditional_question_set%>>
+      <div class='type field_view clearfix profile_ques_field'>
+        <% if profile_question.name_type? %>
+          <%= control_group(:class => "cui_edit_name") do %>
+            <%= content_tag(:div, "display_string.Name".translate + " *", :class => 'false-label control-label col-sm-2') %>
+            <%= controls(class: "cui_edit_first_last_name col-sm-10") do %>
+              <%= content_tag(:div, {:class => "row"}) do %>
+                <%= content_tag(:div, {class: "col-sm-6"}) do %>
+                  <label for="first_name" class="sr-only"><%= Member.human_attribute_name(:first_name) %></label>
+                  <%= (text_field_tag :first_name, nil, placeholder: Member.human_attribute_name(:first_name), :class => 'form-control') %>
+                <% end %>
+                <%= content_tag(:div, {class: "col-sm-6"}) do %>
+                  <label for="last_name" class="sr-only"><%= Member.human_attribute_name(:last_name) %></label>
+                  <%= text_field_tag :last_name, nil, placeholder: Member.human_attribute_name(:last_name), :class => 'form-control' %>
+                <% end %>
+              <% end %>
+              <%= fetch_help_text(profile_question) %>
+            <% end %>
+          <% end %>
+        <% elsif (profile_question.education? || profile_question.experience? || profile_question.publication? || profile_question.manager?) %>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="row m-t-n-xs">
+                <div class="false-label control-label pull-left p-l-xs">
+                  <%= profile_question.question_text %><%= " *"  if required %>
+                  <% help_text = private_question_help_text(profile_question, program, @filter_role) %>
+                  <% if !membership_preview && help_text.present? %>
+                    <%= embed_icon('fa fa-lock m-r-xs','',:id => "profile_question_private_icon_#{q_id}") %>
+                    <%= tooltip("profile_question_private_icon_#{q_id}", help_text.html_safe , true) %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+            <%= preview_profile_question(profile_question, {:required => required}) %>
+          </div>
+        <% else %>
+          <%= control_group do %>
+            <% false_label_required = needs_false_label_profile_question?(profile_question, :preview_form => true) %>
+            <% if false_label_required %>
+              <div class="false-label control-label col-sm-2">
+            <% else %>
+              <label class="control-label col-sm-2" for="preview_<%=q_id%>">
+            <% end %>
+              <%= profile_question.question_text %><%= " *"  if required %>
+              <% help_text = private_question_help_text(profile_question, program, @filter_role) %>
+              <% if !membership_preview && help_text.present? %>
+                <%= embed_icon('fa fa-lock m-r-xs','',:id => "profile_question_private_icon_#{q_id}") %>
+                <%= tooltip("profile_question_private_icon_#{q_id}", help_text.html_safe , true) %>
+              <% end %>
+            <% if false_label_required %>
+              </div>
+            <% else %>
+              </label>
+            <% end %>
+            <%= controls(class: "col-sm-10") do %>
+              <%= preview_profile_question(profile_question, {:required => required}) %>
+            <% end %>
+          <% end %>
+        <% end %>
+        <% if is_conditional_question_set %>
+          <% match_texts.each do |text| %>
+            <%= hidden_field_tag :match_text, text, class: "match_text_#{q_id}", id: nil %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    <% if membership_preview && profile_question.email_type? %>
+      <div id="profile_question_value_join_as">
+        <%= control_group do %>
+          <% label_text = "#{'feature.connection.content.join_as'.translate} *" %>
+          <% if @is_checkbox %>
+            <%= content_tag(:div, label_text, :class => "control-label false-label col-sm-2") %>
+            <%= controls(class: "col-sm-10") do %>
+              <%= get_role_checkboxes(program.roles_without_admin_role.allowing_join_now.pluck(:name), program, selected: @filter_role, name: "dummy_role_names[]", disabled: true) %>
+            <% end %>
+          <% else %>
+            <%= label_tag "join_as_select", label_text, :class => "control-label col-sm-2" %>
+            <%= controls(class: "col-sm-10") do %>
+              <%= select_tag(nil, join_as_role_options_for_select(program: program, selected: @filter_role), disabled: true, id: "join_as_select", class: "form-control") %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

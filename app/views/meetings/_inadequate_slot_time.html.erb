@@ -1,0 +1,6 @@
+<% message = @valid_end_time ? "feature.calendar.content.not_adequate_time_for_meeting_v1".translate(:meeting => _meeting, slot_time: @current_program.calendar_setting.slot_time_in_minutes) : "feature.calendar.content.advance_reservation".translate(n: @current_program.get_allowed_advance_slot_booking_time) %>
+
+<%= javascript_tag do %>
+  closeQtip();
+  alert("<%= j message %>");
+<% end %>

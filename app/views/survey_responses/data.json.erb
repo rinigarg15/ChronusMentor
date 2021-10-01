@@ -1,0 +1,5 @@
+<% responses_list = @responses.map  { |response| render(partial: "survey_responses/response.json.erb", locals: {response: response, survey: @survey}) } %>
+{
+  "data":[<%= safe_join(responses_list, ', ') %>],
+  "total":<%= @total_count %>
+}

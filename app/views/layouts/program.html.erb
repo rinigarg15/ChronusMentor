@@ -1,0 +1,137 @@
+<% is_wob = @current_organization.active? && working_on_behalf? && @current_organization.has_feature?(FeatureName::WORK_ON_BEHALF) %>
+
+<!DOCTYPE html>
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en" <%= "id='ng-app' ng-app=#{@angularjs_page[:app]}".html_safe if @angularjs_page %>>
+  <head>
+    <meta charset="utf-8">
+    <%= viewport_meta_tag %>
+    <% @page_title ||= strip_tags(@title) %>
+    <title><%= "#{program_context.name} #{@page_title ? ' | ' + @page_title : ''}" %></title>
+
+    <% favicon_href = @current_organization.present? && @current_organization.favicon_link.present? ? @current_organization.favicon_link : Brand::Defaults::FAVICON %>
+    <link class="favicon_chronus"  rel="SHORTCUT ICON" href="<%= favicon_href %>" />
+
+    <%= stylesheet_link_tag 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&lang=en' %>
+    <%= stylesheet_link_tag 'https://fonts.googleapis.com/css?family=Roboto:400,300,500,700' %>
+    <%= split_stylesheet_link_tag 'v3/application_v3', split_count: 6 %>
+    <% cache(CacheConstants::Programs::THEME_STYLESHEET.call(program_context.id)) do %>
+      <%# If active theme is not the default theme, include the css of that theme too. %>
+      <% current_used_theme = (@current_program && @current_program.active_theme) || @current_organization.active_theme %>
+      <% if current_used_theme.css? %>
+        <%= stylesheet_link_tag current_used_theme.css.url + "?v=5" %>
+      <% end %>
+    <% end %>
+
+    <%= render partial: "layouts/translations/pre_js_translations" %>
+    <%= javascript_include_tag 'v3/application_v3' %>
+    <%= render partial: "common/js_airbrake" if is_mobile_app? %>
+    <%= render partial: "layouts/translations/js_translations" %>
+
+    <% if @showing_web_thumbnail %>
+      <%= javascript_include_tag('pagepix.js') %>
+    <% end %>
+
+    <% if @angularjs_page && @_angularjs_element_directives # for IE8 support of element directives %>
+      <!--[if lte IE 8]><%= content_tag(:script, @_angularjs_element_directives.map{|name| "document.createElement('#{name}');" }.join.html_safe) %><![endif]-->
+    <% end %>
+
+    <%= csrf_meta_tags %>
+    <%= raw(render_gtac) %>
+    <%= raw(render_pendo) %>
+  </head>
+  <body  role="main" class="md-skin gray-bg <%= @mobile_prompt ? '' : 'fixed-nav' %> fixed-sidebar <%= is_wob ? 'working_on_behalf' : '' %>" <%= "ng-controller=#{@angularjs_page[:controller]}" if @angularjs_page && @angularjs_page[:controller] %>>
+    <%= cucumber_helper_track_page_load_begin %>
+    <!-- Wrapper-->
+    <div id="logged_in">
+      <div id="wrapper" class="clearfix tooltip-demo <%= @v2_page ? 'v2_pages' : '' %>">
+        <%= render partial: 'common/warning'  if @supported_with_warning_browser %>
+        <%= render partial: "organizations/tabs" unless @mobile_prompt%>
+
+        <div id="page-wrapper" class="<%= (mobile_app? || mobile_device?) && @show_mobile_footer_tab ? 'cui_mobile_wrapper' : '' %> gray-bg clearfix <%= @mobile_prompt ? 'no-vertical-margins' : '' %>">
+          <%= render partial: "organizations/header" unless @mobile_prompt %>
+          <div id="content_wrapper" class="clearfix">
+            <%= render partial: "common/page_title" %>
+            <div class="row row-offcanvas row-offcanvas-right clearfix">
+              <%= show_noscript_warning %>
+              <div class="wrapper wrapper-content hide clearfix">
+                <%= render partial: "common/loading_results", locals: { message: @loading_results_message } %>
+                <% if @sidebar_footer_content.present? %>
+                  <div id="cjs_sidebar_footer" class="cui-affixed-footer white-bg p-sm p-t-m z-index-10 b-t <%= hidden_on_web %> hide">
+                    <%= @sidebar_footer_content.html_safe %>
+                  </div>
+                <% end %>
+                <div class="clearfix">
+                  <!-- Main Content  -->
+                  <div id="mainbar" class="no-margins clearfix <%= @show_side_bar ? 'col-md-8' : 'col-md-12' %>">
+                    <%= render partial: "common/main_content" %>
+                  </div>
+
+                  <!-- Side Pane Content  -->
+                  <% if @show_side_bar %>
+                    <div id="sidebarRight" class="clearfix col-md-4 gray-bg sidebar-offcanvas momentum-scroll">
+                      <div class="gray-bg p-b-xs">
+                        <div id="SidebarRightContainer">
+                          <%= yield :sidebar %>
+                        </div>
+                        <div class="<%= hidden_on_web %>">
+                          <div id="SidebarRightMobile" class="clearfix">
+                            <div id="SidebarRightContentMobile">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="<%= hidden_on_mobile %>">
+                      <div id="SidebarRightHomePage" class="clearfix animated col-md-4 fadeInRight p-l-sm">
+                        <div id="SidebarRightHomeContent">
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+                <% if @show_learn_more %>
+                  <div class="col-xs-12 no-padding text-center" id="program_learn_more">
+                    <p class="m-t-sm text-center">
+                      <%= "app_layout.label.learn_more_about_program_html".translate(learn_more: content_tag(:b, link_to("app_layout.label.learn_more".translate, about_path, target: "_blank")), program: program_context.name) %>
+                    </p>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <%= @current_organization.footer_code.html_safe if @current_organization.footer_code %>
+            <%= render partial: 'common/auto_logout'  if logged_in_organization? && @current_organization.active? && !@current_organization.login_expiry_disabled? && !is_mobile_app? %>
+          </div>
+          <%= render partial: "organizations/footer" unless @mobile_prompt %>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile Programs Pane  -->
+    <div class="<%= hidden_on_web %>">
+      <%= render partial: 'layouts/my_programs' %>
+    </div>
+
+    <%= render partial: "common/modal" %>
+    <%= yield :global_menus %>
+    <%= cucumber_helper_track_page_load_end %>
+    <%= download_ck_attachment_if_exist %>
+    <%= render partial: "common/mobile_floating_action", locals: { options: @mobile_floating_action } if @mobile_floating_action.present? %>
+
+    <%= javascript_tag do %>
+      var lastVisitedHash;
+      var mobileModalId;
+      Navigation.toggleHeaderIcon();
+      jQuery(window).load(function() {
+        // Animate loader off screen
+        jQuery('#page_loading_results').addClass('hide');
+      });
+      <% if @current_organization.login_expiry_disabled? && !is_mobile_app? %>
+        AutoLogout.initAllTabLogout('<%= request.host %>','<%= AutoLogout::Cookie::SESSION_ACTIVE %>', <%= AutoLogout::TimeInterval::CHECK_SESSION%>);
+      <% end %>
+      Mobile.fixMobileLastElementVisibility();
+      <% if mobile_device?  && !is_mobile_app? %>
+        Mobile.hideModalOnBackButtonClick();
+      <% end %>
+    <% end %>
+    <%= render partial: 'common/cordova', locals: { header_id: '#chronus_header' } if is_mobile_app? %>
+  </body>
+</html>

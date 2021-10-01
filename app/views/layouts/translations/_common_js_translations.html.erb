@@ -1,0 +1,222 @@
+<%= javascript_tag do %>
+
+  var jsCommonTranslations = {
+    i18nLocale: '<%= j(I18n.locale.to_s) %>',
+    popup: {
+      alert: '<%= j("js_translations.alert".translate) %>',
+      ok: '<%= j("js_translations.ok".translate) %>',
+      confirmation: '<%= j("js_translations.confirmation".translate) %>',
+      cancel: '<%= j("js_translations.cancel".translate) %>',
+      yes: '<%= j("display_string.Yes".translate) %>',
+      no: '<%= j("display_string.No".translate) %>'
+    },
+    fileUploadText: '<%= j("common_text.file_upload.common_help_text_v1".translate) %>',
+    fileUploadProgressText: '<%= j("common_text.file_upload.file_upload_progress_text".translate) %>',
+    remove: '<%= j("display_string.Remove".translate) %>',
+    sureToDelete: '<%= j("common_text.confirmation.sure_to_delete".translate) %>',
+    sureToRemove: '<%= j("common_text.confirmation.sure_to_remove".translate) %>',
+    sureToCancel: '<%= j("common_text.confirmation.sure_to_cancel".translate) %>',
+    skypeHelpText: '<%= j(ProfileQuestion.skype_text) %>',
+    invalidDateError: '<%= j("common_text.error_msg.enter_valid_date".translate) %>',
+    invalidDateFormatError: '<%= j("common_text.error_msg.enter_date_in_proper_format".translate) %>',
+    enterFutureDate: '<%= j("feature.calendar.content.enter_future_date".translate) %>',
+    chooseFutureAvailability: '<%= j("feature.calendar.content.choose_future_availability".translate) %>',
+    showLess: '<%= j("display_string.Show_less".translate) %>',
+    flagged: '<%= j("feature.flag.header.Flagged".translate) %>',
+    resolveFlagging: '<%= j("feature.flag.action.Resolve_Flagging".translate) %>',
+    flaggedInappropriate: '<%= j("feature.flag.content.flagged_inappropriate".translate) %>',
+    requiredFieldMissing: '<%= j("common_text.error_msg.required_missing".translate) %>',
+    fillRequiredFields: '<%= j("flash_message.user_flash.required_fields".translate) %>',
+    digitsNotAllowed: '<%= j("activerecord.custom_errors.profile_answer.contains_digits".translate) %>',
+    problemsPerformingOperation: '<%= j("js_translations.error.problems_performing_operation".translate) %>',
+    invalidEmailFormatError: '<%= j("js_translations.error.email_address_format_error".translate) %>',
+    valueGreaterThanZero: '<%= j("js_translations.error.value_greater_than_zero".translate) %>',
+    fillAppropriateValues: '<%= j("common_text.error_msg.fill_appropriate_values".translate) %>',
+    fixPasswordError: '<%= j("js_translations.error.fix_password_error_v1".translate) %>',
+    voteUpConfirm: '<%= j("js_translations.content.vote_up_confirm".translate) %>',
+    experiencesInvalid: '<%= j("js_translations.error.experiences_invalid".translate) %>',
+    searchAllColumns: '<%= j("js_translations.content.search_all_columns".translate) %>',
+    whenAsterisk: '<%= j("js_translations.content.when_asterisk".translate) %>',
+    enterValidDates: '<%= j("js_translations.error.enter_valid_dates".translate) %>',
+    endDateBeforeStartDate: '<%= j("js_translations.error.end_date_before_start_date".translate) %>',
+    youHaveUnsavedChanges: '<%= j("js_translations.content.you_have_unsaved_changes".translate) %>',
+    changeCurrentStateOfFilters: '<%= j("js_translations.content.change_current_state_of_filters".translate) %>',
+    characters: '<%= j("js_translations.characters".translate) %>',
+    character: '<%= j("js_translations.character".translate) %>',
+    over: '<%= j("js_translations.over".translate) %>',
+    left: '<%= j("js_translations.left".translate) %>',
+    dateRangeError: '<%= j("js_translations.error.date_range_error".translate) %>',
+    searchUsers: "<%= j "js_translations.search_users".translate %>",
+    OR: '<%= j("display_string.OR".translate) %>',
+    seeAll: '<%= j("display_string.See_all".translate) %>',
+    dragToUpload: '<%= j("common_text.file_upload.drag_and_drop_to_upload_file".translate)%>',
+    clickToUpload: '<%= j("common_text.file_upload.click_to_upload_file".translate)%>',
+    contentTypeRestricted: '<%= j('flash_message.profile_answer.file_attachment_invalid'.translate) %>',
+    commonErrorMessage: '<%= j("common_text.error_msg.something_went_wrong".translate) %>',
+    cancelled: '<%= j("feature.meetings.header.canceled".translate) %>',
+    symbolForThousand: '<%= j("feature.global_reports.overall_impact.content.symbol_for_thousand".translate) %>',
+    symbolForMillion: '<%= j("feature.global_reports.overall_impact.content.symbol_for_million".translate) %>',
+    noData: '<%= j("common_text.info.No_data_available".translate) %>'
+  };
+
+  var jsReportTranslation = {
+    mentorAvailability: '<%= j("feature.reports.label.mentors_availability".translate(mentor: _Mentor).html_safe) %>',
+    meetingScheduled: '<%= j("feature.reports.label.meetings_scheduled_v1".translate(Meetings: _Meetings)) %>',
+    hours: '<%= j("feature.reports.label.hours".translate) %>',
+    time_in_hours: '<%= j("feature.reports.label.time_in_hours".translate) %>',
+    lastXToYDays: '<%= j("feature.reports.label.last_x_to_y_days".translate(x: 30, y: 60)) %>',
+    lastXdays: '<%= j("feature.reports.label.last_x_days".translate(x: 30)) %>',
+    nextXdays: '<%= j("feature.reports.label.next_x_days".translate(x: 30)) %>',
+    summary: '<%= j("feature.reports.label.summary".translate) %>',
+    date: '<%= j("feature.reports.label.date".translate) %>',
+    users: '<%= j("feature.reports.label.users".translate) %>',
+    shortDateFormat: '<%= j("date.formats.full_display_no_time_highcharts_js".translate) %>',
+    count: '<%= j("feature.reports.label.count".translate) %>'
+  };
+
+  var jsProfileQuestionTranslation = {
+    removeProgramConfirm: '<%= j("feature.profile_question.js_message.remove_program_confirm_v2".translate(program: _program)) %>',
+    tiedToMatchConfigsConfirm: '<%= j("feature.profile_customization.content.remove_question_confirmation_line3".translate) %>',
+    changingFieldType: '<%= j("feature.profile_question.js_message.changing_field_type_from_html".translate) %>',
+    to: '<%= j("feature.profile_question.js_message.to_html".translate) %>',
+    willLossUserResponses: '<%= j("feature.profile_question.js_message.will_loss_user_responses_html".translate) %>',
+    changingFieldTypeConfirm: '<%= j("feature.profile_question.js_message.changing_field_type_confirm".translate(new_line: "\n\n".html_safe)) %>',
+    changingFieldTypeConfirmText: '<%= j("feature.profile_question.js_message.changing_field_type_text".translate) %>',
+    changingMatrixRowDataConfirmText: '<%= j("feature.profile_question.js_message.changing_matrix_row_data_text".translate) %>',
+    changingMatrixColumnDataConfirmText: '<%= j("feature.profile_question.js_message.changing_matrix_column_data_text".translate) %>'
+  };
+
+  var adminViewTranslations = {
+    export_csv_confirm: '<%= j("feature.admin_view.content.export_csv_confirm".translate) %>'
+  };
+
+  var rolesMapping = {
+    mentor: '<%= j(RoleConstants::MENTOR_NAME) %>',
+    mentee: '<%= j(RoleConstants::STUDENT_NAME) %>',
+    admin: '<%= j(RoleConstants::ADMIN_NAME) %>',
+    mentor_and_mentee: '<%= j([RoleConstants::MENTOR_NAME,RoleConstants::STUDENT_NAME].join(MembershipRequest::SEPARATOR)) %>'
+  };
+
+  var matchConfigValidator = {
+    invalidMatchConfig: '<%= j("activerecord.custom_errors.answer.invalid_question_choice".translate) %>'
+  };
+
+  var autoCompleteTagItTranslations = {
+    tag_or_label: '<%= j("common_text.tag_or_label".translate) %>'
+  };
+
+  var htmlContentEmbedderTranslations = {
+    insecureWarningHeader: '<%= j("js_translations.htmlContentEmbedder.insecure_content_warning_header".translate) %>',
+    insecureWarningAdminFooter: '<%= j("js_translations.htmlContentEmbedder.insecure_content_warning_footer_for_admin".translate) %>',
+    insecureWarningOthersFooter: '<%= j("js_translations.htmlContentEmbedder.insecure_content_warning_footer_for_others".translate) %>',
+    previewForCurrentContent: '<%= j("js_translations.htmlContentEmbedder.see_preview_for_current_content".translate) %>',
+    insecureUrlAndContentWarning: '<%= j("js_translations.htmlContentEmbedder.insecure_url_and_content_warning".translate) %>',
+    insecureContentWarning: '<%= j("js_translations.htmlContentEmbedder.insecure_content_warning".translate) %>',
+    insecureUrlWarning: '<%= j("js_translations.htmlContentEmbedder.insecure_url_warning".translate) %>',
+    showInsecureLinks: '<%= j("js_translations.htmlContentEmbedder.show_insecure_links".translate) %>',
+    hideInsecureLinks: '<%= j("js_translations.htmlContentEmbedder.hide_insecure_links".translate) %>',
+    showInsecureContent: '<%= j("js_translations.htmlContentEmbedder.show_insecure_content".translate) %>',
+    hideInsecureContent: '<%= j("js_translations.htmlContentEmbedder.hide_insecure_content".translate) %>',
+    continueEditingText: '<%= j("js_translations.htmlContentEmbedder.continue_editing".translate) %>',
+    proceedAnywaysText: '<%= j("js_translations.htmlContentEmbedder.proceed_anyways".translate) %>',
+    previewText: '<%= j("js_translations.htmlContentEmbedder.preview".translate) %>',
+    askApproach: '<%= j("js_translations.htmlContentEmbedder.ask_approach".translate) %>',
+    systemClean: '<%= j("js_translations.htmlContentEmbedder.system_clean".translate) %>',
+    systemCleanShort: '<%= j("js_translations.htmlContentEmbedder.system_clean_short".translate) %>',
+    selfClean: '<%= j("js_translations.htmlContentEmbedder.self_clean".translate) %>',
+    dontClean: '<%= j("js_translations.htmlContentEmbedder.dont_clean".translate) %>',
+    rmContentAndLink: '<%= j("js_translations.htmlContentEmbedder.rm_content_and_link".translate) %>',
+    rmLinks: '<%= j("js_translations.htmlContentEmbedder.rm_links".translate) %>',
+    promptToClean: '<%= j("js_translations.htmlContentEmbedder.prompt_to_clean".translate) %>',
+    close: '<%= j("display_string.Close".translate) %>',
+    ok: '<%= j("js_translations.htmlContentEmbedder.ok".translate) %>',
+    proceed: '<%= j("js_translations.htmlContentEmbedder.proceed".translate) %>',
+    tagsWarningHeader: '<%= j("js_translations.htmlContentEmbedder.tagsWarningHeader".translate) %>',
+    tagsWarningText: '<%= j("js_translations.htmlContentEmbedder.tagsWarningText".translate) %>',
+  };
+
+  var jsConnectionActivityReportTranslation = {
+    completedTasksText: '<%= j("feature.mentoring_model.label.n_report_completed_tasks".translate) %>',
+    notCompletedTasksText: '<%= j("feature.mentoring_model.label.n_report_not_completed_tasks".translate) %>',
+    overdueTasksText: '<%= j("feature.mentoring_model.label.n_report_overdue_tasks".translate) %>',
+    differentTasksText: '<%= j("feature.mentoring_model.label.report_tasks_in_different_statuses".translate) %>',
+    oneCompletedTaskText: '<%= j("feature.mentoring_model.label.n_report_one_completed_task".translate) %>',
+    oneNotCompletedTaskText: '<%= j("feature.mentoring_model.label.n_report_one_not_completed_task".translate) %>',
+    oneOverdueTaskText:'<%= j("feature.mentoring_model.label.n_report_one_overdue_task".translate) %>',
+    customText: '<%= j("feature.mentoring_model.label.custom".translate) %>',
+    selectedTasksText: '<%= j("feature.mentoring_model.label.selected_tasks_with_status".translate) %>'
+  };
+
+  var jsManagementReportTranslation = {
+    sectionHelptText: '<%= j("feature.reports.tour.help_text.section".translate(program: _program)) %>',
+    metricCountHelptText: '<%= j("feature.reports.tour.help_text.metric_count".translate) %>',
+    configureDropdownHelptText: '<%= j("feature.reports.tour.help_text.configure_dropdown".translate) %>',
+    addReportHelptText: '<%= j("feature.reports.tour.help_text.add_report".translate) %>'
+  };
+
+  var jsCampaignTourTranslation = {
+    createCampaignHelptText: '<%= j("feature.campaign.tour.help_text.create_campaign_v2".translate) %>',
+    detailsPageLinkHelptText: '<%= j("feature.campaign.tour.help_text.details_page_link_v1".translate) %>',
+    clickRatesHelptText: '<%= j("feature.campaign.tour.help_text.click_rates_v1".translate) %>',
+    stateTabsHelptText: '<%= j("feature.campaign.tour.help_text.state_tabs_v1".translate) %>'
+  };
+
+  var jsCampaignEmailTourTranslation = {
+    FromFieldHelptText: '<%= j("feature.campaign_message.tour.help_text.from_field".translate(program: _program, administrators: _admins)) %>',
+    insertVariableHelptText: '<%= j("feature.campaign_message.tour.help_text.insert_variable".translate) %>',
+    scheduleHelptText: '<%= j("feature.campaign_message.tour.help_text.schedule".translate) %>',
+    testEmailHelptText: '<%= j("feature.campaign_message.tour.help_text.test_email".translate) %>'
+  };
+
+  var jsCampaignDetailTourTranslation = {
+    emailsListHelptText: '<%= j("feature.campaign.tour.details_page.help_text.emails_list".translate) %>',
+    actionsHelptText: '<%= j("feature.campaign.tour.details_page.help_text.actions_v1".translate) %>',
+    draftActivateHere: '<%= j("feature.campaign.tour.details_page.help_text.draft_activate_here".translate) %>',
+    draftActions: '<%= j("feature.campaign.tour.details_page.help_text.draft_actions".translate) %>',
+    editDeleteEmail: '<%= j("feature.campaign.tour.details_page.help_text.edit_delete_email".translate) %>',
+    cloneEmail: '<%= j("feature.campaign.tour.details_page.help_text.clone".translate) %>'
+  };
+
+  var jsTourTranslation = {
+    nextLabelHelptText: '<%= j("features_list.tour.nextlabel".translate) %>',
+    finishLabelHelptText: '<%= j("features_list.tour.finishlabel".translate) %>',
+    prevLabelHelptText: '<%= j("features_list.tour.prevlabel".translate) %>'
+  };
+
+  var jsDetailedReportUserTable = {
+    first_name: '<%= j("feature.outcomes_report.detailed_report.table.first_name".translate) %>',
+    last_name: '<%= j("feature.outcomes_report.detailed_report.table.last_name".translate) %>',
+    role: '<%= j("feature.outcomes_report.detailed_report.table.role".translate) %>',
+    created_at: '<%= j("feature.outcomes_report.detailed_report.table.created_at".translate) %>',
+    email: '<%= j("feature.outcomes_report.detailed_report.table.email".translate) %>',
+  };
+
+  var jsHighChartOptions = {
+    resetZoom: '<%= j("feature.outcomes_report.highchart_graph.reset_zoom".translate) %>',
+    resetZoomTitle: '<%= j("feature.outcomes_report.highchart_graph.reset_zoom_title".translate) %>',
+    download: '<%= j("display_string.Download".translate) %>',
+    downloadPNG: '<%= j("feature.outcomes_report.highchart_graph.download_png".translate) %>',
+    downloadJPEG: '<%= j("feature.outcomes_report.highchart_graph.download_jpeg".translate) %>',
+    downloadSVG: '<%= j("feature.outcomes_report.highchart_graph.download_svg".translate) %>',
+    downloadCSV: '<%= j("feature.outcomes_report.highchart_graph.download_csv".translate) %>',
+    downloadError: '<%= j("feature.outcomes_report.highchart_graph.download_error".translate) %>'
+  };
+
+  var CalendarAvailabilityTranslations = {
+    slotOne: '<%= j("display_string.slot".translate(count: 1)) %>',
+    slotOther: '<%= j("display_string.slot".translate(count: 10)) %>'
+  };
+
+  var jsMatchReportTranslation = {
+    requested: '<%= j("feature.match_report.tooltips.sent_requests_html".translate(mentees: _mentees, number: "")) %>',
+    accepted: '<%= j("feature.match_report.tooltips.accepted_requests_html".translate(number: "")) %>',
+    result: '<%= j("feature.match_report.tooltips.matched_html".translate(mentees: _mentees, number: "")) %>',
+    matchRate: '<%= j("feature.match_report.tooltips.matched_html".translate(mentees: _mentees, number: "")) %>',
+    drafted: '<%= j("feature.match_report.tooltips.drafted_html".translate(mentees: _mentees, number: "", connection: _mentoring_connection)) %>',
+    neverConnected: '<%= j("feature.match_report.tooltips.never_connected_html".translate(mentees: _mentees, number: "")) %>'
+  };
+
+  // CSV3_TODO : move this later
+  var todayBeginningOfDayInUserTimeZoneInMillisecond = <%= Meeting.get_millisecond(Date.current.in_time_zone(wob_member.try(:get_valid_time_zone)).beginning_of_day) %>;
+  var currentUserTimeZone = <%= Date.current.in_time_zone(wob_member.try(:get_valid_time_zone)).beginning_of_day.utc_offset / 60 %>;
+<% end %>

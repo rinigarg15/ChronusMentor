@@ -1,0 +1,48 @@
+<% @title = edit_or_create_page_title(@article) %>
+
+<%= ibox nil, ibox_id: "new_article" do %>
+  <%= simple_form_for @article, :html => { :id => "article_form", :multipart => true } do |f| %>
+    <%= f.fields_for(@article.article_content) do |ac| %>
+      <%= ac.input :title, :as => :string, :label => "feature.article.header.article_title".translate(Article: _Article), :required => true, :input_html => {:class => "form-control"} %>
+
+      <div id="show_attachment">
+        <% if @is_edit && @article.article_content.attachment? %>
+          <div class="m-b">
+            <%= display_type_logo(@article) %>
+            <span id="file_name">
+              <%= @article.article_content.attachment_file_name %>
+            </span>
+            <span id="download m-l">
+              <%= link_to(get_icon_content("fa fa-pencil") + set_screen_reader_only_content("display_string.Edit".translate), 'javascript:void(0)', :class => 'edit_attachment', :onclick => %Q[jQuery('#article_attachment').show()]) %>
+            </span>
+            <%= control_group(:id => 'article_attachment', :class => 'm-t-xs hide') do %>
+              <label for="attachment_browser" class="sr-only">
+                <%= "display_string.attach_file".translate %>
+              </label>
+              <%= controls do %>
+                <%= file_field_tag "article[article_content][attachment]", :id => 'attachment_browser', class: "noshadow" %>
+                <p class="help-block text-muted">
+                  <%= "feature.article.content.upload_helptext".translate(an_article: _a_article) %>
+                </p>
+              <% end %>
+            <% end %>
+          </div>  
+        <% else %>
+          <%= ac.input :attachment, :as => :file, :input_html => { :id => "attachment_browser" }, :hint => "feature.article.content.upload_helptext".translate(an_article: _a_article), :required => true %>
+        <% end %>
+      </div>
+
+      <%= ac.input :body, :as => :text, :label => ArticleContent.human_attribute_name(:description), :input_html => {:class => "form-control", :rows => 5}  %>
+      <%= tag_field_with_auto_complete(ac, @tag_names, _Article) %>
+      <%= render :partial => "articles/hidden_fields_and_buttons", :locals => { :ac => ac } %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% content_for_sidebar do %>
+  <% tips = [
+    "feature.article.content.common_tips.copyrights_tip".translate,
+    "feature.article.content.common_tips.avoid_controversy_tip".translate
+  ] %>
+  <%= render_tips_in_sidepane tips, "feature.article.content.upload_article_tips.header".translate(articles: _articles) %>
+<% end %>

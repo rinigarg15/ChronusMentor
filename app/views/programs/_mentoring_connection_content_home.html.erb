@@ -1,0 +1,69 @@
+<div>
+  <div id="group_<%= group.id %>" class="ibox no-margins slick_box noshadow">
+    <div class="ibox-content clearfix p-sm p-b-0">
+      <% if @page_controls_allowed %>
+        <div class="ibox-tools pull-right <%= hidden_on_mobile %>">
+          <% if @show_meetings_tab %>
+            <% action_items = [] %>
+            <% action_item_options = {dropdown_title: append_text_to_icon("fa fa-calendar-plus-o", "feature.mentoring_model.button.new_meeting".translate(Meeting: _Meeting)), btn_group_btn_class: "btn-sm", dropdown_menu_class: "pull-right"} %>
+            <% action_items << {:label => append_text_to_icon("fa fa-calendar-plus-o", "feature.mentoring_model.button.add_new_meeting".translate(Meeting: _Meeting)), :url => "javascript:void(0)", :class => "cjs_connection_widget_add_meeting", data: { url: new_connection_widget_meeting_meetings_path(group_id: group.id) }} %>
+            <% action_items << {:label => append_text_to_icon("fa fa-calendar-plus-o", "feature.mentoring_model.button.record_past_meeting".translate(Meeting: _Meeting)), :url => "javascript:void(0)", :class => "cjs_connection_widget_add_meeting", data: { url: new_connection_widget_meeting_meetings_path(group_id: group.id, is_past_meeting: true) }} if @past_meeting_controls_allowed %>
+            <%= build_dropdown_button(action_item_options.delete(:dropdown_title), action_items, action_item_options) %>
+          <% end %>
+          <% page_action = [] %>
+          <% if @show_forum_tab %>
+            <% group_forum = group.forum %>
+            <% page_action << new_topic_action(group_forum, false, false, class: "btn btn-sm btn-primary", id: "#{group.id}") %>
+            <%= render partial: "topics/new", locals: { forum: group_forum, home_page: true, group_id: "#{group.id}" } %>
+          <% end %>
+          <% if @show_messages_tab %>
+            <% page_action << { label: append_text_to_icon("fa fa-plus-circle", "feature.mentoring_model.button.new_mm_message".translate), url: "javascript:void(0)", class: "#{ 'btn btn-primary' unless @show_forum_tab } btn-sm cjs-new-scrap-link-#{ group.id }", js_class: "cjs-new-scrap-link-#{ group.id }" } %>
+            <%= render partial: 'groups/new_ajax_scrap_form', locals: { new_scrap: group.scraps.new, home_page: true } %>
+          <% end %>
+          <%= render_page_action(page_action, { small: true }) %>
+        </div>
+      <% end %>
+      <div class="media-left text-center">
+        <%= render(:partial => "common/header_collage", :locals => {member_pictures: get_member_pictures(group)}) %>
+      </div>
+      <div class="media-body">
+        <div class="pull-left cjs_homepage_connection_details_<%= group.id %>">
+          <%= render(:partial => "groups/home_page_widget_connection_details.html.erb", locals: {group: group}) %>
+          <% if @page_controls_allowed %>
+            <div class="<%=hidden_on_web%> m-t-sm m-b-xs">
+              <% action_items = [] %>
+              <% action_item_options = {:dropdown_title => get_icon_content("fa fa-calendar-plus-o"), :btn_group_btn_class => "btn-sm"} %>
+
+              <% if @show_meetings_tab %>
+                <% action_items << {:label => append_text_to_icon("fa fa-calendar-plus-o", "feature.mentoring_model.button.add_new_meeting".translate(Meeting: _Meeting)), :url => "javascript:void(0)", :class => "cjs_connection_widget_add_meeting", data: { url: new_connection_widget_meeting_meetings_path(group_id: group.id) }} %>
+                <% action_items << {:label => append_text_to_icon("fa fa-calendar-plus-o", "feature.mentoring_model.button.record_past_meeting".translate(Meeting: _Meeting)), :url => "javascript:void(0)", :class => "cjs_connection_widget_add_meeting", data: { url: new_connection_widget_meeting_meetings_path(group_id: group.id, is_past_meeting: true) }} if @past_meeting_controls_allowed %>
+              <% end %>
+              <% if action_items.size > 0 %>
+                <%= build_dropdown_button(action_item_options.delete(:dropdown_title), action_items, action_item_options) %>
+              <% end %>
+
+              <% if @show_forum_tab && @show_messages_tab %>
+                <% page_action = [] %>
+                <% group_forum = group.forum %>
+                <% page_action << new_topic_action(group_forum, false, false, class: "btn-sm", id: "#{group.id}") %>
+                <% page_action << { label: append_text_to_icon("fa fa-plus-circle", "feature.mentoring_model.button.new_mm_message".translate), url: "javascript:void(0)", class: " btn-sm cjs-new-scrap-link-#{ group.id }", js_class: "cjs-new-scrap-link-#{ group.id }" }  %>
+                <%= build_dropdown_button( get_icon_content("fa fa-envelope-o"), page_action, action_item_options) %>
+              <% elsif @show_forum_tab %>
+                <% group_forum = group.forum %>
+                <% options = new_topic_action(group_forum, false, false, class: "btn-sm", id: "#{group.id}")%>
+                <%= link_to embed_icon("fa fa-comment-o") + set_screen_reader_only_content("feature.forum.action.start_conversation".translate), "javascript:void(0)", class: "btn btn-sm btn-primary", data:options[:data] %>
+              <% elsif @show_messages_tab %>
+                <%= link_to embed_icon("fa fa-envelope-o") + set_screen_reader_only_content("display_string.Send_Message".translate), "javascript:void(0)", class: "btn btn-sm btn-primary cjs-new-scrap-link-#{group.id} m-r-sm" %>
+              <% end %>
+
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <%= render :partial => 'groups/group_tabs_home_page', locals: { group: group, can_show_messages: @show_messages_tab, can_show_meetings: @show_meetings_tab, can_show_forums: @show_forum_tab, badge_counts: @badge_counts, show_plan_tab: @show_plan_tab, tab_to_open: @tab_to_open } %>
+
+    </div>
+  </div>
+  <%= content_tag(:span, will_paginate(groups, :class => "mentoring_connections_bottom hide text-muted pull-right ajax", :page_links => false,:params => { :controller => "programs", :action => "mentoring_connections_widget" }) )%>
+</div>

@@ -1,0 +1,38 @@
+<h4 class="gray-bg clearfix h5 p-b-sm m-b-0 m-t-0 pull-left">
+  <%= append_text_to_icon("fa fa-fw fa-calendar m-r-xs", "feature.email.content.upcoming_meetings_widget_heading".translate(Meetings: _Meetings)) %>
+  <%= content_tag(:span, "(#{meetings.size})", class: "m-l-xxs") %>
+</h4>
+
+<div class="ibox no-margins meetings-slick white-bg">
+  <% meetings.each do |meeting| %>
+    <div>
+      <div id="meeting_<%= meeting[:meeting].id %>" class="ibox no-margins slick_box noshadow">
+        <div class="ibox-content clearfix no-padding">
+          <%= render :partial => 'meetings/meetings', :locals => { :meetings => [meeting], :group_admin_view => false, :ei_src => nil, :from_connection_home_page_widget => true , rsvp_src: MemberMeeting::RSVP_SOURCE::HOME_PAGE_WIDGET, :send_message_allowed => true} %>
+        </div>
+      </div>
+      <% if show_view_all %>
+        <div class="well light-yellow-bg clearfix text-center no-margins">
+          <%= content_tag(:span, "feature.group.content.meetings_footer_text_homepage_v1_html".translate(meetings: _meetings, Mentoring_Area: link_to("display_string.Click_here".translate, member_path(wob_member, :tab => MembersController::ShowTabs::AVAILABILITY, src: EngagementIndex::Src::AccessMentoringArea::HOME_PAGE_FOOTNOTE), class: "m-l-xs font-bold btn btn-outline btn-xs btn-primary hidden-xs") + link_to("display_string.Click_here".translate, member_path(wob_member, :tab => MembersController::ShowTabs::AVAILABILITY, src: EngagementIndex::Src::AccessMentoringArea::HOME_PAGE_FOOTNOTE), class: "font-bold visible-xs"))) %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<% if meetings.size > 1 %>
+  <div class="text-center listing_bottom_bar clearfix p-t-sm">
+    <%= slick_carousel_navigation_buttons(prev_button_class: "meetings-slick-prev", next_button_class: "meetings-slick-next") %>
+  </div>
+<% end %>
+
+<%= javascript_tag do  %>
+  carousel.addCarousel('.meetings-slick', {dots: true, slidesToShow: 1, slidesToScroll: 1, prevArrow: jQuery('.meetings-slick-prev'), nextArrow: jQuery('.meetings-slick-next')});
+  Meetings.initializeCarouselGaTrack();
+<% end %>
+
+<% meetings.each do |meeting| %>
+  <%= javascript_tag do  %>
+    NewScrap.initialize("<%= meeting[:meeting].id %>");
+  <% end %>
+<% end %>

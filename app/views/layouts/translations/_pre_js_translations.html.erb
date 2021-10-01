@@ -1,0 +1,39 @@
+<%= javascript_tag do %>
+
+  var preJsTranslations = {
+    outComesReport: {
+      dayText: '<%= j "display_string.day".translate(count: 1) %>',
+      daysText: '<%= j "display_string.day".translate(count: 0) %>',
+      appliedFiltersLabel: '<%= j "feature.outcomes_report.title.applied_filter_title".translate %>',
+      save: '<%= j "display_string.Save".translate %>',
+      pleaseWait: '<%= j "display_string.Please_Wait".translate %>',
+      selectOption: '<%= j "feature.outcomes_report.content.select_a_option".translate %>',
+      search: '<%= j "display_string.Search".translate %>'
+    },
+
+    detailedConnectionOutcomesReport: {
+      usersTitle: '<%= j "feature.outcomes_report.title.users".translate %> '
+    },
+
+    baseAppJQuery: {
+      successfullySaved: "<%= j 'flash_message.successfully_saved'.translate %>",
+      createFailure: "<%= j 'flash_message.feedback.response_flash.create_failure'.translate %>",
+      selectViewPlaceholder: "<%= j 'feature.admin_view.header.select_view_placeholder'.translate %>"
+    },
+
+    demoPrograms: {
+      organizationNameErrorMessage: '<%= j "feature.demo_programs.label.organization_name_error_message".translate %>',
+      subdomainNameErrorMessage: '<%= j "feature.demo_programs.label.web_address_empty_error_message".translate %>'
+    },
+
+    mentoringModelTasks: {
+      fullDisplayNoTime: "<%= j 'date.formats.full_display_no_time_js'.translate %>",
+      markCompleteText: '<%= j "feature.mentoring_model.label.mark_complete".translate %>',
+      markInCompleteText: '<%= j "feature.mentoring_model.label.mark_incomplete".translate %>',
+      markInCompleteForPrevAssigneeText : '<%= j "feature.mentoring_model.label.mark_incomplete_for_prev_assignee".translate %>',
+      atleaseOneRequired: "<%= j 'feature.mentoring_model.js_translations.atleast_one_required_v1'.translate %>",
+      defaultMentoringTopic: '<%= j "feature.mentoring_model.js_translations.default_meeting_topic".translate %>'
+    }
+  };
+
+<% end %>

@@ -1,0 +1,18 @@
+<% @title = "feature.program.header.setup_new_program".translate(:program => _Program) %>
+
+<div id="new_program_container">
+  <%= response_flash "new_program_flash" %>
+  <%= simple_form_for @program, :url => create_program_path, :html => {:class => "form-horizontal", multipart: true} do |f| %>
+    <%= render_message_warnings_popup(@message_warnings) %>
+
+    <%= formatted_form_error f %>
+    <% tab_captions = get_new_program_wizard_view_headers %>
+    
+    <%= render :partial => 'programs/new_step_1', :locals => {:f => f, :tab_captions => tab_captions} %>
+    <%= render :partial => 'programs/new_step_2', :locals => {:f => f, :tab_captions => tab_captions} %>
+
+    <% if @current_organization.standalone? %>
+      <%= render :partial => 'programs/new_step_3', :locals => {:f => f, :tab_captions => tab_captions} %>
+    <% end %>
+  <% end %>
+</div>

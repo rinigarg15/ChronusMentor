@@ -1,0 +1,36 @@
+<% is_campaign_object = ref_obj.is_a?(CampaignManagement::AbstractCampaign) %>
+<%= control_group do %>
+  <% if is_campaign_object %>
+    <label class="control-label col-sm-3"><%= "feature.campaigns.label.To".translate %></label>
+  <% end %>
+  <% html_id = is_campaign_object ? "campaign_admin_views" : "admin_view_id" %>
+  <%= controls(class: "#{is_campaign_object ? 'col-sm-9' : 'col-sm-12 p-l-lg'}") do %>
+    <div class="m-b-xs clearfix">
+      <% admin_view_params = {
+        class: "col-xs-12 no-padding cjs-members-select2",
+          :placeholder => "feature.admin_view.content.prompt.select_view".translate,
+        id: html_id,
+        data: {
+          url: auto_complete_for_name_admin_views_path(format: :json),
+          show_admin_view_url: fetch_admin_view_details_admin_views_path(format: :js),
+          new_admin_view_url: new_admin_view_path(source_info: source_info)
+        }.merge(get_campaign_for_select2(ref_obj))
+      } %>
+      <% if local_assigns[:resource_publication].present? %>
+        <%= local_assigns[:resource_publication].hidden_field :admin_view_id, admin_view_params %>
+      <% else %>
+        <%= hidden_field_tag html_id, "", admin_view_params %>
+      <% end %>
+    </div>
+    <% if ref_obj.new_record? %>
+      <div class='cjs_admin_view_content'></div>
+    <% else %>
+      <% admin_view = AdminView.get_first_admin_view(ref_obj, @current_program.id) %>
+      <% if admin_view.present? %>
+        <%= render(partial: "admin_views/preview_view_details", locals: {:admin_view => admin_view, :admin_view_filters => admin_view.get_applied_filters, :admin_view_users_count => admin_view.generate_view("", "", false).size, :source_info => source_info})%>
+      <% else %>
+        <div class='cjs_admin_view_content'></div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

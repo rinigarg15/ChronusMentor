@@ -1,0 +1,31 @@
+<% if @group_activities.nil? %>
+  <div id="show_more_activities" class="text-center">
+    <%= image_tag('ajax-loader.gif', :height => "18") %>
+    <%= javascript_tag %Q[GroupsShow.sendOnloadRaRequest("#{more_url}");] %>
+  </div>
+<% elsif @group_activities.any? %>
+  <% rendered_count = 0 %>
+  <% @group_activities.each_with_index do |act, index| %>
+   <% str = mentoring_area_activity(act) %>
+    <% rendered_count += 1 if str.present? %>
+    <%= str %>
+  <% end %>
+
+  <% if rendered_count.zero? %>
+    <%= content_tag(:div, "feature.connection.content.No_activity_yet".translate, :class => 'text-muted text-center') %>
+  <% else %>
+    <div id="show_more_activities" class="show_more text-center">
+      <%= content_tag(:b, link_to("display_string.Show_more".translate, more_url, :remote => true, :method => :get, :class => 'more_link',
+      :onclick => "jQuery('#show_more_activities .loading_ra').show(); jQuery('#show_more_activities .more_link').hide();")) %>
+      <%= image_tag('ajax-loader.gif', :class => 'loading_ra', :style => 'display: none', :height => "18") %>
+    </div>
+  <% end %>
+<% else %>
+  <div class='text-muted text-center'>
+    <% if @offset_id %>
+      <%= "feature.connection.content.No_more_activities".translate %>
+    <% else %>
+      <%= "feature.connection.content.No_activity_yet".translate %>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,20 @@
+<div id="meeting_requests">
+  <%= render :partial => 'meeting_requests/index', locals: {email_meeting_request_id: @email_meeting_request_id, email_action: @email_action, meeting_request_hash: @meeting_request_hash, percentage: @percentage, prev_periods_count: @prev_periods_count, is_manage_view: @is_manage_view} %>
+</div>
+
+<% if @is_manage_view %>
+  <% @report_actions = {
+    url: manage_meeting_requests_path,
+    data_js: %Q[MeetingRequests.getMeetingRequestReportFilterData();],
+    ga_label: ReportsController::GoogleAnalytics::MEETING_REQUESTS_REPORT_LABEL,
+    time_filter: { time: {start: @from_date_range, end: @to_date_range}, label: "feature.membership_request.label.sent_between".translate },
+    export: [{label: "feature.mentor_offer.action.export_as_csv".translate, url: manage_meeting_requests_path(format: :csv)}]
+  } %>
+<% end %>
+<%= hidden_field_tag(:switch_tabs_options, { data_attribute: "list", apply_preFilter: false }.to_json, id: 'switch_tabs_options') %>
+
+<%= javascript_tag do %>
+  <% if @is_manage_view %>
+    commonReportFilters.initializeSwitchTab();
+  <% end %>
+<% end %>

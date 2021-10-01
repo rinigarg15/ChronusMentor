@@ -1,0 +1,8 @@
+<% if @reviewer_group.valid? %>
+  <% content = render(:partial => "three_sixty/reviewer_groups/reviewer_group", :locals => {:reviewer_group => @reviewer_group, :show_actions => true}) %>
+  jQuery("#three_sixty_reviewer_group_from_new").replaceWith('<%= j(render(:partial => "three_sixty/reviewer_groups/new", :locals => {:reviewer_group => ThreeSixty::ReviewerGroup.new})) %>');
+  jQuery("#three_sixty_reviewer_groups .cjs_three_sixty_parent:last").after('<%= j(content)%>');
+<% else %>
+  ThreeSixty.displayErrorMessage("#three_sixty_add_new_reviewer_group_form_container", '<%= @reviewer_group.error_for_display %>', "")
+  jQuery("#three_sixty_reviewer_group_from_new").replaceWith('<%= j(render(:partial => "three_sixty/reviewer_groups/new", :locals => {:reviewer_group => @reviewer_group})) %>');
+<% end %>

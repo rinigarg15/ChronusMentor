@@ -1,0 +1,8 @@
+<% modal_v3_popup "feature.mentoring_slot.header.Calendar".translate, modal_body_class: "no-padding" do %>
+  <%= get_calendar_slot_popup_header(@can_current_user_create_meeting, @can_mark_availability_slot, {from_settings_page: @from_settings_page}) %>
+
+  <div class="tab-content clearfix">
+    <%= render partial: 'mentoring_slots/availability_slot' if @can_mark_availability_slot %>
+    <%= render partial: 'mentoring_slots/meeting' if @can_current_user_create_meeting && !@from_settings_page %>
+  </div>
+<% end %>

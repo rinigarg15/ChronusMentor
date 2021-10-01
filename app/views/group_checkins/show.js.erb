@@ -1,0 +1,2 @@
+<% content = render partial: "group_checkins/group_checkin",  locals: {group: @group, group_checkin: @checkin} %>
+jQuery("#task_checkin_<%=@checkin.id%>_container").replaceWith('<%= j(content) %>');

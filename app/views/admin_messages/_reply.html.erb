@@ -1,0 +1,30 @@
+<% options = get_comment_wrapper_options(reply, from_discussion, from_inbox)%>
+<% set_screen_reader_only = !from_inbox %>
+<% form_options = {remote: remote} %>
+<% form_options[:url] = options[:reply_path] if options[:reply_path].present? %>
+<% hidden_fields = options[:hidden_fields] %>
+<% buttons = [
+    { type: 'btn', class: 'btn btn-primary', icon: "fa fa-paper-plane-o", content: "display_string.Reply".translate, set_screen_reader_only: set_screen_reader_only },
+    { type: 'link', url: "javascript:void(0)", class: "cjs_comment_cancel btn btn-white cjs_reply_cancel",onclick: options[:onclick], icon:"fa fa-times text-default", content: "display_string.Cancel".translate, link_class: "text-default", set_screen_reader_only: set_screen_reader_only },
+    { type: 'file', id: options[:id], name: options[:name], data: {'remove-button-class': "cjs_remove_comment_attachment"}, class: "quick_file", wrapper_html: { class: "col-xs-3 col-sm-6 cjs-attachment no-margins no-padding #{from_inbox ? "" : "cui_no_browse_text"}" }}
+  ] %>
+  
+<% common_id = reply.try(:parent_id).present? ? reply.parent_id : SecureRandom.hex(3) %>
+<% comment_options = {
+  :wrapper_id => options[:wrapper_id],
+  :wrapper_class => "new_admin_message #{@open_reply ? '' : 'hide'}",
+  :object => reply,
+  :form_options => form_options,
+  :form_html_options => { id_suffix: id, multipart: true, class: "clearfix form-horizontal cjs_new_message #{'m-b' unless from_inbox} #{'light-gray-bg m-l-n p-m m-r-n m-b-n b-l b-r' if from_inbox}"},
+  :attribute => options[:attribute],
+  :input_class => "",
+  :input_id => options[:input_id],
+  :placeholder => options[:placeholder],
+  :action_buttons => buttons,
+  :hidden_fields => hidden_fields,
+  :formatted_error_options => {:header_message => "flash_message.message_flash.creation_failed_v1".translate, :message => nil},
+  :other_options => {home_page: home_page, html_id:"home_page_#{common_id}"}
+} %>
+
+<%= render layout: "common/new_comment_wrapper", locals: comment_options do %>
+<% end %>

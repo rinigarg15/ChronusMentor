@@ -1,0 +1,28 @@
+<% if data.empty?%>
+  <div class="dim text-center"><%= "feature.reports.content.no_active_announcements".translate(program: _program) %></div>
+<% else %>
+  <% announcements = data[1..-1] %>
+  <% display_expires_on = data.first[:display_expires_on] %>
+  <div class="row">
+    <h4 class="<%= get_announcement_title_class(display_expires_on) %>"><%= "feature.reports.content.active_announcements".translate(count: data.count) %></h4>
+    <h4 class="col-xs-3"><%= "feature.announcements.label.for".translate %></h4>
+    <% if display_expires_on %>
+      <h4 class="col-xs-3"><%= "feature.connection.header.Expires_on".translate %></h4>
+    <% end %>
+  </div>
+  <ul class="stat-list m-t-md">
+    <% announcements.each do |announcement_hash| %>
+      <li class="row">
+        <% announcement = announcement_hash[:announcement] %>
+        <%= link_to get_announcement_title(announcement), announcement_path(announcement), class: "#{ get_announcement_title_class(display_expires_on)}" %>
+        <span class="col-xs-3 small"><%= announcement_hash[:for] %></span>
+        <% if display_expires_on %>
+          <span class="col-xs-3">
+            <% expiration_date = announcement.expiration_date %> 
+            <span class="<%= get_label_class(expiration_date) %> label"><%= announcement_expiration_date(expiration_date) %></span>
+          </span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

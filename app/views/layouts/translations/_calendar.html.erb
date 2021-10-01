@@ -1,0 +1,74 @@
+<%= javascript_tag do %>
+  var calendarTranslations = {
+    fullDateTimeFormat: '<%= j("yyyy-MM-dd HH:mm:ss") %>',
+    onlyDate: '<%= j("yyyy-MM-dd") %>',
+    onlyTime: '<%= j("HH-mm-ss") %>',
+    midNight: '<%= j("00-00-00") %>',
+    titleDayFormat: '<%= j("fullcalendar.formats.title_day".translate) %>',
+    titleWeekFormat: '<%= j("fullcalendar.formats.title_week".translate) %>',
+    titleMonthFormat: '<%= j("fullcalendar.formats.title_month".translate) %>',
+    recurrentWarning: '<%= j("feature.calendar.content.recurrent_slot_warning".translate) %>',
+    recurrentDayChangeWarning: '<%= j("feature.calendar.content.recurrent_day_change_warning".translate) %>',
+    dateStrParseError: '<%= j("feature.calendar.content.datestr_parse_error".translate) %>',
+    midNightAM: '<%= j("12:00 am") %>',
+    noDateForRepeatingSlot: '<%= j("feature.calendar.content.no_date_for_repeating_slot".translate) %>',
+    recurrentDelete: '<%= j("feature.mentoring_slot.content.delete_recurrent_slot_confirm".translate) %>',
+    loading: '<%= j("common_text.prompt_text.loading".translate) %>',
+    next7Days: '<%= j("feature.user.label.next_n_days".translate(n: 7)) %>',
+    next15Days: '<%= j("feature.user.label.next_n_days".translate(n: 15)) %>',
+    next30Days: '<%= j("feature.user.label.next_n_days".translate(n: 30)) %>',
+    dateRange: '<%= j("feature.user.label.date_range".translate) %>',
+    moreEventsText: '<%= j("display_string.more".translate) %>',
+    timeText: '<%= j("display_string.Time".translate) %>',
+    hourFormat: '<%= j("fullcalendar.formats.hour_format".translate) %>',
+    mediumTimeFormat: '<%= j("fullcalendar.formats.medium_time_format".translate) %>',
+    smallTimeFormat: '<%= j("fullcalendar.formats.small_time_format".translate) %>',
+    eventTimeFormat: '<%= j("fullcalendar.formats.event_time_format".translate) %>',
+    extraSmallTimeFormat: '<%= j("fullcalendar.formats.extra_small_time_format".translate) %>',
+    noMeridiemTimeFormat: '<%= j("fullcalendar.formats.no_meridiem_time_format".translate) %>'
+  };
+
+  var fullCalendarParamHash = {
+    buttonIcons: {
+      prev:     'left-single-arrow',
+      next:     'right-single-arrow',
+      prevYear: 'left-double-arrow',
+      nextYear: 'right-double-arrow'
+    },
+    buttonText: {
+      today:    '<%= j("feature.full_calendar.content.today".translate) %>',
+      month:    '<%= j("feature.full_calendar.content.month".translate) %>',
+      week:     '<%= j("feature.full_calendar.content.week".translate) %>',
+      day:      '<%= j("feature.full_calendar.content.day".translate) %>'
+    },
+     monthNames: [],
+     monthNamesShort: [],
+     dayNames: [],
+     dayNamesShort: []
+    };
+  
+  <% if "date.month_names_array".translate.class.to_s == "Array" %>
+    <% "date.month_names_array".translate.each do |mon| %>
+      fullCalendarParamHash.monthNames.push('<%= mon %>')
+    <% end %>
+  <% end %>
+
+  <% if "date.month_names_array".translate.class.to_s == "Array" %>
+    <% "date.abbr_month_names_array".translate.each do |mon| %>
+      fullCalendarParamHash.monthNamesShort.push('<%= mon %>')
+    <% end %>
+  <% end %>
+
+  <% if "date.month_names_array".translate.class.to_s == "Array" %>
+    <% "date.day_names".translate.each do |mon| %>
+      fullCalendarParamHash.dayNames.push('<%= mon %>')
+    <% end %>
+  <% end %>  
+
+  <% if "date.month_names_array".translate.class.to_s == "Array" %>
+    <% "date.abbr_day_names".translate.each do |mon| %>
+      fullCalendarParamHash.dayNamesShort.push('<%= mon %>')
+    <% end %>
+  <% end %>
+
+<% end %>

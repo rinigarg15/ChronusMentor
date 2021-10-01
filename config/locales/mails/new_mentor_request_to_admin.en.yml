@@ -1,0 +1,16 @@
+en:
+  email_translations:
+    new_mentor_request_to_admin:
+      title_v3: "%{_Mentee} requests for %{_a_mentor} notification to %{_admin}"
+      description_v2: Sometimes %{_a_mentee} cannot directly request %{_a_mentor}; they have to use the system to ask the %{_admin} to assign them one. When the system receives the request, it generates this email and sends it to the %{_admin}.
+      subject_v1: "{{mentee_name}} requests {{customized_mentor_term_articleized}} assignment"
+      content_v1_html: "{{mentee_name}} requested that you assign them {{customized_mentor_term_articleized}} in <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a>.<br /><br/><a href='{{url_mentor_requests_listing}}'>Click here</a> to view the {{customized_mentee_term}}'s preferences and take action.<br/>"
+      tags:
+        mentee_name:
+          description: Name of the mentee who has sent the mentoring request
+          example: William Brown
+        url_mentor_requests_listing:
+          description: Url of the listing page containing all the mentoring request from the mentees
+        message_to_admin:
+          description: Message from sender to admin
+          example: I am looking to expand my horizons into Marketing, please help me in finding the right match.

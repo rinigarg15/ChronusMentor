@@ -1,0 +1,6 @@
+<div id="cjs_<%= MessageConstants::Tabs::INBOX %>_messages_list" class="cjs_messages_list">
+  <%= render "admin_messages/admin_messages_list", {tab_number: MessageConstants::Tabs::INBOX, tab_data: messages_presenter.tabs_data[MessageConstants::Tabs::INBOX], is_inbox: true} %>
+</div>
+<div id="cjs_<%= MessageConstants::Tabs::SENT %>_messages_list" class="hide cjs_messages_list">
+  <%= render "admin_messages/admin_messages_list", {tab_number: MessageConstants::Tabs::SENT, tab_data: messages_presenter.tabs_data[MessageConstants::Tabs::SENT], include_system_generated: messages_presenter.include_system_generated, is_inbox: false} %>
+</div>

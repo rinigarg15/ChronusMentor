@@ -1,0 +1,26 @@
+en:
+  feature:
+    custom_themes:
+      header:
+        customize_appearance_v1: Customize %{Program} Branding
+        add_theme: Add theme
+        edit_theme: Edit theme
+      actions:
+        add_theme: Add theme
+        use_theme: Use theme
+      content:
+        usage_instructions: Following are the themes available for the program. Click on 'Use theme' to switch to the theme.
+        view_all_themes: View all themes
+      label:
+        Theme: Theme
+        actions: Actions
+        program_specific: "(program specific)"
+        active_theme_in_org: "(active theme in %{org_name})"
+        current_theme: Current theme
+        scope: Scope
+        global: Global
+        private: Private
+        theme: theme
+      popup:
+        theme_usage: Theme Usage
+        all_programs: Do you want to apply this theme to all %{Programs}?

@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+# TODO: Make changes in chef cookbooks to use this file for start of Delayed Job
+
+# If there are any change(s) in this file, then corresponding change must be made in script/dj_stop file too
+
+# We are using restart over start because
+# - when stopping DJ, we do not force kill workers - so, worker(s) might be still running processing the last job
+# - restart with 'no_wait' will create a new worker instance even when the worker is not completely shut
+# - start will not create a new worker instance when the worker is running
+
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+require 'delayed/command'
+
+Delayed::Command.new(["restart", "-n", "2", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["restart", "--queue", "es_delta", "--identifier", "es_queue_worker", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["restart", "--queue", "mongo_cache", "--identifier", "mongo_queue_worker", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["restart", "--queue", DjQueues::HIGH_PRIORITY, "--identifier", "high_priority_queue_worker_0", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["restart", "--queue", DjQueues::HIGH_PRIORITY, "--identifier", "high_priority_queue_worker_1", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["restart", "--queue", DjQueues::WEEKLY_DIGEST, "--identifier", "weekly_digest_queue_worker", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["restart", "--queue", DjQueues::SPLIT, "--identifier", "split_worker_0", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["restart", "--queue", DjQueues::SPLIT, "--identifier", "split_worker_1", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["restart", "--queue", DjQueues::SPLIT, "--identifier", "split_worker_2", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["restart", "--queue", DjQueues::LONG_RUNNING, "--identifier", "long_running_worker", "--", "--no_wait"]).daemonize

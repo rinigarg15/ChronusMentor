@@ -1,0 +1,49 @@
+<%= include_ckeditor_tag %>
+<% @title = "feature.announcements.header.new_announcement".translate %>
+<% @back_link = {:label => "feature.announcements.label.announcements".translate, :link => announcements_path} %>
+<%- example_email_list = "feature.announcements.content.example_mails".translate -%>
+<%= response_flash "test_send_success" -%>
+
+<%= ibox nil do %>
+  <%= simple_form_for @announcement, :html => {:id => 'new_announcement', :class => 'form-horizontal clearfix', :multipart => true} do |f| %>
+    <%= control_group do %>
+      <%= content_tag(:div, "feature.announcements.label.for".translate + " *", :class => "false-label control-label col-sm-3") %>
+      <%= controls(:id => 'announcement_role_list', class: "col-sm-9") do %>
+        <div id="announcement_option_wrapper" class="clearfix">
+          <%= choices_wrapper("display_string.Roles".translate) do %>
+            <% @current_program.roles_without_admin_role.includes({:customized_term => :translations}).each do |role| %>
+              <label class="checkbox inline">
+                <%= check_box_tag 'announcement[recipient_role_names][]', role.name, true , :id => "announcement_recipient_role_names_#{role.name}" %>
+                <%= role.customized_term.term %>
+              </label>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <%= f.input :title, :as => :string, :required => true, :wrapper => :horizontal_input, :input_html => {:class => 'form-control'} %>
+
+    <%= f.input :body, :as => :text, :label => "feature.announcements.label.message".translate, :wrapper => :horizontal_input, :input_html => {:id => 'new_announcement_body', :value => ("feature.announcements.content.take_part_in_survey_html".translate(survey_link: link_to(participate_survey_url(@survey), participate_survey_url(@survey))) if @survey)} %>
+    <%= f.input :attachment, :as => :file, :wrapper => :horizontal_input,  label: "feature.announcements.label.add_an_attachment".translate, :input_html => { :id => "post_attachment" } %>
+    <%= f.input :expiration_date, as: :string, :wrapper => :datepicker_input, input_html: { id: "announcements_expiry", class: "form-control", placeholder: "feature.announcements.content.select_date".translate, data: date_picker_options } %>
+
+
+    <%= f.input :status, :as => :hidden, :input_html => {:id => 'announcement_status'} %>
+
+
+    <%= control_group do %>
+      <%= render :partial => "announcements/send_notification_options", :locals => {:f => f, :example_email_list => example_email_list, mailer_klass: AnnouncementNotification} -%>
+    <% end %>
+    <%= hidden_field_tag :survey_id, params[:survey_id] %>
+    <%= render :partial => "announcements/actions", :locals => {:f => f} %>
+  <% end %>
+
+  <%= render :partial => "announcements/test_email_popup", :locals => {:announcement => @announcement, :example_email_list => example_email_list}-%>
+
+  <%= javascript_tag do %>
+    RequiredFields.fieldIds.push('announcement_title');
+    RequiredFields.fieldIds.push('announcement_option_wrapper');
+    RequiredFields.fieldIds.push('announcement_email_notification');
+  <% end %>
+<% end %>

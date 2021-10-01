@@ -1,0 +1,13 @@
+<div id="import_form">
+  <%= simple_form_for :translations_import_csv, url: import_csv_translations_path, html: {multipart: true, method: :post} do |f| %>
+    <%= control_group do %>
+      <%= content_tag(:label, "csv_import.label.csv_file".translate, for: "translations_import_csv", class: 'false-label control-label') %>
+      <%= controls(id: 'translations_csv_upload', class: "cjs_translations_csv") do %>
+        <%= file_field_tag :user_csv, value: nil, accept: '.csv', as: :file, id: "translations_import_csv", :required => true %>
+      <% end %>
+    <% end %>
+    <% action_set(class: "pull-right") do %>
+      <%= f.button :submit, "display_string.Upload".translate, class: 'btn btn-primary' %>
+    <% end %>
+  <% end %>
+</div>

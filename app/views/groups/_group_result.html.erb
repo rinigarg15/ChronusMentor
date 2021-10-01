@@ -1,0 +1,102 @@
+<% if local_assigns[:show_manage_connections_view].nil? %>
+  <% show_manage_connections_view = @is_manage_connections_view || (@profile_user && current_user.can_manage_connections?) %>
+  <% @mentoring_model_v2_enabled ||= @current_program.mentoring_connections_v2_enabled? %>
+  <% if @mentoring_model_v2_enabled %>
+    <% group_roles = @current_program.roles.for_mentoring.includes(:permissions, customized_term: :translations) %>
+  <% end %>
+<% end %>
+<% v2_non_global_group = @mentoring_model_v2_enabled && !@is_global_connections_view %>
+
+<% render partial: "groups/drop_down_action_links", locals: { group: group, is_table_view: is_table_view, find_new: @find_new , ga_src: local_assigns[:ga_src]} %>
+
+<%= @group_actions %>
+<div id="group_pane_<%= group.id %>">
+  <div class="<%= 'm-l' if is_table_view %>">
+    <div class="media-left">
+      <%= image_tag(group.logo_url, class: "media-object img-circle", size: "50x50") %>
+    </div>
+    <div class="media-body">
+      <% group_name = render_group_name(group, current_user, { find_new: !!@find_new, is_global: (!!params[:show] ? (params[:show] == 'global') : false), src: @src_path } ) %>
+      <% group_label = get_group_label_for_end_user(current_user, group, skip_my_group: @is_my_connections_view) if @is_my_connections_view %>
+      <% if @mentoring_model_v2_enabled && @is_manage_connections_view %>
+        <% group_notes = content_tag(:span, get_group_notes_content(group, true, { id: "cjs_group_notes_#{group.id}" } ), id: "cjs_group_notes_#{group.id}") %>
+      <% end %>
+      <h4 class="<%= group_label.present? ? 'm-b-xs' : 'm-b-xxs' %>">
+        <%= group_name %>
+        <%= group_label %>
+        <span class="font-noraml h6 m-l-xxs">
+          <%= group_notes %>
+        </span>
+      </h4>
+
+      <% if v2_non_global_group %>
+        <div class="text-muted">
+          <% if !@find_new && group.closed? %>
+            <% group_duration_content = formatted_time_in_words(group.published_at, no_ago: true, no_time: true) + " - " +content_tag(:span, get_group_expiry_content(group, true, show_expired_text: !@find_new), id: "cjs_expiry_#{group.id}") %>
+            <%= display_group_data(group_duration_content, nil, "fa fa-clock-o") %>
+          <% elsif @find_new && (group.pending? || group.active?) %>
+            <% text_class = get_circle_start_and_available_info_text_class(group, wob_member) %>
+            <% label, date = get_circle_start_and_available_info(group, wob_member) %>
+            <%= display_group_data(content_tag(:span, DateTime.localize(date, format: :short), class: text_class), label, "fa fa-clock-o", text_class) %>
+          <% elsif group.pending? || group.active? %>
+            <% label, date = get_active_or_pending_group_display_info(group, current_user) %>
+            <%= display_group_data(date, label, "fa fa-clock-o") %>
+          <% elsif group.drafted? %>
+            <%= display_group_data(formatted_time_in_words(group.created_at, no_ago: true, no_time: true), "feature.connection.header.drafted_label".translate, "fa fa-clock-o") %>
+          <% elsif group.withdrawn? %>
+            <div class="m-t-xs">
+              <%= display_group_data(formatted_time_in_words(group.closed_at, no_ago: true, no_time: true), "feature.connection.header.withdrawn_label".translate, "fa fa-clock-o") %>
+            </div>
+            <div>
+              <%= display_group_data(group.closed_by.nil? ? "feature.connection.header.removed_user_label".translate : link_to_user(group.closed_by), "feature.connection.header.withdrawn_by_label".translate) %>
+              <span>
+                <% if group.termination_reason.present? %>
+                  <%= content_tag(:span, link_to("feature.connection.content.View_Reason".translate, "javascript:void(0)", data: { toggle: "popover", title: "feature.connection.content.Reason_for_withdrawal".translate, content: group.termination_reason, placement: "bottom" } ), class: "text-default m-l-xs") %>
+                <% end %>
+              </span>
+            </div>
+          <% elsif group.proposed? || group.rejected? %>
+            <%= display_group_proposed_data(group, @is_my_connections_view) %>
+            <% if group.rejected? %>
+              <div class="m-t-xs">
+                <%= display_group_data(formatted_time_in_words(group.closed_at, no_ago: true, no_time: true), "feature.connection.header.rejected_label".translate, "fa fa-clock-o") %>
+                <%= content_tag(:span, "|", class: "text-muted p-l-xxs p-r-xxs") %>
+                <% closed_by_content = group.closed_by.nil? ? "feature.connection.header.removed_user_label".translate : link_to_user(group.closed_by, { content_method: [:name, name_only: @is_manage_connections_view] } ) %>
+                <%= display_group_data(closed_by_content, "feature.connection.header.rejected_by_label".translate) %>
+                <span>
+                  <% if group.closure_reason.present? %>
+                    <%= content_tag(:span, link_to("feature.connection.content.View_Reason".translate, "javascript:void(0)", data: { toggle: "popover", title: "feature.connection.content.Reason_for_closure".translate, content: group.closure_reason.reason, placement: "bottom" } ), class: "text-default m-l-xs") %>
+                  <% elsif group.termination_reason.present? %>
+                    <%= content_tag(:span, link_to("feature.connection.content.View_Reason".translate, "javascript:void(0)", data: { toggle: "popover", title: "feature.connection.content.Reason_for_rejection".translate, content: group.termination_reason, placement: "bottom" } ), class: "text-default m-l-xs") %>
+                  <% end %>
+                </span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+        <% if group.drafted? || group.closed? %>
+          <div class="text-muted">
+            <% if group.drafted? %>
+              <%= display_group_data(group.created_by.nil? ? _Admin : link_to_user(group.created_by), "feature.connection.header.created_label".translate) %>
+            <% elsif group.closed? %>
+              <%= display_closed_group_data(group) %>
+              <% if group.closure_reason.present? %>
+                <%= content_tag(:span, link_to("feature.connection.content.View_Reason".translate, "javascript:void(0)", data: { toggle: "popover", title: "feature.connection.content.Reason_for_closure".translate, content: group.closure_reason.reason, placement: "bottom" } ), class: "text-default m-l-xs") %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <%= render partial: "groups/display_members_and_template", locals: { group: group, v2_non_global_group: v2_non_global_group, group_roles: group_roles, is_manage_connections_view: @is_manage_connections_view, find_new: @find_new } %>
+    <%= render_start_date_content(group, current_user) if @current_program.allow_circle_start_date? %>
+    <% if v2_non_global_group %>
+      <%= render partial: "groups/v2_non_global_group", locals: { group: group, group_roles: group_roles, is_manage_connections_view: @is_manage_connections_view, find_new: @find_new, connection_questions: @connection_questions, show_manage_connections_view: show_manage_connections_view, mentoring_model_roles: local_assigns[:mentoring_model_roles] } %>
+    <% else %>
+      <%= render partial: "groups/global_or_pre_v2_group", locals: { group: group, profile_user: @profile_user, group_roles: group_roles, is_manage_connections_view: @is_manage_connections_view, is_global_connections_view: @is_global_connections_view, is_my_connections_view: @is_my_connections_view } %>
+    <% end %>
+    <%= group_meeetings_status(group) if @find_new %>
+  </div>
+  <%= @group_actions_block %>
+</div>

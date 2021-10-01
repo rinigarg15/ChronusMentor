@@ -1,0 +1,43 @@
+<% listing_info_options = {} %>
+<% if mentor_requests.any? %>
+  <% listing_info_options = { collection: mentor_requests } %>
+<% end %>
+
+<% mentor_requests_present = !(mentor_requests.empty? || mentor_requests.total_entries == 0) %>
+
+<%= ibox nil, :content_class => "no-padding" do %>
+  <% if is_request_manager_view_of_all_requests && mentor_requests_present %>
+    <div class='pagination_box p-xs p-l-sm p-r-sm b-b clearfix'>
+      <%= mentor_requests_bulk_actions(local_assigns[:from_manage]) %>
+      <% if local_assigns[:non_moderated] %>
+        <%= mentor_requests_export_form %>
+      <% end %>
+    </div>
+
+    <label for="cjs_primary_checkbox" class="sr-only"><%= "feature.mentor_request.content.select_all_label_v1".translate %></label>
+    <div class='pull-left m-t-md m-l-md m-r-lg'><%= check_box_tag :cjs_primary_checkbox %></div>
+  <% end %>
+
+  <% sort_options = CommonSortUtils.fill_user_sort_input_or_defaults!({}, action_params) %>
+  <% sort_options[:on_select_function] = "commonReportFilters.changeSortOptions" if local_assigns[:from_manage] %>
+  <%= top_bar_in_listing(listing_info_options, { show: true, applied_count: @my_filters.try(:size) }, basic_sort_by_id_options_for_top_bar(mentor_requests_present, sort_options)) %>
+
+  <% unless mentor_requests_present %>
+    <div class="p-sm text-muted text-center">
+      <%= 'feature.mentor_request.content.empty_text_v1'.translate(:mentoring => _mentoring) %>
+    </div>
+  <% else %>
+    <% pagination_options = {:entries_name => "feature.mentor_request.label.Requests".translate, :additional_class => "col-xs-10"} %>
+    <% pagination_options.merge!(:empty_collection => true) if local_assigns[:moderated] %>
+
+    <div class='listing clearfix'>
+      <%= render :partial => 'mentor_requests/select_all', :locals => {mentor_requests: mentor_requests, filter_params: filter_params, from_manage: local_assigns[:from_manage]} %>
+      <%= listing_page(mentor_requests, partial: mentor_request_partial, collection_key: :mentor_request, locals: {match_results_per_mentor: match_results_per_mentor}) %>
+    </div>
+    <% if mentor_requests.any? %>
+      <% pagination_options = { collection: mentor_requests, ajax: true } %>
+      <% pagination_options[:params] = action_params if local_assigns[:from_manage] %>
+      <%= bottom_bar_in_listing(pagination_options) %>
+    <% end %>
+  <% end %>
+<% end %>

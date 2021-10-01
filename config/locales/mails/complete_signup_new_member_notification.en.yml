@@ -1,0 +1,15 @@
+en:
+  email_translations:
+    complete_signup_new_member_notification:
+      title_v3: Notification with instructions to a new user applying to join the %{_program}
+      description_v4: This email, with instructions and a link to complete application, is sent to a user who fills in a Captcha and applies to join the %{_program}.
+      subject_v1: Complete signing-up for {{subprogram_or_program_name}}
+      content_v1_html: 'Thank you for your interest in joining as {{roles_applied_for}} in {{subprogram_or_program_name}}. To finish signing-up, click on the button below. It''s that easy! <br />{{sign_up_button}}<br /> If the link above does not work, copy and paste the following link in your browser: {{url_signup}}<br/>'
+      tags:
+        roles_applied_for:
+          description: Roles, the user applied for
+        organization_name:
+          description: Name of the Organization
+          example: Chronus
+        url_signup:
+          description: Sign Up link

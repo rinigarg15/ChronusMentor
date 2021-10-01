@@ -1,0 +1,79 @@
+<% activity_details = [] %>
+<% login_activity = {
+  icon_class: "fa fa-sign-in",
+  heading: "feature.mentoring_model.label.no_of_logins".translate,
+  content: group.login_activity(false),
+  content_class: "login_count"
+} %>
+<% if !group.closed? && group.created_at.to_date < LOGIN_INSTANCES_TRACKING_STARTED %>
+  <% login_activity.merge!(heading_tooltip: "display_string.since_date".translate(date: DateTime.localize(LOGIN_INSTANCES_TRACKING_STARTED, format: :abbr_short))) %>
+<% end %>
+<% activity_details << login_activity %>
+<% if group.scraps_enabled? %>
+  <% activity_details << {
+    icon_class: "fa fa-envelope",
+    heading: "feature.mentoring_model.label.messages_sent".translate,
+    content: group.scraps_activity(nil, false)
+  } %>
+<% end %>
+<% if group.forum_enabled? %>
+  <% activity_details << {
+    icon_class: "fa fa-comment",
+    heading: "feature.forum.label.Posts".translate,
+    content: group.posts.size
+  } %>
+<% end %>
+<% if group.meetings_enabled?(group_roles) %>
+  <% activity_details << {
+    icon_class: "fa fa-calendar",
+    heading: "feature.mentoring_model.label.meetings_attended".translate(meetings: _Meetings),
+    content: group.past_active_meetings.count
+  } %>
+<% end %>
+<% if local_assigns[:survey_exists] %>
+  <% activity_details << {
+    icon_class: "fa fa-comments",
+    heading: "feature.survey.label.survey_responses".translate,
+    content: survey_answers_size
+  } %>
+<% end %>
+<% if local_assigns[:tasks] %>
+  <% completed_task_count = MentoringModel::Task.get_complete_tasks(tasks).count %>
+  <% activity_details << {
+    icon_class: "fa fa-check-square-o",
+    heading: "feature.reports.groups_report_columns.tasks_count".translate,
+    content: "#{completed_task_count}" + "/" + "#{tasks.count}"
+  } %>
+<% end %>
+
+<div class="m-t table-responsive" id="group_activity_details_<%= group.id %>">
+  <table class="table">
+    <thead>
+      <tr>
+        <th><%= set_screen_reader_only_content("feature.profile.header.connections_and_activity".translate) %></th>
+        <% activity_details.each do |activity| %>
+          <th class="text-center">
+            <%= append_text_to_icon(activity[:icon_class], activity[:heading]) %>
+            <% if activity[:heading_tooltip].present? %>
+              <%= content_tag(:span, get_icon_content("fa fa-info-circle m-r-0"), data: { toggle: "tooltip", title: activity[:heading_tooltip] } ) %>
+            <% end %>
+          </th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="font-bold">
+        <td class="no-horizontal-padding">
+          <%= link_to(("display_string.More".translate + get_icon_content("fa fa-angle-down m-l-xxs m-r-0")).html_safe, get_activity_details_group_path(group.id), method: :get, remote: true, class: "m-l-xs font-noraml cjs_see_more_tr_link", data: { group_id: group.id } ) %>
+          <%= link_to(("display_string.Less".translate + get_icon_content("fa fa-angle-up m-l-xxs m-r-0")).html_safe, "javascript:void(0)", data: { group_id: group.id }, class: "m-l-xs font-noraml cjs_see_less_tr_link hide") %>
+          <%= get_icon_content("fa fa-spinner fa-spin m-r-0 follow_ajax_loader hide") %>
+        </td>
+        <% activity_details.each do |activity| %>
+          <td class="text-center <%= activity[:content_class] %>">
+            <%= activity[:content] %>
+          </td>
+        <% end %>
+      </tr>
+    </tbody>
+  </table>
+</div>

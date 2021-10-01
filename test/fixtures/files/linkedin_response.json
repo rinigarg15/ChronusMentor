@@ -1,0 +1,95 @@
+{
+  "educations": {
+    "_total": 3,
+    "values": [
+      {
+        "degree": "Bachelor of Engineering (BE)",
+        "endDate": {"year": 2013},
+        "fieldOfStudy": "CSE",
+        "schoolName": "CEG"
+      },
+      {
+        "degree": "HSC",
+        "schoolName": "SVB"
+      },
+      {"schoolName": "St. John's"}
+    ]
+  },
+  "firstName": "Sundar",
+  "lastName": "Raja",
+  "id": "12345",
+  "positions": {
+    "_total": 3,
+    "values": [
+      {
+        "company": {"name": "Chronus LLC"},
+        "isCurrent": true,
+        "startDate": {
+          "month": 7,
+          "year": 2017
+        },
+        "title": "SSDE II"
+      },
+      {
+        "company": {"name": "Chronus LLC"},
+        "isCurrent": false,
+        "startDate": {
+          "month": 7,
+          "year": 2016
+        },
+        "endDate": {
+          "month": 6,
+          "year": 2017
+        },
+        "title": "SSDE"
+      },
+      {
+        "company": {"name": "Chronus Corporation"},
+        "endDate": {
+          "month": 6,
+          "year": 2016
+        },
+        "isCurrent": false,
+        "startDate": {
+          "month": 7,
+          "year": 2014
+        },
+        "title": "SDE II"
+      }
+    ]
+  },
+  "publications": {
+    "_total": 2,
+    "values": [
+      {
+        "authors": {
+          "_total": 3,
+          "values": [
+            {},
+            {"name": "Arjuna"},
+            {"name": "Dharma"}
+          ]
+        },
+        "date": {
+          "day": 11,
+          "month": 6,
+          "year": 2006
+        },
+        "publisher": {"name": "Pearson"},
+        "summary": "Summary",
+        "title": "An exactly solved model of self-organized critical phenomena",
+        "url": "http://google.com"
+      },
+      {
+        "authors": {
+          "_total": 1,
+          "values": [
+            {}
+          ]
+        },
+        "publisher": {},
+        "title": "How to implement Mentoring?"
+      }
+    ]
+  }
+}

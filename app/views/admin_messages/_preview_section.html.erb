@@ -1,0 +1,28 @@
+<div id="cjs_preview_section_<%= msg.id %>" class="row-fluid pointer cjs_preview_section <%= 'cjs_collapse' unless preview_message %>" data-detailed-url="<%= show_detailed_abstract_message_path(msg, from_inbox: @from_inbox) %>">
+  <% if preview_message %>
+    <div class="cjs_preview_active media no-margins <%= 'cjs_unread' if expand_message %>" data-id="<%= msg.id %>">
+      <div class="media-left">
+        <%= display_profile_pic(msg) %>
+      </div>
+      <div class="media-body">
+        <div class="col-xs-12 no-padding">
+          <div class="col-sm-10 col-xs-8 no-padding">
+            <div class="cui_preview_message_content font-bold pull-left"><%= from_to_details[:from] %></div>
+            <div class="cui_preview_message_gradient"></div>
+          </div>
+          <div class="col-sm-2 col-xs-4 no-padding hidden-xs">
+            <div class="pull-right"><%= time_or_date %></div>
+            <div class="pull-right"><%= embed_icon("fa fa-paperclip fa-fw m-r-0") if msg.attachment? %></div>
+          </div>
+        </div>
+        <div class="cui_content_preview no-padding col-xs-12">
+          <div class="cui_preview_message_content pull-left">
+            <%= message_content_format(msg) %>
+          </div>
+          <div class="cui_preview_message_gradient"></div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+<div id="cjs_detailed_section_empty_<%= msg.id %>"></div>

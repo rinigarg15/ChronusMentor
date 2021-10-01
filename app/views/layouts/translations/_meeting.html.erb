@@ -1,0 +1,18 @@
+<%= javascript_tag do %>
+  var meetingTranslations = {
+    topic: '<%= j("#{'feature.meetings.form.topic'.translate} *") %>',
+    when: '<%= j("#{'feature.meetings.form.when'.translate} *") %>',
+    invalidAttendees: '<%= j("#{'feature.meetings.content.invalid_attendees_v1'.translate(:meeting => _meeting)} ") %>',
+    requiredFields: '<%= j("#{'common_text.error_msg.required_missing'.translate} ") %>',
+    invalidDate: '<%= j("#{'feature.meetings.content.invalid_date'.translate} ") %>',
+    invalidStartEndDate: '<%= j("#{'feature.meetings.content.invalid_start_end_date'.translate} ") %>',
+    dueDateOutOfRange: '<%= j("#{'feature.meetings.content.due_date_out_of_range'.translate} ") %>',
+    month: '<%= j("feature.full_calendar.content.month".translate) %>',
+    week: '<%= j("feature.full_calendar.content.week".translate) %>',
+    day: '<%= j("feature.full_calendar.content.day".translate) %>',
+    decline: '<%= j("feature.meetings.content.decline".translate) %>',
+    reschedule: '<%= j("feature.meetings.content.reschedule".translate) %>',
+    slotsOrAvailabilityTextRequired: '<%= j("#{'feature.meetings.content.propose_slots_or_availability_text_required_v1'.translate} ") %>',
+    clickOnEmptySlotMessage: '<%= j("feature.calendar.content.click_on_empty_slot_message_html".translate(meeting: _meeting, mentors: _mentors)) %>'
+    };
+<% end %>

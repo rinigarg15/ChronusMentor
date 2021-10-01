@@ -1,0 +1,68 @@
+en:
+  feature:
+    forum:
+      title:
+        forums: Forums
+        new_forum: New Forum
+        recent_conversations: Recent Conversations
+        new_conversation: New Conversation
+      back_link:
+        forums: Forums
+      action:
+        new_forum: New Forum
+        leave_forum: Leave Forum
+        join_forum: Join Forum
+        follow: Follow
+        remove_featured: Remove from Featured
+        mark_featured: Mark as Featured
+        following: Following
+        start_conversation: Start a Conversation
+        reply_to_this_conversation: Reply to this conversation
+      content:
+        no_forum_html: There are no forums for this criteria. %{click_here} to create one.
+        remove_warning: Removing this forum will remove all the topics and posts in the forum.
+        remove_confirm: Are you sure you want to remove this forum?
+        last_post_description_html: "<b>Last post</b> %{time} by %{user}"
+        last_post_html: "<b>Last post</b> %{time}"
+        no_replies: No replies yet.
+        add_reply: Add reply
+        sure_to_leave: Are you sure you want to leave %{forum_name}?
+        member:
+          one: 1 member
+          other: "%{count} members"
+        post:
+          one: 1 post
+          other: "%{count} posts"
+        view:
+          one: 1 view
+          other: "%{count} views"
+        cannot_change_afterwards: This cannot be changed afterwards
+        available_for: Available for
+        n_conversations:
+          one: Conversation
+          other: Conversations
+        n_members:
+          one: Member
+          other: Members
+        no_conversations: There are no conversations.
+        remove_featured_help_text: Remove from featured will remove this topic from the featured listing section in the forums page.
+        mark_featured_help_text: Marking as featured will increase the importance of this topic. Topics marked as featured will be displayed above all other topics in the forums page.
+        Featured: Featured
+        conversation_marked_as_featured: This conversation is marked as featured.
+        conversation_removed_as_featured: This conversation is removed from featured conversations.
+        topic_update_failed: Topic update failed
+        last_post: Last post
+        not_permitted: is not permitted
+        leave_reply: Leave your reply
+        write_a_comment: Write a comment
+        conversation_started_following: You have started following this conversation.
+        conversation_stopped_following: You have stopped following this conversation.
+        moderation_not_for_discusion_board: Content moderation is disabled for discussion board.
+        flagging_not_for_discussion_board: Flagging is disabled for discussion board.
+        Replies: Replies
+        no_other_conversations: There are no other conversations in this forum.
+      label:
+        post: post
+        Post: Post
+        Posts: Posts
+        conversation: conversation

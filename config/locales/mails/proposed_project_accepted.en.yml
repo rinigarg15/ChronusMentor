@@ -1,0 +1,26 @@
+en:
+  email_translations:
+    proposed_project_accepted:
+      title_v3: Proposed %{_mentoring_connection} accepted notification to the user
+      description_v3: When %{_a_admin} accepts a user's %{_mentoring_connection} proposal, this email is sent to the user.
+      subject_v1: Your proposed {{customized_mentoring_connection_term}} has been accepted!
+      content_v2_html: Congratulations! We have accepted your proposed {{customized_mentoring_connection_term}}, {{project_name}}, in <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a>{{text_for_owner}}<br/>{{message_from_admin_as_quote}}<br/>We will notify you when the {{customized_mentoring_connection_term}} starts. Meanwhile, you can visit the {{customized_mentoring_connection_term}} to see your other available activities.<br/>{{mentoring_connection_button}}
+      button_text: Go to the %{mentoring_connection}
+      tags:
+        project_name:
+          description: Name of the project
+          example: Develop TO-DO Android App
+        url_project:
+          description: Url to the project page
+        message_from_admin:
+          description: Optional reason provided by the admin when accepting a project proposal
+          example: Congratulations. This Project has been approved.
+        message_from_admin_as_quote:
+          description: Optional reason provided by the admin when accepting a project proposal with the sender's name
+          example: Congratulations. This Project has been approved.
+        text_for_owner:
+          description: Additional text if proposer is assigned as owner
+          example: " and made you owner for the same"
+          content_v1: You are the owner of the %{project}.
+        mentoring_connection_button:
+          description_v1: "%{_Mentoring_Connection} button"

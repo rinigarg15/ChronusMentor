@@ -1,0 +1,38 @@
+<% roles_hash = @current_program.roles_applicable_for_auto_approval.index_by(&:name) %>
+
+<%= control_group do %>
+  <%= content_tag(:h3, "program_settings_strings.label.role_settings".translate, class: "has-below-2") %>
+<% end if roles_hash.present? %>
+
+<%= control_group(class: @current_program.allow_multiple_role_option_in_membership_request? ? '' : 'hide', id: 'program_show_multiple_role_option') do %>
+  <% label = "program_settings_strings.content.can_join_in_multiple_roles".translate %>
+  <%= content_tag(:div, label, class: "false-label control-label") %>
+  <%= controls do %>
+    <%= choices_wrapper(label) do %>
+      <label class="radio inline">
+        <%= form.radio_button :show_multiple_role_option, true %> <%= "display_string.Yes".translate %>
+      </label>
+      <label class="radio inline">
+        <%= form.radio_button :show_multiple_role_option, false %> <%= "display_string.No".translate %>
+      </label>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= control_group do %>
+  <% label = "program_settings_strings.label.add_roles_without_approval".translate(admin: _admin) %>
+  <%= content_tag(:div, label, class: "false-label control-label") %>
+  <%= controls do %>
+    <%= choices_wrapper("display_string.Roles".translate) do %>
+      <% roles_hash.each do |role_name, role| %>
+        <% to_add_role = roles_hash[RoleConstants::AUTO_APPROVAL_ROLE_MAPPING[role_name]] %>
+        <%= hidden_field_tag "program[role_permissions][#{role.id}][add_role_permissions]", "" %>
+        <label class="checkbox inline p-r-md">
+          <%= check_box_tag "program[role_permissions][#{role.id}][become_#{to_add_role.name}]", true, role.has_permission_name?("become_#{to_add_role.name}") %>
+          <%= "program_settings_strings.label.role".translate(role_name: to_add_role.customized_term.term) %>
+          <%= render_add_role_without_approval_help_text(role, to_add_role) %>
+        </label>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end if roles_hash.present? %>

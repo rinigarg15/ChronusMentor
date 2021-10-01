@@ -1,0 +1,52 @@
+<% @title = "feature.announcements.header.announcements".translate %>
+<% has_announcements = @published_announcements.present? || @drafted_announcements.present? %>
+<% @skip_rounded_white_box_for_content = has_announcements %>
+<% manage_view = current_user.can_manage_announcements? %>
+
+<% if manage_view %>
+  <% @page_action = {:label => "feature.announcements.action.create_new_announcement".translate, :url => new_announcement_path, :class => "btn btn-primary btn-large"} %>
+  <% @back_link = {:label => "display_string.Manage".translate, :link => manage_program_path} %>
+<% end %>
+
+<% if !has_announcements %>
+  <%= ibox nil, :content_class =>"p-sm text-center" do %>
+    <p><%= "feature.announcements.content.no_announcements".translate %> <%= "feature.announcements.content.create_new_announcement_html".translate(click_here: link_to("display_string.Click_here".translate, new_announcement_path)) if manage_view %></p>
+  <% end %>
+
+<% else %>
+  <% if manage_view %>
+    <%= ibox "feature.announcements.header.drafted_announcements".translate, :ibox_class => "m-t-xs", :show_collapse_link => true do %>
+      <% if @drafted_announcements.any? %>
+        <div class='pagination_box clearfix'>
+          <%= top_bar_in_listing({:collection => @drafted_announcements}, {}, {}, {:additional_class => manage_view ? "p-l-0" : ""}) %>
+        </div>
+        <%= render :partial => 'announcements/announcement_fields', :locals => {announcements: @drafted_announcements, status: Announcement::Status::DRAFTED} %>
+        <%= bottom_bar_in_listing( { :collection => @drafted_announcements, :param_name => "drafted"} ) if @drafted_announcements.any? %>
+      <% else %>
+        <div class="text-center clearfix">
+          <p><%= "feature.announcements.content.no_draft_announcements".translate %></p>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
+
+
+  <%= ibox ( manage_view ? "feature.announcements.header.published_announcements".translate : nil), :ibox_class => "m-t-0", :content_class => "#{manage_view ? "" : "no-padding" }", :show_collapse_link => true do %>
+    <% if @published_announcements.any? %>
+      <div class='pagination_box  clearfix'>
+        <%= top_bar_in_listing({:collection => @published_announcements}, {}, {}, {:additional_class => manage_view ? "p-l-0" : ""}) %>
+      </div>
+      <% if manage_view %>
+        <%= render :partial => 'announcements/announcement_fields', :locals => {announcements: @published_announcements, status: Announcement::Status::PUBLISHED} %>
+      <% else %>
+        <%= listing_page(@published_announcements, :partial => "announcements/announcement_user", :collection_key => :announcement_user) %>
+      <% end %>
+      <%= bottom_bar_in_listing( { :collection => @published_announcements, :param_name => manage_view ? "published" : "page"} ) if @published_announcements.any? %>
+    <% else %>
+      <div class="text-center clearfix">
+        <p><%= "feature.announcements.content.no_published_announcements".translate %></p>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

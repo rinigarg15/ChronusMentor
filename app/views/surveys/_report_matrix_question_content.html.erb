@@ -1,0 +1,36 @@
+<% first_question = rating_question_responses.first.survey_question %>
+  <tr class="matrix_table_row">
+    <td class="col-md-2"></td>
+    <% first_question.default_choices.each do |answer| %>
+      <td class="text-center">
+        <span class="font-bold text-center <%= 'p-b-xs' if format == FORMAT::PDF %>">
+          <%= answer %>
+        </span>
+      </td>
+    <% end %>
+  </tr>
+
+<% rating_question_responses.each do |rating_question_response| %>
+  <% question = rating_question_response.survey_question; total_count = rating_question_response.count; answer_data = rating_question_response.data %>
+  <tr class="matrix_table_row">
+    <td>
+      <b><%= question.question_text %></b>
+      <span class ="h5">
+        <div class="small font-bold ">
+          (<%= "feature.survey.content.survey_response".translate(count: total_count) %>)
+        </div>
+      </span>
+    </td>
+    <% question.default_choice_records.each do |question_choice| %>
+        <% percent = answer_data[question_choice.id] %>
+        <td class="font-bold text-center  <%= render_background_color(percent) %>">
+          <span><%= percent.to_f.round(2) %>%</span>
+          <span class ="h5">
+            <div class="small font-bold ">
+              <%= render_choice_answers_count(percent,total_count) %>
+            </div>
+          </span>
+        </td>
+    <% end %>
+  </tr>
+<% end %>

@@ -1,0 +1,32 @@
+<%= include_ckeditor_tag %>
+<% group_id = group_id || ""%>
+<% if home_page %>
+  <% id = "new_topic_body_#{group_id}" %>
+  <% cke_id = "cke_new_topic_body_#{group_id}" %>
+  <% form_class = "cjs_new_topic_form_#{group_id}" %>
+<% else %>
+  <% id = "new_topic_body" %>
+  <% cke_id = "cke_new_topic_body" %>
+  <% form_class = "cjs_new_topic_form" %>
+<% end %>
+<% modal_container "feature.forum.title.new_conversation".translate, modal_id: topic_modal_id(group_id) do %>
+  <%= simple_form_for [forum, Topic.new], remote: home_page, html: { class: form_class + " cjs_ckeditor_dont_register_for_insecure_content" } do |f| %>
+    <%= f.input :title, input_html: { class: "form-control cjs_new_topic_title" } %>
+    <%= f.input :body, input_html: { id: id, rows: "5", class: "form-control cjs_new_topic_body" } %>
+    <%= hidden_field_tag :group_id, group_id%>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", data: { dismiss: "modal" } %>
+      <%= f.button :submit, "display_string.Create".translate %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    NewForumTopic.validateForm("<%= form_class %>", '<%= id%>', '#<%= cke_id%>');
+    NewForumTopic.addTopicForm(<%= group_id %>);
+    jQuery(document).on('shown.bs.modal', '#<%= topic_modal_id(group_id) %>', function (e) {
+      CkeditorConfig.initializeTopicBody("<%= id %>");
+    });
+  });
+<% end %>

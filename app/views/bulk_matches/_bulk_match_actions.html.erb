@@ -1,0 +1,47 @@
+<div class="cjs_bulk_actions pull-left col-xs-4 p-l-0" >
+  <div class="btn-group pull-left">
+    <a href="#" class="btn btn-outline btn-success dropdown-toggle m-r-xs" data-toggle="dropdown" ng-class="bulk_btn_class"><%= "feature.bulk_match.label.bulk_actions".translate %> <span class="caret"></span></a>
+    <% if !@recommend_mentors %>
+      <ul class="dropdown-menu">
+        <li><a href="javascript:void(0)" ng-click="bulkUpdatePairStatus('<%= AbstractBulkMatch::UpdateType::DRAFT %>', true);" onclick="return false;"><%= "feature.bulk_match.action.create_drafted_connections_v1".translate(:Mentoring_Connections => _Mentoring_Connections) %></a></li>
+        <li><a href="javascript:void(0)" ng-click="bulkUpdatePairStatus('<%= AbstractBulkMatch::UpdateType::PUBLISH %>', true);" onclick="return false;"><%= "feature.bulk_match.action.publish_drafted_connections_v1".translate(:Mentoring_Connections => _Mentoring_Connections) %></a></li>
+        <li><a href="javascript:void(0)" ng-click="bulkUpdatePairStatus('<%= AbstractBulkMatch::UpdateType::DISCARD %>');" onclick="return false;"><%= "feature.bulk_match.action.discard_drafted_connections_v1".translate(:Mentoring_Connections => _Mentoring_Connections) %></a></li>
+      </ul>
+    <% else %>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="javascript:void(0)" ng-click="bulkUpdatePairStatus('<%= AbstractBulkMatch::UpdateType::DRAFT %>');" onclick="return false;">
+            <%= "feature.bulk_recommendation.action.draft_recommendations".translate %>
+          </a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" ng-click="bulkUpdatePairStatus('<%= AbstractBulkMatch::UpdateType::PUBLISH %>');" onclick="return false;">
+            <%= "feature.bulk_recommendation.action.publish_drafted_recommendations".translate %>
+          </a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" ng-click="bulkUpdatePairStatus('<%= AbstractBulkMatch::UpdateType::DISCARD %>');" onclick="return false;">
+            <%= "feature.bulk_recommendation.action.discard_drafted_recommendations".translate %>
+          </a>
+        </li>
+      </ul>
+    <% end %>
+  </div>
+  <%= link_to_function("feature.bulk_match.label.settings".translate, "jQueryShowQtip('#cjs_bulk_match_result', 400, '#{send_only('fetch_settings_' + @bulk_match.type.underscore.pluralize + '_path', AbstractBulkMatch.fetch_settings_paths, orientation_type: orientation_type)}', {}, {method: 'get', modal: true});", :id => "advanced_settings", :class => "btn btn-success btn-outline m-r-xs") %>
+  <%= get_icon_content("fa fa-refresh m-r-0") %>
+  <%= link_to("feature.bulk_match.label.reset".translate, "javascript:void(0);", :id => "cjs_refresh_results", :data => {:url => send_only("refresh_results_#{@bulk_match.type.underscore.pluralize}_path", AbstractBulkMatch.refresh_results_paths, orientation_type: orientation_type), :title => "feature.bulk_match.content.reset_tooltip".translate, :toggle => "tooltip"}) %>
+</div>
+<div class="col-xs-8 m-t-xs">
+  <div class="pull-right cjs_match_performance" ng-init="getMatchPerformanceMetrics();">
+    <span class="font-600 inline m-r-xs"> <%= "feature.bulk_match.label.match_perfomance".translate %> </span>
+    <span class="inline">
+      <%= "feature.bulk_match.label.average".translate %>
+      <span class="label m-r-xs"> {{bulk_match_vars.average_score}} </span>
+      <%= "feature.bulk_match.label.range".translate %>
+      <span class="label m-r-xs"> {{bulk_match_vars.range}} </span>
+      <%= "feature.bulk_match.label.deviation".translate %>
+      <span class="label" id="deviation_score"> {{bulk_match_vars.deviation}} </span>
+      <%= tooltip("deviation_score", "feature.bulk_match.content.deviation_tooltip".translate(:mentors => _mentors)) %>
+    </span>
+  </div>
+</div>

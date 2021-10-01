@@ -1,0 +1,23 @@
+<div class="p-md p-l-m white-bg h4 no-vertical-margins"><%= get_icon_content("fa fa-paint-brush") %> Create a New Theme </div>
+<%= ibox nil do %>
+  <%= simple_form_for @theme, :url => build_new_themes_path(@theme), :as => :theme, :html => {:method => :post, :class => "form-horizontal"} do |f| %>
+
+    <% ThemeBuilder::THEME_VARIABLES.each do |key, value|%>
+      <% default_value = (@themes_hash.present? && @themes_hash[key]) || value["default"][0] %>
+      <%= control_group do %>
+        <%= label_tag key, value["default"][1], :class => "col-sm-2 control-label" %>
+        <%= controls(:class => "col-sm-10 no-margins") do %>
+          <%= f.input_field key, :value => default_value, :class => "cjs-theme-build form-control", :id => key, :title => value["default"][2]%>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% action_set(class: "pull-right p-r-0") do %>
+      <%= link_to_function "display_string.Cancel".translate, "closeQtip();", :class => "btn btn-white" %>
+      <%= f.button :submit, "display_string.Submit".translate, :class => "cjs-theme-submit btn btn-primary", :no_disable_with => true %>
+    <% end %>
+    <div id="theme_error"></div>
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[ThemeValidate.initializeForm();] %>

@@ -1,0 +1,14 @@
+<% divider = "<hr class='m-t-xs m-b-xs'/>" %>
+<% wrapper_proc = Proc.new do |programs, options, &block| %>
+      <% content_tag(:div, content_tag(:h4, options[:title], class: 'has-above has-below-1') + content_tag(:div, block.call(programs, options))).html_safe %>
+<% end %>
+<%= control_group do %>
+  <div class="false-label control-label col-sm-2"><%= "feature.resources.content.select_things_to_publish".translate(things: _Programs) %></div>
+  <%= controls(class: "col-sm-10") do %>
+    <div class="well white-bg">
+      <%= ProgramsListingService.list_programs self, wrapper_proc, divider: divider do |programs, options|%>
+        <% render :partial => "resources/programs", :locals => {programs: programs, program_ids: program_ids, new_record: new_record, resource_roles: resource_roles} %>
+      <%end%>
+   </div>
+  <% end %>
+<% end %>

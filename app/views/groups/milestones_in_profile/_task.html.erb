@@ -1,0 +1,17 @@
+<% show_preview = local_assigns[:show_preview] %>
+<% preview_role = local_assigns[:preview_role] %>
+<% milestone_items = local_assigns[:milestone_items] %>
+<% task_id = task.id %>
+<div class="list-group-item clearfix no-padding cjs-form-and-menu-link-container cjs-sortable-list-item cjs-sortable-list-item-disabled cjs-task-container cjs-task-container-<%= task_id %>" id="<%= task.class.name.underscore.gsub("/", "_") %>_<%= task_id %>" data-update-position-url="">
+  <div class="p-sm clearfix cjs-sortable-list-item-inner-container cjs-completed-checkbox-filter-show cjs-task-edit-action-<%= task_id %> cjs-mentoring-model-filter-for-task-and-meetings-all">
+    <%= render partial: "groups/milestones_in_profile/task_content", locals: {task: task, show_preview: show_preview, preview_role: preview_role, tasks: milestone_items} %>
+  </div>
+  <% if show_preview %>
+    <div class="light-gray-bg hide cjs-task-comment-container">
+      <div class="form-group form-group-sm text p-md p-l-lg p-r-lg m-b-none">
+        <textarea rows="1" class="text required form-control no_autosize" aria-label='' placeholder='<%= "feature.connection.content.placeholder.add_new_comment".translate %>' name="mentoring_model_task_comment[content]" title='<%= "feature.connection.content.placeholder.add_new_comment".translate %>'></textarea>
+      </div>
+    </div>
+  <% end %>
+</div>
+<%= javascript_tag %Q[MentoringModels.hoverEvent();] %>

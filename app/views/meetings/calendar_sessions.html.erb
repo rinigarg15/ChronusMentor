@@ -1,0 +1,19 @@
+<% @title = "feature.reports.header.meeting_calendar_report_v1".translate(:Meeting => _Meeting) %>
+<% @back_link = back_to_reports_options(@category) %>
+<% @report_actions = {
+    url: calendar_sessions_path,
+    data_js: %Q[Meetings.getMeetingReportFilterData();],
+    reset_js: %Q[commonUserProfileFilter.resetFilter();commonReportFilters.resetOtherFilters();],
+    ga_label: ReportsController::GoogleAnalytics::MEETING_SESSIONS_REPORT_LABEL,
+    time_filter: { time: {start: @from_date_range, end: @to_date_range}, label: "feature.reports.label.meetings_between".translate(:Meetings => _Meetings) },
+    export: [{label: "feature.reports.actions.export_to_xls".translate, url: calendar_sessions_path(format: :xls)}],
+    other_filters_partial: "meetings/meetings_report_filter"
+  } %>
+
+<div id="meeting_session_report">
+  <%= render :partial => 'meetings/meeting_report_main_content', :locals => {meetings: @meetings, :tab => @tab, :meeting_hash => @meeting_hash, :percentage => @percentage, :prev_periods_count => @prev_periods_count } %>
+</div>
+
+<%= javascript_tag do %>
+  Meetings.settingMeetingReportTab();
+<% end %>

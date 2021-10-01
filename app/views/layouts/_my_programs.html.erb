@@ -1,0 +1,11 @@
+<% programs_listing_options = get_program_listing_options %>
+<% if show_program_selector?(programs_listing_options[:member_has_many_active_programs]) %>
+  <div id="right-sidebar" class="sidebar-open sidebar-top hide <%= hidden_on_web %> list-group animated momentum-scroll">
+    <div id="programs_wrapper" class="clearfix animated theme-bg theme-font-color">
+      <%= render(:partial => 'common/programs_header') %>
+    </div>
+    <ul class="unstyled no-padding">
+      <%= render :partial => "layouts/my_programs_listing", :locals => programs_listing_options.merge(list_class: "list-group-item", list_style: "table-bordered") %>
+    </ul>
+  </div>
+<% end %>

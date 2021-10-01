@@ -1,0 +1,7 @@
+// not showing any questions related error as there isn't any required question for now.
+<% if @feedback_response.errors.any? %>
+  ChronusValidator.ErrorManager.ShowPageFlash(false, "<%= j('feature.coach_rating.label.provide_valid_rating'.translate.html_safe) %>", "feedback_response_flash");
+<% else %>
+  ChronusValidator.ErrorManager.ShowPageFlash(true, "<%= j('feature.coach_rating.label.thanks_for_feedback'.translate.html_safe) %>");
+  closeQtip();
+<% end %>

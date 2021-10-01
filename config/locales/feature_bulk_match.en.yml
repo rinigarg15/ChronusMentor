@@ -1,0 +1,215 @@
+en:
+  feature:
+    bulk_match:
+      header:
+        bulk_match: Bulk Match
+        bulk_recommendation: Bulk Recommendation
+        update_bulk_match_view: Update Bulk Match View
+        update_notes: Update notes
+        add_notes: Add notes
+        update_notes_with_action: Update notes & %{action}
+        add_notes_with_action: Add notes & %{action}
+        match_mentor_to_mentee: Match %{mentor_name} to %{student_name}
+        match_suggested_user_to_user: Match %{suggested_role_name} to %{role_name}
+      content:
+        prompt:
+          select_view: Select a View...
+        user_count: 'User Count:'
+        usercount: User Count
+        drafted_and_suspended_note: Users in drafted and suspended state will not be considered for matching
+        drafted_and_suspended_note_v1: Users in drafted and deactivated state will not be considered for matching
+        suspended_note: Users in deactivated state will not be considered for matching
+        deviation_tooltip: The deviation is a measure of how deviated the scores of the selected %{mentors} are. If the deviation is lower, the scores of selected %{mentors} are in a close range.
+        reset_tooltip: This will refresh the results to find the best match possible for unmatched pairs. Please Make sure you Draft/Publish if you want to preserve the selection.
+        slots: slots
+        no_users_view_error: Both %{mentor} and %{mentee} View should have at least One User. Please select some other view.
+        max_pickable_slots_tooltip: Reducing the limit will refresh the result to select best possible %{mentor}. UnMatched/Selected pairs will not be preserved.
+        max_pickable_slots_tooltip_for_user: Reducing the limit will refresh the result to select best possible %{role}. UnMatched/Selected pairs will not be preserved.
+        updating_results: Updating Results... Please Wait....
+        assign_matches_tooltip_html:
+          one: There is %{mentoring_connection_count} associated with the current view. Do you want to keep/discard the %{mentoring_connections} created in the previous view?
+          other: There are %{mentoring_connections_count} associated with the current view. Do you want to keep/discard the %{mentoring_connections} created in the previous view?
+        assign_matches_discarding_note: Discarding will only dis-associate %{mentoring_connections} from bulk match and not close/destroy them.
+        update_views_confirmation: Are you sure you want to update the views?
+        with: with
+        default_value_for_notes: Type your notes for this %{mentoring_connection}. This is optional and will be visible only to the %{admins}.
+        mentor_already_matched_with_mentee_html: "%{mentor_name_bold} has already been matched with %{mentees_count} %{mentees}. To assign %{mentor_name} to %{mentee_name}, please remove one of the match(es) below:"
+        mentor_already_matched_with_mentee_v1_html:
+          one: "<b>%{mentor_name}</b> has already been matched with <b>1</b> %{mentee}. To assign %{mentor_name} to %{mentee_name}, please remove the match below:"
+          other: "<b>%{mentor_name}</b> has already been matched with <b>{{students_to_alter.length}}</b> %{mentees}. To assign %{mentor_name} to %{mentee_name}, please remove one of the matches below:"
+        user_already_matched_with_other_users_html:
+          one: "<b>%{suggested_role_name}</b> has already been matched with <b>1</b> %{role}. To assign %{suggested_role_name} to %{role_name}, please remove the match below:"
+          other: "<b>%{suggested_role_name}</b> has already been matched with <b>{{users_to_alter.length}}</b> %{role_plural}. To assign %{suggested_role_name} to %{role_name}, please remove one of the matches below:"
+        maximum_mentees_for_mentor_note: You can change the maximum %{mentees} that %{mentor} can connect with in the bulk match by clicking on the settings.
+        maximum_users_for_suggested_user_note: You can change the maximum %{role_plural} that %{suggested_role} can connect with in the bulk match by clicking on the settings.
+        mentee_name: "%{Mentee} Name"
+        mentor_name: "%{Mentor} Name"
+        preference: Recommendation preference
+        recommended_count: Number of times recommended
+        match_percent: Match %
+        drafted_date: Drafted Date
+        published_date: Published Date
+        ongoing_connections_of_role: Ongoing %{mentoring_connections} of the %{role}
+        note_added: Note Added
+        field_mapping: Field Mapping
+        mentors_answer: "%{Mentor}'s Answer for : "
+        mentees_answer: "%{Mentee}'s Answer for : "
+        connected_mentors: Connected %{Mentors}
+        connected_to: 'Connected to:'
+        drafted_mentors: Drafted %{Mentors}
+        drafted_to: 'Drafted to:'
+        find_mentor_placeholder: Find %{mentor}
+        select_a_different_mentor: Select a different %{mentor}
+        select_a_different_mentee: Select a different %{mentee}
+        add_a_mentor_recommendation: Add %{a_mentor} recommendation
+        profile_fields_compared: Profile fields compared
+        response_of_role: "%{role} response"
+        not_a_match: Users' responses do not meet the specified criteria to be considered a match
+        add_additional_fields_tooltip: Adding fields here will not alter your matching algorithm.
+        additional_field_pair_exists: The fields selected to compare are already present. Please select different fields to compare.
+        additional_users_alert:
+          following_user_added_to_drafted:
+            one: The following user was added to the drafted %{mentoring_connection_term} outside 'Bulk Match' tool.
+            other: The following users were added to the drafted %{mentoring_connection_term} outside 'Bulk Match' tool.
+          added_to_connection_between_html:
+            one: "%{additional_users_list} was added to the %{mentoring_connection} between %{existing_users_list}."
+            other: "%{additional_users_list} were added to the %{mentoring_connection} between %{existing_users_list}."
+        mentee_to_mentor_match_help_text: "Takes all the %{mentor} and %{mentee} profiles and comes up with best %{mentor} for each %{mentee} in the %{program}."
+        mentor_to_mentee_match_help_text: "Takes all the %{mentee} and %{mentor} profiles and comes up with best %{mentee} for each %{mentor} in the %{program}."
+        match_one_role_to_other_help_text: "Match every %{role} with the best %{suggested_role} available."
+      label:
+        drafted_export_report_name: Bulk match drafted %{mentoring_connections} %{date}
+        mentor_to_mentee_drafted_export_report_name: "%{Mentor} to %{Mentee} Bulk match drafted %{mentoring_connections} %{date}"
+        mentee_to_mentor_drafted_export_report_name: "%{Mentee} to %{Mentor} Bulk match drafted %{mentoring_connections} %{date}"
+        all_pairs_export_report_name: Bulk match all pairs %{date}
+        mentor_to_mentee_all_pairs_export_report_name: "%{Mentor} to %{Mentee} Bulk match all pairs %{date}"
+        mentee_to_mentor_all_pairs_export_report_name: "%{Mentee} to %{Mentor} Bulk match all pairs %{date}"
+        all_recommendations_export_report_name: Bulk recommendation %{date}
+        actions: Actions
+        match_perfomance: 'Match Performance:'
+        average: 'Average:'
+        range: 'Range:'
+        deviation: 'Deviation:'
+        bulk_actions: Bulk Actions
+        settings: Settings
+        reset: Reset
+        status: Status
+        role_name_search: Search by %{role} name
+        selected_role: Selected %{role}
+        match_score: Match Score
+        show_details: Show Details
+        ongoing_mentoring_connections: 'Ongoing %{mentoring_connections}:'
+        available_slots_small: Available slots
+        mentees_per_mentor: 'Limit %{mentees} per %{mentor} to:'
+        users_per_suggested_user: 'Limit %{role_plural} per %{suggested_role} to:'
+        show_drafted: Show Drafted %{mentoring_connections}?
+        show_drafted_v1: Show %{mentees} with drafted %{mentoring_connections}?
+        show_drafted_mentors: Show %{mentors} with drafted %{mentoring_connections}?
+        show_published: Show Published %{mentoring_connections}?
+        show_published_v1: Show %{mentees} with published %{mentoring_connections}?
+        show_published_mentors: Show %{mentors} with published %{mentoring_connections}?
+        ask_for_notes: Ask for notes while creating %{mentoring_connections}?
+        skip_notes_while_creating: Skip notes while creating %{mentoring_connections}
+        select_all: Select all %{Mentor}-%{Mentee} combinations to perform an action
+        select_this: Select this %{Mentor}-%{Mentee} combination to perform an action
+        quick_search_mentors: Search for %{Mentor}
+        quick_search_mentees: Search for %{Mentee}
+        recommend_mentors: Recommend %{mentors}
+        create_matches: Create matches
+        times_recommended: Times recommended
+        available_slots: Available Slots
+        available_slots_v1: "%{mentoring} slots available"
+        remaining_slots_html: 'Remaining slots : <b>%{remaining}</b> out of <b>%{total}</b>'
+        bulk_match_operation: Bulk match operation
+        match: Match
+        bulk_match: Bulk Match
+        drafted_pairs: Drafted pairs
+        all_pairs: All pairs
+        export_mentor_recommendations: Export %{mentor} recommendations
+        add_other_fields_to_compare: Add other fields to compare
+        mentee_to_mentor_match: "%{Mentee} to %{Mentor}"
+        mentor_to_mentee_match: "%{Mentor} to %{Mentee}"
+      action:
+        view_drafted_pairs: View drafted pairs
+        view_users: View Users
+        edit_view: Edit View
+        create_drafted_connections_v1: Create Drafted %{Mentoring_Connections}
+        publish_drafted_connections_v1: Publish Drafted %{Mentoring_Connections}
+        discard_drafted_connections_v1: Discard Drafted %{Mentoring_Connections}
+        skip_notes_html: Skip notes & %{action}
+      tab:
+        select_users: 'Step 1: Select Users'
+        assign_matches: 'Step 2: Assign Matches'
+      js_message:
+        unmatched_v1: Unmatched
+        selected: Selected
+        drafted: Drafted
+        published: Published
+        not_available: Not Available
+        update_drafted: You cannot perform this action as the pair was drafted. Please undraft it if you want to change the pair.
+        connect_same_person_v1: "%{Mentoring_Connection} cannot be created between the same person."
+        no_slots_available_v1: "%{Mentor} does not have slots available. Please select a different %{mentor}."
+        draft_match_v1: Draft
+        remove_match: Remove Match
+        remove_draft_connection_v1: Remove Draft %{Mentoring_Connection}
+        publish: Publish
+        draft: Draft
+        discarded_success_v1: "%{Mentoring_Connections} discarded successfully."
+        published_success_v1: "%{Mentoring_Connections} published successfully."
+        published_success_change_settings_v1: "%{Mentoring_Connection} published successfully. Please change settings to view published %{mentoring_connections}."
+        drafted_success_v1: "%{Mentoring_Connections} drafted successfully."
+        select_pair_error: Please select at least one pair to create match
+        select_drafted_record_error: Please select at least one drafted record
+        drafted_success_change_settings_v1: "%{Mentoring_Connection} Drafted Successfully. Please change settings to view drafted %{mentoring_connections}."
+        discard_draft: Discard Draft
+        please_select_view: Please select a view for both the roles
+        tab_switch_confirm: Are you sure you want to navigate from this tab? Please make sure you Draft/Publish all required pairs. UnMatched/Selected pairs will not be preserved.
+        valid_limit: Please enter a valid limit
+        one_time_mentoring_mode: "%{Mentor} has preferred to participate only in One time %{mentoring}"
+        mentor_already_selected: "%{Mentor} is already selected"
+        mentee_already_selected: "%{Mentee} is already selected"
+    bulk_recommendation:
+      js_message:
+        tab_switch_confirm: Are you sure you want to navigate from this tab? Please make sure you Draft/Publish all required recommendations. UnMatched/Selected recommendations will not be preserved.
+        remove_recommendation: Remove recommendation
+        send_recommendations: Send Recommendations
+        published: Recommendations Sent
+        publish_confirmation: An email will be sent to the users if you complete this action.
+        drafted_success: "%{Mentor} recommendations drafted successfully."
+        discarded_success: "%{Mentor} recommendations discarded successfully."
+        published_success: "%{Mentor} recommendations published successfully."
+        update_drafted: You cannot perform this action as the recommendations are drafted. Please undraft if you want to change the recommendations.
+        published_success_change_settings: "%{Mentor} recommendations published successfully. Please change settings to view published %{mentor} recommendations."
+        drafted_success_change_settings: "%{Mentor} recommendations drafted successfully. Please change settings to view drafted %{mentor} recommendations."
+        connect_same_person: A %{mentor} cannot be recommended to himself.
+        remove_a_mentor: "%{Mentee} has maximum recommendations. Please change the settings or remove a recommended %{mentor}"
+        select_pair_error: Please select at least one %{mentee} to draft recommendations
+        select_drafted_record_error: Please select at least one drafted record
+        remove_drafted_recommendation: Remove Drafted Recommendation
+      tab:
+        assign_matches: 'Step 2: Recommend %{Mentors}'
+      content:
+        mentor_already_matched_with_mentee_v1_html:
+          one: "<b>%{mentor_name}</b> has already been recommended to <b>1</b> %{mentee}. To recommend %{mentor_name} to %{mentee_name}, please remove the recommendation below:"
+          other: "<b>%{mentor_name}</b> has already been recommended to <b>{{students_to_alter.length}}</b> %{mentees}. To recommend %{mentor_name} to %{mentee_name}, please remove one of the recommendations below:"
+        user_already_matched_with_other_users_html:
+          one: "<b>%{suggested_role_name}</b> has already been recommended to <b>1</b> %{role}. To recommend %{suggested_role_name} to %{role_name}, please remove the recommendation below:"
+          other: "<b>%{suggested_role_name}</b> has already been recommended to <b>{{users_to_alter.length}}</b> %{role_plural}. To recommend %{suggested_role_name} to %{role_name}, please remove one of the recommendations below:"
+        maximum_mentees_for_mentor_note: You can change the maximum %{mentees} that %{mentor} can connect with in the bulk recommendation by clicking on the settings.
+        maximum_users_for_suggested_user_note: You can change the maximum %{role_plural} that %{suggested_role} can connect with in the bulk recommendation by clicking on the settings.
+        max_pickable_slots_tooltip: Reducing limit will refresh the result to select best possible %{mentors}. UnMatched/Selected recommendations will not be preserved.
+      header:
+        match_config_summary: Matching summary
+      action:
+        draft_recommendations: Draft Recommendations
+        publish_drafted_recommendations: Publish Drafted Recommendations
+        discard_drafted_recommendations: Discard Drafted Recommendations
+        discard: Discard
+        draft: Draft
+      label:
+        show_drafted: Show Drafted Recommendations?
+        show_published: Show Published Recommendations?
+        recommended_mentors: Recommended %{mentors}
+        mentees_per_mentor: 'Limit number of times a %{mentor} can be recommended to:'
+        mentors_per_mentee: 'Limit number of %{mentors} recommended for a %{mentee} to:'
+        remaining_slots_html: 'Remaining slots : <b>%{remaining}</b>'

@@ -1,0 +1,8 @@
+<div class="topic h5 no-margins m-b-xxs font-bold truncate-with-ellipsis whitespace-nowrap">
+  <%= link_to h(sidepane_asset.title), article_path(sidepane_asset) %>
+</div>
+<div class="text-muted m-t-xs inline small">
+  <span><%= get_icon_content("fa fa-clock-o") + "display_string.time_ago".translate(time: time_ago_in_words(sidepane_asset.created_at)) %></span>
+  <%= circle_separator %>
+  <%= link_to "display_string.Comment".translate, article_path(sidepane_asset)%>
+</div>

@@ -1,0 +1,26 @@
+<% good_engagement_type_string = (engagement_type == Program::Dashboard::EngagementsReport::MEETINGS_ENGAGEMENT_TYPE ? "feature.reports.content.engagements_with_good_survey_responses".translate(Engagements: _Meetings) : "feature.reports.content.engagements_with_good_survey_responses".translate(Engagements: _Mentoring_Connections))%>
+<% not_good_engagement_type_string = (engagement_type == Program::Dashboard::EngagementsReport::MEETINGS_ENGAGEMENT_TYPE ? "feature.reports.content.engagements_with_not_good_survey_responses".translate(Engagements: _Meetings) : "feature.reports.content.engagements_with_not_good_survey_responses".translate(Engagements: _Mentoring_Connections))%>
+<% empty_engagement_type_string = (engagement_type == Program::Dashboard::EngagementsReport::MEETINGS_ENGAGEMENT_TYPE ? "feature.reports.content.engagements_without_survey_responses".translate(Engagements: _Meetings) : "feature.reports.content.engagements_without_survey_responses".translate(Engagements: _Mentoring_Connections)) %>
+
+<ul class="stat-list">
+  <li class="m-b-sm row">
+    <span class="col-md-2">
+      <span class="label label-primary m-r-xs"><%= engagements_with_good_survey_responses_count %></span>
+    </span>
+    <div class="col-md-10"><%= (engagement_type == Program::Dashboard::EngagementsReport::MEETINGS_ENGAGEMENT_TYPE) ? good_engagement_type_string : link_to(good_engagement_type_string, groups_path(tab: Group::Status::ACTIVE, dashboard: {type: GroupsController::DashboardFilter::GOOD, start_date: date_range.begin.to_date, end_date: date_range.end.to_date})) %></div>
+  </li>
+
+  <li class="m-b-sm row">
+    <span class="col-md-2">
+      <span class="label label-warning m-r-xs"><%= engagements_with_not_good_survey_responses_count %></span>
+    </span>
+    <div class="col-md-10"><%= (engagement_type == Program::Dashboard::EngagementsReport::MEETINGS_ENGAGEMENT_TYPE) ? not_good_engagement_type_string : link_to(not_good_engagement_type_string, groups_path(tab: Group::Status::ACTIVE, dashboard: {type: GroupsController::DashboardFilter::NEUTRAL_BAD, start_date: date_range.begin.to_date, end_date: date_range.end.to_date})) %></div>
+  </li>
+
+  <li class="m-b-sm row">
+    <span class="col-md-2">
+      <span class="label m-r-xs"><%= engagements_without_survey_responses_count %></span>
+    </span>
+    <div class="col-md-10"><%= (engagement_type == Program::Dashboard::EngagementsReport::MEETINGS_ENGAGEMENT_TYPE) ? empty_engagement_type_string : link_to(empty_engagement_type_string, groups_path(tab: Group::Status::ACTIVE, dashboard: {type: GroupsController::DashboardFilter::NO_RESPONSE, start_date: date_range.begin.to_date, end_date: date_range.end.to_date})) %></div>
+  </li>
+</ul>

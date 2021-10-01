@@ -1,0 +1,29 @@
+<% if @allow_admin_to_add_reviewers %>
+  <div id="three_sixty_survey_assessee_container_<%= survey_assessee.id %>" class="animated clearfix fadeIn">
+    <% collapsible_content three_sixty_survey_assessee_heading(survey_assessee), [], false,
+        :render_panel => true,
+        :class => "m-b-sm table-bordered",
+        :additional_header_class => "cjs_three_sixty_parent gray-bg b-t b-b b-r b-l" do %>
+      <div class="clearfix">
+        <ul id="three_sixty_survey_assessee_reviewers_<%= survey_assessee.id %>" class="list-group">
+          <%= render :partial => 'three_sixty/surveys/reviewer', :collection => survey_assessee.reviewers, :locals => {:survey => survey_assessee.survey, :survey_assessee => survey_assessee} %>
+        </ul>
+        <div id="three_sixty_survey_assessee_add_reviewers_<%= survey_assessee.id%>" class="m-t-xs">
+          <hr class="m-t-0 m-b" />
+          <div class="clearfix cjs_new_three_sixty_object" id="three_sixty_add_new_assessee_container_<%= survey_assessee.id %>">
+            <%= render :partial => 'three_sixty/surveys/new_reviewer', :locals => {:survey => survey_assessee.survey, :survey_assessee => survey_assessee, :survey_reviewer_groups => @survey_reviewer_groups, :survey_reviewer => survey_assessee.reviewers.new, :for_new => true} %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <% collapsible_content content_tag(:big, three_sixty_survey_assessee_heading(survey_assessee)), [], true,
+      :render_panel => true,
+      :class => "no-vertical-margins",
+      :additional_header_class => "cjs_three_sixty_parent gray-bg b-t b-b b-r b-l",
+      :panel_id => "three_sixty_survey_assessee_container_#{survey_assessee.id}",
+      :collapsible => false do %>
+
+    <% end %>
+<% end %>

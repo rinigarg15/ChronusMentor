@@ -1,0 +1,45 @@
+<% listing_options = { mentee_groups_map: @mentee_groups_map, viewer_can_offer: @viewer_can_offer, viewer_can_find_mentor: @viewer_can_find_mentor, students_with_no_limit: @students_with_no_limit, offer_pending: @offer_pending, analytics_param: EngagementIndex::Src::SendRequestOrOffers::USER_LISTING_PAGE } %>
+<% actions, dropdown_title = actions_for_mentees_listing(current_user, user, listing_options) %>
+<% show_pending_requests = @received_requests_sender_ids && @received_requests_sender_ids.count(user.id) > 0 %>
+<% labels = [] %>
+<% labels << { content: "feature.user.content.pending_response".translate, label_class: "label-warning"} if show_pending_requests %>
+<% labels << status_indicator(user, {:student_required_questions => @student_required_questions, return_hash: true, consider_user_as_mentor: local_assigns[:consider_user_as_mentor].present?, consider_user_as_student: true}) %>
+<% labels << drafted_connections_indicator(user, @current_program, {:draft_count => @student_draft_count}) %>
+
+<%= dropdown_buttons_or_button(Marshal.load(Marshal.dump(actions)), { dropdown_title: dropdown_title }.merge( { btn_class: "hidden-xs pull-right" } )) %>
+
+<% request_text = @received_requests_sender_ids ? "feature.user.content.view_request".translate(count: @received_requests_sender_ids.count(user.id)) : "" %>
+
+<%= link_to(request_text, "javascript:void(0)", {class: "cjs_pending_requests_#{user.id} btn btn-primary  hidden-xs pull-right m-r-xs"}) if show_pending_requests %>
+<div class="media-left">
+  <%= user_picture(user, { :no_name => true, :size => :large }, { class: "cui_large_to_medium img-circle" } ) %>
+</div>
+<div class="media-body">
+  <% user_link = link_to_user user, :content_text => user.name(:name_only => true), :no_hovercard => true %>
+  <h3 class="m-b-0 <%= hidden_on_mobile %>">
+    <%= user_link %>
+  </h3>
+  <h4 class="m-b-0 <%= hidden_on_web %>">
+    <%= user_link %>
+  </h4>
+  <% if current_user && current_user.can_offer_mentoring? && @current_program.ongoing_mentoring_enabled? && current_user.opting_for_ongoing_mentoring? %>
+    <div class="text-muted ct_mentors_count m-t-xs">
+      <%= append_text_to_icon("fa fa-users", "feature.user.label.mentor_member_since".translate(:mentor => "feature.user.content.n_mentors".translate(:count => @mentors_count[user.id].to_i, :mentor => _mentor, :mentors => _mentors), since_time: DateTime.localize(user.created_at, format: :full_month_year))) %>
+    </div>
+  <% end %>
+  <%= available_and_ongoing_groups_list(user) if current_program.project_based? %>
+  <%= labels_container(labels, { class: "m-t-xs" } ) %>
+</div>
+<div class="section-pane m-t">
+  <%= mentor_links_in_container(user, @mentors_list[user.id]) if current_user.is_admin? %>
+  <%= render :partial => "users/show_profile_summary_fields", :locals => {:user => user, :role => RoleConstants::STUDENT_NAME, :profile_last_updated_at => local_assigns[:profile_last_updated_at]} %>
+  <% show_last_logged_in(user) do |last_logged_in| %>
+    <%= profile_field_container("feature.user.label.Last_Login".translate, last_logged_in, { class: "m-t-sm m-b-xs" } ) %>
+  <% end %>
+</div>
+<%= link_to(request_text, "javascript:void(0)", {class: "cjs_pending_requests_#{user.id} btn btn-primary col-xs-12 visible-xs btn-block m-t-sm"}) if show_pending_requests %>
+<%= dropdown_buttons_or_button(Marshal.load(Marshal.dump(actions)), { dropdown_title: dropdown_title }.merge( { btn_class: "col-xs-12 no-padding visible-xs btn-block m-t-sm", dropdown_menu_class: "col-xs-12 pull-right table-bordered", btn_group_btn_class: "col-xs-12" } )) %>
+
+<script>
+  UserListing.initializePendingRequestsPopup('.cjs_pending_requests_<%= user.id %>', '<%= pending_requests_popup_user_path(user, src: nil) %>' );
+</script>

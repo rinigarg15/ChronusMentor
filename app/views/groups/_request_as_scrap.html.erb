@@ -1,0 +1,11 @@
+<div class="activity_summary list-group-item mentor_request">
+  <div class="media-left">
+    <%= user_picture(mentor_request.student, :size => :small, :no_name => true) %>
+  </div>
+
+  <div class="media-body">
+    <div class="font-600"><%= "feature.connection.content.help_text.mentoring_obj_v1_html".translate(:mentor => _mentor,user: link_to_user(mentor_request.student)) %></div>
+    <div class="text-muted small"><%= append_text_to_icon('fa fa-clock-o',"feature.connection.content.about_time_ago".translate(time: time_ago_in_words(mentor_request.created_at))) %></div>
+  </div>
+  <div class="m-t">"<%= chronus_auto_link(mentor_request.message) %>"</div>
+</div>

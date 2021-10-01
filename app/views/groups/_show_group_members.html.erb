@@ -1,0 +1,40 @@
+<div class="cjs_existing_groups_alert"/>
+<div id="flash_container" class= "hide cjs_member_update_info alert alert-info wrap attach-bottom">
+  <%= append_text_to_icon("fa fa-info-circle fa-lg", "feature.group.action.save_info_v2".translate(circle: _mentoring_connection), media_padding_with_icon: true) %>
+</div>
+
+<div>
+  <% role_terms_hash = RoleConstants.program_roles_mapping(@current_program, pluralize: true) %>
+  <% role_terms_hash_single = RoleConstants.program_roles_mapping(@current_program, pluralize: false) %>
+  <% roles =  @current_program.roles.for_mentoring %>
+  <% drafted_or_pending_group = group.status.in?([Group::Status::DRAFTED, Group::Status::PENDING]) %>
+  <% roles.each do |role| %>
+    <% if @current_user.can_manage_role_in_group?(group, role) %>
+      <% members_with_role = group.memberships.where(role_id: role.id) %>
+      <% header_content = content_tag(:h4, class: "list_#{role.name} pull-left m-b-0") do
+        content_tag(:span, role_terms_hash[role.name], class: "text-default p-r-xxs") +
+        "(" + content_tag(:span, members_with_role.count, class: "cjs_count text-default") + ")"
+      end %>
+      <% add_member = get_add_member_link(role, role_terms_hash_single, members_with_role.blank?) %>
+      <div>
+        <div class="clearfix m-b-xs">
+          <%= header_content %>
+          <%= add_member %>
+        </div>
+        <%= render partial: "groups/add_new_member", locals: { role: role, group: group, drafted_or_pending_group: drafted_or_pending_group } %>
+        <% members_with_role.each do |membership| %>
+          <%= render partial: "groups/display_member", locals: { role: role, user: membership.user, group: group, modified: Group::MemberUpdateAction::NONE, drafted_or_pending_group: drafted_or_pending_group } %>
+        <% end %>
+        <hr class="m-b-sm m-t-sm"/>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    GroupSearch.initalizeUpdateActions();
+  });
+<% end %>
+
+<%= email_notification_consequences_in_group_manage_members_html(group) %>

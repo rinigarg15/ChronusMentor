@@ -1,0 +1,54 @@
+<% from_profile_or_listing_page = [EngagementIndex::Src::AcceptMentorRequest::USER_PROFILE_PAGE, EngagementIndex::Src::AcceptMentorRequest::USER_LISTING_PAGE ].include?(local_assigns[:source])%>
+<% unless from_profile_or_listing_page %>
+  <div class="pull-right hidden-xs">
+    <%= render :partial => "mentor_requests/mentor_request_content_actions", :locals => {:mentor_request => mentor_request, :is_mentor_action => is_mentor_action, :dropdown_menu_class => "pull-right", :source => local_assigns[:source] } %>
+  </div>
+<% end %>
+<div class="no-margins">
+  <div class="clearfix">
+    <% if member.present? %>
+      <div class="media-left">
+      <% if [EngagementIndex::Src::AcceptMentorRequest::USER_LISTING_PAGE, EngagementIndex::Src::AcceptMentorRequest::USER_PROFILE_PAGE].include?(local_assigns[:source]) %>
+        <%= get_icon_content("fa fa-fw fa-users", :container_class => "fa-circle") %>
+      <% else %>
+        <%= user_picture member, {:size => :medium, :no_name => true, :outer_class => "pull-left"}, {:class => "img-circle"} %>
+      <% end %>
+      </div>
+      <div class="media-body">
+        <h4>
+          <% if [EngagementIndex::Src::AcceptMentorRequest::USER_LISTING_PAGE, EngagementIndex::Src::AcceptMentorRequest::USER_PROFILE_PAGE].include?(local_assigns[:source]) %>
+            <%= content_tag(:span, "feature.mentor_request.header.request_title".translate(Mentoring_Connection: _Mentoring_Connection), class: "text-success") %>
+          <% else %>
+            <%= link_to_user member %>
+          <% end %>
+          <div class="small m-t-xs"><%= get_icon_content("fa fa-clock-o no-margins") + content_tag(:span, "#{formatted_time_in_words(mentor_request.created_at, :absolute => true)}") %></div>
+        </h4>
+      </div>
+    <% end %>
+
+    <div class="m-t-sm clearfix">
+      <%= profile_field_container_wrapper("display_string.Sent".translate, get_icon_content("fa fa-clock-o no-margins") + content_tag(:span, "#{formatted_time_in_words(mentor_request.created_at, :absolute => true)}"), :heading_tag => :h4, :class => "m-t-xs m-b-xs") unless member.present? %>
+      <div class="clearfix <%= local_assigns[:source] == EngagementIndex::Src::AcceptMentorRequest::USER_PROFILE_PAGE ? 'p-r-sm scroll-2 scroll-request' : '' %>">
+        <% description = from_profile_or_listing_page ? render_more_less(chronus_auto_link(mentor_request.message), 150) : chronus_auto_link(mentor_request.message) %>
+        <%= profile_field_container_wrapper("#{'feature.mentor_request.label.Request'.translate}", description, :heading_tag => :h4, :answer_class => 'word_break', :class => "m-t-xs m-b-xs") %>
+      </div>
+
+      <% if @current_program.matching_by_mentee_and_admin_with_preference? && !from_profile_or_listing_page %>
+        <% preferred_mentors_content = mentor_request.request_favorites.empty? ? content_tag(:span, 'display_string.None'.translate) : render(:partial => "mentor_requests/display_request_favorites", :locals => {:mentor_request => mentor_request, :match_results => @match_results_per_mentor[mentor_request]}) %>
+        <%= profile_field_container_wrapper('feature.preferred_mentoring.header.Preferred_Mentors'.translate(Mentors: _Mentors), preferred_mentors_content, :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+
+        <% if (mentor_request.accepted? && !mentor_request.student.mentors.empty?) %>
+          <%= profile_field_container_wrapper("#{'feature.situational_mentoring.content.Assigned_Mentors'.translate(count: mentor_request.student.mentors.size, Mentor: _Mentor, Mentors: _Mentors)}", safe_join(mentor_request.student.mentors.collect { |mentor| link_to_user(mentor) }, ", "), :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+        <% end %>
+      <% end %>
+
+      <%= render :partial => "mentor_requests/status_details", :locals => {:mentor_request => mentor_request} %>
+    </div>
+  </div>
+</div>
+<div class="<%= from_profile_or_listing_page ? '' : 'pull-right visible-xs'%> col-xs-12 no-padding">
+  <%= render :partial => "mentor_requests/mentor_request_content_actions", :locals => {:mentor_request => mentor_request, :is_mentor_action => is_mentor_action, :btn_class => "btn-block m-t-sm", :btn_group_btn_class => "btn-block", :dropdown_menu_class => "col-xs-12 pull-right  table-bordered", :source => local_assigns[:source]} %>
+</div>
+<% if @current_program.matching_by_mentee_and_admin_with_preference? && !from_profile_or_listing_page %>
+  <%= javascript_tag("jQuery('body').append('#{j(render :partial => "mentor_requests/assign_mentor", :locals => {mentor_request: mentor_request, assign_mentor: false, match_results_per_mentor: match_results_per_mentor})}')") %>
+<% end %> 

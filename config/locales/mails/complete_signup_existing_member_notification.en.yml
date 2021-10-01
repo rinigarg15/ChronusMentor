@@ -1,0 +1,20 @@
+en:
+  email_translations:
+    complete_signup_existing_member_notification:
+      title_v3: Notification with instructions to an existing user applying to join the %{_program}
+      description_v4: This email is sent to a user who is already part of this %{_program} or any other %{_program} in any state but fills in a Captcha and applies to join the %{_program}.
+      subject_v1: Sign in to {{subprogram_or_program_name}}
+      content_v2_html: Thank you for your interest in joining as {{roles_applied_for}} in {{subprogram_or_program_name}}.<br/>We noticed you already have login credentials. Please login with your existing password to continue on your way.<br/>{{sign_in_program_button}}<br/>If you can't remember your password, please click <a href='{{url_reset_password}}'>here</a> to reset it.<br/>If you need other assistance, please click <a href='{{url_contact_admin}}'>here</a> to contact the {{customized_admin_term_pluralized}}.<br/>
+      tags:
+        user_state_content:
+          description: Content based on the state of the user
+          example_v1: It looks like you are enrolled in the program.
+        roles_applied_for:
+          description: Roles, the user applied for
+        url_contact_admin:
+          description: Url for the user to contact administrator
+        sign_in_program_button:
+          description: Sign in to program button
+          login_to_continue: Login to continue
+        url_reset_password:
+          description: Url to reset the password

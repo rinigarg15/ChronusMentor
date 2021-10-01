@@ -1,0 +1,22 @@
+<tr id="three_sixty_survey_assessee_container_<%= survey_assessee.id %>" >
+  <% survey = survey_assessee.survey %>
+  <% program = survey.program %>
+	<td><%= link_to_user(survey_assessee.assessee, :content_text => survey_assessee.assessee.name(:name_only => true))%></td>
+	<td>
+    <div>
+      <%= link_to(survey.title, three_sixty_survey_path(survey)) %>
+    </div>
+    <% if organization_view? && program %>
+      <div class="text-muted">
+        <%= program.name %>
+      </div>
+    <% end %>
+  </td>
+  <td><%= DateTime.localize(survey.issue_date, format: :full_display_no_time) %></td>
+	<td><%= survey.expiry_date.present? ? DateTime.localize(survey.expiry_date, format: :full_display_no_time) : content_tag(:span, "display_string.Never".translate, :class => 'text-muted') %></td>
+  <td><%= survey_assessee.reviewers.select{ |r| r.answered? }.size %>/<%= survey_assessee.reviewers.size %></td>
+  <td>
+    <%= link_to(get_icon_content("fa fa-trash") + "display_string.Delete".translate, destroy_published_three_sixty_survey_assessee_path(survey, survey_assessee, @options.merge(:from_dashboard => true)), :remote => true, :method => :delete, data: {:confirm => "feature.three_sixty.assessee.delete_published_warning".translate}, :class => "btn btn-xs btn-white pull-right") %>
+    <%= three_sixty_survey_download_link(survey, survey_assessee) %>
+  </td>
+</tr>

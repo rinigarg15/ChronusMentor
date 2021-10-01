@@ -1,0 +1,15 @@
+<% outside_group = local_assigns[:outside_group].nil? ? true : outside_group %>
+<% if (@is_self_view || !is_admin_view) && show_actions %>
+  <% member_meeting = meeting.member_meetings.find { |member_meeting| member_meeting.member_id == wob_member.id } %>
+  <% member_meeting_response = member_meeting.get_response_object(current_occurrence_time) %>
+  <% show_rsvp_buttons = show_rsvp_buttons?(meeting, member_meeting_response, current_occurrence_time) %>
+  <div class=" <%= "btn-group" if show_rsvp_buttons %> col-xs-12 p-b-sm p-l-0 p-r-0">
+    <% if show_rsvp_buttons %>
+      <% text = embed_yes_no_button(member_meeting, "display_string.Yes".translate, MemberMeeting::ATTENDING::YES, src, :current_occurrence_time => current_occurrence_time, button_class: "btn-primary m-r-xs", outside_group: outside_group, from_connection_home_page_widget: from_connection_home_page_widget) %>
+      <% text += embed_yes_no_button(member_meeting, "display_string.No".translate, MemberMeeting::ATTENDING::NO, src, :current_occurrence_time => current_occurrence_time, button_class: "btn-danger", outside_group: outside_group, from_connection_home_page_widget: from_connection_home_page_widget) %>
+      <%= append_text_to_icon("fa fa-question m-t-sm m-r-sm", text, :media_padding_with_icon => true) %>
+    <% else %>
+      <%= embed_yes_no_text(member_meeting_response, member_meeting, src, current_occurrence_time: current_occurrence_time, outside_group: outside_group, from_connection_home_page_widget: from_connection_home_page_widget) %>
+    <% end %>
+  </div>
+<% end %>

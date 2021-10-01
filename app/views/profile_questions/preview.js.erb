@@ -1,0 +1,6 @@
+jQuery('div.common_questions').replaceWith('<%= escape_javascript(render(:partial => "profile_questions/preview_result_pane", :locals => {:profile_questions => @profile_questions, :is_membership_preview => false})) %>');
+jQueryHighlight(".common_questions");
+toastr.clear();
+<% if @filter_role.empty? %>
+  ChronusValidator.ErrorManager.ShowPageFlash(false, "<%= j ('feature.profile_customization.content.select_one_of_the_role_v2'.translate(role: (@preview_type ==  ProfileQuestionsController::PreviewType::USER_PROFILE ?  'feature.profile_customization.content.role_of_the_viewed_user_v1'.translate : 'display_string.Role'.translate))) %>");
+<% end %>

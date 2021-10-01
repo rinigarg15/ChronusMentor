@@ -1,0 +1,909 @@
+en:
+  activemodel:
+    errors:
+      messages:
+        invalid_email_address: is not a valid email address.
+        email_address_not_routable: is not a valid email address.
+  activerecord:
+    models:
+      member: Member
+      education: Education
+      experience: Experience
+      publication: Publication
+      manager: Manager
+      message: message
+      page: Page
+      article_list_item: Article List Item
+      article_content: Article Content
+      book_list_item: Book List Item
+      user: User
+      common_task: Common Goal
+      survey: Survey
+      common_question: Question
+      group: Connection
+      confidentiality_audit_log: Audit Log
+      facilitation_message: Facilitation Message
+      task: Task
+      scrap: Discussion
+      coaching_goal: Goal
+      mentoring_slot: Mentoring Slot
+      meeting: Meeting
+      meeting/feedback: Meeting feedback
+      admin_message: Message
+      survey_question: Question
+      announcement: Announcement
+      QaAnswer: Question and Answer
+      qa_answer: Question and Answer
+      comment: Comment
+      mentor_request: Mentor Request
+      coaching_goal_activity: Goal Activity
+      program_event: Program Event
+      custom_term: Custom Terminology
+      customized_term: Custom Terminology
+      mentoring_model/task/comment: Comment
+      solution_pack: Solution Pack
+      post: Post
+    attributes:
+      facilitate_user:
+        subject: Subject
+        message: Message
+        send_type: Repeats
+      member:
+        first_name: First name
+        invalid_user: does not have the user
+        last_name: Last name
+        email: Email
+        password: New Password
+        notification_setting: Notification for new Inbox messages
+        password_confirmation: Confirm Password
+        time_zone: Time zone
+        current_password: Current password
+      education:
+        school_name: College/School name
+        degree: Degree
+        major: Major
+        graduation_year: Graduation
+      program/domain:
+        subdomain: Web Address
+      organization:
+        account_name: Account Name
+        name: Program Name
+        description: Description
+        logo: Logo
+        banner: Banner
+        email_theme_override: Email theme override
+        mobile_logo: Mobile Logo
+      custom_term:
+        mentor_name: Term for Mentor
+        mentee_name: Term for Mentee
+        article_name: Term for Article
+        mentoring_connection_name: Term for Mentoring Connection
+        program_term: "Term for Sub-program"
+        resource_name: Term for Resource
+        meeting_name: Term for Meeting
+        mentors_name: Term for Mentor pluralized
+        mentees_name: Term for Mentee pluralized
+        articles_name: Term for Article pluralized
+        mentoring_connections_name: Term for Mentoring Connection pluralized
+        programs_term: "Term for Sub-program pluralized"
+        resources_name: Term for Resource pluralized
+        a_mentor_name: Term for Mentor articalized
+        a_mentee_name: Term for Mentee articalized
+        an_article_name: Term for Article articalized
+        a_mentoring_connection_name: Term for Mentoring Connection articalized
+        a_program_term: "Term for Sub-program articalized"
+        a_resource_name: Term for Resource articalized
+      security_setting:
+        email_domain: Allowed email domains
+      experience:
+        company: Organization
+        job_title: Job title
+      publication:
+        title: Title
+        publisher: Publication/Publisher
+        date: Publication Date
+        url: Publication URL
+        authors: Author(s)
+        description: Description
+      manager:
+        first_name: First name
+        last_name: Last name
+        email: Email
+      theme:
+        name: Theme name
+        css: CSS File
+        css_file_name: CSS File
+        css_content_type: CSS File
+        css_file_size: CSS File
+        css_updated_at: CSS File
+      message:
+        subject: Subject
+        sender_name: Your name
+        sender_email: Your email
+        content: Message
+        attachment_content_type: Attachment content type
+        attachment_file_size: Attachment file size
+      admin_message:
+        captcha: Word verification
+        captcha_v1: Code verification
+        content: Message
+        sender: Sender
+        message_receivers: Message receivers
+        receivers: Receivers
+        attachment_content_type: Attachment content type
+        attachment_file_size: Attachment file size
+      membership_request:
+        description: Reason to join
+        captcha: Word verification
+        response_text: Reason
+      mailer/template:
+        subject: Subject
+        source: Body
+      mailer/widget:
+        source: Content
+      announcement:
+        title: Title
+        recipient_role_names: For
+        body: Message
+        expiration_date: Expires On
+        admin: Admin
+        attachment: Attachment
+        attachment_content_type: Attachment content type
+        attachment_file_size: Attachment file size
+      mentoring_model/task_template:
+        action_item_type: Action Item
+      mentoring_model/task:
+        connection_membership_id: Assign To
+        action_item_type: Action Item
+      report/metric:
+        abstract_view_id: Select View
+        description: Description
+      report/section:
+        title: Title
+        description: Description
+      mentoring_model/task/comment:
+        notify: Send Message
+      mentoring_model/facilitation_template:
+        role_names: For
+        send_on: Send
+      resource:
+        title: Title
+        content: Body
+      handbook:
+        attachment: Upload new handbook
+        attachment_file_name: Upload new handbook
+        attachment_file_size: Attachment file size
+      assistant_invitation:
+        sent_to: Email
+      forum:
+        name: Name
+        access_roles: Available For
+        description: Description
+      topic:
+        title: Title
+        posts:
+          body: Message body
+      posts:
+        body: Message body
+      post:
+        body: Message
+      career_dev/portal:
+        description: Description
+        logo: Logo
+        banner: Banner
+        number_of_licenses: Number of Licenses
+
+      program:
+        allows_logged_in_pages: Allow logged in pages
+        description: Description
+        logo: Logo
+        banner: Banner
+        allow_end_user_milestones: Allow end users to add milestones
+        mentor_name: Term for Mentor
+        student_name: Term for Mentee
+        meeting_request_reminder_duration: Reminder duration
+        meeting_request_auto_expiration_days: Expiration duration
+        number_of_licenses: Number of Licenses
+        mentor_request_expiration_days: Expiration days
+        mentoring_request_reminder_duration: Reminder duration
+        default_max_connections_limit: Default max connections limit
+      calendar_setting:
+        slot_time_in_minutes: Configure calendar slot duration
+        advance_booking_time: Advance booking time
+      page:
+        visibility: Visibility
+        use_in_sub_programs: Make this page available on the top navigation
+        use_in_sub_programs_v1: Make this page available on the navigation
+        title: Page title
+      article_list_item:
+        description: Your comments
+      book_list_item:
+        content: Title
+      site_list_item:
+        content: URL
+      article_content:
+        body: Description
+        embed_code: "Paste the Link / Embedded code below"
+        list_items: At least one of the list items
+        title: Article title
+        attachment: Attachment
+        attachment_content_type: Attachment content type
+        attachment_file_size: Attachment file size
+        description: Description
+      common_task:
+        title: Goal
+        due_date_period: Due date period
+        due_date: Due date
+        include_future_connections: Include future connections
+      program_invitation:
+        sent_to: Recipient
+        message: Message
+      diversity_report:
+        admin_view_id: Choose Member Segment
+        profile_question_id: Select Reporting Dimension
+        comparison_type: Comparison Criteria
+        name: Report Name
+      program_event:
+        admin_view: Attendees
+        role_names: Attendees
+        title: Name
+        location: Where
+        date: When
+        start_time: Start Time
+        end_time: End Time
+        description: Details
+      survey:
+        name: Survey name
+        due_date: Survey closes on
+        recipient_role_names: For
+        type: Type
+        progress_report: Progress Report
+      survey_question:
+        question_text: Field Name
+        question_type: Field Type
+      common_question:
+        required: Required
+        question_text: Field Name
+        question_type: Field Type
+        allow_other_option: Allow user to specify a different answer
+        question_info: Choices
+        help_text: Field Description
+        matrix_position: Position of question within matrix question
+        matrix_setting: Matrix Question Setting
+        condition: Show this question
+      common_answer:
+        common_question: Common question
+        answer_text: Answer text
+        attachment: Attachment
+      group:
+        message: Message
+        notes: Notes
+        revoking_reason: Reason
+        termination_reason: Reason
+        expiry_time: Expires on
+        name: Name
+        logo: Logo
+        logo_file_size: Logo file size
+        logo_content_type: Logo content type
+      confidentiality_audit_log:
+        reason: Reason
+        user: User
+      mentoring_tip:
+        message: Mentoring Tip
+      mentoring_slot:
+        date: When
+        start_time_of_day: From
+        end_time_of_day: To
+        repeats_every_option: Repeat
+        repeats_by_month_date: Repeat by
+        location: Where
+      section:
+        title: Section Label
+        description: Description
+      profile_question:
+        question_text: Field Name
+        question_type: Field Type
+        options_count: Number of options to ask for
+        help_text: Field description
+      facilitation_message:
+        subject: Subject
+        recipient_role_names: Send to
+        send_on: When
+        message: Message
+      task:
+        title: Goal
+        description: Description
+        owner_id: Assigned to
+        due_date: Due date
+      mentoring_template/milestone:
+        title: Title
+        duration: Duration
+        description: Description
+      mentoring_template/task:
+        title: Title
+        description: Description
+      connection/question:
+        question_text: Field Name
+        question_type: Field Type
+      connection/task:
+        owner_id: Assigned to
+        due_date: Due date
+      connection/private_note:
+        text: Note
+      connection/milestone:
+        title: Title
+        description: Description
+        duration: Duration
+      coaching_goal:
+        title: Title
+        description: Description
+        due_date: Target
+      qa_question:
+        summary: Your question
+        description: Add details
+      qa_answer:
+        content: Your Answer
+      mentor_request:
+        mentor_name: To
+        response_text: Reason
+        message: Message
+        closed_by_id: Closed By
+        closed_at: Closed At
+      meeting_request:
+        response_text: Reason
+      user:
+        badge_text: Badge text
+        max_connections_limit: Connections Limit
+        notification_setting: Notification for other activities
+        notification_setting_v2: Notification for %{program} activities
+        admin_notes: Personal Notes
+      user_setting:
+        max_capacity_hours: Maximum hours
+        max_meeting_slots: Maximum available slots
+      situation:
+        title: Situation
+        mentoring_topic: Mentoring Topic
+        due_date: Target date
+        description: Description
+        mentoring_topic_id: Mentoring Topic
+      admin_view:
+        title: Title
+        description: Description
+      language:
+        title: Title
+        display_title: Title in Language
+        language_name: Language name
+        enabled: Status
+      organization_language:
+        enabled: Available For
+      mentoring_slot:
+        repeats: Repeat
+        repeats_end_date: Until (optional)
+        repeats_by_month_date: Repeat by
+        repeats_on_week: Repeat on
+        location: Where
+      meeting:
+        topic: Topic
+        description: Description
+        location: Where
+        message: Message
+        meeting: Meeting
+      assistant:
+        email: Email
+        password: Password
+        password_confirmation: Confirm Password
+      mentor_offer:
+        message: Message
+        created_at: Received
+      mailer_widget:
+        source: Content
+      mailer_templates:
+        source: Body
+      abstract_message_receiver:
+        member: Member
+      committee_response:
+        committee_member: Committee member
+        membership_request: Membership request
+      match_config:
+        student_question_id: Student question
+        student_question: Student question
+        mentor_question: Mentor question
+        program: Program
+        weight: Weight - Factor by which the field score is multiplied and added to the total score
+      mentoring_topic:
+        title: Topic
+        description: Description
+      comment:
+        body: Comment
+      meeting/feedback:
+        body: Feedback
+      membership_request/instruction:
+        content: Instructions
+      mentor_request/instruction:
+        content: Instructions
+      three_sixty/competency:
+        title: Title
+        description: Description
+      three_sixty/question:
+        title: Title
+        question_type: Type
+      solution_pack:
+        description: Name
+        program: Program
+        created_by: Created by
+        created_at: Created at
+      mentoring_model:
+        title: Title
+        description: Description
+      mentoring_model/goal_template:
+        title: Title
+        description: Description
+      mentoring_model/milestone_template:
+        title: Title
+        description: Description
+      mentoring_model/goal:
+        title: Title
+        description: Description
+      mentoring_model/milestone:
+        title: Title
+        description: Description
+      program/goal_template:
+        title: Title
+        description: Description
+      report/section:
+        title: Title
+        description: Description
+      program_asset:
+        logo_content_type: Logo content type
+        logo_file_size: Logo file size
+        banner_content_type: Banner content type
+        banner_file_size: Banner file size
+        mobile_logo_content_type: Mobile logo content type
+        mobile_logo_file_size: Mobile logo file size
+      scrap:
+        attachment_file_size: Attachment file size
+        attachment_content_type: Attachment content type
+        attachment_file_name: Attachment file name
+      question_choice:
+        text: choice
+    errors:
+      messages:
+        record_invalid:  "Validation failed: %{errors}"
+        blank: can't be blank
+        taken: has already been taken
+      models:
+        message:
+          attributes:
+            sender_name:
+              blank: Sender name can't be blank
+            sender_email:
+              blank: Sender email can't be blank
+        survey:
+          attributes:
+            due_date:
+              old_date: date occurs in the past
+              date_parsing: Couldn't parse date %{time_str}
+        site_list_item:
+          attributes:
+            content:
+              invalid_url: "format is invalid. Only HTTP, HTTPS URLs are allowed"
+        handbook:
+          attributes:
+            attachment_file_size:
+              inclusion: must be less than 10MB
+              less_than: must be less than 10MB
+            attachment:
+              less_than: must be less than 10MB
+        task:
+          attributes:
+            due_date:
+              out_of_range: out of range
+        post:
+          attributes:
+            body:
+              blank: can't be blank
+        ckeditor/picture:
+          attributes:
+              attachment_content_type:
+                invalid: is not one of %{types}
+        group:
+          attributes:
+            logo_content_type:
+              invalid: is not one of %{types}
+        assistant:
+          attributes:
+            email:
+              invalid: is not a valid email address
+        program_asset:
+          attributes:
+            logo_file_size:
+              inclusion: must be less than 2MB
+              less_than: should be within 2 MB
+            logo:
+              inclusion: should be within 2 MB
+              less_than: should be within 2 MB
+            logo_content_type:
+              invalid: is not one of %{types}
+            logo:
+              invalid: is not one of %{types}
+            banner_file_size:
+              inclusion: must be less than 2MB
+              less_than: should be within 2 MB
+            banner:
+              inclusion: should be within 2 MB
+              less_than: should be within 2 MB
+            banner_content_type:
+              invalid: is not one of %{types}
+            banner:
+              invalid: is not one of %{types}
+            mobile_logo_file_size:
+              less_than: should be within 2 MB
+            mobile_logo:
+              less_than: should be within 2 MB
+            mobile_logo_content_type:
+              invalid: is not one of %{types}
+            mobile_logo:
+              invalid: is not one of %{types}
+        profile_picture:
+          attributes:
+            image_remote_url:
+              blank: is invalid or inaccessible
+        calendar_setting:
+          attributes:
+            advance_booking_time:
+              inclusion: should be positive
+        common_answer:
+          attributes:
+            common_question:
+              blank: "Question can't be blank"
+        profile_answer:
+          attributes:
+            profile_question:
+              blank: "Question can't be blank"
+        match_config:
+          attributes:
+            student_question_id:
+              taken: is already being matched with another field
+        mentor_request:
+          attributes:
+            sender_id:
+              taken: has already sent a request to this mentor
+        project_request:
+          attributes:
+            sender_id:
+              taken: has already sent a request to this project
+        mentoring_topic:
+          attributes:
+            user_id:
+              taken: has already been taken
+        program:
+          attributes:
+            root:
+              invalid: can only contain alphanumeric characters and dashes.
+              taken: has already been taken
+        program_invitation:
+          invalid_record: invitee already user in program
+        role:
+          attributes:
+            program_id:
+              taken: already has the role
+        role_question:
+          attributes:
+            role_id:
+              taken: has already been taken
+        role_resource:
+          attributes:
+            role_id:
+              taken: has already been taken
+        situation_group:
+          attributes:
+            group_id:
+              taken: has already been taken
+        survey_answer:
+          attributes:
+            user_id:
+              taken: has already answered the question
+        feedback/form:
+          attributes:
+            program_id:
+              taken: already has the feedback form
+        article_content:
+          attributes:
+            attachment_content_type:
+              inclusion: "is not an allowed type. You can attach files with the following extensions: pdf, doc, xls, ppt, docx, pptx, xlsx, png, jpg, gif, zip, rar."
+              invalid: is not one of %{types}
+        three_sixty/competency:
+          attributes:
+            title:
+              blank: can't be blank
+        three_sixty/question:
+          attributes:
+            title:
+              blank: can't be blank
+            question_type:
+              blank: can't be blank
+        three_sixty/survey_reviewer:
+          attributes:
+            name:
+              blank: can't be blank
+            email:
+              blank: can't be blank
+            three_sixty_survey_reviewer_group_id:
+              blank: can't be blank
+        mentoring_model/goal:
+          attributes:
+            title:
+              blank: can't be blank
+
+    custom_errors:
+      facilitate_user:
+        positive_send_frequency: interval days is not a positive number
+        invalid_send_type: is invalid
+        invalid_admin_view: is invalid
+      mentoring_model:
+        base_templates_blank: can't be blank
+      coaching_goal:
+        title:
+          blank: Title can't be blank
+      calendar_setting:
+        meeting_preference_or_slots_should_be_allowed: Allow %{mentors} either to configure availability slots or to describe the %{meetings} preference
+      group:
+        already_mentoring: "%{mentor_name} is already mentoring %{student_name}"
+        already_mentoring_v1: "%{mentor_name} is already %{a_mentor} to %{student_name}"
+        already_drafted: "%{mentee_name} is already drafted with %{mentor_name}. Please select a different %{Mentor}."
+        already_connected: "%{Mentee} is already connected with the %{Mentor}"
+        match_error: There are some problems matching the pair. %{errors}
+        invalid_closed_by: The user is not authorized to terminate the connection
+        invalid_closed_by_v1: "The user is not authorized to terminate the %{mentoring_connection}"
+        invalid_expiry_date: Invalid expiry date
+        invalid_expiration_date: Invalid expiration date
+        invalid_mentors_or_mentees: are either not specified or invalid
+        invalid_mentors_or_mentees_v1: "%{plural_role_name} are either not specified or invalid"
+        invalid_users: "%{Users} are invalid"
+        mentee_limit_reached: "%{mentor_name} preferred not to have more than %{mentee_limit} mentees"
+        mentee_limit_reached_v1: "%{mentor_name} preferred not to have more than %{mentee_limit} %{mentees}"
+        one_to_one_allowed: cannot be more than one per group
+        termination_reason:
+          blank: Reason can't be blank
+        limit_reached_for_project:
+          one: "The %{mentoring_connection} can't have more than %{count} %{singular_role_name}"
+          other: "The %{mentoring_connection} can't have more than %{count} %{plural_role_name}"
+        not_a_mentor_in_group: "%{mentor_name} is not a part of this %{mentoring_connection} as a %{mentor}."
+        not_a_mentee_in_group: "%{mentee_name} is not a part of this %{mentoring_connection} as a %{mentee}."
+        not_published_yet: "%{mentoring_connection} is not yet published."
+        does_not_belong_to_program_of_feedback_form: "%{mentoring_connection} and feedback form belongs to different %{programs}"
+        mentor_has_one_time_mentoring_enabled: "%{mentor_name} has preferred to participate only in One time %{mentoring}"
+      scrap:
+        not_member: does not belong to the mentoring group
+        not_meeting_member: "does not belong to the %{meeting}"
+        group_expired: has expired
+        messaging_not_allowed_in_connection: "Messaging is not allowed in the %{mentoring_connection}."
+      assistant:
+        should_not_be_admin: should not be an %{admin}
+      profile_answer:
+        contains_digits: cannot contain digits
+        invalid_attachment_file_size: must be less than 2 MB
+        invalid_video_attachment_file_size: must be less than 50 MB
+      home:
+        google_auth: Unsuccessful case google auth %{status}
+        troubleshoot: Troubleshoot report. Generated on %{created_at}
+      incoming_mail:
+        invalid_signature: Invaid signature
+        mail_received_previously: Mail Received Previously
+        received_but_rejected: Mail Received But Rejected
+      message:
+        no_user: Oops! The user may no longer exist in the program.
+        member_not_active: is not active
+        sender_not_program_member: is not a member of this program
+        sender_blank: "can't be blank (group given)"
+        user_not_in_group: User does not belong to the group
+        limit_exceeded: You have exceeded the maximum number of messages that can be sent to the %{_admins} in an hour. Please try again later.
+        sender_invalid: is invalid
+      report/metric:
+        abstract_view_not_in_program: is not a view in this %{program}
+      article:
+        invalid_update_status: Invalid Update Status
+        invalid_rating: Invalid rating!
+        blank: "can't be blank."
+        are_invalid: are invalid
+        list_blank: List cannot be empty
+      announcement:
+        no_privileges: does not have necessary privileges to create an announcement
+      publication:
+        cant_write_article: "can't write an article"
+      comment:
+        comment_in_invalid_program: You can comment only on articles in your program
+      committee_response:
+        vote_in_ivalid_program: cannot vote on request because user belongs to different program
+        committee_required: Program should have committee enabled
+        not_committee_member: is not a committee member
+        not_for_mentor: is not for mentor role
+      answer:
+        invalid_choice: contains an invalid choice
+        invalid_question_choice: Please select compatible question types
+        blank: "can't be blank"
+        not_allowed: is not allowed to answer
+        role_mismatch: cannot provide answer for this question (Role mismatch)
+      confidentiality_audit_log:
+        no_privileges: does not have the privileges to perform this action
+      activity:
+        not_supported: is not supported
+      membership:
+        not_belong_to_program: "doesn't belong to the program"
+        cannot_be_mentee: cannot be a mentee
+        cannot_be_mentee_v1: '%{user_name} cannot be %{mentee}'
+        cannot_be_mentor: cannot be a mentor
+        cannot_be_mentor_v1: '%{user_name} cannot be %{mentor}'
+        cannot_be_custom_role: "%{user_name} cannot be %{custom_role_name}"
+        cannot_be_used_for_mentoring: "%{custom_role_name} cannot be part of %{connections}"
+        invalid_view_mode: view mode is invalid
+        existing_user: The user %{user_name} is already part of the %{mentoring_connection} as '%{existing_role}' and cannot be assigned '%{new_role}' role unless removed from the %{mentoring_connection} first.
+      membership_request:
+        rejection_reason: Please provide some reason for rejection
+        voting_down_reason: Please supply a reason for voting down
+        resolver_should_be_member: The resolver should be a governing committee member
+        not_among_requested_roles: is not among the requested roles
+        cannot_be_present_when_rejected: cannot be present when rejected
+        admin:
+          blank: "can't be blank"
+        suspended_user_cannot_join_directly: Suspended users are not allowed to join without approval
+        suspended_user_cannot_join_directly_v1: Deactivated users are not allowed to join without approval
+        suspended_member_cannot_apply: suspended members cannot apply
+        suspended_member_request_cannot_be_pending: suspended member's request cannot be pending
+      experience:
+        end_year_before_start: end year comes before start year
+      facilitation:
+        message_and_user_different_programs: Facilitation message and user belong to different programs
+        user_and_group_invalid: User does not belong to the %{mentoring_connection}
+      response:
+        invalid_user: does not belong to the %{mentoring_connection}
+      match_config:
+        invalid_fields: does not contain the field
+        unmatchable_question: is of a type that cannot be used for matching
+        matching_type_not_set: "has matching details present, but is not of set matching type"
+      match_config_discrepancy_cache:
+        cant_be_cached: "match config's question are not choice based or location"
+      meeting:
+        invalid_time: start time should be before end time
+        mentee_should_be_part_of_meeting: "%{mentee} should be part of the %{meeting}"
+      member:
+        invalid_educations: One or more of your educations is invalid
+        invalid_experiences: One or more of your experiences is invalid
+        invalid_publications: One or more of your publications is invalid
+        invalid_manager: Manager is invalid
+        invalid_current_password: is invalid
+        invalid_date_answer: One or more of your date answers is invalid
+      mentor_request:
+        not_program_member: is not member of the program
+        self_mentor_request: Cant get mentored by yourself
+        blocked_by_program: doesnot allow you to send any requests
+        not_mentor: is not %{mentor}
+        cant_be_present: cannot be present
+        must_be_active: must be active
+        min_preferred_mentors: must have at least %{preferred_mentors} preferred %{mentors} to send a request
+        cant_be_blank: "can't be blank"
+        mentors_limit: has reached the mentors limit
+        pending_requests_limit: has reached the pending requests limit
+      project_request:
+        not_program_member: is not member of the program
+        not_program_group: is not part of the program
+      mentoring_slot:
+        invalid_time: starting time should be before ending time
+        invalid_repeat_date: repeat date should be after start date
+        invalid_start_time: start time should be after the current time
+      receiver:
+        not_organization_member: is not a member of this organization
+        message_cant_be_sent: Message cannot be sent because you are not connected to %{member}
+        not_allowed_to_message: "We are sorry, but you are not allowed to message %{member}"
+      permission:
+        invalid: is invalid
+      profile_picture:
+        invalid_url: Unable to get the image from the url. Please check the url again.
+      profile_question:
+        location_error: "can't have more than one location question per role"
+        manager_error: "can't have more than one manager question per role"
+        not_text_only: does not support not allowing digits
+        manager_feature_error: "can't have manager question when manager feature is disabled"
+        question_info_error: "can't be blank"
+      common_question:
+        question_info_error: "can't be blank"
+        matrix_position_error: "order is already taken"
+        invalid_choices_count_error: "number of rows cannot be more than number of choices in case of forced ranking"
+        rating_questions_not_present: "Matrix question needs to have at least one rating question."
+      organization:
+        ssl_cert_validation_for_custom_domains: "can't have ssl enabled when ssl certificate is not available in custom domain organizations"
+        display_custom_terms: "can't be set because organization is a basic subscription "
+      program:
+        invalid_user: does not have the user
+        not_valid_email: is not a valid email address
+        cant_invite_admin: "can't invite %{admin}"
+        invitation_disalbed: "can't invite since invitation by non-admins is disabled for the %{program}"
+        meeting_request_reminder_duration_less_than_auto_expiration: "should be less than expiration duration"
+        mentoring_period: "%{mentoring_term} period must be greater than %{days_count}"
+      request_favorite:
+        invalid_user: is not the student who sent the request
+      role:
+        invalid: is invalid
+        invalid_join_now: Only one membership setting other than invitation can be selected
+      section:
+        default_reposition: cannot reposition default section
+        default_count: cannot be more than one
+      survey:
+        cannot_participate: cannot participate in the survey
+        survey_expired: Sorry. The survey has passed it's due date.
+        not_belong_to_program: does not belong to the program
+        more_than_one_feedback_survey: The %{program} can have only one feedback survey.
+        invalid_file: Invalid survey question file
+        cannot_set_progress_report: can be enabled only for %{mentoring_connection} survey.
+      task:
+        occurs_in_past: occurs in the past
+        expired: has expired
+        not_belong_to_group: "doesn't belong to the group"
+        private_goal_creation: cannot create private goal for another
+      theme:
+        invalid_file_type: file type is wrong
+        incomplete_vars: Important styles are missing.
+      topic:
+        not_permitted: is not permitted
+        not_subscribed: has not subscribed
+      user:
+        no_privilege: does not have the privilege to perform the action
+        already_exists: has this user already
+        cannot_reactivate: is suspended and hence the user cannot be reactivated
+        cannot_add_suspended_member: is suspended and hence cannot be added to the %{program}
+      security_setting:
+        invalid_address: contains invalid address value
+      three_sixty/competency:
+        already_exists: has to be unique
+      three_sixty/question:
+        already_exists: has to be unique
+        competency_should_belong_the_organization: competency should belong to the organization
+      three_sixty/survey_question:
+        survey_competency_should_belong_to_survey: survey competency should belong to the same survey
+        question_should_belong_to_same_competency: question should belong to the same competency
+      three_sixty/survey_competency:
+        competency_should_belong_to_same_organization_as_survey: competency should belong to the same organization as the survey
+      three_sixty/survey_assessee:
+        cant_be_blank: choose users from the autocomplete list
+        already_exists: has already been added
+        assessee_should_belong_to_same_organization_as_survey: member being assessed should belong to the same organization as the survey
+        assessee_should_belong_to_same_program_as_survey: member being assessed should belong to the same program as the survey
+      three_sixty/survey_reviewer:
+        email_already_exists: has already been added
+        survey_assessee_and_survey_reviewer_group_belong_to_same_survey: survey reviewer group being selected should belong to the same survey as survey assessee
+      three_sixty/survey_reviewer_group:
+        reviewer_group_should_belong_to_same_organization_as_survey: reviewer group being selected should belong to the same organization as the survey
+      three_sixty/survey:
+        validate_expiry_date: can't be in the past
+        program_should_belong_to_organization: program should belong to organization
+      three_sixty/survey_answer:
+        no_answer: answer text or answer value must be present
+      task_template:
+        duration_or_specific_date_presence: Both specific date and duration can't be blank for required tasks.
+        specific_date_is_blank: Specific date should be blank
+        survey_invalid: Survey linked to the task template is invalid
+        survey_cannot_be_blank_in_engagement_survey_task: Survey cannot be blank in EngagementSurvey type Task
+      facilitation_template:
+        survey_invalid: The survey ids present are invalid
+      group/membership_setting:
+        cannot_be_empty: Membership setting cannot be empty
+        group_and_role_program_mismatch: group and role should belongs to same program
+      can_not_be_blank: "%{Objects} can't be blank"
+      password:
+        member_or_email: Either member id or email should be present
+      domain:
+        invalid_format: is not of valid format
+        already_exists: has already been taken
+        invalid: can only contain alphanumeric characters and dashes or dots
+        subdomain_is_reserved: "%{value} is reserved"
+      survey_response_column:
+        invalid_column: column object type and question type id/key combination is not valid
+      auth_config:
+        type_uniqueness: Only one %{auth_type} login is allowed per organization.
+        atleast_one_login_be_enabled: An organization must have atleast one login enabled.
+        atleast_one_login_be_enabled_v1: An organization must have at least one login enabled.
+      skip_and_favorite_profile:
+        different_programs: Preference marker and preference marked users cannot belong to different programs
+      explicit_user_preferences:
+        blank: can't be blank
+        empty: should be empty

@@ -1,0 +1,46 @@
+en:
+  feature:
+    match_config:
+      label:
+        lt: less than
+        gt: greater than
+        create: Create Matching Customization
+        edit: Edit Matching Customization
+        mentor_question: "%{mentor} question"
+        student_question: "%{student} question"
+        threshold: Threshold - Consider %{mentor} as not a match if field score is
+        threshold_operator: Threshold operator for field score to consider %{mentor} as not a match
+        threshold_value: Threshold value for field score to consider %{mentor} as not a match
+        role_choices: "%{role} Choices"
+        normal_matching: Normal Matching (Based on Question type)
+        set_matching: Set Matching
+        Matching_Type: Matching Type
+        Matching_Sets: Matching Sets
+        confirmation_message: You have not provided any mapping for following %{mentee} choices. %{Mentee} with unmapped choices will not match with anybody. Are you sure you want to proceed?
+        new_set: Add new set
+        set_configuration: Set Configuration
+        matching_customization: Matching Customization
+        play_with_matching: Play with Matching
+        recompute_match_scores: Recompute Match Scores
+        new_config: New Config
+        destroy_confirmation: Are you sure?
+        net_result: Net Result
+        match_labels: Show match labels inside recommendation
+        prefix: Match Label - Prefix
+      table:
+        mentor_question: "%{Mentor} Question"
+        mentee_question: "%{Mentee} Question"
+        weight: Weight
+        threshold: Threshold
+        actions: Actions
+        mentee_answer: "%{Mentee} Answer"
+        mentor_answer: "%{Mentor} Answer"
+        field_score: Field Score
+        consider_for_matching: Consider for matching?
+        contribution_to_total_score: Contribution to the total score
+      content:
+        your_compatibility: Your compatibility
+        show_compatibility: Show compatibility
+        see_details: See Details
+        no_details_text_v1_html: We are unable to retrieve your matching details with %{mentor_name}. %{Contact_admin} for more details.
+        details_text: You match with %{mentor_name} on the following criteria

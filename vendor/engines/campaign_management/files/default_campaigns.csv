@@ -1,0 +1,21 @@
+#Campaign,,,
+Name,AdminView,Enable,
+Get users to sign up,"Application Accepted, Awaiting Signup",Draft,
+Get users to complete profiles,Users With Low Profile Scores,Draft,
+,,,
+#Emails,,,
+Subject,Message,Schedule,Campaign
+"{{user_firstname}}, finish signing up today!","Dear {{user_firstname}},<br />
+<br />
+We see you have not yet completed the sign-up process in the program. Click on the following link to get started with mentoring:<br />
+<br />
+{{url_signup}}<br />
+<br />
+If you have any trouble signing up or have any questions, feel free to reply to this email.<br />
+<br />",7,Get users to sign up
+" {{user_firstname}}, complete your profile today!","Dear {{user_firstname}},<br />
+<br />
+We see your profile is&nbsp;{{profile_completion_score}} complete. It is important that your profile is complete and detailed as it heps find better matches in the program. To complete your profile, please click on the link below. <br />
+<br />
+{{url_profile_completion}}<br />
+<br />",30,Get users to complete profiles

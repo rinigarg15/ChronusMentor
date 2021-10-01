@@ -1,0 +1,11 @@
+<h4 class="m-b-md" id="cjs_reports_to_show"><%= "feature.reports.content.select_reports_to_show".translate %></h4>
+<%= control_group do %>
+  <%= controls do %>
+    <% current_program.get_reports_available_for_section(tile).each_with_index do |report_type, index| %>
+      <label class="checkbox m-b-md">
+        <%= check_box_tag('dashboard_reports[]', report_type, current_program.is_report_enabled?(report_type), {class: "cjs_management_report_settings_checkboxes", id: "dashboard_reports_#{index}", 'aria-labelledby' => 'cjs_reports_to_show'}) %>
+        <%= get_dashboard_report_name(report_type, current_program) %>
+      </label>
+    <% end %>
+  <% end %>
+<% end %>

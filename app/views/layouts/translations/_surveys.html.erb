@@ -1,0 +1,12 @@
+<% if @current_program.present? %>
+  <%= javascript_tag do %>
+    var surveysTranslations = {
+      engagement_help_text: '<%= j("feature.survey.content.engagement_survey_help_text".translate(:a_Mentoring_Connection => _a_Mentoring_Connection, :Mentoring_Connections => _Mentoring_Connections)) %>',
+      program_help_text: '<%= j("feature.survey.content.program_survey_help_text".translate(:Program => _Program)) %>',
+      rating_hint_text_low_to_high: '<%= j("common_text.help_text.comma_separated_rating_scale_low_to_high".translate()) %>',
+      rating_hint_text: '<%= j("common_text.help_text.comma_separated_v1".translate()) %>',
+      mandatory_setting_text_all_rows_must_be_rated: '<%= j("feature.profile_customization.label.mandatory_all_rows_must_be_rated".translate()) %>',
+      mandatory_setting_text: '<%= j("feature.profile_customization.label.mandatory".translate()) %>'
+    };
+  <% end %>
+<% end %>

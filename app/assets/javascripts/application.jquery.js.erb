@@ -1,0 +1,2863 @@
+// Guidelines for placing your javascript
+// There are four files your js can fall into:
+// 1. Generic functions: Generic functions which have high chances of getting re-used.
+//    Please comment these functions well.
+// 2. The 'initialize' namescope: The functions which should be called when the page loads,
+//    i.e. inside jquery(document).ready.
+// 3. Views related functions: When the functions concern a particular view, they should always
+//    be namescoped under the name of the HELPER/CONTROLLER DIRECTORY which is rendering the view. If more than
+//    two controllers are using the function, consider making it generic. You might find some stray
+//    namescopes not conforming to the guideline, please consider repositioning them.
+// 4. jQuery(document).ready: Add the functions to be called when the page loads. By default, all the
+//    functions inside the 'initialize' namescope are called.
+//
+// Please keep the guidelines updated.
+
+
+var localTabs = {
+    selectTab: function(tabToSelect) {
+      jQuery(".cjs_tab_items").each(function(index){
+        if(jQuery(this).attr("id") != tabToSelect){
+          jQuery(this).hide();
+        }
+      });
+      jQuery(".cjs_header_item").each(function(index){
+        jQuery(this).removeClass("dim strong")
+      });
+      jQuery("#" + tabToSelect).toggle();
+      jQuery("#" + tabToSelect + "_link").addClass("dim strong")
+    }
+};
+
+var UserFavorites = {
+  appendPreferredMentor: function(link)
+  {
+    jQuery(".cjs_preferred_mentors_box").show();
+    jQuery('.cjs_preferred_mentors_box ul').append(link);
+  },
+  removePreferredMentor: function(name)
+  {
+    jQuery('.cjs_preferred_mentors_box ul li a[title="' + name +'"]' ).parent().remove();
+    if (jQuery('.cjs_preferred_mentors_box ul li').size() == 0)
+      jQuery(".cjs_preferred_mentors_box").hide();
+  }
+};
+
+var BBQPlugin = {
+  resetAllFilters: function(){
+    // refer construct_daterange_picker before updating the selector
+    jQuery('#search_filter_form :input[type="checkbox"][data-ignore!=true]').attr('checked', false);
+    jQuery('#search_filter_form :input[type="text"][data-ignore!=true]').val('');
+    var datePickersForProfile = jQuery('#search_filter_form').find('.cjs_date_picker_for_profile_question');
+    initialize.setDatePicker();
+    jQuery.each(datePickersForProfile, function(index, element){
+      DateRangePicker.clearInputs(element);
+    });
+  },
+
+  checkUniqueFilters: function(ele){
+    UNIQUE_FILTERS_NAME = ["sf[quick_search]", "filter", "tags", "list"];
+    if (jQuery.inArray(ele,UNIQUE_FILTERS_NAME) == -1 )
+      return false;
+    return true;
+  },
+
+  toggleTagFilter: function(ele_id, toggleElement){
+    ele_id = '#' + ele_id;
+    var state = jQuery(ele_id).is(':checked');
+
+    if (!(typeof(toggleElement) == 'undefined')){
+     state = !state
+    }
+
+    jQuery(ele_id).attr('checked', state);
+    MentorSearch.applyFilters();
+  },
+
+  clearStatusFilters: function(){
+    jQuery('#filter_pane .status_filters input').attr('checked', false);
+    jQuery(".cjs_appended_controls").addClass("hide");
+  },
+
+  clearTagFilters: function(){
+    jQuery('#filter_pane .tag_filters input').attr('checked', false);
+  },
+
+  toggleStatusFilter: function(ele_id, toggleElement){
+    ele_id = '.' + ele_id;
+    state = jQuery(ele_id).is(':checked');
+    if (!(typeof(toggleElement) == 'undefined'))
+    state = !state
+
+    jQuery(ele_id).attr('checked', state);
+    MentorSearch.applyFilters();
+  },
+
+  createPaginationState: function (relevanceSortView) {
+    var pagingAttributes = ['items_per_page', 'page', 'order', 'sort'];
+    if (!!jQuery("#sf_quick_search").val()){
+      if (relevanceSortView){
+        jQuery('#search_filter_form .sort').val('<%= UserSearch::SortParam::RELEVANCE %>');
+        jQuery('#search_filter_form .order').val("");
+      }
+    }else if (jQuery('#search_filter_form .sort').val() == '<%= UserSearch::SortParam::RELEVANCE %>') {
+      jQuery('#search_filter_form .sort').val("");
+    }
+    return BBQPlugin.createPaginationStateHash(pagingAttributes);
+  },
+
+  createPaginationStateHash: function (attributes){
+    var content = '';
+    jQuery.each(attributes, function (i, e) {
+      var value = jQuery('#search_filter_form .' + e).val();
+      if(undefined != value && !value.blank()) { content += e + '~' + value + '~!' }
+    });
+    return content;
+  },
+
+  createCurrentFilterState: function(){
+    MentorSearch.clearAllDefaultTexts();
+    Placeholder.cleanBeforeSubmit(jQuery('#search_filter_form'));
+    // refer construct_daterange_picker before updating the selector
+    serializedArray=jQuery("#search_filter_form :input[type!=hidden][data-ignore!=true]").serializeArray();
+    checkboxHash = {};
+    textboxString = "";
+    jQuery.each(serializedArray, function (index,ele){
+      if (BBQPlugin.checkUniqueFilters(ele.name)){
+        if (ele.name == "filter" || ele.name == "tags[]" || ele.name == "list")
+          inputElement = jQuery('#search_filter_form input[name="' + ele.name + '"][value="' + ele.value +'"]')
+        else
+          inputElement = jQuery('#search_filter_form input[name="' + ele.name + '"]')
+      }
+      else if (ele.name.match(/\[\]$/))
+        inputElement = jQuery('#search_filter_form input[name="' + ele.name + '"][value="' + ele.value +'"]');
+      else
+        inputElement = jQuery('#search_filter_form input[name="' + ele.name + '"]');
+      if (inputElement.attr('type') == "checkbox" && BBQPlugin.checkFilterConditions(ele)){
+        cbId = 'chQ_' + inputElement.attr('index').split('_')[0];
+        prefixHash = typeof(checkboxHash[cbId]) == "undefined" ? "" : checkboxHash[cbId] + "|"
+        checkboxHash[cbId] = prefixHash + inputElement.attr('index').split('_')[1];
+      }
+      else if(inputElement.hasClass(DateRangePicker.dateRangePickerForProfileQuestion) && BBQPlugin.checkFilterConditions(ele) && !inputElement.val().blank()){
+        textboxString += BBQPlugin.getBBQFilterName(("dateQuestion_" + inputElement.attr('id')), inputElement.val());
+      }
+      else{
+        hashId = inputElement.attr('id');
+        hashValue = inputElement.attr('value');
+        //TODO See if
+        if(!hashValue.blank()){
+          textboxString += BBQPlugin.getBBQFilterName(hashId, hashValue);
+        }
+      }
+    });
+
+    cbStateString = "";
+    jQuery.each(checkboxHash, function (cbIndex,cbEle){
+      cbState = {};
+      cbState[cbIndex] = cbEle;
+      cbStateString += BBQPlugin.getBBQFilterName(cbIndex, cbEle);
+    });
+    return (textboxString + cbStateString);
+  },
+
+  checkFilterConditions: function(element){
+    return ((element.name != "filter") && (element.name != "filter[]") && (element.name != "tags[]") && (element.name != "list"));
+  },
+
+  getBBQFilterName: function(id, value){
+    return (id + "~" + value + '~!');
+  },
+
+  jQueryCreateBbqHash: function(relevanceSortView){
+    var state = {};
+    state["filters"] = BBQPlugin.createCurrentFilterState();
+    state["pagination"] = BBQPlugin.createPaginationState(relevanceSortView);
+    jQuery.bbq.pushState(state);
+  },
+
+  embedHashInTitleLinks: function(hashString){
+    var titleObj = jQuery(".cjs_title_link");
+    if(titleObj.length > 0){
+      var linkHref = titleObj.attr("href");
+      // remove any other hash links already present
+      if(linkHref.indexOf("#") != -1){
+        linkHref = linkHref.substr(0, linkHref.indexOf('#'));
+      }
+      titleObj.attr("href", linkHref + hashString);
+    }
+  },
+
+  addHashChangeListener: function(){
+    jQuery(window).bind( 'hashchange', function(e){
+      if (jQuery.isEmptyObject(jQuery.bbq.getState())){
+        return false;
+      }
+      if(jQuery.bbq.getState().filters === undefined){
+        return false;
+      }
+      currentHash = window.location.hash
+      var modalRegEx = new RegExp(mobileModalId + "|" + sidePaneOpened,"g");
+      if(!!lastVisitedHash && currentHash.replace(modalRegEx, "") == lastVisitedHash.replace(modalRegEx, "")){
+        return false;
+      }
+      lastVisitedHash = window.location.hash
+      BBQPlugin.embedHashInTitleLinks(window.location.hash);
+      MentorSearch.showLoading();
+      formFields = jQuery.bbq.getState().filters.split('~!');
+      BBQPlugin.resetAllFilters();
+      formFields = jQuery.grep(formFields,function(n,i){
+        return (n != "");
+      });
+
+      jQuery.each(formFields, function (fieldIndex, fieldValue){
+        var selector = fieldValue.split('~')[0];
+        var value = fieldValue.split('~')[1];
+        if (fieldValue.match(/^chQ_/))
+        {
+          var questNo = selector.substring(4,selector.length);
+          jQuery.each(value.split('|'), function (ind, choiceId)
+          {
+            jQuery('#search_filter_form input[name="sf[pq][' + questNo + '][]"][index="' + questNo + '_' + choiceId + '"]').attr('checked', true);
+          });
+        }
+        else if(fieldValue.match(/^dateQuestion_/)){
+          AdminViewsNewView.initializeDatePicker();
+          var prefix = "dateQuestion_";
+          var questNo = selector.substring(prefix.length, selector.length);
+          var hiddenField = jQuery("#" + questNo);
+          DateRangePicker.setDateRangePickerForProfileQuestion(hiddenField, value);
+        }
+        else{
+          if (fieldValue.match(/^filter_/) || fieldValue.match(/^tags_/) || fieldValue.match(/^list_/))
+          {
+            jQuery('#' + selector).attr('checked', true);
+          }
+          else{
+            jQuery('#' + selector).val(value);
+          }
+          jQuery('#' + selector).css('color', "#000000");
+        }
+      });
+
+      var pagination = jQuery.bbq.getState('pagination');
+      if(undefined != pagination) {
+        var paginationValues = jQuery.grep(pagination.split('~!'), function(n, i) { return (n != ""); });
+
+        jQuery.each(paginationValues, function (fieldIndex, fieldValue) {
+          var values = fieldValue.split('~');
+          jQuery('#' + values[0]).val(values[1]);
+          jQuery('#search_filter_form #' + values[0]).val(values[1]);
+        });
+      }
+
+      jQuery('#ajax_filters').val(jQuery.bbq.getState('filters'));
+      jQuery('#apply_last_search').hide();
+      BBQPlugin.submitForm((jQuery(document).find("#mentoring_calendar").length == 1));
+    });
+    jQuery(window).trigger( 'hashchange' );
+  },
+
+  submitForm: function(isMeetingSearch){
+    isMeetingSearch = typeof isMeetingSearch != 'undefined' ? isMeetingSearch : false;
+    var searchFilterForm = jQuery("#search_filter_form");
+    if(isMeetingSearch){
+      jQuery('#mentoring_calendar').fullCalendar('refetchEvents');
+    }
+    else if(searchFilterForm.length == 0){
+      jQuery('#loading_results').hide();
+    }
+    else{
+      MentorSearch.clearAllDefaultTexts();
+      var finalData = getProfileFilterFormData();
+      jQuery.ajax({
+        url: searchFilterForm.attr("action"),
+        data: finalData,
+        complete: function() {
+          Placeholder.init(searchFilterForm.find("input[type='text']"));
+        }
+      });
+      MentorSearch.setAllDefaultTexts();
+    }
+  },
+
+  applySavedFilters: function(ele, str){
+    var formState = BBQPlugin.buildFromState(str);
+    jQuery.bbq.pushState(formState);
+    jQuery(ele).hide();
+  },
+
+  buildFromState: function(str){
+    var formState = {};
+    formState["filters"] = str;
+    if (jQuery('#search_filter_form .sort').val() == '<%= UserSearch::SortParam::RELEVANCE %>' ) {
+      formState["pagination"] = "";
+      jQuery('#search_filter_form .sort').val("");
+    }
+    return formState;
+  }
+};
+
+var Users = {
+  // On modifying any constants below, please change the hard coded constant in
+  // app/views/linkedin_import/callback_success.html.erb
+  linkedinConstants: {
+    cookieName: "chronus_linkedin_import",
+    enableValue: "chronus_linkedin_started",
+    disableValue: "chronus_linkedin_completed"
+  },
+
+  linkedin_popup: false,
+  
+  startLinkedIn: function(loadingText, loginUrl, importDataUrl, id, sectionId, membershipRequestMemberId, membershipRequestRoleName, programId, isMobileApp){
+    jQuery(".cjs_current_linkedin_link").removeClass("cjs_current_linkedin_link");
+    jQuery("#import_profile_link_login_" + sectionId).addClass("cjs_current_linkedin_link");
+    if(isMobileApp) {
+      jQuery("#import_profile_link_login_" + sectionId).prop("disabled", true);
+      IAB.open(loginUrl, '_blank', InAppBrowserHelper.inAppBrowserOptions());
+    }
+    else if(Users.linkedin_popup && !Users.linkedin_popup.closed) {
+      Users.linkedin_popup.focus();
+      return;
+    }
+    else {
+      Users.linkedin_popup = window.open(loginUrl, 'Authorization', 'status=1,width=600,height=500');
+    }
+
+    Users.linkedinConstants.loadingText = loadingText;
+    jQueryAddToCookie(Users.linkedinConstants.cookieName, Users.linkedinConstants.enableValue, 365, { path: "/" } );
+    setTimeout('Users.checkLinkedInAuth("' + importDataUrl + '", ' + id + ', ' + sectionId + ', "' + membershipRequestMemberId + '", "' + membershipRequestRoleName + '", "' + programId + '")', 500);
+  },
+
+  checkLinkedInAuth: function(importDataUrl, user_id, sectionId, membershipRequestMemberId, membershipRequestRoleName, programId){
+    if(jQuery.cookie(Users.linkedinConstants.cookieName) == Users.linkedinConstants.enableValue) {
+      setTimeout('Users.checkLinkedInAuth("' + importDataUrl + '", ' + user_id + ', ' + sectionId + ', "' + membershipRequestMemberId + '", "' + membershipRequestRoleName + '", "' + programId + '")', 500);
+    } else {
+      var flashContainer = jQuery("#ajax_success_flash_" + sectionId);
+      flashContainer.attr('class', "alert").show().html(Users.linkedinConstants.loadingText);
+      jQuery.post(importDataUrl, { id: user_id, section: sectionId, membership_request_role_name: membershipRequestRoleName, program_id: programId, membership_request_member_id: membershipRequestMemberId } );
+    }
+  }
+};
+
+var Admins = {
+  showNewForm: function(){
+    jQuery('#new_admin').show();
+    jQuery('#no_admins').hide();
+  },
+
+  hideNewForm: function(){
+    jQuery('#new_admin').hide();
+    jQuery('#no_admins').show();
+  }
+};
+
+var OrganizationAdmins = {
+  show: function(id){
+    Admins.showNewForm();
+    jQuery('#new_user_to_admin').hide();
+    jQuery('#exisiting_user_to_admin').hide();
+    jQuery('#'+id).show();
+  }
+};
+
+var CommonQuestions = {
+  toggleArrow : function(selector)
+  {
+    first = jQuery(jQuery(selector)[0]);
+    second = jQuery(jQuery(selector)[1]);
+    if(first.is(":visible"))
+    {
+      first.hide();
+      second.show();
+    }
+    else
+    {
+      first.show();
+      second.hide();
+    }
+  },
+  toggleArrowAndBlind : function (blindEle, toggleEle)
+  {
+    jQuery(blindEle).slideToggle(1000);
+    CommonQuestions.toggleArrow(toggleEle);
+  }
+};
+
+var OfferMentoring = {
+  initializeSubmitForm : function() {
+    jQuery(document).on('click', '.cjs-offer-mentoring-button', function(){
+      studentId = jQuery(this).data('studentId');
+      groupId = jQuery(this).data('group-id');
+      if(groupId === undefined) {
+        jQuery('#assign_loading_2').show();
+      }
+      else {
+        jQuery('#assign_loading_2_'+groupId).show();
+        jQuery('#select_connection_'+studentId+ ' #group_id')[0].value = groupId;
+      }
+      jQuery(this).attr("disabled", true);
+      jQuery('#offer_mentoring_form_'+studentId)[0].submit();
+    });
+  },
+  mentorToggleRadio : function(ele,id)
+  {
+    offer_value = jQuery(ele).val();
+    if(offer_value == "new")
+    {
+      jQuery("div#offer_new_connection_"+id).show();
+      jQuery("div#offer_existing_connection_"+id).hide();
+    }
+    else if(offer_value == "existing")
+    {
+      jQuery("div#offer_new_connection_"+id).hide();
+      jQuery("div#offer_existing_connection_"+id).show();
+    }
+  },
+  renderPopup: function(url)
+  {
+    jQueryShowQtip("#inner_content", 600, url,"",{modal: true});
+  }
+};
+
+var sidePaneOpened;
+
+var GroupTabs = {
+  isInView: function() {
+    jQuery(".connections-slick").on('afterChange', function (event, slick, currentSlide, nextSlide) {
+      slideSelector = jQuery('.connections-slick .slick-slide[data-slick-index="'+currentSlide+'"]');
+      carousel.showAdaptiveHeight(".connections-slick", slideSelector, 0);
+      MentoringAreaTracking.gaTrackViewedConnection(currentSlide);
+    });
+
+    jQuery(".connections-slick").on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+      jQuery('.connections-slick .slick-slide[data-slick-index="'+currentSlide+'"] .slick_box').addClass('slick-box-hide');
+      jQuery('.connections-slick .slick-slide[data-slick-index="'+nextSlide+'"] .slick_box').removeClass('slick-box-hide');
+      ConnectionsWidget.loadSlick('.mentoring_connections_bottom .next_page', nextSlide);
+    });
+
+  },
+
+  clickTabWithBagde: function(tab_to_open, tab_id) {
+    disableSwitchTabTracking = true;
+    var mentoring_tabs = jQuery(tab_id);
+    if(mentoring_tabs.hasClass('cjs_not_loaded'))
+    {
+      var clicked = false;
+      mentoring_tabs.removeClass('cjs_not_loaded');
+      if(tab_to_open != "")
+      {
+        mentoring_tabs.find("."+tab_to_open).click();
+      }
+      else{
+        var message_tab = mentoring_tabs.find(".cjs_message_tabs");
+        var task_tab = mentoring_tabs.find(".cjs_tasks_tab");
+        var meetings_tab = mentoring_tabs.find(".cjs_meetings_tab");
+        var forums_tab = mentoring_tabs.find(".cjs_forum_tabs");
+        var tabs =  {"message_tab": message_tab, "task_tab": task_tab, "meetings_tab": meetings_tab, "forums_tab": forums_tab};
+        jQuery.each(tabs, function( tab, tab_info ) {
+          if(tab_info.length > 0 && !clicked)
+          {
+            tab_info.click();
+            clicked = true;
+          }
+        });
+      }
+    }
+    disableSwitchTabTracking = false;
+  },
+
+  initializeConnectionWidgetMeetingPopup: function(link_class){
+    jQuery("." + link_class).on('click', function(){
+      var url = jQuery(this).data("url");
+      jQueryShowQtip('#inner_content', 675, url, '', {modal: true, successCallback: function(){CalendarAvailabilityInfo.initialize()}});
+    });
+  },
+
+  affixTabContentSideBar: function() {
+    jQuery(document).ready(function () {
+      jQuery('#SidebarRightHomePage').affix({
+        offset: {
+          top: 100
+        }
+      });
+      jQuery("#SidebarRightHomePage").on("affix.bs.affix", function(){
+        jQuery("#SidebarRightHomePage").css('top', '0px');
+        GroupTabs.setSlimScrollRightSideBarHeight(true);
+      });
+      jQuery("#SidebarRightHomePage").on('affixed-top.bs.affix', function(){
+        jQuery("#SidebarRightHomePage").css('top', '');
+        GroupTabs.setSlimScrollRightSideBarHeight(false);
+      });
+    });
+  },
+
+  mobileToggleToMainContent: function() {
+    if(jQuery('#SidebarRightContentMobile').text().length > 0 && jQuery('[data-toggle=offcanvasright] i#cjs-chevron-header').hasClass('fa-chevron-left'))
+    {
+      jQuery('#SidebarRightContentMobile').html("");
+      jQuery('#SidebarRightContainer').show();
+      jQuery('.mobile_footer').show();
+    }
+    jQuery('#header_actions [data-toggle=offcanvasright]').click();
+  },
+
+  setSlimScrollRightSideBarHeight: function (is_affixed) {
+    var headerHeight = jQuery("#chronus_header_wrapper").height();
+    var topOffset = jQuery('#wob_banner').length > 0 ? jQuery('#wob_banner').outerHeight() : 0;
+    var totalHeight = jQuery(window).height();
+    var titleHeight =  is_affixed? 0 : jQuery('#title_box').outerHeight() + 30; 
+    var sideBarTitle = jQuery('#SidebarRightHomeContent .ibox-title').outerHeight();
+    var sidebarFullHeight = headerHeight + topOffset + titleHeight;
+    jQuery('#SidebarRightHomeContent ').children('.ibox').css('min-height', totalHeight - sidebarFullHeight + 'px')
+    var titleFooterHeight = sideBarTitle + 100;
+    jQuery('.cjs_ibox_content_scroll').css('max-height', totalHeight -( sidebarFullHeight + titleFooterHeight ) + 'px');
+    jQuery('.cjs_ibox_content_scroll').slimScroll({
+      height: '',
+      start: 'top',
+      railVisible: true
+    });
+  },
+
+  setSlimScrollRightSideBar: function() {
+    jQuery(document).ready(function () {
+      if(jQuery('.boxed-layout').length > 0)
+      {
+        jQuery('#SidebarRightHomePage .cui-full-height-sidebar').css('max-width', jQuery('#sidebarRight').width());
+      }
+      GroupTabs.setSlimScrollRightSideBarHeight(jQuery("#SidebarRightHomePage").hasClass('affix'));
+    });
+  },
+
+  showFilterPane: function(mobileView) {
+    if(mobileView){
+      setTimeout(function() {
+        jQuery('#header_actions [data-toggle=offcanvasright]').click()
+      }, 100);
+    }
+    else{
+      jQuery("div#mentors_filters").addClass("animated fadeInRight");
+    }
+  },
+
+  showHideContentInSidebar: function(content) {
+    if(jQuery('.row-offcanvas-right').hasClass('active'))
+    {
+      if(jQuery('[data-toggle=offcanvasright] i#cjs-chevron-header').is(":visible")){
+        jQuery('#SidebarRightContentMobile').html(content);
+      }
+      else{
+        jQuery('#SidebarRightHomeContent').html(content);
+      }
+    }
+    else
+    {
+      if(jQuery('[data-toggle=offcanvasright] i#cjs-chevron-header').is(":visible")){
+        jQuery('#SidebarRightContentMobile').html(content);
+        jQuery('#SidebarRightContainer').hide();
+        jQuery('#header_actions [data-toggle=offcanvasright]').click();
+        jQueryScrollTo("#chronus_header", false, 50);
+      }
+      else{
+        jQuery('#SidebarRightHomeContent').html(content);
+        jQuery('.row-offcanvas-right').toggleClass('active');
+      }
+    }
+    jQuery("#loading_results").hide();
+  },
+
+  adjustSlickSlideHeight: function(slickClass, timeout){
+    if(jQuery(slickClass).length > 0){
+      var slideSelector = jQuery(slickClass + ' .slick-active');
+      carousel.showAdaptiveHeight(slickClass, slideSelector, timeout);
+    }
+  },
+
+  scrollToSidebarBottom: function(bottomContainerClass) {
+    var scrollByVal = jQuery(bottomContainerClass).outerHeight();
+    var contentSelector = jQuery('#SidebarRightHomeContent .cjs_ibox_content_scroll');
+    contentSelector.slimScroll({ scrollBy: scrollByVal});
+    var barPosition = contentSelector.outerHeight();
+    contentSelector.closest('.slimScrollDiv').find('.slimScrollBar').css("top", barPosition + 'px');
+  }
+}
+
+var Announcements = {
+  announcementFooter: function()
+  {
+    // The jQuery below issues an xmlhttp request to get_announcement action of programs controller
+    jQuery('.announcement_footer a').bind('click', function(event){
+      event.preventDefault();
+      jQuery.ajax({
+          url : jQuery(this).attr('href'),
+          beforeSend : function(){
+            jQuery('#announcement img.ajax_loading').show()
+          }
+      });
+    });
+  },
+
+  announcementMarkVisited: function()
+  {
+    jQuery('#remoteModal').on("hide.bs.modal", function(){
+      if(jQuery('#remoteModal .cjs_announcements_container').length > 0) {
+        jQuery.ajax({
+          url : jQuery('#remoteModal').find('.close-link-announcements').data('url')
+        });
+      }
+    });
+  },
+
+  initializeAnnouncementsPopup: function(url)
+  {
+    jQuery('#cjs_announcement_icon').on('click', function(){
+      jQuery(this).addClass('hidden-xs hidden-sm');
+      if(!jQuery("#announcement").is(':visible')){
+        jQueryShowQtip('#inner_content', 675, url, '', {modal: true, largeModal: true});
+      }
+    });
+  },
+
+  initializeAnnouncementsScroll: function()
+  {
+    if(jQuery('.cjs_ibox_content_scroll').length > 0){
+      jQuery('.cjs_ibox_content_scroll').slimScroll({
+        height: '',
+        start: 'top',
+        railVisible: true
+      });
+    }
+    else{
+      jQuery('#announcement .announcements-slick').addClass('no-scroll');
+    }
+  },
+
+  showAdaptiveHeightAnnouncement: function()
+  {
+    jQuery(".announcements-slick").on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+      slideSelector = jQuery('.announcements-slick .slick-slide[data-slick-index="'+nextSlide+'"]');
+      carousel.showAdaptiveHeight(".announcements-slick", slideSelector, 0);
+      jQuery('.announcements-slick .slick-slide[data-slick-index="'+currentSlide+'"] .slick_box').addClass('slick-box-hide');
+      jQuery('.announcements-slick .slick-slide[data-slick-index="'+nextSlide+'"] .slick_box').removeClass('slick-box-hide');
+      Announcements.markAnnouncementAsViewed(jQuery('.announcements-slick .slick-slide[data-slick-index="'+currentSlide+'"] .close-link-announcements').data("url"));
+    });
+  },
+
+  setStatus: function(status)
+  {
+    jQuery('#announcement_status').val(status);
+    return true;
+  },
+
+  saveDraft: function(status)
+  {
+    jQuery(".cjs_draft_submit").click(function() {
+      Announcements.setStatus(1);
+    });
+  },
+
+  confirmEmailNotification: function(currentDate, dontSend)
+  {
+    currentDate = new Date(currentDate);
+    jQuery(".cjs_forun_submit").click(function() {
+      if(!RequiredFields.validate(false, false))
+        return false;
+      var expiryDate = jQuery("#announcements_expiry").data("kendoDatePicker").value();
+      var hasExpired = expiryDate ? expiryDate.setHours(0,0,0,0) < currentDate : false;
+      var isNotificationEnabled = jQuery("#announcement_email_notification").val() != dontSend;
+      if( hasExpired && isNotificationEnabled ){
+        jQuery("#confirm_email_notification").modal('show');
+        return false;
+      }
+      return true;
+    });
+    jQuery(".cjs_submit_announcement_form").click(function() {
+      jQuery("#" + jQuery(this).data("formId")).submit();
+    });
+  },
+
+  disableEmailNotification: function(dontSend)
+  {
+    jQuery("#announcement_email_notification").val(dontSend).trigger('change');
+  },
+
+  handleAnnouncementsClosePopup: function(){
+    jQuery(document).on("click", ".close-link-announcements", function(){
+      Announcements.markAnnouncementAsViewed(jQuery(this).data("url"));
+      jQuery("#remoteModal").modal('hide');
+      jQuery('#remoteModal').removeClass('no-scroll');
+      jQuery('#announcement .announcements-slick').removeClass('no-scroll');
+      jQuery('#cjs_announcement_icon').removeClass("hidden-xs hidden-sm");
+    });
+  },
+
+  markAnnouncementAsViewed: function(url){
+    jQuery.ajax({
+      url : url
+    });
+  }
+};
+
+var MobileFooter = {
+  initializeConnectionPopup: function(buttonClass, url)
+  {
+    jQuery(document).on('click', buttonClass, function(){
+      jQueryShowQtip('#inner_content', 675, url, '', {modal: true});
+    });
+  },
+
+  updateUpcomingMeetingsBadge: function(meetingSelector){
+    jQuery(document).ready(function(){
+      if(jQuery(".btn-primary.cjs_rsvp_confirm[data-meetingselector="+meetingSelector+"]").length > 0)
+      { 
+        var requestsTabElement = jQuery(".cjs_footer_total_requests .cui_footer_menu_badge");
+        var meetingTabElement = jQuery(".cjs_footer_upcoming_meetings .cui_footer_menu_badge");
+        if(requestsTabElement.length > 0)
+        {
+          var updatedRequestsCount = parseInt(requestsTabElement.html()) - 1;
+          var meetingSubTabElement = jQuery(".cjs_footer_upcoming_meetings .badge");
+          var updatedMeetingsCount = parseInt(meetingSubTabElement.html()) - 1;
+          MobileFooter.updateElementCount(updatedRequestsCount, requestsTabElement);
+          MobileFooter.updateElementCount(updatedMeetingsCount, meetingSubTabElement);
+        }
+        else if(meetingTabElement.length > 0)
+        {
+          var updatedMeetingsCount = parseInt(meetingTabElement.html()) - 1;
+          MobileFooter.updateElementCount(updatedMeetingsCount, meetingTabElement);
+        }
+      }
+    });
+  },
+
+  updateElementCount :function(badgeCount, badgeElement){
+    if(badgeCount > 0)
+    {
+      badgeElement.html(badgeCount);
+    }
+    else{
+      badgeElement.html("");
+    }
+  },
+
+  updateMessageCountBadge: function(){
+    jQuery(document).ready(function(){
+      var messageElement = jQuery(".cjs_footer_messages .cui_footer_menu_badge");
+      var submessageElement = jQuery(".cjs_my_messages .badge");
+      var notificationTabElement = jQuery(".cjs_footer_total_requests[data-target=#notifications_modal] .cui_footer_menu_badge");
+      if(messageElement.length > 0)
+      {
+        var messageCount = parseInt(messageElement.html()) - 1;
+        MobileFooter.updateElementCount(messageCount, messageElement);
+      }
+      if(submessageElement.length > 0)
+      {
+        var messageCount = parseInt(submessageElement.html()) - 1;
+        MobileFooter.updateElementCount(messageCount, submessageElement);
+      }
+      if(notificationTabElement.length > 0)
+      {
+        var notificationTabCount = parseInt(notificationTabElement.html()) - 1;
+        MobileFooter.updateElementCount(notificationTabCount, notificationTabElement);
+      }
+    });
+  }
+};
+
+var MobileAppTracking = {
+  gaTrackOpenedApp: function(eventLabel, eventLabelId){
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MOBILE_APP_SIGNIN_WORKFLOW, chrGoogleAnalytics.action.GA_MOBILE_OPENED_APP, eventLabel, eventLabelId);
+  },
+
+  gaTrackEnteredProgramUrl: function(eventLabel, eventLabelId){
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MOBILE_APP_SIGNIN_WORKFLOW, chrGoogleAnalytics.action.GA_MOBILE_ENTERED_PROGRAM_URL, eventLabel, eventLabelId);
+  },
+
+  gaTrackViewedNonLoggedInPage: function(eventLabel, eventLabelId){
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MOBILE_APP_SIGNIN_WORKFLOW, chrGoogleAnalytics.action.GA_MOBILE_VIEWED_NON_LOGGED_IN_PAGE, eventLabel, eventLabelId);
+  },
+
+  gaTrackLoggedIn: function(eventLabel, eventLabelId){
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MOBILE_APP_SIGNIN_WORKFLOW, chrGoogleAnalytics.action.GA_MOBILE_LOGGED_IN, eventLabel, eventLabelId);
+  },
+
+  gaTrackSignedUp: function(eventLabel, eventLabelId){
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MOBILE_APP_SIGNIN_WORKFLOW, chrGoogleAnalytics.action.GA_MOBILE_SIGNED_UP, eventLabel, eventLabelId);
+  },
+
+  gaTrackClickedFakedoorLink: function(eventLabel, eventLabelId){
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MOBILE_APP_SIGNIN_WORKFLOW, chrGoogleAnalytics.action.GA_MOBILE_CLICKED_FAKEDOOR, eventLabel, eventLabelId);
+  },
+
+  gaTrackClickedEnterProgramURL: function(eventLabel, eventLabelId){
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MOBILE_APP_SIGNIN_WORKFLOW, chrGoogleAnalytics.action.GA_MOBILE_CLICKED_ENTER_PROGRAM_URL, eventLabel, eventLabelId);
+  },
+
+  gaTrackClickedSignUp: function(eventLabel, eventLabelId){
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MOBILE_APP_SIGNIN_WORKFLOW, chrGoogleAnalytics.action.GA_MOBILE_CLICKED_SIGN_UP, eventLabel, eventLabelId);
+  },
+
+  gaTrackEnteredEmailAddress: function(eventLabel, eventLabelId){
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MOBILE_APP_SIGNIN_WORKFLOW, chrGoogleAnalytics.action.GA_MOBILE_ENTERED_EMAIL_ADDRESSS, eventLabel, eventLabelId);
+  },
+
+  gaTrackClickedEmailAddressBackLink: function(eventLabel, eventLabelId){
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MOBILE_APP_SIGNIN_WORKFLOW, chrGoogleAnalytics.action.GA_MOBILE_CLICKED_EMAIL_ADDRESS_BACK_LINK, eventLabel, eventLabelId);
+  },
+
+  gaTrackClickedLogintoProgramFromEmail: function(eventLabel, eventLabelId){
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MOBILE_APP_SIGNIN_WORKFLOW, chrGoogleAnalytics.action.GA_CLICKED_LOGIN_TO_PROGRAM_FROM_EMAIL, eventLabel, eventLabelId);
+  }
+}
+
+var UserListing = {
+  paginationRequest: function()
+  {
+    jQuery('#results_pane .pagination a').bind('click', function(event){
+      event.preventDefault();
+      jQuery('#search_filter_form .page').val(jQuery(this).attr('data-page'));
+      jQuery('#search_filter_form .reset_page').val(false);
+      MentorSearch.applyFilters();
+    });
+  },
+
+  initializePendingRequestsPopup: function(buttonClass, url){
+    jQuery(document).on('click', buttonClass, function(){
+      jQueryShowQtip('#inner_content', 675, url,'',{modal: true});
+    });
+  },
+
+  enableScrollRequestPopup: function(){
+    setTimeout(function() {
+      jQuery('.cjs_pending_requests').on('click', '.cjs_see_more_link', function(){
+        jQuery('.modal-body').css('overflowY','auto');
+      });
+    }, 100);
+  },
+
+  showMatchConfigSummaryPopup: function(){
+    jQuery('.cjs-show-match-config-summary').unbind('click').on('click', function(){
+      jQueryShowQtip(null, null, jQuery(this).data('url'), {}, {largeModal: true});
+    });
+  }
+};
+
+var RecentActivities = {
+  RATabSwitch: function(within_program){
+    /*
+    * Register tab switching logic for recent activities.
+    **/
+    jQuery(document).on('click', '.act_tabs li', function() {
+        curElem = jQuery(this);
+        var tabContainer = curElem.parent();
+        var tabItems = tabContainer.children('li');
+        var contentItems = tabContainer.nextAll('.pane_tab_contents').children('.item');
+        var itemIndex = tabItems.index(curElem);
+        var contentEle = contentItems[itemIndex].children[0];
+        if(!jQuery(contentEle).hasClass("loaded"))
+        {
+          var load_url = jQuery(contentEle).attr("load_url");
+
+          jQuery.ajax({
+            url: load_url,
+            success: function(){
+              jQuery(contentEle).addClass("loaded");
+            }
+          });
+        }
+        else if(within_program)
+        {
+          var update_url = jQuery(contentEle).attr("update_url");
+          jQuery.ajax({
+            url: update_url,
+            data: "tab_order="+itemIndex
+          });
+        }
+        for(var i = 0; i < tabItems.length; i++) {
+          if (i == itemIndex) {
+            jQuery(contentItems[i]).show();
+            jQuery(tabItems[i]).addClass('active');
+          }
+          else {
+            jQuery(contentItems[i]).hide();
+            jQuery(tabItems[i]).removeClass('active');
+          }
+        }
+    });
+  },
+
+  //this is used for endless scrolling of pages in programs home page, organization home page, mentoring activity page.
+  // TODO: Convert [].click references to jquery.click after completly removing prototype. At present we couldn't figure
+  // out a way to fire the click event using jquery for the below scenarios.
+  check_and_load_RA: function() {
+    if (jQuery("#cjs_show_more_all_activities").is(":visible")) {
+      jQuery("#cjs_show_more_all_activities")[0].click();
+    }
+    else if (jQuery("#cjs_show_more_my_activities").is(":visible")) {
+      jQuery("#cjs_show_more_my_activities")[0].click();
+    }
+    else if (jQuery("#cjs_show_more_conn_activities").is(":visible")) {
+      jQuery("#cjs_show_more_conn_activities")[0].click();
+    }
+    else if (jQuery("#group .more_link").is(":visible")) {
+      jQuery(".more_link")[0].click();
+    }
+  },
+
+  repeatCheckScroll: function(frequency) {
+    var stopval = setInterval( function() {
+
+    //calculate the number of tabs being displayed and number of no content 'div's displayed
+    //if they are equal OR you nocontent in groups i.e mentoring area then stop javascript
+      var num_nocontent = jQuery(".recent_activities .no_content").length;
+      var num_panetabs = jQuery(".pane_tabs .item").length;
+      if((num_nocontent == num_panetabs && num_panetabs != 0) || jQuery("#group .no_content").is(":visible")) {
+        clearInterval(stopval);
+        return;
+      }
+      computePageScroll.checkScroll(RecentActivities.check_and_load_RA, 100); }, frequency);
+  }
+};
+
+var PreviewQuestions = {
+  roleCheckboxes: "input:checkbox[name='role_names[]']",
+  roleCheckboxesChecked: "input:checkbox[name='role_names[]']:checked",
+
+  initializeRoleChange: function(url, programId) {
+    jQuery(PreviewQuestions.roleCheckboxes).on("change", function(){
+      PreviewQuestions.handleRoleChange(url, programId);
+    });
+  },
+
+  handleRoleChange: function(url, programId) {
+    var filterDetails = {};
+    filterDetails['role'] = collectVals(PreviewQuestions.roleCheckboxesChecked);
+    filterDetails['program'] = programId;
+
+    jQuery.ajax({
+      url: url,
+      data: {'filter' : filterDetails},
+      beforeSend: function(){
+        jQuery('#loading_results').show();
+      },
+      success: function(){
+        jQuery('#loading_results').hide();
+      }
+    });
+  }
+};
+
+var MentoringSessions = {
+  filterFormSubmit: function(){
+    jQuery('#loading_results').show();
+    jQuery('#meeting_report_filter_form').submit();
+  },
+
+  loadFeedbackPopup: function(hashed_feedback_id){
+    url = jQuery(hashed_feedback_id +" a").attr("feedback_popup");
+    jQueryShowQtip(hashed_feedback_id,485, url,"", {modal: true});
+    jQueryBlind('#archived_meetings', 'show');
+  },
+
+  checkAndApplyFilter: function(elementId, isCheckBox){
+    jQuerySelectBox(elementId, isCheckBox);
+    MentoringSessions.filterFormSubmit();
+  }
+};
+
+var ProgramHealthReport = {
+  filterFormClose: function(filtersId){
+    ChronusEffect.ExpandSection(filtersId, [], true);
+  },
+
+  validateDateRange:function(date_id,flashId,format){
+    if (DateValidator.validateProperDate(date_id,flashId,format) && DateValidator.validateDateFormat(date_id,flashId,format)){
+      ChronusValidator.ErrorManager.ClearResponseFlash(flashId);
+    }
+    else{
+      return false;
+    }
+    ValidateRequiredFields.hideFieldError(jQuery('#'+date_id));
+    return true;
+  }
+};
+
+var ProfileQuestionPreview = {
+  formTypeBitmask: 2,
+  programBasedItems: 4,
+  selectProgramBitmask: 8,
+  canPreviewMembershipForm: false,
+  previousFormType: '',
+
+  setResetHideBitmaskForElement: function(element, bit, set) {
+    var initialVal = jQuery(element).data("hide-bitmask");
+    if(set) jQuery(element).data("hide-bitmask", initialVal | bit);
+    else jQuery(element).data("hide-bitmask", initialVal & (~bit));
+  },
+  setResetHideBitmask: function(selector, bit, set) {
+    jQuery.each(jQuery(selector), function(index, element) {
+      ProfileQuestionPreview.setResetHideBitmaskForElement(element, bit, set);
+    });
+  },
+  handleFormTypeChange: function() {
+    var selectedPreviewType = jQuery("input.cjs-preview-form-type:checked").val();
+    var membershipFormPreviewSelected = (selectedPreviewType == "<%= ProfileQuestionsController::PreviewType::MEMBERSHIP_FORM %>");
+    var userProfileFormPreviewSelected = (selectedPreviewType == "<%= ProfileQuestionsController::PreviewType::USER_PROFILE_FORM %>");
+    var formTypeSelected = (membershipFormPreviewSelected || userProfileFormPreviewSelected);
+    ProfileQuestionPreview.setResetHideBitmask(".cjs-viewer-role-container, .cjs-connected-status-container", ProfileQuestionPreview.formTypeBitmask, formTypeSelected);
+    ProfileQuestionPreview.setResetHideBitmask(".cjs-user-profile-preview-program-select-container", ProfileQuestionPreview.selectProgramBitmask, membershipFormPreviewSelected);
+    ProfileQuestionPreview.setResetHideBitmask(".cjs-membership-preview-program-select-container", ProfileQuestionPreview.selectProgramBitmask, !membershipFormPreviewSelected);
+    jQuery(".cjs-role-of-viewed-user-label").text(jQuery(".cjs-role-of-viewed-user-label").data(formTypeSelected ? 'form-text' : 'profile-text'));
+    if(membershipFormPreviewSelected && ProfileQuestionPreview.previousFormType != "<%= ProfileQuestionsController::PreviewType::MEMBERSHIP_FORM %>") {
+      var targetVal = jQuery("#program_select_membership_profile").val();
+      jQuery("#program_select_membership_profile").val('').change();
+      if(jQuery("#program_select_membership_profile option[value='" + jQuery("#program_select_user_profile").val() + "']").length > 0) {
+        targetVal = jQuery("#program_select_user_profile").val();
+      }
+      jQuery("#program_select_membership_profile").val(targetVal).change();
+    }
+    if(!membershipFormPreviewSelected && ProfileQuestionPreview.previousFormType == "<%= ProfileQuestionsController::PreviewType::MEMBERSHIP_FORM %>") {
+      if(jQuery("#program_select_membership_profile").val()) jQuery("#program_select_user_profile").val(jQuery("#program_select_membership_profile").val()).change();
+    }
+    ProfileQuestionPreview.updateUiObjectsVisibility();
+    ProfileQuestionPreview.previousFormType = selectedPreviewType;
+  },
+  handleProgramChange: function() {
+    jQuery.each(jQuery(".cjs-viewer-role-container, .cjs-role-container"), function(index, element) {
+      var jqElement = ((jQuery("#program_select_membership_profile").closest(".cjs-program-select-container").data("hide-bitmask") == 0) ? jQuery("#program_select_membership_profile") : jQuery("#program_select_user_profile"));
+      ProfileQuestionPreview.setResetHideBitmaskForElement(element, ProfileQuestionPreview.programBasedItems, jQuery(element).data("program-id") != jqElement.val());
+    });
+    ProfileQuestionPreview.updateUiObjectsVisibility();
+  },
+  updateUiObjectsVisibility: function() {
+    jQuery.each(jQuery(".cjs-general-container"), function(index, element) {
+      jQuery(element).toggle(jQuery(element).data("hide-bitmask") == 0);
+    });
+  },
+  handlePreviewInvoke: function() {
+    var filterDetails = {};
+    var selectedPreviewType = jQuery("input.cjs-preview-form-type:checked").val();
+    var membershipFormPreviewSelected = (selectedPreviewType == "<%= ProfileQuestionsController::PreviewType::MEMBERSHIP_FORM %>");
+    var userProfileFormPreviewSelected = (selectedPreviewType == "<%= ProfileQuestionsController::PreviewType::USER_PROFILE_FORM %>");
+    var programId = jQuery((membershipFormPreviewSelected ? "#program_select_membership_profile" : "#program_select_user_profile")).val();
+    filterDetails['role'] = collectVals("input[name='role[" + programId + "]']:checked");
+    filterDetails['program'] = programId;
+    filterDetails['viewer_role'] = (userProfileFormPreviewSelected ? [] : collectVals("input[name='viewer_role[" + programId + "]']:checked"));
+    filterDetails['should_be_connected'] = jQuery("input[name='are_they_connected']:checked").val();
+
+    jQuery.ajax({
+      url: jQuery("input[name='preview_type']:checked").data('url'),
+      data: {'filter' : filterDetails, 'preview_type' : selectedPreviewType},
+      beforeSend: function(){
+        jQuery('#loading_results').show();
+      },
+      success: function(){
+        jQuery('#loading_results').hide();
+      }
+    });
+    return false;
+  },
+  init: function() {
+    if(ProfileQuestionPreview.canPreviewMembershipForm == false) {
+      jQuery(".cjs-preview-membership-form-radio-container").removeClass("inline").hide();
+    }
+    jQuery(document).on("change", "input.cjs-preview-form-type", function(){ ProfileQuestionPreview.handleFormTypeChange() });
+    ProfileQuestionPreview.handleFormTypeChange();
+    jQuery(document).on("change", ".cjs-program-selector", function(){ ProfileQuestionPreview.handleProgramChange() });
+    ProfileQuestionPreview.handleProgramChange();
+    jQuery(document).on("click", ".cjs-invoke-preview", function(){ ProfileQuestionPreview.handlePreviewInvoke() });
+    ProfileQuestionPreview.updateUiObjectsVisibility();
+  }
+};
+
+var MentorRequestsListing = {
+  clearFilter: function(reset_id)
+  {
+    jQuery("#filter_pane").find('#reset_filter_' + reset_id).trigger('click');
+  }
+};
+
+var BulkAction = {
+  showMoreUsers: function(){
+    jQuery("#cjs_first_five_users a#cjs_show_more_link").click(function(event){
+      event.preventDefault();
+      jQuery("#cjs_first_five_users").addClass('hide');
+      jQuery("#cjs_all_users_list").removeClass('hide');
+    });
+  }
+};
+
+var calendarSlot = {
+  initialize: function(member_id, daily_option, monthly_option){
+    var rand = Math.floor(Math.random()*1000);
+    var mentSlotNew = jQuery('#mentoring_slots_list_'+member_id).find('.mentoring_slot:last');
+    var selector = '#ment_slots_'+member_id+'_new_mentoring_slot_attributes__repeats_every_option'+rand;
+    calendarSlot.resetIdAndLabelForAttribute(mentSlotNew, rand);
+    calendarSlot.resetEventHandlers(selector, daily_option, monthly_option);
+    initialize.setDatePicker();
+  },
+  // to reset the new slot ids and label for attribute
+  resetIdAndLabelForAttribute: function(component, rand){
+    component.find("label").each(function(){
+      if (!(jQuery(this).hasClass("checkbox")) && !(jQuery(this).hasClass("radio"))){
+        appendRandToAttribute(jQuery(this), "for", rand);
+      }
+    });
+    component.find('input, textarea, select').each(function(){
+      if (!(jQuery(this).attr('type')=="checkbox") && !(jQuery(this).attr('type')=="radio")){
+        appendRandToAttribute(jQuery(this), "id", rand);
+      }
+    });
+  },
+  // to reset the eventhandlers specific to the new slot
+  resetEventHandlers: function(selector, daily_option, monthly_option){
+    MentoringSlotForm.toggleEndDate(selector, '.mentoring_slot');
+    MentoringSlotForm.toggleDayListing(daily_option, selector, '.mentoring_slot');
+    MentoringSlotForm.toggleMonthOptions(monthly_option, selector, '.mentoring_slot');
+  },
+  changeEndTime: function(time_slot_options, slot_duration_numbers, start_time_element, end_time_element, time_slot_values) {
+    var time_slot_array = time_slot_options.split(',');
+    time_slot_array_size = time_slot_array.length;
+    jQuery(end_time_element).empty(); //Clear options if there are any already existing ones.
+    var start_index, end_time_start_index;
+    if (time_slot_values === undefined){
+      time_slot_values_array = time_slot_array;
+      start_index = jQuery.inArray(jQuery(start_time_element).val(), time_slot_array);
+      if (start_index == (time_slot_array_size -1)) {
+        end_time_start_index = 0;
+      }
+    }
+    else{
+      time_slot_values_array = time_slot_values.split(',');
+      start_index = jQuery.inArray(jQuery(start_time_element).val(), time_slot_values_array);
+    }
+    if (end_time_start_index == undefined){
+      end_time_start_index = start_index + parseInt(slot_duration_numbers) + 1;
+    }
+    for( i=end_time_start_index; i< time_slot_array_size; i++ ) {
+      jQuery(end_time_element).append("<option value="+'"'+time_slot_values_array[i]+'"'+">"+ time_slot_array[i] +"</option>");
+    }
+  },
+  toggleCalendarForm: function(){
+    jQuery('div.ui-tooltip div#meeting_form_container').toggle();
+    jQuery('div.ui-tooltip div#availability_slot_form_container').toggle();
+  },
+  setAutoCompleteValue: function(){
+    if (jQuery('#student_name_auto_complete_for_meeting').val() == ""){
+      jQuery('.cjs_auto_complete_meeting_attendee_ids').val("");
+    }
+  },
+  updateAttendees: function(element, item){
+    jQuery(".cjs_auto_complete_meeting_attendee_ids").val(item["user-id"]);
+  },
+  renameMentSlotFields: function() {
+    var searchDivs = [{
+      divClass : '.mentoring_slot',
+      inputName : 'new_mentoring_slot_attributes'
+    }];
+
+    jQuery.each(searchDivs, function(allDivInd, allDivVal){
+      jQuery(allDivVal.divClass).each(function(divInd, divVal){
+        calendarSlot.mentoringSlotRegexReplace(divInd, divVal, allDivVal);
+      });
+    });
+  },
+  // rename the new slots added with unique ids
+  mentoringSlotRegexReplace: function(divInd, divVal, allDivVal){
+    var regex = new RegExp(/^ment_slots\[(\d+)\]\[/.source + (new RegExp(allDivVal.inputName)).source + /]\[\]\[(\w+)]$/.source);
+    var regex1 = new RegExp(/^ment_slots\[(\d+)\]\[/.source + (new RegExp(allDivVal.inputName)).source + /]\[\]\[(\w+)]\[\]$/.source);
+    var matchingElements = calendarSlot.findMatchingElements(divVal, regex);
+    var matchingElements1 = calendarSlot.findMatchingElements(divVal, regex1);
+
+    //for the elements with same name string, rename them
+    calendarSlot.renameMatchingElements(matchingElements, divInd, allDivVal, regex, false);
+    calendarSlot.renameMatchingElements(matchingElements1, divInd, allDivVal, regex1, true);
+  },
+  findMatchingElements: function(divVal, regex){
+    var elements = jQuery(divVal).find(':input').filter(function() {
+      return (jQuery(this).attr('name') && jQuery(this).attr('name').match(regex));
+    });
+    return elements;
+  },
+  renameMatchingElements: function(matchingElements, divInd, allDivVal, regex, is_array){
+    matchingElements.each(function(index) {
+      var nameDetails = jQuery(this).attr('name').match(regex);
+      var newName = 'ment_slots[' + nameDetails[1] + '][' + allDivVal.inputName + '][][' + (divInd + 1) + '][' + nameDetails[2] + ']';
+      if (is_array) {
+        newName += '[]';
+      }
+      jQuery(this).attr('name', newName);
+    });
+  }
+};
+
+
+var ChangePasswordSettings = {
+  validateChangePasswordSettings: function(formObject, selector){
+    var isValid = true;
+    jQuery(".cjs_password_submit").attr('disabled', true);
+    jQuery.each(selector,function(fieldIndex, field){
+      isfieldValid = ValidateRequiredFields.checkNonMultiInputCase(jQuery(field));
+      isValid = isValid && isfieldValid;
+     });     
+      if (!isValid) {
+        ChronusValidator.ErrorManager.ShowPageFlash(false, jsCommonTranslations.fillRequiredFields);
+      }
+      else {
+        isValid = ChangePasswordSettings.validateConfirmPassword();
+      }    
+      if (isValid) {
+        formObject.submit();
+      }
+      else {
+        jQuery(".cjs_password_submit").removeAttr('disabled');
+      }
+  },
+
+  validateConfirmPassword: function(){
+    if(jQuery("#member_password").val() != jQuery("#member_password_confirmation").val()) {
+      ChronusValidator.ErrorManager.ShowFieldError(jQuery("#member_password"));
+      ChronusValidator.ErrorManager.ShowFieldError(jQuery("#member_password_confirmation"));
+      ChronusValidator.ErrorManager.ShowPageFlash(false, jsCommonTranslations.fixPasswordError);
+      return false;
+    }
+    return true;  
+  }
+}
+
+
+
+var AccountLockout = {
+  inspectUnblocklinks: function(){
+    jQuery(".cjs_unblock_links").click(function(){
+      jQuery(this).closest(".cjs_actions").find("img.spinner").removeClass("invisible");
+    });
+  },
+
+  refreshLockoutListing: function(content){
+    jQuery("#cjs_lockout_listing_enclosure").html(content);
+  }
+};
+
+var SecuritySettings = {
+  initialize: function(){
+    jQuery(document).ready(function(){
+      SecuritySettings.toggleHiddenState();
+      SecuritySettings.setValues();
+      SecuritySettings.addOneMore();
+      SecuritySettings.removeAllowedIP();
+    });
+  },
+
+  toggleHiddenState: function(){
+    jQuery(".cjs_primary_checkbox").change(function(){
+      var siblings = jQuery(this).closest(".controls").find(".cjs_hidden_control");
+      SecuritySettings.toggleState(siblings, jQuery(this).is(":checked"));
+    });
+  },
+
+  toggleState: function(controlObjs, state){
+    state ? controlObjs.removeClass("hide") : controlObjs.addClass("hide");
+  },
+
+  setValues: function(){
+    jQuery(".cjs_set_value_checkbox").change(function(){
+      var checkBox = jQuery(this);
+      if(checkBox.is(":checked")){
+        SecuritySettings.setDefaultValue(checkBox);
+      }
+    })
+  },
+
+  setDefaultValue: function(checkBoxObj){
+    var defaultValue = checkBoxObj.attr("data-value");
+    var input = checkBoxObj.closest(".cjs_group_enclosure").find(".cjs_value_recepient");
+    input.val(defaultValue);
+  },
+
+  addOneMore: function(){
+    jQuery(document).on("click", "a.cjs_add_one_more_link", function(event){
+      event.preventDefault();
+      var controlBlock = jQuery(this).closest(".controls");
+      var oldComponent = controlBlock.find("div#cjs_add_one_more_div").find("div");
+      var newComponent = oldComponent.clone();
+      oldComponent.closest("div.cjs_controls_enclosure").append(newComponent);
+      newComponent.find("input").val('');
+      newComponent.find(".cjs_allowed_ip").show();
+      LinkLabelToInput.updateIdAndLabelForAttribute(newComponent);
+    });
+  },
+
+  removeAllowedIP: function(){
+    jQuery(document).on("click", ".cjs_allowed_ip", function(){
+      jQuery(this).closest("div").remove();
+    });
+  }
+};
+
+var ProgramInvitation = {
+  validateRequiredField: function(formId){
+    var submitButton = "#" + formId + " input[type=submit]";
+    jQuery(document).on('click', submitButton, function(){
+      var form = jQuery("#" + formId);
+      roleList = form.find(".cjs_roles_list")
+      return RequiredFields.checkMultiSelectCase(roleList, roleList.find("input[type=checkbox]"));
+    });
+  },
+
+  validateInviteWithRecipients: function(){
+    jQuery(document).on("click", "#cjs_send_invites", function(){
+      var recipientValid = true;
+      var roleValid = true;
+      if(jQuery("#cjs_recipients").length > 0){
+        recipientValid = RequiredFields.checkNonMultiInputCase(jQuery("#cjs_recipients"));
+      }
+      inviteMemberToProgramContainer = jQuery("#role_btn_group_invite");
+      if(inviteMemberToProgramContainer.length > 0){
+        rolesList = inviteMemberToProgramContainer.find(".cjs_roles_list");
+        roleValid = RequiredFields.checkMultiSelectCase(rolesList, inviteMemberToProgramContainer.find(".cjs_roles_list input[type=radio]"));
+        if(roleValid) {
+          checkboxes = rolesList.find("input[type=radio]:checked").closest("div").find("input[type=checkbox]");
+          roleValid = RequiredFields.checkMultiSelectCase(rolesList, checkboxes);
+        }
+      }
+      return recipientValid && roleValid;
+    });
+  },
+
+  handleProgramChange: function(selectBoxId, linkId, type){
+    var pid = jQuery(selectBoxId).val();
+    var linkToEmail = jQuery(selectBoxId).find('option:selected').data('follow_link');
+    jQuery(linkId).attr('href', linkToEmail);
+    jQuery.ajax({
+      url : jQuery("#role_btn_group_"+ type).data("url") + "?" + jQuery.param({program_id: pid})
+    });
+  },
+
+  initializeProgramChange: function(selectBoxId, linkId, type){
+    jQuery(selectBoxId).on("change", function(){
+      ProgramInvitation.handleProgramChange(selectBoxId, linkId, type);
+    });
+  },
+
+  prefillRecipientAndRoles: function(roles, email) {
+    jQuery("#cjs_recipients").val(email);
+    jQuery("#role_assign_roles").prop("checked", true);
+    jQuery("#role_assign_roles").click();
+    for(i=0; i<roles.length; i++){
+      jQuery("#cjs_assign_roles").find(jQuery("input:checkbox[value=" + roles[i] + "]")).prop("checked", true);
+    }
+  },
+
+  handleLanguageSelectOptions: function() {
+    jQuery(function() {
+      jQuery(".cjs_language_options_show_link").click(function() {
+        jQuery(".cjs_language_options_available_notifier").hide();
+        jQuery(".cjs_language_options_for_invitations_select").show();
+      });
+    });
+  }
+};
+
+var ConnectionFeatures = {
+  showAddFormOnLoad: function(paneHeader, paneContent){
+    jQuery(paneHeader).click();
+    jQueryHighlight(paneContent);
+  }
+};
+
+var NewProgramForm = {
+  base_id: "source_program",
+
+  toggleSelector: function (method) {
+    // Full copy conrols
+    var program_div = jQuery("#" + NewProgramForm.base_id + "_div");
+    var program_select = jQuery("#" + NewProgramForm.base_id + "_id");
+    if("all" != method) {
+      program_div.hide();
+      program_select.attr("disabled", "disabled");
+    } else {
+      program_div.show();
+      program_select.removeAttr("disabled", "disabled");
+    }
+    // Custom copy conrols
+    if("custom" != method) {
+    } else {
+    }
+  },
+
+  submitWithIgnoreCloneWarning: function () {
+    NewProgramForm.closeWarningsPopup();
+    var form = jQuery('form#new_program');
+    form.append(jQuery("<input>", { name: 'ignore_clone_warning', type: 'hidden', value: 'true' }));
+    form.submit();
+  },
+
+  closeWarningsPopup: function () {
+    jQuery('#confirm_warnings_popup').dialog('close');
+  },
+
+  initWarningsPopup: function () {
+    jQuery("#confirm_warnings_popup").dialog({
+      modal: true,
+      width: 650,
+      resizable: false,
+      show: "blind"
+    });
+  },
+
+  init: function (clone_method) {
+    NewProgramForm.toggleSelector(clone_method);
+    var methods = ["nothing", "all", "custom"];
+    jQuery.each(methods, function (i, method) {
+      jQuery("#clone_method_" + method).on("click", function () {
+        NewProgramForm.toggleSelector(method);
+      });
+    });
+  }
+};
+
+var Placeholder = {
+  init: function(selector) {
+    if(!Modernizr.input.placeholder){
+    	jQuery(selector).focus(function() {
+    	  var input = jQuery(this);
+    	  if (input.val() == input.attr('placeholder')) {
+    		input.val('');
+    		input.removeClass('placeholder');
+    	  }
+    	}).blur(function() {
+    	  var input = jQuery(this);
+    	  if (input.val() == '' || input.val() == input.attr('placeholder')) {
+    		input.addClass('placeholder');
+    		input.val(input.attr('placeholder'));
+    	  }
+    	}).blur();
+    	jQuery(selector).parents('form').submit(function() {
+        Placeholder.cleanBeforeSubmit(this);
+    	});
+    }
+  },
+  cleanBeforeSubmit: function(form) {
+	  jQuery(form).find('[placeholder]').each(function() {
+		var input = jQuery(this);
+		if (input.val() == input.attr('placeholder')) {
+		  input.val('');
+		}
+	  })
+  }
+}
+
+var ChangeRoles = {
+  checkboxCanBeEnabled: {},
+  checkboxInitiallyChecked: [],
+  roles: [],
+
+  setHiddenFieldValue: function(value){
+    jQuery('#hidden_roles').val(value);
+  },
+
+  disableIFOnlyOneRoleChecked: function(){
+    var checkedCheckboxes = jQuery(".change_roles_checkbox:checked");
+    switch(checkedCheckboxes.length) {
+      case 0:
+        ChangeRoles.setHiddenFieldValue('');
+        break;
+      case 1:
+        checkedCheckboxes.attr("disabled", true);
+        //Show tooltip and help icon
+        checkedCheckboxes.parent().tooltip('enable');
+        checkedCheckboxes.siblings(".fa-info-circle").removeClass('invisible');
+        ChangeRoles.setHiddenFieldValue(checkedCheckboxes.val());
+        break;
+      default:
+        ChangeRoles.setHiddenFieldValue(ChangeRoles.rolesToString(checkedCheckboxes));
+        for (var i = 0; i < ChangeRoles.roles.length; i++) {
+          var role = ChangeRoles.roles[i];
+          if(ChangeRoles.checkboxCanBeEnabled[role]){
+            ChangeRoles.enableCheckboxAndHideHelpText("change_" + role + "_role");
+          }
+        }
+        break;
+    }
+  },
+
+  enableCheckboxAndHideHelpText: function(checkboxLableId){
+    var checkboxLable = jQuery("#"+checkboxLableId);
+    checkboxLable.children(".change_roles_checkbox").removeAttr('disabled');
+    checkboxLable.tooltip('disable');
+    checkboxLable.children('.fa-info-circle').addClass('invisible');
+  },
+
+  setAndHideDefaultHelpText: function(checkboxLableId, tooltipText){
+    var checkboxLable = jQuery("#"+checkboxLableId);
+    checkboxLable.tooltip({title: tooltipText});
+    checkboxLable.tooltip('disable');
+    checkboxLable.children('.fa-info-circle').addClass('invisible');
+  },
+
+  setDefaultValues: function(tooltipText){
+    jQuery(".change_roles_checkbox:checked").each(function(){
+      ChangeRoles.checkboxInitiallyChecked.push(jQuery(this).val());
+    });
+    for (var i = 0; i < ChangeRoles.roles.length; i++) {
+      var role = ChangeRoles.roles[i];
+      var canBeEnabled = !jQuery("#role_names_" + role).is(':disabled');
+      ChangeRoles.checkboxCanBeEnabled[role] = canBeEnabled;
+      if (canBeEnabled) {
+        ChangeRoles.setAndHideDefaultHelpText("change_" + role + "_role", tooltipText);
+      }
+    };
+    ChangeRoles.disableIFOnlyOneRoleChecked();
+  },
+
+  setHiddenFieldValuesAndDisableCheckbox: function(){
+    jQuery(".change_roles_checkbox").on("click" ,function() {
+      ChangeRoles.disableIFOnlyOneRoleChecked();
+    });
+  },
+
+  roleChangesMade: function(errorMessage){
+    jQuery(".cjs_submit").on("click" ,function() {
+      var checkedRoles = [];
+      jQuery(".change_roles_checkbox:checked").each(function(){
+        checkedRoles.push(jQuery(this).val());
+      });
+      var rolesNotChanged = jQuery(checkedRoles).not(ChangeRoles.checkboxInitiallyChecked).length == 0 && jQuery(ChangeRoles.checkboxInitiallyChecked).not(checkedRoles).length == 0;
+      if(rolesNotChanged){
+        ChronusValidator.ErrorManager.ShowResponseFlash("change_roles_popup_flash_container", errorMessage);
+        return false;
+      }
+      else{
+        ChronusValidator.ErrorManager.ClearResponseFlash("change_roles_popup_flash_container");
+      }
+    });
+  },
+
+  rolesToString: function(checkedCheckboxes){
+    var checkedRoles = [];
+    checkedCheckboxes.each(function() {
+      checkedRoles.push(jQuery(this).val());
+    });
+    return checkedRoles.toString();
+  },
+
+  setRoles: function(roles){
+    ChangeRoles.roles = JSON.parse(roles);
+  }
+};
+
+var Posts = {
+  declinePost : function() {
+    jQuery(".cjs_decline_btn").on("click", function(event){
+      event.preventDefault();
+      jQueryShowQtip('#inner_content', 600, jQuery(this).attr("href"), '', {modal: true})
+    });
+  },
+
+  declineFormValidation : function() {
+    jQuery("form#decline_form input[type=submit]").on("click", function() {
+      var reasonObj = jQuery(this).closest("form#decline_form").find("#reason");
+      if(reasonObj.val().blank()){
+        ChronusValidator.ErrorManager.ShowFieldError(reasonObj);
+        return false;
+      }
+    });
+  }
+}
+
+var ProfileFields = {
+  fieldIds: [],
+  scopedFieldIds: {},
+
+  addScopedField: function(scope, fieldId) {
+    ProfileFields.scopedFieldIds[scope] = ProfileFields.scopedFieldIds[scope] || [];
+    ProfileFields.scopedFieldIds[scope].push(fieldId);
+  },
+
+  getFieldsarray: function(scope){
+    var fieldsArray = [];
+    if (scope) {
+      fieldsArray = ProfileFields.scopedFieldIds[scope] || [];
+    }
+    else {
+      fieldsArray = ProfileFields.fieldIds;
+    }
+    return fieldsArray;
+  },
+
+  validateTextOnly: function(scope) {
+    var fieldsArray = this.getFieldsarray(scope);
+    var valid = true;
+    var currentElement;
+
+    for(var i = 0; i < fieldsArray.length; i++){
+      currentElement = jQuery('#' + fieldsArray[i]);
+      if(currentElement.children().length > 0) {
+        valid = this.handleMultiFieldTextOnly(currentElement, valid);
+      }
+      else {
+        valid = this.handleSingleFieldTextOnly(currentElement, valid);
+      }
+    }
+    return valid;
+  },
+
+  handleSingleFieldTextOnly: function(currentElement, valid) {
+    if(currentElement.val().match(/\d/)) {
+      ChronusValidator.ErrorManager.ShowFieldError(currentElement);
+      this.showTextOnlyError(currentElement);
+      valid = false;
+    } else {
+      ChronusValidator.ErrorManager.HideFieldError(currentElement);
+      this.hideTextOnlyError(currentElement);
+    }
+    return valid;
+  },
+
+  handleMultiFieldTextOnly: function(currentElement, valid) {
+    var multiFieldsArray = currentElement.find('input');
+    var multiFieldValid = true;
+
+    for(var i = 0; i < multiFieldsArray.length; i++){
+      var multi_field = jQuery(multiFieldsArray[i]);
+
+      if(multi_field.val().match(/\d/)) {
+        ChronusValidator.ErrorManager.ShowFieldError(multi_field);
+        valid = false;
+        multiFieldValid = false;
+      } else {
+        ChronusValidator.ErrorManager.HideFieldError(multi_field);
+      }
+    }
+    if(!multiFieldValid) {
+      this.showTextOnlyError(currentElement);
+    } else {
+      this.hideTextOnlyError(currentElement);
+    }
+    return valid;
+  },
+
+  showTextOnlyError: function(currentElement) {
+    currentElement.parents(".control-group, .form-group").addClass('has-error');
+    currentElement.parents(".controls").find('.help-block').html(jsCommonTranslations.digitsNotAllowed);
+  },
+
+  hideTextOnlyError: function(currentElement) {
+    currentElement.parents(".control-group, .form-group").removeClass('has-error');
+    currentElement.parents(".controls").find('.help-block').html('');
+  }
+}
+
+var PageForm = {
+  initialize: function () {
+    jQuery('.page-submit').on('click', function () {
+      PageForm.setPublished(jQuery(this).data('state'));
+    });
+  },
+
+  setPublished: function(status) {
+    jQuery('#page_published').val(status);
+  },
+
+  draftSubmit: function() {
+    PageForm.setPublished(0);
+    jQuery('#page_form').submit();
+  },
+
+  publishSubmit: function() {
+    PageForm.setPublished(1);
+    jQuery('#page_form').submit();
+  }
+}
+
+var ContactAdminSetting = {
+  initializeForm: function(){
+    ContactAdminSetting.validateForm();
+    ContactAdminSetting.toggleForms();
+  },
+
+  validateForm: function(){
+    jQuery(".cjs_submit_button").on("click", function(){
+      var contactUrlForm = jQuery('.cjs_contact_url_form');
+      if(contactUrlForm.is(":visible") && contactUrlForm.val().blank())
+      {
+        ChronusValidator.ErrorManager.ShowFieldError(contactUrlForm);
+        return false;
+      }
+    });
+  },
+
+  toggleForms: function() {
+    jQuery(".cjs_toggle_radio_button").on("click", function(){
+      if(jQuery(this).hasClass("cjs_toggle_contact_link")) {
+        jQuery('.cjs_content_form').hide();
+        jQuery('.cjs_contact_url_form').show();
+      }
+      else{
+        jQuery('.cjs_contact_url_form').hide();
+        jQuery('.cjs_content_form').show();
+      }
+    });
+  }
+}
+
+var TimeZoneFlash = {
+  tzfConstants: {
+    tzfEnableHide: "tzf_hide_enable",
+    tzfExpiry: 30
+  },
+
+  initializeForm: function() {
+    TimeZoneFlash.selectHide();
+  },
+
+  selectHide: function() {
+    jQuery(".hide_time_zone_alert_box").on('click', function(event){
+      event.preventDefault();
+      jQueryBlind('.cjs_display_time_zone');
+      jQueryAddToCookie(TimeZoneFlash.tzfConstants.tzfEnableHide,
+        TimeZoneFlash.tzfConstants.tzfEnableHide, TimeZoneFlash.tzfConstants.tzfExpiry, {"path": "/"});
+    });
+  },
+
+  extractOffset: function(timeZoneString){
+    return timeZoneString.slice(0,11);
+  },
+
+  showTimeZoneInfo: function(profileTimezone, profileOffset, validTimezonesArray, obsoleteTimezonesHash, urlToNotifyNewTimezone){
+    if ( !isCookiePresent(TimeZoneFlash.tzfConstants.tzfEnableHide) ) {
+      var timezoneObject = determineTimeZone(validTimezonesArray, obsoleteTimezonesHash, urlToNotifyNewTimezone);
+      var browserOffsetInSeconds = TimeZoneUtils.getSystemTimeZoneOffset(false);
+      if (profileOffset != browserOffsetInSeconds && timezoneObject["tzValue"] != profileTimezone) {
+        var browserOffsetForDisplay = TimeZoneUtils.getSystemTimeZoneOffset(true);
+        var timezoneText = (timezoneObject["validity"]) ? browserOffsetForDisplay + " " + timezoneJSTranslations[timezoneObject["tzValue"]] : browserOffsetForDisplay + " " + timezoneObject["tzValue"];
+        jQuery("#cjs_display_time_zone_alert .time_zone_text").text(timezoneText);
+        jQuery('#cjs_display_time_zone_alert .cjs_display_time_zone').removeClass('hide');
+        if(!timezoneObject["validity"]) jQuery("div.cjs_time_zone_alert_submit_container").hide();
+      }
+    }
+  }
+}
+
+var SchedulingAssistant = {
+  connectCalendarConstants: {
+    ConnectCalendarShowHideCookieName: "connect_calendar_hide_enable",
+    ConnectCalendarExpirationDays: 3
+  },
+
+  initializeForm: function() {
+    SchedulingAssistant.selectHide();
+  },
+
+  selectHide: function() {
+    jQuery(".cjs_hide_connect_calendar_alert_box").on('click', function(event){
+      jQuery('.cjs_display_connect_calendar').hide();
+      jQueryAddToCookie(SchedulingAssistant.connectCalendarConstants.ConnectCalendarShowHideCookieName,
+        SchedulingAssistant.connectCalendarConstants.ConnectCalendarShowHideCookieName, SchedulingAssistant.connectCalendarConstants.ConnectCalendarExpirationDays, {"path": "/"});
+    });
+  },
+
+  showConnectCalendarAlert: function(){
+    if(!isCookiePresent(SchedulingAssistant.connectCalendarConstants.ConnectCalendarShowHideCookieName)){
+      jQuery('.cjs_display_connect_calendar').removeClass('hide');
+    }
+  }
+}
+
+var CalendarAvailabilityInfo = {
+  span: 7,
+  defaultMobileSpan: 3,
+  defaultSpan: 7,
+  dataCache: {},
+
+  initialize: function(options) {
+    options = getDefaultVal(options, {});
+    var clearCache = getDefaultVal(options.clearCache, true);
+    if(clearCache) CalendarAvailabilityInfo.dataCache = {};
+    var selector = getDefaultVal(options.selector, "#remoteModal .modal-content");
+    var navButtonToClick = jQuery(selector).find(".cjs-get-next-n-days-slots-info.cjs-clickable");
+    if(options.setDefaultSpan) navButtonToClick.data('set-default-span', true);
+    if(navButtonToClick.length == 0) navButtonToClick = jQuery(selector).find(".cjs-get-prev-n-days-slots-info.cjs-clickable");
+    if(navButtonToClick.length) navButtonToClick.data('init-click', true).eq(0).click();
+  },
+
+  getValueFromDataCache: function(key) {
+    var tryValue, value = CalendarAvailabilityInfo.dataCache[key];
+    if(value) return value;
+    var i, fifteenMinutesInMs = 900 * 1000;
+    
+    // speed up for +/- 1 hour
+    tryValue = CalendarAvailabilityInfo.dataCache[key + (4*fifteenMinutesInMs)];
+    if(tryValue) return tryValue;
+    tryValue = CalendarAvailabilityInfo.dataCache[key - (4*fifteenMinutesInMs)];
+    if(tryValue) return tryValue;
+    
+    for(i=1; i<14; i++) {
+      tryValue = CalendarAvailabilityInfo.dataCache[key + (i*fifteenMinutesInMs)];
+      if(tryValue) return tryValue;
+      tryValue = CalendarAvailabilityInfo.dataCache[key - (i*fifteenMinutesInMs)];
+      if(tryValue) return tryValue;
+    }
+    return value;
+  }
+};
+
+var CalendarSyncV2 = {
+  calendarSyncV2Enabled: false,
+  externalRedirectionInitializationStatus: false,
+
+  initializeExternalRedirect: function(){
+    if(!CalendarSyncV2.externalRedirectionInitializationStatus){
+      jQuery(document).on('click', '.cjs-external-calendar-redirect-link', function(event){
+        window.location.href = jQuery(this).data("url");
+        event.stopPropagation();
+      });
+      CalendarSyncV2.externalRedirectionInitializationStatus = true;
+    }
+  },
+
+  initializeCalendarSyncV2Status: function(status){
+    CalendarSyncV2.calendarSyncV2Enabled = status;
+  },
+
+  setupCalendarDisconnect: function(message){
+    jQuery(document).on('click', '.cjs-external-calendar-disconnect-link', function(){
+      var redirectUrl = jQuery(this).data("url");
+      chronusConfirm(message, function(){
+        window.location.href = redirectUrl;      
+      }, function(){ return false; }, jsCommonTranslations.popup.yes, jsCommonTranslations.popup.no);
+    });
+  }
+}
+
+var ProfilePicture = {
+  cropImage: function(alt){
+    // Refer https://github.com/fengyuanchen/cropper/issues/119 for checkImageOrigin option.
+    jQuery('#cropbox').cropper({
+      aspectRatio: 1/1,
+      background: false,
+      preview: '.img-preview',
+      responsive: true,
+      movable: false,
+      rotatable: true,
+      zoomable: false,
+      checkImageOrigin: false,
+      crop: function(e){
+        jQuery("#crop_x").val(Math.round(e.x));
+        jQuery("#crop_y").val(Math.round(e.y));
+        jQuery("#crop_h").val(Math.round(e.height));
+        jQuery("#crop_w").val(Math.round(e.width));
+        jQuery("#rotate").val(Math.round(e.rotate));
+      }
+    }).on('built.cropper', function(e){
+      // ADA Compliance
+      jQuery('.img-preview.preview-sm img, .cropper-container img').attr('alt', alt);
+      ProfilePicture.rotateImage();
+    });
+  },
+  rotateImage: function(event){
+    jQuery('.cjs-profile-pic-rotate').on('click', function() {
+      jQuery('#cropbox').cropper('rotate', jQuery(this).data('degree'));
+    });
+  }
+}
+var ViewProfile = {
+  setActivityDimensions: function(){
+    var activity_items = jQuery(".cjs-connections-and-activity-items .col-lg-4");
+    var width_array = jQuery.map(activity_items, function(element){
+      return jQuery(element).find(".btn-default").width();
+    });
+    var height_array = jQuery.map(activity_items, function(element){
+      return jQuery(element).height();
+    });
+    activity_items.find(".btn-default").width(Math.max.apply(null, width_array));
+    activity_items.height(Math.max.apply(null, height_array));
+  }
+}
+
+var QuicksearchBox = {
+  initializeWithOther: function(quickSearchSelector, searchParentSelector, otherCheckBoxSelector, otherInputSelector, mirrorTextSelector){
+    var quick_search = jQuery(quickSearchSelector).quicksearch(searchParentSelector+' .cjs_quicksearch_item');
+    jQuery(otherInputSelector).on('keyup keypress blur', function() {
+      jQuery(mirrorTextSelector).html(jQuery(this).val());
+      quick_search.cache();
+    });
+    jQuery(otherCheckBoxSelector).on('change',function(){
+      if (this.checked) {
+        jQuery(mirrorTextSelector).html(jQuery(otherInputSelector).val());
+      }else {
+        jQuery(mirrorTextSelector).html('');
+      }
+      quick_search.cache();
+    });
+  }
+}
+
+var Discussions = {
+  isMobileFooterHiddenOnFocus: false,
+  postReplyInitialized: false,
+  markPostsViewed: function(url){
+    jQuery.ajax({
+      url : url
+    });
+  },
+
+  updateElementCount :function(badgeCount, badgeElement){
+    if(badgeCount > 0)
+    {
+      badgeElement.html(badgeCount);
+    }
+    else{
+      badgeElement.html("");
+    }
+  },
+
+  scrapCollapse: function(scrapId) {
+    jQuery("#child_scraps_" + scrapId).on('show.bs.collapse', function () {
+      if(jQuery(".cjs-scrap-siblings.collapse.in").length == 0){
+        jQuery(".cjs-scrap-header").addClass("gray-bg");
+      }
+      jQuery("#scrap_header_" + scrapId).removeClass("gray-bg");
+      jQuery("#scrap_header_" + scrapId).addClass("navy-border");
+    });
+    jQuery("#child_scraps_" + scrapId).on('hidden.bs.collapse', function () {
+      jQuery("#scrap_header_" + scrapId).addClass("navy-border");
+      jQuery("#scrap_header_" + scrapId).addClass("gray-bg"); 
+      if(jQuery(".cjs-scrap-siblings.collapse.in").length == 0){
+        jQuery(".cjs-scrap-header").removeClass("gray-bg");
+      }
+      jQuery("#scrap_header_" + scrapId).removeClass("navy-border");
+    });
+  },
+
+  displayNewMessageV2: function(content, id) {
+    var scrapForm = jQuery("#cjs_new_ajax_message_form");
+      Discussions.displayNewMessage(content, id);
+  },
+
+  displayNewMessage: function(content, id) {
+    jQuery("#cjs_new_message_modal").modal("hide");
+    jQuery(".discussion-list .cjs-no-scraps").hide();
+    jQuery(".discussion-list .display-scraps").prepend(content);
+    jQueryHighlight(jQuery("#scrap_item_" + id + " .cjs-scrap-header"));
+    jQueryScrollTo(".discussion-list .display-scraps");
+    Discussions.reloadScrapBgColor();
+    NewScrap.resetScrapForm();
+  },
+
+  reloadScrapBgColor: function(){
+    if(jQuery(".cjs-scrap-header.gray-bg").length){
+      jQuery(".cjs-scrap-header").addClass("gray-bg");
+      jQuery(".cjs-scrap-item").each(function(){
+        if(jQuery(this).find(".cjs-scrap-siblings.collapse.in").length){
+          jQuery(this).find(".cjs-scrap-header").removeClass("gray-bg");
+        }
+      });
+    }
+  },
+
+  showErrorMessage: function(id, error_message){
+    ChronusValidator.ErrorManager.ShowResponseFlash("scrap_error_" + id, error_message);
+  },
+
+  reloadScrapThread: function(content, root_id, id, load_url){
+    var scrap = jQuery("#scrap_item_" + root_id);
+    scrap.replaceWith(content);
+    scrap = jQuery("#scrap_item_" + root_id);
+    scrap.removeClass("white-bg");
+    scrap.addClass("gray-bg cjs_selected_scrap");
+    jQuery.ajax({
+      url: load_url,
+      success: function(){
+        if(jQuery("#scrap_sibling_" + id).closest('.cui-full-height-sidebar').length == 0){
+          jQueryScrollTo("#scrap_sibling_" + id);
+        }
+      }
+    });
+  },
+
+  showHideScrapThread: function(id, load_url, isHomePageView){
+    var scrap = jQuery("#scrap_item_" + id);
+    var scrapSiblings = scrap.find(".cjs-scrap-siblings.collapse.in");
+    var selectedScrap = scrap.closest('.display-scraps').find('.cjs_selected_scrap');
+    var scrapHeader = scrap.find(".cjs-scrap-header");
+    if(selectedScrap.length > 0){
+      selectedScrap.addClass("white-bg");
+      selectedScrap.removeClass("gray-bg cjs_selected_scrap");
+    }
+    scrap.removeClass("white-bg");
+    scrap.addClass("gray-bg cjs_selected_scrap");
+
+    if(scrapSiblings.length == 0){
+      scrapHeader.find(".cjs-scrap-subject").removeClass('font-600');
+      scrapHeader.find(".cjs-scrap-from").removeClass('font-600');
+      scrapHeader.find(".cjs-from-name").removeClass('font-600');
+      if(scrapHeader.find(".cjs-unread-scrap").length > 0){
+        MobileFooter.updateMessageCountBadge();
+        var messagetab = isHomePageView ? jQuery('.slick-current').find('.cjs_unread_scraps_count') : jQuery(".cjs_unread_scraps_count");
+        var discussionsTab = isHomePageView ? jQuery('.slick-current').find('.cjs_discussions_badge') : jQuery(".cjs_discussions_badge");
+        var unreadScrapsCount = parseInt(messagetab.html()) - 1;
+        var discussionsUnreadCount = parseInt(discussionsTab.html()) - 1;
+        MobileFooter.updateElementCount(unreadScrapsCount, messagetab);
+        MobileFooter.updateElementCount(discussionsUnreadCount, discussionsTab);
+        scrapHeader.find(".cjs-unread-scrap").removeClass("cjs-unread-scrap");
+      }
+    }
+    // Child scrap partial will replace the cjs-child-scraps-holder. Shouldn't make the ajax call if child scraps are already loaded.
+    if (scrap.find(".cjs-child-scraps-holder").length != 0 ){
+      jQuery.ajax({
+        url: load_url
+      });
+    }
+  },
+
+  getMessageTabCount: function(isHomePageView){
+    if(jQuery(".cjs_unread_scraps_count").length != 0){
+      var messagetab = isHomePageView ? jQuery('.slick-current').find('.cjs_unread_scraps_count') : jQuery(".cjs_unread_scraps_count");
+      var badgeCount = parseInt(messagetab.html());
+      return badgeCount ? badgeCount : 0;
+    }
+    return 0;
+  }, 
+
+  renderScrapThread: function(id, content){
+    var scrap = jQuery("#scrap_item_" + id);
+    var childScrapsHolder = scrap.find(".cjs-child-scraps-holder");
+    childScrapsHolder.replaceWith(content);
+  },
+
+  renderReply: function(id, content){
+    jQuery("#scrap_reply_box_" + id).html(content);
+    Discussions.showReplyBox(id);
+  },
+
+  renderSelectedTopic: function(id, load_url, isHomePageView, mobileView){
+    var topic = jQuery(".topic_" + id);
+    var selectedTopic = topic.closest('#cjs_topics_list').find('.cjs_selected_topic');
+    if(selectedTopic.length > 0){
+      selectedTopic.addClass("white-bg").removeClass("gray-bg cjs_selected_topic");
+      selectedTopic.find(".cjs_see_less_link").click();
+    }
+    topic.removeClass("white-bg").addClass("gray-bg cjs_selected_topic");
+
+    jQuery.ajax({
+      url: load_url,
+      method: "get",
+      data: {'home_page' : isHomePageView},
+      success: function(){
+        if(mobileView){
+          jQuery('.cui-mobile-floater-action').hide();
+        }
+      }
+    });
+
+  },
+
+  showDiscussReplyForm: function() {
+    if(!Discussions.postReplyInitialized){
+      var sidebarClass = jQuery('.cjs_ibox_content_scroll').length > 0 ? '.cjs_ibox_content_scroll' : '#SidebarRightContentMobile'
+      jQuery(document).on("click", ".cjs_add_message_sidepane", function(){
+        jQuery('.cjs_add_comment_link, .cjs_add_message_sidepane').hide();
+        jQuery('#reply_box, #new_post').show();
+        jQuery("#message_content_post").focus();
+        GroupTabs.scrollToSidebarBottom('.cjs_comment_form_container');
+      })
+      jQuery(document).on("click", ".cjs_comment_cancel", function(){
+        Discussions.hideReplyBox();
+      })
+      jQuery(document).on("click", ".cjs_add_comment_link", function(){
+        jQuery(".cjs_add_message_sidepane").click();
+      })
+      Discussions.postReplyInitialized = true;
+    }
+  },
+
+  hideReplyBox:function() {
+    jQuery('#reply_box').hide();
+    jQuery('.cjs_add_message_sidepane, .cjs_add_comment_link').show();
+  },
+
+  showHideReplyForm: function() {
+    var sidebarClass = jQuery('.cjs_ibox_content_scroll').length > 0 ? '.cjs_ibox_content_scroll' : '#SidebarRightContentMobile'
+    if(jQuery(sidebarClass+' .cjs_reply_link').last().length == 0)
+    {
+      jQuery('.cjs_add_message_sidepane').hide();
+    }
+    jQuery(document).off("click",".cjs_add_message_sidepane");
+    jQuery(document).on("click", ".cjs_add_message_sidepane", function(){
+      jQuery('.cjs_add_message_sidepane').hide();
+      jQuery(sidebarClass+' .cjs_reply_link').last().click();
+    })
+    jQuery(document).on("click", ".cjs_comment_cancel", function(){
+      if(!jQuery('.cjs_comment_form').is(":visible") && jQuery(sidebarClass+' .cjs_reply_link').last().length > 0)
+      {
+        jQuery('.cjs_add_message_sidepane').show();
+      }
+    })
+  },
+
+  loadReply: function(id, loadUrl, homePageView){
+    MentoringAreaTracking.gaTrackMessageReplyClicked(homePageView == "true");
+    jQuery('.cjs_add_message_sidepane').hide();
+    var sidebarClass = jQuery('.cjs_ibox_content_scroll').length > 0 ? '.cjs_ibox_content_scroll' : '#SidebarRightContentMobile'
+    if (jQuery("#new_admin_message_" + id).length == 0 ){
+      jQuery.ajax({
+        url: loadUrl,
+        success: function(){
+          if(("reply_link_"+id) == jQuery(sidebarClass+' .cjs_reply_link').last().attr('id')){
+            GroupTabs.scrollToSidebarBottom('.cjs_comment_form_container');
+          }
+        }
+      });
+    }
+    else{
+      Discussions.showReplyBox(id);
+      if(("reply_link_"+id) == jQuery(sidebarClass+' .cjs_reply_link').last().attr('id')){
+        GroupTabs.scrollToSidebarBottom('.cjs_comment_form_container');
+      }
+    }
+  },
+
+  showReplyBox: function(id){
+    jQuery("#new_admin_message_" + id).show();
+    jQuery("#message_content_" + id).focus();
+  },
+
+  showReplyPopup: function(){
+    jQuery(document).on("click", ".cjs_add_comment_link", function(){
+      jQuery(".cjs_show_post_modal").click();
+    })
+  },
+
+  adjustHeightOnShowmoreShowlessClick: function(){
+    jQuery(document).on("click", ".cjs_see_more_link, .cjs_see_less_link", function(){
+      GroupTabs.adjustSlickSlideHeight(".connections-slick", 100);
+    });
+  },
+
+  toggleThread: function(id){
+    jQuery("#scrap_thread_" + id).toggle();
+  },
+
+  hideMobileFooterOnInputFocus: function(id){
+    //This is a temporary fix. handle this using cordova-keyboard-plugin
+    var mobileFooterMarginBottom;
+    jQuery(id).focus(function() {
+      if(jQuery('.mobile_footer').is(":visible")){
+        jQuery('.mobile_footer').hide();
+        mobileFooterMarginBottom = jQuery('.cui_mobile_wrapper').css("margin-bottom");
+        jQuery('.cui_mobile_wrapper').css("margin-bottom", "0px");
+        isMobileFooterHiddenOnFocus = true;
+      }
+    }).blur(function(){
+      if(isMobileFooterHiddenOnFocus){
+        jQuery('.mobile_footer').show();
+        jQuery('.cui_mobile_wrapper').css("margin-bottom", mobileFooterMarginBottom);
+      }
+    })
+  }
+}
+
+var LinkLabelToInput = {
+  updateIdAndLabelForAttribute: function(newComponent){
+    var rand = Math.floor(Math.random()*1000);
+    newComponent.find("label").each(function(){
+      var labelElement = jQuery(this);
+      labelElement.prop({"for": labelElement.attr("for") + rand});
+    });
+    newComponent.find('input[type=text],input[type=password],textarea,select').each(function(){
+      var inputElement = jQuery(this);
+      inputElement.prop({"id": inputElement.attr("id") + rand});
+    });
+  }
+}
+
+var Features = {
+  undisableCheckBoxes: function(){
+    var formObject = jQuery("#enable_features").closest("form");
+    formObject.find("div.form-actions").find("input[type=submit]").on("click", function(){
+      jQuery(".cjs_features_list").attr("disabled", false);
+    });
+    return false;
+  }
+}
+
+var Enrollment = {
+  roleCheckboxesChecked: "input:checkbox[name='roles[]']:checked",
+  getSelectedRoles: function(isCheckbox){
+    if(isCheckbox){
+      return collectVals(Enrollment.roleCheckboxesChecked);
+    }
+    else{
+      return [jQuery('#roles').val()];
+    }
+  },
+
+  initializeDisableSubmit: function(formSelector){
+    selector = " input:checkbox[name='roles[]']"
+    jQuery(formSelector + selector).on("change", function(){
+      formId = jQuery(this).closest("form").prop("id");
+      disabled = collectVals("form#" + formId + selector + ":checked").length == 0;
+      jQuery(this).closest("form").find("input[type='submit']").prop("disabled", disabled);
+    });
+  },
+
+  initialize: function(){
+    Enrollment.initializeDisableSubmit("form#enrollment_form_membership");
+    Enrollment.initializeDisableSubmit("form#enrollment_form_join");
+    RequiredFields.fieldIds = [];
+  }
+}
+
+var Resources = {
+  ADMIN_VIEW_SELECTOR: "admin_view_id",
+
+  slickDynamicHeight: function() {
+    jQuery(".resources-slick").on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+      currentSlide = currentSlide + 3;
+      var prevSlideSelector = jQuery('.slick-slide[data-slick-index="'+(currentSlide-1)+'"]');
+      var currSlideSelector = jQuery('.slick-slide[data-slick-index="'+currentSlide+'"]');
+      var nextSlideSelector = jQuery('.slick-slide[data-slick-index="'+(currentSlide+1)+'"]');
+      var slides =  {"prev": prevSlideSelector, "curr": currSlideSelector, "next": nextSlideSelector} ;
+      var maxHeight = 0;
+      var slideSelector = '';
+      jQuery.each(slides, function( slide, slideElement ) {
+        if(slideElement.length > 0 && slideElement.outerHeight() > maxHeight){
+          maxHeight = slideElement.outerHeight();
+          slideSelector = slideElement;
+        }
+      });
+      carousel.showAdaptiveHeight(".resources-slick", slideSelector, 0);
+    });
+  },
+
+  initializeCarouselGaTrack: function(){
+    jQuery(".resources-slick").on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+      chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.RESOURCE_ACTIVITY, chrGoogleAnalytics.action.GA_VIEWED_MORE_RESOURCES, chrGoogleAnalytics.eventLabel.GA_MENTORING_AREA_ACTIVITY_LABEL_HOME_PAGE, chrGoogleAnalytics.eventLabelId.GA_MENTORING_AREA_ACTIVITY_HOME_PAGE_LABEL_ID);
+    });
+  },
+
+  hideUnhideCheckBox: function() {
+    jQuery(".cjs-resources-primary-checkbox").on("change", function(){
+      var primaryCheckbox = jQuery(this);
+      var roleCheckboxes = primaryCheckbox.closest(".cjs-resources-enclosure").find(".cjs-roles-sub-checkbox");
+      var roleBlock = primaryCheckbox.closest(".cjs-resources-enclosure").find(".cjs-roles-enclosure");
+      if(primaryCheckbox.is(":checked")){
+        roleBlock.show();
+      }
+      else{
+        roleCheckboxes.attr("checked", false);
+        roleBlock.hide();
+      }
+    });
+  },
+
+  adminViewDisableEnableSelect: function(){
+    jQuery("#cjs_resources_pinned_options").on("change", function(){
+      if(jQuery('.cjs_pin_resources_to_admin_views').is(":checked"))
+      {
+        jQuery('.admin_view_select2_container').show();
+      }
+      else{
+        jQuery('.admin_view_select2_container').hide();
+      }
+    });
+  },
+
+  validateResourceForm: function(is_program_view){
+    RequiredFields.fieldIds.push("resource_title");
+    jQuery(document).on("click", "#cjs_submit_resources", function(){
+      var textareaInvalid = !(typeof(CKEDITOR.instances["resource_content"]) == 'undefined') && CKEDITOR.instances["resource_content"].getData().replace(/<br \/>\n$/, '').blank();
+      var editorElement = jQuery("#cke_resource_content");
+      var isFeildsValid = true;
+      if(textareaInvalid) {
+        ValidateRequiredFields.showFieldError(editorElement);
+      } else {
+        ValidateRequiredFields.hideFieldError(editorElement);
+      }
+      if(is_program_view) {
+        isFeildsValid = Resources.resourceValidationProgramLevel();
+      }
+      titleValid = RequiredFields.validate();
+      if((titleValid && textareaInvalid) || !isFeildsValid){
+        ChronusValidator.ErrorManager.ShowPageFlash(false, jsCommonTranslations.requiredFieldMissing);
+        scroll(0,0);
+      }
+      return !textareaInvalid && titleValid && isFeildsValid;
+    });
+  },
+
+  resourceValidationProgramLevel: function(){
+    var isAccessChecked = jQuery('input[name="resource[role_ids][]"]:checked').length > 0;
+    var isPinningOptionSet = jQuery('input[name="resource[resource_publications][show_in_quick_links]"]:checked').length > 0;
+    var adminViewNotSetForPinning = jQuery('.cjs_pin_resources_to_admin_views').is(":checked") && jQuery('#admin_view_id').val().blank();
+
+    if(!isAccessChecked) {
+      ValidateRequiredFields.showFieldError(jQuery('.cjs_resources_accessible'));
+    }
+    else {
+      ValidateRequiredFields.hideFieldError(jQuery('.cjs_resources_accessible'));
+    }
+
+    if(!isPinningOptionSet) {
+      ValidateRequiredFields.showFieldError(jQuery('#cjs_resources_pinned_options'));
+    }
+    else {
+      ValidateRequiredFields.hideFieldError(jQuery('#cjs_resources_pinned_options'));
+      if(adminViewNotSetForPinning) {
+        ValidateRequiredFields.showFieldError(jQuery('#s2id_admin_view_id'));
+      }
+      else{
+        ValidateRequiredFields.hideFieldError(jQuery('#s2id_admin_view_id'));
+      }
+    }
+    isPinningOptionSet = isPinningOptionSet && !adminViewNotSetForPinning;
+    showProgramErrorFlash = !isAccessChecked || !isPinningOptionSet;
+    return isAccessChecked && isPinningOptionSet;
+  },
+  
+  feedbackButtonClicked: function(){
+    jQuery(document).on("click", ".resource_feedback_button_clicked", function(){
+      var element = jQuery(this);
+      jQuery.ajax({
+        url: element.data("url"),
+        data: {rating: element.data("rating")}
+      });
+    });
+  },
+  initializeCommentForm: function(){
+    var commentForm = jQuery(".cjs_comment_body");
+    commentForm.attr("rows", 3);
+    jQuery(".cjs_comment_actions").show();
+  },
+
+  renderPopup: function(url){
+    jQuery(document).on("click", ".cjs_resource_question_button", function(){
+      chrGoogleAnalytics.addEvent(chrGoogleAnalytics.GA_RESOURCE_CATEGORY, chrGoogleAnalytics.GA_ACTION_ASK_A_QUESTION);
+      jQueryShowQtip('#inner_content', 470, url,'',{modal: true});
+    });
+  }
+}
+
+// HoverCards
+// On mouse over, the timer is set. When the timer elapses, hovercard is shown.
+// On mouse leave, if hovercard is visible, hidden. Else, the timer is cleared.
+var HoverCard = {
+  hoverCardDelay: 500,
+  hoverCardTimeOuts: [],
+
+  showHoverCard: function(userLinkContainer, userLinkContainerId){
+    var hoverCardContainer = jQuery("#cjs_hovercard_container_" + userLinkContainerId);
+    var hoverTextElement = userLinkContainer.find(".cjs-onhover-text");
+    HoverCard.hoverCardTimeOuts.push(setTimeout(function(){
+      if(hoverCardContainer.length){
+        // Hovercard data is already fetched, so just toggle.
+        HoverCard.positionHoverCard(userLinkContainer, userLinkContainerId);
+      }
+      else{
+        jQuery.ajax({
+          url: hoverTextElement.data("hovercard-url"),
+          data: {container_id: userLinkContainerId},
+          success: function(){
+            HoverCard.positionHoverCard(userLinkContainer, userLinkContainerId);
+          }
+        });
+      }
+    }, HoverCard.hoverCardDelay));
+  },
+
+  revertHoverCardTimeOuts: function(){
+    for(i = 0; i < HoverCard.hoverCardTimeOuts.length; i++){
+      clearTimeout(HoverCard.hoverCardTimeOuts[i]);
+    }
+    HoverCard.hoverCardTimeOuts = [];
+  },
+
+  positionHoverCard: function(userLinkContainer, userLinkContainerId){
+    var hoverCardContainer = jQuery("#cjs_hovercard_container_" + userLinkContainerId);
+    var hoverTextElement = userLinkContainer.find(".cjs-onhover-text");
+    var hoverTextOffset = hoverTextElement.offset();
+    var hoverTextTop = hoverTextOffset.top - jQuery(window).scrollTop();
+    var hoverTextWidth = hoverTextElement.width();
+    var hoverTextHeight = hoverTextElement.height();
+    var hoverCardWidth = hoverCardContainer.width();
+    var hoverCardHeight = hoverCardContainer.height();
+    var windowWidth = jQuery(window).width();
+    var windowHeight = jQuery(window).height();
+
+    var verticalEndPosition = hoverTextTop + hoverCardHeight + hoverTextHeight;
+    if(verticalEndPosition > (jQuery(window).height())){
+      hoverCardContainer.css("top", hoverTextOffset.top - hoverCardHeight);
+    }
+    else{
+      hoverCardContainer.css("top", (hoverTextOffset.top + hoverTextHeight));
+    }
+    var leftWidth = 0
+    var horizontalEndPosition = hoverTextOffset.left + hoverCardWidth + hoverTextWidth;
+    if(horizontalEndPosition > (windowWidth)){
+      leftWidth = windowWidth - hoverCardWidth - hoverTextWidth;
+    }
+    else{
+      leftWidth = hoverTextOffset.left;
+    }
+    hoverCardContainer.css("left", leftWidth);
+    hoverCardContainer.show();
+  },
+
+  hideHoverCard: function(hoverCardContainer){
+    setTimeout(function(){
+      if(hoverCardContainer.hasClass("cjs-user-link-container")){
+        if (!jQuery("#cjs_hovercard_container_" + hoverCardContainer.data('user-id')).hasClass("on-hover")) {
+          jQuery("#cjs_hovercard_container_" + hoverCardContainer.data('user-id')).removeClass("on-hover");
+          jQuery("#cjs_hovercard_container_" + hoverCardContainer.data('user-id')).fadeOut("fast");
+        }
+      }
+      else{
+        hoverCardContainer.removeClass("on-hover");
+        hoverCardContainer.fadeOut("fast");
+      }
+    }, 50);
+  }
+}
+
+var CsvImport = {
+
+  prevSelectedOption: "",
+
+  csvDropDownText: {},
+  profileDropDownText: {},
+  selectedDropDownHash: {},
+
+  initializeDropDownValuesAndText :  function(){
+    var csvDropdown = jQuery(".cjs_csv_header_dropdown")[0];
+    var profileDropDown = jQuery(".cjs_profile_header_dropdown")[0];
+
+    if(csvDropdown){
+      for(var i=0;i<csvDropdown.options.length;i++){
+        CsvImport.csvDropDownText[csvDropdown.options[i].value] = csvDropdown.options[i].text;
+      }
+    }
+
+    if(profileDropDown){
+      for(var i=0;i<profileDropDown.options.length;i++){
+        CsvImport.profileDropDownText[profileDropDown.options[i].value] = profileDropDown.options[i].text;
+      }
+    }
+  },
+
+
+  initializeSelectedDropDownHash : function(){
+    var allDropdowns = jQuery(".cjs_user_csv_dropdown");
+
+    for(var i=0;i<allDropdowns.length;i++){
+      CsvImport.selectedDropDownHash[allDropdowns[i].value] = true;
+    }
+  },
+
+  resetDropDownOptions : function(isCsvDropDowns){
+    var allDrowDowns = jQuery(".cjs_csv_header_dropdown");
+    var dropDownTextHash = CsvImport.csvDropDownText;
+    if(!isCsvDropDowns){
+      allDrowDowns = jQuery(".cjs_profile_header_dropdown");
+      dropDownTextHash = CsvImport.profileDropDownText;
+    }
+
+    for(var j=0;j<allDrowDowns.length;j++){
+      var dropDownDom = document.getElementById(allDrowDowns[j].id);
+      var selectedOption = dropDownDom.value;
+      var optionLength = dropDownDom.options.length;
+
+      dropDownDom.options.length = 0;
+      
+      for(var key in dropDownTextHash){
+        if((selectedOption == key || CsvImport.selectedDropDownHash[key] != true) || (key == "select_a_column") || (key == "dont_map")){
+          var option = document.createElement('option');
+          option.value = key;
+          option.innerHTML = dropDownTextHash[key];
+          if(key == selectedOption){
+            option.selected = true;
+          }
+          dropDownDom.appendChild(option);
+        }
+      }
+    }
+  },
+
+  initializeRoleToggleJs : function(){
+    NestedShowHideRadioToggle('.cjs_nested_show_hide_container', '.cjs_show_hide_sub_selector', '.cjs_toggle_radio', '.cjs_toggle_content');
+  },
+
+  initializeRoles : function(roles) {
+    jQuery(".cjs_toggle_content").removeClass("hide");
+    jQuery(".cjs_role_name_radio_btn").prop("checked", true);
+    for(i=0;i<roles.length;i++){
+      jQuery("#cjs_select_roles").find(jQuery("input:checkbox[value=" + roles[i] + "]")).prop("checked", true);
+    }
+  },
+
+  initializeMapColumns : function(){
+    jQuery(".cjs_map_role_radio_btn").prop("checked", true);
+  },
+
+  showCancelFileUploadIcon : function(){
+    jQuery(".cjs_user_csv").addClass("hide");
+    jQuery(".cjs_clear_file").removeClass("hide");
+  },
+
+  allMandatoryFieldsSelected : function(){
+    var allCsvDropdown = jQuery(".cjs_mandatory_csv_column");
+    var allSelected = true;
+
+    for(var i=0; i<allCsvDropdown.length; i++){
+      if(allCsvDropdown[i].value == "select_a_column"){
+        allSelected = false;
+        break;
+      }
+    }
+
+    return allSelected;
+  },
+
+  initializePreSelectedMapping : function(exampleRowValues){
+    if(CsvImport.allMandatoryFieldsSelected()){
+      jQuery(".cjs_optional_import_options").removeClass("hide");
+    }
+    CsvImport.initializeSelectedDropDownHash();
+    CsvImport.resetDropDownOptions(true);
+    CsvImport.resetDropDownOptions(false);
+    CsvImport.initializeExampleText(exampleRowValues);
+  },
+
+  initializeExampleText : function(exampleRowValues){
+    var allCsvDropdown = jQuery(".cjs_user_csv_dropdown");
+    for(i=0; i<allCsvDropdown.length; i++){
+      var dropDownDom = jQuery("#" + allCsvDropdown[i].id);
+      CsvImport.showExampleText(dropDownDom, exampleRowValues);
+    }
+  },
+
+  hideSelectedDropDownChoices : function(exampleRowValues){
+    jQuery(".cjs_user_csv_dropdown").on('change', function(){
+      CsvImport.selectedDropDownHash[jQuery(this).val()] = true;
+      CsvImport.selectedDropDownHash[CsvImport.prevSelectedOption] = false;
+      CsvImport.prevSelectedOption = jQuery(this).val();
+      CsvImport.resetDropDownOptions(jQuery(this).hasClass("cjs_csv_header_dropdown"));
+      CsvImport.showExampleText(jQuery(this), exampleRowValues);
+    });
+  },
+
+  showExampleText : function(dropDownDom, exampleRowValues){
+    if(dropDownDom.hasClass("cjs_csv_header_dropdown")){
+      var selectedDropdownIndex = dropDownDom.attr("id").split("_")[dropDownDom.attr("id").split("_").length-1];
+      var selectedDropDownExampleTextDom = jQuery(".example_text_for_dropdown_" + selectedDropdownIndex);
+
+      if(dropDownDom.val() != "select_a_column"){
+        selectedDropDownExampleTextDom.removeClass("hide");
+        selectedDropDownExampleTextDom.html(exampleRowValues[dropDownDom.val()]);
+      }
+      else{
+        selectedDropDownExampleTextDom.addClass("hide");
+      }
+    }
+  },
+
+  capturePreviousSelectedOption : function(){
+    jQuery(".cjs_user_csv_dropdown").focus(function(){
+      CsvImport.prevSelectedOption = jQuery(this).val();
+    });
+  },
+
+  trackMandatoryFields : function(exampleRowValues){
+    jQuery(".cjs_mandatory_csv_column").on('change', function(){
+      if(CsvImport.allMandatoryFieldsSelected()){
+        if(jQuery(".cjs_optional_import_options").hasClass("hide")){
+          jQuery(".cjs_optional_import_options").removeClass("hide");
+          CsvImport.handleChoiceForOptionalFields(exampleRowValues);
+        }
+        jQuery(".cjs_submit_columns_mapping").prop("disabled", false);
+      }
+      else{
+        jQuery(".cjs_submit_columns_mapping").prop("disabled", true);
+      }
+    });
+  },
+
+  handleChoiceForOptionalFields : function(exampleRowValues){
+    var optionalColumns = jQuery(".cjs_optional_csv_column");
+
+    for(var i=0;i<optionalColumns.length;i++){
+      var options = optionalColumns[i].options;
+      var isOptionSelected = false;
+      var selectedDropdownIndex = optionalColumns[i].id.split("_")[optionalColumns[i].id.split("_").length-1];
+      var selectedDropDownExampleTextDom = jQuery(".example_text_for_dropdown_" + selectedDropdownIndex);
+      for(var j=0;j<options.length;j++){
+        var dom = jQuery('#' + optionalColumns[i].id + " option[value=" + options[j].value + "]");
+        if(CsvImport.selectedDropDownHash[options[j].value] != true && (dom.val() != "select_a_column") && isOptionSelected == false){
+          dom.attr("selected", true);
+          selectedDropDownExampleTextDom.removeClass("hide");
+          selectedDropDownExampleTextDom.html(exampleRowValues[options[j].value]);
+          CsvImport.selectedDropDownHash[options[j].value] = true;
+          isOptionSelected = true;
+          break;
+        }
+      }
+    }
+
+    CsvImport.resetDropDownOptions(true);
+  },
+
+  alignTrackFieldsText : function(){
+    
+  },
+
+  renderPopup: function(url){
+    jQueryShowQtip('#inner_content', 850, url,'',{modal: true});
+  },
+
+  handleAddUserOptionsPopup: function(){
+    jQuery(".cjs_show_add_user_options_popup").on('click', function(){
+      url = jQuery(this).data('url');
+      CsvImport.renderPopup(url);
+    });
+  },
+
+  onImportCompletion: function(elementId){
+    var element = jQuery('.progress_data_url');
+    var url = element.attr('href');
+    window.location.replace(url);
+  }
+}
+
+var RemoveUser = {
+  onRemoveUserCompletion: function(elementId){
+    var element = jQuery('.progress_data_url');
+    var url = element.attr('href');
+    window.location.replace(url);
+  }
+}
+
+var MemberProfilePage = {
+  initializeRequestPaneStick : function(){
+    jQuery(document).ready(function () {
+      var headerHeight = jQuery("#chronus_header_wrapper").height();
+      if (jQuery('#profile_side_bar').is(":visible")) {
+        jQuery('.cui-request-pane').affix({
+          offset: {
+            top: 100
+          }
+        });
+        var topOffset = jQuery('#wob_banner').length > 0 ? jQuery('#wob_banner').outerHeight() : 0;
+        jQuery(".cui-request-pane").on("affix.bs.affix", function(){
+          jQuery(this).css('top', headerHeight + topOffset + 'px');
+        });
+      }
+    });
+  },
+
+  initializeSidePaneRequestScroll : function(){
+    jQuery(document).ready(function() {
+
+    jQuery('.scroll-request').slimScroll({
+      height: '',
+      railVisible: true,
+      alwaysVisible: true
+    });
+    jQuery('.cui-request-pane .slimScrollRail').hide();
+      jQuery(".cjs_see_more_link").click(function(){
+        jQuery('.cui-request-pane .slimScrollBar').show();
+        jQuery('.cui-request-pane .slimScrollRail').show();
+      });
+      jQuery(".cjs_see_less_link").click(function(){
+        jQuery('.cui-request-pane .slimScrollRail').hide();
+        jQuery('.cui-request-pane .slimScrollBar').hide();
+      });
+    });
+  }
+}
+
+
+var Navigation = {
+  toggleHeaderIcon: function(){
+    jQuery(".cjs_navigation_header").on("click", function(){
+      eventAction = chrGoogleAnalytics.action.GA_COLLAPSED_SIDEBAR_NAVIGATION_HEADER;
+
+      if(jQuery(this).next().is(":visible")){
+        jQuery(this).find(".cjs_open_icon").hide();
+        jQuery(this).find(".cjs_close_icon").show();
+      }
+      else{
+        jQuery(this).find(".cjs_open_icon").show();
+        jQuery(this).find(".cjs_close_icon").hide();
+        eventAction = chrGoogleAnalytics.action.GA_EXPANDED_SIDEBAR_NAVIGATION_HEADER;
+      }
+
+      Navigation.trackGaHeaderClick(jQuery(this), eventAction);
+    });
+  },
+
+  trackGaHeaderClick: function(element, eventAction){
+    eventLabel = chrGoogleAnalytics.eventLabel.GA_MEETINGS_SIDEBAR_NAVIGATION_HEADER;
+    eventLabelId = chrGoogleAnalytics.eventLabelId.GA_MEETINGS_SIDEBAR_NAVIGATION_HEADER_LABEL_ID;
+
+    if(element.hasClass("cjs_mentoring_connection_header")){
+      eventLabel = chrGoogleAnalytics.eventLabel.GA_MENTORING_CONNECTION_SIDEBAR_NAVIGATION_HEADER;
+      eventLabelId = chrGoogleAnalytics.eventLabelId.GA_MENTORING_CONNECTION_SIDEBAR_NAVIGATION_HEADER_LABEL_ID;
+    }
+    else if(element.hasClass("cjs_mentoring_community_header")){
+      eventLabel = chrGoogleAnalytics.eventLabel.GA_MENTORING_COMMUNITY_SIDEBAR_NAVIGATION_HEADER;
+      eventLabelId = chrGoogleAnalytics.eventLabelId.GA_MENTORING_COMMUNITY_SIDEBAR_NAVIGATION_HEADER_LABEL_ID; 
+    }
+    else if(element.hasClass("cjs_help_and_support_header")){
+      eventLabel = chrGoogleAnalytics.eventLabel.GA_HELP_SUPPORT_SIDEBAR_NAVIGATION_HEADER;
+      eventLabelId = chrGoogleAnalytics.eventLabelId.GA_HELP_SUPPORT_SIDEBAR_NAVIGATION_HEADER_LABEL_ID; 
+    }
+    else if(element.hasClass("cjs-dashboards-tab")){
+      eventLabel = chrGoogleAnalytics.eventLabel.GA_DASHBOARDS_SIDEBAR_NAVIGATION_HEADER;
+      eventLabelId = chrGoogleAnalytics.eventLabelId.GA_DASHBOARDS_SIDEBAR_NAVIGATION_HEADER_LABEL_ID;
+    }
+
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.GA_SIDEBAR_NAVIGATION, eventAction, eventLabel, eventLabelId);
+  },
+
+  redirectOnLogoAndBannerClick: function(){
+    jQuery(".cjs_side_navigation_logo_or_banner").on("click", function(){
+      window.location.href = jQuery(this).data("url");
+    });
+  }
+}
+
+var AuthConfig = {
+  handleLogo: function() {
+    jQuery(document).ready(function() {
+      jQuery(".cjs_auth_config_remove_logo").on("click", function() {
+        jQuery(".cjs_auth_config_existing_logo").hide();
+        jQuery(".cjs_auth_config_logo").show();
+        jQuery("input[name='persist_logo']").val(false);
+      });
+    });
+  },
+
+  handleLoginButton: function(disableText) {
+    jQuery(".cjs-login-btn").on("click", function(event){
+      event.preventDefault();
+      toastr.clear();
+
+      jQuery(this).attr("disabled", "disabled");
+      jQuery(this).val(disableText);
+      jQuery(this).closest("form").submit();
+    });
+  },
+
+  handleForgotPasswordLink: function(modalId) {
+    jQuery(".cjs-forgot-password-link").on("click", function(){
+      jQuery("#" + modalId).modal("hide");
+      jQuery("#cjs-forgot-password-modal").modal("show");
+    });
+  },
+
+  handleBackToLoginLink: function(modalId) {
+    jQuery(".cjs-back-to-login-link").on("click", function(){
+      jQuery("#cjs-forgot-password-modal").modal("hide");
+      jQuery("#" + modalId).modal("show");
+    });
+  }
+}
+
+var Signup = {
+  validateForm: function(disableText, validTimezonesArray, obsoleteTimezonesHash, urlToNotifyNewTimezone) {
+    jQuery(".cjs-signup-btn").on("click", function(){
+      var isFirstNamePresent = RequiredFields.checkNonMultiInputCase("#member_first_name");
+      var isLastNamePresent = RequiredFields.checkNonMultiInputCase("#member_last_name");
+      var isRolesPresent = (jQuery("#roles_list").length == 0) || RequiredFields.checkMultiInputCase(jQuery("#roles_list"));
+      var isPasswordPresent = (jQuery("#member_password").length == 0) || RequiredFields.checkNonMultiInputCase("#member_password");
+      var isPasswordConfirmationPresent = (jQuery("#member_password_confirmation").length == 0) || RequiredFields.checkNonMultiInputCase("#member_password_confirmation");
+      var isSignUpTermsPresent = jQuery("#signup_terms_container").length == 0 || RequiredFields.checkMultiInputCase("#signup_terms_container");
+      var requiredFieldsPresent = isFirstNamePresent && isLastNamePresent && isRolesPresent && isPasswordPresent && isPasswordConfirmationPresent && isSignUpTermsPresent;
+      var isValid = true;
+
+      if(requiredFieldsPresent) {
+        if(jQuery("#member_password").length > 0) {
+          if(jQuery("#member_password").val() != jQuery("#member_password_confirmation").val()) {
+            ChronusValidator.ErrorManager.ShowFieldError(jQuery("#member_password"));
+            ChronusValidator.ErrorManager.ShowFieldError(jQuery("#member_password_confirmation"));
+            ChronusValidator.ErrorManager.ShowPageFlash(false, jsCommonTranslations.fixPasswordError);
+            isValid = false;
+          }
+        }
+      } else {
+        ChronusValidator.ErrorManager.ShowPageFlash(false, jsCommonTranslations.fillAppropriateValues);
+        isValid = false;
+      }
+
+      if(isValid) {
+        ChronusValidator.ErrorManager.ClearPageFlash();
+        jQuery(this).attr("disabled", "disabled");
+        jQuery(this).val(disableText);
+        computeTimeZone(validTimezonesArray, obsoleteTimezonesHash, urlToNotifyNewTimezone);
+        jQuery(this).closest(".cjs-signup-form").submit();
+      }
+      return isValid;
+    });
+  }
+
+}
+
+var KendoSticky = function(kendoGrid) {
+  this.initialize = function(kendoGrid){
+    this.kendoGrid = kendoGrid;
+    this.wrapper = this.kendoGrid.data("kendoGrid").wrapper;
+    this.kendoHeader = this.wrapper.find(".k-grid-header");
+    this.chronusHeaderHeight = jQuery("#chronus_header_wrapper").height();
+    this.kendoHeaderOffsetTop = this.kendoHeader.offset().top;
+    this.kendoHeaderHeight = this.kendoHeader.height();
+    this.fixOn = this.kendoHeaderOffsetTop - this.chronusHeaderHeight;
+    this.selectAll = this.wrapper.find("#cjs_select_all_option");
+    this.selectAllHeight = 0;
+
+    var options = { kendoSticky: this };
+    KendoSticky.handleWidth({ data: options });
+
+    // Handling window resize
+    jQuery(window).bind("resize", options, KendoSticky.handleWidth);
+  };
+
+  this.process = function(){
+    if (this.selectAll.is(":visible")) {
+      this.affixTop(this.selectAll, this.selectAll.offset().top - this.chronusHeaderHeight, this.chronusHeaderHeight);
+      this.selectAllHeight = this.selectAll.outerHeight();
+    } else {
+      this.selectAllHeight = 0;
+    }
+
+    this.affixTop(this.kendoHeader, this.fixOn, this.chronusHeaderHeight + this.selectAllHeight);
+
+    var scroll_wrapper = this.kendoGrid.find(".suwala-doubleScroll-scroll-wrapper");
+    if (scroll_wrapper.length > 0){
+      this.affixTop(scroll_wrapper, this.fixOn, this.chronusHeaderHeight + this.kendoHeaderHeight + this.selectAllHeight);
+    }
+  };
+
+  this.affixTop = function(element, fixOn, top_height){
+    element.affix({
+      offset: {
+        top: fixOn
+      }
+    });
+
+    jQuery(element).css('top', top_height + 'px');
+    jQuery(element).css("z-index", 1);
+  };
+
+  this.affixWidth = function(element, width){
+    jQuery(element).css({ "width": width });
+  };
+
+  this.initialize(kendoGrid);
+}
+
+// Width has to be set to bring elements within kendo-grid
+KendoSticky.handleWidth = function(event){
+  var kendoSticky = event.data.kendoSticky;
+  kendoSticky.affixWidth(kendoSticky.kendoHeader, kendoSticky.kendoGrid.width());
+  var selectAllPaddingValue = parseInt(kendoSticky.selectAll.css("padding-left")) + parseInt(kendoSticky.selectAll.css("padding-right"));
+  kendoSticky.affixWidth(kendoSticky.selectAll, kendoSticky.kendoGrid.width() - selectAllPaddingValue);
+};

@@ -1,0 +1,25 @@
+en:
+  email_translations:
+    inbox_message_notification:
+      title_v2: New message notification to end users in %{portal_name}
+      description: This e-mail is sent to a user when they receive a message from any other user or %{_admin} in the %{_program}.
+      subject: "{{message_subject}}"
+      content_v1_html: "<table cellspacing='0' border = '0' cellpadding = '0' width='100%' style='table-layout: fixed;' class='wrapper'><tbody><tr><td align = 'center'>{{sender_profile_picture}}</td></tr><tr><td align = 'center'>You have a <a href='{{url_message}}'>message</a> from {{sender_name}}.</td></tr></tbody></table><br/><table cellspacing='0' border = '0' cellpadding = '0' bgcolor = '#ECEEF1' width='100%'><tbody><tr><td style='padding: 10px; font-weight: bold; font-style: italic;'>{{message_content}}</td></tr></tbody></table>{{reply_button}}{{reply_button_help_text}}<br/>"
+      reply_text: Reply
+      reply_button_help_text_with_reply_enabled_html: To respond to %{sender_name}, just reply to this email or click the 'Reply' button above. You can also <a href='%{url_message}'>login and reply to this message</a> from the %{organization_name}.
+      reply_button_help_text_without_reply_enabled_html: To respond to %{sender_name}, just reply to this email or click the 'Reply' button above.
+      tags:
+        reply_button:
+          description: Reply button
+        reply_button_help_text:
+          description: Reply button help text
+        message_subject:
+          description: Subject of the message
+          example: Help needed
+        sender_name:
+          description: Name of the sender of the message
+        message_content:
+          description: Content of the message
+          example: Sure. I can help you in choosing a mentor. Please share the qualities you expect in your mentor.
+        sender_profile_picture:
+          description: Profile picture of message sender.

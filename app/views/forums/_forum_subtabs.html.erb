@@ -1,0 +1,30 @@
+<li class="dropdown <%= subtab_class %>">
+  <%= link_to(get_safe_string + get_icon_content("fa fa-fw fa-comments") + translated_tab_label(TabConstants::FORUMS) + content_tag(:span, "", :class => "fa arrow"), tab_info.url, :class => 'dropdown-toggle navigation_tab_link') %>
+  <ul class="nav nav-second-level">
+    <% subscribed_program_forums = current_user.subscribed_forums.program_forums.select("forums.id, forums.name").all %>
+    <% if subscribed_program_forums.any? %>
+      <li class="p-l-xl p-b-xxs font-bold text-nav-item">
+        <%= "tab_constants.sub_tabs.my_forums".translate %>
+      </li>
+      <% subscribed_program_forums.each do |forum| %>
+        <li class="font-noraml p-l-xs">
+          <%= link_to h(truncate(forum.name, length: 25)), forum_path(forum, src: EngagementIndex::Src::BrowseMentors::SIDE_NAVIGATION, sub_src: EngagementIndex::SideBarSubSrc::MENTORING_COMMUNITY) %>
+        </li>
+      <% end %>
+    <% end %>
+
+    <% other_program_forums = current_user.accessible_program_forums - subscribed_program_forums %>
+    <% if other_program_forums.any? %>
+      <% if subscribed_program_forums.any? %>
+        <li class="p-l-xl p-t-xs p-b-xxs font-bold text-nav-item">
+          <%= "tab_constants.sub_tabs.other_forums".translate %>
+        </li>
+      <% end %>
+      <% other_program_forums.each do |forum| %>
+        <li class="font-noraml p-l-xs">
+          <%= link_to h(truncate(forum.name, length: 25)), forum_path(forum, src: EngagementIndex::Src::BrowseMentors::SIDE_NAVIGATION, sub_src: EngagementIndex::SideBarSubSrc::MENTORING_COMMUNITY) %>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+</li>

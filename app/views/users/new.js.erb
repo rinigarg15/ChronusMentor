@@ -1,0 +1,17 @@
+<% existing_user = @existing_member.user_in_program(@current_program) if @existing_member %>
+
+<% if !@role.present? %>
+  jQuery("#profile_form").html("");
+<% elsif existing_user.present? %>
+  flash_msg = "<%= 'feature.user.label.user_already_exists_in_the_program_html'.translate(user_name: existing_user.name, user_email: existing_user.email, program: _program, user_profile: user_path(existing_user)) %>";
+  ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", flash_msg);
+<% elsif @existing_member && @existing_member.suspended? %>
+  flash_msg = "<%= 'feature.user.label.member_suspended_at_org_level'.translate(member_name: @existing_member.name, member_email: @existing_member.email, program: _program, org_name: @current_organization.name) %>";
+  ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", flash_msg);
+<% elsif !@existing_member || @can_add_existing_member %>
+  NewMember.handleClearEmail(true);
+  jQuery("#profile_form").html("<%= j(render(:partial => 'profile_form')) %>");
+<% elsif !@can_add_existing_member %>
+  flash_msg = "<%= 'feature.user.label.permission_not_present_to_add_existing_member_html'.translate(member_name: @existing_member.name, admins: _admins, org_name: @current_organization.name, invite_url: new_program_invitation_path(:recipient_email => @existing_member.email, :invitation_roles => @roles)) %>";
+  ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", flash_msg);
+<% end %>

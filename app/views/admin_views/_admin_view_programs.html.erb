@@ -1,0 +1,20 @@
+<% programs.in_groups_of(3, false) do |row_programs| %>
+  <div class="row m-t-sm m-b-xs">
+    <% row_programs.each do |program| %>
+      <div class="col-sm-4">
+        <% unless @current_organization.standalone? %>
+          <div class="font-600"> <%= program.name.truncate(AdminViewsHelper::MAX_LENGTH_PROGRAM_NAME) %> </div>
+        <% end %>
+        <%= choices_wrapper("feature.admin_view.label.program_and_roles".translate(program: _Program)) do %>
+          <% program.roles.each do |role| %>
+            <label class="checkbox inline">
+              <%= check_box_tag("admin_view[program_roles][]", role.id, filter_roles.include?(role.id.to_s), id: "admin_view_program_roles_#{role.id}") %>
+              <%= role.customized_term.term.truncate(AdminViewsHelper::MAX_LENGTH_ROLE_NAME) %>
+            </label>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+

@@ -1,0 +1,13 @@
+<% if @update_settings %>
+  closeQtip();
+<% end %>
+
+<% partial_locals = {mentee_view: @mentee_view, mentor_view: @mentor_view, mentor_view_users: @mentor_view_users, mentee_view_users: @mentee_view_users, match_config_question_texts_hash: @match_config_question_texts_hash, section_data: @section_data, top_match_configs: @top_match_configs} %>
+<% content = render(partial: @partial, locals: partial_locals) %>
+jQuery("#<%= @element_id %>").html("<%= j content %>");
+<% match_config = @top_match_configs.first[:match_config_id] if @top_match_configs.present? %>
+<% match_config ||= @match_config_question_texts_hash.keys[0] if @match_config_question_texts_hash.present? %>
+
+<% if match_config.present? %>
+  jQuery('.cjs_needs_discrepancy_match_config_link#<%= match_config %>').trigger('click');
+<% end %>

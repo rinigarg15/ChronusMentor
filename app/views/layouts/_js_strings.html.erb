@@ -1,0 +1,9 @@
+<%= javascript_tag do %>
+  var jsStrings = {
+    sanitizationDiffPath: '<%= j(compare_content_before_and_after_sanitize_sanitizations_path(format: :js)) %>',
+    sanitizedContentPath: '<%= j(preview_sanitized_content_sanitizations_path(format: :js)) %>',
+    previewIconPath: '<%= j(asset_path("preview.png")) %>',
+    isAdmin: <%= (current_user ? current_user.is_admin? : (current_member ? current_member.admin? : false)).to_s %>,
+    allowVulnerableContentByAdmin: <%= (@current_organization ? @current_organization.security_setting.allow_vulnerable_content_by_admin : false).to_s %>
+  };
+<% end %>

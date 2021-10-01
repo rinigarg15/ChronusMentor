@@ -1,0 +1,11 @@
+<div class="col-md-12 cjs-tile-container no-padding" id="mentee_actions_container">
+  <%= render(partial: "match_reports/tile_settings", locals: {tile: MatchReport::Sections::MenteeActions, tile_settings_class: " cjs_mentee_actions_tile_setting", admin_view_id: admin_view_id}) %>
+  <h3 class="font-noraml"><%= "feature.match_report.label.mentee_actions".translate(mentor: _mentor, mentees: _mentees) %>
+    <span id="mentee_actions_helptext"><%= get_icon_content("fa fa-info-circle") %></span>
+    <% date_time = DateTime.localize(MatchReport::MenteeActions::VIEWABLE_CUTOFF_DATE.to_datetime) %>
+    <%= tooltip("mentee_actions_helptext", "feature.match_report.tooltips.mentee_actions".translate(datetime: date_time)) %>
+  </h3>
+  <div id="mentee_actions_info">
+    <%= render(partial: "common/tile_placeholder") %>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="profile_status_box" id ="profile_complete_sidebar">
+  <% if home_page %>
+    <%= profile_completion_content %>
+  <% else %>
+    <%= ibox "feature.profile.content.complete_your_profile".translate, {ibox_class: "m-b-sm", additional_right_links: additional_right_links, show_collapse_link: true, collapse_link_class: collapse_link_class} do %>
+      <%= profile_completion_content %>
+    <% end %>
+  <% end %>
+</div>

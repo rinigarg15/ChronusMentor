@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <title><%= "app_layout.header.chronus".translate %><%= " | #{strip_tags(@title)}" unless @title.blank? %></title>
+
+    <% favicon_href = @current_organization.present? && @current_organization.favicon_link.present? ? @current_organization.favicon_link : Brand::Defaults::FAVICON %>
+    <link class="favicon_chronus" rel="SHORTCUT ICON" href="<%= favicon_href %>" type="image/x-icon" />
+    <%= split_stylesheet_link_tag 'v3/application_v3', :split_count => 6 %>
+    <%= render partial: "layouts/translations/pre_js_translations" %>
+    <%= javascript_include_tag 'v3/application_v3' %>
+    <%= render partial: "layouts/translations/js_translations" %>
+    <%= csrf_meta_tag %>
+    <%= raw(render_gtac) %>
+  </head>
+  <body role="main" class="add_new_program white-bg">
+    <%= cucumber_helper_track_page_load_begin %>
+    <div class="clearfix">
+      <div id="statusbar_header" class="p-m clearfix" style="background: #1eaa79; color: white;">
+        <ul class="unstyled no-margins font-bold pull-left font-bold">
+          <li class="h5 no-margins">
+            <a href="https://chronus.com" class="no-waves text-white" target="_blank"><%= image_tag("chronus_white_small.png", :class => "m-r-sm") %> Chronus Super Console</a>
+          </li>
+        </ul>
+        <div id='actions' class="unstyled no-margins pull-right">
+          <% if super_console? %>
+            <span id="super_console" class="font-bold text-white <%= 'p-r-sm m-r-sm b-r' if logged_in_organization? %>">
+              <%= "app_layout.label.super_user_signout_html".translate(signout_link: link_to("display_string.sign_out".translate, super_logout_path, :method => :delete, :class => "text-white")) %>
+            </span>
+          <% end %>
+          <% if logged_in_organization? %>
+            <span class="font-bold m-l-sm">
+              <%= wob_member.name.camelize %>
+            </span>
+            <span class="font-bold"><%= link_to "display_string.Sign_out".translate, logout_path, get_logout_options("text-white") %></span>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+    <div id="page-wrapper" class="no-margins no-padding">
+
+      <div id='app_content' class='clearfix p-b-xl'>
+        <%= render :partial => 'common/warning' if @supported_with_warning_browser %>
+        <% if @title %>
+          <div class="p-md p-l-m white-bg h4 no-vertical-margins">
+            <%= @title %>
+            <div id="title_actions" class="pull-right">
+              <div class="hidden-xs m-r">
+                <% if @page_action %>
+                  <div id='action_1' class="pull-right m-t-n-xs">
+                    <%= render_page_action(@page_action, @page_action_options || {}) %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+        <div id='page_canvas' class='clearfix app_page_canvas <%= "v2_pages" if @v2_page %>'>
+          <%= show_flash %>
+          <%= yield %>
+        </div>
+      </div>
+
+      <div class="footer no-padding white-bg text-center clearfix">
+        <ul class='unstyled no-margins clearfix white_label_footer'>
+          <% if @current_organization.present? && !@current_organization.white_label %>
+            <li class='inline first p-sm b-r'>
+              <%= link_to 'footer.about_chronus'.translate, 'https://chronus.com', :target => "_blank" %>
+            </li>
+          <% end %>
+          <li class="p-sm b-r inline <%= 'first' if @current_organization.try(:white_label) %>">
+            <%= link_to 'footer.terms_and_conditions'.translate, url_for(:controller => 'home', :action => 'terms'), :target => "_blank" %>
+          </li>
+          <li class="p-sm inline">
+            <%= link_to 'footer.privacy_policy'.translate, url_for(:controller => 'home', :action => 'privacy_policy'), :target => "_blank" %>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <%= cucumber_helper_track_page_load_end %>
+    <%= download_ck_attachment_if_exist %>
+    <%= render partial: 'common/cordova', locals: {header_id: '#statusbar_header'} if is_mobile_app? %>
+  </body>
+</html>

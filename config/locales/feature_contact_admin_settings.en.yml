@@ -1,0 +1,20 @@
+en:
+  feature:
+    contact_admin:
+      header:
+        title: Contact Admin Settings
+        title_v1: Contact %{Admin} Settings
+      label:
+        contact_admin_label: Label for contact admin
+        contact_admin_label_v1: Label for contact %{admin}
+        available_options: Available options for contact admin
+        available_options_v1: Available options for contact %{admin}
+        external_link: Use External URL
+        default_form: Use Chronus Contact Admin Form
+        default_form_v1: Use Chronus Contact %{Admin} Form
+      placeholder:
+        optional_instructions: Optional instructions to be present in contact admin form
+        optional_instructions_v1: Optional instructions to be present in contact %{admin} form
+        external_url: "Type the external URL ex: http://chronus.com"
+      content:
+        contact_for_questions_html: "%{contact_admin} if you have any questions."

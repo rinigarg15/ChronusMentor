@@ -1,0 +1,26 @@
+en:
+  email_translations:
+    new_admin_message_notification_to_member:
+      title_v3: New message notification to %{_admins} in %{portal_name}
+      description_v2: When a participant replies to %{_a_admin}'s message or contacts %{_a_admin} at the organization (global) level, this email is sent to the %{_admin}.
+      subject: "{{message_subject}}"
+      content_v1_html: You have a <a href='{{url_message}}'>message</a> from {{sender_name}}:<br/><br/>{{message_content}}<br/><br/>To respond to {{sender_name}}, click the button below or click reply to this email.<br/>{{reply_to_message_button}}
+      reply_text: Reply
+      tags:
+        sender_name:
+          description: Name of the sender of the message
+        url_message:
+          description: Url to the message
+        message_content:
+          description: Content of the message
+          example: Please give suggestions for improving my profile
+        url_reply:
+          description: Link to reply to the message
+        message_subject:
+          description: Subject of the message
+          example: Help needed
+        text_for_inline_reply:
+          description: For cases where the member can reply from the email client, this instruction text will be appended
+          example: reply to this email (message will be sent to the member) or
+        reply_to_message_button:
+          description: Reply to message button

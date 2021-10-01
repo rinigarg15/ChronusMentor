@@ -1,0 +1,73 @@
+@import "mixins.scss";
+
+div.pdf_banner_container{
+  #program_name_pdf{
+    span#prog_name {
+      margin-left: 15px;
+      font-size:1.9em;
+      font-weight: normal;
+      line-height: 30px;
+      padding: 0px;
+      color: $program-header-color;
+      vertical-align: -90%;
+    }
+    img{
+      margin-left: 15px;
+      height: 60px;
+      max-width: none;
+      @include align-logo-in-banner($logo-alignment);
+    }
+    .program_logo_or_banner img{
+      max-width: 100px;
+    }
+  }
+}
+
+* {
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.ibox {
+  border-bottom: 2px solid #CCC;
+
+  .ibox-title {
+    .ibox-tools {
+      display: none;
+    }
+  }
+}
+
+div.pdf_banner_container #report_title{
+  font-size: 1.4em;
+}
+
+.glyphicons-fullpath{
+  background-image: image-url("glyphicons-halflings.png");
+}
+
+/*! Multiple font family create problem while generating PDF. So we are using ony one font for pdfs */
+body {
+  width: 980px;
+  min-width: 980px;
+  max-width: 980px;
+  font-family: "sans-serif";
+}
+
+.fa-th-large{background-position:-216px 0;}
+.fa-calendar{background-position:-192px -120px;}
+.fa-external-link{background-position:-120px -71px;}
+
+tr { page-break-inside: avoid }
+body,html {
+  overflow-x: visible;
+}
+
+
+.cui-page-break {
+  page-break-before: always;
+}
+
+.cui-page-break-avoid {
+  page-break-inside: avoid;
+}

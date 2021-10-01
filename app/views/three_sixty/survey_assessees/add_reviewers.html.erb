@@ -1,0 +1,55 @@
+<% @title = @survey.title %>
+<% @sub_title = "feature.three_sixty.reviewer.add_reviewers".translate %>
+  <div class="well white-bg">
+    <% if @survey.only_assessee_can_add_reviewers? %>
+      <%= "feature.three_sixty.assessee.adding_reviewers_instruction".translate %>
+      <% reviewer_group_thresholds = [] %>
+      <% @survey.reviewer_groups.excluding_self_type.each do |rg| %>
+        <% reviewer_group_thresholds << "feature.three_sixty.assessee.reviewer_group_threshold_instruction".translate(:count => rg.threshold, :reviewer_group_name => rg.name, :reviewer_group_name_pluralized => rg.name.pluralize) unless rg.threshold.zero? %>
+      <% end %>
+      <% if reviewer_group_thresholds.any? %>
+        <span class="strong">
+          <% reviewer_group_thresholds_string = reviewer_group_thresholds.to_sentence(:last_word_connector =>  " #{'display_string.and'.translate} ") %>
+          <%= "feature.three_sixty.assessee.threshold_instruction_v1".translate(:reviewer_group_thresholds => reviewer_group_thresholds_string) %>
+        </span>
+      <% end %>
+    <% else %>
+      <%= "feature.three_sixty.assessee.adding_reviewers_instruction_for_admin".translate(:assessee_name => @survey_assessee.name, :survey_title => @survey.title) %>
+    <% end %>
+  </div>
+<%= ibox nil do %>
+  <% if @invited_survey_reviewers.present? %>
+    <%= render :partial => 'three_sixty/survey_assessees/invited_reviewer', :collection => @invited_survey_reviewers %>
+    <hr/>
+  <% end %>
+
+  <div class="cjs_three_sixty_container m-l-xs list-group">
+    <%= render :partial => 'three_sixty/survey_assessees/reviewer', :collection => @pending_survey_reviewers, :locals => {:survey => @survey, :survey_assessee => @survey_assessee} %>
+
+    <div id="new_three_sixty_survey_reviewer" class="list-group-item">
+      <%= link_to(get_icon_content("fa fa-plus-circle") + "feature.three_sixty.reviewer.add".translate, '#', :class => "cjs_new_three_sixty_object_link btn btn-white btn-sm")%>
+      <div class="cjs_new_three_sixty_object" style="display:none;">
+        <%= render :partial => 'three_sixty/survey_assessees/new_reviewer', :locals => {:survey => @survey, :survey_assessee => @survey_assessee, :survey_reviewer_groups => @survey_reviewer_groups, :survey_reviewer => @survey_reviewer, :for_new => true} %>
+      </div>
+    </div>
+  </div>
+
+  <div class="clearfix" style=<%= @pending_survey_reviewers.present? ? "" : "display:none;" %> id="three_sixty_survey_notify_reviewers" >
+    <span class="pull-right m-t-sm">
+      <%= link_to("display_string.Send".translate, notify_reviewers_three_sixty_survey_assessee_path(@survey, @survey_assessee), :class => "btn btn-primary") %>
+    </span>
+  </div>
+
+  <% if @show_edit_survey_response %>
+    <div class="m-t-sm clearfix">
+      <hr/>
+      <div class="text-center">
+        <%= link_to("feature.three_sixty.assessee.edit_survey_response".translate, show_reviewers_three_sixty_survey_assessee_reviewers_path(@survey, @survey_assessee, code: @survey_assessee.self_reviewer.invitation_code), class: "btn btn-primary") %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  ThreeSixty.initializeAddSurveyReviewers();
+<% end %>

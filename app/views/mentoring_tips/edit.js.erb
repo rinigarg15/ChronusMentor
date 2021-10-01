@@ -1,0 +1,4 @@
+jQuery("#mentoring_tip_<%= @mentoring_tip.id %>").after('<%= escape_javascript(render(:partial => "mentoring_tips/mentoring_tip_form", :locals => {:mentoring_tip => @mentoring_tip})) %>');
+jQuery("#mentoring_tip_<%= @mentoring_tip.id %>").hide();
+MentoringTips.updateCount("<%= @mentoring_tip.id %>");
+initialize.autoResizeTextAreas();

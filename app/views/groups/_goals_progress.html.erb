@@ -1,0 +1,22 @@
+<% mentoring_model_goals = group.mentoring_model_goals %>
+
+<%= panel "feature.mentoring_model.header.goals_progress_v1".translate, panel_class: "panel-default no-borders m-b-sm" do %>
+  <% if mentoring_model_goals.present? %>
+    <% if group.get_mentoring_model.manual_progress_goals? %>
+      <% mentoring_model_goals.each do |mentoring_model_goal| %>
+        <div class="m-b-sm">
+          <%= render :partial => "groups/display_mentoring_model_manual_goal_progress", locals: { goal: mentoring_model_goal, group: group, from_groups: true } %>
+        </div>
+      <% end %>
+    <% else %>
+      <% required_tasks = group.mentoring_model_tasks.select(&:required) %>
+      <% mentoring_model_goals.each do |mentoring_model_goal| %>
+        <div class="m-b-sm">
+          <%= render partial: "groups/display_mentoring_model_goal_progress", locals: { goal: mentoring_model_goal, required_tasks: required_tasks, group: group, from_groups: true, show_manage_connections_view: show_manage_connections_view } %>
+        </div>
+      <% end %>
+    <% end %>
+  <% else %>
+    <%= content_tag(:div, "feature.mentoring_model.header.no_goals_defined".translate, class: "text-muted") %>
+  <% end %>
+<% end %>

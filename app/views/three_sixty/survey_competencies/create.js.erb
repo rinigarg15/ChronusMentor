@@ -1,0 +1,5 @@
+<% if @survey_competency.valid? %>
+  jQuery("#three_sixty_survey_competencies").append('<%= j render(:partial => "three_sixty/surveys/survey_competency", :locals => {:survey_competency => @survey_competency, :survey => @survey}) %>');
+  jQuery("#three_sixty_new_survey_competency").html('<%= j render(:partial => "three_sixty/surveys/new_survey_competency", :locals => {:survey => @survey, :available_competencies => @available_competencies}) %>');
+  ThreeSixty.alternateColor("#three_sixty_survey_competency_<%= @survey_competency.id %>");
+<% end %>

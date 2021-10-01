@@ -1,0 +1,32 @@
+<% is_disabled = current_notification_settting_values(@profile_user)%>
+<% content = notification_section_content %>
+<%= control_group do %>
+  <% UserNotificationSetting::SettingNames.all.each do |setting|%>
+    <div class="notification_setting_option m-b-md">
+      <div class="notification_setting_content vertical-align-top inline col-sm-10">
+        <strong><%= content[setting][:title].translate(admin: _admin , Program: _Program) %></strong>
+        <div class="text-muted small"><%= content[setting][:description].translate(admin: _admin, program: _program, mentoring_connections: _mentoring_connections) %></div>
+      </div>
+      <div class="switch  inline vertical-align-top" id=<%= "#{setting}_switch" %>>
+        <div class="onoffswitch">
+          <% if !is_disabled[setting] %>
+            <input class="onoffswitch-checkbox" id=<%= "#{setting}" %> type="checkbox" checked>
+          <% else %>
+            <input class="onoffswitch-checkbox" id=<%= "#{setting}" %> type="checkbox">
+          <% end %>
+          <label class="onoffswitch-label" for=<%= setting %>>
+            <span class="onoffswitch-inner"></span>
+            <span class="onoffswitch-switch"></span>
+            <span class="sr-only"><%= "feature.profile.content.enable_disable_switch".translate %></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  <%end%>
+<% end %>
+
+<script type="text/javascript">
+  jQuery('.onoffswitch').on("click",function(){
+    EditUser.editNotifications(jQuery(this),"<%= update_notifications_member_path(@profile_member); %>");
+  });
+</script>

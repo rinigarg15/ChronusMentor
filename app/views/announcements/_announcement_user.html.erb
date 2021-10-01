@@ -1,0 +1,21 @@
+<% time = time_ago_in_words(announcement_user.updated_at)%>
+<div class="clearfix">
+  <div class="media-left">
+    <%= get_icon_content("fa fa-bullhorn no-margins", :container_class => "fa-circle", :stack_class => "fa-2x") %>
+  </div>
+  <div class="media-body">
+    <h4>
+      <%= link_to content_tag(:span, truncate(announcement_user.title.term_titleize,:length => 45), :class => hidden_on_web) + content_tag(:span, announcement_user.title.term_titleize, :class => hidden_on_mobile), announcement_path(announcement_user) %>
+      <div class="small m-t-xs"><%= get_icon_content("fa fa-clock-o no-margins") + "feature.announcements.label.posted".translate %> <%= "display_string.time_ago".translate(time: time) %></div>
+    </h4>
+  </div>
+  <%- unless announcement_user.body.blank? -%>
+    <div class="m-t-sm clearfix ckeditor_generated word_break">
+      <% announcement_user_body, is_truncated = truncate_content(announcement_user.body, 290) %>
+      <%= announcement_user_body -%>
+      <%- if is_truncated or announcement_user.attachment? -%>
+        (<%= link_to "display_string.read_more_raquo_html".translate, announcement_path(announcement_user) -%>)
+      <%- end -%>
+    </div>
+  <%- end -%>
+</div>

@@ -1,0 +1,6 @@
+jQuery("#remoteModal [data-dismiss]").click();
+jQuery('.cjs-section-inner-container').append("<%= j(render(partial: 'sections/section', locals: {section: @section, visibility: true})) %>");
+jQuery('.cjs-profile-question-inner-container').append("<%= j(render(partial: 'sections/new_empty_section', locals: {section: @section})) %>");
+ProfileConfigUI.updateAndShowNoOfSections();
+ProfileConfigUI.updateAndShowNumberOfProfileQuestionsUnderSection(<%= @section.id %>);
+ProfileConfigUI.adjustUiCommon();

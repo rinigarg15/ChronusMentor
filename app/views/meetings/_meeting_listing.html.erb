@@ -1,0 +1,52 @@
+<% tabs = [] %>
+<% tabs << {
+  label: "feature.meetings.header.upcoming".translate(Meetings: _Meetings),
+  url: "#upcoming_meetings",
+  active: !@past_meetings_selected,
+  link_options: {
+    data: {
+      toggle: "tab"
+    }
+  },
+  tab_class: "cjs_upcoming_meetings_tab"
+} %>
+<% tabs << {
+  label: "feature.meetings.header.past".translate(Meetings: _Meetings),
+  url: "#archived_meetings",
+  active: @past_meetings_selected,
+  link_options: {
+    data: {
+      toggle: "tab"
+    }
+  },
+  tab_class: "cjs_archived_meetings_tab"
+} %>
+
+<% tab_options = {} %>
+<% tab_options.merge!({:tab_position_class => "hide"}) if @group %>
+
+<%= ibox nil, content_class: "no-padding" do %>
+  <%= inner_tabs(tabs, tab_options) %>
+  <div class="tab-content no-padding clearfix">
+    <div id="upcoming_meetings" class="tab-pane no-padding <%= 'active' if !@past_meetings_selected %>">
+      <%= render partial: "meetings/upcoming_meetings" %>
+    </div>
+    <div id="archived_meetings" class="tab-pane no-padding <%= 'active' if @past_meetings_selected %>">
+      <%= render partial: "meetings/archived_meetings" %>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).on("ready", function(){ 
+    <% if @show_past_meetings %>
+      Meetings.showPastMeetings();
+    <% end %>
+    <% unless from_meeting_index %>
+      Meetings.handleRsvpChange();
+    <% end %>
+    Meetings.trackMeetingListingEvents();
+    Meetings.setNewMeetingFormEISrc();
+    Meetings.handleRsvpPopup();
+  });
+<% end %>

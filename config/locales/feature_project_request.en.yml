@@ -1,0 +1,81 @@
+en:
+  feature:
+    project_request:
+      header:
+        project_requests: "%{Mentoring_Connection} Requests"
+        project_requests_to_group: "%{Mentoring_Connection} Requests to %{group_name}"
+        project_requests_dropped: Includes %{Mentoring_Connection} Requests Rejected
+      label:
+        Request: Request
+        Sender: Requestor
+        Sent: Sent
+        Applied_For: Applied For
+      content:
+        requests_dropped: Includes %{mentoring_connection} requests rejected, withdrawn and closed
+        empty_text: There are no %{mentoring_connection} requests matching the chosen criteria
+        select_all_label: Select all %{mentoring_connection} requests to perform an action
+        select_atleast_one_request: Please select atleast one %{mentoring_connection} request
+        select_this_label: Select this request to perform an action
+        filters:
+          title: Filter Requests
+          Status: Status
+          requestor: Requestor
+          project: "%{Mentoring_Connection}"
+          sent_between: Sent Between
+          view: View
+        bulk_reject_request_popup:
+          title:
+            one: Reject Request
+            other: Reject Requests
+          help_text:
+            one: You have selected a %{mentoring_connection} request.
+            other: You have selected %{count} %{mentoring_connection} requests.
+          placeholder:
+            reason:
+              one: Enter a reason for rejecting the %{mentoring_connection} request.
+              other: Enter a reason for rejecting the %{mentoring_connection} requests.
+          rejection_reason: Reason for rejection
+          action:
+            reject_request:
+              one: Reject Request
+              other: Reject Requests
+        withdraw_request_popup:
+          placeholder:
+            reason: Enter a reason for withdrawing the %{mentoring_connection} request.
+          withdrawal_reason: Reason for withdrawal
+          action:
+            withdraw_request: Withdraw Request
+        bulk_accept_request_popup:
+          title:
+            one: Accept Request
+            other: Accept Requests
+          action:
+            accept_request:
+              one: Accept Request
+              other: Accept Requests
+          help_text:
+            one: You have selected a %{mentoring_connection} request.
+            other: You have selected %{count} %{mentoring_connection} requests.
+          add_tasks: Add all tasks to the new users being accepted into the %{circles} which have already started
+          dont_add_tasks: Don't add any tasks for the new users being accepted into the %{circles} which have already started
+        new_request_popup:
+          title: Request to join %{mentoring_connection}
+          role_selector_label: Request to join as
+          action:
+            send_request: Send Request
+          label:
+            message: Request
+          default_txt_v1: Add a message to be sent along with your request.
+        critical_mass: Would you also like to publish this %{circle}?
+        auto_expire_message: Auto closed because it has not been responded.
+        limit_reached: Reached the %{mentoring_connection} join limit.
+        closing_reason: Reason for closing
+        withdrawal_reason: Reason for withdrawal
+      status:
+        Accepted: Accepted
+        Rejected: Rejected
+        Withdrawn: Withdrawn
+        Pending: Pending
+        closed: Closed
+        Declined: Rejected
+        Closed: Closed

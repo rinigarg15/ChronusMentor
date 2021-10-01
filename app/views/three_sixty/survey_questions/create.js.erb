@@ -1,0 +1,18 @@
+<% if @survey_competency.present? %>
+  closeQtip();
+  <% content =  render(:partial => "three_sixty/surveys/survey_question", :collection => @survey_questions, :locals => {:survey => @survey, :survey_competency => @survey_competency}) %>
+  jQuery("#three_sixty_survey_competency_questions_<%= @survey_competency.id %>").append("<%= j(content) %>");
+  jQueryHighlight("#three_sixty_survey_competency_<%= @survey_competency.id %>", 500);
+  ThreeSixty.alternateColor("#three_sixty_survey_competency_<%= @survey_competency.id %>");
+  <% if @survey_competency.questions.size == @survey_competency.competency.questions.size %>
+    jQuery("#three_sixty_survey_add_questions_<%= @survey_competency.id %>").hide();
+  <% end %>
+<% else %>
+  <% if @survey_question.valid? %>
+    jQuery("#three_sixty_survey_oeqs").append('<%= j render(:partial => "three_sixty/surveys/survey_oeq", :locals => {:survey_oeq => @survey_question, :survey => @survey}) %>');
+    jQuery("#cjs_three_sixty_survey_oeq_<%= @survey_question.id %>").hide();
+    jQuery("#three_sixty_new_survey_oeq").html('<%= j render(:partial => "three_sixty/surveys/new_survey_oeq", :locals => {:survey => @survey, :available_oeqs => @available_oeqs, :show_actions => true}) %>');
+    ThreeSixty.alternateColor("#three_sixty_survey_oeqs");
+    jQuery("#cjs_three_sixty_survey_oeq_<%= @survey_question.id %>").show();
+  <% end %>
+<% end %>

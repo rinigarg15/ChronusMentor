@@ -1,0 +1,6 @@
+jQuery(BulkMatch.refreshResults).tooltip('hide');
+<%= render partial: "bulk_matches/update_bulk_match_results" %>
+<% if @student_user_ids.present? && @mentor_user_ids.present? %>
+  jQuery(BulkMatch.exportCSVLink).show();
+  jQuery(".cjs_view_drafted_pairs").show();
+<% end %>

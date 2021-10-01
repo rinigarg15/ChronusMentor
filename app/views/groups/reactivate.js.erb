@@ -1,0 +1,11 @@
+jQuery("#reactivate_group_<%= @group.id %>").modal('hide');
+<% if @error_flash.present? %>
+  closeQtip();
+  ChronusValidator.ErrorManager.ShowResponseFlash('cjs_groups_flash', '<%= @error_flash %>', false);
+<% else %>
+  <% content = render :partial => "groups/no_groups", :locals => {:view => @view} %>
+  GroupSearch.reactivateCallback('<%= @group.id %>');
+  GroupSearch.updateNoGroupText("cjs_closed_count", "<%= escape_javascript content %>");
+  ChronusValidator.ErrorManager.ShowResponseFlash('cjs_groups_flash', '<%= "#{'flash_message.group_flash.reactivated_v1'.translate(mentoring_connection: _mentoring_connection)}" %>', true);
+<% end %>
+<%= render :partial => "groups/update_member_group_tabs_counts" %>

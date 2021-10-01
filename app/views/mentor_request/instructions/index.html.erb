@@ -1,0 +1,12 @@
+<%= include_ckeditor_tag %>
+<% @title = "feature.mentor_request.header.Customize_Mentor_Request_Form".translate(Mentoring: _Mentoring) %>
+<%= ibox "feature.mentor_request.content.instructions_for_mentee".translate(mentee: _mentee, mentoring: _mentoring) do %>
+  <%= simple_form_for @mentor_request_instruction, html: {class: 'clearfix', id: "mentor_request_instruction_form"} do |f| %>
+      <div id="edit_instructions">
+        <%= f.input :content, as: :text, label_html: {class: 'hide'}, input_html: {class: "form-control col-md-12", rows: 5} %>
+        <% action_set(class: "pull-right m-t") do %>
+          <%= f.button :submit, "Save" %>
+        <% end %>
+      </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,23 @@
+<% @title = "feature.reports.header.mentoring_calendar_report_v1".translate(:Mentoring => _Mentoring) %>
+<% @back_link = back_to_reports_options(@category) %>
+<% @loading_results_message = "common_text.prompt_text.filtering_results".translate %>
+
+<% @report_actions = {
+  url: mentoring_sessions_path,
+  data_js: %Q[Meetings.getMentoringSessionsFilterData();],
+  reset_js: %Q[commonReportFilters.resetOtherFilters();],
+  ga_label: ReportsController::GoogleAnalytics::MENTORING_SESSIONS_REPORT_LABEL,
+  time_filter: { time: {start: @from_date_range, end: @to_date_range}, label: "feature.reports.label.meetings_between".translate(:Meetings => _Meetings) },
+  export: [{label: "feature.membership_request.label.export_as_csv".translate, url: mentoring_sessions_path(format: :csv)},
+           {label: "feature.membership_request.label.export_as_pdf".translate, url: mentoring_sessions_path(format: :pdf)}],
+  other_filters_partial: "meetings/attendees_auto_complete"
+} %>
+
+
+<div id="meeting_session_report">
+  <%= render :partial => 'meetings/mentoring_sessions_main_content', :locals => {meetings: @meetings, tab: @tab, filter_params: @filter_params} %>
+</div>
+
+<%= javascript_tag do %>
+  commonReportFilters.initializeSwitchTab();
+<% end %>

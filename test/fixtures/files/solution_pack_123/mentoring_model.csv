@@ -1,0 +1,2 @@
+id,title,description,default,program_id,mentoring_period,created_at,updated_at,version,should_sync,mentoring_model_type,allow_due_date_edit
+1,Indian Institute of Technology Madras Template,,true,2,15552000,2014-08-07 11:11:20 UTC,2014-08-07 11:11:23 UTC,33,true,base,false

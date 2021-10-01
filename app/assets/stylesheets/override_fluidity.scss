@@ -1,0 +1,8 @@
+@import "mixins.scss";
+@import "structure_mixins.scss";
+
+$layout_max_width: 980px;
+$header_links_padding: 0px;
+
+@include default-structure;
+@include v2-structure;

@@ -1,0 +1,83 @@
+<%= render :partial => 'layouts/translations/campaign_management_analytics' %>
+<%= ibox nil do %>
+  <div class= "row">
+    <%= render(:partial => "campaign_management/user_campaigns/overall_stats", locals: { invitation: local_assigns[:invitation] }) %>
+    <h3>
+      <%= "feature.campaigns.analytics.activity".translate %> 
+      <%= content_tag(:small, "feature.campaigns.analytics.activity_tag".translate(:starting_year => @analytic_stats[:starting_time].year, :starting_month => "date.abbr_month_names_array".translate[@analytic_stats[:starting_time].month-1] , :starting_date => @analytic_stats[:starting_time].day, :ending_year => @analytic_stats[:ending_time].year, :ending_date => @analytic_stats[:ending_time].day, :ending_month => "date.abbr_month_names_array".translate[@analytic_stats[:ending_time].month-1]), class: "text-muted") %>
+    </h3>
+    <div id="cjs_highchart_campaign_analytics" class="clearfix col-sm-8 p-l-0 m-t-sm">
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(window).load(function(){
+    jQuery(window).resize();
+  });
+  var chart;
+  chart = jQuery('#cjs_highchart_campaign_analytics').highcharts({
+    credits: {
+      enabled: false
+    },
+    chart: {
+      height: 240,
+      backgroundColor: '#E3E3E1',
+      type: 'column'
+    },
+    title: {
+      text: ''
+    },
+    tooltip: {
+      formatter: function() {
+      return this.x + '<br><p style = "color:' + this.series.color +';">' + this.series.name + ': '+'<b>' + this.y + '</b> ';
+      }
+    },
+    xAxis: {
+      categories: <%= chr_json_escape(month_names.to_json) %>
+    },
+     yAxis: {
+      title: {
+          text: campaignsTranslations.sent_emails
+       },
+       min: 0
+     },
+    plotOptions: {
+      series: {
+        marker: {
+          enabled: false
+        },
+        lineWidth: 3
+      },
+      column: {
+        pointPadding: 0,
+        groupPadding: <%= 0.5 - 0.05 * month_names.size %>,
+        borderWidth: 0,
+        events: {
+          afterAnimate: function(event){
+            jQuery(window).resize();
+          }
+        }
+      }
+
+    },
+
+    series: [{
+       name: campaignsTranslations.sent,
+       data: <%= sent %>,
+       color: '#F16745'
+    },{
+       name: campaignsTranslations.delivered,
+       data: <%= delivered %>,
+       color: '#FFC65D'
+    },{
+      name: campaignsTranslations.opened,
+      data: <%= opened %>,
+      color: '#7BC8A4'
+    },{
+      name: campaignsTranslations.clicked,
+      data: <%= clicked %>,
+      color: '#93648D'
+    }]
+  });
+<% end %>

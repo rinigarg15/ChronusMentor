@@ -1,0 +1,9 @@
+<% if manage_mm_milestones_at_admin_level? %>
+  <% @all_task_templates.each do |milestone_template_id, task_templates| %>
+    <% content = render partial: "mentoring_model/task_templates/task_template", collection: task_templates %>
+    MilestoneTemplates.refreshTasks("<%= milestone_template_id.to_s %>", "<%= j(content) %>", "<%= task_templates.present? %>");
+  <% end %>
+<% else %>  
+  <% content = render partial: "mentoring_model/task_templates/task_template", collection: @all_task_templates %>
+  MilestoneTemplates.refreshTasks("<%= @facilitation_template.milestone_template_id.to_s %>", "<%= j(content) %>", "true");
+<% end %>

@@ -1,0 +1,17 @@
+en:
+  email_translations:
+    meeting_request_created_notification:
+      title_v4: "%{_Meeting} request notification to %{_mentor} for a calendar %{_meeting}"
+      description_v2: This email is sent to the %{_mentor}, when %{_a_mentee} requests %{_a_meeting} and the %{_meeting} date and time have been set using the %{_mentor}'s available slots.
+      subject_v2: "{{meeting_topic}}: You received a request for {{customized_meeting_term_articleized}} from {{mentee_name}}"
+      content_v7_html: "<table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: center;' width='100%' class='wrapper'><tbody><tr><td>{{mentee_profile_picture}}</td></tr><tr><td style='padding-top: 5px;'>{{mentee_url}} has requested {{customized_meeting_term_articleized}} with you.</td></tr></tbody></table><br /><table cellspacing='0' cellpadding='0' border='0' style='background-color: #F3F3F4; table-layout: fixed;' width='100%' class='wrapper'><tbody><tr><td style='padding: 10px 10px 0 10px; color: #787878; line-height: 16px; text-decoration: underline;'>Topic</td></tr><tr><td style='padding: 0 10px 10px 10px;'>{{meeting_topic_link}}</td></tr><tr><td style='padding: 0 10px 0 10px; color: #787878; line-height: 16px; text-decoration: underline;'>Description</td></tr><tr><td style='padding: 0 10px 0 10px;'>{{meeting_description}}</td></tr><tr><td style='padding: 10px 10px 10px 10px;'>{{meeting_proposed_times}}</td></tr></tbody></table><br />Tips:<ul><li>View {{mentee_url}}'s profile to learn more about them.</li><li>If you think the {{customized_meeting_term}} would be a good idea, please accept their request as soon as possible.</li><li>If you must decline, please do so in a timely manner.</li></ul>"
+      tags:
+        meeting_request_creator_email:
+          description: Email of the creator of the meeting request. Note that the email will be displayed irrespective of the email privacy settings.
+        meeting_request_recepient_email:
+          description: Email of the recepient of the meeting request. Note that the email will be displayed irrespective of the email privacy settings.
+        view_request_button:
+          description: View Meeting Request button
+          view_request: View Request
+        mentee_name:
+          example: William Smith

@@ -1,0 +1,23 @@
+<%
+  filter = get_mentor_offer_filters(@current_user)
+  is_hybrid_view = filter.values.count{|a| a} > 1
+  options = { js_action: "return MentorOffers.applyFilters();" }
+%>
+
+<div id="filter_request_pane">
+  <%= form_tag url_for(params.to_unsafe_h), method: :get, remote: true, id: 'search_filter_form', class: 'clearfix' do %>
+    <%= include_common_sort_by_id_fields(@filter_params.merge(suffix_id: "mentor_offers")) %>
+
+    <% if is_hybrid_view %>
+      <%= collapsible_filter_view_field_filter(@filter_params[:filter_field], filter, options.merge(entity: "mentor_offer")) %>
+    <% end %>
+
+    <% profile_filter_wrapper 'feature.mentor_offer.content.filter.show_label'.translate, false, false, !is_hybrid_view do %>
+      <%= radio_button_filter 'feature.mentor_request.status.Pending'.translate, @filter_params[:status], 'pending', :status, options %>
+      <%= radio_button_filter 'feature.mentor_request.status.Accepted'.translate, @filter_params[:status], 'accepted',:status, options %>
+      <%= radio_button_filter 'feature.mentor_request.status.Declined'.translate, @filter_params[:status], 'rejected', :status, options %>
+      <%= radio_button_filter 'feature.mentor_request.status.Withdrawn'.translate, @filter_params[:status], 'withdrawn', :status, options if (@filter_params[:filter_field] == AbstractRequest::Filter::BY_ME) || current_user.is_admin? %>
+      <%= radio_button_filter 'feature.mentor_offer.status.Closed'.translate, @filter_params[:status], 'closed', :status, options %>
+    <% end %>
+  <% end %>
+</div>

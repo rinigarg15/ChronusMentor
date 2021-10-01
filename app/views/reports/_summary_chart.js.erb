@@ -1,0 +1,80 @@
+    new Highcharts.Chart({
+      credits: {
+        enabled: false
+      },
+      chart: {
+        renderTo: "<%= render_to %>",
+        height: 140,
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+      },
+      legend: {
+        itemStyle: {
+          fontSize: '95%',
+          paddingBottom: 5,
+        },
+        width: 200,
+        itemWidth:105,
+        symbolWidth:10,
+        labelFormatter: function() {
+          return this.name + ' - ' + Highcharts.numberFormat(this.y, 0)+ '%';
+        }
+      },
+      title: {
+        text: '',
+        style: {
+          fontSize: '12px'
+        }
+      },
+      tooltip: {
+        style: {
+          fontSize: '11px',
+          width: '120px'
+        },
+        formatter: function() {
+          return this.point.name +': <b>'+ Highcharts.numberFormat(this.percentage, 0)+ '%</b>';
+        }
+      },
+      plotOptions: {
+        pie: {
+          animation: {
+            duration: <%= (format == FORMAT::HTML) ? 1500 : 0 %>
+          },
+          shadow: <%= (format == FORMAT::HTML) %>,
+          enableMouseTracking: <%= (format == FORMAT::HTML) %>,
+          size : "100%",
+          center: ['50%', '50%'],
+          allowPointSelect: true,
+          cursor: 'pointer',
+          showInLegend: <%= (format == FORMAT::PDF) %>,
+          dataLabels: {
+            enabled: false,
+            color: '#3E576F',
+            connectorColor: '#000000',
+            distance: 10,
+            formatter: function() {
+              return this.point.name;
+            }
+          }
+        }
+      },
+      series: [{
+        type: 'pie',
+        name: name + jsReportTranslation.summary,
+        data: 
+          [
+          <% first_elem = true %>
+            <% chart_summary_data.each do|name, series| %>
+              <%= ',' unless first_elem  %>
+              {
+                name: "<%= highchart_string_sanitize(series[:name]) %>",
+                y: <%= series[:data] %>,
+                color: "<%=  j(series[:color]) %>"
+              }
+            <% first_elem = false %>
+            <% end  %>
+          ]
+      }]
+    });
+

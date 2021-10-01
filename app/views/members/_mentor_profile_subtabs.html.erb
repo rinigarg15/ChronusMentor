@@ -1,0 +1,8 @@
+<ul class="profile_subtabs clearfix">
+  <li <%= 'class="current"' if params[:tab] != 'articles' %>>
+    <%= link_to content_tag(:h3, "feature.user.header.Profile".translate), member_path(@profile_member) %>
+  </li>
+  <li <%= 'class="current"' if params[:tab] == 'articles' %>>
+    <%= link_to "<h3> #{_Articles} (#{@user_articles.size})</h3>", member_path(@profile_member, :tab => 'articles') %>
+  </li>
+</ul>

@@ -1,0 +1,21 @@
+<fieldset class="no-border no-padding-bottom <%= 'hide' if defined?(hide) && hide %>">
+  <% label_text = "#{'feature.connection.content.join_as'.translate} *" %>
+  <%= control_group(class: "question") do %>
+    <% if @is_checkbox %>
+      <%= content_tag(:div, label_text, class: "control-label false-label col-sm-2") %>
+      <%= controls(class: "col-sm-10") do %>
+        <%= get_role_checkboxes(@can_apply_role_names, @membership_request.program, selected: @membership_request.role_names, name: "roles[]") %>
+      <% end %>
+    <% else %>
+      <%= label_tag "role_names_select", label_text, class: "control-label col-sm-2" %>
+      <%= controls(class: "col-sm-10") do %>
+        <% options = {selected: @membership_request.role_names[0]} %>
+        <% options.merge!(program: program) if from_enrollment %>
+        <%= select_tag("role_names_select", join_as_role_options_for_select(options), class: "form-control role_names_select") %>
+      <% end %>
+    <% end %>
+  <% end %>
+</fieldset>
+
+
+<%= javascript_tag %Q[MembershipRequest.initializeRoleChange(#{@is_checkbox}, '#{new_membership_request_path(format: :js)}', '#{j "display_string.Please_Wait".translate}', '#{j "display_string.Submit".translate}')] %>

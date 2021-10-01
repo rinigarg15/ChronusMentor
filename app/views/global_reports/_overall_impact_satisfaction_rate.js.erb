@@ -1,0 +1,13 @@
+<% if @overall_impact_hash[:satisfaction_rate] %>
+  <% satisfaction_rate = @overall_impact_hash[:satisfaction_rate][:current].to_s %>
+  <% content = rollup_body_box(box_icon_class: "fa-thumbs-up", text_number: satisfaction_rate, text_number_class: "cjs_global_reports_overall_impact_satisfaction_rate_number") %>
+  <% content << get_percentage_difference_rollup(@overall_impact_hash[:satisfaction_rate]) %>
+  jQuery(".cjs_global_reports_overall_impact_satisfaction_rate").html("<%= j(content) %>")
+  NumberCounter.initCounter('.cjs_global_reports_overall_impact_satisfaction_rate_number', {showPercentage: true});
+<% elsif @overall_impact_hash[:positive_outcomes_not_configured] %>
+  <% right_addon_configure_link = content_tag(:span, positive_outcome_configuration_link("(" + "feature.global_reports.overall_impact.action.configure".translate + ")"), class: "h6 font-normal p-l-xxs") unless @overall_impact_hash[:date_range_hash][:previous].present? %>
+  <% bottom_configure_link = content_tag(:span, positive_outcome_configuration_link("feature.global_reports.overall_impact.action.configure".translate), class: "h6 font-bold") if @overall_impact_hash[:date_range_hash][:previous].present? %>
+  <% content = rollup_body_box(box_icon_class: "fa-thumbs-up", text_number: "display_string.n_a".translate, text_number_class: "cjs_global_reports_overall_impact_satisfaction_rate_number", right_addon: right_addon_configure_link) %>
+  <% content << rollup_body_sub_boxes([{content: bottom_configure_link, additional_class: "light-gray-bg p-t-xxs"}], additional_class: "animated fadeInDown") if bottom_configure_link.present? %>
+  jQuery(".cjs_global_reports_overall_impact_satisfaction_rate").html("<%= j(content) %>")
+<% end %>

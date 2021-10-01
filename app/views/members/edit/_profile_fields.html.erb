@@ -1,0 +1,15 @@
+<div class="cui_custom_fields_container">
+  <div class="common_questions">
+    <% if @is_first_visit && local_assigns[:section_title] %>
+      <fieldset>
+        <legend><%= section_title %></legend>
+    <% end %>
+      <%= hidden_field_tag("role", role, id: nil) %>
+      <%= hidden_field_tag("prof_c", @is_profile_completion, id: nil) %>
+
+      <%= render :partial => "members/edit/profile_question", :locals => {:role => @role, :questions => questions, :person => person, :no_action => local_assigns[:no_action], is_first_visit: @is_first_visit, is_profile_completion: @is_profile_completion, grouped_role_questions: @grouped_role_questions, :profile_user => @profile_user} %>
+    <% if @is_first_visit && local_assigns[:section_title] %>
+      </fieldset>
+    <% end %>
+  </div>
+</div>

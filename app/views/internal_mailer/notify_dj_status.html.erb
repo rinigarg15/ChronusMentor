@@ -1,0 +1,58 @@
+<% categories = @dj_notifier.queue_stats.keys %>
+<% all_queues = @dj_notifier.queue_stats.values.map(&:keys).flatten.uniq %>
+
+<div style="font-family: Arial, sans-serif; font-size: 14px;">
+  <div style="margin-top: 10px; font-size: 18px; margin-bottom: 20px; background-color: #31babc; padding: 10px;">
+    <%= Rails.env.to_s.upcase %>: Job Categorization
+  </div>
+
+  <div style="font-size: 16px; text-decoration: underline; margin-bottom: 15px;">
+    <%= "Queue Stats:" %>
+  </div>
+  <table style="border-collapse: collapse; font-family: Arial, sans-serif; font-size: 15px; margin-bottom: 20px;">
+    <tr>
+      <% (["Queue"] + categories).each do |category| %>
+        <th style="background-color: #73a553; color: white; padding: 10px;">
+          <%= category.to_s.capitalize %>
+        </th>
+      <% end %>
+    </tr>
+    <% all_queues.each_with_index do |queue, index| %>
+      <tr style="<%= 'background-color: #f2f2f2;' if (index % 2 == 0) %>">
+        <td style="padding: 10px;">
+          <b><%= queue %></b>
+        </td>
+        <% categories.each do |category| %>
+          <td style="padding: 10px;">
+            <%= @dj_notifier.queue_stats[category][queue].to_i %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+
+  <% @dj_notifier.job_stats.each do |job_category, job_infos| %>
+    <% next if job_infos.blank? %>
+
+    <div style="margin-top: 15px; font-size: 16px; text-decoration: underline; margin-bottom: 15px;">
+      <%= "#{job_category.to_s.capitalize} Jobs:" %>
+    </div>
+
+    <% job_infos.each do |job_info| %>
+      <div style="background-color: whitesmoke; margin-bottom: 10px; padding: 10px;">
+        <% job_info.each do |name, value| %>
+          <% if value.is_a?(Hash) %>
+            <%= name %>:<br/><br/>
+            <div style="margin-left: 15px;">
+              <% value.each do |nested_name, nested_value| %>
+                <%= nested_name %>: <%= nested_value %><br/><br/>
+              <% end %>
+            </div>
+          <% else %>
+            <%= name %>: <%= value %><br/><br/>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

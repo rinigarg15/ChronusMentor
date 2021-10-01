@@ -1,0 +1,4 @@
+<%= render partial: "mentor_recommendations/mentor_recommendation", locals: {recommendation_preferences_hash: recommendation_preferences_hash, mentors_score: mentors_score, show_favorite_ignore_links: show_favorite_ignore_links, favorite_preferences_hash: favorite_preferences_hash, ignore_preferences_hash: ignore_preferences_hash, user: user, program: program} if recommendation_preferences_hash.present? %>
+<%= render :partial => "programs/explicit_preference_or_system_recommendations", locals: {can_render_system_reco_box: can_render_system_reco_box, mentors_list: recommendation_preferences_hash, user: user, program: program} %>
+<%= render partial: "preference_based_mentor_lists/container" %>
+<%= render(partial: "mentor_recommendations/mentors_list_links", locals: {hidden: !recommendation_preferences_hash.present?}) %>

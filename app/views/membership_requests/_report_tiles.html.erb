@@ -1,0 +1,6 @@
+<%= render :layout => 'common/report_tiles' do %>
+  <%= render_report_tiles(tabs_data[:received], "fa fa-address-card-o", "feature.membership_request.content.tiles.headers.received".translate, "feature.membership_request.content.tiles.description.received".translate, {percentage: tabs_data[:percentage], prev_periods_count: tabs_data[:prev_periods_count]}) %>
+  <%= render_report_tiles(tabs_data[:pending], "fa fa-exclamation-triangle ", "feature.membership_request.content.tiles.headers.pending".translate, "feature.membership_request.content.tiles.description.pending".translate) %>
+  <%= render_report_tiles(tabs_data[:accepted], "fa fa-check", "feature.membership_request.content.tiles.headers.accepted".translate, "feature.membership_request.content.tiles.description.accepted".translate) %>
+  <%= render_report_tiles(tabs_data[:rejected], "fa fa-times", "feature.membership_request.content.tiles.headers.rejected".translate, "feature.membership_request.content.tiles.description.rejected".translate) %>
+<% end %>

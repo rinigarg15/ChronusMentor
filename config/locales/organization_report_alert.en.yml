@@ -1,0 +1,18 @@
+en:
+  email_translations:
+    organization_report_alert:
+      title: "Consolidated dashboard alert email"
+      description: "%{Administrators} can subscribe to receive dashboard alerts across different %{programs} in one email"
+      subject: "{{alerts_count_consolidated}} {{need}} your attention"
+      content_html: 'The following alerts require your attention: <br /> <br /> {{alert_details_consolidated}}'
+      alerts_count_consolidated:
+        one: 1 alert
+        other: "%{count} alerts in %{programs_count}"
+      tags:
+        alert_details_consolidated:
+          description: Alert details consolidated across %{programs}
+          example_html: '<table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;line-height: 21px; color:#333333; "><tbody><tr><td style="border-top: 3px solid #eeeeee; padding-top: 10px"><div style="font-size: 1.3em;margin-bottom: 5px;font-weight: bold; color: #1eaa79;">%{program_name_1}</div><table cellspacing="0" border = "0" cellpadding = "0"><tbody><tr><td valign="top" align="left" style="padding-top: 10px; padding-bottom: 10px"><b>Pending Membership Requests</b><br><a href="http://www.chronus.com" style="text-decoration: none;">3 Membership Requests are pending more than 15 days</a></td></tr></tbody></table></td></tr><tr><td style="border-top: 3px solid #eeeeee; padding-top: 10px"><div style="font-size: 1.3em;margin-bottom: 5px;font-weight: bold; color: #1eaa79;">%{program_name_2}</div><table cellspacing="0" border = "0" cellpadding = "0"><tbody><tr><td valign="top" align="left" style="padding-top: 10px; padding-bottom: 10px"><b>Never Connected %{Mentees}</b><br><a href="http://www.chronus.com" style="text-decoration: none;">3 %{Mentees} who have joined over a month ago and never been connected</a></td></tr><tr><td valign="top" align="left" style="padding-top: 10px; padding-bottom: 10px"><b>Pending %{Mentoring} Requests</b><br><a href="http://www.chronus.com" style="text-decoration: none;">1 %{Mentoring} requests received in last 20 days and that have not yet been accepted or declined</a></td></tr></tbody></table></td></tr></tbody></table>'
+        alerts_count_consolidated:
+          description: Number of alerts across %{programs} which need attention
+        need:
+          description: word 'need(s)'

@@ -1,0 +1,4 @@
+<div class="pull-left m-r-sm <%= block_class %>">
+  <%= get_icon_content("fa fa-lg fa-check-square-o") + set_screen_reader_only_content("feature.mentoring_model.header.task".translate) %>
+  <%= content_tag :span, task_template.role ? UnicodeUtils.upcase(task_template.role.customized_term.term) : "feature.mentoring_model.label.unassigned".translate, class: "text-muted" %>
+</div>

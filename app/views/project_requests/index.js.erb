@@ -1,0 +1,18 @@
+<% show_find_new_project = show_find_new_project?(current_user, @filter_params) %>
+
+<% reset_url = project_requests_path %>
+<% content = render(:partial => 'common/your_filters', :locals => { onclick_function: 'ProjectRequests.clearFilter', results_count: @project_requests.total_entries, reset_url_options: { url: reset_url } } ) %>
+jQuery('#your_filters').replaceWith("<%= j(content) %>");
+
+<% content = render(partial: 'project_requests/index', locals: {filter_params: @filter_params, project_requests: @project_requests, ga_src: @src_path} ) %>
+jQuery('#results_pane').html("<%= j(content) %>");
+
+CommonSelectAll.resetSelectedIds(ProjectRequests);
+jQuery("input[id^=ct_project_request_checkbox_]").prop("checked", false);
+ProjectRequests.maintainTriStateCheckbox(true);
+<% if show_find_new_project %>
+  jQuery('.find_new_project_link').show();
+<% else %>
+  jQuery('.find_new_project_link').hide();
+<% end %>
+jQuery('#loading_results').hide();

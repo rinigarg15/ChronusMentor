@@ -1,0 +1,9 @@
+id,program_id,question_text,question_type,question_info,position,created_at,updated_at,required,help_text,type,survey_id,common_answers_count,feedback_form_id,allow_other_option,is_admin_only,question_mode,positive_outcome_options,matrix_position,matrix_setting,matrix_question_id,condition,positive_outcome_options_management_report
+833,2,How was your meeting with your mentoring partner?,2,"Very Good,Good,Satisfactory,Poor",53,2014-12-01 14:50:50 +0530,2014-12-01 14:50:50 +0530,true,,SurveyQuestion,158,0,,false,,,"17,18",,,,0,
+834,2,How did you meet your mentoring partner?,2,"In person,Video Conference,Phone,We did not meet",54,2014-12-01 14:50:50 +0530,2014-12-01 14:50:50 +0530,false,,SurveyQuestion,158,0,,false,,,,,,,0,
+835,2,Did you achieve your goals for the meeting?,2,"Yes,No",55,2014-12-01 14:50:50 +0530,2014-12-01 14:50:50 +0530,false,,SurveyQuestion,158,0,,false,,,,,,,0,
+836,2,"If you did not meet, what was the reason?",2,"Person did not turn up for the meeting,Never scheduled the meeting,We are yet to meet / We postponed the meeting",56,2014-12-01 14:50:50 +0530,2014-12-01 14:50:50 +0530,false,,SurveyQuestion,158,0,,false,,,,,,,0,
+837,2,Will you continue remaining in contact with your mentoring partner?,2,"Yes,No",57,2014-12-01 14:50:50 +0530,2014-12-01 14:50:50 +0530,false,,SurveyQuestion,158,0,,false,,,,,,,0,
+838,2,Do you have any additional comments?,1,,58,2014-12-01 14:50:50 +0530,2014-12-01 14:50:50 +0530,false,,SurveyQuestion,158,0,,false,,,,,,,0,
+50,2,How do you communicate with the members of this mentoring connection?,3,"Mentoring Area,Chat/IM,Emails,Phone,Face to face meetings,Other",50,2014-11-20 11:59:40 +0530,2014-11-20 11:59:40 +0530,true,,SurveyQuestion,6,0,,false,,1,,,,,0,
+51,2,How effective is this mentoring connection?,4,"Very good,Good,Satisfactory,Poor,Very poor",51,2014-11-20 11:59:40 +0530,2014-11-20 11:59:40 +0530,true,,SurveyQuestion,6,0,,false,,0,,,,,0,

@@ -1,0 +1,15 @@
+<%= simple_form_for @new_qa_question, html: { class: "cjs_new_qa_question_form" }, remote: true, format: :js do |f| %>
+  <%= response_flash "cjs_new_qa_question_flash" %>
+  <%= f.input :summary, as: :string, input_html: { class: "form-control cjs_new_qa_question_summary" } %>
+  <%= f.input :description, input_html: { rows: 5, class: "form-control" } %>
+
+  <% action_set class: "pull-right" do %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+    <%= f.button :submit, "feature.question_answers.action.post_question".translate %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  QuestionForm.validateSummary("<%= j "feature.question_answers.content.required_field_error".translate %>");
+<% end %>
+

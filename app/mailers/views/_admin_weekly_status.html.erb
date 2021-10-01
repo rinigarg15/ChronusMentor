@@ -1,0 +1,28 @@
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody>
+    <tr>
+      <td align="left" class="padding-list heading">
+        <span style="float: left;"><%= "email_translations.admin_weekly_status.program_activity_v1".translate(:Program => @_Program_string) %></span>
+        <span style="float:right; font-size:13px; color:#777777;"><%= since_time %> <%= "display_string.to_for_dates_only".translate %> <%= current_time_in_admin_time_zone %></span>
+      </td>
+    </tr>
+
+    <% item_pairs = [] %>
+    <% items_to_display(@program, data_hash).each_slice(2) {|s| item_pairs << s} %>
+    <%= render(:partial => 'layouts/emails/admin_weekly_two_column_layout', :collection => item_pairs) %>
+
+    <% soon_expiring_connections_count = @program.groups.active.select(&:expiring_next_week?).size %>
+    <% url_connections_expiring_next_week = groups_url(:subdomain => @organization.subdomain, :search_filters => {"expiry_date" => "#{DateTime.localize(Date.today, format: :date_range)}"}, :src => 'mail') %>
+    <% if soon_expiring_connections_count > 0 %>
+      <tr><td>
+        <%= 'email_translations.admin_weekly_status.tags.expiring_connections_content_tag.content_html'.translate(count: soon_expiring_connections_count, connection: @_mentoring_connection_string, connections:  @_mentoring_connections_string, Click_here: ("<a href='#{url_connections_expiring_next_week}'>" + "display_string.Click_here".translate + "</a>").html_safe) %>
+      </td></tr>
+    <% end %>
+
+    <tr>
+      <td>
+        <%= call_to_action("email_translations.admin_weekly_status.visit_your_program".translate(program: @_program_string), root_url(:subdomain => @program.organization.subdomain, :root => @program.root)) %>
+      </td>
+    </tr>
+  </tbody>
+</table>

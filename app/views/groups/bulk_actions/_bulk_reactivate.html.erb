@@ -1,0 +1,32 @@
+<% modal_v3_popup "feature.connection.header.bulk_reactivate_connections_v1".translate(Mentoring_Connections: _Mentoring_Connections) do %>
+  <%= existing_groups_alert(@group_ids, [], Group::Status::CLOSED, :group, true) %>
+  <p><%= "feature.connection.content.help_text.bulk_reactivate_v2".translate(mentoring_connections: _mentoring_connections, mentoring_connection: _mentoring_connection, count: @group_ids.size) %></p>
+
+  <%= form_tag update_bulk_actions_groups_path, :remote => true, :id => "bulk_groups_reactivate" do %>
+    <%= control_group do %>
+      <%= content_tag(:label, set_required_field_label(Group.human_attribute_name(:expiry_time)), :class => "control-label", :for => "bulk_actions_mentoring_period") %>
+      <%= controls :class => "expiry_date_select calendar" do %>
+        <%= construct_input_group( { type: "addon", icon_class: "fa fa-calendar" } ) do %>
+          <%= text_field_tag "bulk_actions[mentoring_period]", nil, :class => "form-control", autocomplete: :off, data: date_picker_options(min_date: Date.current) %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= control_group do %>
+      <%= content_tag(:label, set_required_field_label(Group.human_attribute_name(:revoking_reason)), :class => "control-label", :for => "bulk_actions_reason") %>
+      <%= controls do %>
+        <%= text_area_tag "bulk_actions[reason]", nil, :rows => "5", :class => "form-control" %>
+      <% end %>
+    <% end %>
+    <%= hidden_field_tag "bulk_actions[action_type]", Group::BulkAction::REACTIVATE %>
+    <%= hidden_field_tag "bulk_actions[group_ids]", @group_ids %>
+
+    <%= horizontal_line(class: "m-t-xs m-b-sm") %>
+    <%= email_notification_consequences_on_action_html(GroupReactivationNotification, div_enclose: true, div_class: "m-b-sm") %>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => "btn btn-white", data: { dismiss: "modal" } %>
+      <%= submit_tag "feature.connection.action.Reactivate".translate, :class => "btn btn-primary", data: {:disable_with => "display_string.Please_Wait".translate} %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[initialize.setDatePicker(); GroupSearch.validateBulkReactivate();] %>

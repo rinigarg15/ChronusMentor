@@ -1,0 +1,28 @@
+en:
+  email_translations:
+    admin_weekly_status:
+      description: Sent on a weekly basis to administrator(s) providing the program's status summary.
+      title_v3: Weekly update to %{_admins}
+      description_v3: This weekly update email sent to %{_admins} includes any relevant %{_program} related information like new members along with membership request, new %{_articles} published or %{_mentoring} related information (%{_mentoring_connection} request, new %{_mentoring_connections}), as applicable.
+      subject_v1: Your weekly activity summary ({{since_time}} to {{current_time_in_admin_time_zone}}) for {{subprogram_or_program_name}}
+      new_roles: New %{role_pluralize_term}
+      mentor_requests_received: "%{mentoring_term_cap} Requests Received"
+      connections_established: "%{connections_term_cap} Established"
+      mentoring_requests_pending: "%{mentoring_term_cap} Requests Pending"
+      meeting_requests_received: "%{meeting_term_cap} Requests Received"
+      meeting_requests_pending: "%{meeting_term_cap} Requests Pending"
+      new_articles: New %{articles}
+      pending_membership_requests: Pending Membership Requests
+      program_activity_v1: "%{Program} Activity for the week"
+      visit_your_program: Visit your %{program}
+      groups_pending_for_approval: "%{connections_term_cap} waiting to be approved"
+      users_waiting_to_join_groups: Users waiting to join %{connections_term}
+      new_survey_responses: New Survey Responses
+      tags:
+        since_time:
+          description: Time since last update
+          example: December 24, 2013
+        expiring_connections_content_tag:
+          content_html:
+            one: 1 %{connection} is about to expire in the coming week. %{Click_here} to review it.
+            other: "%{count} %{connections} are about to expire in the coming week. %{Click_here} to review them."

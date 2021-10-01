@@ -1,0 +1,95 @@
+/*
+ *
+ *   INSPINIA - Responsive Admin Theme
+ *   version 2.3
+ *
+*/
+
+// Google Fonts
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&lang=en");
+@import "base/mixins";
+
+// Variables, Mixins
+@import "mixins.scss";
+@import "base/variables";
+
+// Bootstra
+@import "bootstrap_overrides";
+
+// INSPINIA Theme Elements
+@import "base/typography";
+@import "base/navigation";
+@import "base/top_navigation";
+@import "base/buttons";
+@import "base/badgets_labels";
+@import "base/elements";
+@import "base/sidebar";
+@import "base/base";
+@import "base/pages";
+@import "base/chat";
+@import "base/metismenu";
+@import "base/spinners";
+@import "base/slick_theme";
+@import "base/jquery-ui-slider-pips.scss";
+@import "base/jquery-ui-slider-pips-override.scss";
+
+// Landing page
+@import "base/landing";
+
+// RTL Support
+@import "base/rtl";
+
+// For demo only - config box style
+@import "base/theme-config";
+
+// INSPINIA Skins
+@import "base/skins";
+@import "base/md-skin";
+
+// Media query style
+@import "base/media";
+
+// Custom style
+// Your custom style to override base style
+@import "base/custom";
+
+// Profile Questions Icons
+@import "profile_question_icons";
+
+//Plugins
+@import "plugins/sweetalert";
+@import "base/offcanvas";
+@import "plugins/nouislider.min";
+@import "plugins/nouislider.tooltips";
+@import "plugins/ui.multiselect";
+@import "plugins/uix.multiselect";
+@import "plugins/kendo.common.min";
+@import "plugins/kendo.default.min";
+@import "plugins/fullcalendar.min";
+@import "plugins/awesome_bootstrap_checkbox";
+
+// Overrides
+@import "base/navigation_overrides";
+@import "base/buttons_overrides";
+@import "base/elements_overrides";
+@import "base/sidebar_overrides";
+@import "base/base_overrides";
+@import "base/media_overrides";
+@import "base/pages_overrides";
+@import "base/md-skin_overrides";
+@import "plugins/sweetalert_overrides";
+@import "plugins/nouislider_overrides";
+@import "plugins/ui_multiselect_overrides";
+@import "base/plugin_overrides";
+@import "plugins/kendo_overrides";
+@import "plugins/fullcalendar_overrides";
+
+// V2 Wrappers
+@import "grid/sprite_rules";
+@import "grid/manage_sprite_rules";
+@import "grid/elements";
+@import "grid/progressive_form";
+@import "v3/base/v2_wrapper";
+
+@import "generators/manifest_v5.scss";
+@include v5-theme-color;

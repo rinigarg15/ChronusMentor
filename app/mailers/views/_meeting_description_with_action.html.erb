@@ -1,0 +1,24 @@
+<% program = meeting.program %>
+<% if meeting.accepted? && meeting.active? && meeting.can_be_edited_by_member?(member) %>
+  <table cellspacing='0' cellpadding='0' border='0' width='100%' class='wrapper'>
+    <tbody>
+      <tr>
+        <td style="padding-top: 30px;">
+          <table cellspacing="0" cellpadding="0" border="0" style="border-collapse: separate !important; display: inline-block; border-color: transparent;">
+            <tbody>
+              <tr>
+                <td style="color: #129e12; padding: 7px; border: 1px solid #129e12; white-space: nowrap; background-color: #FFFFFF; vertical-align: middle; line-height: 16px;">
+                  <% if meeting.recurrent? %>
+                    <%= link_to 'feature.email.content.reschedule_meeting'.translate(Meeting: @_Meeting_string), meetings_url(subdomain: program.organization.subdomain, root: program.root, group_id: meeting.group.id, src: 'mail'), style: "color: #129e12; white-space: nowrap; background-color: #FFFFFF; text-decoration: none;" %>
+                  <% else %>
+                    <%= link_to 'feature.email.content.propose_a_new_time'.translate, meeting_url(meeting, subdomain: program.organization.subdomain, root: program.root, src: 'mail', open_edit_popup: true), style: "color: #129e12; white-space: nowrap; background-color: #FFFFFF; text-decoration: none;" %>
+                  <% end %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+<% end %>

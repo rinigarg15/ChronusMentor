@@ -1,0 +1,20 @@
+en:
+  email_translations:
+    new_article_notification:
+      title_v3: New %{_article} notification to %{_admins}
+      description_v2: This email is sent to the %{_admin} when a member publishes a new %{_article}.
+      subject_v1: New {{customized_article_term}} posted by {{author_name}}!
+      content_v1_html: "<a href='{{url_author_profile}}'>{{author_name}}</a> has published a new {{customized_article_term}} titled <a href='{{url_article}}'>{{article_title}}</a>.<br/>{{view_article_button}}"
+      read_article: Read %{article_term}
+      tags:
+        author_name:
+          description: Name of the author of the article
+        url_author_profile:
+          description: Url to the profile of the author
+        article_title:
+          description: Article title
+          example: Time management
+        url_article:
+          description: Link to the article
+        view_article_button:
+          description: View article button

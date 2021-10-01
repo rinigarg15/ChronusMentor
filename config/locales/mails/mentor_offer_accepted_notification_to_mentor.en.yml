@@ -1,0 +1,23 @@
+en:
+  email_translations:
+    mentor_offer_accepted_notification_to_mentor:
+      title_v2: "%{_Mentoring} offer accepted notification to %{_mentor}"
+      description_v2: "%{_Mentors} can directly offer %{_mentoring} to %{_mentees}. This email (including a personal  message from the %{_mentee}) is sent to %{_a_mentor} when %{_a_mentee} accepts the %{_mentoring} offer."
+      subject_v1: "{{mentee_name}} has accepted to be your {{customized_mentee_term}}!"
+      content_v2_html: 'Congratulations!<br/><br/><a href=''{{url_mentee}}''>{{mentee_name}}</a> has accepted to be your {{customized_mentee_term}} in <a href=''{{url_subprogram_or_program}}''>{{subprogram_or_program_name}}</a>.<br/><br/>Get started now by: <br/><ul><li>Contacting <a href=''{{url_mentee}}''>{{mentee_name}}</a> directly and introducing yourself. This also gives you an opportunity to let {{mentee_name}} know what you expect from the {{customized_mentoring_connection_term}}.</li><li>Posting a message in the {{customized_mentoring_connection_term}}.</li><li>Reviewing the {{customized_mentoring_connection_term}} plan.</li></ul>This {{customized_mentoring_connection_term}}, {{group_name}} will end on {{mentoring_connection_expiry_date}}.{{visit_mentoring_area_button}}'
+      button_text: " Visit %{mentoring_connection} area"
+      tags:
+        mentee_name:
+          description: Name of the mentee who has accepted the offer
+        url_mentoring_connection:
+          description_v1: Url to the %{_mentoring_connection}
+        url_mentee:
+          description: Url to the profile of the mentee
+        mentoring_connection_expiry_date:
+          description_v2: Expiration date of the %{_mentoring_connection}
+          example: December 24, 2013
+        group_name:
+          description: Name of the mentoring area
+          example: Smith and Doe
+        visit_mentoring_area_button:
+          description: Visit Mentoring Area Button

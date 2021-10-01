@@ -1,0 +1,35 @@
+<% group.members.each do |user| %>
+  <tr class="collapsable">
+    <td class="no-horizontal-padding">
+      <%= user.name(name_only: true) %>
+    </td>
+    <td class="text-center">
+      <%= login_activity[user.id].to_i %>
+    </td>
+    <% unless scraps_activity.nil? %>
+      <td class="text-center">
+        <%= scraps_activity[user.member_id].to_i %>
+      </td>
+    <% end %>
+    <% unless posts_activity.nil? %>
+      <td class="text-center">
+        <%= posts_activity[user.id].to_i %>
+      </td>
+    <% end %>
+    <% unless meetings_activity.nil? %>
+      <td class="text-center">
+        <%= meetings_activity[user.member_id].present? ? meetings_activity[user.member_id] : "0" %>
+      </td>
+    <% end %>
+    <% unless survey_answers.nil? %>
+      <td class="text-center">
+        <%= survey_answers[user.id] ? survey_answers[user.id].count : "0" %>
+      </td>
+    <% end %>
+    <% unless tasks_activity.nil? %>
+      <td class="text-center">
+        <%= tasks_activity[user.id].to_i %>
+      </td>
+    <% end %>
+  </tr>
+<% end %>

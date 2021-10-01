@@ -1,0 +1,104 @@
+var PreferenceBasedMentorLists = {
+  trackingNoMentorsInitialized: false,
+  trackingComplete: false,
+
+  initialize: function(){
+    PreferenceBasedMentorLists.adjustMediaBodyMaxWidth();
+    PreferenceBasedMentorLists.initializeIgnore();
+  },
+
+  adjustMediaBodyMaxWidth: function(){
+    jQuery(document).ready(function() {
+      var mediaContainer = jQuery(".cui-preference-based-mentor-list-item .media");
+      var mediaLeft = jQuery(".cui-preference-based-mentor-list-item .media-left");
+      var maxWidth = mediaContainer.width() - mediaLeft.outerWidth()
+      jQuery(".cui-preference-based-mentor-list-item .cui-preference-based-mentor-list-item-content").width(maxWidth);
+      jQuery(".cui-preference-based-mentor-list-item .cui-preference-based-mentor-list-item-content").css('max-width', maxWidth + 'px');
+      jQuery(".cui-preference-based-mentor-list-item-title h4").addClass("truncate-with-ellipsis whitespace-nowrap");
+      jQuery(".cui-preference-based-mentor-list-item-description").addClass("truncate-with-ellipsis whitespace-nowrap");
+    });
+  },
+
+  loadMentorLists: function(url){
+    jQuery.ajax({
+      url: url
+    });
+  },
+
+  initializeIgnore: function(){
+    jQuery(document).ready(function() {
+      jQuery(".preference_based_mentor_lists").on("click", ".cjs-ignore-preference-based-mentor-list-item", function(e){
+        e.preventDefault();
+        PreferenceBasedMentorLists.ignoreMentorList(jQuery(this));
+      });
+    });
+  },
+
+  ignoreMentorList: function(element){
+    jQuery.ajax({
+      url: element.attr("href"),
+      data: {preference_based_mentor_list: element.data()['pbml']},
+      method: 'PUT'
+    });
+
+    var container = jQuery(".cjs_preference_based_mentor_lists_container")
+    if(container.find(".cui-preference-based-mentor-list-item").length == 1){
+      container.fadeOut(2000);
+    }
+    else{
+      element.closest(".cui-preference-based-mentor-list-item").hide('slow', function(){
+        var slickIndex = jQuery('.preference_based_mentor_lists_slick .cjs-ignore-preference-based-mentor-list-item').index(element);
+        jQuery('.preference_based_mentor_lists_slick').slick('slickRemove', slickIndex);
+      });
+    }
+  },
+
+  initializeTrackingNoMentors: function(){
+    PreferenceBasedMentorLists.trackingNoMentorsInitialized = true
+  },
+
+  trackNoMentors: function(noMentors){
+    var noMentors = (noMentors == 'true');
+    if(PreferenceBasedMentorLists.trackingNoMentorsInitialized && !PreferenceBasedMentorLists.trackingComplete && noMentors){
+      chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.POPULAR_CATEGORIES, chrGoogleAnalytics.action.GA_VIEWED_MENTORS, chrGoogleAnalytics.eventLabel.GA_NO_RESULTS, chrGoogleAnalytics.eventLabelId.GA_NO_RESULTS_LABEL_ID);
+    }
+    PreferenceBasedMentorLists.trackingComplete = true;
+  },
+
+  abTestGetGaCategory: function(abTest){
+    switch(abTest){
+      case "<%= ProgramAbTest::Experiment::GUIDANCE_POPUP %>":
+        return chrGoogleAnalytics.category.AB_TEST_GUIDANCE_POPUP;
+      case "<%= ProgramAbTest::Experiment::POPULAR_CATEGORIES %>":
+        return chrGoogleAnalytics.category.POPULAR_CATEGORIES;
+    }
+  }
+};
+
+var homePageRecommendation = {
+  addCarousel: function(carouselSelector){
+    carouselOptions = {
+      slidesToShow: 3,
+      slidesToScroll: 3,
+      nextArrow: '<button type="button" class="custom-slick-next hidden-xs">'+recommendationsTranslations.nextText+'</button>',
+      prevArrow: '<button type="button" class="custom-slick-prev hidden-xs">'+recommendationsTranslations.prevText+'</button>',
+      arrows: true,
+
+      responsive: [
+        {
+          breakpoint: 1900,
+          settings: {slidesToShow: 3, slidesToScroll: 1}
+        },
+        {
+          breakpoint: 1800,
+          settings: {slidesToShow: 2, slidesToScroll: 1}
+        },
+        {
+          breakpoint: 480,
+          settings: {slidesToShow: 1.1, slidesToScroll: 1}
+        }
+      ]
+    } 
+    carousel.addCarousel(carouselSelector, carouselOptions);
+  },
+}

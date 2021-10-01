@@ -1,0 +1,522 @@
+en:
+  feature:
+    email:
+      header:
+        emails_v1: System Emails
+        status: Status
+        widgets: Widgets
+        available_tags: Available Tags
+        switch_to_default_content: Switch to default content
+        show: Show
+      action:
+        Customize: Customize
+        customize: customize
+        Preview: Preview
+        preview: preview
+      label:
+        Subject: Subject
+        Content: Content
+        Body: Body
+      content:
+        test_email:
+          receiver_name: John Smith
+        click_icon_to_disable: Click the icon to disable.
+        click_icon_to_enable: Click the icon to enable.
+        enabled_html: An %{email} will be sent to the users if you complete this action.
+        enabled_with_count_html:
+          one: An %{email} will be sent to the user if you complete this action.
+          other: An %{email} will be sent to the %{count} users if you complete this action.
+        disabled_html: An %{email} is usually sent to the users as part of completing this action, but has been disabled. No email will be sent.
+        disabled_with_count_html:
+          one: An %{email} is usually sent to the user as part of completing this action, but has been disabled. No email will be sent.
+          other: An %{email} is usually sent to the %{count} users as part of completing this action, but has been disabled. No email will be sent.
+        click_to_send_test_mail_html: "%{Click_here} to send a test email to your email address."
+        click_to_send_test_mail_v1_html: "%{Click_here} to send a test email."
+        email_sent_successfully: The test email has been sent successfully to your email address
+        all_mailer_roles_enabled_html: An email will be sent to the %{users} (%{enabled_roles_list}) if you complete this action.
+        all_mailer_roles_disabled_html: An email is usually sent to the %{users} (%{disabled_roles_list}) as part of completing this action, but has been disabled. No email will be sent.
+        mailer_roles_enabled_and_disabled_html: An email is usually sent to the %{users} as part of completing this action, but has been disabled for %{disabled_roles_list}, and enabled only for %{enabled_roles_list}.
+        do_not_use_widget: Do not use widgets and urls in subject
+        copy_paste_tags: Copy and paste the tags into the body and subject to avoid typing mistakes
+        widgets_content: Widgets content is same accross all emails and are not specific to any email
+        list_of_email_description: The following is the list of all the emails sent out by the system to the members of %{program}.
+        no_mails_empty_message: Sorry, there are no emails present in this particular category for this %{_program}.
+        email: email
+        modify_your_notifications_html: "%{click_here} to modify your %{notif_text} notifications."
+        modify_your_notifications_v1_html: "%{click_here} to modify your notification settings."
+        modify_your_meeting_request_reminder_notifications_html: "%{click_here} to stop receiving %{meeting} request reminders."
+        contact_admin_for_any_queries_html: "%{contact_admin} for any queries"
+        contact_admin_for_any_queries_v1_html: "%{contact_admin} for any queries."
+        contact_admin_for_any_queries_v2_html: "%{contact_admin} for any questions."
+        powered_by_html: Powered by %{brand}
+        automated_email_hint_html: This is an automated email, please don't reply.
+        automated_email_hint_v1_html: This is an automated email - please don't reply.
+        help_requested: 'Help requested :'
+        replied_to_your_message: replied to your message
+        sent_you_a_message: sent you a message
+        actor_found_article_helpful_html: "%{actor} found the %{article} %{article_link} helpful"
+        task_status: 'Task Status:'
+        pending_completed_task_size: "%{pending_task_size} pending, %{tasks_completed_size} completed"
+        initiator_created_new_goal_html: "%{initiator_name} created a new goal - %{link_to_goal}"
+        new_goal_was_created_html: 'A new goal was created: %{link_to_goal}'
+        due_on_time: due on %{date}.
+        initiator_updated_goal_progress_html: "%{initiator_name} updated the progress of the goal %{link_to_goal} to %{value}%."
+        initiator_left_comment_html: "%{initiator_name} has left a comment on the goal %{link_to_goal}."
+        goal_progress_updated_html: The progress of the goal %{link_to_goal} was updated to %{value}%.
+        you_have_new_goal_comment_html: You have a new comment on the goal %{link_to_goal}.
+        contact_admin: Contact Admin
+        user_name_html: "<Username>"
+        sender_via_program_html: "%{sender_name} via %{program}"
+        email_disabled_message: This email is disabled for %{organization}
+        rollout_update_all_alert_message: A new content update is now available! This update includes new and improved subject lines and content for your %{program} emails. You can choose to update all emails or view each email individually to update them one at a time. We recommend updating all emails at once for the best results.
+        rollout_update_all_alert_message_v1: A new content update is now available! This update includes new and improved subject lines and content for your emails. On the right, you can choose to update all emails or only those you have not customized. Alternatively, view each email individually to preview the changes and update them one at a time. We recommend updating all emails at once for the best results.
+        rollout_update_all: Update all emails
+        rollout_update_all_help_text: Updates all your %{program} emails to the new content.
+        update_non_customized: Update non-customized emails
+        update_non_customized_help_text: Updates only emails you have not made edits to. Edited emails stay unchanged.
+        rollout_popup_alert_message_html: We've revamped the default content of email message. <b>Would you like to keep the old email content or migrate to the updated content?</b>
+        rollout_popup_from_sidebar_heading_html: A new content update is now available! This update includes new and improved subject lines and content for your %{program} emails. <b>Would you like to move to the new content?</b>
+        current_content: Current Content
+        updated_content: Updated Content
+        keep_current_content: Keep current content
+        update_content: Update content
+        content_update_sidebar_message: 'At any time, you can switch to the new default content provided by the system. '
+        content_update_sidebar_message_v1: 'At any time, you can switch to the default content provided by the system. '
+        preview_new_content: Preview the new content.
+        content_updation_info_html: Updated last on %{updation_date} by %{user_link}.
+        subcategory_enabled_disabled_mails_count_html: "(<span class='cjs_enabled_count'>%{enabled_count}</span> enabled, <span class='cjs_disabled_count'>%{disabled_count}</span> disabled)"
+        invitation_subcategory_description_html: Emails which are sent out when an %{admin} sends out the invitations to the users are listed <a href='%{invitation_emails_url}'>here</a>.
+        unsubscribe_weekly_update: Unsubscribe from this mail.
+        unsubscribe_weekly_update_v1: Unsubscribe from this email.
+        unsubscribe_weekly_update_success_flash: You have been successfully unsubscribed from weekly updates email.
+        unsubscribe_weekly_update_success_flash_v1: The email you are trying to unsubscribe has been deprecated and will no longer be sent. We have reduced the number of digest emails and consolidated them into a single "smart digest" email that acts as the offline homepage. You can set your notification preferences from this page.
+        upcoming_meetings_widget_heading: Upcoming %{Meetings}
+        upcoming_meetings_widget_duration: "(Next 30 days)"
+        reschedule_meeting: Reschedule %{Meeting}
+        propose_a_new_time: Propose a New Time
+      filter:
+        content_related: Content Related
+        membership_related: Membership Related
+        mentoring_requests_and_offers_related: "%{_Mentoring} Requests and Offers Related"
+        mentoring_connection_related: "%{_Mentoring_Connection} Related"
+        message_related: Message Related
+        user_related: User Related
+        weekly_updates: Weekly Updates
+        welcome_messages: Welcome Messages
+        meeting_requests_related: "%{_Meeting} Requests Related"
+        meeting_requests_related_v1: "%{Meeting} Requests Related"
+        three_sixty_related: 360 Survey Related
+        three_sixty_related_v1: 360 Degree Survey
+        project_related: "%{_Mentoring_Connection} Related"
+        enabled: Enabled
+        disabled: Disabled
+        enrollment_and_user_management_related: Enrollment and user management
+        administration_mails: General Administration
+        administration_mails_v1: General administration
+        community_related: Community
+        community_related_v1: Community features
+        matching_and_engagement_related: Matching and engagement
+        matching_and_engagement_related_v1: Matching and engagement
+        digest_and_weekly_updates: Digest and weekly updates
+        digest_and_weekly_updates_v1: Digests and weekly updates
+        subcategories:
+          apply_to_join: Apply to Join
+          admin_adding_users: "%{_Admin} Adding Users"
+          admin_adding_users_v1: Add Users
+          welcome_messages: Welcome Messages
+          announcements: Announcements
+          articles: Articles
+          articles_v1: "%{_Articles}"
+          engagement: Engagements
+          others: Others
+          others_v1: General
+          forums: Forums
+          user_management: User management
+          user_management_v1: User Management
+          admin_initiated_matching: "%{_Admin} Initiated Matching"
+          admin_initiated_matching_v1: "%{_Admin}-initiated Matching"
+          mentoring_connections_notification: "%{_Mentoring_Connection} notification"
+          mentoring_connections_notification_v1: "%{_Mentoring_Connection} Notifications"
+          mentoring_offers: "%{_Mentoring} Offers"
+          new_circles_creation: New Circles Creation
+          invitation: Invites
+          invitation_v1: Invitations
+          meetings: "%{_Meetings}"
+          meeting_requests_related: "%{_Meeting} Requests"
+          mentor_requests_related: "%{_Mentor} Requests"
+          events: Events
+          circle_request_related: Circle Requests
+          qa_related: Q&A
+        all_emails: All Emails
+        customized_emails: Customized Emails
+        non_customized_emails: Non-customized Emails
+      category_description:
+        enrollment_and_user_management_related: Emails that cater to user enrollment and management workflows, for instance emails sent out when a user joins the %{_program}, or is allocated a new role in the %{_program}.
+        administration_mails: Emails that are sent to the %{_admin} or are related to day-to-day administration, like reports requested or alerts triggered.
+        administration_mails_v1: Emails related to day-to-day administration, announcements, or alerts triggered.
+        community_related: Emails that are sent out to users participating in community features like Questions and Answers, or Forums, and choose to receive these email updates.
+        community_related_v1: Emails sent to users participating in community features like %{_Articles} or Forums, if they choose to receive these email updates.
+        matching_and_engagement_related: Emails sent out to users during initiation of a new %{_mentoring_connection}, or post getting connected. These include %{_mentoring_connection} creation and closure emails.
+        matching_and_engagement_related_v1: Emails sent to users during matching and throughout the %{_mentoring_connection} duration. These include %{_mentoring_connection} creation and closure emails.
+        digest_and_weekly_updates: Bundled notification digests served to provide an overview of the %{_program} or %{_mentoring_connections} to users who choose to receive them.
+        digest_and_weekly_updates_v1: 'Notifications such as Announcements are bundled if a user opts for less frequent emails. Bundled notifications include the %{_Program} Activity Digest and %{_Mentoring_Connection} Activity Digest. '
+        three_sixty_related_v1: Emails that are sent to the assessees and reviewers participating in a 360 Degree Survey.
+      error:
+        description_missing: Option missing => :description
+        duplicate_uid: Duplicate UID
+        tag_missing_html: Option missing => should contain :eval_tag or :example
+        duplicate_uid_desc: 'Duplicate UID: %{uid} for %{mailer_name}. Already taken by: %{mailer_uids}'
+        multiple_type_element_in_array: Object is an array containing more than one type of objects
+        no_program: Program does not exist for the object
+        no_flower_braces: contains invalid syntax, donot apply any styles within flower braces of the tag
+        invalid_tags: contains invalid tags - %{tag_string}
+        invalid_syntax_style_in_tag: contains invalid syntax, donot apply any styles to the tags in subject
+        no_widgets: cannot contain widgets - %{tag_string}
+        invalid_widgets: contains invalid widgets - %{tag_string}
+        erb_in_mailer_views: erb tags in mailer views
+      widget_signature:
+        content:
+          title: Signature Widget
+          description_v1: "%{_Program} signature"
+        default_template:
+          thanks: Thanks
+      salutation_signature_v1: Hi {{receiver_first_name}}
+      widget_style:
+        content:
+          title: Styles Widget
+          description: Customize your email styles here
+      received_mail:
+        invalid_signature: Signature validation failed
+        invalid_receiver: Invalid receiver mail
+        no_content: No message content
+        invalid_object_type: Invalid object type
+        invalid_api_token: No match for the given API TOKEN
+        original_message_deleted: The original message was deleted
+        successfully_accepted: Reply successfully created
+      tags:
+        reply_email_user: reply to this email (message will be sent to the user) or
+        message_from_administrator_v2_html: 'Message from the %{admin}: <br/> &quot; %{message_from_admin} &quot;<br/>'
+        message_from_user_v2_html: "<br/>Message from %{name}: <br/> &quot; %{message} &quot;<br/>"
+        message_from_user_v3_html: "<br/>%{message}<br/> - %{name}<br/>"
+        connection_inactivity_notice_period:
+          description_v1: "%{_Mentoring_Connection} inactivity notice period in days"
+        mentor_name:
+          example: William Smith
+          example_with_url: "<a href='www.chronus.com'>William Smith</a>"
+        mentee_name:
+          example: John Smith
+        custom_terms:
+          customized_mentors_term: Customized mentors term (plural)
+          customized_mentees_term: Customized mentees term (plural)
+          customized_mentors_term_caps: Customized mentors term (plural & caps)
+          customized_mentees_term_caps: Customized mentees term (plural & caps)
+          customized_mentor_term_caps: Customized mentor term (caps)
+          customized_mentee_term_caps: Customized mentee term (caps)
+          customized_mentor_term: Customized mentor terms
+          customized_mentee_term: Customized mentee term
+          customized_mentor_term_articleized: Customized mentor term with article prepended (a/an)
+          customized_mentee_term_articleized: Customized mentee term with article prepended (a/an)
+          customized_mentor_term_articleized_caps: Customized mentor term with article prepended (a/an & caps)
+          customized_articles_term: Customized articles term (plural)
+          customized_article_term: Customized article term
+          customized_article_term_articleized: Customized article term with article prepended (a/an)
+          customized_admin_term_articleized: Customized admin term with article prepended (a/an)
+          customized_admin_term: Customized admin term
+          customized_admin_term_pluralized: Customized admin term pluralize
+          customized_admin_term_capitalized: Customized admin term (capitalized)
+          customized_mentoring_connection_term_v1: Customized %{_mentoring_connection} term
+          customized_mentoring_connections_term_v1: Customized %{_mentoring_connections} term (plural)
+          customized_mentoring_connection_term_capitalized_v1: Customized %{_mentoring_connection} term (capitalized)
+          customized_mentoring_connections_term_capitalized_v1: Customized %{_mentoring_connections} term (plural & capitalized)
+          customized_connection_term_articleized: Customized mentoring connection term with article prepended (a/an)
+          customized_meeting_term: Customized meeting term
+          customized_meetings_term: Customized meetings term (plural)
+          customized_meeting_term_capitalized: Customized meeting term (capitalized)
+          customized_meeting_term_articleized: Customized meeting term with article prepended (a/an)
+          customized_subprogram_term: Customized Subprogram term
+          customized_subprograms_term: Customized Subprograms term
+          customized_subprogram_term_capitalized: Customized Subprogram term (capitalized)
+          customized_subprogram_term_articleized: Customized Subprogram term with article prepended (a/an)
+          customized_mentoring_term: Customized mentoring term
+          customized_mentoring_term_capitalized: Customized mentoring term (capitalized)
+          customized_mentoring_term_articleized: Customized mentoring term with article prepended (a/an)
+        global_tags:
+          url_program: Url of the program
+          current_time: Current time
+          receiver_name: Name of the receiver
+          receiver_first_name: First name of the receiver
+          receiver_last_name: Last name of the receiver
+        meeting_request_tags:
+          meeting_request_creator_name_v1: Name of the creator of the %{meeting} request.
+          meeting_request_recepient_name_v1: Name of the recepient of the %{meeting} request
+          meeting_request_calendar_attachment: Link to Event.ics file.
+          url_meeting_request_accept_link_v1: Relevant link to accept the %{meeting} request
+          url_meeting_request_decline_link_v1: Relevant link to decline the %{meeting} request
+          meeting_request_status_sender_name_v1: The name of the person who has updated the status of the %{meeting} request
+          proposed_times:
+            title: Proposed Times
+            description_v1: You can accept this request by choosing one of the proposed times or by proposing a new %{meeting} time.
+          accept_this_time: Accept this Time
+          accept_and_propose_time: Accept and Propose Time
+          decline_request: Decline
+          download_ics: Download ICS
+          mentee_profile_picture:
+            description: Profile picture of the %{mentee}
+          mentor_profile_picture:
+            description: Profile picture of the %{mentor}
+          meeting_topic_link:
+            description: Topic with link
+            example_html: <a href="www.chronus.com" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;color:#00ADBC;text-decoration:none">Resume discussion</a>
+          meeting_topic:
+            description: Topic of the %{meeting}
+            example: Resume discussion
+          meeting_proposed_times:
+            description: Details of the %{meeting}
+            example_v1_html: '<table cellspacing="0" cellpadding="0" border="0" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-rspace:0pt;mso-table-lspace:0pt;border-collapse:collapse !important;table-layout: fixed; text-align: left;" width="100%" class="wrapper"> <tbody> <tr><td style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;padding:0;font-size:14px;line-height:25px;font-family:Helvetica, Arial, sans-serif;color:#333333;color: #787878; line-height: 20px; text-decoration: underline;">Proposed Times (IST)</td></tr> <tr><td style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;padding:0;font-size:14px;line-height:25px;font-family:Helvetica, Arial, sans-serif;color:#333333;color: #787878; font-size: 0.8em; line-height: 16px; padding-bottom: 5px;">You can accept this request by choosing one of the proposed times or by proposing a new meetup time.</td></tr> <tr><td style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;padding:0;font-size:14px;line-height:25px;font-family:Helvetica, Arial, sans-serif;color:#333333"> <table cellspacing="0" cellpadding="0" border="0" width="100%" class="wrapper" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-rspace:0pt;mso-table-lspace:0pt;border-collapse:collapse !important;border-collapse: separate !important;"> <tbody> <tr> <td style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;padding:0;font-size:14px;line-height:25px;font-family:Helvetica, Arial, sans-serif;color:#333333;padding: 10px 0 10px 0;"> Mar 6, 2014 11:02 pm IST (30 minutes) <br> <span style="font-size: 1em; color: #787878; line-height: 16px;"> <img alt="Map marker" height="10" src="https://s3.amazonaws.com/chronus-mentor-assets/global-assets/images/map_marker.png" width="10" style="-ms-interpolation-mode:bicubic;border:0;line-height:100%;text-decoration:none;outline:none;max-width:100% !important"> Chennai </span> <br> <a href="https://s3.amazonaws.com/chronus-mentor-assets/global-assets/files/20140321091645_sample_event.ics" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;color:#00ADBC;text-decoration:none;font-size: 1em; line-height: 16px;">Download ICS</a> </td> <td style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;padding:0;font-size:14px;line-height:25px;font-family:Helvetica, Arial, sans-serif;color:#333333;padding: 10px 0 10px 0; text-align: right; vertical-align: top;" align="right"> <table cellspacing="0" cellpadding="0" border="0" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-rspace:0pt;mso-table-lspace:0pt;border-collapse:collapse !important;border-collapse: separate !important; display: inline-block; border-color: transparent;"><tbody><tr><td style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;padding:0;font-size:14px;line-height:25px;font-family:Helvetica, Arial, sans-serif;color:#333333;color: #129e12; padding: 5px; border: 1px solid #129e12; white-space: nowrap; background-color: #FFFFFF; vertical-align: middle; line-height: 16px;"> <a href="www.chronus.com" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;color:#00ADBC;text-decoration:none;color: #129e12; white-space: nowrap; background-color: #FFFFFF;">Accept this Time</a> </td></tr></tbody></table> </td> </tr> </tbody> </table> </td></tr> </tbody> </table> <hr> <table cellspacing="0" cellpadding="0" border="0" width="100%" class="wrapper" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-rspace:0pt;mso-table-lspace:0pt;border-collapse:collapse !important"> <tbody> <tr> <td style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;padding:0;font-size:14px;line-height:25px;font-family:Helvetica, Arial, sans-serif;color:#333333;text-align: left;"> <a href="www.chronus.com" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;color:#00ADBC;text-decoration:none;color: #ef5632; text-decoration: underline;">Decline</a> </td> <td style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;padding:0;font-size:14px;line-height:25px;font-family:Helvetica, Arial, sans-serif;color:#333333;text-align: right;" align="right"> <table cellspacing="0" cellpadding="0" border="0" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-rspace:0pt;mso-table-lspace:0pt;border-collapse:collapse !important;border-collapse: separate !important; display: inline-block; border-color: transparent;"><tbody><tr><td style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;padding:0;font-size:14px;line-height:25px;font-family:Helvetica, Arial, sans-serif;color:#333333;color: #129e12; padding: 5px; border: 1px solid #129e12; white-space: nowrap; background-color: #FFFFFF; vertical-align: middle; line-height: 16px;"> <a href="www.chronus.com" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;color:#00ADBC;text-decoration:none;color: #129e12; white-space: nowrap; background-color: #FFFFFF;">Accept and Propose Time</a> </td></tr></tbody></table> </td> </tr> </tbody> </table>'
+          meeting_details_with_action:
+            description: Details of the %{meeting} with actions
+            example_html: '<table cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed; text-align: left; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important;" width="100%" class="wrapper"><tbody><tr><td style="color: #787878; line-height: 16px; text-decoration: underline; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; font-family: Helvetica, Arial, sans-serif; padding: 0;">%{meeting_caps} Time</td></tr><tr><td style="line-height: 16px; vertical-align: top; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 5px 0 10px 0;" valign="top">Mar 6, 2014 11:02 pm IST (30 minutes)<br><span style="color: #787878; line-height: 16px;"><img src="https://s3.amazonaws.com/chronus-mentor-assets/global-assets/images/map_marker.png" alt="Map marker" width="10" height="10" style="-ms-interpolation-mode: bicubic; line-height: 100%; outline: none; text-decoration: none; max-width: 100% !important; border: 0;">Chennai</span><br><a style="line-height: 16px; text-decoration: none; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; color: #00ADBC;" href="https://s3.amazonaws.com/chronus-mentor-assets/global-assets/files/20140321091645_sample_event.ics">Download ICS</a></td></tr></tbody></table><hr><table cellspacing="0" cellpadding="0" border="0" width="100%" class="wrapper" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important;"><tbody><tr><td style="text-align: right; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 5px 0 0;" align="right"><table cellspacing="0" cellpadding="0" border="0" style="border-collapse: separate !important; display: inline-block; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: transparent;"><tbody><tr><td style="color: #129e12; white-space: nowrap; vertical-align: middle; line-height: 16px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; font-family: Helvetica, Arial, sans-serif; background: #FFFFFF; padding: 5px; border: 1px solid #129e12;" valign="middle"><a style="color: #129e12; white-space: nowrap; text-decoration: none; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; background: #FFFFFF;" href="http://www.chronus.com">Visit %{meeting_caps} Area</a></td></tr></tbody></table></td></tr></tbody></table>'
+            noncalendar_example_html: '<table cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed; text-align: left; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important;" width="100%" class="wrapper"><tbody><tr><td style="color: #787878; line-height: 16px; text-decoration: underline; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; font-family: Helvetica, Arial, sans-serif; padding: 0;">%{meeting_caps} Time</td></tr><tr><td style="line-height: 16px; vertical-align: top; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 5px 0 10px 0;" valign="top">Not Set <a href="http://www.chronus.com">(Set %{meeting_caps} Time)</a></td></tr></tbody></table><hr><table cellspacing="0" cellpadding="0" border="0" width="100%" class="wrapper" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important;"><tbody><tr><td style="text-align: right; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 5px 0 0;" align="right"><table cellspacing="0" cellpadding="0" border="0" style="border-collapse: separate !important; display: inline-block; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: transparent;"><tbody><tr><td style="color: #129e12; white-space: nowrap; vertical-align: middle; line-height: 16px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; font-family: Helvetica, Arial, sans-serif; background: #FFFFFF; padding: 5px; border: 1px solid #129e12;" valign="middle"><a style="color: #129e12; white-space: nowrap; text-decoration: none; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; background: #FFFFFF;" href="http://www.chronus.com">Visit %{meeting_caps} Area</a></td></tr></tbody></table></td></tr></tbody></table>'
+            meeting_time: "%{meeting} Time"
+            visit_meeting_area: Visit %{meeting} Area
+            not_set: Not Set
+            set_meeting_time: Set %{meeting} Time
+          url_mentor:
+            description: Url of the %{mentor}
+          url_meeting_area_message:
+            description: Url to send a message in the %{meeting} area
+          contextual_message:
+            description: Message depending on the context of the %{meeting}
+            example: William Smith also updated the %{meeting} with a new time that works.
+            content: "%{name} also updated the %{meeting} with a new time that works."
+            content_with_message_html: '<div style="margin-bottom: 10px;"><strong><b>%{name} also updated the %{meeting} with a new time that works and has a message for you,</b></strong></div><em><i>"%{message}"</i></em>'
+            example_noncalendar_html: <strong><b>However William Smith did not confirm the %{meeting} time and has a message for you,</b></strong><br /><em><i>"Please call me evening to discuss about the venue."</i></em>
+            content_noncalendar_html: <strong><b>However %{name} did not confirm the %{meeting} time and has a message for you,</b></strong><br /><em><i>"%{message}"</i></em>
+        meeting_rescudule_button_tags:
+          meeting_reschedule_button:
+            description: Reschedule/Propose a new time button
+            example_html: "<table cellspacing='0' cellpadding='0' border='0' style='-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-rspace:0pt;mso-table-lspace:0pt;border-collapse:collapse !important;border-collapse: separate !important; display: inline-block; border-color: transparent; padding-top:30px;'><tbody><tr><td style='-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;padding:0;font-size:14px;line-height:25px;font-family:Helvetica, Arial, sans-serif;color:#333333;color: #129e12; padding: 5px; border: 1px solid #129e12; white-space: nowrap; background-color: #FFFFFF; vertical-align: middle; line-height: 16px;'> <a href='www.chronus.com' style='-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;color:#00ADBC;text-decoration:none;color: #129e12; white-space: nowrap; background-color: #FFFFFF;'>Propose a New Time</a> </td></tr></tbody></table>"
+        meeting_tags:
+          mentee_name:
+            description: Name of the mentee
+            example: William Smith
+          mentor_name:
+            description: Name of the mentor
+          url_meeting:
+            description: Url of the meeting
+          meeting_topic:
+            description: Topic of the meeting
+            example: Resume discussion
+          url_reject_meeting_invite:
+            description: Relevant link to reject the meeting invitation
+          url_accept_meeting_invite:
+            description: Relevant link to accept the meeting invitation
+          meeting_owner_name:
+            description: Name of the owner of the meeting
+          meeting_start_date:
+            description: Start date of the meeting
+            example: December 24, 2013
+          meeting_start_time:
+            description: Start time of the meeting
+            example: 11:00 am
+          meeting_timings:
+            description: Meeting Timings - From To time
+            example: December 24, 2013 11:00 am to 11:30 am UTC
+            start_to_end_time: "%{start_time} to %{end_time}"
+            starting_from: starting from %{start_time}
+            all_following: All the %{meetings} following %{following_time}
+          meeting_description:
+            description: Description of the meeting
+            example: A brief discussion on how to present your ideas and skills in the resume
+          meeting_location:
+            description: Location of the meeting
+            example: University Library
+          meeting_details:
+            description: Meeting attendees along with their status of each attendee
+            attending: Attending
+          respond_or_change:
+            description: Respond/ Change your response depending upon the rsvp status
+            example: Change your response
+            content_respond: Respond
+            content_change: Change your response
+          member_response:
+            description: Status of the rsvp
+            example: accepted
+          update_rsvp:
+            description: Update the RSVP if not responded earlier or datetime/location changed
+            example_v2_html: 'Attending?<br/><table class=''table-responsive'' border=''0''><tr><td>%{accept_button}</td><td style=''padding-left: 15px;''>%{reject_button}</td></tr></table>'
+            please_update_response_v1: Attending?
+          accept_invitation_button:
+            description: Accept invitation button
+            accept_text: Yes, I will attend
+          reject_invitation_button:
+            description: Reject invitation button
+            reject_text: No, I will not attend
+          read_more: read more
+          mentee_url:
+            description: Url of the mentee's profile.
+        reply_to_tags:
+          reply_to_button:
+            description: Reply to the sender of the email
+            reply_text: Reply
+          subject: 'Re: %{subject_text}'
+        message_tags:
+          message_subject:
+            description: Subject specified as part of the message
+            example: Can you please review my profile
+          sender_name:
+            description: Name of the sender
+          url_sender_profile:
+            description: Url to the sender of the profile
+          url_reply:
+            description: Url to reply for the message
+          url_message:
+            description: Url to view the message
+          message_content:
+            description: Content of the message
+            example: Lets discuss about our mentoring relationship, Can we schedule a meeting and discuss about it?
+        subprogram_tags:
+          subprogram_name:
+            description: Name of the subprogram
+            example_v1: "%{program_name}"
+          url_subprogram:
+            description: Url of the subprogram
+          subprogram_or_program_name:
+            name: Subprogram or program name
+            description: Relevant program/subprogram name
+          url_subprogram_or_program:
+            name: Subprogram or program url
+            description: Relevant program/subprogram url
+          url_program_login:
+            description: Url to login page for the program
+        campaign_tags:
+          user_name:
+            name: User Name
+            description: Full name of recipient
+            example_html: John Doe
+          user_email:
+            name: User Email
+            description: Email of recipient
+            example_html: johndoe@example.com
+          user_role:
+            name: User Role
+            description: Role of recipient
+            example_html: Mentor
+          number_of_pending_mentor_requests:
+            name: Number of pending Mentor Requests
+            description: Pending mentor requests against a mentor
+            example_html: '2'
+          recommended_mentors:
+            name: Recommended %{_Mentors}
+            description: List of recommended %{_mentors}
+            heading: Recommendations based on your profile
+            example_html_v1: '<div style="color: #1ab394; font-weight: 600; margin-top: 10px;">Recommendations based on your profile </div><br/><table cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed; text-align: left; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important;" width="100%"> <tbody><tr> <td width="100%" style="width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0 10px 10px;"> <table cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed; text-align: left; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important;" width="100%"> <tbody> <tr> <td bgcolor="#FFFFFF" width="100%" style="width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0 10px 10px;"> <table cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed; text-align: left; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important;" width="100%"> <tbody> <tr> <td valign="top" width="50" style="width: 50px !important; vertical-align: top; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0 0 10px;"> <div class="media medium "> <div class=" media-middle"> <a href="https://www.chronus.com" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-decoration: none; color: #00ADBC;"><img alt="Bob Sutton" title="Bob Sutton" style="width: 40px !important; height: 40px !important; font-size: 18px !important; line-height: 40px !important; -ms-interpolation-mode: bicubic; outline: none; text-decoration: none; max-width: 100% !important; border: 0 none;" class="img-circle " src="https://chronus-mentor-assets.s3.amazonaws.com/global-assets/images/user_medium.jpg"></a> </div> </div> </td> <td valign="top" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0 0 10px;"> <table cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed; text-align: left; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important;" width="100%"> <tbody> <tr style="overflow: auto;"><td valign="top" width="100%" style="font-weight: bold; text-align: left; width: 100% !important; vertical-align: top; color: #628F98 !important; font-size: 14px !important; line-height: 22px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;" align="left"><a href="http://anand.localhost.com/p/p1/members/2?src=recommended_mentors" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-decoration: none; color: #00ADBC;">Bob Sutton</a></td><td valign="top" width="100%" style="text-align: right; width: 100% !important; vertical-align: top; color: #628F98 !important; font-size: 14px !important; line-height: 18px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;" align="right"><a style="font-size: 14px; font-weight: normal; color: #ffffff; border-radius: 3px; display: inline-block; text-decoration: none; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; background: #1eaa79; padding: 0px 5px; border: 5px solid #1eaa79;" href="http://www.chronus.com">Connect</a></td></tr> <tr><td valign="top" width="100%" style="color: #1ab394; width: 100% !important; vertical-align: top; font-size: 14px !important; line-height: 17px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;">50% match</td></tr><tr> <td valign="top" width="100%" style="width: 100% !important; vertical-align: top; color: #6E6C70; font-size: 0.7em; line-height: 17px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;">Contoso Systems </td> </tr> <tr><td valign="top" width="100%" style="width: 100% !important; vertical-align: top; color: #9EAEB1; font-size: 0.7em; line-height: 17px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;">New York, NY, USA</td></tr><tr><td valign="top" width="100%" style="width: 100% !important; vertical-align: top; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 25px; color: #333333; padding: 5px 0px 0px;"><div style="font-size: 85%; font-style: italic; color: #1c84c6;">You match on</div></td></tr><tr><td style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0;"><table cellspacing="0" cellpadding="0" border="0" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important;"><tbody><tr><td style="line-height: 5px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0 0 7px;"><div style="text-decoration: none; font-size: 10px; color: #1c84c6; border-radius: 6px; display: inline-block; font-style: bold; line-height: 20px; background: #ffffff; padding: 0px 6px; border: 1px solid #1c84c6;">20+ years</div></td><td style="line-height: 5px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0 0 7px;"><div style="text-decoration: none; font-size: 10px; color: #1c84c6; border-radius: 6px; display: inline-block; font-style: bold; line-height: 20px; background: #ffffff; padding: 0px 6px; border: 1px solid #1c84c6; margin-left: 5px;">Career Pathing</div></td><td style="line-height: 5px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0 0 7px;"><div style="text-decoration: none; font-size: 10px; color: #1c84c6; border-radius: 6px; display: inline-block; font-style: bold; line-height: 20px; background: #ffffff; padding: 0px 6px; border: 1px solid #1c84c6; margin-left: 5px;">Male</div></td></tr></tbody></table></td></tr></tbody> </table> </td> </tr> <tr> <td colspan="2" width="100%" height="1" bgcolor="#D2D6D7" style="font-size: 1px; line-height: 1px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0;">&nbsp;</td> </tr> <tr> <td valign="top" width="50" style="width: 50px !important; vertical-align: top; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 10px 0;"> <div class="media medium "> <div class=" media-middle"> <a href="https://www.chronus.com" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-decoration: none; color: #00ADBC;"><img alt="Michael Brian" title="Michael Brian" id="none" style="width: 40px !important; height: 40px !important; font-size: 18px !important; line-height: 40px !important; -ms-interpolation-mode: bicubic; outline: none; text-decoration: none; max-width: 100% !important; border: 0 none;" class="img-circle " src="https://chronus-mentor-assets.s3.amazonaws.com/global-assets/images/user_medium.jpg"></a> </div> </div> </td> <td valign="top" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 10px 0;"> <table cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed; text-align: left; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important;" width="100%"> <tbody> <tr style="overflow: auto;"><td valign="top" width="100%" style="font-weight: bold; text-align: left; width: 100% !important; vertical-align: top; color: #628F98 !important; font-size: 14px !important; line-height: 22px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;" align="left"><a href="http://anand.localhost.com/p/p1/members/2?src=recommended_mentors" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-decoration: none; color: #00ADBC;">Michael Brian</a></td><td valign="top" width="100%" style="text-align: right; width: 100% !important; vertical-align: top; color: #628F98 !important; font-size: 14px !important; line-height: 18px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;" align="right"><a style="font-size: 14px; font-weight: normal; color: #ffffff; border-radius: 3px; display: inline-block; text-decoration: none; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; background: #1eaa79; padding: 0px 5px; border: 5px solid #1eaa79;" href="http://www.chronus.com">Connect</a></td></tr><tr><td valign="top" width="100%" style="color: #1ab394; width: 100% !important; vertical-align: top; font-size: 14px !important; line-height: 17px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;">50% match</td></tr><tr> <td valign="top" width="100%" style="width: 100% !important; vertical-align: top; color: #6E6C70; font-size: 0.7em; line-height: 17px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;">CEO at NewGreen Corporation </td> </tr> <tr><td valign="top" width="100%" style="width: 100% !important; vertical-align: top; color: #9EAEB1; font-size: 0.7em; line-height: 17px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;">Orlando, FL, USA</td></tr><tr><td valign="top" width="100%" style="width: 100% !important; vertical-align: top; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 25px; color: #333333; padding: 5px 0px 0px;"><div style="font-size: 85%; font-style: italic; color: #1c84c6;">You match on</div></td></tr><tr><td style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0;"><table cellspacing="0" cellpadding="0" border="0" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important;"><tbody><tr><td style="line-height: 5px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0 0 7px;"><div style="text-decoration: none; font-size: 10px; color: #1c84c6; border-radius: 6px; display: inline-block; font-style: bold; line-height: 20px; background: #ffffff; padding: 0px 6px; border: 1px solid #1c84c6;">Business Development</div></td><td style="line-height: 5px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0 0 7px;"><div style="text-decoration: none; font-size: 10px; color: #1c84c6; border-radius: 6px; display: inline-block; font-style: bold; line-height: 20px; background: #ffffff; padding: 0px 6px; border: 1px solid #1c84c6; margin-left: 5px;">20+ years</div></td></tr></tbody></table></td></tr></tbody> </table> </td> </tr> <tr> <td colspan="2" width="100%" height="1" bgcolor="#D2D6D7" style="font-size: 1px; line-height: 1px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0;">&nbsp;</td> </tr> <tr> <td valign="top" width="50" style="width: 50px !important; vertical-align: top; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 10px 0 0;"> <div class="media medium "> <div class=" media-middle"> <a href="https://www.chronus.com" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-decoration: none; color: #00ADBC;"><img alt="Dean Parker" title="Dean Parker" id="none" style="width: 40px !important; height: 40px !important; font-size: 18px !important; line-height: 40px !important; -ms-interpolation-mode: bicubic; outline: none; text-decoration: none; max-width: 100% !important; border: 0 none;" class="img-circle " src="https://chronus-mentor-assets.s3.amazonaws.com/global-assets/images/user_medium.jpg"></a> </div> </div> </td> <td valign="top" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 10px 0 0;"> <table cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed; text-align: left; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important;" width="100%"> <tbody> <tr style="overflow: auto;"><td valign="top" width="100%" style="font-weight: bold; text-align: left; width: 100% !important; vertical-align: top; color: #628F98 !important; font-size: 14px !important; line-height: 22px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;" align="left"><a href="http://anand.localhost.com/p/p1/members/2?src=recommended_mentors" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-decoration: none; color: #00ADBC;">Dean Parker</a></td><td valign="top" width="100%" style="text-align: right; width: 100% !important; vertical-align: top; color: #628F98 !important; font-size: 14px !important; line-height: 18px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;" align="right"><a style="font-size: 14px; font-weight: normal; color: #ffffff; border-radius: 3px; display: inline-block; text-decoration: none; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; background: #1eaa79; padding: 0px 5px; border: 5px solid #1eaa79;" href="http://www.chronus.com">Connect</a></td></tr><tr><td valign="top" width="100%" style="color: #1ab394; width: 100% !important; vertical-align: top; font-size: 14px !important; line-height: 17px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;">50% match</td></tr><tr> <td valign="top" width="100%" style="width: 100% !important; vertical-align: top; color: #6E6C70; font-size: 0.7em; line-height: 17px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;">General Manager at Silicom Communications </td> </tr> <tr><td valign="top" width="100%" style="width: 100% !important; vertical-align: top; color: #9EAEB1; font-size: 0.7em; line-height: 17px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; padding: 0;">Miami Gardens, FL, USA</td></tr><tr><td valign="top" width="100%" style="width: 100% !important; vertical-align: top; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 25px; color: #333333; padding: 5px 0px 0px;"><div style="font-size: 85%; font-style: italic; color: #1c84c6;">You match on</div></td></tr><tr><td style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0;"><table cellspacing="0" cellpadding="0" border="0" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important;"><tbody><tr><td style="line-height: 5px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0 0 7px;"><div style="text-decoration: none; font-size: 10px; color: #1c84c6; border-radius: 6px; display: inline-block; font-style: bold; line-height: 20px; background: #ffffff; padding: 0px 6px; border: 1px solid #1c84c6;">Business Development</div></td></tr></tbody></table></td></tr></tbody> </table> </td> </tr> </tbody> </table> </td> </tr> </tbody> </table> </td> </tr><tr> <td colspan="2" width="100%" height="1" bgcolor="#D2D6D7" style="font-size: 1px; line-height: 1px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 0;">&nbsp;</td> </tr><tr><td align="center" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-size: 14px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding: 20px 0 0;"><a href="http://www.chronus.com" class="button-small" target="_blank" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-decoration: none; font-size: 16px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #ffffff; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; display: inline-block; background: #1eaa79; border-color: #1eaa79; border-style: solid; border-width: 5px 5px;">View all Mentors &rarr;</a></td></tr></tbody></table>'
+          number_of_pending_meeting_requests:
+            name: Number of pending meeting requests
+            description: Pending meeting requests against a mentor
+            example_html: '3'
+          profile_completion_score:
+            name: Profile completion score
+            description: Profile completion score of recipient
+            example_html: 50%
+          url_profile_completion:
+            name: Url of profile completion
+            description: Link to edit profile of recipient
+          url_contact_admin:
+            name: Url of contact admin
+            description: Link to Contact Admin
+          url_signup:
+            name: Url for signup
+            description: Link for signup code
+          last_logged_in_on:
+            name: Last logged in on
+            description: Last login by a user
+            example_html: 18th April, 2014
+          mentor_request_acceptance_rate:
+            name: Mentor Request Acceptance Rate
+            description: Mentor request acceptance rate of a mentor
+            example_html: 50%
+            value_html: "%{value}%"
+          meeting_request_acceptance_rate:
+            name: Meeting Request Acceptance Rate
+            description: Meeting request acceptance rate of a mentor
+            example_html: 50%
+            value_html: "%{value}%"
+          mentor_request_average_response_time:
+            name: Mentor Request Average Response Time
+            description: Average response time taken by a mentor to mentor requests
+            example_html: 7 hours
+            value_html:
+              one: "%{count} hour"
+              other: "%{count} hours"
+          meeting_request_average_response_time:
+            name: Meeting Request Average Response Time
+            description: Average response time taken by a mentor to meeting requests
+            example_html: 7 hours
+            value_html:
+              one: "%{count} hour"
+              other: "%{count} hours"
+          join_date:
+            name: Join Date
+            description: Joining date of the user in the program
+            example_html: 18th April 2014
+          available_connection_slots:
+            name: Available Connection Slots
+            description: Available connection slots against a mentor
+            example_html: '3'
+          user_firstname:
+            name: User Firstname
+            description: First name of recipient
+            example_html: John
+          user_lastname:
+            name: User Lastname
+            description: Last name of recipient
+            example_html: Doe
+          survey_name:
+            name: Survey Name
+            description: Name of the survey
+            example_html: Partnership Effectiveness
+          survey_url:
+            name: Survey Url
+            description: Url of the survey
+            start_survey_v1: Start Survey
+          group_name:
+            name: "%{_Mentoring_Connection} Name"
+            description: Name of the %{_mentoring_connection}
+            example: Smith and Doe
+          meeting_topic:
+            name: "%{_Meeting} Topic"
+            description: Topic of the %{_meeting}
+            example: How to become a better manager
+          partner_name:
+            name: Partner Name
+            description: Name of the partner
+            example: John Doe
+          meeting_area_url:
+            name: "%{_Meeting} Area Url"
+            description: Url of the %{_meeting} area
+          meeting_reschedule_url:
+            name: "%{_Meeting} Reschedule Url"
+            description: Url to reschedule the %{_meeting}
+          feedback_survey_button:
+            name: Provide Feedback Button
+            description: Button to provide feedback
+          start_survey_button:
+            name_v1: Survey Button
+            description_v1: Button to answer survey
+        forum_tags:
+          forum_name:
+            description: Name of the forum
+          conversation_title:
+            description: Title of the conversation
+            example: Help with using the system
+          link_to_conversation:
+            description: Url of the conversation
+        common_tags:
+          program_name:
+            name: Program Name
+            description: Name of the program
+          mentoring_area_button:
+            name: "%{_Mentoring_Connection} area button"
+            description: "%{_Mentoring_Connection} button"
+            visit_your_connection: Visit your %{mentoring_connection} area

@@ -1,0 +1,488 @@
+---
+en:
+  timezone:
+    region:
+      Africa: Africa
+      America: America
+      Antarctica: Antarctica
+      Arctic: Arctic
+      Asia: Asia
+      Atlantic: Atlantic
+      Australia: Australia
+      Others: Others
+      Etc: Etc
+      Europe: Europe
+      Indian: Indian
+      Pacific: Pacific
+      US: US
+    zone:
+      Abidjan: Abidjan
+      Accra: Accra
+      Addis_Ababa: Addis Ababa
+      Algiers: Algiers
+      Asmara: Asmara
+      Bamako: Bamako
+      Bangui: Bangui
+      Banjul: Banjul
+      Bissau: Bissau
+      Blantyre: Blantyre
+      Brazzaville: Brazzaville
+      Bujumbura: Bujumbura
+      Cairo: Cairo
+      Casablanca: Casablanca
+      Ceuta: Ceuta
+      Conakry: Conakry
+      Dakar: Dakar
+      Dar_es_Salaam: Dar es Salaam
+      Djibouti: Djibouti
+      Douala: Douala
+      El_Aaiun: El Aaiun
+      Freetown: Freetown
+      Gaborone: Gaborone
+      Harare: Harare
+      Johannesburg: Johannesburg
+      Juba: Juba
+      Kampala: Kampala
+      Khartoum: Khartoum
+      Kigali: Kigali
+      Kinshasa: Kinshasa
+      Lagos: Lagos
+      Libreville: Libreville
+      Lome: Lome
+      Luanda: Luanda
+      Lubumbashi: Lubumbashi
+      Lusaka: Lusaka
+      Malabo: Malabo
+      Maputo: Maputo
+      Maseru: Maseru
+      Mbabane: Mbabane
+      Mogadishu: Mogadishu
+      Monrovia: Monrovia
+      Nairobi: Nairobi
+      Ndjamena: Ndjamena
+      Niamey: Niamey
+      Nouakchott: Nouakchott
+      Ouagadougou: Ouagadougou
+      Porto-Novo: Porto-Novo
+      Sao_Tome: Sao Tome
+      Tripoli: Tripoli
+      Tunis: Tunis
+      Windhoek: Windhoek
+      Adak: Adak
+      Anchorage: Anchorage
+      Anguilla: Anguilla
+      Antigua: Antigua
+      Araguaina: Araguaina
+      Argentina/Buenos_Aires: Argentina/Buenos Aires
+      Argentina/Catamarca: Argentina/Catamarca
+      Argentina/Cordoba: Argentina/Cordoba
+      Argentina/Jujuy: Argentina/Jujuy
+      Argentina/La_Rioja: Argentina/La Rioja
+      Argentina/Mendoza: Argentina/Mendoza
+      Argentina/Rio_Gallegos: Argentina/Rio Gallegos
+      Argentina/Salta: Argentina/Salta
+      Argentina/San_Juan: Argentina/San Juan
+      Argentina/San_Luis: Argentina/San Luis
+      Argentina/Tucuman: Argentina/Tucuman
+      Argentina/Ushuaia: Argentina/Ushuaia
+      Aruba: Aruba
+      Asuncion: Asuncion
+      Atikokan: Atikokan
+      Bahia: Bahia
+      Bahia_Banderas: Bahia Banderas
+      Barbados: Barbados
+      Belem: Belem
+      Belize: Belize
+      Blanc-Sablon: Blanc-Sablon
+      Boa_Vista: Boa Vista
+      Bogota: Bogota
+      Boise: Boise
+      Cambridge_Bay: Cambridge Bay
+      Campo_Grande: Campo Grande
+      Cancun: Cancun
+      Caracas: Caracas
+      Cayenne: Cayenne
+      Cayman: Cayman
+      Chicago: Chicago
+      Chihuahua: Chihuahua
+      Costa_Rica: Costa Rica
+      Creston: Creston
+      Cuiaba: Cuiaba
+      Curacao: Curacao
+      Danmarkshavn: Danmarkshavn
+      Dawson: Dawson
+      Dawson_Creek: Dawson Creek
+      Denver: Denver
+      Detroit: Detroit
+      Dominica: Dominica
+      Edmonton: Edmonton
+      Eirunepe: Eirunepe
+      El_Salvador: El Salvador
+      Fort_Nelson: Fort Nelson
+      Fortaleza: Fortaleza
+      Glace_Bay: Glace Bay
+      Godthab: Godthab
+      Goose_Bay: Goose Bay
+      Grand_Turk: Grand Turk
+      Grenada: Grenada
+      Guadeloupe: Guadeloupe
+      Guatemala: Guatemala
+      Guayaquil: Guayaquil
+      Guyana: Guyana
+      Halifax: Halifax
+      Havana: Havana
+      Hermosillo: Hermosillo
+      Indiana/Indianapolis: Indiana/Indianapolis
+      Indiana/Knox: Indiana/Knox
+      Indiana/Marengo: Indiana/Marengo
+      Indiana/Petersburg: Indiana/Petersburg
+      Indiana/Tell_City: Indiana/Tell City
+      Indiana/Vevay: Indiana/Vevay
+      Indiana/Vincennes: Indiana/Vincennes
+      Indiana/Winamac: Indiana/Winamac
+      Inuvik: Inuvik
+      Iqaluit: Iqaluit
+      Jamaica: Jamaica
+      Juneau: Juneau
+      Kentucky/Louisville: Kentucky/Louisville
+      Kentucky/Monticello: Kentucky/Monticello
+      Kralendijk: Kralendijk
+      La_Paz: La Paz
+      Lima: Lima
+      Los_Angeles: Los Angeles
+      Lower_Princes: Lower Princes
+      Maceio: Maceio
+      Managua: Managua
+      Manaus: Manaus
+      Marigot: Marigot
+      Martinique: Martinique
+      Matamoros: Matamoros
+      Mazatlan: Mazatlan
+      Menominee: Menominee
+      Merida: Merida
+      Metlakatla: Metlakatla
+      Mexico_City: Mexico City
+      Miquelon: Miquelon
+      Moncton: Moncton
+      Monterrey: Monterrey
+      Montevideo: Montevideo
+      Montserrat: Montserrat
+      Nassau: Nassau
+      New_York: New York
+      Nipigon: Nipigon
+      Nome: Nome
+      Noronha: Noronha
+      North_Dakota/Beulah: North Dakota/Beulah
+      North_Dakota/Center: North Dakota/Center
+      North_Dakota/New_Salem: North Dakota/New Salem
+      Ojinaga: Ojinaga
+      Panama: Panama
+      Pangnirtung: Pangnirtung
+      Paramaribo: Paramaribo
+      Phoenix: Phoenix
+      Port-au-Prince: Port-au-Prince
+      Port_of_Spain: Port of Spain
+      Porto_Velho: Porto Velho
+      Puerto_Rico: Puerto Rico
+      Rainy_River: Rainy River
+      Rankin_Inlet: Rankin Inlet
+      Recife: Recife
+      Regina: Regina
+      Resolute: Resolute
+      Rio_Branco: Rio Branco
+      Santarem: Santarem
+      Santiago: Santiago
+      Santo_Domingo: Santo Domingo
+      Sao_Paulo: Sao Paulo
+      Scoresbysund: Scoresbysund
+      Sitka: Sitka
+      St_Barthelemy: St Barthelemy
+      St_Johns: St Johns
+      St_Kitts: St Kitts
+      St_Lucia: St Lucia
+      St_Thomas: St Thomas
+      St_Vincent: St Vincent
+      Swift_Current: Swift Current
+      Tegucigalpa: Tegucigalpa
+      Thule: Thule
+      Thunder_Bay: Thunder Bay
+      Tijuana: Tijuana
+      Toronto: Toronto
+      Tortola: Tortola
+      Vancouver: Vancouver
+      Whitehorse: Whitehorse
+      Winnipeg: Winnipeg
+      Yakutat: Yakutat
+      Yellowknife: Yellowknife
+      Casey: Casey
+      Davis: Davis
+      DumontDUrville: DumontDUrville
+      Macquarie: Macquarie
+      Mawson: Mawson
+      McMurdo: McMurdo
+      Palmer: Palmer
+      Rothera: Rothera
+      Syowa: Syowa
+      Troll: Troll
+      Vostok: Vostok
+      Longyearbyen: Longyearbyen
+      Aden: Aden
+      Almaty: Almaty
+      Amman: Amman
+      Anadyr: Anadyr
+      Aqtau: Aqtau
+      Aqtobe: Aqtobe
+      Ashgabat: Ashgabat
+      Baghdad: Baghdad
+      Bahrain: Bahrain
+      Baku: Baku
+      Bangkok: Bangkok
+      Barnaul: Barnaul
+      Beirut: Beirut
+      Bishkek: Bishkek
+      Brunei: Brunei
+      Chita: Chita
+      Choibalsan: Choibalsan
+      Colombo: Colombo
+      Damascus: Damascus
+      Dhaka: Dhaka
+      Dili: Dili
+      Dubai: Dubai
+      Dushanbe: Dushanbe
+      Gaza: Gaza
+      Hebron: Hebron
+      Ho_Chi_Minh: Ho Chi Minh
+      Hong_Kong: Hong Kong
+      Hovd: Hovd
+      Irkutsk: Irkutsk
+      Istanbul: Istanbul
+      Jakarta: Jakarta
+      Jayapura: Jayapura
+      Jerusalem: Jerusalem
+      Kabul: Kabul
+      Kamchatka: Kamchatka
+      Karachi: Karachi
+      Kathmandu: Kathmandu
+      Khandyga: Khandyga
+      Kolkata: Kolkata
+      Krasnoyarsk: Krasnoyarsk
+      Kuala_Lumpur: Kuala Lumpur
+      Kuching: Kuching
+      Kuwait: Kuwait
+      Macau: Macau
+      Magadan: Magadan
+      Makassar: Makassar
+      Manila: Manila
+      Muscat: Muscat
+      Nicosia: Nicosia
+      Novokuznetsk: Novokuznetsk
+      Novosibirsk: Novosibirsk
+      Omsk: Omsk
+      Oral: Oral
+      Phnom_Penh: Phnom Penh
+      Pontianak: Pontianak
+      Pyongyang: Pyongyang
+      Qatar: Qatar
+      Qyzylorda: Qyzylorda
+      Riyadh: Riyadh
+      Sakhalin: Sakhalin
+      Samarkand: Samarkand
+      Seoul: Seoul
+      Shanghai: Shanghai
+      Singapore: Singapore
+      Srednekolymsk: Srednekolymsk
+      Taipei: Taipei
+      Tashkent: Tashkent
+      Tbilisi: Tbilisi
+      Tehran: Tehran
+      Thimphu: Thimphu
+      Tokyo: Tokyo
+      Tomsk: Tomsk
+      Ulaanbaatar: Ulaanbaatar
+      Urumqi: Urumqi
+      Ust-Nera: Ust-Nera
+      Vientiane: Vientiane
+      Vladivostok: Vladivostok
+      Yakutsk: Yakutsk
+      Yangon: Yangon
+      Yekaterinburg: Yekaterinburg
+      Yerevan: Yerevan
+      Azores: Azores
+      Bermuda: Bermuda
+      Canary: Canary
+      Cape_Verde: Cape Verde
+      Faroe: Faroe
+      Madeira: Madeira
+      Reykjavik: Reykjavik
+      South_Georgia: South Georgia
+      St_Helena: St Helena
+      Stanley: Stanley
+      Adelaide: Adelaide
+      Brisbane: Brisbane
+      Broken_Hill: Broken Hill
+      Currie: Currie
+      Darwin: Darwin
+      Eucla: Eucla
+      Hobart: Hobart
+      Lindeman: Lindeman
+      Lord_Howe: Lord Howe
+      Melbourne: Melbourne
+      Perth: Perth
+      Sydney: Sydney
+      CET: CET
+      CST6CDT: CST6CDT
+      EET: EET
+      EST: EST
+      EST5EDT: EST5EDT
+      GMT: GMT
+      GMT+0: GMT+0
+      GMT+1: GMT+1
+      GMT+10: GMT+10
+      GMT+11: GMT+11
+      GMT+12: GMT+12
+      GMT+2: GMT+2
+      GMT+3: GMT+3
+      GMT+4: GMT+4
+      GMT+5: GMT+5
+      GMT+6: GMT+6
+      GMT+7: GMT+7
+      GMT+8: GMT+8
+      GMT+9: GMT+9
+      GMT-0: GMT-0
+      GMT-1: GMT-1
+      GMT-10: GMT-10
+      GMT-11: GMT-11
+      GMT-12: GMT-12
+      GMT-13: GMT-13
+      GMT-14: GMT-14
+      GMT-2: GMT-2
+      GMT-3: GMT-3
+      GMT-4: GMT-4
+      GMT-5: GMT-5
+      GMT-6: GMT-6
+      GMT-7: GMT-7
+      GMT-8: GMT-8
+      GMT-9: GMT-9
+      GMT0: GMT0
+      Greenwich: Greenwich
+      UCT: UCT
+      UTC: UTC
+      Universal: Universal
+      Zulu: Zulu
+      Amsterdam: Amsterdam
+      Andorra: Andorra
+      Astrakhan: Astrakhan
+      Athens: Athens
+      Belgrade: Belgrade
+      Berlin: Berlin
+      Bratislava: Bratislava
+      Brussels: Brussels
+      Bucharest: Bucharest
+      Budapest: Budapest
+      Busingen: Busingen
+      Chisinau: Chisinau
+      Copenhagen: Copenhagen
+      Dublin: Dublin
+      Gibraltar: Gibraltar
+      Guernsey: Guernsey
+      Helsinki: Helsinki
+      Isle_of_Man: Isle of Man
+      Jersey: Jersey
+      Kaliningrad: Kaliningrad
+      Kiev: Kiev
+      Kirov: Kirov
+      Lisbon: Lisbon
+      Ljubljana: Ljubljana
+      London: London
+      Luxembourg: Luxembourg
+      Madrid: Madrid
+      Malta: Malta
+      Mariehamn: Mariehamn
+      Minsk: Minsk
+      Monaco: Monaco
+      Moscow: Moscow
+      Oslo: Oslo
+      Paris: Paris
+      Podgorica: Podgorica
+      Prague: Prague
+      Riga: Riga
+      Rome: Rome
+      Samara: Samara
+      San_Marino: San Marino
+      Sarajevo: Sarajevo
+      Simferopol: Simferopol
+      Skopje: Skopje
+      Sofia: Sofia
+      Stockholm: Stockholm
+      Tallinn: Tallinn
+      Tirane: Tirane
+      Ulyanovsk: Ulyanovsk
+      Uzhgorod: Uzhgorod
+      Vaduz: Vaduz
+      Vatican: Vatican
+      Vienna: Vienna
+      Vilnius: Vilnius
+      Volgograd: Volgograd
+      Warsaw: Warsaw
+      Zagreb: Zagreb
+      Zaporozhye: Zaporozhye
+      Zurich: Zurich
+      Factory: Factory
+      HST: HST
+      Antananarivo: Antananarivo
+      Chagos: Chagos
+      Christmas: Christmas
+      Cocos: Cocos
+      Comoro: Comoro
+      Kerguelen: Kerguelen
+      Mahe: Mahe
+      Maldives: Maldives
+      Mauritius: Mauritius
+      Mayotte: Mayotte
+      Reunion: Reunion
+      MET: MET
+      MST: MST
+      MST7MDT: MST7MDT
+      PST8PDT: PST8PDT
+      Apia: Apia
+      Auckland: Auckland
+      Bougainville: Bougainville
+      Chatham: Chatham
+      Chuuk: Chuuk
+      Easter: Easter
+      Efate: Efate
+      Enderbury: Enderbury
+      Fakaofo: Fakaofo
+      Fiji: Fiji
+      Funafuti: Funafuti
+      Galapagos: Galapagos
+      Gambier: Gambier
+      Guadalcanal: Guadalcanal
+      Guam: Guam
+      Honolulu: Honolulu
+      Johnston: Johnston
+      Kiritimati: Kiritimati
+      Kosrae: Kosrae
+      Kwajalein: Kwajalein
+      Majuro: Majuro
+      Marquesas: Marquesas
+      Midway: Midway
+      Nauru: Nauru
+      Niue: Niue
+      Norfolk: Norfolk
+      Noumea: Noumea
+      Pago_Pago: Pago Pago
+      Palau: Palau
+      Pitcairn: Pitcairn
+      Pohnpei: Pohnpei
+      Port_Moresby: Port Moresby
+      Rarotonga: Rarotonga
+      Saipan: Saipan
+      Tahiti: Tahiti
+      Tarawa: Tarawa
+      Tongatapu: Tongatapu
+      Wake: Wake
+      Wallis: Wallis
+      Pacific-New: Pacific-New
+      WET: WET
+      Famagusta: Famagusta

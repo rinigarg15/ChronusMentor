@@ -1,0 +1,20 @@
+<% if users.to_a.size > 0 %>
+  <div class="font-bold m-b">
+    <span class="pull-right"><%=  link_to("feature.program_event.action.see_all_count".translate(:count => size), program_event_path(@program_event, :tab => tab)) if size > 0 %></span>
+    <span ><%= get_reponse_label_tab_pane(@program_event, tab) %></span>
+  </div>
+  <% users.each do |user| %>
+    <div class="m-b">
+      <div class="media-left">
+        <%= user_picture(user, {:no_name => true, :size => :small}, { class: "img-circle" } ) %>
+      </div>
+      <div class="media-body">
+        <div><%= link_to_user user, :content_text => user.name(:name_only => true) %></div>
+        <%= fetch_user_info(user, @questions, @user_info) %>
+      </div>
+    </div>
+  <% end %>
+  <% if tab != ProgramEventConstants::ResponseTabs::INVITED %>
+    <hr class="row m-t m-b"/>
+  <% end %>
+<% end %>

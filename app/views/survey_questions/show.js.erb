@@ -1,0 +1,4 @@
+<% total_count = @answers.size %>
+<% modal_v3_popup "feature.survey.content.all_responses".translate(count: total_count) do %>
+  <%= render 'answers' %>
+<% end %>

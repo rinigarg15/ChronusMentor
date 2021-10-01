@@ -1,0 +1,24 @@
+<%= field_set_wrapper("feature.admin_view.label.Profile".translate, false, @filter_params.present? && profile_accordion_collapse?(@admin_view, @filter_params[:profile])) do %>
+  <%= render partial: "admin_views/profile_answer_fields", locals: {admin_view: @admin_view, profile_questions: @profile_questions, filter_params: @filter_params} %>
+  <% if @admin_view.is_program_view? %>
+    <%= control_group(class: "cjs_hidden_input_box_container") do %>
+      <label class="control-label col-sm-2" for="new_view_filter_profile_completeness_status"><%= "feature.admin_view.label.Profile_Completeness_Score".translate %></label>
+      <div class="controls col-sm-5">
+        <%= admin_view_profile_score_list("admin_view[profile][score][operator]", {:class => "cjs_show_input_field form-control"}, @filter_params) %>
+      </div>
+      <div class="controls col-sm-2">
+        <%= admin_view_profile_score_box("admin_view[profile][score][value]", {:class => "form-control cjs_input_hidden", :style => "display:none"}, @filter_params) %>
+      </div>
+    <% end %>
+    <%= control_group do %>
+      <% mandatory_filter_html_id = "admin_view_filter_mandatory_filter" %>
+      <label class="control-label col-sm-2" for="<%= mandatory_filter_html_id %>">
+        <%= "feature.admin_view.select_option.users_who_have".translate %>
+        <%= embed_icon("fa fa-info-circle cjs-tool-tip", "", data: {desc: "feature.admin_view.content.mandatory_filter_help_text".translate}) %>
+      </label>
+      <div class="controls col-sm-5">
+        <%= admin_view_mandatory_filter_list("admin_view[profile][mandatory_filter]", {class: "form-control", id: mandatory_filter_html_id}, @filter_params) %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

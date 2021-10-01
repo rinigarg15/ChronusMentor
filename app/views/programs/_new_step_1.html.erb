@@ -1,0 +1,38 @@
+<div id="step_1">
+  
+  <%= wizard_wrapper(tab_captions, ProgramsHelper::Headers::PROGRAM_DETAILS, :content_ibox_content_class => "p-xl p-t-m p-b-m") do %>
+    <%= f.input :name, :wrapper => :horizontal_input, :label => "feature.program.label.program_name".translate(:program => _Program),
+        :input_html => {:class => 'form-control', :id => 'program_name', :onblur => "newProgram.inferRoot()"} %>  
+
+    <% if @current_organization.can_update_root? %>
+      <%= control_group do %>
+        <%= f.label :root, "feature.program.label.web_address".translate, :class => "control-label col-sm-3", :for => "tmp_new_root" %>
+        <%= controls(:class => "col-sm-9") do %>
+          <%- root_value = @program.root || "secondary" %>
+          <%= render 'programs/root_editor', :prefix => 'new', :default_value => root_value, :attr_name => 'program[root]' %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= f.input :description, :wrapper => :horizontal_input, :input_html => {:class => 'form-control', :id => 'program_description', :rows => 4 } %>
+
+    <%= control_group do %>
+      <% label = "feature.program.label.program_type".translate(program: _Program) %>
+      <%= content_tag(:div, label, :class => "control-label col-sm-3 false-label") %>
+      <%= controls(class: "col-sm-9") do %>
+        <%= one_time_setting_radio_button(f, @program, :program_type,
+          ["feature.program.content.program_type.chronus_mentor".translate,
+            "feature.program.content.program_type.chronus_coach".translate,
+            "feature.program.content.program_type.chronus_learn".translate],
+          [Program::ProgramType::CHRONUS_MENTOR, Program::ProgramType::CHRONUS_COACH, Program::ProgramType::CHRONUS_LEARN], label_text: label) %>
+      <% end %>
+    <% end %>
+
+    <%= f.input :number_of_licenses, :wrapper => :horizontal_input, :label => "feature.program.label.number_of_licenses".translate, :input_html => {:class => 'form-control'}, :hint => "feature.program.content.number_of_licenses_help_text".translate(:program => _program) %>
+
+    <% action_set(class: "pull-right") do %>
+      <%= cancel_link %>
+      <%= link_to_function "display_string.Next_raquo_html".translate, "newProgram.stepTwo()", :class => 'btn btn-primary' %>
+    <% end %>
+  <% end %>
+</div>

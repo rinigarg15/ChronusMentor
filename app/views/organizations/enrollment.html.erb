@@ -1,0 +1,14 @@
+<% @title = "feature.enrollment.title".translate(programs: _Programs) %>
+<% @skip_rounded_white_box_for_content = true %>
+
+<% wrapper_proc = Proc.new do |programs, options, &block| %>
+  <% content_tag(:div, content_tag(:h3, options[:title], class: 'p-sm') + content_tag(:div, block.call(programs, options))).html_safe %>
+<% end %>
+
+<%= ProgramsListingService.list_programs self, wrapper_proc do |programs, opts| %>
+  <% render :partial => "organizations/enrollment_list", :locals => {:programs => programs} %>
+<% end %>
+
+<%= javascript_tag do  %>
+  QtipPopup.generateForm();
+<% end %>

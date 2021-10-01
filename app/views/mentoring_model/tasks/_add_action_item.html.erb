@@ -1,0 +1,14 @@
+<% show_preview = local_assigns[:show_preview] %>
+<% task_options = local_assigns[:task_options].presence || {} %>
+
+<% click_action = show_preview ? "javascript:void(0)" : new_group_mentoring_model_task_path(group, {view_mode: @view_mode}.merge(task_options)) %>
+
+<% if show_preview || manage_mm_tasks_at_end_user_level?(group) %>
+  <div class="cjs-add-task-form-link  cjs-form-and-menu-link-container cjs-add-task-form-link-<%= task_options[:milestone_id] %>">
+  <!-- the class cjs_dummy_link is added to handle add new action button in mentoring model preview pages -->
+    <%= link_to(get_icon_content("fa fa-check-square-o") + "feature.mentoring_model.button.add_new_task".translate, click_action, :remote => true, :class => "add-action-opener cjs-menu-link-holder btn-outline btn btn-primary btn-sm pull-right cjs_dummy_link" ) %>
+    <div class="cjs-action-item-response-container hide"></div>
+  </div>
+<% elsif tasks.empty? %>
+  <%= no_mentoring_model_entities("feature.mentoring_model.description.no_tasks".translate) %>
+<% end %>

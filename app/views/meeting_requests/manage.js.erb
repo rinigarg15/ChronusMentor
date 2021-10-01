@@ -1,0 +1,4 @@
+jQuery('#meeting_requests').html("<%= j(render(:partial => 'meeting_requests/index', :locals => {:filter_params => @filter_params, meeting_request_hash: @meeting_request_hash, :percentage => @percentage, :prev_periods_count => @prev_periods_count, is_manage_view: @is_manage_view})) %>");
+jQuery('.cjs_reports_time_filter').html('<%= j get_reports_time_filter({start: @from_date_range, end: @to_date_range}) %>');
+jQuery('.dropdown-with-datepicker.open').removeClass('open');
+MeetingRequests.maintainTriStateCheckbox(true);

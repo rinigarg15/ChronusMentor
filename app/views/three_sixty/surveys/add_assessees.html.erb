@@ -1,0 +1,26 @@
+<% @title = @survey.title %>
+
+<%= three_sixty_survey_show_view_bar(@view, @survey) do %>
+  <h3 class="p-b-xxs"><%= "feature.three_sixty.survey.assessees".translate %></h3>
+  <div class="cjs_three_sixty_container">
+    <%= render :partial => "three_sixty/surveys/survey_assessee", :collection => @survey_assessees, :locals => {:survey => @survey} %>
+
+    <div id="new_three_sixty_survey_assessee" class="m-t">
+      <div class="well well-sm p-b-0 noshadow cjs_new_three_sixty_object" id="three_sixty_add_new_assessee_container">
+        <%= render :partial => 'three_sixty/surveys/new_assessee', :locals => {:survey => @survey} %>
+      </div>
+    </div>
+  </div>
+
+  <div class="m-t-lg clearfix no-borders noshadow">
+    <div class="pull-right">
+      <%= link_to("feature.three_sixty.survey.discard".translate, three_sixty_survey_path(@survey), :method => :delete, data: {:confirm => "feature.three_sixty.survey.delete_warning".translate}, :class => "btn btn-white") %>
+      <%= link_to("display_string.Send".translate, publish_three_sixty_survey_path(@survey), :method => :patch, :class => "btn btn-primary") %>
+    </div>
+    <%= link_to("feature.three_sixty.survey.back_to_preview_html".translate, preview_three_sixty_survey_path(@survey), :class => "btn btn-primary pull-left") %>
+  </div>
+<% end %>
+
+<%= javascript_tag do  %>
+  ThreeSixty.initializeAddSurveyAssessees();
+<% end %>

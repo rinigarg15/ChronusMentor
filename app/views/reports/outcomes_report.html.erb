@@ -1,0 +1,11 @@
+<% @back_link = back_to_reports_options(@category) %>
+<% @report_actions = {
+  data_js: %Q[outcomesReport.getParamsForPDF();],
+  reset_js: %Q[commonUserProfileFilter.resetFilter();commonReportFilters.resetOtherFilters();],
+  ga_label: ReportsController::GoogleAnalytics::MEMBERSHIP_REQUESTS_REPORT_LABEL,
+  time_filter: { time: {start: @start_date, end: @end_date}, date_range_preset: DateRangePresets::PROGRAM_TO_DATE, label: "feature.membership_request.label.sent_between".translate, date_format: "kendo_date_picker.formats.full_display_no_time".translate, min_date: @current_program.created_at.in_time_zone(Time.zone)},
+  other_filters_partial: "reports/outcomes_report/filter_form",
+  export: [{label: "feature.membership_request.label.export_as_pdf".translate, url: outcomes_report_path(format: :pdf)}],
+  submit_data_js: %Q[outcomesReport.applyFilters();]
+} %>
+<%= render partial: "reports/outcomes_report/outcomes_report_content_main", locals: {format: FORMAT::HTML, show_flash_mentoring_sections: @show_flash_mentoring_sections, positive_outcome_surveys: @positive_outcome_surveys} %>

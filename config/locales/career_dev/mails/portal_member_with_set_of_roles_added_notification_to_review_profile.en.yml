@@ -1,0 +1,20 @@
+en:
+  email_translations:
+    portal_member_with_set_of_roles_added_notification_to_review_profile:
+      title: Invitation to user added to %{_program} with new role and unpublished profile
+      description: Sent to a user when he/she is added to the %{_program} and are invited to review and publish their profile.
+      subject: "{{receiver_first_name}}, {{invitor_name}} invites you to join as {{role_names}}!"
+      content_html: Congratulations! <br /> <br /> You have been invited by {{invitor_name}} to join {{subprogram_or_program_name}} as {{role_names}}. <br /> After you accept the invite, it is important that you complete and publish your profile. <br /> {{accept_sign_up}} <br /> If you have any questions, please contact the {{customized_admin_term_pluralized}} <a href='{{url_contact_admin}}'>here</a>.<br/>
+      tags:
+        url_invite:
+          description: Url for the user to click and accept the invitation
+        invitor_name:
+          description: Name of the admin who is adding the user and sending the invite
+        role_names:
+          description: Roles for which user is invited
+          example: "%{role}"
+        accept_sign_up:
+          description: Accept and sign-up button
+          accept: Accept and sign-up
+        url_contact_admin:
+          description: Url for the user to contact admin

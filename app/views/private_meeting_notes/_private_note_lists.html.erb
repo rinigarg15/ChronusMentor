@@ -1,0 +1,13 @@
+<% add_new_note_action = link_to(get_icon_content("fa fa-plus-circle fa-fw m-r-xs") + "feature.connection.action.New_Note".translate, "javascript:void(0)", :class => "btn btn-primary btn-sm pull-right add_private_meeting_note cjs_meeting_area") unless is_admin_view %>
+<% if private_meeting_notes.blank? %>
+  <%= content_tag(:div, add_new_note_action, :class => "clearfix m-t-sm m-b-sm") %>
+  <%= "feature.connection.content.help_text.private_notes_help_text_meeting".translate(meeting: _meeting, add_first_note: link_to("feature.connection.content.help_text.private_notes_add_your_first_note".translate, "javascript:void(0)", :class => "add_private_meeting_note cjs_meeting_area #{"hide" if is_admin_view}")).html_safe %>
+<% else %>
+  <%= top_bar_in_listing( { collection: private_meeting_notes}, {}, {}, {right_most_content: add_new_note_action}) %>
+  <%= render :partial => "private_meeting_notes/private_meeting_note", :collection => private_meeting_notes %>
+  <%= bottom_bar_in_listing( {collection: private_meeting_notes, :param_name => 'notes_page', :params => {:controller => :private_meeting_notes, :action => :index}} ) %>
+<% end %>
+
+<script type="text/javascript">
+  Meetings.trackMeetingActivityAddNote("<%= new_meeting_private_meeting_note_path(@meeting) %>");
+</script>

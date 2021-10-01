@@ -1,0 +1,7 @@
+en:
+  email_translations:
+    membership_requests_export:
+      title_v2: Membership list exported to file
+      description_v2: When %{_a_admin} requests a membership request list export, the system produces the export file, generates this email, attaches the export file to this email and sends it to the %{_admin}. Please do not disable this email.
+      subject: Membership requests report
+      content_v1: Please find attached the membership requests report you requested.<br/>

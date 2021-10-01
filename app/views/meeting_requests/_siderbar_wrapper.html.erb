@@ -1,0 +1,35 @@
+<% multi_view = !@is_manage_view && @allow_multi_view %>
+<% @filters_in_sidebar = true %>
+<% params_to_h = params.to_unsafe_h %>
+
+<% content_for_sidebar do %>
+  <% mobile_footer_actions = { see_n_results: { results_count: @meeting_requests.total_entries },
+    reset_filters: { url: url_for(params_to_h.merge(:search_filters => {}, :filter => nil, :view_id => nil)), class: "#{'hide' if @my_filters.blank?}" } } %>
+
+  <%= form_tag url_for(params_to_h.merge(page: 1)), :method => :get, :id => 'search_filter_form', :class => 'clearfix' do %>
+    <%= include_common_sort_by_id_fields(params_to_h.merge(suffix_id: "meeting_requests")) %>
+    <%= filter_container_wrapper(mobile_footer_actions) do %>
+      <div class="panel-group filters-panel no-margins">
+        <% if multi_view %>`
+          <% profile_filter_wrapper "feature.meeting_request.header.view".translate, false, false, true do %>
+            <%= radio_button_filter("feature.mentor_request.content.filter.requests_to_me_v2".translate, @filter_field, AbstractRequest::Filter::TO_ME, :filter) if current_user.is_mentor? %>
+            <%= radio_button_filter("feature.mentor_request.content.filter.requests_by_me_v2".translate, @filter_field, AbstractRequest::Filter::BY_ME, :filter) if current_user.is_student?  %>
+            <%= radio_button_filter('feature.meeting_request.label.requests_all'.translate, @filter_field, AbstractRequest::Filter::ALL, :filter) if current_user.is_admin? %>
+          <% end %>
+        <% end %>
+
+        <% profile_filter_wrapper "feature.meeting_request.header.req_with_status".translate, false, false, !multi_view do %>
+          <%= radio_button_filter "feature.meeting_request.label.pending".translate, @status_type, AbstractRequest::Filter::ACTIVE, :list %>
+          <%= radio_button_filter "feature.meeting_request.label.accepted".translate, @status_type, AbstractRequest::Filter::ACCEPTED, :list %>
+          <%= radio_button_filter "feature.meeting_request.label.declined".translate, @status_type, AbstractRequest::Filter::REJECTED, :list %>
+          <% if @is_manage_view || (@filter_field == AbstractRequest::Filter::BY_ME) || current_user.is_admin? %>
+            <%= radio_button_filter "feature.meeting_request.label.withdrawn".translate, @status_type, AbstractRequest::Filter::WITHDRAWN, :list %>
+          <% end %>
+          <%= radio_button_filter "feature.meeting_request.label.closed".translate, @status_type, AbstractRequest::Filter::CLOSED, :list %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= yield %>

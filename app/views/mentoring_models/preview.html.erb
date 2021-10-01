@@ -1,0 +1,80 @@
+<% title_terms = ["display_string.Preview".translate, @mentoring_model.title, "feature.mentoring_model.header.mentoring_plan".translate(:Mentoring_Connection => _Mentoring_Connection)] %>
+<% @title = title_terms.join(" ") %>
+<% @title_description = render_mentoring_model_description_info(@mentoring_model) %>
+<% show_link = @mentoring_model.can_manage_mm_milestones?(current_program.roles.for_mentoring) %>
+<% header_content = "".html_safe %>
+<% header_content << link_to(append_text_to_icon("fa fa-plus-circle", "feature.mentoring_model.button.add_milestone_v1".translate), "javascript:void(0)", class: "cjs_add_new_custom_milestone_dummy btn btn-primary btn-sm pull-right m-b-xs") if show_link %>
+<% header_title_content = content_tag(:div) do %>
+  <% concat(content_tag(:h3, "feature.mentoring_model.header.mentoring_plan".translate(:Mentoring_Connection => _Mentoring_Connection))) %>
+  <% concat("feature.mentoring_model.information.preview_connection_plan_information".translate(:Mentoring_Connection => _Mentoring_Connection, mentoring_connection: _mentoring_connection)) %>
+<% end %>
+<% header_content %>
+<% @page_action = {:label => "display_string.Edit".translate + " " + "feature.mentoring_model.header.mentoring_plan".translate(:Mentoring_Connection => _Mentoring_Connection), :url => mentoring_model_path(@mentoring_model), class: "btn btn-primary btn-large"} %>
+<% milestones = @milestones %>
+<% roles = @current_program.roles_without_admin_role %>
+<%= ibox nil do %>
+  <div class = "cjs_preview_role">
+    <strong class="p-r-xs"> <%= "feature.mentoring_model.label.select_role".translate %> </strong>
+    <%= choices_wrapper("display_string.Role".translate, class: "inline") do %>
+      <% roles.each_with_index do |role, index| %>
+        <% is_selected = (index == 0) ? true : false %>
+        <span class="radio inline">
+          <%= radio_button_tag "role", role.id, is_selected ,class: "cjs_role", title: "#{role.customized_term.term}" %> <%= role.customized_term.term %>
+        </span>
+      <% end %>
+    <% end %>
+    <br/><br/>
+    <span><%= "feature.mentoring_model.information.preview_connection_plan_information".translate(:Mentoring_Connection => _Mentoring_Connection, mentoring_connection: _mentoring_connection) %></span>   
+  </div>
+<% end %>
+<%= ibox nil, header_content: header_content, :ibox_id => "cjs_connection_milestones_container", :collapse_link_class => "hide", :content_class => "cjs-connection-plan-container #{"p-l-0 p-r-0" if @milestones.blank?}" do %>
+  <% if @milestones.present? %>
+        <%= render partial: "groups/milestones_in_profile/milestone_bar", locals: {milestones: milestones} %>
+  <% elsif @mentoring_model_tasks.present? %>
+     <%= render partial: "groups/milestones_in_profile/task", collection: @mentoring_model_tasks, locals: {task_counter: 0, show_preview: true, preview_role: roles.first.id} if @mentoring_model_tasks.present? %>
+  <% end %>
+<% end %>
+<%= javascript_tag do %>
+  MentoringModelMilestones.initialize();
+  jQuery(document).ready(function(){
+    MentoringModelMilestones.descriptionHandler({preview: true});
+    MentoringModelTask.tasksListHandler(<%= MentoringModel::Task::Section::UPCOMING %>, <%=  MentoringModel::Task::Section::REMAINING %>);
+
+    var milestones = jQuery('.cjs_milestone_description_handler');
+    if(milestones.length > 0) {
+      milestones.eq(0).click();
+    }
+
+    jQuery('.cjs_role').click(function(){
+      var open_milestones = jQuery('.cjs_milestone_description_handler.open');
+      <!-- to close all open milestones and clear them since the role is changed -->
+      if (open_milestones.length > 0){
+        open_milestones.click();
+        jQuery('.cjs_milestone_description').empty();
+        open_milestones.click();
+      }
+      else{
+        var role_id = jQuery(this).val();
+
+        //changing buttons
+        var class_name = "btn btn-primary btn-sm";
+        jQuery(".cjs_task_link").removeClass(class_name);
+        jQuery(".cjs_task_role_" + role_id).addClass(class_name);
+
+        //changing checkbox state
+        jQuery(".cjs-checkbox-for-task").attr('disabled', 'true');
+        jQuery(".cjs-checkbox-for-task-" + role_id).removeAttr('disabled');
+        jQuery(".cjs-unassigned-available-for-checkbox").removeAttr('disabled');
+      }
+    });
+
+    jQuery(document).on("click", ".cjs_dummy_link, .cjs_add_new_custom_milestone_dummy", function() {
+      alert('<%= "feature.mentoring_model.information.preview_link_button_alert".translate %>');
+      return false;
+    });
+    jQuery(document).on("click", ".cjs-edit-content-header", function() {
+      jQuery(this).closest(".cjs-task-container").find(".cjs-task-description-container").toggle();
+      jQuery(this).closest(".cjs-task-container").find(".cjs-task-comment-container").toggle();
+    });
+  });
+<% end %>

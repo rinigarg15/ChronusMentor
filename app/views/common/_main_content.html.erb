@@ -1,0 +1,27 @@
+<div id='inner_content' class="clearfix">
+  <%= render :partial => 'common/warning' if @invalid_browser %>
+  <%= render :partial => 'common/time_zone_check' if (!working_on_behalf? && @display_time_zone_check) %>
+  <%= response_flash("cjs_ajax_disabled_flash", :additional_class => "hide") %>
+  <%= show_flash(controller.sub_layout) %>
+
+<%# #TODO - Responsive UI Increase the height to 5 px before footer %>
+  <div id='page_canvas' class="clearfix">
+    <% if @header_alert_content %>
+      <%= dismissable_alert(@header_alert_content, (@header_alert_options ? @header_alert_options : {})) %>
+    <% end %>
+    <div class="clearfix no-padding">
+      <% if controller.sub_layout %>
+      <%# If there's a sublayout, it should take care of yielding %>
+        <%= render :partial => "layouts/#{controller.sub_layout}" %>
+      <% else %>
+        <%= yield %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<%# Render program-specific script that can be used for collecting analytics data.%>
+<%= raw(@current_program.analytics_script) if program_view? %>
+
+<%= ajax_disabled_check %>

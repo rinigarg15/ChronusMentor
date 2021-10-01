@@ -1,0 +1,36 @@
+<% show_advance_form = @current_organization.organization_languages.present? %>
+<% scope = @current_organization.standalone? ? @current_organization : (@current_program || @current_organization) %>
+<%# program_scope : In program scope we will hide terms other than mentoring connection in UI%>
+<% program_scope = scope.is_a?(Program)  %>
+<% customized_terms = scope.get_terms_for_view %>
+<%= simple_form_for :customized_term, :url => update_all_customized_terms_path(program_scope: program_scope, :format => :js),
+      :html => {:class => "form-horizontal clearfix edit_custom_term ", :method => :patch, :remote => true, :id => "custom_terms_form"} do |f| %>
+  <% customized_terms.each do |customized_term| %>
+    <% can_show_label = (show_advance_form && (customized_terms.first == customized_term)) %>
+    <% label_html_class =  can_show_label ? "" : "sr-only" %>
+    <% base_term_class = can_show_label ? "has_label" : "" %>
+
+    <%= f.fields_for customized_term.id.to_s.to_sym, customized_term do |customized_term_form| %>
+      <%= control_group(:class => "cui_edit_name clearfix") do %>
+        <%= content_tag(:div, "feature.customized_term.label.term_for".translate(term_type: customized_term.ref_obj.is_a?(Role) ? (RoleConstants::DEFAULT_CUSTOMIZED_TERMS_MAPPING[customized_term.ref_obj.name].try(:humanize) || customized_term.ref_obj.name.humanize) : customized_term.term_type.humanize) ,:class => "false-label col-md-3 control-label #{base_term_class}") %>
+        <%= controls(:class => "no-margins col-md-9 cui_edit_first_last_name clearfix") do %>
+          <%= customized_term_form.input :term, label: "feature.custom_terms.label.base_term".translate, :input_html => {:class => "form-control"}, :label_html => {:class => "#{label_html_class} #{hidden_on_mobile}"}, :required => false, :wrapper_html => {:class => "  col-xs-12 col-md-4"} %>
+          <% if show_advance_form %>
+            <%= customized_term_form.input :pluralized_term, label: "feature.custom_terms.label.pluralize".translate, :input_html => {:class => "form-control"}, :label_html => {:class => "#{label_html_class} #{hidden_on_mobile}"}, :wrapper_html => {:class => " col-xs-12 col-md-4"} %>
+            <%= customized_term_form.input :articleized_term, label: "feature.custom_terms.label.articalize".translate, :input_html => {:class => "form-control"}, :label_html => {:class => "#{label_html_class} #{hidden_on_mobile}"}, :wrapper_html => {:class => "  col-xs-12 col-md-4"} %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% action_set :fields_required => :all, :class => "pull-right action_set m-b" do %>
+    <% if program_scope %>
+      <%= cancel_link(manage_program_path) %>
+    <% else %>
+      <%= cancel_link(manage_organization_path) %>
+    <% end %>
+    <%= f.submit "display_string.Save".translate, :class => 'btn btn-primary', :onclick => "return CustomTerm.validateForm()" %>
+  <% end %>
+
+<% end %>

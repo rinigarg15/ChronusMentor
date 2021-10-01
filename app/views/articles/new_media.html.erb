@@ -1,0 +1,42 @@
+<% @title = edit_or_create_page_title(@article) %>
+
+<%= ibox nil, ibox_id: "new_article" do %>
+  <%= simple_form_for @article, :html => {:id => "article_form" } do |f| %>
+    <%= f.fields_for(@article.article_content) do |ac| %>
+      <%= ac.input :title, :as => :string, :label => "feature.article.header.article_title".translate(Article: _Article), :input_html => {:class => "form-control"}, required: true %>
+      <%= ac.input :body, :as => :text, :label => ArticleContent.human_attribute_name(:description), :input_html => {:class => "form-control", :rows => 5} %>
+      <%= ac.input :embed_code, :as => :text, :label => ArticleContent.human_attribute_name(:embed_code), :required => true, :input_html => {:class => "form-control", :rows => 3}, wrapper_html: {:class => "no-margins"} %>
+      <span class="help-block">
+        <%= "feature.article.content.embed_helptext".translate %>
+      </span>
+      <%= tag_field_with_auto_complete(ac, @tag_names, _Article) %>
+      <%= render :partial => "articles/hidden_fields_and_buttons", :locals => { :ac => ac } %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% content_for_sidebar do %>
+  <% tips = [
+    "feature.article.content.common_tips.copyrights_tip".translate,
+    "feature.article.content.media_article_tips.right_dimensions_tip".translate,
+    "feature.article.content.common_tips.avoid_controversy_tip".translate
+  ] %>
+  <%= render_tips_in_sidepane tips, "feature.article.content.media_article_tips.header".translate %>
+<% end %>
+
+<%= javascript_tag do %>
+  var formElement = jQuery('#article_form');
+  InsecureContentHelper.registerForInsecureContentCheck({
+    formElement: formElement,
+    readDataCallback: function () {
+      return jQuery('#article_article_content_embed_code').val();
+    },
+    showPreview: false,
+    previewCallback: null,
+    editor: {
+      setData: function(content) {
+        jQuery('#article_article_content_embed_code').val(content);
+      }
+    }
+  });
+<% end %>

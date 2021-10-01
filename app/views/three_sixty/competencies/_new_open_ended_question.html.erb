@@ -1,0 +1,14 @@
+<% url = for_new ? three_sixty_questions_path(:format => :js) : three_sixty_question_path(question, :format => :js) %>
+<% method = for_new ? :post : :patch %>
+<%= simple_form_for question, :url => url, :method => method, :remote => true, :html => { :class => "cjs_new_three_sixty_object cui_three_sixty_inline_question", :id => "new_three_sixty_open_ended_question_#{question.id}"} do |f| %>
+  <div class="clearfix">
+    <div class="col-md-9">
+      <%= label_tag("title", "feature.three_sixty.question.title".translate, :for => "three_sixty_open_ended_question_title_#{question.id}", class: "sr-only")  %>
+      <%= f.input(:title, :as => :string, :input_html => {:id => "three_sixty_open_ended_question_title_#{question.id}", :class => "col-md-12 form-control", :placeholder => "feature.three_sixty.question.add".translate}, :label => false) %>
+    </div>
+    <div class="col-md-3">
+      <%= f.submit("display_string.Save".translate, :class => 'btn btn-primary has-next pull-right', :disable_with => "display_string.Please_Wait".translate) %>
+    </div>
+    <%= f.hidden_field :question_type, :value =>  ThreeSixty::Question::Type::TEXT, id: nil %>
+  </div>
+<% end %>

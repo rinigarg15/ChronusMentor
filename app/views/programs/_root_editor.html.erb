@@ -1,0 +1,30 @@
+<div id="<%= prefix %>_root_url" class="p-t-xxs m-xxs">
+  <%= root_organization_path(:organization_level => true) %><%= SubProgram::PROGRAM_PREFIX %><span id="preview_<%= prefix %>_root_value"><%= default_value %></span>
+  <%= hidden_field_tag :root, default_value, :id => "#{prefix}_prog_root", :name => attr_name %>
+  <%= link_to_function "[#{'display_string.Edit'.translate}]", "newProgram.showWebAddressField('#{prefix}')" %>
+</div>
+<div id="change_<%= prefix %>_root" class="change_root" style="display:none">
+<% left = { type: "addon",
+      		content: root_organization_path(:organization_level => true) + SubProgram::PROGRAM_PREFIX
+        } %>
+<% right = [{ type: "btn",
+          btn_options: {
+            :class => 'btn btn-primary',
+            :onclick => "newProgram.webAddressChanged('#{prefix}'); return false;"
+          },
+          content: 'display_string.Save'.translate
+        },{ type: "addon",
+            :class => "btn btn-white cancel_root_url_edit_#{prefix}",
+            content: 'display_string.Cancel'.translate
+        }] %>
+	<%= construct_input_group(left, right) do %>
+		<%= text_field_tag "tmp_#{prefix}_root", default_value, :id => "tmp_#{prefix}_root", :class => 'tmp_root form-control' %>
+	<% end %>
+</div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function() {
+    newProgram.discardAddressChange('<%= prefix %>');
+  })
+</script>
+

@@ -1,0 +1,2 @@
+jQuery(".cjs_comments_count").replaceWith("<%= j get_comment_action_label(@article_publication.comments.size) %>");
+jQuery(Comment.selectors.commentsContainer).replaceWith("<%= j article_comments_container(@article_publication) %>");

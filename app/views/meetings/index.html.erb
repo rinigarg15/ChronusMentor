@@ -1,0 +1,8 @@
+<%= render :layout => 'groups/show_layout', :locals => { show_tabs: true, meetings_tab: true, show_page_actions: true } do %>
+  <div id="meetings">
+    <div id='meetings_list'>
+      <%= render :partial => "/meetings/meeting_listing", locals: {from_meeting_index: true} %>
+    </div>
+  </div>
+<% end %>
+<%= javascript_tag "MentoringSessions.loadFeedbackPopup('#{@hashed_feedback_selector}')" if params[:meeting_id] %>

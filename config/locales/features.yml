@@ -1,0 +1,193 @@
+en:
+  features_list:
+    answers:
+      title: "Questions & Answers"
+    articles:
+      title: Articles
+    assistant_work_on_behalf:
+      title: Assistant Work On Behalf
+    work_on_behalf:
+      title: Work On Behalf
+      description: "Ability to work on behalf of a specific user to assist them in taking a specific action."
+    skype_interation:
+      title: Skype Interaction
+    confidentiality_audit_logs:
+      title: Admin Audit Logs
+      description: "Audit logs that track activity.  In particular, when administrators work on behalf of other users."
+    sticky_topic:
+      title: Forum Featured Topic
+      description: "Ability to mark a specific forum post as a featured article. This ensures that this post always stays on top."
+    feedback_widget:
+      title: Feedback Widget
+    forums:
+      title: Forums
+    subprogram_creation:
+      title: Subprogram Creation
+    connection_profile:
+      title: Connection Profiles
+    user_badge:
+      title: User Badges
+    profile_completion_alert:
+      title: Profile Completion Progress Bar
+      description: "Progress reporting on completing user profiles."
+    calendar:
+      title: Flash Mentoring
+      description: "In this mode of mentoring, %{mentee_name_plural} request mentoring over a meeting rather than a long term commitment."
+      description_v1: "In this mode of mentoring, %{mentee_name_plural} request mentoring over a %{meeting} rather than a long term commitment."
+    mentoring_connection_meeting:
+      title: Mentoring Area Calendar
+      title_v1: "%{Mentoring_Area} Calendar"
+      description: "Enable users to setup meetings with their partners in the %{mentoring_connection_name}."
+      description_v1: "Enable users to setup %{meetings} with their partners in the %{mentoring_connection_name}."
+    private_profiles:
+      title: Private Mentee Profiles
+    member_tagging:
+      title: Member Tagging
+    offer_mentoring:
+      title: Mentor Initiated Offer
+      description: "Ability for a %{mentor_name} to initiate a %{mentoring_connection_name} to a specific %{mentee_name}.  This happens rarely as more often %{mentoring_connection_name_plural} are initiated by %{mentee_name_plural} or by administrators on behalf of %{mentee_name_plural}."
+    membership_request_customization:
+      title: Membership Request Form
+      description: "Ability to customize the form that is filled in and submitted by users to request membership to a specific mentoring program."
+      description_v1: "Ability to customize the form that is filled in and submitted by users to request membership to a specific %{program}."
+    facilitation_messages:
+      title: Facilitation Messages
+      description: "Facilitation messages are email messages triggered periodically to remind %{mentor_name_plural} and %{mentee_name_plural} about milestones and tasks that are due and drive their engagement in the %{mentoring_connection_name}."
+    mentoring_milestones:
+      title: Mentoring Milestones
+      description: "Progress tracking and reporting on %{mentoring_connection_name_plural} active within the mentoring program."
+      description_v1: "Progress tracking and reporting on %{mentoring_connection_name_plural} active within the %{program}."
+    mentoring_goals:
+      title: Mentoring Goals
+    resources:
+      title: Resources
+      description: "Articles, Best Practices and Guidelines to help make mentoring programs and individual %{mentoring_connection_name_plural} effective."
+      description_v1: "Articles, Best Practices and Guidelines to help make %{programs} and individual %{mentoring_connection_name_plural} effective."
+    admin_user_management:
+      title: Program Members
+      description: "Managing users who have administrative access to the specific mentoring program."
+      description_v1: "Managing users who have administrative access to the specific %{program}."
+    flagging:
+      title: Flag Content
+      description: "Ability to flag specific content that may be inappropriate or require administrative review."
+    program_events:
+      title: Program Events
+    draft_connections:
+      title: Draft Connections
+      title_v1: Draft %{Mentoring_Connections}
+      description: "Ability for administrators to model 1-1 %{mentoring_connection_name_plural} to evaluate without having the %{mentor_name} or the %{mentee_name} see these connections or be notified about them.  Note that Draft Connections can only be created in 1-1 mentoring mode."
+      description_v1: "Ability for administrators to model 1-1 %{mentoring_connection_name_plural} to evaluate without having the %{mentor_name} or the %{mentee_name} see these %{mentoring_connections} or be notified about them.  Note that Draft %{Mentoring_Connections} can only be created in 1-1 %{mentoring_connection} mode."
+    bulk_matching:
+      title: Bulk Matching
+      description: "Ability for administrators to run a sophisticated algorithm within Chronus Mentor that takes all the %{mentor_name} and %{mentee_name} profiles in a given program along with other constraints and comes up with best set of %{mentoring_connection_name_plural} for all %{mentee_name_plural} in the program.  This capability can be very powerful way for administrators kick start their program in some cases."
+    organization_profiles:
+      title: Global Members
+      description: "User profiles that have not yet been associated with any specific mentoring program yet."
+      description_v1: "User profiles that have not yet been associated with any specific %{program} yet."
+    video_profile:
+      title: Video Profile Question Type
+    data_import:
+      title: Data Import Log
+    enrollment_page:
+      title: Enrollment Page
+    coaching_goals:
+      title: Coaching Goals
+    linkedin_imports:
+      title: Linkedin Imports
+      description: Enable users to import work experience and education from their LinkedIn profiles
+      description_v1: Enable users to import work experience from their LinkedIn profiles
+    language_settings:
+      title: Language Settings
+      description: Have languages other than English as an option
+    moderate_forums:
+      title: Moderate Forums
+    facilitate_users:
+      title: User Facilitation
+    sharing_widget:
+      title: Sharing Widget
+    three_sixty:
+      title: Three Sixty Feedback Tool
+    mentoring_connections_v2:
+      title: Mentoring Connections V2
+    multiple_templates:
+      title: Multiple Templates
+    manager:
+      title: Manager
+      description: Enable Manager type profile question for the program
+    logged_in_pages:
+      title: Logged in pages
+    mentoring_tips:
+      title: Mentoring Insights
+      description: "Tips will be provided to users in their %{mentoring_connection_name} to improve their interaction with their partners."
+    customize_emails:
+      title: Customize Emails
+    campaign_management:
+      title: Campaign Management
+      description: Ability for administrators to turn on/off the campaign feature. Admins can not disable this feature if there are any active campaigns present for the program.
+    contract_management:
+      title: 'Track %{mentoring_term_downcase} hours'
+    membership_eligibility_rules:
+      title: 'Membership Eligibility Rules'
+    program_management_report:
+      title: Program Management Report
+      description: "Concise data depicting well-being of program and what can be done to make it more useful to people"
+    executive_summary_report:
+      title: Executive Summary Report
+      description: "A summary of the number of %{mentor_name_plural}, %{mentee_name_plural} and %{mentoring_connection_name_plural} in the system"
+    program_outcomes_report:
+      title: "Program Outcomes Report"
+      description: Presents the outcomes of your program in various stages
+    mobile_view:
+      title: Mobile View
+    coach_rating:
+      title: "%{mentor_name_plural_uppercase} Rating"
+      description: "Enables %{mentee_name_plural} to provide a rating for %{mentor_name_plural} they have been connected with. These ratings are visible to admins only and help create better, more meaningful %{mentoring_connection_name_plural} ."
+    tour:
+      nextlabel: "Next"
+      finishlabel: "Got it"
+      prevlabel: "Previous"
+    program_goals:
+      title: Program Goals
+      description: Objectives which will be achieved by being part of this program
+    mentor_recommendation:
+      title: Mentor Recommendation
+    career_development:
+      title: "%{career_development_term_upcase}"
+    user_csv_import:
+      title: "Import users from CSV"
+      description: "Allows administrators to import users from csv at both program and global level."
+    inapp_notifications:
+      title: In-app Notifications with Intercom
+    calendar_sync:
+      title: Automatic Calendar Sync
+      description: "Automatically sync all the meetings scheduled inside the %{program} to the user's personal calendar"
+    global_reports_v3:
+      title: Global Executive Reports
+      description: Reports to summarize business impact and diversity.
+    calendar_sync_v2:
+      title: Scheduling Assistant
+      description: Ability for the end users to connect their personal calendar to their profile and enable the scheduling assistant to suggest available times when scheduling meetings
+    share_progress_reports:
+      title: Shareable %{mentoring_connection_name_upcase} Surveys
+      description:  Allow end users to share %{mentoring_connection_name} surveys with their peers. This feature will be useful if %{mentoring_connection_name} surveys are modeled as progress reports.
+    organization_wide_calendar_access:
+      title: Organization wide calendar access
+      description: Ability to authorize the master Gsuite that has read access to free busy calendar information of all the accounts in the domain.
+    skip_and_favorite_profiles:
+      title: Skip and Favorite profiles
+      description: Ability for the %{mentee_name_plural} to favorite and skip %{mentor_name} profiles from recommendations
+    dual_request_mode:
+      title: Dual Request Mode
+      description: Improve the chances of the %{mentee_name}'s request getting accepted by enabling the %{mentor_name} to accept a %{meeting_term_downcase} request if they cannot accept a %{mentoring_term_downcase} request. (Note- The %{mentor_name} can still reject both the requests)
+    enhanced_meeting_scheduler:
+      title: Enhanced %{meeting_term_uppercase} Scheduler
+    mentor_to_mentee_matching:
+      title: "%{mentor_name_uppercase} to %{mentee_name_uppercase} matching"
+      description: Ability for admins to find matches for %{mentor_name_plural} and create %{mentoring_connection_name} through bulk match and 'Find a %{mentee_name}' Option. Also, this will enable %{mentor_name_plural} to see match scores.
+    explicit_user_preferences:
+      title: Explicit User Preferences
+    popular_categories:
+      title: Popular Categories
+    match_report:
+      title: Match Report
+      description: "A detailed report to assess the %{mentee_name} needs and improve the match rate."

@@ -1,0 +1,4 @@
+id,program_id,question_text,question_type,question_info,position,created_at,updated_at,required,help_text,type,survey_id,common_answers_count,feedback_form_id,allow_other_option,is_admin_only,question_mode,positive_outcome_options,matrix_position,matrix_setting,matrix_question_id,condition,positive_outcome_options_management_report
+900,2,How effective is your partnership in helping to reach your goals,7,"Very good,Good,Okay,Poor,Very poor",1,2014-11-20 11:59:39 +0530,2014-11-20 11:59:39 +0530,true,,SurveyQuestion,1,0,,false,,,,,,,0,
+901,2,What is going well in your mentoring partnership?,4,"Very good,Good,Okay,Poor,Very poor",2,2014-11-20 11:59:39 +0530,2014-11-20 11:59:39 +0530,true,,SurveyQuestion,1,0,,false,,,,1,1,900,0,
+902,2,What could be better in your mentoring partnership?,4,"Very good,Good,Okay,Poor,Very poor",3,2014-11-20 11:59:39 +0530,2014-11-20 11:59:39 +0530,true,,SurveyQuestion,1,0,,false,,,,2,1,900,0,

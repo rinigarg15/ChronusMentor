@@ -1,0 +1,22 @@
+closeQtip();
+<% if @source == "profile" %>
+  AdminGroupNotes.updateNotes("<%= j(@group.notes.presence || '') %>");
+<% else %>
+  <% if @view == Group::View::LIST %>
+    <% columns_to_show = @current_program.group_view.get_group_view_columns(@tab_number) %>
+    <% content = get_group_row_values(@group, columns_to_show, @tab_number) %>
+    jQuery('#group_pane_<%= @group.id %>').replaceWith('<%= j(content) %>');
+    jQueryHighlight("#group_pane_<%= @group.id %>");
+    jQuery(document).ready(function() {GroupSearch.inspectSubCheckBox(); GroupSearch.resetTriStateCheckbox(); initialize.initializeTooltip();})
+  <% else %>
+    <% if @mentoring_model_v2_enabled %>
+      <% content = get_group_notes_content(@group, true, { id: "cjs_group_notes_#{@group.id}" } ) %>
+      jQuery("#cjs_group_notes_<%= @group.id %>").html("<%= j content %>");
+      jQuery("#cjs_group_notes_<%= @group.id %>").attr("data-content", "<%= j @group.notes %>");
+    <% else %>
+      jQuery("#cjs_notes_container_<%= @group.id %>").html("<%= j(get_group_notes_content(@group, false)) %>");
+    <% end %>
+    jQueryHighlight("#group_<%= @group.id %>");
+  <% end %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('cjs_groups_flash', '<%= "#{'flash_message.group_flash.note_updated'.translate(mentoring_connection: _mentoring_connection)}" %>', true);
+<% end %>

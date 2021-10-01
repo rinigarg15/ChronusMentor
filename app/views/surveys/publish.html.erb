@@ -1,0 +1,12 @@
+<% @title = "feature.survey.action.Share_Survey".translate %>
+<% @back_link = {:label => "feature.survey.header.surveys".translate, :link => surveys_path} %>
+
+<%= ibox "feature.survey.header.publish_through_announcement_v1".translate, :icon_class => "fa fa-bullhorn" do %>
+  <%= content_tag(:p, "feature.survey.content.publish_through_announcement_desc_v1_html".translate(Create_announcement: link_to("feature.survey.action.Create_survey_announcement_v1".translate, new_announcement_path(:survey_id => @survey.id)))) %>
+<% end %>
+<%= ibox "feature.survey.header.publish_through_email_v1".translate, :icon_class => "fa fa-share-alt" do %>
+  <%= content_tag(:p, "feature.survey.content.publish_through_email_desc_v1".translate) %>
+  <div id="full_url">
+    <%= participate_survey_url(@survey) %>
+  </div>
+<% end %>

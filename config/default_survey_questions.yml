@@ -1,0 +1,20 @@
+---
+name: <%= SurveyConstants::DEFAULT_SURVEY_NAME %>
+questions:
+- question_type: <%= CommonQuestion::Type::RATING_SCALE %>
+  question_text: "How effective is your partnership in helping to reach your goals"
+  question_choices:
+    - Very good
+    - Good
+    - Okay
+    - Poor
+    - Very poor
+  required:  true
+
+- question_type: <%= CommonQuestion::Type::TEXT %>
+  question_text: "What is going well in your mentoring partnership?"
+  required:  true
+
+- question_type: <%= CommonQuestion::Type::TEXT %>
+  question_text: "What could be better in your mentoring partnership?"
+  required:  true

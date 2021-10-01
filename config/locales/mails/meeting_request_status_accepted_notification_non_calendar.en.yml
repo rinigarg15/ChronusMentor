@@ -1,0 +1,15 @@
+en:
+  email_translations:
+    meeting_request_status_accepted_notification_non_calendar:
+      title_v3: "%{_Meeting} request accepted notification to %{_mentee} for a non-calendar %{_meeting}"
+      description_v2: This email is sent to the %{_mentee}, when the %{_mentor} accepts %{_a_meeting} they requested.
+      subject_v2: "{{mentor_name}} has accepted your request for a {{customized_meeting_term}}!"
+      content_v7_html: "<table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: center;' width='100%' class='wrapper'><tbody><tr><td>{{mentor_profile_picture}}</td></tr><tr><td style='padding-top: 5px; padding-bottom: 5px;'>Congratulations! <a href='{{url_mentor}}'>{{mentor_name}}</a> has accepted your request for a {{customized_meeting_term}}.</td></tr><tr><td style='padding: 5px 5px 10px 5px; text-align: left;'>{{contextual_message}}</td></tr><tr><td style='padding: 5px; text-align: left;'>You can reach out to {{mentor_name}} by <a href='{{url_meeting_area_message}}'>sending a message</a> from the {{customized_meeting_term}} area. The {{customized_meeting_term}} details are available below.</td></tr></tbody></table><br /><table cellspacing='0' cellpadding='0' border='0' style='background-color: #F3F3F4; table-layout: fixed;' width='100%' class='wrapper'><tbody><tr><td style='padding: 10px 10px 0 10px; color: #787878; line-height: 16px; text-decoration: underline;'>Topic</td></tr><tr><td style='padding: 0 10px 10px 10px;'>{{meeting_topic}}</td></tr><tr><td style='padding: 0 10px 0 10px; color: #787878; line-height: 16px; text-decoration: underline;'>Description</td></tr><tr><td style='padding: 0 10px 0 10px;'>{{meeting_description}}</td></tr><tr><td style='padding: 10px 10px 10px 10px;'>{{meeting_details_with_action}}</td></tr></tbody></table><table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: center;' width='100%' class='wrapper'><tbody><tr><td>{{reply_to_button}}</td></tr></tbody></table>To respond to {{mentor_name}} you can just reply to this email or click on the button above.<br/>"
+      tags:
+        meeting_request_creator_email:
+          description: Email of the creator of the meeting request. Note that the email will be displayed irrespective of the email privacy settings.
+        meeting_request_recepient_email:
+          description: Email of the recepient of the meeting request. Note that the email will be displayed irrespective of the email privacy settings.
+        message_from_mentor:
+          description: An optional message from the mentor added during acceptance of the meeting request
+          example_html: "<br />I'm happy to help in any way I can - how about grabbing quick coffee sometime next week and discussing your ideas?"

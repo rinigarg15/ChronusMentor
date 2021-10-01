@@ -1,0 +1,7 @@
+jQuery("#featured_topic_link").tooltip('hide')
+jQuery("#mark_featured").replaceWith("<%= j(render(partial: 'topics/mark_topic_featured_link', locals: {topic: @topic})) %>")
+<% if @success %>
+  ChronusValidator.ErrorManager.ShowPageFlash(true, "<%= j(@topic.sticky? ? 'feature.forum.content.conversation_marked_as_featured'.translate : 'feature.forum.content.conversation_removed_as_featured'.translate) %>")
+<% else %>
+  ChronusValidator.ErrorManager.ShowPageFlash(false, '<%= j("feature.forum.content.topic_update_failed".translate)%>')
+<% end %>

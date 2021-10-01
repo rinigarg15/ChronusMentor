@@ -1,0 +1,6 @@
+<% modal_container "feature.survey.action.delete".translate, :modal_id => "modal_survey-#{survey_id}-destroy" do %>
+    <div id="remove_survey_<%= survey_id %>_prompt">
+        <%= get_icon_content("fa fa-spin fa-spinner") %>
+    </div>
+    <div id="confirm_survey_<%= survey_id %>_prompt"></div>
+<% end %>

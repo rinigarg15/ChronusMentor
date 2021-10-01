@@ -1,0 +1,28 @@
+<% programs.ordered.select{|p| p.resources_enabled?}.in_groups_of(3, false) do |row_programs| %>
+  <div class="row m-t-xs">
+    <% row_programs.each do |program| %>
+      <div class="col-sm-4 cjs-resources-enclosure">
+        <% unless @current_organization.standalone? %>
+          <div class="font-600">
+            <%= choices_wrapper(_Program) do %>
+              <label class="font-600 checkbox">
+                <%= check_box_tag("resource[program_ids][]", program.id, program_ids.include?(program.id) || new_record, class: "cjs-resources-primary-checkbox", id: nil) %>
+                <%= program.name.truncate(ResourcesHelper::MAX_LENGTH_PROGRAM_NAME) %>
+              </label>
+            <% end %>
+          </div>
+        <% end %>
+        <%= controls(class: "cjs-roles-enclosure", :style => program_ids.include?(program.id) || new_record ? "" : "display:none") do %>
+          <%= choices_wrapper("display_string.Roles".translate) do %>
+            <% program.roles.reject{|role| role.administrative }.each do |role| %>
+              <label class="checkbox inline">
+                <%= check_box_tag("resource[role_ids][]", role.id, resource_roles.include?(role) || new_record, class: "cjs-roles-sub-checkbox", id: nil) %>
+                <%= role.customized_term.term.truncate(ResourcesHelper::MAX_LENGTH_ROLE_NAME) %>
+              </label>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

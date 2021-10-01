@@ -1,0 +1,44 @@
+---
+version: "2"
+checks:
+  argument-count:
+    config:
+      threshold: 5
+plugins:
+  brakeman:
+    enabled: true
+  bundler-audit:
+    enabled: true
+  csslint:
+    enabled: false
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - ruby
+      - javascript
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+  rubocop:
+    enabled: true
+exclude_patterns:
+- .bundle/
+- app/assets/fonts/
+- app/assets/images/
+- app/assets/javascripts/vendor/
+- app/assets/javascripts/cordova/android/cordova.js
+- app/assets/javascripts/cordova/ios/cordova.js
+- app/assets/javascripts/ng-grid.js
+- app/assets/stylesheets/vendor/
+- bin/
+- db/
+- demo/
+- features/
+- script/
+- test/
+- vendor/assets/
+- vendor/gems/
+- vendor/plugins/
+- vendor/engines/campaign_management/test

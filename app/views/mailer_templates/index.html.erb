@@ -1,0 +1,19 @@
+<% @title = "feature.email.header.emails_v1".translate %>
+<% if @show_rollout_update_all %>
+  <% @header_alert_content = update_all_alert_for_rollout %>
+  <% @header_alert_options = {
+    :close_link_url => dismiss_rollout_flash_by_admin_rollout_emails_path(format: :js)
+    } %>
+<% end %>
+
+<div class="tiles-container">
+  <% (@email_catogories_list).each do |catogory| %>
+    <%= render partial: "tile", locals: {catogory: catogory} %>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function() {
+    setSameHeightOnResize(".tiles-container", ".cjs-same-heignt");
+  })
+</script>

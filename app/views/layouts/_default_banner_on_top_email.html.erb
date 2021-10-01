@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+    <style type="text/css" data-premailer="ignore">
+      /* MOBILE STYLES */
+      @media screen and (max-width: 525px) {
+
+        /* ALLOWS FOR FLUID TABLES */
+        table[class="wrapper"]{
+          width:100% !important;
+        }
+
+        /* ADJUSTS LAYOUT OF LOGO IMAGE */
+        td[class="logo"]{
+          text-align: left;
+          padding: 20px 0 20px 0 !important;
+        }
+
+        td[class="logo"] img{
+          margin:0 auto!important;
+        }
+
+        /* USE THESE CLASSES TO HIDE CONTENT ON MOBILE */
+        td[class="mobile-hide"]{
+          display:none;
+        }
+
+        img[class="mobile-hide"]{
+          display: none !important;
+        }
+
+        img[class="img-max"]{
+          max-width: 100% !important;
+          height:auto !important;
+        }
+
+        /* FULL-WIDTH TABLES */
+        table[class="responsive-table"]{
+          width:100% !important;
+        }
+
+        /* UTILITY CLASSES FOR ADJUSTING PADDING ON MOBILE */
+        td[class="padding"]{
+          padding: 10px 5% 15px 5% !important;
+        }
+
+        td[class="padding-copy"]{
+          padding: 10px 5% 10px 5% !important;
+          text-align: left;
+        }
+        td[class="padding-list"]{
+          padding: 0 5% 0 5% !important;
+          text-align: left;
+        }
+        td[class="padding-meta"]{
+          padding: 30px 5% 0px 5% !important;
+          text-align: center;
+        }
+        td[class="padding-top"]{
+          padding: 20px 0 0 0 !important;
+        }
+        td[class="no-pad"]{
+          padding: 0 0 20px 0 !important;
+        }
+
+        td[class="no-padding"]{
+          padding: 0 !important;
+        }
+
+        td[class="section-padding"]{
+          padding: 30px 15px 50px 15px !important;
+        }
+
+        td[class="section-padding-bottom-image"]{
+          padding: 30px 15px 0 15px !important;
+        }
+        td[class="centered"]{
+          text-align: center !important;
+        }
+
+        /* ADJUST BUTTONS ON MOBILE */
+        td[class="mobile-wrapper"]{
+            padding: 15px 5% 15px 5% !important;
+        }
+
+        table[class="mobile-button-container"]{
+            margin:0 auto;
+            width:100% !important;
+        }
+
+        a[class="mobile-button"]{
+            width:80% !important;
+            padding: 15px !important;
+            border: 0 !important;
+            font-size: 14px !important;
+            margin-top: 25px !important;
+        }
+
+        div[class="rounded-borders"]{
+          border-radius:50%;
+          overflow:hidden;
+        }
+
+      }
+    </style>
+  </head>
+  <body style="margin: 0; padding: 0;">
+    <%= render partial: "layouts/emails/email_client_specific_and_style_resets" %>
+    <style type="text/css">
+      .button{color: #ffffff; text-decoration: none; display: block; font-size: 13px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; background-color: <%= email_theme[:primary_color] %>; border-top: 10px solid <%= email_theme[:primary_color] %>; border-bottom: 10px solid <%= email_theme[:primary_color] %>; border-left: 15px solid <%= email_theme[:primary_color] %>; border-right: 15px solid <%= email_theme[:primary_color] %>; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px;}
+      .button-grey{color: #ffffff; text-decoration: none; display: block; font-size: 13px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; background-color: #909090; border-top: 10px solid #909090; border-bottom: 10px solid #909090; border-left: 15px solid #909090; border-right: 15px solid #909090; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px;}
+      .heading{padding: 0 0 20px 0; font-size: 18px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: <%= email_theme[:primary_color] %>;}
+      .button-large{font-size: 16px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #ffffff; text-decoration: none; background-color: <%= email_theme[:primary_color] %>; border-top: 15px solid <%= email_theme[:primary_color] %>; border-bottom: 15px solid <%= email_theme[:primary_color] %>; border-left: 25px solid <%= email_theme[:primary_color] %>; border-right: 25px solid <%= email_theme[:primary_color] %>; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; display: inline-block;}
+      .circular-image{border: none; border-radius: 50%}
+
+      /* iOS BLUE LINKS */
+      .appleBody a {color:#68440a; text-decoration: none;}
+
+      /* RESET STYLES */
+      a{color: #00ADBC;}
+    </style>
+
+    <!-- HEADER -->
+    <div style="mso-hide:all; display:none; max-height: 0; font-size: 0; line-height: 0; padding: 0;">
+      <%= get_hidden_text yield %>
+    </div>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td bgcolor="#ffffff" style="border-bottom: 1px solid #dddddd;">
+          <div style="padding: 10px 15px 10px 15px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="580" class="wrapper" style="width:100%;">
+              <tr>
+                <td style="padding: 10px 0px 10px 0px;" class="logo">
+                  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                      <% if program_logo.present? %>
+                        <td align="left">
+                          <table border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td width=<%= UserMailerHelper::LOGO_ASPECT_WIDTH.to_s %> align="center">
+                                <a href='<%= @program_url %>' target="_blank"><%= program_logo %></a>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                        <td align="right" class="mobile-hide">
+                          <table border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td align="right" style="padding: 10px 0 5px 0; font-size: 16px; font-family: Arial, sans-serif; color: #666666; text-decoration: none;">
+                                <%= @program_or_organization_link %>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      <% else %>
+                        <td width="400" align="left" style="padding: 10px 0 5px 0; font-size: 16px; font-family: Arial, sans-serif; color: #666666; text-decoration: none;">
+                          <%= @program_or_organization_link %>
+                        </td>
+                      <% end %>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <!--CONTENT-->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td bgcolor="#ffffff" style="padding: 20px 15px 20px 15px;" class="section-padding">
+          <table border="0" cellpadding="0" cellspacing="0" width="580" class="responsive-table" style="width:100%;">
+            <!--Content header, body and signature -->
+            <tr>
+              <td style="padding-bottom: 20px;">
+                <table border="0" cellspacing="0" cellpadding="0" width="100%" style="table-layout: fixed;">
+                  <tr>
+                    <td align="left" class="padding-list"><%= yield %></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <!-- FOOTER -->
+    <%= render partial: "layouts/emails/common_footer" %>
+  </body>
+</html>

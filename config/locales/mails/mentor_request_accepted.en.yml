@@ -1,0 +1,24 @@
+en:
+  email_translations:
+    mentor_request_accepted:
+      title_v2: "%{_Mentor} request acceptance notification to %{_mentee}"
+      description_v2: This email is sent to %{_a_mentee} when %{_a_mentor} accepts their %{_mentoring} request.
+      subject_v2: "{{mentor_name}} has accepted to be your {{customized_mentor_term}}!"
+      content_v2_html: 'Congratulations! <br /> <br /> <a href=''{{mentor_url}}''>{{mentor_name}}</a> has accepted your {{customized_mentoring_term}} request in <a href=''{{url_subprogram_or_program}}''>{{subprogram_or_program_name}}</a>. <br /><br/> Get started now by: <br /><ul><li> Contacting <a href=''{{mentor_url}}''>{{mentor_name}}</a> directly and introducing yourself to them. This also gives you an opportunity to let them know what you expect from the {{customized_mentoring_connection_term}}. </li> <li> Posting a message in the {{customized_mentoring_connection_term}}. </li> <li> Reviewing the {{customized_mentoring_connection_term}} plan. </li></ul> This {{customized_mentoring_connection_term}}, {{group_name}}, will end on {{expiry_date}}.<br />{{mentoring_area_button}}'
+      tags:
+        mentor_name:
+          description: Name of the mentor who has accepted the mentoring request
+          example: William Brown
+        url_mentoring_connection:
+          description_v1: Url for the %{_mentoring_connection}
+        expiry_date:
+          description_v2: "%{_Mentoring_Connection} expiration date"
+          example: December 24, 2013
+        group_name:
+          description: Name of the mentoring area
+          example_v1: Brown and Smith
+        mentoring_area_button:
+          description: Button to visit the mentoring area
+          visit_your_connection: Visit %{mentoring_connection} area
+        mentor_url:
+          description: Url of the mentor's profile who has accepted the mentoring request

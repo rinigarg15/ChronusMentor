@@ -1,0 +1,49 @@
+<% profile_question = question %>
+<% filter_value = (local_assigns[:applied_filters] || {})[profile_question.id] %>
+<% first_wrapper = ((defined? show_first_filter).present? ? show_first_filter : false) && question_counter == 0 %>
+<% expand = defined?(expand) ? expand : false %>
+<% options ||= {} %>
+
+<% profile_filter_wrapper profile_question.question_text, !(expand || filter_value.present?), false, first_wrapper, options do %>
+  <% if profile_question.choice_based? || profile_question.ordered_options_type? %>
+    <%= choices_wrapper(profile_question.question_text) do %>
+      <div class="m-b-xs font-bold">
+        <%= render_select_all_clear_all("MentorSearch.selectAllChoices('#{profile_question.id}')", "MentorSearch.deSelectAllChoices('#{profile_question.id}')", select_all_options: { class: "#{local_assigns[:ei_class]}", data: {activity: local_assigns[:activity]} }, clear_all_options: { id: "reset_filter_profile_question_#{profile_question.id}", class: "#{local_assigns[:ei_class]}", data: {activity: local_assigns[:activity]} }) %>
+      </div>
+
+      <% values_and_choices = profile_question.values_and_choices %>
+      <% all_choices, all_values = values_and_choices.values, values_and_choices.keys %>
+      <% container_html_options = (all_choices.size > 10) ? { data: { slim_scroll: true } } : {} %>
+
+      <%= content_tag(:div, container_html_options) do %>
+        <% all_choices.each_with_index do |choice, index| %>
+          <label class="checkbox">
+            <% value = filter_value ? filter_value.include?(choice) : false %>
+            <%= check_box_tag "sf[pq][#{profile_question.id}][]", all_values[index], value,
+              :id => "sfpq_#{profile_question.id}_#{index}".to_html_id,
+              :index => "#{profile_question.id}_#{index}",
+              :class => "#{local_assigns[:ei_class]}",
+              data: {
+                activity: local_assigns[:activity]
+              }
+            %>
+            <%= javascript_tag "jQuery('##{ "sfpq_#{profile_question.id}_#{index}" }').change(function(){MentorSearch.applyFilters();});" %>
+            <div><%= choice %></div>
+          </label>
+        <% end %>
+      <% end %>
+    <% end %>
+
+  <% else %>
+    <%= profile_filter_container(profile_question, filter_value, { ei_class: local_assigns[:ei_class], activity: local_assigns[:activity]}) %>
+    <%= content_tag(:i, "", class: "fa fa-spinner fa-spin hide", id: "loc_loading_#{profile_question.id}") if profile_question.location? %>
+    <%= javascript_tag do %>
+      jQuery(document).on("autocompleteselect",'<%= "#search_filters_location_#{profile_question.id}_name" %>', function(event, ui){
+        MentorSearch.updateSelectedLocation('<%= "#search_filters_location_#{profile_question.id}_name" %>', ui.item);
+      });
+      jQuery(document).on("focus",'<%= "#search_filters_location_#{profile_question.id}_name" %>', function(){
+        if(jQuery(this).val().blank()) jQuery(this).autocomplete("search", "");
+      });
+    <% end %>
+  <% end %>
+<% end %>

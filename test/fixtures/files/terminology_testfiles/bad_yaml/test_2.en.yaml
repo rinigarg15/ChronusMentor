@@ -1,0 +1,9 @@
+en:
+  feature:
+    group:
+      content:
+        mentoring_area: "Mentoring Session"
+      action:
+        mentoring_area: "Mentoring Session"
+        a_mentee_name: "Term for Mentee articalized"
+        show_past_meetings: "Show Past %{meeting} ()"

@@ -1,0 +1,50 @@
+common: &common
+  s3_bucket_region: "us-east-1"
+
+production:
+  <<: *common
+  bucket: groups-logs
+
+productioneu:
+  s3_bucket_region: "eu-central-1"
+  bucket: groups-productioneu-logs
+
+generalelectric:
+  <<: *common
+  bucket: groups-generalelectric-logs
+
+veteransadmin:
+  <<: *common
+  bucket: groups-veteransadmin-logs
+
+nch:
+  <<: *common
+  bucket: groups-nch-logs
+
+demo:
+  <<: *common
+  bucket: groups-demo-logs
+
+staging:
+  <<: *common
+  bucket: groups-staging-logs
+
+training:
+  <<: *common
+  bucket: groups-training-logs
+
+releasestaging1:
+  <<: *common
+  bucket: groups-releasestaging1-logs
+
+releasestaging2:
+  <<: *common
+  bucket: groups-releasestaging2-logs
+
+opstesting:
+  <<: *common
+  bucket: groups-opstesting-logs
+
+standby:
+  <<: *common
+  bucket: groups-standby-logs

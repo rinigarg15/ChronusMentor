@@ -1,0 +1,14 @@
+<%= "feature.demo_programs.information.please_wait".translate %>
+
+<script type="text/javascript">
+  setInterval(function(){
+    params = {
+      subdomain: "<%= @program_subdomain %>"
+    };
+    jQuery.ajax({
+      url: "<%= check_status_demo_programs_url(format: :js) %>",
+      data: jQuery.param(params),
+      type: 'GET'
+    });
+  }, 3000);
+</script>

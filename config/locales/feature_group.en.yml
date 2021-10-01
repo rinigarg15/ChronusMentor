@@ -1,0 +1,51 @@
+en:
+  feature:
+    group:
+      label:
+        select_all: Select all %{mentoring_connections} to perform an action
+        select_this: Select %{mentoring_connection}- '%{connection_name}' to perform an action
+        mentoring_connection: "%{mentoring_connection}"
+        remove_option_0_help_text_v1: This removes all pending tasks belonging to %{name} from the %{circle}. All completed tasks will be marked 'unassigned'. Choose this if the pending tasks assigned to %{name} are no longer needed in the %{circle}.
+        remove_option_1_help_text_v1: All tasks that were assigned to %{name}, completed or pending remain in unassigned state. Choose this if you would like to assign those tasks to a different member of the %{circle}.
+        add_option_0_help_text_v1: Default %{role_name} tasks are a set of tasks that are allocated for a %{role_name} in the %{circle} template get assigned to the new %{role_name}
+        add_option_1_help_text_v1: The new %{role_name} gets added with no tasks assigned to them
+        search_role_name: Search %{role_name}
+      user_no_longer_role:
+        one: "%{user_names} is no longer a %{role_name}"
+        other: "%{user_names} are no longer %{role_names}"
+      group_cannot_be_reactivated: You cannot reactivate the group as %{reason}.
+      group_cannot_be_duplicated: You cannot duplicate the %{mentoring_connection} as %{reason}
+      content:
+        group_manage_email_notif:
+          both_enabled_html: An email will be sent to the users who were %{added} or %{removed} in the %{mentoring_connection}.
+          both_disabled_html: An email is usually sent to the users who were %{added} or %{removed} in the %{mentoring_connection}, but has been disabled. No email will be sent.
+          hybrid_case_html: An email is usually sent to the users if you complete this action, but has been disabled for the case when a user gets %{action_disabled} and enabled only for the case when a user gets %{action_enabled}.
+        please_select_one_group: This action cannot be performed on multiple %{mentoring_connection} at once, please select one %{mentoring_connection} to perform this action
+        view_plan: View Plan
+        tasks_footer_text_homepage_v1_html: You are only seeing recent tasks. To view all your tasks, %{Mentoring_Area}
+        messages_footer_text_homepage_v1_html: You are only seeing recent messages. To view all your messages, %{Mentoring_Area}
+        forums_footer_text_homepage_v1_html: You are only seeing recent conversations. To view all your conversations, %{Mentoring_Area}
+        meetings_footer_text_homepage_v1_html: You are only seeing recent %{meetings}. To view all your %{meetings}, %{Mentoring_Area}
+        dashboard_filter:
+          positive_html:
+            one: "1 %{connection} (%{ongoing_count_link} ongoing, %{closed_count_link} closed) with positive survey responses in the selected time (%{time})."
+            other: "%{count} %{connections} (%{ongoing_count_link} ongoing, %{closed_count_link} closed) with positive survey responses in the selected time (%{time})."
+          negative_html:
+            one: "1 %{connection} (%{ongoing_count_link} ongoing, %{closed_count_link} closed) with neutral or negative survey responses in the selected time (%{time})."
+            other: "%{count} %{connections} (%{ongoing_count_link} ongoing, %{closed_count_link} closed) with neutral or negative survey responses in the selected time (%{time})."
+          no_responses_html:
+            one: "1 %{connection} (%{ongoing_count_link} ongoing, %{closed_count_link} closed) with no survey responses in the selected time (%{time})."
+            other: "%{count} %{connections} (%{ongoing_count_link} ongoing, %{closed_count_link} closed) with no survey responses in the selected time (%{time})."
+        message_help_text: Your message will not be saved when you draft %{mentoring_connections}
+      action:
+        edit_columns: Edit Columns
+        select_fields: Select Fields to Display
+        remove_member_option_0_v1: Remove %{name}'s outstanding tasks
+        remove_member_option_1_v1: Leave %{name}'s tasks unassigned
+        replacement_tag_v1: REPLACEMENT
+        replace_member_desc_v1: All of %{name}'s incomplete tasks will be assigned to this %{role_name}.
+        add_tag_v1: ADD
+        add_member_v1: Add %{role_name}
+        save_info_v2: Click 'Save' to complete the task of managing people in this %{circle}.
+        add_member_option_0_v1: Add %{role_name}-assigned tasks
+        add_member_option_1_v1: Do not add any tasks

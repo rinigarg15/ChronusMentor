@@ -1,0 +1,19 @@
+en:
+  feature:
+    coach_rating:
+      label:
+        comments: Comments
+        popup_title: Rate Your %{Mentor}
+        popup_description: Your %{mentor} evaluation will help us create better %{mentoring_connections} for other %{mentees}.
+        visibility_information: Your answers will be seen only by %{program} %{admins}.
+        rate_mentor: Rate %{mentor_name} on a scale of 0.5 to 5 (*)
+        thanks_for_feedback: Thank you for your feedback.
+        provide_valid_rating: Please provide a valid rating.
+        mentor_ratings: "%{mentor_name}'s Rating"
+        date: Date
+        rating: Rating
+        anonymous_user: Anonymous User
+        rating_text: " rating"
+        not_rated_yet: Not rated yet.
+        rating_filter_label: "%{Mentor} Rating"
+        rating_value_label: "%{Mentor} Rating Value"

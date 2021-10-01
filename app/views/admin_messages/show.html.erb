@@ -1,0 +1,6 @@
+<% @title = @admin_message.formatted_subject %>
+<% drop_down_array = [{:label => "feature.messaging.label.send_message_to_members".translate, :url => new_admin_message_path}] %>
+<% drop_down_array << {:label => "feature.messaging.label.send_message_to_mentoring_connections".translate(:mentoring_connections => _Mentoring_Connections), :url => new_admin_message_path(:for_groups => true), :class => 'cui_send_message_to_connections'} if program_view? && @current_program.ongoing_mentoring_enabled? %>
+<% @page_action = drop_down_array if @is_admin_access %>
+<% @skip_rounded_white_box_for_content = true %>
+<%= render :partial => 'admin_messages/admin_message_mail', :locals => {:msg => @admin_message} %>

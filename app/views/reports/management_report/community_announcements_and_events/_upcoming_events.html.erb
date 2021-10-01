@@ -1,0 +1,22 @@
+<hr/>
+<% if data.empty?%>
+  <div class="dim text-center"><%= "feature.reports.content.no_upcoming_events".translate(program: _program) %></div>
+<% else %>
+  <div class="clearfix m-t-md">
+    <div class="row">
+      <h4 class="col-xs-6"><%= "feature.reports.content.upcoming_events".translate(count: data.count) %></h4>
+      <h4 class="col-xs-3"><%= "feature.reports.content.event_on".translate %></h4>
+      <h4 class="col-xs-3"><%= "feature.meetings.header.attending".translate%></h4>
+    </div>
+    <ul class="stat-list m-t-md">
+      <% data.each do |program_event_hash| %>
+        <% program_event = program_event_hash[:program_event] %>
+        <li class="row">
+          <%= get_program_event_link(program_event, {class: "col-xs-6"}) %>
+          <span class="col-xs-3 small"><%= get_time_for_time_zone(program_event.start_time, wob_member.get_valid_time_zone, "%b #{program_event.start_time.day.ordinalize}") %></span>
+          <span class="col-xs-3 small"><%= program_event_hash[:attending] %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

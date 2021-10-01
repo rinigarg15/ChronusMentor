@@ -1,0 +1,49 @@
+<% @title = @label.present? ? ("feature.article.header.articles_labeled".translate(Articles: _Articles, label_name: @label.name)) : _Articles %>
+<% @page_action = {:label => append_text_to_icon("fa fa-pencil", "feature.article.action.write_new".translate(Article: _Article)), :url => new_article_path, :class => "btn btn-primary btn-large"} if current_user.can_write_article? && !search_view? %>
+
+<%= render :partial => "articles/drafts_warning" if !search_view? && wob_member.articles.drafts.any? %>
+
+<div id='articles'>
+  <% search_results_wrapper(@search_query) do %>
+    <%= ibox nil, :content_class => "no-padding" do %>
+      <% if @current_program.articles.published.empty? %>
+        <% first_article_url = current_user.can_write_article? ? link_to("feature.article.action.write_first".translate(Article: _Article), new_article_path) : "" %>
+        <div class="p-sm text-center empty_listing">
+          <%= "feature.article.content.no_article_message_html".translate(articles: h(_articles), write_first_url: first_article_url) %>
+        </div>
+      <% else %>
+        <% other_params = {} %>
+        <% other_params[:label] = @label.name if @label %>
+        <% other_params[:search] = @search_query if search_view? %>
+
+        <% sort_info = [
+          {:field => :created_at, :order => :desc, :label => "feature.article.header.sort_by.recent_first".translate},
+          {:field => :view_count, :order => :desc, :label => "feature.article.header.sort_by.most_viewed".translate},
+          {:field => :helpful_count, :order => :desc, :label => "feature.article.header.sort_by.most_helpful".translate},
+          {:field => :created_at, :order => :asc, :label => "feature.article.header.sort_by.oldest_first".translate}
+        ] %>
+        <div id="articles_results_pane">
+          <%= top_bar_in_listing( { collection: @articles }, { show: true }, { sort_url: articles_path, sort_field: @sort_field, sort_order: @sort_order, sort_info: sort_info, url_params: other_params } ) %>
+          <% if @articles.empty? %>
+            <div class="p-sm text-center">
+              <%= "common_text.search.no_result_found".translate(results: _articles) %><br/>
+              <%= link_to "common_text.search.view_all".translate(results: _articles), articles_path %>
+            </div>
+          <% else %>
+            <%= listing_page(@articles, partial: "articles/article", collection_key: :article) %>
+            <%= bottom_bar_in_listing( { collection: @articles } ) %>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+
+<% unless search_view? %>
+  <% content_for_sidebar do %>
+    <% mobile_footer_actions = { see_n_results: { results_count: @articles.total_entries } } %>
+    <%= filter_container_wrapper(mobile_footer_actions, "feature.article.content.Labels_v1".translate) do %>
+      <%= render(:partial => "articles/labels_pane") %>
+    <% end %>
+  <% end %>
+<% end %>

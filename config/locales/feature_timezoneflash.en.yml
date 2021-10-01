@@ -1,0 +1,12 @@
+en:
+  feature:
+    timezoneflash:
+      header:
+        reset_time: Please Reset Your Time Zone
+      action:
+        use_my_devices_time_zone: Use my device's time zone
+        Ignore_this: Ignore this
+      message:
+        text_html_v1: Your computer's time zone doesn't match your profile. Stay on top of your %{meetings} and appointments by making them the same. You can also change these settings later through Account Settings.
+        your_profile: 'Your Profile:'
+        your_device: 'Your Device:'

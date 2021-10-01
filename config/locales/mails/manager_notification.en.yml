@@ -1,0 +1,16 @@
+en:
+  email_translations:
+    manager_notification:
+      title_v2: Membership request submission/join notification to manager
+      description_v3: This system-generated email lets a manager know that a direct report has applied to join or has directly joined the %{_program}; if the manager has any concerns, they can contact the %{_admin}.
+      subject_v2: Information about {{user_name}}'s participation in {{subprogram_or_program_name}}
+      content_v2_html: This is to inform you that {{user_name}}, one of your direct reports, has either applied to participate in, or has already joined {{subprogram_or_program_name}} as {{member_role}}. <br/><br/>For any questions or concerns about this application, please contact the {{customized_admin_term}} <a href='{{url_contact_admin}}'>here</a>. <br/><br/> To learn more about the {{customized_subprogram_term}}, please click <a href='{{url_subprogram}}'>here</a>.<br/>
+      tags:
+        url_contact_admin:
+          description: Url for the user to contact administrator
+          subject: In reference to %{user_name}'s membership e-mail
+        user_name:
+          description: Name of the user who had sent membership request
+        member_role:
+          description: Role of the member who is accepted into the program
+          example_v1: a mentee

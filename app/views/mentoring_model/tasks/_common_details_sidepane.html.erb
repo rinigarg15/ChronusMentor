@@ -1,0 +1,39 @@
+<% mobile_view = mobile_app? || mobile_device? %>
+<% comments_and_checkins = comments_and_checkins.reject{|c| c.id.nil?} %>
+<% allow_task_actions = group.active? && (@is_member_view || group.has_member?(current_user)) %>
+<% header_content = capture do %>
+  <div class="clearfix p-sm p-b-xs">
+    <%= content_tag(:h5, truncate(task.title, length: MentoringModel::Task::SIDEPANE_TITLE_TRUNCATE_LENGTH), title: task.title, :class => "font-600 no-padding col-xs-10") %>
+    <%= link_to("javascript:void(0)", {class: "close-link col-xs-2 no-padding", :onclick => mobile_view ? %Q[GroupTabs.mobileToggleToMainContent();] : %Q[jQuery('.row-offcanvas-right').toggleClass('active');jQuery('#mentoring_model_task_#{task.id}').removeClass("gray-bg cjs_selected_task");]}) do %>
+      <%= get_icon_content("fa fa-times fa-lg no-margins text-muted pull-right")  + set_screen_reader_only_content("display_string.Close".translate) %>
+    <% end %>
+  </div>
+  <%= content_tag(:div, horizontal_line(class: "no-margins")) %>
+<% end %>
+<% if allow_task_actions %>
+  <% footer_content = capture do %>
+    <%= render :partial => "common/sidepane_msg_footer", locals: { footer_content: "feature.mentoring_model_task_comment.action.add_comment_v1".translate, footer_class: "cjs_add_task_comment_sidepane"} %>
+  <% end %>
+<% end %>
+
+<%= ibox nil, content_class: "no-padding", ibox_id: "mentoring_model_task_sidepane_#{task.id}", scroll_required: !mobile_view, scroll_height_class: "", ibox_class: mobile_view ? "" : "cui-full-height-sidebar white-bg m-r", header_content: header_content, title_class: "no-padding", no_collapse: true, footer: footer_content, footer_class: "no-borders no-padding" do %>
+  <div class="clearfix mentoring_model_task_sidepane">
+    <div class="p-m">
+      <%= render partial: "mentoring_model/tasks/task_details_sidepane", locals: {group: group, task: task, comments_and_checkins: comments_and_checkins, can_checkin_access: can_checkin_access, allow_task_actions: allow_task_actions} %>
+      <%= render partial: "mentoring_model/tasks/comments_and_checkins", locals: {group: group, task: task, comments_and_checkins: comments_and_checkins, can_checkin_access: can_checkin_access, allow_task_actions: allow_task_actions} %>
+    </div>
+
+    <div class="cjs_new_comment_and_checkin_form_container p-sm hide">
+      <%= render partial: "mentoring_model/tasks/task_actions", locals: {comment: comment, checkin: checkin, task: task, group: group, can_checkin_access: can_checkin_access} %>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  TaskComment.showHideCommentForm(<%= task.id %>, <%= @home_page_view %>);
+  TaskCheckin.showHideCheckinForm(<%= task.id %>);
+  GroupTabs.setSlimScrollRightSideBar();
+  GroupTabs.affixTabContentSideBar();
+<% end %>
+
+

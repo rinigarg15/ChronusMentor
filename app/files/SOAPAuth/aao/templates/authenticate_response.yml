@@ -1,0 +1,1 @@
+authorization_token: <%= Psych.to_json(self.multi_dimensional_hash_lookup(params, [:envelope, :header, :authorization_token, :token])).chomp %>

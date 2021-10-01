@@ -1,0 +1,11 @@
+en:
+  feature:
+    facilitation_message:
+      header:
+        Subject: Subject
+        facilitation_messages_warnings: Facilitation Messages Warnings
+      content:
+        messages_contains_link: 'Following %{messages} contains original program link inside subject or content:'
+        and_show_more: And %{show_more} more...
+        last_word_connector_term_capitalized: AND
+        preview_mail_help_text: " The salutation and signature will be appended to the body before sending the email."

@@ -1,0 +1,64 @@
+<div class="clearfix m-b-lg">
+  <h4 class="gray-bg clearfix h5 p-b-sm m-b-0">
+    <i class="fa fa-fw fa-book m-r-xs fa-fw m-r-xs"></i><%= _Resources %> (<%= quick_link_resources.size %>)
+  </h4>
+
+  <div class="row">
+    <div class="resources-slick">
+      <% quick_link_resources.each do |resource| %>
+        <div class="col-lg-4 col-xs-12 col-sm-6 m-b-xs text-center">
+          <%= ibox nil, ibox_class: "no-margins slick_box", content_class: "p-m" do %>
+            <div class="text-center m-b">
+            <span class="fa-stack fa-lg fa-2x text-muted"><i class="fa fa-circle fa-stack-2x fa-fw m-r-xs"></i><i class="fa fa-book fa-stack-1x fa-inverse fa-fw m-r-xs"></i></span>
+            </div>
+            <div class="clearfix height-65 overflowy-ellipsis break-word-all">
+              <a href="<%= resource_path(resource, src: EngagementIndex::Src::AccessMentoringArea::HOME_PAGE_TITLE) %>" class="btn-link">
+                <h4 class="m-b-xs maxheight-30 overflowy-ellipsis h5 no-margins text-info"><%= truncate_html(resource.title, max_length: 65) %></h4>
+              </a>
+              <div class="m-t-xs inline m-b-sm">
+                <%= content_tag(:span, append_text_to_icon("fa fa-clock-o", "feature.resources.content.time_ago".translate(time: time_ago_in_words(resource.updated_at))), class: "small text-muted") %>
+              </div>
+            </div>
+            <div class="height-54 break-word-all overflowy-ellipsis p-r-xs">
+              <%= HtmlToPlainText.plain_text(resource.content) %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <% if quick_link_resources.size > 1 %>
+    <div class="text-center listing_bottom_bar clearfix  p-t-xs">
+      <%= slick_carousel_navigation_buttons(prev_button_class: "resources-slick-prev", next_button_class: "resources-slick-next") %>
+    </div>
+  <% end %>
+</div>
+
+<%= javascript_tag do  %>
+    carousel.addCarousel('.resources-slick', {dots: false,
+    responsive: [
+      {
+        breakpoint: 1900,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1
+        }
+      },
+      {
+        breakpoint: 991,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ], slidesToShow: 3, slidesToScroll: 1, prevArrow: jQuery('.resources-slick-prev'), nextArrow: jQuery('.resources-slick-next')});
+    Resources.initializeCarouselGaTrack();
+<% end %>

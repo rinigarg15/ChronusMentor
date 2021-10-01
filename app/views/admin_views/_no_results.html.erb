@@ -1,0 +1,14 @@
+<div class="empty_listing ibox-content">
+  <%= "feature.admin_view.content.no_data_in_current_view".translate(:context => context_term(admin_view)) %>
+  <ul class="m-t-sm">
+    <% if admin_view.is_program_view? %>
+      <%= admin_view_list_item("feature.admin_view.action.View_all_users".translate, admin_view_all_users_path) %>
+    <% else %>
+      <%= admin_view_list_item("feature.admin_view.action.View_all_members".translate, admin_view_all_members_path) %>
+    <% end %>
+    <% if admin_view.editable? %>
+      <%= admin_view_list_item("feature.admin_view.action.Update_View".translate, edit_admin_view_path(admin_view)) %>
+    <% end %>  
+    <%= admin_view_list_item("feature.admin_view.action.create_a_new_view".translate, new_admin_view_path(@current_organization.standalone? ? {:is_program_view => admin_view.is_program_view?} : {})) %>
+  </ul>
+</div>

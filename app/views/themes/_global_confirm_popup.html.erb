@@ -1,0 +1,11 @@
+<% modal_v3_popup "feature.custom_themes.popup.theme_usage".translate do %>
+  <%= simple_form_for @theme, url: theme_path(@theme, activate: true), method: :patch do |f| %>
+    <p> <%= "feature.custom_themes.popup.all_programs".translate(Programs: _programs) %> </p>
+    <% action_set(class: "pull-right m-t") do %>
+      <%= link_to_function "display_string.Cancel".translate, "", class: "btn cancel btn-white", "data-dismiss": "modal" %>
+      <%= f.submit "display_string.No".translate, name: "global", class: "btn btn-white" %>
+      <%= f.button :submit, "display_string.Yes".translate, name: "program", class: "btn btn-primary" %>
+    <% end %>
+  <% end %>
+<% end %>
+

@@ -1,0 +1,25 @@
+
+<% if manage_mm_goals_at_admin_level?(@group) || manage_mm_goals_at_end_user_level?(@group) %>
+  <% if @associated_goal.present? %>
+    <% goal_status = @associated_goal.completion_percentage(@required_tasks) %>
+    var progress_bar_selector = jQuery("#cjs_show_goal_progress_bar_<%=@associated_goal.id.to_s%>");
+    var progress_from_goals = jQuery("#cjs_show_goal_progress_from_goals_<%=@associated_goal.id.to_s%>");
+    var goal_progress_display = jQuery(".cjs-mentoring-model-goal-progress-<%=@associated_goal.id.to_s%>");
+    if(progress_bar_selector.length > 0){
+      progress_bar_selector.replaceWith("<%= j(render :partial => "mentoring_model/goals/display_goal_progress", locals: { goal: @associated_goal, goal_status: goal_status, connection_and_reports_page: true }) %>");
+      goal_progress_display.replaceWith("<%= j(display_goal_status(@associated_goal.id, @associated_goal.mentoring_model_tasks, goal_status)) %>");
+    }
+    else{
+      progress_from_goals.replaceWith("<%= j(render :partial => "mentoring_model/goals/display_goal_progress.html.erb", locals: {goal: @associated_goal, goal_status: goal_status}) %>")
+    }
+  <% end %>
+  <% if @previous_goal.present? %>
+    <% previous_goal_status = @previous_goal.completion_percentage(@previous_required_tasks) %>
+    var previous_progress_bar_selector = jQuery("#cjs_show_goal_progress_bar_<%=@previous_goal.id.to_s%>"); 
+    var previous_goal_progress_display = jQuery(".cjs-mentoring-model-goal-progress-<%=@previous_goal.id.to_s%>");
+    if(previous_progress_bar_selector.length > 0){
+      previous_progress_bar_selector.replaceWith("<%= j(render :partial => "mentoring_model/goals/display_goal_progress", locals: { goal: @previous_goal, goal_status: previous_goal_status, connection_and_reports_page: true }) %>");
+      previous_goal_progress_display.replaceWith("<%= j(display_goal_status(@previous_goal.id, @previous_goal.mentoring_model_tasks, previous_goal_status)) %>");
+    }
+  <% end %>
+<% end %>

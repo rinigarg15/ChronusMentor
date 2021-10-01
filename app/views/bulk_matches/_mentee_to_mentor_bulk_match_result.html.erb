@@ -1,0 +1,143 @@
+<tbody id="student_records_{{student.id}}"
+  ng-repeat="student in students | orderBy:predicate:reverse | filter:menteeNameSearch | filter:mentorNameSearcher | filter:showUser | limitTo:display_limit " ng-init="student.highlight = false;" class="clearfix no-borders">
+  <tr>
+    <td>
+      <input type="checkbox" ng-init="student.highlight=student.selected_for_bulk" ng-disabled="student.selected_count == 0 || student.group_status==published_label" ng-hide="student.selected_count == 0 || student.group_status==published_label" ng-checked="master && student.group_status!=published_label && student.selected_count > 0" value="{{student.id}}" id="cjs_bulk_match_record_{{student.id}}" ng-click="updateSelectedRecord(student);" aria-label="<%= 'feature.bulk_match.label.select_this'.translate(Mentor: _Mentor, Mentee: _Mentee) %>">
+    </td>
+
+    <td class="col-xs-2" rowspan="{{student.selected_count}}">
+      <div class="media clearfix">
+        <div class="media-left" ng-bind-html-unsafe="student.picture_with_profile_url">
+          {{student.picture_with_profile_url}}
+        </div>
+        <div class='media-body'>
+          <h4 ng-bind-html-unsafe="student.name_with_profile_url">{{student.name_with_profile_url}}</h4>
+          <div class="small"><span ng-show="student.connected_mentor_id_group_id_list.length > 0"><%= "feature.bulk_match.content.connected_to".translate %> </span><span ng-bind-html-unsafe="student.connected_mentors_html">
+            {{student.connected_mentors_html}}
+          </span></div>
+          <div class="small">
+            <span ng-show="student.drafted_mentor_id_group_id_list.length > 0"><%= "feature.bulk_match.content.drafted_to".translate %> </span>
+            <span ng-bind-html-unsafe="student.drafted_mentors_html"></span>
+          </div>
+        </div>
+      </div>
+    </td>
+    
+    <td class="col-xs-2" ng-class="{'unhighlight' : !doesMentorIdNameMatch(student.selected_mentors[0], mentorNameSearch)}">
+      <div ng-show="student.selected_count > 0" class="media selected_mentor_box">
+        <div ng-bind-html-unsafe="mentors_hash[student.selected_mentors[0]].picture_with_profile_url" class="media-left">
+        </div>
+        <div class="media-body">
+          <h4 class="m-b-xs" ng-bind-html-unsafe="mentors_hash[student.selected_mentors[0]].name_with_profile_url"></h4>
+          <div class="small">
+            <span class="clearfix pull-left">
+              <%= "feature.bulk_match.label.ongoing_mentoring_connections".translate(mentoring_connections: _mentoring_connections) %> {{mentors_hash[student.selected_mentors[0]].connections_count}}
+              <% unless @recommend_mentors %>
+              <span>, <%= "feature.bulk_match.label.available_slots_small".translate %>: {{mentors_hash[student.selected_mentors[0]].slots_available}}</span>
+              <% end %>
+            </span>
+          </div>
+        </div>
+      </div>
+      <%= render partial: "bulk_matches/quick_search_mentors", locals: {container_classes: "m-t-sm"} unless @recommend_mentors %>
+    </td>
+
+    <% unless @recommend_mentors %>
+
+      <td class="col-xs-1 text-center">
+        <div ng-show="student.selected_count > 0" class="clearfix m-t-xs">
+          <span class="label label-success">
+            <big>{{studentMentorMap[student.id][student.selected_mentors[0]].score}} % </big>
+          </span>
+          <div class="m-t-xs">
+            <div ng-click="showMatchConfigSummaryPopup(student, '', '<%= AbstractBulkMatch::Src::MENTEE_TO_MENTOR_BULK_MATCH %>')">
+              <a class="small" href="#" onclick="return false;"><%= "feature.bulk_match.label.show_details".translate %></a>
+            </div>
+          </div>
+        </div>
+      </td>
+
+    <% else %>
+
+      <td class="col-xs-1 text-center" ng-class="{'unhighlight' : !doesMentorIdNameMatch(student.selected_mentors[0], mentorNameSearch)}">
+        {{mentors_hash[student.selected_mentors[0]].slots_available}}
+      </td>
+
+      <td class="col-xs-1 text-center" ng-class="{'unhighlight' : !doesMentorIdNameMatch(student.selected_mentors[0], mentorNameSearch)}">
+        {{mentors_hash[student.selected_mentors[0]].recommended_count || naString}}
+      </td>
+
+      <td class="col-xs-1 text-center" ng-class="{'unhighlight' : !doesMentorIdNameMatch(student.selected_mentors[0], mentorNameSearch)}">
+        <a class="pull-left" ng-hide="student.selected_count == 0" ng-click="showMatchConfigSummaryPopup(student, student.selected_mentors[0], '<%= AbstractBulkMatch::Src::BULK_RECOMMENDATION %>')">
+          {{studentMentorMap[student.id][student.selected_mentors[0]].score}}%
+        </a>
+        <span ng-show="student.selected_count == 0">{{naString}}</span>
+        <i class="fa fa-trash pointer pull-right" ng-show="student.group_status == selected_label && student.selected_count > 0" ng-click="removeSelectedMentor(student, student.selected_mentors[0])"></i>
+      </td>
+
+    <% end %>
+
+    <td class="col-xs-2 cui-td-group-status">
+      <div class="cui_bulk_match_notes font-600 m-b-xs clearfix" ng-show="student.group_status != selected_label">
+        <% if request_notes %>
+          <span class="pointer pull-right m-l-xs" ng-show="student.group_status != unmatched_label && student.group_status != selected_label && !recommendMentors" ng-click="fetchMenteeToMentorNotes(student);">
+            <%= embed_icon("fa fa-file-text-o") %>
+          </span>
+        <% end %>
+        <span class="pull-right" ng-class="getStudentClass(student);">{{student.group_status}}</span>
+      </div>
+      <div class="clearfix">
+        <div class="btn-group pull-right m-t-xs" ng-show="student.primary_action_label != '' && student.selected_count > 0">
+          <a class="btn btn-primary btn-outline btn-xs btn-block-xxs m-b-xs cjs-blur-on-click" href="#" ng-click="updateMenteeToMentorPairStatus(student, 'primary');" onclick="return false;">{{student.primary_action_label}}</a>
+          <a href="#" class="btn btn-primary btn-outline btn-xs btn-block-xxs m-b-xs cjs-blur-on-click" ng-click="updateMenteeToMentorPairStatus(student, 'secondary');" onclick="return false;" ng-show="student.secondary_action_label != ''">{{student.secondary_action_label}}</a>
+        </div>
+      </div>
+    </td>
+  </tr>
+
+  <% if @recommend_mentors %>
+
+    <tr ng-repeat="selected_mentor_id in student.selected_mentors" ng-hide="$first" class="clearfix" ng-class="{'unhighlight' : !doesMentorIdNameMatch(selected_mentor_id, mentorNameSearch)}">
+      <td class="col-xs-2">
+        <div ng-show="student.selected_count > 0" class="media selected_mentor_box">
+          <div ng-bind-html-unsafe="mentors_hash[selected_mentor_id].picture_with_profile_url" class="media-left">
+          </div>
+          <div class="media-body">
+            <h4 ng-bind-html-unsafe="mentors_hash[selected_mentor_id].name_with_profile_url"></h4>
+            <div class="small">
+              <span class="clearfix pull-left">
+                <%= "feature.bulk_match.label.ongoing_mentoring_connections".translate(mentoring_connections: _mentoring_connections) %> {{mentors_hash[selected_mentor_id].connections_count}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </td>
+      
+      <td class="col-xs-1 text-center">
+        {{mentors_hash[selected_mentor_id].slots_available}}
+      </td>
+
+      <td class="col-xs-1 text-center">
+        {{mentors_hash[selected_mentor_id].recommended_count || naString}}
+      </td>
+      
+
+      <td class="col-xs-1 text-center">
+        <a class="pull-left" ng-hide="student.selected_count == 0" ng-click="showMatchConfigSummaryPopup(student, selected_mentor_id, '<%= AbstractBulkMatch::Src::BULK_RECOMMENDATION %>')">
+          {{studentMentorMap[student.id][selected_mentor_id].score}}%
+        </a>
+        <span ng-show="student.selected_count == 0">{{naString}}</span>
+        <i class="fa fa-trash pointer pull-right" ng-show="student.group_status == selected_label && student.selected_count > 0" ng-click="removeSelectedMentor(student, selected_mentor_id)"></i>
+      </td>
+    </tr>
+
+    <tr class="cjs-quick-search-mentors-row">
+      <td class="no-borders"></td>
+      <td ng-show="student.selected_count > 0" class="no-borders"></td>
+      <td class="no-borders no-padding">
+        <%= render :partial => "bulk_matches/quick_search_mentors", locals: {container_classes: "m-b-sm"} %>
+      </td>
+    </tr>
+
+  <% end %>
+</tbody>

@@ -1,0 +1,22 @@
+closeQtip();
+ChronusValidator.ErrorManager.ShowPageFlash(true, '<%= "flash_message.project_request_flash.created_to_admin".translate %>');
+<% if @from_page == :profile %>
+  removeTitleActions(jQuery(".cjs_create_project_request"));
+  jQuery("#page_heading").find('span').remove();
+  jQuery(".cjs_title_text.hidden-xs").addClass("pull-left m-r-xs");
+  <% title_badge_content = render :partial => "common/title_badge", :locals => {:title_badge => get_group_label_for_end_user(current_user, @group), :padding_options => {:logo_padding_class => "m-l-xl p-l-xxs"}} %>
+  jQuery("#main_title_content").append('<%= j(title_badge_content) %>');
+  <% if @current_user.is_admin? %>
+    jQuery("#admin_actions").replaceWith("<%= j(render :partial => 'groups/side_pane_admin_actions') %>");
+  <% end %>
+<% elsif @from_page == :find_new %>
+  <% render partial: 'groups/drop_down_action_links', locals: { group: @group, is_table_view: false, find_new: true } %>
+  jQuery(".cjs_group_actions_<%= @group.id %>").replaceWith('<%= @group_actions %>');
+  jQuery(".cjs_group_action_block_<%= @group.id %>").replaceWith('<%= @group_actions_block %>');
+  jQuery("#group_<%= @group.id %>").find('.group_name').parent().append('<%= get_group_label_for_end_user(current_user, @group) %>');
+  jQuery("#group_<%= @group.id %>").effect('highlight', {}, 1500);
+<% elsif @from_page == :src_hpw %>
+  jQuery("#cjs_home_page_widget").html("<%= escape_javascript(render partial: 'programs/home_page_widget_content', locals: {projects: @projects, show_all_projects_option: @show_all_projects_option, connection_question: @connection_question, connection_question_answer_in_summary_hash: @connection_question_answer_in_summary_hash} ) %>");
+  HomePageWidget.adjustHomePageWidgetHeight();
+  jQueryHighlight(".cjs-home-page-widget-highlight-content", 2500);
+<% end %>

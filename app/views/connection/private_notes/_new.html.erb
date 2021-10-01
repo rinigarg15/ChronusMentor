@@ -1,0 +1,10 @@
+<%= simple_form_for [@group, @new_private_note], :html => {:multipart => true, :class => "group_new_post clearfix"} do |f| %>
+  <%= f.input :text, :as => :text, :input_html => {:rows => 5, :id => 'note_text_box', :class => "form-control required-field"}, :placeholder => "feature.connection.content.placeholder.type_your_note".translate %>
+
+  <div id="pn_attach_panel" class="attach_panel">
+    <%= f.input :attachment, :as => :file, label: "display_string.attach_file".translate, wrapper: :bootstrap_with_label_wrapper, input_html: { :id => "new_note_attachment" } %>
+  </div>
+
+  <%= hidden_field_tag :common_form, local_assigns[:common_form], id: nil %>
+  <%= f.button :submit, "feature.connection.action.Add_Note".translate, :class=>"pull-right", :id => "new_note_submit", :onclick => "return ValidateRequiredFields.validateFormElements(jQuery(this));" %>
+<% end %>

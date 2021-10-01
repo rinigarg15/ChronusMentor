@@ -1,0 +1,6 @@
+<% if params[:tile].present? %>
+  closeQtip();
+<% end %>
+<% locals = {date_range: @date_range, date_range_preset: @date_range_preset} %>
+<% content = render(partial: @partial, locals: locals) %>
+jQuery("#<%= @element_id %>").html("<%= j content %>");

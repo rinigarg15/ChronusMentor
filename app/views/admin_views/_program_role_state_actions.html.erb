@@ -1,0 +1,26 @@
+<%= hidden_field_tag(generate_program_role_state_filter_common("admin_view[program_role_state]", AdminView::ProgramRoleStateFilterObjectKey::ALL_MEMBERS)[0], all_members_checked, class: "cjs-program-role-state-all-members") %>
+<% active_action_class_hash = {get_program_role_state_active_action(filter_params) => "active"} %>
+<% program_role_state_actions = [] %>
+<% program_role_state_actions << {text: "feature.admin_view.show.all_members".translate, type: AdminView::ProgramRoleStateFilterActions::ALL_MEMBERS, additional_class: "cjs-program-role-state-actions-all-members"} %>
+<% program_role_state_actions << {text: "feature.admin_view.content.members_active_in_any_program".translate(program: _program), type: AdminView::ProgramRoleStateFilterActions::ALL_ACTIVE_MEMBERS} %>
+<% program_role_state_actions << {text: "feature.admin_view.content.members_not_active_in_any_program".translate(program: _program), type: AdminView::ProgramRoleStateFilterActions::ALL_INACTIVE_MEMBERS} %>
+<% program_role_state_actions << {text: "feature.profile_question.label.Advanced".translate, additional_class: "cjs-program-role-state-actions-advanced", type: AdminView::ProgramRoleStateFilterActions::ADVANCED} %>
+
+<div class="row m-b-xs">
+  <div class="col-xs-12">
+    <%= content_tag(:span, "feature.admin_view.content.quick_filters".translate, class: "small text-muted p-xs") %>
+  </div>
+  <div class="col-xs-12">
+    <% program_role_state_actions.each do |program_role_state_action| %>
+      <div class="p-xxs inline">
+        <%= button_tag(program_role_state_action[:text], class: "btn-sm btn btn-info btn-outline btn-rounded cjs-program-role-state-actions #{program_role_state_action[:additional_class]} #{active_action_class_hash[program_role_state_action[:type]]}", type: 'button', data: {type: program_role_state_action[:type]}) %>  
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(function(){
+    AdminViewsNewView.handleProgramRoleStateVisibility(".cjs-program-role-state-actions");
+  });
+<% end %>

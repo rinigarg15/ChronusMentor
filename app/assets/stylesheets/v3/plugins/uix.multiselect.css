@@ -1,0 +1,44 @@
+.uix-multiselect-original { position: absolute; left:-999999px; }
+.uix-multiselect { position: relative; float:left; width: 100% !important; min-height: 300px;}
+.uix-multiselect .multiselect-selected-list, .uix-multiselect .multiselect-available-list {
+  position:absolute;
+  overflow:hidden;
+  width: 50% !important;
+  padding: 0 15px;
+  min-height: 300px;
+}
+.uix-multiselect .multiselect-selected-list {
+  left: 50% !important;
+  margin: 0 !important;
+}
+.uix-multiselect .ui-widget-header { overflow:hidden;  white-space:nowrap; padding:2px 4px; }
+.uix-multiselect .ui-widget-header div.header-text { white-space: nowrap; }
+.uix-multiselect .ui-widget-header .uix-control-right, .uix-multiselect .ui-widget-header .uix-control-left { width:18px; height:18px; }
+.uix-multiselect .ui-widget-header .uix-control-right { float:right; }
+.uix-multiselect .ui-widget-header .uix-control-left { float:left; }
+.uix-multiselect .ui-widget-header .uix-search { float: left; height:14px !important; font-size:80%; width: 50% !important;}
+.uix-multiselect .uix-list-container { position:relative; overflow:auto; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; height: 270px !important;}
+.uix-multiselect .group-element { position:relative; padding-left:0;  white-space:nowrap; overflow:hidden; }
+.uix-multiselect .group-element-collapsable { padding-left:16px; }
+.uix-multiselect .group-element span.collapse-handle { position:absolute; margin-top:-8px; top:50%; left:0; }
+.uix-multiselect .group-element .label { margin:0 3px;  white-space:nowrap; overflow:hidden; }
+.uix-multiselect .group-element .ui-icon { float:left; cursor:pointer; }
+.uix-multiselect .option-element, .dragged-element { cursor:pointer; padding:0 2px; }
+.uix-multiselect .option-element.ui-state-disabled { font-style:italic; }
+.dragged-element, .dragged-grouped-element { padding:1px 3px; }
+.dragged-grouped-element { padding-left:16px; }
+.uix-multiselect .grouped-option { position:relative; padding-left:16px }
+.uix-multiselect .grouped-option .ui-icon { position:absolute; left:0; }
+.uix-multiselect .ui-widget-header { height: 28px; background: image-url("v3/layout/pane_bg.png") repeat-x scroll 0 0 #CCD5E8; border: 1px solid #AAA; color: #000; padding-top: 4px; }
+.uix-multiselect .ui-widget-header.ui-priority-secondary { background: none repeat-x scroll 0 0 #DDD; border: 1px solid #AAA; opacity: 1; border-radius: 0; }
+.uix-multiselect .label { padding: 0; font-size: 13px; font-weight: bold; color: #404040; background-color: transparent; text-shadow: none; }
+.uix-multiselect .ui-button { padding: 0; width: 20px; height: 20px; margin-right: 5px; }
+.uix-multiselect .ui-button .ui-icon { margin: 0; }
+.uix-multiselect { margin-bottom: 20px; }
+.uix-multiselect .uix-search { padding: 1px 5px; border-bottom-right-radius: 0; border-top-right-radius: 0; }
+.uix-multiselect .ui-widget-header { border-radius: 4px 4px 0 0;}
+.uix-multiselect .multiselect-selected-list { margin-left: 50px; }
+.uix-multiselect .multiselect-available-list span.ui-icon-plus { display: inline; }
+.uix-multiselect .multiselect-selected-list span.ui-icon-minus { display: inline; }
+.uix-multiselect .option-element span { display: none; }
+.uix-multiselect div.option-element.ui-state-default { padding-bottom: 1px; }

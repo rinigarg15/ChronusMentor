@@ -1,0 +1,23 @@
+<% @title = @show_admin_dashboard ? _Programs : "feature.profile.label.activity_v1".translate  %>
+<% @page_action = get_page_action_for_multi_track_admin(@show_admin_dashboard) if wob_member.admin_only_at_track_level? %>
+<div id='program_home' class="no-border cui-homepage">
+  <%= render partial: 'common/time_zone_check' if !working_on_behalf? %>
+  <% if @show_admin_dashboard %>
+    <%= render(partial: 'organizations/home/rollup', locals: {rollup_info: @rollup_info, managed_programs: @managed_programs}) %>
+    <%= render partial: 'organizations/home/program_info_boxes_container', locals: {programs: @managed_programs} %>
+  <% else %>
+    <% if @is_recent_activities_present %>
+      <div id='recent_activities' class='recent_activities'>
+          <%= render :partial => 'organizations/activity_feed_box', :locals => {:all_url => get_organization_ra_path, :my_url => get_organization_ra_path(:my => 1)} %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<% unless (wob_member.admin? || @show_admin_dashboard) %>
+  <% content_for_sidebar do %>
+    <%= render :partial => 'organizations/home_side_bar' %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[RecentActivities.repeatCheckScroll(500)] %>

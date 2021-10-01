@@ -1,0 +1,19 @@
+<%= simple_form_for @admin_view, :url => reactivate_membership_admin_view_path(@admin_view), :html => {:method => :post, :class => "no-margin", :id => "form_admin_view_bulk_actions"} do |f| %>
+  <%= f.input "users", :as => :hidden, :input_html => {:value => @users.collect(&:id).join(AdminMessagesController::SEPARATOR)} %>
+  <p class="m-b-0">
+    <%= "feature.admin_view.content.user_membership_will_be_reactivated".translate(:user => "feature.admin_view.content.user".translate(:count => @users.size), :program => _program) %>
+  </p>
+  <%= render(:partial => "admin_views/selected_users", :locals => {:users_or_members => @users}) %><br/>
+  <% note = "feature.admin_view.content.user_reactivation_note_v1".translate(programs: _programs, program_name: current_program.name, organization_name: @current_organization.name) %>
+  <div class="text-muted">
+    <%= "#{'display_string.Note_with_colon'.translate} #{note}" %>
+    <%= email_notification_consequences_on_action_html(UserActivationNotification, div_enclose: false, with_count: true, count: 0) %>
+  </div>
+  <%= horizontal_line(class: "m-b-sm m-t-xs") %>
+  <% action_set(class: "form-group") do %>
+    <div class="pull-right">
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "display_string.Submit".translate %>
+    </div>
+  <% end %>
+<% end %>

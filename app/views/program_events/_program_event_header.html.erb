@@ -1,0 +1,22 @@
+<div class="col-sm-8 m-b-sm">
+  <div class="m-t-sm col-xs-12 no-padding">
+    <% if program_event.published? %>
+      <% event_invites = program_event.event_invites.group(:status).count("id") %>
+      <div class="col-xs-6 col-md-3 no-padding m-b-sm">
+        <% attending_size = event_invites[EventInvite::Status::YES].to_i %>
+        <%= display_stats(attending_size, invite_response_label(program_event, EventInvite::Status::YES, attending_size), :is_link => (attending_size != 0), :url => program_event_path(program_event, :tab => ProgramEventConstants::ResponseTabs::ATTENDING)) %>
+      </div>
+      <div class="col-xs-6 col-md-3 no-padding m-b-sm">
+        <% not_responded_size = program_event.users.size - event_invites.values.sum %>
+        <%= display_stats(not_responded_size, "feature.program_event.label.Not_responded".translate, :is_link => (not_responded_size != 0), :url => program_event_path(program_event, :tab => ProgramEventConstants::ResponseTabs::NOT_RESPONDED)) %>
+      </div>
+      <div class="col-xs-6 col-md-3 no-padding m-b-sm">
+        <% not_attending_size = event_invites[EventInvite::Status::NO].to_i%>
+        <%= display_stats(not_attending_size, invite_response_label(program_event, EventInvite::Status::NO, not_attending_size), :is_link => (not_attending_size != 0), :url => program_event_path(program_event, :tab => ProgramEventConstants::ResponseTabs::NOT_ATTENDING)) %>
+      </div>
+      <div class="col-xs-6 col-md-3 no-padding m-b-sm">
+        <% maybe_attending_size = event_invites[EventInvite::Status::MAYBE].to_i %>
+        <%= display_stats(maybe_attending_size, invite_response_label(program_event, EventInvite::Status::MAYBE, maybe_attending_size), :is_link => (maybe_attending_size != 0), :url => program_event_path(program_event, :tab => ProgramEventConstants::ResponseTabs::MAYBE_ATTENDING)) %>
+      </div>
+    <% end %>
+  </div>

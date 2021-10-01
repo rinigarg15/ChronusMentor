@@ -1,0 +1,25 @@
+en:
+  email_translations:
+    auto_publish_circles_failure_notification:
+      title: "Notification to %{_mentoring_connection} owners when %{_mentoring_connection} didn't start"
+      description: "This email is sent to owners of %{_a_mentoring_connection} when the %{_mentoring_connection} didn't start on the mentioned date as the %{_mentoring_connection} didn't had one user per role."
+      subject: "Your {{customized_mentoring_connection_term}}, {{group_name}} didn't start on {{circle_start_date}}"
+      content_html: "This message is to inform you that your {{customized_mentoring_connection_term}}, <a href='{{url_mentoring_connection}}'>{{group_name}}</a>, didn't start on {{circle_start_date}} as users are yet join the {{customized_mentoring_connection_term}}.<br/><br/>Please specify a new start date for the {{customized_mentoring_connection_term}} by clicking on the button below.<br/>{{update_circle_start_date_button}}{{manage_circle_members_button}}<br/>If you have any questions, please contact the {{customized_admin_term_pluralized}} <a href='{{url_contact_admin}}'>here</a>.<br/>"
+      update_start_date_button_text: "Update %{mentoring_connection} start date"
+      manage_circle_members_button_text: "Manage %{mentoring_connection} members"
+      manage_circle_members_help_text_html: "<br/>Or you can add new members to the %{mentoring_connection} so that you can start the %{mentoring_connection} right now<br/>"
+      tags:
+        url_mentoring_connection:
+          description: "Url of the %{_mentoring_connection}"
+        group_name:
+          description: "Name of the %{_mentoring} area"
+          example: Smith and Doe
+        circle_start_date:
+          description: "Start date of %{_mentoring_connection}"
+          example: "April 05, 2025"
+        update_circle_start_date_button:
+          description: "Update %{_mentoring_connection} start date button"
+        manage_circle_members_button:
+          description: "Manage %{_mentoring_connection} members button"
+        url_contact_admin:
+          description: "Url for the user to contact %{_admin}"

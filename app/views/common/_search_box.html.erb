@@ -1,0 +1,22 @@
+<%= form_tag search_path, :method => :get, :class => "navbar-form-custom text-muted search_container navbar-search" do %>
+  <% input_id = "top-search#{local_assigns[:append_icon] ? "-mobile" : ""}" %>
+  <%= label_tag input_id, "display_string.search_program".translate(program: _Program), :class => "control-label sr-only false-label" %>
+  <% left = [] %>
+  <% left << { type: "addon",
+        :content => get_icon_content("fa fa-search"),
+        :class => "theme-bg theme-dark-bg theme-font-color no-borders"
+      } if local_assigns[:prepend_icon] %>
+
+  <% right = [] %>
+  <% right << { type: "addon",
+      :content => get_icon_content("fa fa-times"),
+      :class => "show_hide_pane theme-bg theme-dark-bg theme-font-color no-borders p-xs pointer",
+      :data => {"hide-pane" => "#search_wrapper", "show-pane" => "#chronus_header_wrapper"}
+    } if local_assigns[:append_icon] %>
+
+  <%= construct_input_group(left, right, :input_group_class => "m-t-sm m-b-sm theme-bg theme-dark-bg theme-font-color #{local_assigns[:textBoxClass]}") do %>
+    <small>
+      <%= text_field_tag :query, @search_query, :class => "p-l-0 form-control no-borders theme-bg theme-dark-bg theme-font-color", :id => input_id, :placeholder => "display_string.search_program".translate(program: _Program)  %>
+    </small>
+  <% end %>
+<% end %>

@@ -1,0 +1,6 @@
+<% modal_v3_popup "feature.question_answers.header.ask_question".translate do %>
+  <%= render :partial => 'resources/have_a_question', :locals => {admin_message: @admin_message, resource: @resource}%>
+<% end %>
+<%= javascript_tag do %>
+  Resources.initializeCommentForm();
+<% end %>

@@ -1,0 +1,7 @@
+<% request_connection_allowed = (!current_user.connection_limit_as_mentee_reached? && @current_program.matching_by_mentee_and_admin_with_preference?) %>
+<% if request_connection_allowed %>
+  <% mentor_user_ids ||= [] %>
+  <div class = "actions clearfix p-t-xs">
+      <%= content_tag(:div, link_to("feature.mentor_recommendation.Request_Connection".translate(Connection: _Mentoring_Connection), new_mentor_request_path(mentor_user_ids: mentor_user_ids), class: "btn btn-primary btn-sm" ).html_safe, :class => "pull-right") %>
+  </div>
+<% end %>

@@ -1,0 +1,8 @@
+<div id="<%= DashboardReportSubSection::Type::CommunityAnnouncementsEvents::ANNOUNCEMENTS_AND_EVENTS %>">
+  <div class="clearfix">
+    <%= render(partial: "reports/management_report/community_announcements_and_events/active_announcements", locals: {data: data[:announcements]}) %>
+  </div>
+  <% if current_program.program_events_enabled? %>
+    <%= render(partial: "reports/management_report/community_announcements_and_events/upcoming_events", locals: {data: data[:events]}) %>
+  <% end %>
+</div>

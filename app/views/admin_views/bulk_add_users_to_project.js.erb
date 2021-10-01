@@ -1,0 +1,4 @@
+jQuery(".cjs_user_auto_complete_for_groups").html('<%= j render(partial: "groups/bulk_add_users_to_group", locals: { group: @group, group_roles: @group_roles, users: @users }) %>');
+GroupUpdate.initializeSelect2('<%= @current_program.allow_one_to_many_mentoring? %>', "", ".cjs-users-select2");
+jQuery("a.nickname, a.group_name").attr("target", "_blank");
+ShowAndHideToggle();

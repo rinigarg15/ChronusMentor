@@ -1,0 +1,18 @@
+<% content = mentors_list.present? ? j(render partial: "programs/quick_connect_item_container", locals: {mentors_list: mentors_list, options: {show_favorite_ignore_links: show_favorite_ignore_links, favorite_preferences_hash: favorite_preferences_hash, program: program, recommendations_view: recommendations_view, show_match_config_matches: show_match_config_matches}, mentors_score: mentors_score}) : "" %>
+
+<% selector = (recommendations_view == AbstractPreference::Source::EXPLICIT_PREFERENCES_RECOMMENDATIONS) ? ".explicit_preference_recommendations" : ".system_recommendations" %>
+<% if mentors_list.present? %>
+  Meetings.QuickConnect.embedQuickConnect("<%= selector %> .cjs_quick_connect_items", "<%= selector %> .quick_connect_slick", "<%= content %>");
+<% else %>
+  Meetings.QuickConnect.showNoRecommendationsExperience("<%= selector %>");
+<% end %>
+Meetings.QuickConnect.initializeMentorPreferenceBoxElements();
+<% (mentors_list || []).each do |mentor_hash| %>
+  <% mentor_user = mentor_hash[:user] || mentor_hash[:member].user_in_program(@current_program) %>
+  jQuery(document).ready(function(){
+    IgnorePreference.ignoreProfileInside('.quick_connect_slick', '<%= "#{mentor_user.id}" %>');
+  });
+<% end %>
+jQuery(document).ready(function(){
+  Meetings.QuickConnect.hideOrShowYouMayAlsoBox();
+});

@@ -1,0 +1,25 @@
+jQuery(".cjs-mentoring-model-task-form").remove();
+jQuery('.cjs-mentoring-model-set-status').removeClass('invisible');
+jQuery(".cjs-display-tasks").data("mode", "all");
+<% if @goal.present? %>
+  jQuery('.<%= "cjs-goals-task-container-#{@goal.id.to_s}" %>').html('<%= j(render partial: "mentoring_model/tasks/task", collection: @all_tasks, locals: {group: @group, goal_id: @goal.id, from_goal: true}) %>');
+<% elsif manage_mm_milestones_at_admin_level?(@group) || manage_mm_milestones_at_end_user_level? %>
+  <% if view_by_due_date? %>
+    jQuery(".cjs-connection-plan-container").html(
+      '<%= j(render(partial: "mentoring_model/tasks/task_sections", locals: {group: @group, target_user_id: @target_user.try(:id), target_user_type: @target_user_type, zero_upcoming_tasks: @zero_upcoming_tasks})) %>'
+    );
+  <% else %>
+    <%= render partial: "mentoring_model/milestones/refresh_milestones.js.erb", locals: {all_tasks: @all_tasks, milestones: @mentoring_model_milestones} %>
+  <% end %>
+  MentoringModels.refreshTasksAndMeetingsView();
+<% else %>
+  jQuery(".cjs-mm-task-list-container").html('<%= j(render partial: "mentoring_model/tasks/task", collection: @all_tasks, locals: {group: @group}) %>');
+  MentoringModels.refreshTasksAndMeetingsView();
+<% end %>
+jQuery(".cjs-sortable-spinner").hide();
+<% (@created_tasks || [@task]).each do |task| %>
+  jQueryHighlight(".cjs-task-container-<%= task.id %>", 500, {removeAnimationClassesAfterAnimation: true, checkForSupport: true});
+<% end %>
+<%= render "update_goal_progress.js.erb" %>
+jQuery(".cjs-action-item-response-container").slideUp();
+jQuery("#loading_results").hide();

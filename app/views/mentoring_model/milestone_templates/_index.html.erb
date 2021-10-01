@@ -1,0 +1,45 @@
+<% milestone_templates = capture do %>
+  <% has_milestone_templates = @mentoring_model_milestone_templates.present? %>
+  <div class="cjs_milestone_template_container" data-validation-url="<%= validate_milestones_order_mentoring_model_milestone_templates_path(@mentoring_model) %>" data-reorder-url="<%= reorder_milestones_mentoring_model_milestone_templates_path(@mentoring_model) %>">
+    <% if has_milestone_templates %>
+      <% arg_options = { 
+          collection: @mentoring_model_milestone_templates, 
+          locals: {milestone_task_templates: @mentoring_model_task_templates} 
+        } 
+      %>
+      <%= render({partial: "mentoring_model/milestone_templates/milestone_template"}.merge(arg_options)) %>
+    <% end %>
+  </div>
+  <div class="cjs_milestone_template_no_content <%= "hide" if has_milestone_templates %>">
+    <%= no_mentoring_model_entities("feature.mentoring_model.description.no_milestone_templates".translate) %>
+  </div>
+<% end %>
+
+<% if @read_only %>
+  <%= ibox "feature.mentoring_model.header.manage_mm_milestones".translate, :ibox_id => "cjs_milestone_templates", :collapse_link_class => "hide" do %>
+    <% milestone_templates %>
+  <% end %>
+<% else %>
+  <div id="cjs_milestone_templates" class="b-b p-sm">
+    <div class="clearfix m-b-sm">
+      <div class="pull-right">
+      <%= link_to("feature.mentoring_model.button.add_custom_milestone".translate, new_mentoring_model_milestone_template_path(@mentoring_model), class: "btn btn-primary pull-right", id: "cjs_add_milestone_template") %>
+      </div>
+      <div class="pull-left">
+        <h3><%= "feature.mentoring_model.header.customize_milestones".translate %></h3>
+        <span class="text-muted">
+          <%= "feature.mentoring_model.information.milestone_reorder_help_text".translate %>
+        </span>
+      </div> 
+    </div>
+    <%= milestone_templates %>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  MilestoneTemplates.initialize();
+
+  <% unless @read_only %>
+    MentoringModels.initializeMilestoneOrdering();
+  <% end %>
+<% end %>

@@ -1,0 +1,8 @@
+<% mobile_footer_actions = { see_n_results: { results_count: @mentor_offers.total_entries },
+      reset_filters: { url: url_for(params.to_unsafe_h.except(:format).merge(status: nil, filter: nil))}} %>
+<div id='mentor_offers_filter_pane' class="filter_pane">
+  <%= filter_container_wrapper(mobile_footer_actions) do %>
+  	<%= render :partial => 'common/your_filters', :locals => { :results_count => @mentor_offers.total_entries,:onclick_function => "MentorOffers.clearFilter", reset_url_options: { js: "" }} %>
+  	<%= render partial: "filter_request_pane" %>
+	<% end %>
+</div>

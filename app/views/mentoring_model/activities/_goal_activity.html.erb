@@ -1,0 +1,15 @@
+<div class="cjs-hover-container cjs-task-container-<%= goal_activity.id %> cjs-mentoring-model-hover-well list-group-item p-t-sm p-b-sm">
+  <div class = "media m-t-0">
+    <div class="media-left">
+      <%= member_picture_v3(goal_activity.member, {row_fluid: true, size: :small, no_name: true, new_size: :small}, { class: "img-circle" }) %>
+    </div>
+    <div class="media-body">
+      <%= goal_activity_title_text(goal_activity, current_user) %>
+      <div class="small text-muted m-t-xs">
+        <%= append_text_to_icon("fa fa-clock-o no-margins", formatted_time_in_words(goal_activity.created_at)) %>
+      </div>
+    </div>
+  </div>
+  <div class="<%= 'm-t-sm' unless goal_activity.message.blank? %>"><%= chronus_auto_link(goal_activity.message) %></div>
+</div>
+<%= javascript_tag %Q[MentoringModels.hoverEvent();] %>

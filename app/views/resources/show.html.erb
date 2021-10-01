@@ -1,0 +1,32 @@
+<% @title = @resource.title %>
+
+<% contact_admin_setting = @current_program.contact_admin_setting if @current_program.present? %>
+<% contact_admin_setting_contact_url = contact_admin_setting.contact_url if contact_admin_setting.present? %>
+<% have_a_question_url = contact_admin_setting_contact_url || "javascript:void(0)" %>
+
+<% show_question_url = show_question_resource_path(@resource, format: :js) %>
+<% @back_link = (params[:reorder].present? ? {:label => "feature.resources.action.reorder_resources".translate(resources: _resources), :link => resources_path(reorder: :true)} : {:label => _Resources, :link => resources_path()}) %>
+<% drop_down_array = [{:label => "feature.resources.label.edit_resource".translate(resource: _resource), :url => edit_resource_path(@resource)}] %>
+<% drop_down_array << [{:label => "feature.resources.action.delete_resource".translate(resource: _resource), :url => resource_path(@resource), :method => :delete, :class => 'delete', data: {:confirm => "common_text.confirmation.sure_to_delete_this".translate(title: _resource)}}] unless (program_view? && can_access_resource?(@resource)) %>
+<% @page_action = drop_down_array if @admin_view %>
+<% @title_description = render :partial => "resources/resource_info", :locals => {:resource => @resource}%>
+<%= ibox nil do %>
+  <div class="ckeditor_generated">
+    <%= chronus_sanitize_while_render(@resource.content, :sanitization_version => @current_organization.security_setting.sanitization_version, :sanitization_options => {:attributes => %w[class style _cke_saved_href accesskey align allowscriptaccess alt bgcolor border cellpadding cellspacing charset classid codebase colspan data-cke-realelement dir height href hspace id lang longdesc name onclick pluginspage quality rel rowspan scale scope src start summary tabindex target title type value vspace width wmode], :tags => %w[a address blockquote br caption div em embed h1 h2 h3 h4 h5 h6 hr iframe img li object ol p param pre s span strong sub sup table tbody td tfoot th thead tr b i u ul style]}) %>
+  </div>
+  <%= javascript_tag %Q[jQuery(function() {VideoSetting.addWmodeToIframe();})]%>
+  <%= javascript_tag %Q[jQuery(function() {VideoSetting.addWmodeToEmbed();})]%>
+<% end %>
+
+<% unless @admin_view %>
+  <%= render :partial => "resources/rate_resource", :locals => {:resource => @resource, have_a_question_url: have_a_question_url}%>
+<% end %>
+
+<script type="text/javascript">
+  <% unless @admin_view %>
+    Resources.feedbackButtonClicked();
+    <% unless contact_admin_setting_contact_url.present? %>
+      Resources.renderPopup("<%= show_question_url %>");
+    <% end %>
+  <% end %>
+</script>

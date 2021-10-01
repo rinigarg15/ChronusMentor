@@ -1,0 +1,5 @@
+<% if @redirect_url.present? %>
+  <%= javascript_tag do %>
+    window.location.href = "<%= raw @redirect_url %>";
+  <% end %>
+<% end %>

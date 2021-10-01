@@ -1,0 +1,54 @@
+<% ics_api_url = api_access_ics_calendar_url(:calendar_api_key => wob_member.calendar_api_key, :format => :ics) %>
+
+<div id="<%= popup_id %>" class="p-t-m container-fluid">
+  <div class="m-b-md row"> 
+    <p class="col-xs-10 col-xs-offset-1 word_break">
+      <%= ics_api_url.html_safe %>
+    </p>
+  </div>
+  <%= horizontal_line(class: "m-b-sm m-t-xs") %>
+  <div class="cui_ical_outlook_container row p-xxs">
+    <div class="col-sm-4 p-l-md">
+      <%= image_tag("ical_icon.jpg", :height => "45px") %>
+      <%= image_tag("outlook_icon.png", :height => "45px", :class => "m-t-xs") %>
+    </div>
+    <div class="col-sm-8 p-r-md p-t-sm">
+      <div class="col-sm-10">
+        <%= "feature.calendar.content.outlook_ical_subscription_text".translate(meetings: _meetings) %>
+      </div>
+      <div class="pull-right p-r-sm m-t-sm h4">
+        <%= link_to("#{'feature.calendar.content.for_more_details'.translate} &raquo;".html_safe, calendar_sync_instructions_path, target: "_blank", :class => "cjs_show_instructions_page cjs_external_link", :id => "cjs_outlook_ical_instruction_link") %>
+      </div>
+    </div>
+  </div>
+  <%= horizontal_line(class: "m-b-sm") %>
+  <div class="cui_google_calendar_container row p-xxs">
+    <div class="col-sm-4 p-l-md p-t-md">
+      <%= image_tag("google_calendar_icon.png", :height => "45px") %>
+    </div>
+    <div class="col-sm-8 p-r-md p-t-sm">
+      <div class="col-sm-5 m-b-xs">
+        <%= "feature.calendar.content.google_calendar_subscription_text_v1".translate %>
+      </div>
+      <div class="col-sm-5 no-padding m-l-sm">
+        <%= image_tag("google_cal_instructions_1.png", :height => "100px", :width => "180px") %>
+      </div>
+      <div class="pull-right p-r-sm m-t-sm h4">
+        <%= link_to("#{'feature.calendar.content.for_more_details'.translate} &raquo;".html_safe, calendar_sync_instructions_path, target: "_blank", :class => "cjs_show_instructions_page cjs_external_link", :id => "cjs_google_instruction_link") %>
+      </div>
+    </div>
+  </div>
+  <%= horizontal_line(class: "m-b-xxs") %>
+  <div class="cui_instructions_note_container p-sm">
+    <%= content_tag(:h4, "feature.calendar.content.few_points_to_note_v1".translate) %>
+    <ul class="m-t-xs">
+      <%= content_tag(:li, "feature.calendar.content.points_to_note_instruction_1_v1".translate(meetings: _meetings)) %>
+      <%= content_tag(:li, "feature.calendar.content.points_to_note_instruction_2_v1".translate(meetings: _meetings)) %>
+      <%= content_tag(:li, "feature.calendar.content.points_to_note_instruction_3_v1".translate(mentoring: _mentoring)) %>
+    </ul>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  Meetings.trackInstructionsPageVisit();
+<% end %>

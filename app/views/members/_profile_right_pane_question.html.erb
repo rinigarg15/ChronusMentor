@@ -1,0 +1,6 @@
+<div class="font-bold h5 no-margins truncate-with-ellipsis whitespace-nowrap"><%= link_to h(sidepane_asset.summary), qa_question_path(sidepane_asset) %></div>
+<div class="m-t-xs text-muted small">
+  <%= get_icon_content("fa fa-clock-o") + "display_string.time_ago".translate(time: time_ago_in_words(sidepane_asset.created_at)) %>
+  <%= circle_separator %>
+  <%= link_to "feature.question_answers.action.answer_question".translate, qa_question_path(sidepane_asset) %>
+</div>

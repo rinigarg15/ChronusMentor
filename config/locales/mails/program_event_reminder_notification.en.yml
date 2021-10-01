@@ -1,0 +1,31 @@
+en:
+  email_translations:
+    program_event_reminder_notification:
+      title_v1: Reminder of upcoming %{_program} event
+      description_v1: If an event attendee has set a program event reminder, this email is sent to them one day before the start of the program event.
+      subject_v3: 'Reminder: {{program_event_title}} on {{event_time}}'
+      content_v4_html: 'This is to remind you of the upcoming event, {{program_event_title}}. <br/><br /> <div style=''background-color: #F8F8F8; padding-left: 12px;padding-right: 12px;padding-top: 12px;padding-bottom: 12px''> When: {{event_time}} <br /> Where: {{program_event_location}} <br /> </div> {{view_event_details_button}} <br /> We look forward to seeing you there.<br/>'
+      tags:
+        program_event_title:
+          description: Title of the program_event
+          example: Welcome meet for all users at he Cafeteria
+        program_event_start_time:
+          description: Start Time of the program_event
+          example: December 24, 2013 11:00 am
+        program_event_timings:
+          description: Time of the program_event
+          example: December 24, 2013 11:00 am to 11:30 am UTC
+        event_start_time:
+          description: This indicates the start time of the event in the attendee's timezone. If not set, the time is displayed in the event's timezone.
+          example: December 24, 2013 11:00 am
+        event_time:
+          description: This indicates the time of the event in the attendee's timezone. If not set, the time is displayed in the event's timezone.
+          example: December 24, 2013 11:00 am to 11:30 am UTC
+        program_event_location:
+          description: Location of the program_event
+          example: University Cafeteria
+        url_program_event:
+          description: Url of the program_event
+        view_event_details_button:
+          description: View Event Details Button
+          view_event_details: View Event Details

@@ -1,0 +1,13 @@
+<h4 class="gray-bg clearfix h4 font-600 p-b-sm m-b-0 m-t-0">
+  <%= append_text_to_icon("fa fa-fw fa-group m-r-xs", "feature.program.content.publish_circle_widget_header".translate(mentoring_connections: _mentoring_connections, mentoring_connection: _mentoring_connection, count: publishable_groups.size)) %>
+  <%= content_tag(:span, "(#{publishable_groups.size})", class: "m-l-xxs") %>
+</h4>
+
+<%= render partial: "programs/publish_circle_widget_mobile_content", locals: {publishable_groups: publishable_groups} %>
+<%= render partial: "programs/publish_circle_widget_desktop_content", locals: {publishable_groups: publishable_groups} %>
+
+<%= javascript_tag do  %>
+  jQuery(document).ready(function(){
+    PublishCircleWidget.removeCircleFromWidget();
+  });
+<% end %>

@@ -1,0 +1,5 @@
+<%= ibox nil, content_class: "no-padding" do %>
+  <div class="cjs_messages_list">
+    <%= listing_page(msgs_collection, partial:  "admin_messages/child_msg", list_group_item_class: "cjs_mail_section", collection_key: :child_msg, locals: {msgs_size: msgs_collection.size, messages_to_preview: msgs_collection, messages_to_expand: []}) %>
+  </div>
+<% end %>

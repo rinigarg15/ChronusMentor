@@ -1,0 +1,30 @@
+<% if @type == ProfileQuestion::Type::SINGLE_CHOICE %>
+  
+  <select class="form-control" ng-model="question.value" ng-change="getFieldScore(mc)">
+    <option value="">Select..</option>
+    <option ng-repeat="choice in question.choices" value="{{choice}}">{{choice}}</option>
+  </select>
+
+<% elsif @type == ProfileQuestion::Type::MULTI_CHOICE %>
+
+  <div ng-init="question.selectedChoices = {}" class="clearfix scroll-1">
+    <label class="checkbox" ng-repeat="choice in question.choices">
+      <input type="checkbox" ng-change="getFieldScore(mc)" ng-model="question.selectedChoices[choice]">{{choice}}
+    </label>
+  </div>
+
+<% elsif @type == ProfileQuestion::Type::ORDERED_OPTIONS %>
+
+  <ol ng-init="question.selectedChoices = {}">
+    <li ng-repeat="t in getTimes(question.count)">
+      <select class="form-control" ng-model="question.selectedChoices[$index]" ng-change="getFieldScore(mc)" >
+        <option value="">Select..</option>
+        <option ng-repeat="choice in question.choices" value="{{choice}}">{{choice}}</option>
+      </select>
+    </li>
+  </ol>
+
+<% else %>  
+   No play for  
+   <%= get_profile_question_type_options_array(true, false, false).select{|q| q[1] == get_question_type(@type)}.first[0] %> type :( 
+<% end %>

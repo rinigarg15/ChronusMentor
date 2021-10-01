@@ -1,0 +1,4 @@
+jQuery("#cjs_new_qa_question_modal").modal('hide');
+jQuery(".cjs_new_qa_question_form").replaceWith("<%= j render(:partial => 'new_qa_question') %>");
+jQuery("#qa_questions_pane").replaceWith("<%= j render(:partial => 'all_qa_questions') %>");
+jQueryHighlight("#qa_question_<%= @qa_questions.first.id %>");

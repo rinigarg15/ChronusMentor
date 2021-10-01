@@ -1,0 +1,29 @@
+<% @title = "#{'manage_strings.program.header.Customize'.translate}: #{@auth_config.title}" %>
+<% logo_exists = @auth_config.logo.exists? %>
+
+<%= ibox nil, ibox_class: "col-md-offset-2 col-md-8" do %>
+  <%= simple_form_for @auth_config do |f| %>
+    <%= f.input :title, label: "feature.connection.title".translate, input_html: { class: "form-control" } %>
+    <%= f.input :logo, as: :file, label: "feature.connection.Logo".translate, hint: "feature.login_management.content.logo_help_text".translate, hint_html: { class: "small" }, wrapper_html: { class: "cjs_auth_config_logo#{' hide' if logo_exists}" } %>
+
+    <% if logo_exists %>
+      <%= hidden_field_tag("persist_logo", true) %>
+      <%= control_group(class: "cjs_auth_config_existing_logo") do %>
+        <label class="control-label">
+          <%= "feature.connection.Logo".translate %>
+        </label>
+        <div class="form-control-static">
+          <%= link_to(@auth_config.logo_file_name, @auth_config.logo.url, target: "_blank") %>
+          <%= link_to(get_icon_content("fa fa-times-circle") + set_screen_reader_only_content("display_string.Remove".translate), "javascript:void(0)", class: "text-danger cjs_auth_config_remove_logo") %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% action_set(class: "pull-right") do %>
+      <%= cancel_link auth_configs_path %>
+      <%= f.button :submit, "display_string.Save".translate %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[AuthConfig.handleLogo();] %>

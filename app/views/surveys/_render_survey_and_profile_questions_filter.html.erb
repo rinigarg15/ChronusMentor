@@ -1,0 +1,47 @@
+<% prefix = local_assigns[:prefix] ? local_assigns[:prefix] : (is_survey_type ? "survey" : "profile") %>
+<% role_id = local_assigns[:role_id] %>
+<% class_name = "cjs_role_profile_filter_container_#{role_id}" if role_id %>
+<div class="cjs_controls_enclosure col-xs-12 no-padding">
+  <div class="cjs_add_one_more_div">
+    <% operator_options = questions_container_operator_options %>
+    <div class="m-b-xs prof-ques-cont animated fadeInDown clearfix cjs_survey_report_filter_container cjs_hidden_input_box_container <%= class_name %>">
+      <div class="form-group">
+        <%= construct_input_group([], [], input_group_class: "col-xs-12") do %>
+          <% question_name = local_assigns[:question_name] || "#{prefix}_question_1" %>
+          <%= label_tag(question_name, "feature.survey.survey_report.filters.label.select_question_label".translate, :for => question_name, :class => "sr-only") %>
+          <%= select_tag(question_name, options_for_select_for_questions(questions, is_survey_type), :class => "form-control cjs_question_selector col-xs-12 no-padding", :id => question_name, data: {scope: local_assigns[:scope]}) %>
+        <% end %>
+        <%= construct_input_group([], [], input_group_class: "m-t-sm col-xs-8 pull-left hide") do %>
+          <% operator_name = local_assigns[:operator_name] || "#{prefix}_operator_1" %>
+          <%= label_tag(operator_name, "feature.survey.survey_report.filters.label.select_operator_label".translate, :for => operator_name, :class => "sr-only") %>
+          <%= select_tag(operator_name, options_for_select(operator_options, ""), :class => "form-control cjs_show_input_field", :id => operator_name) %>
+        <% end %>
+        <%= construct_input_group([], [], input_group_class: "m-t-sm col-xs-8 pull-left hide") do %>
+          <% value_name = local_assigns[:value_name] || "#{prefix}_value_1" %>
+          <%= label_tag(value_name, "feature.survey.survey_report.filters.label.select_value_label".translate, :for => value_name, :class => "sr-only") %>
+          <%= text_field_tag(value_name, "", :class => "cjs_input_hidden form-control", :id => value_name) %>
+          <% choices_name = local_assigns[:choices_name] || "#{prefix}_choices_1" %>
+          <%= label_tag(choices_name, "feature.survey.survey_report.filters.label.select_value_label".translate, :for => choices_name, :class => "sr-only") %>
+          <%= hidden_field_tag(choices_name, "", :class => "cjs_choices_hidden no-padding form-control", :id => choices_name, :data => {:placeholder => "feature.connection.header.survey_response_filter.placeholder.select_choices".translate}) %>
+        <% end %>
+
+        <%# date range picker %>
+        <div class="m-t-sm col-xs-8 pull-left hide cjs_date_range_picker_container no-padding">
+          <% question_name = "#{prefix}_#{ProfileQuestionsHelper::DATE_VALUE}_1" %>
+          <%= construct_daterange_picker(question_name, {}, presets: DateRangePresets.for_date_profile_field_quick_filter, hidden_field_attrs: {class: ProfileQuestionsHelper::DATE_RANGE_PICKER_FOR_PROFILE_QUESTION}) %>
+        </div>
+
+        <span class="col-xs-4 cjs-add-delete-buttons-container">
+          <%= link_to(get_icon_content("fa fa-plus-circle") + "display_string.Add".translate, "", {:class => "cjs_add_one_more_filter btn-md btn btn-white m-t-sm border-bottom hide"}.merge({:data => {:prefix => prefix, :id => "2"}})) %>
+          <div class="m-t-md hide cjs-delete-button-container">
+            <span class="pointer cjs_delete_question pull-right"><%= get_icon_content('fa fa-trash') + set_screen_reader_only_content("display_string.Delete".translate) %></span>
+          </div>
+        </span>
+
+        <div class="cjs-and-seperator col-xs-12 hide p-xs">
+          <%= horizontal_or_separator("m", "display_string.AND".translate) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

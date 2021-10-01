@@ -1,0 +1,96 @@
+<% all_answers = @all_answers || [] %>
+<% answer_by_user = all_answers[question.id][0] if all_answers[question.id].present? %>
+<% is_conditional_question_set = question.conditional_question_id.present? %>
+<% match_texts = is_conditional_question_set ? question.conditional_text_choices : [] %>
+<% display_hide = !question.conditional_text_matches?(all_answers) %>
+<% role_questions = grouped_role_questions[question.id] %>
+
+<% admin_only_editable = role_questions.any?(&:admin_only_editable?) %>
+<% required = role_questions.any?(&:required?) %>
+<% private_field = role_questions.any?(&:private?) %>
+<% non_editable = (admin_only_editable && !current_user.is_admin?) %>
+<% highlight_class = (answer_by_user.blank? && is_profile_completion && !display_hide && !non_editable) ? 'incomplete_field' : '' %>
+
+<div class='question <%= "cjs_experience" if question.experience? %> cjs_question_<%= question.id %> clearfix <%="cjs_dependent_#{question.conditional_question_id}" if question.conditional_question_id %> <%= "hide" if display_hide %>' id='question_<%= question.id %>'>
+  <% unless answer_by_user.present? %>
+    <% if question.education? || question.experience? || question.publication? %>
+      <% answer_value = []  %>
+    <%  else %>
+      <% answer_value =  (defined?(answers) && answers.present?) ? answers[question.id.to_s].presence : nil %>
+      <% answer_value = {answer_text: answer_value, question: question} %>
+    <% end %>
+  <% end %>
+
+  <% answer = answer_by_user || ProfileAnswer.new(:profile_question => question, :answer_value => answer_value, :ref_obj => profile_user.member) %>
+  <% scope = local_assigns[:profile_question] ? question.section_id.to_s : role %>
+
+  <% if (question.education? || question.experience? || question.publication? || question.manager?) && !non_editable %>
+
+    <div class="panel panel-default <%= highlight_class %>">
+      <div class="panel-heading">
+        <div class="row m-t-n-xs">
+          <%= profile_answer_label(question, profile_user, :required => required, :private => private_field, :non_editable => non_editable, :class => "pull-left p-l-xs") %>
+        </div>
+      </div>
+      <% if question.education? %>
+        <%= render :partial => "users/education_form_fieldset", :locals => {:question => question, :answer => answer, :required => required} %>
+      <% elsif question.experience? %>
+        <%= render :partial => "users/experience_form_fieldset", :locals => {:question => question, :answer => answer, :required => required} %>
+      <% elsif question.publication? %>
+        <%= render :partial => "users/publication_form_fieldset", :locals => {:question => question, :answer => answer, :required => required} %>
+      <% elsif question.manager? %>
+        <%= render :partial => "users/manager_form_fieldset", :locals => {:question => question, :answer => answer, :required => required} %>
+      <% end %>
+      <% if required %>
+        <script>
+          <% if question.education? %>
+            RequiredFields.addScopedField("<%= scope %>", "edu_cur_list_<%= question.id %>");
+          <% elsif question.experience? %>
+            RequiredFields.addScopedField("<%= scope %>", "exp_cur_list_<%= question.id %>");
+          <% elsif question.publication? %>
+            RequiredFields.addScopedField("<%= scope %>", "publication_cur_list_<%= question.id %>");
+          <% elsif question.manager? %>
+            RequiredFields.addScopedField("<%= scope %>", "manager_cur_list_<%= question.id %>");
+          <% end %>
+        </script>
+      <% end %>
+    </div>
+  <% else %>
+    <%= control_group(:class => highlight_class) do %>
+      <%= profile_answer_label(question, profile_user, :required => required, :private => private_field, :non_editable => non_editable, :class => "col-sm-2") %>
+      <%= controls(class: "col-sm-10") do %>
+        <div class="answer">
+          <% if non_editable %>
+            <div class='form-control-static'>
+              <%= fetch_formatted_profile_answers(profile_user.member, question, all_answers, false) %>
+              <%= fetch_help_text(question) %>
+            </div>
+          <% else %>
+            <% answer_field_options = { user: profile_user } %>
+            <% answer_field_options.merge!(section_id: role) unless local_assigns[:profile_question] %>
+            <%= edit_profile_answer_field(answer, question, answer_field_options) %>
+            <% if required %>
+              <script>
+                <% if question.ordered_options_type? %>
+                    RequiredFields.addScopedField("<%= scope %>", "profile_answers_<%= question.id %>_0");
+                <% else %>
+                  <% unless question.question_type == CommonQuestion::Type::FILE && !answer.unanswered? %>
+                    RequiredFields.addScopedField("<%= scope %>", "profile_answers_<%= question.id %>");
+                  <% end %>
+                <% end %>
+              </script>
+            <% end %>
+            <% if question.text_only_allowed? %>
+              <%= javascript_tag(%Q[ProfileFields.addScopedField("#{local_assigns[:profile_question] ? question.section_id.to_s : role}", "profile_answers_#{question.id}");]) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+  <% if is_conditional_question_set %>
+    <% match_texts.each do |text| %>
+      <%= hidden_field_tag :match_text, text, class: "match_text_#{question.id}", id: nil %>
+    <% end %>
+  <% end %>
+</div>

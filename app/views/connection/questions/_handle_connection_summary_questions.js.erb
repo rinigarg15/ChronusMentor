@@ -1,0 +1,4 @@
+<% option_already_enabled_text = 'feature.connection_questions.tooltip.option_already_enabled'.translate %>
+<% uncheck_option_text = 'feature.connection_questions.tooltip.uncheck_option'.translate %>
+CustomizeQuestions.resetConnectionSummaryQuestionCheckBoxes("<%= common_question.id %>", "<%= j option_already_enabled_text %>", "<%= common_question.question_text %>", "<%= j uncheck_option_text %>", <%= @current_program.connection_summary_question.present? %>);
+initialize.initializeTooltip();

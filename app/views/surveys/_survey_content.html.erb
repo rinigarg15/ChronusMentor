@@ -1,0 +1,35 @@
+<%= ibox nil, header_content: render_surveys_title(survey_name, survey_type), no_collapse: true, hide_header_title: true, ibox_id: "#{survey_type.downcase}" do %>
+  <% if surveys.present? %>
+    <table class="table pane m-t-sm" cellpadding="0" cellspacing="0">
+      <thead class="pane-header">
+        <tr>
+          <th class="col-md-6"><%= "feature.survey.survey_table.header_label.title".translate %></th>
+          <th class="col-md-4"><%= "feature.survey.survey_table.header_label.total_response".translate %></th>
+          <th class="text-right col-md-2"><%= "feature.survey.survey_table.header_label.last_response".translate %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% surveys.each do |survey| %>
+          <tr>
+            <td class="col-md-6">
+              <%= link_to survey.name, survey_survey_questions_path(survey) %>
+            </td>
+            <td class="col-md-4">
+              <%= link_to "feature.survey.content.survey_response".translate(count: survey.total_responses), report_survey_path(survey) %>
+              <%= link_to_responses_in_last_week(survey) %>
+            </td>
+            <td class="text-right col-md-2">
+              <%# ActiveRecord maximum obeys Time.zone from Rails-4.2 . Remove .in_time_zone after upgrade %>
+              <% last_response_at = survey.survey_answers.maximum(:last_answered_at).try(:in_time_zone) %>
+              <%= last_response_at.present? ? DateTime.localize(last_response_at, format: :full_display_short_month) : "feature.survey.survey_table.no_response_text".translate %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="p-sm text-center clearfix">
+      <p><%= "feature.survey.content.no_survey".translate %></p>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,90 @@
+<% meeting_slots, is_proposed_slots_present = meeting_request.get_meeting_proposed_slots %>
+<% show_proposed_slots_pane = is_calendar_meeting || is_proposed_slots_present %>
+<% show_mobile_view = [EngagementIndex::Src::AcceptMentorRequest::USER_PROFILE_PAGE, EngagementIndex::Src::AcceptMentorRequest::USER_LISTING_PAGE].include?(source) %>
+<div>
+  <% if show_proposed_slots_pane %>
+    <div class="p-b-xs">
+      <h4 class="m-t-xs m-b-xs"><%= 'feature.meeting_request.content.proposed_times'.translate %><span class="font-noraml small m-l-xs"><%= 'feature.meeting_request.content.meeting_timezone'.translate(:time_zone => wob_member.short_time_zone) %></span></h4>
+      <div class="small text-muted"><%= 'feature.meeting_request.content.proposed_times_help_text'.translate(:a_meeting => _a_meeting) if is_mentor_action && meeting_request.active? %></div>
+    </div>
+    <div>
+      <ul class="list-group clearfix">
+        <% meeting_slots.each do |slot| %>
+          <li class="list-group-item col-xs-12 p-l-0 p-r-0">
+            <div class="col-xs-4 small text-center <%= (@with_bulk_actions ? 'col-sm-3' : 'col-sm-2') unless show_mobile_view %>">
+              <b><%= DateTime.localize(slot.start_time, format: :short_time) %></b><br> <%= DateTime.localize(slot.end_time, format: :short_time) %>
+            </div>
+            <div class="col-xs-8 <%= (@with_bulk_actions ? 'col-sm-9' : 'col-sm-10') unless show_mobile_view %> p-r-0 b-l">
+              <div class="pull-left col-xs-8 p-l-xxs p-r-xxs">
+                <div class="font-bold clearfix"><%= DateTime.localize(slot.start_time, format: :abbr_short)%></div>
+                <div class="small text-muted">
+                  <%= slot.location.present? ? chronus_auto_link(h(slot.location)) : "feature.meetings.content.no_location".translate %>  
+                </div>
+              </div>
+              <% url_options = is_proposed_slots_present ? {slot: slot} : {} %>
+              <div class="pull-right m-t-xxs">
+                <%= get_meeting_request_action(meeting_request, true, filter_field, {:accept_button => true, :show_mobile_view => show_mobile_view, :source => source}.merge(url_options)) if is_mentor_action %>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if is_mentor_action && meeting_request.active? %>
+    <%= show_proposed_slots_pane ? horizontal_or_separator("m-t-xxs m-b-xxs small") : content_tag(:h4, 'display_string.Actions'.translate, class: "m-t-xs m-b-xs #{'visible-xs' unless show_mobile_view}") %>
+    <div class="<%= 'visible-xs' unless show_mobile_view %>">
+      <ul class="list-group clearfix">
+        <li class="list-group-item col-xs-12 p-l-0 p-r-0">
+          <div class="col-xs-4 small text-center <%= 'col-sm-2' unless show_mobile_view %> m-t-xs b-r">
+            <b><i class="fa fa-clock-o fa-fw fa-lg"></i></b><br>
+          </div>
+          <div class="col-xs-8 <%= 'col-sm-10' unless show_mobile_view %> p-r-0">
+            <div class="pull-left col-xs-8 p-l-xxs p-r-xxs">
+              <div class="font-bold clearfix"><%= "feature.meetings.content.propose_meeting_time".translate %></div>
+              <div class="small text-default"><%= "feature.meetings.content.connect_with_name".translate(name: link_to_user(meeting_request.student, {no_link: true, no_hovercard: true})) %></div>
+            </div>
+
+            <div class="pull-right m-t-xxs">
+              <%= link_to(append_text_to_icon("fa fa-user-plus") + content_tag(:span, "feature.meetings.content.propose_meeting_time".translate, class: "sr-only"), "javascript:void(0)", class: "btn btn-primary btn-outline btn-sm cjs_propose_meeting_time_#{meeting_request.id}") %>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <%= horizontal_or_separator("#{'visible-xs' unless show_mobile_view} m-t-xxs m-b-xxs small") %>
+    <div class="<%= 'visible-xs' unless show_mobile_view %>">
+      <ul class="list-group clearfix">
+        <li class="list-group-item col-xs-12 p-l-0 p-r-0">
+          <div class="col-xs-4 small text-center <%= 'col-sm-2' unless show_mobile_view %> m-t-xs b-r">
+            <b><i class="fa fa-times fa-fw fa-lg"></i></b><br>
+          </div>
+          <div class="col-xs-8 <%= 'col-sm-10' unless show_mobile_view %> p-r-0">
+            <div class="pull-left col-xs-8 p-l-xxs p-r-xxs">
+              <div class="font-bold clearfix"><%= "feature.meeting_request.action.decline_request".translate %></div>
+              <div class="small"><%= "feature.meetings.content.decline_meeting_reason_text".translate(:meeting => _meeting) %></div>
+            </div>
+
+            <div class="pull-right m-t-xxs">
+              <%= get_meeting_request_action(meeting_request, true, filter_field, {:skip_expiry_check => true, :show_mobile_view => show_mobile_view, :source => source}) %>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+
+    <ul class="hidden-xs list-group clearfix <%= 'hide' if show_mobile_view %>">
+      <li class="list-group-item col-xs-12 p-l-0 p-r-0">
+        <div class="text-center">
+          <%= get_meeting_request_action(meeting_request, true, filter_field, {:skip_expiry_check => true, :show_mobile_view => show_mobile_view, :source => source}) %>
+          <%= link_to(append_text_to_icon("fa fa-user-plus", content_tag(:span, "feature.meetings.content.propose_meeting_time".translate, class: "hidden-xs #{'sr-only' if show_mobile_view}")), "javascript:void(0)", class: "btn btn-primary btn-outline btn-sm cjs_propose_meeting_time_#{meeting_request.id}") %>
+        </div>
+      </li>
+    </ul>
+  <% end %>
+</div>
+<script>
+  MeetingRequest.initializeDeclineSlotPopup('#<%= get_meeting_request_action_popup_id(meeting_request, AbstractRequest::Status::REJECTED) %>', '.cjs_meeting_request_reject_link_<%= meeting_request.id %>');
+  MeetingRequest.initializeProposeSlotPopup('.cjs_propose_meeting_time_<%= meeting_request.id %>', '<%= propose_slot_popup_meeting_request_path(meeting_request, src: source) %>' );
+</script>

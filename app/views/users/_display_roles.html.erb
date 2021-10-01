@@ -1,0 +1,13 @@
+<% if program_invitation.try(:allow_type?) %>
+  <div class="cjs_roles_list m-t-sm text-left">
+    <%= control_group do %>
+      <%= controls do %>
+        <% selected_roles = current_user.present? ? current_user.role_names : '' %>
+        <div id = "roles_list" class="well well-sm white-bg m-b-0">
+          <%= get_role_checkboxes(program_invitation.role_names, current_program, name: "roles[]", selected: selected_roles) %>
+        </div>
+      <% end %>
+      <%= content_tag(:div, "registration_page.content.choose_roles".translate(program: _program), class: "small help-block") %>
+    <% end %>
+  </div>
+<% end %>

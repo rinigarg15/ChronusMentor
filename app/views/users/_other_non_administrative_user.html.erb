@@ -1,0 +1,31 @@
+<% listing_options = { mentee_groups_map: @mentee_groups_map } %>
+<% actions, dropdown_title = actions_for_other_non_administrative_user_listing(current_user, user, listing_options) %>
+
+<% labels = [] %>
+<% labels << status_indicator(user, return_hash: true) %>
+<% labels << drafted_connections_indicator(user, @current_program) %>
+
+<div id ="<%= "cui_member_#{user.member_id}"%>">
+  <%= dropdown_buttons_or_button(Marshal.load(Marshal.dump(actions)), { dropdown_title: dropdown_title }.merge( { btn_class: "hidden-xs pull-right" } )) %>
+  <div class="media-left">
+    <%= user_picture(user, { :no_name => true, :size => :large }, { class: "cui_large_to_medium img-circle" } ) %>
+  </div>
+  <div class="media-body">
+    <% user_link = link_to_user user, :content_text => user.name(:name_only => true), :no_hovercard => true %>
+    <h3 class="m-b-0 <%= hidden_on_mobile %>">
+      <%= user_link %>
+    </h3>
+    <h4 class="m-b-0 <%= hidden_on_web %>">
+      <%= user_link %>
+    </h4>
+    <%= available_and_ongoing_groups_list(user) if current_program.project_based? %>
+    <%= labels_container(labels, { class: "m-t-xs" } ) %>
+  </div>
+  <div class="section-pane m-t">
+    <%= render :partial => "users/show_profile_summary_fields", :locals => {:user => user, :role => @role || local_assigns[:role], :profile_last_updated_at => local_assigns[:profile_last_updated_at]} %>
+    <% show_last_logged_in(user) do |last_logged_in| %>
+      <%= profile_field_container("feature.user.label.Last_Login".translate, last_logged_in, { class: "m-t-sm m-b-xs" } ) %>
+    <% end %>
+  </div>
+  <%= dropdown_buttons_or_button(Marshal.load(Marshal.dump(actions)), { dropdown_title: dropdown_title }.merge( { btn_class: "col-xs-12 no-padding visible-xs btn-block m-t-sm", dropdown_menu_class: "col-xs-12 pull-right table-bordered", btn_group_btn_class: "col-xs-12" } )) %>
+</div>

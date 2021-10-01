@@ -1,0 +1,5 @@
+<% if @error_message.present? %>
+  ChronusValidator.ErrorManager.ShowPageFlash(false, "<%= j @error_message %>");
+  jQuery(".cjs-login-btn").val("<%= j 'display_string.Login'.translate %>");
+  jQuery(".cjs-login-btn").attr("disabled", false);
+<% end %>

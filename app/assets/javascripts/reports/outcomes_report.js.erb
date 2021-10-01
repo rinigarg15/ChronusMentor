@@ -1,0 +1,541 @@
+var applyProfileFiltersOnOutcomesReport;
+DAY_TEXT = preJsTranslations.outComesReport.dayText;
+DAYS_TEXT = preJsTranslations.outComesReport.daysText;
+
+var outcomesReportApp = angular.module('outcomesReportApp', ['highcharts-ng']);
+
+outcomesReportApp.controller('outcomesReportCtrl', ['$scope', '$http', function($scope, $http){
+  // Common items
+  var defaultPointInterval = 86400000; // one day
+  var commonChartOptions = {
+    options: {
+      chart: { zoomType: 'x' },
+      legend: { borderWidth: 0 },
+      plotOptions: {
+        line: { marker: { enabled: false } },
+        series: { events: { legendItemClick: updateSeriesVisibility } },
+        column: { events: { afterAnimate: function(event){ jQuery(window).resize(); } } }
+      },
+      tooltip: { pointFormat: '{series.name}: <b>{point.y}</b>' }
+    },
+    credits: { enabled: false },
+    title: { text: null },
+    xAxis: { type: 'datetime' },
+    yAxis: { min: 0, title: { text: null } },
+    series: []
+  };
+  var commonBarChartOptions = {
+    options: {
+      chart: { zoomType: 'x', type: 'column' },
+      legend: { borderWidth: 0 },
+      plotOptions: {
+        line: { marker: { enabled: false } },
+        series: { events: { legendItemClick: updateSeriesVisibility } },
+        column: { events: { afterAnimate: function(event){ jQuery(window).resize(); } } }
+      },
+      tooltip: { pointFormat: '{series.name}: <b>{point.y}</b>' }
+    },
+    credits: { enabled: false },
+    title: { text: null },
+    xAxis: { type: 'datetime' },
+    yAxis: { min: 0, title: { text: null } },
+    series: []
+  };
+
+  function updateSeriesVisibility() {
+    var index = this.chart.series.pluck("name").indexOf(this.name);
+    var reportSection = this.chart.renderTo.id;
+    if(reportSection == "registered-user-chart") {
+      $scope.registeredUsersChartConfig.series[index].visible = !$scope.registeredUsersChartConfig.series[index].visible;
+    } else if(reportSection == "total-connections-chart") {
+      $scope.totalConnectionsChartConfig.series[index].visible = !$scope.totalConnectionsChartConfig.series[index].visible;
+    } else if(reportSection == "closed-connections-chart") {
+      $scope.closedConnectionsChartConfig.series[index].visible = !$scope.closedConnectionsChartConfig.series[index].visible;
+    } else if(reportSection == "positive-connections-chart") {
+      $scope.positiveConnectionsChartConfig.series[index].visible = !$scope.positiveConnectionsChartConfig.series[index].visible;
+    } else if(reportSection == "closed-meetings-chart") {
+      $scope.closedMeetingsChartConfig.series[index].visible = !$scope.closedMeetingsChartConfig.series[index].visible;
+    } else if(reportSection == "positive-meetings-chart") {
+      $scope.positiveMeetingsChartConfig.series[index].visible = !$scope.positiveMeetingsChartConfig.series[index].visible;
+    }
+  };
+
+  $scope.Loading = {
+    registeredUsersLeft: false,
+    registeredUsersRight: false,
+    totalConnectionsLeft: false,
+    totalConnectionsRight: false,
+    closedConnections: false,
+    closedMeetings: false,
+    positiveConnections: false,
+    positiveMeetings: false,
+
+    setAllLoadingVariables: function(boolValue){
+      $scope.Loading.registeredUsersLeft = boolValue;
+      $scope.Loading.registeredUsersRight = boolValue;
+      $scope.Loading.totalConnectionsLeft = boolValue;
+      $scope.Loading.totalConnectionsRight = boolValue;
+      $scope.Loading.closedConnections = boolValue;
+      $scope.Loading.positiveConnections = boolValue;
+    },
+    isLoadingRegisteredUsers: function(){
+      return ($scope.Loading.registeredUsersLeft || $scope.Loading.registeredUsersRight);
+    },
+    isLoadingTotalConnections: function(){
+      return ($scope.Loading.totalConnectionsLeft || $scope.Loading.totalConnectionsRight);
+    },
+    isLoadingClosedConnections: function(){
+      return ($scope.Loading.closedConnections);
+    },
+    isLoadingPositiveConnections: function(){
+      return ($scope.Loading.positiveConnections);
+    },
+    isLoadingClosedMeetings: function(){
+      return ($scope.Loading.closedMeetings);
+    },
+    isLoadingPositiveMeetings: function(){
+      return ($scope.Loading.positiveMeetings);
+    }
+  };
+
+  $scope.AppliedProfileFilters = {
+    myFilters: [],
+    newFilter: true,
+    clearFilter: 'MentorSearch.clearFilter',
+    labelClass: 'm-r-xs',
+    appliedFiltersLabel: preJsTranslations.outComesReport.appliedFiltersLabel,
+    containerClass: "cjs-outcomes-report-applied-filters"
+  };
+
+  $scope.Cache = {
+    key: null,
+    expireAfter: 0,
+    dismissCache: function() {
+      $scope.Cache.key = null;
+      $scope.Cache.expireAfter = 0;
+    },
+    setCache: function(key, timeToLive){
+      $scope.Cache.key = key;
+      $scope.Cache.expireAfter = Math.round(new Date().getTime()/1000) + timeToLive;
+    },
+    isValid: function(){
+      return (Math.round(new Date().getTime()/1000) < $scope.Cache.expireAfter);
+    }
+  };
+
+  $scope.toggleProfileFilterBox = function() {
+    $scope.showProfileFilterBox = !$scope.showProfileFilterBox;
+    $scope.showDateRangeBox = false;
+  };
+
+  $scope.toggleDateRangeBox = function() {
+    $scope.showDateRangeBox = !$scope.showDateRangeBox;
+    $scope.showProfileFilterBox = false;
+  };
+
+  $scope.computePercentage = function(count, total) {
+    if(total>0) { return (count/total)*100; }
+    else { return null; }
+  };
+
+  $scope.updateDateRange = function() {
+    $scope.startDate = jQuery(".cjs_daterange_picker_start").val() || $scope.defaultStartDate;
+    $scope.endDate = jQuery(".cjs_daterange_picker_end").val() || $scope.defaultEndDate;
+    $scope.dateRange = jQuery('.cjs_daterange_picker_value').val() || $scope.defaultDateRange;
+  };
+
+  $scope.setDaysCountText = function() {
+    $scope.daysCountText = ($scope.daysCount == 1) ? ($scope.daysCount + " " + DAY_TEXT) : ($scope.daysCount + " " + DAYS_TEXT);
+  }
+
+  $scope.applyFilter = function(forceRefreshCache) {
+    forceRefreshCache = getDefaultVal(forceRefreshCache, false);
+    if (forceRefreshCache) {
+      $scope.$apply(function(){
+        $scope.Loading.setAllLoadingVariables(true);
+      });
+    } else {
+      $scope.Loading.setAllLoadingVariables(true);
+    };
+
+    if(!forceRefreshCache && $scope.Cache.isValid()){
+      $scope.updateDateRange();
+      $scope.refreshAllPageData();
+      jQuery(".highcharts-button").click(); //manually triggering Reset Zoom button provided by highcharts
+    } else {
+      var profileFiltersData = getProfileFilterFormData();
+      $scope.pdfDownloadEnabled = false;
+      jQuery.ajax({
+        url: outcomesReportRoutes.filterUsersOnProfileQuestionsPath,
+        data: profileFiltersData,
+        success: function(response) {
+          $scope.setErrorMessagesForLocationFilter(response["location"]);
+          if (response["location"]["invalid_location_filter"]) {
+            $scope.Cache.dismissCache();
+            $scope.$apply(function(){
+              $scope.toggleProfileFilterBox();
+              $scope.Loading.setAllLoadingVariables(false);
+            });
+            return false;
+          }
+          $scope.Cache.setCache(response["cache_key"], response["time_to_live"]);
+          $scope.AppliedProfileFilters.myFilters = response["my_filters"];
+          $scope.updateDateRange();
+          $scope.refreshAllPageData();
+          jQuery(".highcharts-button").click(); //manually triggering Reset Zoom button provided by highcharts
+          $scope.pdfDownloadEnabled = true;
+        }
+      });
+    }
+  }
+
+  $scope.setPdfParams = function(obj) {
+    if($scope.pdfDownloadEnabled) {
+      var pdfUrl = obj.currentTarget.attributes.href.value;
+      var idx = pdfUrl.indexOf("?");
+      if (idx != -1) {
+        pdfUrl = pdfUrl.substring(0, idx);
+      }
+
+      enabledUserOutcomesGraphs = $scope.registeredUsersChartConfig.series.map(function(obj) { return obj.visible ? 1 : 0; }).join("")
+      enabledTotalOutcomesGraphs = $scope.totalConnectionsChartConfig.series.map(function(obj) { return obj.visible ? 1 : 0; }).join("")
+      enabledClosedOutcomesGraphs = $scope.program.flashMentoringEnabled ? $scope.closedMeetingsChartConfig.series.map(function(obj) { return obj.visible ? 1 : 0; }).join("") : $scope.closedConnectionsChartConfig.series.map(function(obj) { return (obj.visible == true) ? 1 : 0; }).join("")
+      enabledPositiveOutcomesGraphs = $scope.program.flashMentoringEnabled ? $scope.positiveMeetingsChartConfig.series.map(function(obj) { return obj.visible ? 1 : 0; }).join("") : $scope.positiveConnectionsChartConfig.series.map(function(obj) { return (obj.visible == true) ? 1 : 0; }).join("")
+
+      var appliedFilters = $scope.AppliedProfileFilters.myFilters.pluck("label").join(",");
+
+      obj.currentTarget.attributes.href.value = pdfUrl + "?date_range=" + jQuery(".cjs-daterange-display-container").text().trim()
+      + "&cache_key=" + $scope.Cache.key + "&enabled[users]=" + enabledUserOutcomesGraphs + "&enabled[total]=" + enabledTotalOutcomesGraphs
+      + "&enabled[closed]=" + enabledClosedOutcomesGraphs + "&enabled[positive]=" + enabledPositiveOutcomesGraphs
+      + "&filters=" + appliedFilters;
+    } else {
+      obj.preventDefault();
+    }
+  }
+
+  applyProfileFiltersOnOutcomesReport = $scope.applyFilter;
+
+  // this will refresh the graph data
+  $scope.refreshAllPageData = function() {
+    $scope.refreshRegisteredUsersData();
+    if($scope.program.flashMentoringEnabled) {
+      $scope.refreshClosedMeetingsData();
+      $scope.refreshPositiveMeetingsData();
+    } else {
+      $scope.refreshTotalConnectionsData();
+      $scope.refreshClosedConnectionsData();
+      $scope.refreshPositiveConnectionsData();
+    }
+  }
+
+  $scope.refreshRegisteredUsersData = function() {
+    if ($scope.pageDetails.format == "html") {
+      $scope.refreshRegisteredUsersNonGraphData();
+      $scope.refreshRegisteredUsersGraphData();
+    } else if ($scope.pageDetails.format == "pdf") {
+      $scope.registeredUsersData = jQuery(".cjs-angularjs-init").data("user-outcomes-report");
+      $scope.setRegisteredUsersData();
+    }
+  }
+
+  // Registered Users chart related
+  $scope.refreshRegisteredUsersNonGraphData = function() {
+    $scope.Loading.registeredUsersLeft = true;
+    $http.get(outcomesReportRoutes.userOutcomesReportPath, {params: {date_range: $scope.dateRange, user_ids_cache_key: $scope.Cache.key, data_side: '<%= OutcomesReportUtils::DataType::NON_GRAPH_DATA %>'}}).success(function(data){
+      $scope.registeredUsersData = data;
+      $scope.daysCount = $scope.registeredUsersData.intervalInDays;
+      $scope.prevWindow.valid = $scope.registeredUsersData.prevWindowValid;
+      if ($scope.prevWindow.valid) $scope.setDaysCountText();
+      $scope.Loading.registeredUsersLeft = false;
+    });
+  };
+ // Registered Users chart related
+  $scope.refreshRegisteredUsersGraphData = function() {
+    $scope.Loading.registeredUsersRight = true;
+    $http.get(outcomesReportRoutes.userOutcomesReportPath, {params: {date_range: $scope.dateRange, user_ids_cache_key: $scope.Cache.key, data_side: '<%= OutcomesReportUtils::DataType::GRAPH_DATA %>'}}).success(function(data){
+      $scope.graphStartDate = data.startDateForGraph;
+      $scope.registeredUsersChartConfig.series = data.graphData.map(function(obj) {
+        return {
+          'name': obj.name,
+          'pointInterval': defaultPointInterval,
+          'pointStart': $scope.graphStartDate,
+          'data': obj.data,
+          'visible': obj.visibility,
+          'color': obj.color
+        };
+      });
+      $scope.Loading.registeredUsersRight = false;
+    });
+  };
+
+  $scope.setRegisteredUsersData = function() {
+    $scope.graphStartDate = $scope.registeredUsersData.startDateForGraph;
+    $scope.daysCount = $scope.registeredUsersData.intervalInDays;
+    $scope.prevWindow.valid = $scope.registeredUsersData.prevWindowValid;
+    if ($scope.prevWindow.valid) $scope.setDaysCountText();
+    $scope.registeredUsersChartConfig.series = $scope.registeredUsersData.graphData.map(function(obj) {
+      return {
+        'name': obj.name,
+        'pointInterval': defaultPointInterval,
+        'pointStart': $scope.graphStartDate,
+        'data': obj.data,
+        'visible': obj.visibility,
+        'color': obj.color
+      };
+    });
+  }
+
+  $scope.refreshTotalConnectionsData = function() {
+    if ($scope.pageDetails.format == "html") {
+      $scope.refreshTotalConnectionsNonGraphData();
+      $scope.refreshTotalConnectionsGraphData();
+    } else if ($scope.pageDetails.format == "pdf") {
+      $scope.totalConnectionsData = jQuery(".cjs-angularjs-init").data("active-connection-outcomes-report");
+      $scope.setTotalConnectionsData();
+    }
+  }
+
+  // Total Connections chart related (left side data)
+  $scope.refreshTotalConnectionsNonGraphData = function() {
+    $scope.Loading.totalConnectionsLeft = true;
+    $http.get(outcomesReportRoutes.connectionOutcomesReportPath, {params: {date_range: $scope.dateRange, user_ids_cache_key: $scope.Cache.key, data_side: '<%= OutcomesReportUtils::DataType::NON_GRAPH_DATA %>'}}).success(function(data){
+      $scope.totalConnectionsData = data;
+      $scope.Loading.totalConnectionsLeft = false;
+    });
+  };
+
+  // Total Connections chart related (right side data)
+  $scope.refreshTotalConnectionsGraphData = function() {
+    $scope.Loading.totalConnectionsRight = true;
+    $http.get(outcomesReportRoutes.connectionOutcomesReportPath, {params: {date_range: $scope.dateRange, user_ids_cache_key: $scope.Cache.key, data_side: '<%= OutcomesReportUtils::DataType::GRAPH_DATA %>'}}).success(function(data){
+      // $scope.totalConnectionsData = data;
+      $scope.graphStartDate = data.startDateForGraph;
+      $scope.totalConnectionsChartConfig.series = data.graphData.map(function(obj) {
+        return {
+          'name': obj.name,
+          'pointInterval': defaultPointInterval,
+          'pointStart': $scope.graphStartDate,
+          'data': obj.data,
+          'visible': obj.visibility,
+          'color': obj.color
+        };
+      });
+      $scope.Loading.totalConnectionsRight = false;
+    });
+  };
+
+  $scope.setTotalConnectionsData = function() {
+    $scope.graphStartDate = $scope.totalConnectionsData.startDateForGraph;
+    $scope.totalConnectionsChartConfig.series = $scope.totalConnectionsData.graphData.map(function(obj) {
+      return {
+        'name': obj.name,
+        'pointInterval': defaultPointInterval,
+        'pointStart': $scope.graphStartDate,
+        'data': obj.data,
+        'visible': obj.visibility,
+        'color': obj.color
+      };
+    });
+  }
+
+  $scope.refreshClosedConnectionsData = function() {
+    $scope.Loading.closedConnections = true;
+    if ($scope.pageDetails.format == "html") {
+      $http.get(outcomesReportRoutes.connectionOutcomesReportPath, {params: {status: <%= Group::Status::CLOSED %>, date_range: $scope.dateRange, user_ids_cache_key: $scope.Cache.key}}).success(function(data){
+        $scope.closedConnectionsData = data;
+        $scope.setClosedConnectionsData();
+      });
+    } else if ($scope.pageDetails.format == "pdf") {
+      $scope.closedConnectionsData = jQuery(".cjs-angularjs-init").data("closed-connection-outcomes-report");
+      $scope.setClosedConnectionsData();
+    }
+  };
+
+  $scope.setClosedConnectionsData = function() {
+    $scope.closedConnectionsChartConfig.series = $scope.closedConnectionsData.graphData.map(function(obj) {
+      return {
+        'name': obj.name,
+        'data': obj.data,
+        'visible': obj.visibility,
+        'color': obj.color
+      };
+    });
+    $scope.Loading.closedConnections = false;
+  };
+
+  $scope.refreshPositiveConnectionsData = function() {
+    $scope.Loading.positiveConnections = true;
+    if ($scope.pageDetails.format == "html") {
+      $http.get(outcomesReportRoutes.connectionOutcomesReportPath, {params: {type: '<%= ConnectionOutcomesReport::POSITIVE_OUTCOMES %>', date_range: $scope.dateRange, user_ids_cache_key: $scope.Cache.key}}).success(function(data){
+        $scope.positiveConnectionsData = data;
+        $scope.setPositiveConnectionsData();
+      });
+    } else if ($scope.pageDetails.format == "pdf") {
+      $scope.positiveConnectionsData = jQuery(".cjs-angularjs-init").data("positive-connection-outcomes-report");
+      $scope.setPositiveConnectionsData();
+    }
+  };
+
+  $scope.setPositiveConnectionsData = function() {
+    $scope.positiveConnectionsChartConfig.series = $scope.positiveConnectionsData.graphData.map(function(obj) {
+      return {
+        'name': obj.name,
+        'data': obj.data,
+        'visible': obj.visibility,
+        'color': obj.color
+      };
+    });
+    $scope.Loading.positiveConnections = false;
+  };
+
+  $scope.refreshClosedMeetingsData = function() {
+    $scope.Loading.closedMeetings = true;
+    if ($scope.pageDetails.format == "html") {
+    $http.get(outcomesReportRoutes.meetingOutcomesReportPath, {params: {type: '<%= MeetingOutcomesReport::Type::CLOSED %>', date_range: $scope.dateRange, user_ids_cache_key: $scope.Cache.key}}).success(function(data){
+        $scope.closedMeetingsData = data;
+        $scope.setClosedMeetingsData();
+      });
+    } else if ($scope.pageDetails.format == "pdf") {
+      $scope.closedMeetingsData = jQuery(".cjs-angularjs-init").data("closed-meeting-outcomes-report");
+      $scope.setClosedMeetingsData();
+    }
+  }
+
+  $scope.setClosedMeetingsData = function() {
+    $scope.closedMeetingsChartConfig.series = $scope.closedMeetingsData.graphData.map(function(obj) {
+      return {
+        'name': obj.name,
+        'data': obj.data,
+        'visible': obj.visibility,
+        'color': obj.color
+      };
+    });
+    $scope.Loading.closedMeetings = false;
+  }
+
+  $scope.refreshPositiveMeetingsData = function() {
+    $scope.Loading.positiveMeetings = true;
+    if ($scope.pageDetails.format == "html") {
+      $http.get(outcomesReportRoutes.meetingOutcomesReportPath, {params: {type: '<%= MeetingOutcomesReport::Type::POSITIVE_OUTCOMES %>', date_range: $scope.dateRange, user_ids_cache_key: $scope.Cache.key}}).success(function(data){
+        $scope.positiveMeetingsData = data;
+        $scope.setPositiveMeetingsData();
+      });
+    } else if ($scope.pageDetails.format == "pdf") {
+      $scope.positiveMeetingsData = jQuery(".cjs-angularjs-init").data("positive-meeting-outcomes-report");
+      $scope.setPositiveMeetingsData();
+    }
+  }
+
+  $scope.setPositiveMeetingsData = function() {
+    $scope.positiveMeetingsChartConfig.series = $scope.positiveMeetingsData.graphData.map(function(obj) {
+      return {
+        'name': obj.name,
+        'data': obj.data,
+        'visible': obj.visibility,
+        'color': obj.color
+      };
+    });
+    $scope.Loading.positiveMeetings = false;
+  }
+
+  $scope.setErrorMessagesForLocationFilter = function(locationHash){
+    var locationError = locationHash["invalid_location_filter"];
+    if (locationError) {
+      ChronusValidator.ErrorManager.ShowResponseFlash("loc_error", locationHash["error_message"]);
+    } else {
+      ChronusValidator.ErrorManager.ClearResponseFlash("loc_error");
+    }
+  }
+
+  $scope.program = {
+    flashMentoringEnabled: false
+  };
+
+  $scope.pageDetails = {
+    format: "html"
+  };
+
+  $scope.initializeChartVariables = function() {
+    $scope.registeredUsersChartConfig = jQuery.extend({}, commonChartOptions);
+    $scope.totalConnectionsChartConfig = jQuery.extend({}, commonChartOptions);
+    $scope.closedConnectionsChartConfig = jQuery.extend({}, commonBarChartOptions);
+    $scope.positiveConnectionsChartConfig = jQuery.extend({}, commonBarChartOptions);
+    $scope.closedMeetingsChartConfig = jQuery.extend({}, commonBarChartOptions);
+    $scope.positiveMeetingsChartConfig = jQuery.extend({}, commonBarChartOptions);
+  }
+
+  $scope.configureChartVariablesForPdf = function() {
+    commonChartOptions.options.chart.width = 460;
+    commonChartOptions.options.chart.height = 200;
+    commonBarChartOptions.options.chart.width = 460;
+    commonBarChartOptions.options.chart.height = 200;
+    commonChartOptions.options.plotOptions.series = { animation: false, enableMouseTracking: false, shadow: false };
+    commonBarChartOptions.options.plotOptions.series = { animation: false, enableMouseTracking: false, shadow: false };
+  }
+
+  // general
+  $scope.initialize = function() {
+    $scope.program.flashMentoringEnabled = jQuery(".cjs-angular-data-init").data("flash-mentoring-enabled");
+    $scope.pdfDownloadEnabled = true;
+    $scope.initializeChartVariables();
+    if(jQuery(".cjs-angularjs-init").data("is-pdf")) {
+      $scope.pageDetails.format = "pdf";
+      $scope.configureChartVariablesForPdf();
+    }
+    $scope.prevWindow = {valid: null};
+    $scope.updateDateRange();
+    $scope.refreshAllPageData(); // this is graph data refresh
+    $scope.showDateRangeBox = false;
+    $scope.showProfileFilterBox = false;
+    $scope.showDateRangeBoxDatepickers = true;
+  }
+  $scope.initialize();
+}]);
+
+// TODO : this is customized for outcomes report, need to make it generic and move to chrNgUtils
+outcomesReportApp.directive('datepicker', [function() {
+  return {
+    link: function(scope, element, attrs) {
+      var datePickerOptions = {
+        dateFormat: datePickerTranslations.fullDateFormat,
+        minDate: attrs['startDate'],
+        maxDate: Date.today(),
+        buttonImage: '<%= asset_path('calendar.gif') %>',
+        buttonImageOnly: true,
+        changeMonth: true,
+        changeYear: true,
+        onSelect: function(dateText) {
+          var customOption = jQuery('.cjs_daterange_picker_presets option[data-custom=true]');
+          var thisElement = jQuery(this);
+          if(thisElement.hasClass('cjs-start-date')) {
+            customOption.data('start-date', thisElement.val());
+          } else if (thisElement.hasClass('cjs-end-date')) {
+            customOption.data('end-date', thisElement.val());
+          }
+          scope.$apply();
+        }
+      };
+      jQuery(element).datepicker(datePickerOptions).datepicker('setDate', attrs['initialValue']);
+    }
+  };
+}]);
+
+outcomesReportApp.directive('loadingResults', [function() {
+  return { restrict: 'EA', templateUrl: 'loadingResults.html' };
+}]);
+
+outcomesReportApp.directive('appliedFilters', [function() {
+  return { restrict: 'EA', scope: { klass: '=' }, templateUrl: 'appliedFilters.html' };
+}]);
+
+outcomesReportApp.filter('truncateWithEllipsis', function () {
+  return function (text, length, end) {
+    if (isNaN(length)) length = 30;
+    end = getDefaultVal(end, "...");
+    if (text.length <= length || text.length - end.length <= length) {
+      return text;
+    } else {
+      return String(text).substring(0, length-end.length) + end;
+    }
+  };
+});

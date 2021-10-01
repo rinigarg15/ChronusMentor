@@ -1,0 +1,15 @@
+<br />
+<strong>Sales Demo Organization Creation Status:</strong>
+<br />
+<div style="margin-top: 10px; padding: 10px; background-color: whitesmoke;">
+  <%= @creation_success ? link_to(@organization_name, root_organization_url(subdomain: @organization_subdomain, host: DEFAULT_DOMAIN_NAME)) : "#{@organization_name} (subdomain: #{@organization_subdomain}) Account" %>
+  <br />
+  <div>
+    <div style="margin-top: 10px;">
+      Status: <%= @creation_success ? content_tag(:strong, "Success", style: "color: green;") : content_tag(:strong, "Failed", style: "color: red;") %>
+    </div>
+  </div>
+</div>
+<br />
+Thanks,<br />
+Chronus Admin.

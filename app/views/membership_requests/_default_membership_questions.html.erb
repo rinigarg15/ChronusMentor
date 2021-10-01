@@ -1,0 +1,5 @@
+<% options = { membership_form: true, skip_visibility_info: true, disable: {} } %>
+<% options[:disable][@current_organization.name_question.id] = false %>
+<% options[:disable][@current_organization.email_question.id] = new_request && @email.present? %>
+<% grouped_role_questions = membership_request.program.role_questions.where(profile_question_id: @current_organization.default_question_ids).group_by(&:profile_question_id) %>
+<%= render_default_questions(membership_request, grouped_role_questions, form, options) %>

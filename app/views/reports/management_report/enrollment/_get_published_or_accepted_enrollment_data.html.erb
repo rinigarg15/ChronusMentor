@@ -1,0 +1,26 @@
+<div class="m-t-md">
+  <h4><%= data[:report_type] == DashboardReportSubSection::Type::Enrollment::PUBLISHED_PROFILES ? "feature.reports.content.published_profiles".translate : link_to("feature.reports.content.invitations".translate, program_invitations_path, class: "") %></h4>
+  <ul class="stat-list m-t-sm">
+    <li class="m-b-sm">
+      <h5 class="no-margins font-noraml">
+        <%= data[:report_type] == DashboardReportSubSection::Type::Enrollment::PUBLISHED_PROFILES ? "feature.reports.content.published_rate".translate : "feature.reports.content.acceptance_rate".translate %>
+        <div class="stat-percent">
+          <span><%= data[:percentage] %>%</span>
+        </div>
+      </h5>
+      <div class="progress progress-mini">
+        <div style="width: <%= data[:percentage] %>%;" class="progress-bar"></div>
+      </div>
+    </li>
+    <% data[:roles].each do |role| %>
+      <li>
+        <div class="no-margins">
+          <%= role.customized_term.pluralized_term %>
+          <div class="stat-percent">
+            <h5 class="no-margins"><%= data[role.name][:accepted_or_published] %> / <%= data[role.name][:total] %></h5>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+</div>

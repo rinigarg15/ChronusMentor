@@ -1,0 +1,7 @@
+<div class="common_questions">
+  <div id="sections_list">
+    <% @sections.each do |section| %>
+      <%= get_role_question_section_content(section) %>
+    <% end %>
+  </div>
+</div>

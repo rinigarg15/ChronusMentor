@@ -1,0 +1,17 @@
+<% member_meeting = meeting.member_meetings.find { |mm| mm.member_id == wob_member.id } %>
+
+<% unless group_admin_view %>
+  <% meeting_feedback_provided = member_meeting.get_feedback_answers(current_occurrence_time) %>
+  <% if meeting.archived?(current_occurrence_time) %>
+    <% if meeting.group_id.nil? %>
+      <div class="update_feedback_<%= meeting.id %>_<%= current_occurrence_time.to_i %>">
+        <% feedback_survey = @current_program.get_meeting_feedback_survey_for_user_in_meeting(current_user, meeting) %>
+        <% if meeting_feedback_provided.present? %>
+          <%= link_to(append_text_to_icon("fa fa-comment text-default", "feature.meetings.action.view_feedback".translate), participate_survey_path(feedback_survey, member_meeting_id: member_meeting.id, meeting_occurrence_time: current_occurrence_time, :src => survey_src, ei_src: get_meeting_area_src(survey_src)), :class => "edit btn-sm btn btn-white cjs_meeting_view_feedback_survey cjs_meeting_area_listing_event") %>
+        <% else %>
+          <%= link_to(append_text_to_icon("fa fa-comment", "feature.meetings.action.provide_feedback".translate), participate_survey_path(feedback_survey, member_meeting_id: member_meeting.id, meeting_occurrence_time: current_occurrence_time, :src => survey_src, ei_src: get_meeting_area_src(survey_src)), :class => "edit btn btn-sm btn-primary cjs_meeting_provide_feedback_survey cjs_meeting_area_listing_event") %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

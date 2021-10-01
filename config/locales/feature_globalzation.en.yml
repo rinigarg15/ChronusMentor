@@ -1,0 +1,22 @@
+en:
+  feature:
+    language:
+      manage_page:
+        header:
+          manage_languages: Manage Languages
+          new_language: New Language
+          edit_language: Edit Language
+          edit_language_name: 'Edit Language: %{name}'
+          Display_Title: Display Title
+          Programs_Enabled_For: "%{Programs} Enabled For"
+        action:
+          create_new: New Language
+        content:
+          no_additional_languages: No languages other than english have been added.
+          listing_page_description_html: The languages available for your %{program} are shown below. Click 'Edit' to change the availability settings for a language for the %{program}.
+          availability_status:
+            None: None
+            Only_Admins: Only %{Admins}
+            Everyone: Everyone
+      validator:
+        unique_error: "%{attribute} must be unique"

@@ -1,0 +1,12 @@
+<% modal_v3_popup "feature.favorite_preference.header.request_sent".translate do %>
+  <div class="m-b-lg col-xs-12 label-info jumbotron p-xs">
+    <%= append_text_to_icon("#{TOOLTIP_IMAGE_CLASS} big", "feature.favorite_preference.content.request_bookmarked_mentors".translate(mentors: _mentors, mentor: _mentor), {media_padding_with_icon: true, additional_icon_class: "no-padding"}) %>
+  </div>
+  <%= listing_page(favorite_users, partial: 'users/favorite_user', collection_key: :mentor, list_group_item_padding: "p-t-0", locals: { favorite_preferences_hash: favorite_preferences_hash, request_type: request_type} ) %>
+<% end %>
+
+<script type="text/javascript">
+  jQuery(document).ready(function() {
+    Meetings.QuickConnect.adjustQuickConnectMatchInfo();
+  });
+</script>

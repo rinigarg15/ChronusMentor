@@ -1,0 +1,48 @@
+<div class='pagination_box p-xs p-l-0 p-r-0 clearfix bulk_actions_bar'>
+      <%= get_add_member_bulk_actions_box %>
+</div>
+
+<div class="clearfix p-xs p-t-xxs table-bordered">
+  <%= top_bar_in_listing({ collection: users }, { show: true, applied_count: @my_filters.try(:size) }, {}, {:additional_class => "no-horizontal-padding p-t-xxs m-t-xxs p-b-0 no-borders"}) %>
+</div>
+
+<div class="cjs_table_enclosure table-responsive table-bordered clearfix">
+  <table id="cjs_user_result" class="table pane table-striped table-vertical-centered">
+    <thead>
+      <tr class="cjs_user_header cui_table_sort">
+        <th class="sr-only"><label for="cjs_user_primary_checkbox"><%= "feature.user.label.select_all".translate %></label></th>
+        <th class="cui_user_checkbox cui_tabel_checkbox_width"><input id="cjs_user_primary_checkbox" type="checkbox"/><%= set_screen_reader_only_content("feature.user.label.select_all".translate) %></th>
+        <%= get_columns(listing_options[:sort]) %>
+      </tr>
+    </thead>
+    <tbody>
+      <% if users.total_entries > users.size %>
+        <tr id="cjs_select_all_option" class="hide bg-warning cui_disable_hover">
+          <td nowrap colspan="6">
+            <div id="cjs_select_all_message">
+              <%= "feature.user.content.all_selected_on_the_page_html".translate(:size => content_tag(:b, users.size)) %>
+              <u class="pointer" id="cjs_select_all_handler" data-url="<%=select_all_ids_users_path(:search_content => listing_options[:filters][:search], :filter_role => listing_options[:filters][:role], :filter_program_id => listing_options[:filters][:program_id])%>">
+                <%= "feature.user.content.select_all_in_this_view_html".translate(:size => content_tag(:b, users.total_entries)) %>
+              </u>
+              <%= get_icon_content("fa fa-spinner fa-spin hide") %>
+            </div>
+            <div id="cjs_clear_all_message" class="hide">
+              <%= "feature.user.content.all_selected_in_the_view_html".translate(:size => content_tag(:b, users.total_entries)) %>
+              <u class="pointer"  id="cjs_clear_all_handler"><%= "feature.user.action.Clear_selection".translate %></u>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+
+      <% users.each_with_index do |user, index|%>
+        <tr id="ct_user_record_<%= user.id %>" class ="ct_user_row_<%= index + 1 %>">
+          <td nowrap class="sr-only"><label for="ct_user_checkbox_<%=user.id%>"><%= "feature.user.label.select_this".translate %></label></td>
+          <td nowrap class="cui_user_checkbox cui_tabel_checkbox_width"><input class="cjs_user_record" type="checkbox" id="ct_user_checkbox_<%=user.id%>" value="<%= user.id %>"/></td>
+          <%= populate_user_row(user) %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= bottom_bar_in_listing( { collection: users, ajax: true } ) if users.any? %>

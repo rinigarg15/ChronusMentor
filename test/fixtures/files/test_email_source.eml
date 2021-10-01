@@ -1,0 +1,83 @@
+Delivered-To: reply-dev+c9c5fa43a9721fb09e185322389b855c@chronus.com
+Received: by 10.229.251.130 with SMTP id ms2cs227403qcb;
+        Tue, 6 Apr 2010 23:04:16 -0700 (PDT)
+Received: by 10.231.170.143 with SMTP id d15mr3876224ibz.13.1270620255311;
+        Tue, 06 Apr 2010 23:04:15 -0700 (PDT)
+Return-Path: <mrudhukar@chronus.com>
+Received: from qw-out-2122.google.com (qw-out-2122.google.com [74.125.92.24])
+        by mx.google.com with ESMTP id o29si5686290ibr.46.2010.04.06.23.04.14;
+        Tue, 06 Apr 2010 23:04:15 -0700 (PDT)
+Received-SPF: neutral (google.com: 74.125.92.24 is neither permitted nor denied by best guess record for domain of mrudhukar@chronus.com) client-ip=74.125.92.24;
+Authentication-Results: mx.google.com; spf=neutral (google.com: 74.125.92.24 is neither permitted nor denied by best guess record for domain of mrudhukar@chronus.com) smtp.mail=mrudhukar@chronus.com
+Received: by qw-out-2122.google.com with SMTP id 5so141019qwi.7
+        for <reply-dev+c9c5fa43a9721fb09e185322389b855c@chronus.com>; Tue, 06 Apr 2010 23:04:14 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 10.229.219.194 with HTTP; Tue, 6 Apr 2010 23:03:54 -0700 (PDT)
+In-Reply-To: <4bbb12a6.9713f30a.1d34.ffffb70f@mx.google.com>
+References: <4bbb12a6.9713f30a.1d34.ffffb70f@mx.google.com>
+From: Mrudhukar Batchu <mrudhukar@chronus.com>
+Date: Wed, 7 Apr 2010 11:33:54 +0530
+Received: by 10.229.14.157 with SMTP id g29mr1876948qca.57.1270620254246; Tue, 
+	06 Apr 2010 23:04:14 -0700 (PDT)
+Message-ID: <z2kda9d0af81004062303iacbfa7eese7e415625fd42a27@mail.gmail.com>
+Subject: Re: New message from Jane Mayer
+To: reply-dev+c9c5fa43a9721fb09e185322389b855c@chronus.com
+Content-Type: multipart/alternative; boundary=00151757671ce61a1404839f5481
+
+--00151757671ce61a1404839f5481
+Content-Type: text/plain; charset=ISO-8859-1
+
+Hopefully this will be the final failure message I send :)
+
+
+## Ensure that your reply is above this line ##
+> Chronus Mentor <http://chronus.com/>
+> <http://ceg.localhost.com:3000/> College of Engineering<http://ceg.localhost.com:3000/>
+> Dear Chronus Admin (Admin),
+>
+> Jane Mayer has posted the following message in the mentoring area.
+>
+> *"Guys, please reply to this email. I want to test my feature.
+>
+> Thank you,"*
+>
+> Click here <http://ceg.localhost.com:3000/groups/7/scraps#scrap_41> to
+> reply to the message.
+>
+
+
+
+
+-- 
+Regards,
+Mrudhukar
+
+--00151757671ce61a1404839f5481
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+Hopefully this will be the final failure message I send :)<br><br><div clas=
+s=3D"gmail_quote"><br><blockquote class=3D"gmail_quote" style=3D"margin:0 0=
+ 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;"><span style=3D"color:=
+#888">## Ensure that your reply is above this line ## </span>
+
+    <div style=3D"clear:left"></div><div style=3D"margin-bottom:5px">Dear C=
+hronus Admin (Admin),<br><br>
+ =20
+	  Jane Mayer has posted the following message in the mentoring area.
+ =20
+  <br><br>
+  <i>&quot;Guys, please reply to this email. I want to test my feature.
+<br>
+<br>Thank you,&quot;</i>
+  <br>
+  <br>
+  <a href=3D"http://ceg.localhost.com:3000/groups/7/scraps#scrap_41" target=
+=3D"_blank">Click here</a> to reply to the message.
+
+ =20
+<br><br>
+
+</blockquote></div>
+
+--00151757671ce61a1404839f5481--

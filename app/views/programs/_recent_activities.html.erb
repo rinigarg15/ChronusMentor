@@ -1,0 +1,20 @@
+<% if @recent_activities.any? %>
+  <% @recent_activities.each do |act| %>
+    <%= format_recent_activity(act) %>
+  <% end %>
+<% end %>
+
+<% if @new_offset_id %>
+  <div id="<%= more_id %>" class="show_more p-sm text-center b-t">
+    <b><%= link_to "display_string.Show_more".translate,  more_url, :remote => true, :class => 'more_link', :id => "cjs_#{more_id}", :onclick => "jQuery('##{more_id} .loading_ra').show(); jQuery('##{more_id} .more_link').hide()" %></b>
+    <%= content_tag(:span, get_icon_content("fa fa-spinner fa-spin fa-fw"), :class => 'loading_ra', :style => 'display: none') %>
+  </div>
+<% else %>
+  <div class='text-muted p-sm text-center <%= "b-t" if @offset_id %>'>
+    <% if @offset_id %>
+      <%= "common_text.info.No_more_activity_to_show".translate %>
+    <% else %>
+      <%= "common_text.info.No_activity_yet".translate %>
+    <% end %>
+  </div>
+<% end %>

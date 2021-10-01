@@ -1,0 +1,21 @@
+<% params_to_h = params.to_unsafe_h %>
+<% partial_options = params_to_h[:partial_options].present? ? params_to_h[:partial_options].with_indifferent_access : {} %>
+<% slot_index = params_to_h[:slotIndex].to_i %>
+<% unlimited_slots = @current_program.calendar_setting.slot_time_in_minutes.zero? || @selected_group.present? %>
+<% @localized_free_slots.each do |free_slots_day, free_slots| %>
+  <% content = (render partial: "meetings/propose_slot_time_form", locals: {start_time: free_slots[:start_times_array], end_time: free_slots[:end_times_array], disable_start_end_times: false, no_slots_available: @no_slots_available[free_slots_day], shortlist_slots: @shortlist_slots}.with_indifferent_access.reverse_merge(partial_options)) %>
+  CalendarAvailabilityInfo.dataCache[<%= Meeting.get_millisecond(free_slots_day) %>] = {
+    startTimes: "<%= free_slots[:start_times_array].join(',') %>",
+    endTimes: "<%= free_slots[:end_times_array].join(',') %>",
+    slotsCount: <%= free_slots[:start_times_array].size %>,
+    slotsAvailable: <%= free_slots[:start_times_array].size > 0 %>,
+    indices: "<%= @indices[free_slots_day].join(',') %>",
+    unlimitedSlots: <%= unlimited_slots %>,
+    content: "<%= j content %>",
+    partialOptions: <%= chr_json_escape partial_options.to_json %>,
+    slotIndex: <%= slot_index %>
+  };
+<% end %>
+CalendarAvailabilityInfo.proposeSlots = <%= params_to_h[:propose_slots].to_s.to_boolean %>;
+CalendarAvailabilityInfo.triggerNoChange = <%= @trigger_no_change.to_s.to_boolean %>;
+todayBeginningOfDayInUserTimeZoneInMillisecond = <%= Meeting.get_millisecond(Date.current.in_time_zone(wob_member.get_valid_time_zone).beginning_of_day) %>;

@@ -1,0 +1,9 @@
+<% if @survey.destroyed? %>
+  <% @options = @options.merge(:params => {:action => "dashboard", :controller => "three_sixty/surveys"}) %>
+  <% if @surveys.present? %>
+    jQuery("#three_sixty_drafted_survey").html("<%= j(render :partial => 'three_sixty/surveys/dashboard/drafted_surveys', :locals => {:objects => @surveys}) %>");
+  <% else %>
+    jQuery("#three_sixty_drafted_survey").html("<%= 'feature.three_sixty.dashboard.no_drafted_surveys'.translate %>");
+  <% end %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("cjs_survey_view_flash", '<%="feature.three_sixty.survey.delete_message".translate %>', true);
+<% end %>

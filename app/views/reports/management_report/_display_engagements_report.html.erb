@@ -1,0 +1,12 @@
+<% engagements_report = current_program.get_engagements_reports_to_display %>
+<% engagement_type = program.get_engagement_type %>
+<div class="ibox-content clearfix" id="<%= DashboardReportSubSection::Tile::ENGAGEMENTS %>">
+  <% engagements_report.each do |report| %>
+    <%= render_engagements_report(current_program, report, {date_range: date_range, date_range_preset: date_range_preset, engagement_type: engagement_type}) %>
+  <% end %>
+</div>
+<%= render(partial: "reports/management_report/lower_ibox", locals: {show_date_filter: true, object_links: [{link: surveys_path, name: "feature.reports.content.view_all_survey_responses_html".translate}], date_range: date_range, date_range_preset: date_range_preset, tile: DashboardReportSubSection::Tile::ENGAGEMENTS}) %>
+
+<%= javascript_tag do %>
+  commonReportFilters.initializeTimeFilter();
+<% end %>

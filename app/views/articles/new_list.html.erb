@@ -1,0 +1,58 @@
+<% @title = edit_or_create_page_title(@article) %>
+<% no_items = @article.list_items.empty? %>
+
+<%= ibox nil, ibox_id: "new_article" do %>
+  <%= simple_form_for @article, :html => { :id => "article_form" } do |f| %>
+    <%= f.fields_for(@article.article_content) do |ac| %>
+      <%= formatted_form_error(ac, :header_message => "feature.article.content.list_error".translate, :message => nil, :associations => [:list_items]) %>
+      <%= ac.input :title, :as => :string, :label => "feature.article.header.list_title".translate, :required => true, :input_html => {:class => "form-control"} %>
+
+      <div id="article_list_items" class="m-b-sm">
+        <%= content_tag(:div, "feature.article.header.list_items".translate, :class => "false-label control-label m-b-xs") %>
+        <div id="empty_list" class="panel panel-default no-margins <%= 'hide' unless no_items %>">
+          <h4 class="text-center panel-body">
+            <%= "feature.article.content.new_list_helptext".translate %>
+          </h4>
+        </div>
+        <% @article.article_content.list_items.each do |item| %>
+          <% if item.is_a?(BookListItem) %>
+            <%= render :partial => "articles/book_list_item", :locals => {:book_list_item => item } %>
+          <% else %>
+            <%= render :partial => "articles/site_list_item", :locals => {:site_list_item => item } %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div id="add_items_links" class="text-sm-right text-xs-center m-b">
+        <i id="add_new_item" class="fa fa-spin fa-spinner hide"></i>
+        <%= link_to append_text_to_icon("fa fa-book", "feature.article.action.add_book".translate), new_list_item_articles_path(type: ArticleListItem::TypeToString::BookListItem), remote: true, onclick: "jQuery('#add_new_item').show()" %>
+        <%= circle_separator %>
+        <%= link_to append_text_to_icon("fa fa-globe", "feature.article.action.add_site".translate), new_list_item_articles_path(type: ArticleListItem::TypeToString::SiteListItem), remote: true, onclick: "jQuery('#add_new_item').show()" %>
+      </div>
+
+      <%= tag_field_with_auto_complete(ac, @tag_names, _Article) %>
+      <%= render :partial => "articles/hidden_fields_and_buttons", :locals => { :ac => ac } %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% content_for_sidebar do %>
+  <% tips = [
+    "feature.article.content.list_article_tips.relevant_tip".translate,
+    "feature.article.content.list_article_tips.avoid_controversial_tip".translate
+  ] %>
+  <% notes = [
+    "feature.article.content.list_article_tips.exact_title_tip".translate,
+    "feature.article.content.list_article_tips.preview_tip".translate(article: _article)
+  ] %>
+  <%= render_tips_in_sidepane tips, "feature.article.content.list_article_tips.header".translate(article: _article) %>
+  <%= sidepane_assets_pane notes,
+    pane_header: "feature.article.content.list_article_tips.Note".translate,
+    item_class: "no-borders",
+    asset_icon_class: "fa fa-info"
+  %>
+<% end %>
+
+<%= javascript_tag do %>
+  Article.closeNewListItemPanel();
+<% end %>

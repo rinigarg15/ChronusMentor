@@ -1,0 +1,14 @@
+jQuery('#<%= "cjs-goal-template-container-#{@goal_template.id}" %>').slideUp(MentoringModels.slideTime, function() {});
+<% unless @goal_templates.present? %>
+  jQuery('.cjs_no_goal_template_msg').slideDown();
+  jQuery('.cjs-goal-template-header .cjs-goal-template-horizontal-line').show();
+<% end %>
+<% if manage_mm_milestones_at_admin_level? %>
+  <% @task_templates.each do |milestone_template_id, task_templates_array| %>
+    <% content = render partial: "mentoring_model/task_templates/index", locals: {task_templates: task_templates_array, milestone_template_id: milestone_template_id} %>
+    jQuery("#cjs_milestone_template_<%= milestone_template_id.to_s %> .cjs_display_task_templates").replaceWith("<%= j(content) %>");
+  <% end %>  
+<% else %>
+  <% content = render partial: "mentoring_model/task_templates/index", locals: {task_templates: @task_templates} %>
+  jQuery('.cjs_display_task_templates').replaceWith("<%= j(content) %>"); 
+<% end %>

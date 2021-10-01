@@ -1,0 +1,12 @@
+<table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left; width: 100% !important;' width='100%'>
+  <tbody>
+    <tr>
+      <td style='text-align: right; font-size: 40px; color: #1798C1; line-height: 48px; padding: 0 5px 0 0;' class='rollup-count-below700'>
+        <%= link_to(("%02d" % count), url) %>
+      </td>
+      <td style='text-align: left; font-size: 0.8em; color: #384655; line-height: 16px;' class='rollup-text-below700'>
+        <%= link_to safe_join(content.split, tag(:br)), url %>
+      </td>
+    </tr>
+  </tbody>
+</table>

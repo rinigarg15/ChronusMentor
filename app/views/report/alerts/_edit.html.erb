@@ -1,0 +1,9 @@
+<% modal_v3_popup "feature.reports.content.alert_for".translate(metric_name: @metric.title), {modern_qtip: true, width: 760, container_class: "report-popup alert-popup"} do %>
+  <div id="edit_report_metric">
+  <%= render partial: "report/alerts/form", locals: {
+    section: @section,
+    metric: @metric,
+    alert: @alert,
+    target_path: report_section_metric_alert_path(@section, @metric, @alert, format: :js)
+  } %>
+<% end %>

@@ -1,0 +1,48 @@
+<% form_options = { :remote => true } %>
+<% form_id = "new_meeting_form" %>
+<%= simple_form_for @new_meeting, { :html => { :id => form_id } }.merge(form_options) do |f| %>
+  <%= response_flash "meeting_create_flash" %>
+  <%= hidden_field_tag "meeting[topic]", "", :id => "cjs_new_meeting_topic" %>
+  <%= hidden_field_tag "meeting[description]", "", :id => "cjs_new_meeting_description" %>
+  <%= hidden_field_tag "meeting[location]", @new_meeting.location, :id => "cjs_new_meeting_location" %>
+  <%= hidden_field_tag "meeting[date]", @new_meeting.date, :id => "cjs_new_meeting_date" %>
+  <%= hidden_field_tag(Meeting::AnalyticsParams::QUICK_MEETING, true) %>
+  <%= hidden_field_tag "src", src %>
+
+  <div class="row p-sm">
+    <div class="control-label false-label inline m-r-xs">
+      <%= "feature.meeting_request.label.timeslot".translate %>
+    </div>
+    <%= link_to "feature.meetings.content.change_slot".translate, "javascript:void(0)", class: "cjs_change_meeting_slot small" %>
+    <div class="new_meeting_date_time_container clearfix well well-large no-padding white-bg">
+      <div class="col-md-4 col-xs-12 m-t-sm m-b-xs">
+        <div class="m-b-xs control-label false-label"><%= "feature.meeting_request.label.date".translate %> </div>
+        <%= DateTime.localize(@new_meeting.start_time, format: :short_month_with_date_year_and_day) %>
+      </div>
+      <div class="col-md-8 col-xs-12 m-t-sm">
+        <div class="m-b-xs control-label false-label"><%= "feature.meeting_request.label.times_with_zone".translate(time_zone: wob_member.short_time_zone) %> </div>
+        <%= render partial: "meetings/meeting_date_form", :locals => {:group => group, :from_calendar => true, :direct_meeting_outside_group => false, :meeting => @new_meeting, :f => f, :form_id => form_id, :show_time_only => true} %>
+      </div>
+      <div class="col-md-12 col-xs-12 m-b-lg">
+        <div class="m-b-xs control-label false-label"><%= "feature.meeting_request.label.location".translate%> </div>
+        <%= location_specified?(@new_meeting.location) ? @new_meeting.location : "display_string.Not_specified".translate %>
+      </div>
+    </div>
+  </div>
+
+  <%= hidden_field_tag "meeting[attendee_ids][]", mentor.id, id: nil %>
+
+  <% action_set(class: "pull-left") do %>
+    <%= link_to "display_string.Back".translate, "javascript:void(0)", class: 'btn btn-white cjs_change_meeting_slot' %>
+  <% end %>
+
+  <% action_set(class: "pull-right") do %>
+    <%= f.button :submit, "feature.user.label.request_meeting_v1".translate(Meeting: _Meeting), :id => "meeting_form_submit", :onclick => "return MeetingForm.validateTitleAndDate('#{form_id}', 'cjs_new_meeting_topic', 'cjs_new_meeting_date' ,'cjs_new_meeting_description','cjs_new_meeting_location', 'attendees_list', true, 'meeting_create_flash');" %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do  %>
+  jQuery(document).ready(function() {
+    MeetingRequest.changeMeetingSlot();
+  });
+<% end %>

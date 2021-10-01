@@ -1,0 +1,25 @@
+<% modal_v3_popup "feature.messaging.title.send_message".translate do %>
+  <%= simple_form_for @message, :html => { :id => "new_message_popup" } do |f| %>
+    <%= response_flash ("send_msg_popup_flash_" + @receiver.id.to_s) %>
+    <%= f.input "receiver_ids" , :as => :hidden , :input_html => { class: "form-control", :value => "#{@receiver.id}" } %>
+
+    <%= control_group do %>
+      <div class="false-label control-label"><%= "feature.messaging.label.to".translate %></div>
+      <%= controls do %>
+        <span class="form-control-static"><%= @receiver.name %></span>
+      <% end %>
+    <% end %>
+
+    <%= f.input :subject, :input_html => {:class => "form-control"} %>
+    <%= f.input :content, :as => :text, :input_html => {:rows => 5 , :class => "form-control"} %>
+    <%= f.input :attachment, :as => :file, :label => "feature.announcements.label.add_an_attachment".translate %>
+    <%= f.input :sender_id, :as => :hidden %>
+    <%= f.hidden_field :src, value: @src %>
+
+    <% action_set class: "pull-right" do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "display_string.Send".translate, :id => 'cjs_popup_send_msg_button' %>
+    <% end %>
+  <% end %>
+  <%= javascript_tag %Q[Messages.initNewMessageValidation("#{j('feature.messaging.content.subject_and_message_required'.translate)}", "#{('send_msg_popup_flash_' + @receiver.id.to_s)}");] %>
+<% end %>

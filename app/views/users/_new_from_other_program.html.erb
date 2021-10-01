@@ -1,0 +1,30 @@
+<!-- Here params hash is used in additional_params as the will_paginate gem's paginate method requires the hash to be scoped under params.  -->
+<% additional_params = {:params => {:format => :js, :sort_param => @listing_options[:sort][:column], :sort_order => @listing_options[:sort][:order], :items_per_page => @listing_options[:items_per_page], :search_content => @listing_options[:filters][:search], :filter_role => @listing_options[:filters][:role], :filter_program_id => @listing_options[:filters][:program_id]}} %>
+
+<%= ibox nil, :content_class => "p-t-0", :ibox_id => "new_from_other_program" do %>
+  <% if members.present? %>
+    <%= render :partial => "users/user_results", :locals => {:users => members, :additional_params => additional_params, :listing_options => @listing_options, :member_program_and_roles => @member_program_and_roles} %>
+    <%= javascript_tag do %>
+      UserImport.initializeMaxLength(<%= @members.total_entries %>);
+      UserImport.inspectActions("<%= j('feature.user.content.select_at_least_one_user'.translate) %>");
+    <% end %>
+  <% elsif @listing_options[:filters][:search].present? || @listing_options[:filters][:program_id].present? || @listing_options[:filters][:role].present? %>
+    <div class="empty_listing p-t-sm text-center">
+      <%= "feature.user.content.no_users_found".translate %>
+    </div>
+  <% else %>
+    <div class="empty_listing p-t-sm text-center">
+      <%= "feature.user.content.no_users_present".translate(:program => _program) %>
+    </div>
+  <% end %>
+<% end %>
+
+<% content_for_sidebar do %>
+  <%= render :partial => "users/search_and_filter_box", :locals => {:listing_options => @listing_options} %>
+<% end %>
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+    handleDoubleScroll("#cjs_user_result", ".cjs_table_enclosure");
+  })
+</script>

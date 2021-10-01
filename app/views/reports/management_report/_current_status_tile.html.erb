@@ -1,0 +1,24 @@
+<div class="col-md-4 p-r-0 p-l-0 cjs_current_status_tiles ">
+  <div class="ibox m-0">
+    <div class="ibox-content clearfix p-b-xxs">
+      <h4 class="m-b-md">
+        <%= title %>
+        <% if local_assigns[:title_tooltip].present? %>
+          <span id='<%= title_tooltip_id %>'><%= get_icon_content("fa fa-info-circle") %></span>
+          <%= tooltip(title_tooltip_id, local_assigns[:title_tooltip]) %>
+        <% end %>
+      </h4>
+      <h1 class="m-b-md">
+        <i class="fa <%= icon_class %> fa-fw m-r-sm text-navy"></i><%= total %>
+      </h1>
+      <div class="row">
+        <% sub_sections.each do |sub_section| %>
+          <div class=<%="col-xs-#{GRID_SIZE/sub_sections.size}"%>>
+            <div><%= sub_section[:title] %></div>
+            <h4 class="pull-left"><%= sub_section[:value] %></h4>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

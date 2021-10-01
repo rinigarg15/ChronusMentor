@@ -1,0 +1,128 @@
+<%
+  student = meeting_request.student.member
+  mentor  = meeting_request.mentor.member
+  status = AbstractRequest::Status::ACCEPTED
+  secret_key = meeting_request.mentor.member.calendar_api_key
+  start_time = Meeting.get_valid_start_times(allowed_individual_slot_duration)
+  end_time = Meeting.get_valid_end_times(allowed_individual_slot_duration)
+  all_time = get_all_time_for_end_time((start_time + end_time))
+  unlimited_slot = @current_program.calendar_setting.slot_time_in_minutes.zero?
+  is_dual_request_mode = local_assigns[:is_dual_request_mode].present?
+  mentor_request_id = local_assigns[:mentor_request_id]
+  source = local_assigns[:source]
+  default_message = "feature.meetings.content.default_message_dual_request_mode".translate(a_mentoring_connection: _a_mentoring_connection)
+  default_slot_message = !is_dual_request_mode ? "" : %Q[#{default_message} #{"feature.meetings.content.default_slot_message_dual_request_mode".translate(a_meeting: _a_meeting)}]
+  default_acceptance_message = !is_dual_request_mode ? "" : %Q[#{default_message} #{"feature.meetings.content.default_acceptance_message_dual_request_mode".translate(a_meeting: _a_meeting)}]
+  form_data = { program: meeting_request.program_id, secret: secret_key, status: status, src: source }
+%>
+
+<% modal_v3_popup "feature.meetings.content.accept_meeting".translate(:Meeting => _Meeting), {additional_close_button_class: "cjs_dismiss_propose_slot_popup" } do %>
+  <div class="cjs_propose_meeting_form">
+    <div class="panel panel-default col-xs-12 p-xs btn-warning text-center">
+      <% if is_dual_request_mode %>
+        <%= "feature.meetings.content.propose_meeting_time_header_text_dual_request_mode_1".translate(meeting: _meeting, meeting_duration: get_x_minute_meeting_text(current_program)) %>
+        <%= "feature.meetings.content.propose_meeting_time_header_text_dual_request_mode_2".translate(meeting: _meeting) %>
+        <%= "feature.meetings.content.propose_meeting_time_header_text_dual_request_mode_3".translate(mentee_name: student.name) %>
+      <% else %>
+        <%= "feature.meetings.content.propose_meeting_time_header_text_v2".translate(:meeting => _meeting) %>
+      <% end %>
+    </div>
+    <div class="col-xs-12 panel panel-default no-padding m-t cjs_meeting_slot_form cjs_meeting_slot_content">
+      <div class="col-xs-12 p-t-xs p-b-xxs clearfix gray-bg b-b propose_slot_pane_header">
+        <div class="media-left"><b><i class="fa fa-clock-o"></i></b></div>
+        <div class="media-body">
+          <div class="m-b-xxs font-bold">
+            <%= "feature.meetings.content.propose_meeting_time_text".translate(:Meeting => _Meeting) %>
+            <span class="small text-muted"><%= 'feature.meeting_request.content.meeting_timezone'.translate(:time_zone => wob_member.short_time_zone) %>
+            </span>
+          </div>
+          <div class="text-muted font-noraml small"><%= get_mentee_availability_text_proposed_slot_popup(student)%></div>
+        </div>
+      </div>
+
+      <% partial_options = {unlimited_slot: unlimited_slot, start_time_attributes: {name: "meeting[propose_start_time_of_day]", class: "cjs_slot_start_time"}, end_time_attributes: {name: "meeting[propose_end_time_of_day]", class: "cjs_slot_end_time"}, meeting_date_container_class: "meeting_date_container "} %>
+      <div class="p-sm col-xs-12 propose_slot_pane_body cjs-propose-slot-pane-body">
+        <div class="clearfix form-group form-group-sm col-xs-12 no-horizontal-padding <%= 'hide' if @current_program.enhanced_meeting_scheduler_enabled? %>">
+          <div class="m-b-xs control-label false-label"><%= set_required_field_label("feature.meeting_request.label.pick_a_date".translate) %> </div>
+          <%= construct_input_group([ { type: "addon", icon_class: "fa fa-calendar" } ], [], :input_group_class => "input-group-sm") do %>
+            <%= label_tag("meeting_date", "feature.meeting_request.label.select_a_date".translate, for: "meeting_date", class: "sr-only cjs_meeting_slot_date_label") %>
+            <%= text_field_tag("meeting[date]", "", :class => "cjs_meeting_slot_date cjs_no_clear_selection form-control cjs_calendar_sync_v2_date", data: {date_picker: true, min_date: Date.current.strftime("%b %d, %Y"), url: valid_free_slots_meetings_path(slot_time_in_minutes: @current_program.get_calendar_slot_time, mentor_id: mentor.id, student_id: student.id, partial_options: partial_options)}, :placeholder => "feature.meetings.form.date".translate) %>
+          <% end %>
+        </div>
+        <%= render partial: "meetings/propose_slot_date_form", locals: {target_url: valid_free_slots_for_range_meetings_path(mentor_id: mentor.id, student_id: student.id, partial_options: partial_options, slot_time_in_minutes: @current_program.get_calendar_slot_time), target_input_class: "cjs_calendar_sync_v2_date", input_field_container_class: "cjs-propose-slot-pane-body"} if @current_program.enhanced_meeting_scheduler_enabled? %>
+
+        <div class="clearfix form-group form-group-sm col-xs-12 no-horizontal-padding">
+          <div class="m-b-xs control-label false-label"><%= "feature.meeting_request.label.#{get_choose_time_label_key}".translate(time_zone: wob_member.short_time_zone) %> </div>
+          <div class="meeting_slot_time_form">
+            <%= render partial: "meetings/propose_slot_time_form", locals: {disable_start_end_times: false}.merge(partial_options) %>
+          </div>
+        </div>
+
+        <div class="clearfix form-group form-group-sm col-xs-12 no-horizontal-padding text optional">
+          <div class="m-b-xs control-label false-label"><%= "feature.mentoring_slot.label.Where".translate %> </div>
+          <%= construct_input_group([ { type: "addon", icon_class: "fa fa-map-marker" } ], [], :input_group_class => "input-group-sm") do %>
+            <%= label_tag("meeting_location", "feature.meeting_request.label.location".translate, for: "meeting_location", class: "sr-only cjs_meeting_slot_location_label") %>
+            <%= text_field_tag "meeting[location]", "", {class: "form-control cjs_meeting_slot_location", placeholder: "feature.meetings.content.propose_location_placeholder".translate} %>
+          <% end %>
+        </div>
+
+        <div class="clearfix form-group form-group-sm col-xs-12 no-horizontal-padding text optional">
+          <div class="m-b-xs control-label false-label"><%= "feature.mentoring_slot.label.Message".translate %> </div>
+          <%= label_tag("meeting_slot_message", "feature.meeting_request.label.send_message_with_proposed_slot".translate, :class => "sr-only", :for => "meeting_slot_message") %>
+          <%= text_area_tag "meeting[slot_message]", default_slot_message, {class: "form-control cjs_slot_message_content input-sm", rows:3, placeholder: "feature.meetings.content.proposed_slot_message_placeholder".translate(:mentee_name => student.name(name_only: true))} %>
+        </div>
+
+        <div class="pull-right">
+          <% data_url = is_dual_request_mode ? meeting_requests_path(form_data) : update_status_meeting_request_path(meeting_request, form_data.merge(additional_info:  EngagementIndex::Src::AcceptMeetingRequest::ACCEPT_AND_PROPOSE_SLOT)) %>
+          <%= link_to "feature.meetings.content.accept_and_propose".translate, "javascript:void(0)", class: 'btn btn-primary btn-sm m-r-xs cjs_propose_meeting', data: { url: data_url } %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12 m-t panel panel-default no-padding cjs_meeting_send_message_form cjs_meeting_message_content hide">
+      <div class="col-xs-12 p-t-xs p-b-xxs clearfix gray-bg b-b send_message_pane_header">
+        <div class="media-left"><b><i class="fa fa-envelope"></i></b></div>
+        <div class="media-body">
+          <div class="m-b-xxs font-bold">
+            <%= "feature.meetings.content.send_message".translate(:mentee_name => student.name) %>
+          </div>
+          <div class="text-muted font-noraml small"><%= "feature.meetings.content.send_message_help_text".translate(:mentee_name => student.name, :meeting => _meeting) %></div>
+        </div>
+      </div>
+      <div class="col-xs-12 p-sm send_message_pane_body">
+        <div>
+          <%= label_tag("meeting_acceptance_message", "feature.meetings.content.accept_and_send".translate, :class => "sr-only", :for => "meeting_acceptance_message") %>
+          <%= text_area_tag "meeting[acceptance_message]", default_acceptance_message, {class: "form-control cjs_acceptance_message_content input-sm", rows:3, placeholder: "feature.meetings.content.send_message_placeholder".translate(:meeting => _meeting)} %>
+        </div>
+        <div class="pull-right m-t">
+          <% data_url = is_dual_request_mode ? meeting_requests_path(form_data) : update_status_meeting_request_path(meeting_request, form_data.merge(additional_info:  EngagementIndex::Src::AcceptMeetingRequest::ACCEPT_AND_SEND_MESSAGE)) %>
+          <%= link_to "feature.meetings.content.accept_and_send".translate, "javascript:void(0)", class: 'btn btn-primary btn-sm m-r-xs cjs_propose_send_message',  data: { url: data_url } %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12 clearfix no-padding text-center">
+      <b><i class="fa fa-info-circle"></i></b>
+      <% send_message_url = link_to("feature.meeting_request.content.send_message".translate, "javascript:void(0)", class: "cjs_toggle_slot_popup_content") %>
+      <%= content_tag(:span, "feature.meeting_request.content.show_accept_send_message_section_link_text_html".translate(send_message_url: send_message_url), :class => "cjs_meeting_slot_content m-l-xs") %>
+
+      <% propose_slot_url = link_to("display_string.Click_here".translate, "javascript:void(0)", class: "cjs_toggle_slot_popup_content") %>
+      <%= content_tag(:span, "feature.meeting_request.content.show_accept_propose_slot_section_link_text_html".translate(propose_slot_url: propose_slot_url, meeting: _meeting), :class => "cjs_meeting_message_content m-l-xs hide") %>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    initialize.setDatePicker();
+    MeetingRequest.AcceptAndProposeSlot("<%= "display_string.Please_Wait".translate %>", "<%= "feature.meetings.content.accept_and_propose".translate %>", "<%= source %>", "<%= mentor_request_id %>");
+    MeetingRequest.AcceptAndSendMessage("<%= "display_string.Please_Wait".translate %>", "<%= "feature.meetings.content.accept_and_send".translate %>", "<%= source %>", "<%= mentor_request_id %>");
+    MeetingRequest.handleShowHideSlotAndMessageContent();
+    <% if @current_program.calendar_sync_v2_enabled? %>
+      MeetingRequest.getValidTimeSlots();
+    <% else %>
+      MeetingRequest.handleStartTimeChangeProposeSlotPopup("<%= j(all_time.join(',')) %>", "<%= (allowed_individual_slot_duration/Meeting::SLOT_TIME_IN_MINUTES) %>", <%= unlimited_slot %>);
+    <% end %>
+    MeetingRequest.trackDismissProposeSlotPopup("<%= source %>")
+  });
+<% end %>

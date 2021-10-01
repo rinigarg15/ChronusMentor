@@ -1,0 +1,77 @@
+en:
+  feature:
+    program_invitations:
+      header:
+        invite_friends: Invite Friends
+        invitations: Invitations
+        invite_members: Invite Members
+      action:
+        resend: Resend
+        include_expired_invitations_html: Include expired invitations %{tooltip}
+      content:
+        default_message_tip: Default email, only editable!
+        resend_pop_up_description_v2_html: Resending the invitation to the user sends out the invitation emails with a newly-generated, valid invitation link. An invitation will be sent out to %{sent_to}
+        recipients_tooltip: Separate multiple email addresses with a comma.
+        recipients_tooltip_email_domain: Recipients email domain should be of %{email_domains}
+        invite_url_help_text: The invite URL will be appended to the message.
+        general_message: Hi, I would like to invite you to join the %{program_name}. Please come and register at the site by clicking on the link in this message.
+        invitation_expiry_notification: Invitations sent to users expire in 30 days.
+        invitation_language_notification_html: Invitation emails will be sent in %{language_name}. To send in another language, %{click_here}.
+        no_invitations: There are no invitations to display.
+        allow_users_to_select_roles: Allow users to select role(s)
+        assign_roles_to_users: Assign role(s) to users
+        include_expired_invitations_tooltip:
+          one: An invitation is expired one day after it has been sent out. Please note user will not be able to sign-up using an expired invitation.
+          other: An invitation is expired %{count} days after it has been sent out. Please note user will not be able to sign-up using an expired invitation.
+        allow_user_to_choose: Allow user to choose (%{role})
+        no_invitations_to_show: There are no invitations to show right now.
+        resent_successfully: Selected invitation(s) will be resent.
+      label:
+        invited_x_days_ago:
+          zero: Today
+          one: 1 day ago
+          other: "%{count} days ago"
+        language: Language
+        recipients_v1: Recipient emails
+        roles: Roles *
+        message: Message
+        send_invites: Send Invites
+        awaiting_acceptance: Track Invitation Status
+        view_other_invitations: View Other Invitations
+        recipient: Recipient
+        select_role: Select role(s) *
+        add_email: Add email
+        sent: Sent
+        valid_until: Valid until
+        status: Status
+        sender: Sender
+        deleted_user: Deleted User
+        expired_invitations: Expired Invitations
+        sent_between: Sent Between
+        include_expired_invitations: Include expired invitations
+        select_people_to_invite: Select people to invite
+        provide_user_details_to_invite: Provide user details to invite
+        invitations_sent: Invitations Sent
+        no_roles_to_invite: Invitation is turned off for all the roles in the %{program}.
+      address_book:
+        header:
+          enter_email: Enter Email Addresses
+      kendo:
+        filters:
+          checkboxes:
+            roles:
+              allow_roles: Not Specified
+            statuses:
+              expired: Expired
+              pending: Pending
+              sent: Sent
+              accepted: Accepted
+              opened: Opened
+              clicked: Opened and Clicked
+              delivered: Sent and Delivered
+              not_delivered: Not Delivered
+          button_text:
+            filter: Filter
+            clear: Clear
+        pageable_message: "{0} - {1} of {2} items"
+        select_atleast_one: Please select at least one invitation

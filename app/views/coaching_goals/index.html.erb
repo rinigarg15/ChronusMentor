@@ -1,0 +1,32 @@
+<% @sub_title = "feature.coaching_goal.header.Goals".translate %>
+
+<%= render :layout => 'groups/show_layout' do %>
+  <div id='coaching_goals'>
+    <% if @page_controls_allowed %>
+      <div class="accordion_pane">
+        <% collapsible_content content_tag(:div, embed_icon('icon-plus',"feature.coaching_goal.action.Add_New_Goal".translate), :class => 'add_text'), [], true, :stacked_class => "unstacked" do %>
+          <%= render :partial => 'coaching_goals/goal_form', :locals => {:is_ajax => true} %>
+        <% end %>
+      </div>
+    <% end %>
+    <% if @group_coaching_goals.present? %>
+      <div id="cui_goals_list">
+        <%= render :partial => "coaching_goal_with_pagination" %>
+      </div>
+    <% elsif @page_controls_allowed %>
+      <div id="cui_goals_list">
+        <%= content_tag(:div, "feature.coaching_goal.content.no_goals_yet_html".translate(Click_here: link_to("display_string.Click_here".translate, "", :class => "strong cjs_goal_cancel")), :class => "well well-large dim text-center") %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+<%= bind_event_to_update_link %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    CoachingGoals.newGoalFormBlind();
+    <% if params[:expand_add_form] %>
+      ConnectionFeatures.showAddFormOnLoad('#add_new_goal_header', '#add_new_goal_content');
+    <% end %>
+  });
+<% end %>
+

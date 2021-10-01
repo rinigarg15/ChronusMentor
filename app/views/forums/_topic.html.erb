@@ -1,0 +1,50 @@
+<% is_group_forum = topic.forum.is_group_forum? %>
+<% last_post_time = topic.replied_at(current_user) %>
+<% show_title = is_group_forum && !@can_show_tabs %>
+<% from_global_search = local_assigns[:from_global_search] %>
+
+<%= get_topic_actions(topic, btn_class: "pull-right btn-group-sm", dropdown_title: "", is_not_primary: true, btn_group_btn_class: "btn-white") %>
+<div class="media-left">
+  <% size = home_page ? :small : :medium %>
+  <%= user_picture topic.user, { no_name: true, size: size }, { class: "img-circle" } %>
+</div>
+<div class="media-body">
+  <h4>
+    <% topic_title = from_global_search ? link_to(topic.title, forum_path(id: topic.forum.id, topic_ids: [topic.id], search_view: true), target: "blank") : topic.title  %>
+    <%= content_tag(:div, topic_title, class: "link-color") %>
+    <% if @current_organization.sticky_topics_enabled? && topic.sticky? %>
+      <span class="label label-default">
+        <%= "feature.forum.content.Featured".translate %>
+      </span>
+    <% end %>
+    <% if last_post_time.present? %>
+      <div class="m-t-xs small text-muted">
+        <%= append_text_to_icon("fa fa-clock-o no-margins", "feature.forum.content.last_post_html".translate(time: formatted_time_in_words(last_post_time.getlocal, no_time: true))) %>
+      </div>
+    <% end %>
+  </h4>
+</div>
+<div class="m-t-sm">
+  <% default_state = local_assigns[:see_more] ? :expanded : :collapsed %>
+  <%= chronus_sanitize_while_render(render_more_less(topic.body.html_safe, Topic::DESCRIPTION_TRUNCATE_LENGTH, {default_state: default_state}), sanitization_version: @current_organization.security_setting.sanitization_version, sanitization_options: { tags: %w[tbody table tr td th a span ul li ol p b i u strike blockquote sub sup em strong] } ) %>
+</div>
+
+<div class="btn-group btn-group-sm m-t-md">
+  <% stat_class = "btn btn-sm btn-white noshadow" %>
+  <%# Posts %>
+  <% posts_count = topic.get_posts_count(current_user) %>
+  <% posts_content = content_tag(:span, posts_count, class: "m-r-xs") %>
+  <% posts_content += content_tag(:span, (posts_count == 1) ? "feature.forum.label.Post".translate : "feature.forum.label.Posts".translate, class: "hidden-xs") %>
+  <% posts_content += content_tag(:span, topics_badge_count_hash[topic.id], class: "rounded label label-danger m-l-xs") if topics_badge_count_hash && topics_badge_count_hash[topic.id].present? %>
+  <%= content_tag(:span, append_text_to_icon("fa fa-comment", posts_content), class: "#{stat_class} no-waves cursor-default") %>
+
+  <%# Views %>
+  <% views_content = content_tag(:span, topic.hits, class: "m-r-xs") %>
+  <% views_content += content_tag(:span, "feature.article.content.views_stat".translate(count: topic.hits), class: "hidden-xs") %>
+  <%= content_tag(:span, append_text_to_icon("fa fa-eye", views_content), class: "#{stat_class} no-waves cursor-default") %>
+
+  <%# Following %>
+  <% if topic.can_be_accessed_by?(current_user) %>
+    <%= follow_topic_link(topic, true, true) %>
+  <% end %>
+</div>

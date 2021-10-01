@@ -1,0 +1,21 @@
+<%= javascript_include_tag "highcharts.js" %>
+<%= include_kendo %>
+<%= include_ckeditor_tag %>
+
+<% @back_link = { label: "feature.reports.content.dashboard".translate, link: management_report_path } if @src_path == ReportConst::ManagementReport::SourcePage %>
+<% @title = set_view_title(@metric, "feature.program_invitations.header.invitations".translate) %>
+<%= response_flash("cjs_program_invitations_error_message", class: "alert-success") %>
+
+<%= invitations_page_tabs_html %>
+<% if @sent_by_admin %>
+  <div class="campaign_message_container m-t-md">
+    <%= render partial: 'program_invitations/program_invitation_report_tiles', locals: { program_invitations_hash: @program_invitations_hash } %>
+    <%= render "campaign_management/user_campaigns/analytics",invitation: true,  sent: @analytic_stats[:sent], delivered: @analytic_stats[:delivered], clicked: @analytic_stats[:clicked], opened: @analytic_stats[:opened], month_names: "date.abbr_month_names_array".translate.values_at(*@analytic_stats[:month_numbers].map { |x| x - 1 }) %>
+  </div>
+<% end %>
+
+<div id="results_pane">
+  <%= render partial: "program_invitations/index", locals: { program_invitations: @program_invitations, include_expired_invitations: @filter_hash[:include_expired_invitations].present?, apply_pending_filter: @metric.present?, total_count: @total_count } %>
+</div>
+
+<%= javascript_tag %Q[ShowAndHideToggle();] %>

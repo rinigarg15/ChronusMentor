@@ -1,0 +1,18 @@
+<% response_id, response_hash = response %>
+
+<% data = {
+  "id" => response_id,
+  "name" => link_to_user(response_hash[:user]),
+  "date" => response_hash[:date],
+  "roles" => format_user_roles(response_hash[:user], response_hash[:group], response_hash[:connection_role_id]),
+  "actions" => survey_responses_actions(survey, response_id),
+  "check_box" => survey_response_checkbox(response_id),
+  "surveySpecific" => survey_responses_additional_survey_information(survey, response_hash)
+} %>
+<% response_hash[:answers].each do |q_id, answer| %>
+  <% data["answers#{q_id}"] = chronus_auto_link(answer.to_s.strip) %>
+<% end %>
+<% response_hash[:profile_answers].each do |pq_id, answer| %>
+  <% data["column#{pq_id}"] = chronus_auto_link(answer.to_s.strip) %>
+<% end %>
+<%= data.to_json.html_safe %>

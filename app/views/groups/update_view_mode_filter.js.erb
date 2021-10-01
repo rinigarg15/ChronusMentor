@@ -1,0 +1,18 @@
+<% content = get_task_filter_title %>
+<% if view_by_due_date? %>
+  <% if manage_mm_milestones_at_admin_level?(@group) || manage_mm_milestones_at_end_user_level? %>
+    jQuery(".cjs-connection-plan-container").html(
+      '<%= j(render(partial: "mentoring_model/tasks/task_sections", locals: {group: @group, target_user_id: @target_user.try(:id) , target_user_type: @target_user_type, zero_upcoming_tasks: @zero_upcoming_tasks })) %>' );
+  <% elsif manage_mm_tasks_at_admin_level?(@group) || manage_mm_tasks_at_end_user_level?(@group) %>
+    jQuery(".cjs-connection-plan-container").html('<%= j(render(partial: "mentoring_model/tasks/task", collection: @mentoring_model_tasks, locals: {group: @group})) %>');
+  <% end %>
+<% else # default mode %>
+  <% if manage_mm_milestones_at_admin_level?(@group) || manage_mm_milestones_at_end_user_level? %>
+    jQuery(".cjs-connection-plan-container").html('<%= j(render(partial: "mentoring_model/milestones/milestone_bar", locals: {milestones: @mentoring_model_milestones, completed_mentoring_model_milestone_ids_to_hide: @completed_mentoring_model_milestone_ids_to_hide, mentoring_model_milestone_ids_to_expand: @mentoring_model_milestone_ids_to_expand, completed_mentoring_model_milestone_ids: @completed_mentoring_model_milestone_ids, target_user_id: @target_user.try(:id), target_user_type: @target_user_type})) %>')
+  <% elsif manage_mm_tasks_at_admin_level?(@group) || manage_mm_tasks_at_end_user_level?(@group) %>
+    jQuery(".cjs-connection-plan-container").html('<%= j(render(partial: "mentoring_model/tasks/task", collection: @mentoring_model_tasks, locals: {group: @group})) %>');
+    <% content = get_task_filter_title(:no_type_filter => true) %>
+  <% end %>
+<% end %>
+jQuery(".cjs-task-filter-text").replaceWith('<%= j(content) %>');
+MentoringModels.refreshTasksAndMeetingsView();

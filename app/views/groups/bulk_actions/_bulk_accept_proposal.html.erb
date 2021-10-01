@@ -1,0 +1,70 @@
+<% url = get_url_for_group_actions_form(@source, :update_bulk_actions) %>
+<% modal_v3_popup "feature.connection.action.accept_and_mark_available".translate do %>
+  <%= form_tag url, remote: (@source != "profile"), id: "bulk_groups_accept_proposal", class: "cjs-groups-bulk-action-qtip-popup" do %>
+    <% if @group_ids.size > 1 %>
+      <p><%= "feature.connection.content.help_text.accept_proposal_html".translate(count: @group_ids.size, mentoring_connections: _mentoring_connections, role_string: RoleConstants.human_role_string(@current_program.mentoring_roles_with_permission(RolePermission::PROPOSE_GROUPS).pluck(:name), program: @current_program, pluralize: true, no_capitalize: true)) %></p>
+    <% end %>
+
+    <% if @show_start_date_field %>
+      <div class="panel panel-default col-xs-12 p-xs btn-warning">
+        <%= content_tag(:div, get_icon_content("fa fa-info-circle"), class: "col-xs-1") %>
+        <%= content_tag(:div, "feature.connection.content.start_date_past_warning".translate(mentoring_connection: _mentoring_connection), class: "col-xs-11 no-padding") %>
+      </div>
+      <%= content_tag(:div, "feature.connection.content.new_start_date_label".translate, class: "control-label false-label m-b-xs") %>
+      <%= content_tag(:label, "feature.meetings.form.date".translate, class: "sr-only", for: "circle_start_date_form") %>
+      <%= construct_input_group([ { type: "addon", icon_class: "fa fa-calendar" } ], [], {:input_group_class => "m-b-md"}) do %>
+        <%= text_field_tag("start_date", "", :class => "form-control", :id => "circle_start_date_form", data: date_picker_options({ min_date: Date.current })) %>
+      <% end %>
+      <%= hidden_field_tag "with_new_start_date", true %>
+    <% end %>
+
+    <%= hidden_field_tag "bulk_actions[action_type]", Group::BulkAction::ACCEPT_PROPOSAL %>
+    <%= hidden_field_tag "bulk_actions[group_ids]", @group_ids %>
+    <%= hidden_field_tag "bulk_actions[tab_number]", @tab_number %>
+    <%= control_group do %>
+      <label class="control-label" for="assign_mentoring_model">
+        <%= "feature.multiple_templates.header.connection_multiple_templates_title_v1".translate(Mentoring_Connection: _Mentoring_Connection) %>
+      </label>
+      <%= controls do %>
+        <%= select_tag(:mentoring_model, options_for_select([["common_text.prompt_text.Select".translate, ""]] + @mentoring_models.collect{|mentoring_model| [mentoring_model_pane_title(mentoring_model), mentoring_model.id] }, @individual_action ? @groups.first.mentoring_model_id : ""), id: "assign_mentoring_model", class: "form-control required-field") %>
+      <% end %>
+    <% end %>
+    <%= control_group do %>
+      <label class="control-label" for="bulk_actions_message">
+        <%= "feature.connection.content.message".translate %>
+      </label>
+      <%= controls do %>
+        <%= text_area_tag("bulk_actions[message]", nil, id: "bulk_actions_message", class: "form-control", :placeholder => 'feature.connection.content.placeholder.accept_and_mark_available_message'.translate(name: @groups.first.created_by.first_name, count: @group_ids.size), rows: "5") %>
+      <% end %>
+    <% end %>
+    <% if can_show_assign_owner_link?(@groups) %>
+      <% user_text = get_user_text(@groups) %>
+      <%= control_group do %>
+        <%= controls do %>
+          <label class="checkbox">
+            <%= check_box_tag 'make_proposer_owner', true, true %>
+            <%= 'feature.connection.content.label.assign_owner_v1_html'.translate(mentoring_connection: _mentoring_connection, user: user_text) %>
+          </label>
+          <span class="help-block">
+            <%= "feature.connection.content.help_text.accept_and_mark_available_assign_owner".translate(mentoring_connection: _mentoring_connection) %>
+          </span>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= email_notification_consequences_on_action_html(ProposedProjectAccepted, div_enclose: true, div_class: "help-block", with_count: true, count: @group_ids.size) %>
+
+    <% action_set(:class => "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate,"javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= submit_tag "feature.connection.action.accept_and_mark_available".translate, :class => 'btn btn-primary', data: {:disable_with => "display_string.Please_Wait".translate}, :onclick => "return Groups.validateCircleStartDate(#{@show_start_date_field});" %>
+    <% end %>
+  <% end %>
+
+  <%= javascript_tag do %>
+    GroupSearch.validateBulkActionsPopup();
+    initialize.initializeTooltip();
+    jQuery(document).ready(function() {
+      initialize.setDatePicker();
+    });
+  <% end %>
+<% end %>

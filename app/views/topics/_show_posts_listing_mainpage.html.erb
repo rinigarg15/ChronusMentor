@@ -1,0 +1,13 @@
+<div class="cjs_topic_main_page" class="m-t-xl">
+  <div class="h5 m-b">
+    <%= append_text_to_icon("fa fa-comment", "feature.forum.content.Replies".translate) %>
+  </div>
+  <%= render partial: "topics/posts_listing", locals: { topic: topic, posts: posts, show_in_sidepane: false } %>
+  <div class="cjs_new">
+    <%= ibox nil, ibox_class: "no-margins", content_class: "clearfix no-padding" do %>
+      <div class="pull-right p-r-sm p-t-sm <%= 'p-b-sm' %> <%= hidden_on_mobile %>">
+        <%= new_post_action(topic, false, class: "btn btn-primary") %>
+      </div>
+    <% end %>
+  </div>
+</div>

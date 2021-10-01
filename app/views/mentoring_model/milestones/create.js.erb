@@ -1,0 +1,5 @@
+<% content = render(partial: "mentoring_model/milestones/milestone", locals: {milestone: @milestone, target_user_id: @target_user.try(:id), :target_user_type => @target_user_type}) %>
+jQuery(".cjs-connection-plan-container").append("<%= j content %>");
+jQueryScrollTo(jQuery("#cjs_milestone_container_<%= @milestone.id %>"), false);
+closeQtip();
+MentoringModelMilestones.reorderOptionalTasks();

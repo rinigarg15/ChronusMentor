@@ -1,0 +1,15 @@
+<% user_id = group_params[:user_id] %>
+<% role_id = group_params[:role_id] %>
+<% option = group_params[:group][:remove_member_option] %>
+
+var countElement = jQuery(".list_<%= group_params[:role_name] %>").find(".cjs_count");
+var currentCount = parseInt(countElement.text());
+
+jQuery(".cjs_display_member_handler_<%= user_id %>_<%= role_id %>").addClass("hide");
+jQuery(".cjs_remove_<%= user_id %>_<%= role_id %>").addClass("hide");
+countElement.text(currentCount - 1);
+jQuery('#connection_users_<%= user_id %>_<%= role_id %>__id_').val("<%= user_id %>");
+jQuery('#connection_users_<%= user_id %>_<%= role_id %>__action_type_').val("<%= Group::MemberUpdateAction::REMOVE %>");
+jQuery('#connection_users_<%= user_id %>_<%= role_id %>__option_').val("<%= option %>");
+jQuery(".cjs_member_update_info").removeClass("hide");
+jQuery(".cjs_existing_groups_alert").html("<%= j existing_groups_alert([@group.id], [@student_ids_mentor_ids], Group::Status::DRAFTED, :user) %>");

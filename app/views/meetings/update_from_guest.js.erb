@@ -1,0 +1,42 @@
+ChronusValidator.ErrorManager.ShowPageFlash(true, '<%= @notice %>');
+<% is_rsvp_yes = params[:attending].to_i == MemberMeeting::ATTENDING::YES %>
+<% updating_rsvp = params[:updating_rsvp].present? %>
+<% meeting_id = get_meeting_html_id({meeting: @meeting, current_occurrence_time: @current_occurrence_time}) %>
+
+MobileFooter.updateUpcomingMeetingsBadge('<%= get_meeting_html_id({meeting: @meeting, current_occurrence_time: @current_occurrence_time}) %>');
+Meetings.gaTrackRsvpResponse(<%= updating_rsvp %>, <%= is_rsvp_yes %>, "<%= MemberMeeting::RSVP_SOURCE::GA_NAME[@rsvp_src] %>", <%= @rsvp_src %>);
+
+<% if @rsvp_src == MemberMeeting::RSVP_SOURCE::MEETING_AREA %>
+  <% content = render(:partial => "meetings/fetch_response_buttons", locals: { meeting: @meeting, current_occurrence_time: @current_occurrence_time, show_actions: true, group: @group, is_admin_view: @is_admin_view, src: @rsvp_src, outside_group: @outside_group, from_connection_home_page_widget: false} ) %>
+  <% attendees = j(meeting_attendees_for_display(@meeting, @current_occurrence_time, meeting_area: true, attendees_label_class: "col-md-2 p-l-0")) %>
+  <% location_content = j(render_meeting_location_details(@meeting, wob_member, {meeting_area: true, current_occurrence_time: @current_occurrence_time})) %>
+  jQuery('<%= ".cjs_meeting_#{meeting_id}_location_detail" %>').html('<%= location_content %>');
+  jQuery('<%="#cjs_attendees_list_#{@meeting.id}" %>').html('<%= attendees %>');
+  jQuery('<%="#cjs_response_buttons_#{@meeting.id}" %>').html('<%= j content %>');
+<% else %>
+  <% content = render(:partial => "meetings/fetch_response_buttons", locals: { meeting: @meeting, current_occurrence_time: @current_occurrence_time, show_actions: true, group: @group, is_admin_view: @is_admin_view, src: @rsvp_src, outside_group: @outside_group, from_connection_home_page_widget: @from_connection_home_page_widget} ) %>
+  <% hashed_meeting_id = "#meeting_#{@meeting.id}_#{@current_occurrence_time.to_i}" %>
+  <% hashed_meeting_class = ".meeting_#{@meeting.id}_#{@current_occurrence_time.to_i}" %>
+  <% attendees = j(meeting_attendees_for_display(@meeting, @current_occurrence_time)) %>
+  <% location_content = j(render_meeting_location_details(@meeting, wob_member, {from_connection_home_page_widget: @from_connection_home_page_widget, current_occurrence_time: @current_occurrence_time})) %>
+  jQuery('<%= ".cjs_meeting_#{meeting_id}_location_detail" %>').html('<%= location_content %>');
+  jQuery('.cjs_attendees_list', '<%= hashed_meeting_id %>').html('<%= attendees %>');
+  jQuery('.cjs_response_buttons', '<%= hashed_meeting_id %>').html('<%= j content %>');
+  jQuery('.cjs_response_buttons', '<%= hashed_meeting_class %>').html('<%= j content %>');
+  jQuery("<%= hashed_meeting_id %>", ".meeting_modal").find(".cjs_response_buttons").html('<%= j content %>');
+  jQuery("<%= hashed_meeting_id %>", ".meeting_modal").find(".cjs_attendees_list").html('<%= attendees %>');
+  <% if @group.present? %>
+    <% is_meeting_listing = (@rsvp_src == MemberMeeting::RSVP_SOURCE::MEETING_LISTING) %>
+    jQuery(".cjs_non_responding_member_meetings").replaceWith('<%= j(get_non_responding_member_meetings_label(wob_member, @group)) %>');
+    jQuery('.visible-xs #side_pane_meetings_mobile').replaceWith('<%= j(render("groups/side_pane_meetings", {upcoming_meetings: @upcoming_meetings_in_next_seven_days, initialize_rsvp_js: false, mobile_only: true, meetings_tab: is_meeting_listing})) %>');
+    jQuery('.side_pane_meetings_container #side_pane_meetings').replaceWith('<%= j(render("groups/side_pane_meetings", {upcoming_meetings: @upcoming_meetings, initialize_rsvp_js: false, meetings_tab: is_meeting_listing})) %>');
+  <% end %>
+  <% if @from_connection_home_page_widget %>
+    <% if current_user.can_be_shown_flash_meetings_widget? %>
+      jQuery("#cjs_flash_meetings_widget").html();
+      ConnectionsWidget.getConnectionsWidgetData("<%= flash_meetings_widget_path(format: :js) %>");
+    <% end %>
+  <% end %>
+<% end %>
+
+MeetingForm.setMeetingLocationPopup(".cjs_set_meeting_location_<%= meeting_id %>");

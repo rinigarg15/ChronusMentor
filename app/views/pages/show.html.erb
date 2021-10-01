@@ -1,0 +1,50 @@
+<%= stylesheet_link_tag "v3/overview_pages.css" %>
+<% @no_page_actions = true %>
+<% @pane_tabs = logged_in_at_current_level? %>
+
+<%= ibox nil, :ibox_class => "#{"row noshadow no-vertical-margins" if (@current_organization.active? && !logged_in_organization?)}", :content_class => "#{"page_content" if logged_in_at_current_level?}" do %>
+  <% if @page.present? %>
+    <% if @admin_view %>
+      <div class="panel panel-default">
+        <div class="panel-body gray-bg">
+          <%- if (@current_program || @current_organization).logged_in_pages_enabled? -%>
+            <div class="pull-left">
+              <strong><%= Page.human_attribute_name(:visibility) %>:</strong>
+              <%= visibility_text(@page) %>
+            </div>
+          <%- end -%>
+          <div class="pull-right">
+            <% common_actions = [] %>
+            <% common_actions << (link_to get_icon_content("fa fa-pencil") + "display_string.Edit".translate, edit_page_path(@page), :class => "btn btn-white btn-xs ") %>
+            <% common_actions << (link_to get_icon_content("fa fa-check") + "display_string.Publish".translate, publish_page_path(@page), method: :patch, :class => "btn btn-white btn-xs ")  unless @page.published? %>
+            <% common_actions << (link_to get_icon_content("fa fa-trash") + "display_string.Delete".translate, page_path(@page), :method => :delete, :class => "btn btn-white btn-xs ", data: {:confirm => "#{'feature.page.content.delete_confirmation'.translate} #{'common_text.confirmation.sure_to_continue'.translate}"}) %>
+            <%= render_button_group(common_actions, :btn_group_class => "text-center", :grid_class => " ") %>
+          </div>
+        </div>
+      </div>
+    <%  end %>
+    <% if @page.content.blank? %>
+      <% if @admin_view %>
+        <div class="empty_content text-center">
+          <%= 'feature.page.content.empty'.translate %> <%= link_to 'feature.page.action.add_content'.translate, edit_page_path(@page), :class => "strong" %>
+        </div>
+      <% else %>
+        <p> <%= 'feature.page.content.under_construction'.translate %> </p>
+      <% end %>
+    <% else %>
+      <div class ="page_content_text ckeditor_generated">
+        <%= @page.content.html_safe %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="no_pages text-center">
+      <%= 'feature.page.content.no_pages'.translate %> <%= link_to 'feature.page.action.add_page'.translate, new_page_path, :class => "strong" if @admin_view %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    OverViewPage.updatePlayStoreLink("<%= android_app_store_link(@current_organization, CordovaHelper::AndroidAppStoreSource::OVERVIEW_PAGE) %>");
+  });
+<% end %>

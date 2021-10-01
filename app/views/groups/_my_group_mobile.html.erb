@@ -1,0 +1,30 @@
+<%= ibox nil, :ibox_class => "ibox-content noshadow list-group clearfix" do %>
+  <div class="cjs_groups_info_mobile" id="group_pane_<%= group.id %>" data-redirect-url="<%= generate_connection_links(group, current_user, src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION)%>">
+    <div class="media-left">
+      <%= render(:partial => "common/header_collage", :locals => {member_pictures: get_member_pictures(group)}) %>
+    </div>
+    <% group_name = render_group_name(group, current_user, { :class => 'text-default', src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION }) %>
+    <div class="media-body">
+      <h4 class="no-margins m-b-xs">
+        <%= group_name %>
+      </h4>
+      <div class='small font-bold strong text-muted m-t-xs'>
+        <% if group.last_activity_at.present? %>
+          <%= "feature.connection.header.last_activity_on".translate(last_activity_time: DateTime.localize( group.last_activity_at, format: :full_display_no_time)) %>
+        <% else %>
+          <%= "feature.connection.header.last_activity_on".translate(last_activity_time: "feature.profile.content.no_activity_yet".translate) %>
+      <% end %>
+      </div>
+      <% badge_count_hash = group.badge_counts(current_user) %>
+      <%= link_to(append_text_to_icon("fa fa-envelope", "feature.connection.header.unread_messages".translate(message_count: badge_count_hash[:unread_message_count])), group_scraps_path(group, src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), :class => "btn btn-xs btn-primary btn-outline m-r-xxs m-t-sm") if badge_count_hash[:unread_message_count] != 0 %>
+      <%= link_to(append_text_to_icon("fa fa-check-square-o", "feature.connection.header.pending_task".translate(task_count: badge_count_hash[:tasks_count])), group_path(group, { show_plan: true, src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION }), :class => "btn btn-xs btn-info btn-outline m-r-xxs m-t-sm") if badge_count_hash[:tasks_count] != 0 %>
+      <%= link_to(append_text_to_icon("fa fa-calendar", "feature.connection.header.upcoming_meetings".translate(meeting_count: badge_count_hash[:upcoming_meeting_count])), meetings_path(group_id: group.id, src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), :class => "btn btn-xs btn-warning btn-outline m-r-xxs m-t-sm") if badge_count_hash[:upcoming_meeting_count] != 0 %>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    Groups.redirectGroupPage();
+  });
+<% end %>

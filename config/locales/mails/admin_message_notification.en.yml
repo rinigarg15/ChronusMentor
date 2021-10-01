@@ -1,0 +1,21 @@
+en:
+  email_translations:
+    admin_message_notification:
+      title_v3: New message notification to %{_admins} in %{track_name}
+      description: This e-mail is sent to the %{_admins} when a user reaches out to them.
+      subject: "{{message_subject}}"
+      content_v1_html: You have a <a href='{{url_message}}'>message</a> from {{sender_name}}:<br/><br/>{{message_content}}<br/><br/>To respond to {{sender_name}}, click the button below or click reply to this email.<br/>{{reply_button}}
+      reply_text: Reply
+      tags:
+        reply_button:
+          description: Reply button
+        message_subject:
+          description: Subject of the message
+          example_v1: Joining as %{role}
+        sender_name:
+          description: Name of the sender of the message
+        message_content:
+          description: Content of the message
+          example_html_v1: Sure, John. It’s easy- here are some steps:<br/><ol><li>Log in to <a href='http://www.chronus.com'>program</a>.</li><li>After you have logged in, look in the Right Hand sidebar for &quot;All Programs&quot;.</li><li> From the list of programs, select the one you want to join.</li><li>Click on &quot;Join Now&quot; and fill out your application as %{role}.</li></ol>
+        url_message:
+          description: Url to the message

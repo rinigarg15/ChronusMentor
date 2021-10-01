@@ -1,0 +1,127 @@
+<% user_name = @profile_member == wob_member ? "display_string.you".translate : @profile_member.name(:name_only => true) %>
+<% user_name_prefix = "" %>
+
+<div class="right_pane">
+  <% if (@side_pane_requests_count && @side_pane_requests_count > 0) %>
+    <%= sidepane_assets_pane([@side_pane_requests[0]],
+      :pane_header => "feature.profile.content.request_pane_title".translate(:user_name => @profile_member.first_name.capitalize, :size => @side_pane_requests_count),
+      :sidepane_asset_partial => "members/profile_right_pane_request",
+      :item_class => "no-border",
+      :asset_type => "request",
+      :ibox_class => "cui-request-pane",
+      :collapse_link_class => 'hide')
+    %>
+  <% end %>
+
+  <% if @is_admin_view %>
+    <% actions_to_show =
+        if @logged_in_program_and_not_dormant_view
+          admin_panel_actions
+        elsif @global_profile_view && @current_organization.org_profiles_enabled?
+          member_admin_panel_actions
+        end
+    %>
+    <% if actions_to_show.present? %>
+      <div id="admin_actions">
+        <%= ibox 'common_text.side_pane.admin_actions_v1'.translate(Admin: _Admin), content_class: "p-xxs", show_collapse_link: true do %>
+          <ul class="list-group unstyled">
+            <% actions_to_show.each do |action| %>
+              <%= action %>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% unless @dormant_view %>
+    <% if program_view? && @is_self_view && !current_user.is_admin_only? && @current_program.profile_completion_alert_enabled? && need_profile_complete_sidebar?(@profile_user) %>
+      <%= render :partial => 'members/profile_completion', :locals => { :profile_user => @profile_user} %>
+    <% end %>
+    <% if program_view? && @is_admin_view %>
+      <div id="admin_note_section">
+        <%= render :partial => "members/edit_admin_notes" %>
+      </div>
+      <% if @show_tags %>
+        <div id="tags_section">
+          <%= render :partial => "members/tags" %>
+        </div>
+      <% end %>
+    <% end %>
+    <% if @show_connections && current_program.ongoing_mentoring_enabled? %>
+      <%= sidepane_assets_pane(@side_pane_groups,
+        :pane_header => link_to("#{user_name_prefix} #{_Mentoring_Connections} (#{@side_pane_groups_count})", member_path(@profile_member, :tab => MembersController::ShowTabs::MANAGE_CONNECTIONS)),
+        :logo_url_method => "logo_url",
+        :see_all_url => member_path(@profile_member, :tab => MembersController::ShowTabs::MANAGE_CONNECTIONS),
+        :empty_pane_message => "feature.profile.content.no_connection_for_user".translate(mentoring_connections: _mentoring_connections, user_name: user_name),
+        :sidepane_asset_partial => "members/profile_right_pane_group",
+        :asset_type => "group")
+      %>
+    <% end %>
+  <% end %>
+
+  <% if @show_articles %>
+    <%= sidepane_assets_pane(@side_pane_articles,
+      pane_header: link_to("#{user_name_prefix} #{_Articles} (#{@side_pane_articles_count})", member_path(@profile_member, tab: MembersController::ShowTabs::ARTICLES)),
+      asset_icon_class: "fa-file-text",
+      see_all_url: member_path(@profile_member, tab: MembersController::ShowTabs::ARTICLES),
+      empty_pane_message: "feature.profile.content.no_articles_from_user".translate(article: _article, user_name: user_name),
+      sidepane_asset_partial: "members/profile_right_pane_article",
+      asset_type: "article")
+    %>
+  <% end %>
+
+  <% if @show_answers %>
+    <%= sidepane_assets_pane(@side_pane_questions,
+      pane_header: link_to("#{"feature.profile.header.user_s_questions".translate(user_s: user_name_prefix)} (#{@side_pane_questions_count})", member_path(@profile_member, tab: MembersController::ShowTabs::QA_QUESTIONS)),
+      asset_icon_class: "fa-question",
+      see_all_url: member_path(@profile_member, tab: MembersController::ShowTabs::QA_QUESTIONS),
+      empty_pane_message: "feature.profile.content.no_questions_from_user".translate(user_name: user_name),
+      sidepane_asset_partial: "members/profile_right_pane_question",
+      asset_type: "qa_question")
+    %>
+    <%= sidepane_assets_pane(@side_pane_answers,
+      pane_header: link_to("#{"feature.profile.content.users_answers".translate(user_name_prefix: user_name_prefix)} (#{@side_pane_answers_count})", member_path(@profile_member, tab: MembersController::ShowTabs::QA_ANSWERS)),
+      asset_icon_class: "fa-comment",
+      see_all_url: member_path(@profile_member, tab: MembersController::ShowTabs::QA_ANSWERS),
+      empty_pane_message: "feature.profile.content.no_answers_from_user".translate(user_name: user_name),
+      sidepane_asset_partial: "members/profile_right_pane_answer",
+      asset_type: "qa_answer")
+    %>
+  <% end %>
+
+  <% if @show_meetings %>
+    <%= sidepane_assets_pane(@side_pane_meetings,
+      :pane_header => link_to("#{"feature.profile.content.users_meetings_v1".translate(:Meetings => _Meetings,user_name_prefix: user_name_prefix)} (#{@side_pane_meetings_count})", member_path(@profile_member, :tab => MembersController::ShowTabs::AVAILABILITY)),
+      :asset_icon_class => "fa-calendar",
+      :see_all_url => member_path(@profile_member, :tab => MembersController::ShowTabs::AVAILABILITY),
+      :empty_pane_message => "feature.profile.content.no_meetings_v1".translate(:meetings => _meetings),
+      :sidepane_asset_partial => "members/profile_right_pane_meeting",
+      :asset_type => "meeting",
+      :item_class => "pointer")
+    %>
+  <% end %>
+
+  <% if @global_profile_view %>
+    <% programs = wob_member.admin? ? @profile_member.programs.ordered : @profile_member.accessible_programs_for(wob_member) %>
+    <% if programs.size > 0 %>
+      <%= sidepane_assets_pane(programs,
+        :pane_header => "#{user_name_prefix} #{_Programs} (#{programs.size})",
+        :logo_url_method => "logo_url_with_fallback",
+        :asset_icon_class => "fa-th-large",
+        :sidepane_asset_partial => "members/program_information",
+        :asset_type => "program")
+      %>
+    <% end %>
+  <% end %>
+</div>
+<% if (@side_pane_requests_count && @side_pane_requests_count > 0) %>
+  <script>
+    MemberProfilePage.initializeRequestPaneStick();
+  </script>
+<% end %>
+
+<%= javascript_tag do  %>
+  QtipPopup.generateForm();
+  MeetingRequest.trackMeetingRequestActions('<%= EngagementIndex::Src::AcceptMentorRequest::USER_PROFILE_PAGE %>');
+<% end %>

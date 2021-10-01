@@ -1,0 +1,11 @@
+<div id="<%= DashboardReportSubSection::Type::CommunityForumsArticles::FORUMS_AND_ARTICLES %>">
+  <h4><%= "feature.reports.content.other_activity".translate %></h4>
+  <ul class="stat-list m-t-md">
+    <%= render(partial: "reports/management_report/community_forums_articles/forums_and_articles_data", locals: {data: data[:forum_posts], key: Program::Dashboard::CommunityForumsArticlesReport::Features::FORUM_POSTS}) %>
+
+    <%= render(partial: "reports/management_report/community_forums_articles/forums_and_articles_data", locals: {data: data[:articles_shared], key: Program::Dashboard::CommunityForumsArticlesReport::Features::ARTICLES_SHARED}) %>
+
+    <%= render(partial: "reports/management_report/community_forums_articles/forums_and_articles_data", locals: {data: data[:comments_on_articles], key: Program::Dashboard::CommunityForumsArticlesReport::Features::COMMENTS_ON_ARTICLES}) %>
+  </ul>
+</div>
+  

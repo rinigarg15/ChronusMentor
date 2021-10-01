@@ -1,0 +1,122 @@
+<div id="cjs_permission_general_settings" class="has-below-4 clearfix">
+  <%= content_tag :h2, "manage_strings.program.header.General".translate %>
+  <hr class="has-above has-below-1"/>
+  <%= hidden_field_tag 'program[permissions][]', "" %>
+  <div class="form-horizontal">
+    <% scope = @current_program ? @current_program : @current_organization %>
+    
+    <% unless scope.has_feature?(FeatureName::ARTICLES) || (@current_program && wob_member.admin? && !@current_organization.standalone?) %>
+        <h4><%= "program_settings_strings.content.no_permission_to_enable".translate(program: _program) %></h4>
+    <% else %>
+      <% if scope.has_feature?(FeatureName::ARTICLES) %>
+        <%= control_group do %>
+          <%= content_tag(:div, "program_settings_strings.content.select_permission_to_enable".translate(program: _program), class: "false-label control-label") %>
+          <%= hidden_field_tag 'permissions_tab', 'true' -%>
+          <%= controls do %>
+            <%= choices_wrapper("display_string.Roles".translate) do %>
+              <% @current_program.class::Permissions::PUBLISH_ARTICLES.each do | publish_article | %>
+                <label class="checkbox inline clearfix">
+                  <%= check_box_tag('program[permissions][]', publish_article[:label], @current_program.has_role_permission?(publish_article[:role], publish_article[:permission]), :id => "#{publish_article[:label]}")%>
+                  <%= "program_settings_strings.content.mentees_can_publish_articles".translate(mentees: @current_program.term_for(CustomizedTerm::TermType::ROLE_TERM, publish_article[:role]).pluralized_term, articles: _Articles) %>
+                </label>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% if @current_program && wob_member.admin? && !@current_organization.standalone? %>
+        <%= control_group do %>
+          <% label = "program_settings_strings.content.allow_track_admins_to_access_all_users".translate(program: _program, admins: _admins) %>
+          <%= content_tag(:div, label, :class => "false-label control-label") %>
+          <%= controls do %>
+            <%= choices_wrapper(label) do %>
+              <label class="radio inline">
+                <%= f.radio_button(:allow_track_admins_to_access_all_users, true) %><%= "display_string.Yes".translate %>
+              </label>
+              <label class="radio inline">
+                <%= f.radio_button(:allow_track_admins_to_access_all_users, false) %><%= "display_string.No".translate %>
+              </label>
+              <%= content_tag(:div, "program_settings_strings.content.allow_track_admins_to_access_all_users_help_text".translate(program: _program, admins: _admins, org_name: @current_organization.name), class: "dim") %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+
+<div id="cjs_permission_privacy_settings" class="has-below-4 clearfix">
+  <%= content_tag :h2, "manage_strings.program.header.Privacy".translate %>
+  <hr class="has-above has-below-1"/>
+  <div class="form-horizontal">
+    <%= control_group(class: "has-above-2") do %>
+      <% @roles.each do |role1| %>
+        <%= hidden_field_tag "program[role_permissions][#{role1.id}][view_permissions]", "" %>
+        <%= content_tag(:div, "program_settings_strings.label.role_can_view".translate(role_name: role1.customized_term.pluralized_term), :class => "control-label false-label") %>
+        <%= controls do %>
+          <%= choices_wrapper("display_string.Roles".translate) do %>
+            <% @roles.each do |role2| %>
+              <label class="checkbox">
+                <%= check_box_tag "program[role_permissions][#{role1.id}][view_#{role2.name.pluralize}]", true, role1.has_permission_name?("view_#{role2.name.pluralize}"), :class => "vertical-align-text-bottom" %>
+                <% if role1.id  == role2.id %>
+                  <%= "program_settings_strings.label.other_role_name".translate(:role_name => role2.customized_term.pluralized_term_downcase) %>
+                <% else %>
+                  <%= "program_settings_strings.label.role_name".translate(:role_name => role2.customized_term.pluralized_term) %>
+                <% end %>
+              </label>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <% if @current_program.engagement_enabled? %>
+        <%= controls do %>
+          <%= content_tag(:div, "program_settings_strings.content.view_permissions_for_users".translate, class: "dim")%>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if @current_program && @current_program.engagement_enabled? && !@current_program.project_based? %>
+      <%= control_group do %>
+        <% label = "program_settings_strings.content.users_connect_outside_mentoring_area".translate(:mentoring_connection => _mentoring_connection) %>
+        <%= content_tag(:div, label, :class => "false-label control-label") %>
+        <%= controls do %>
+          <%= choices_wrapper(label) do %>
+            <label class="radio inline">
+              <%= f.radio_button(:allow_user_to_send_message_outside_mentoring_area, true) %><%= "display_string.Yes".translate %>
+            </label>
+            <label class="radio inline">
+              <%= f.radio_button(:allow_user_to_send_message_outside_mentoring_area, false) %><%= "display_string.No".translate %>
+            </label>
+            <%= content_tag(:div, "program_settings_strings.content.admin_access_users_connect_outside_mentoring_area_help_text".translate(program: _program), class: "dim") %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if super_console? && @current_program.engagement_enabled? %>
+    <div class="form-horizontal">
+      <%= control_group do %>
+        <% label = "program_settings_strings.content.admin_access_mentoring_area".translate(Admin: _Admin, mentoring: _mentoring) %>
+        <%= content_tag(:div, label, class: "false-label control-label") %>
+        <%= controls do %>
+          <%= choices_wrapper(label) do %>
+            <label class="radio">
+              <%= radio_button :program, :admin_access_to_mentoring_area, Program::AdminAccessToMentoringArea::OPEN, :checked => true, :id => "admin_access_open" %> <%= "program_settings_strings.content.open".translate %>
+            </label>
+            <label class="radio">
+              <%= radio_button :program, :admin_access_to_mentoring_area, Program::AdminAccessToMentoringArea::AUDITED_ACCESS, :id => "admin_access_audited" -%> <%= "program_settings_strings.content.audited_access".translate %>
+            </label>
+            <label class="radio">
+              <%= radio_button  :program, :admin_access_to_mentoring_area, Program::AdminAccessToMentoringArea::DISABLED, :id => "admin_access_disabled" -%> <%= "program_settings_strings.content.disabled".translate %>
+            </label>
+            <%= content_tag(:div, "program_settings_strings.content.admin_access_mentoring_area_help_text".translate(mentor: _mentor, mentee: _mentee, mentoring_connection: _Mentoring_Connection, Admins: _Admins, mentoring: _mentoring ), class: "dim") %>
+            <%= content_tag(:div, "program_settings_strings.content.ensure_work_on_behalf_turned_off_tip".translate, class: "dim") %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

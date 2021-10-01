@@ -1,0 +1,3 @@
+jQuery("#cjs_milestone_tasks_list_<%= @milestone.id %>").html("<%= escape_javascript(render partial: 'groups/milestones_in_profile/milestone_tasks', locals: {milestone: @milestone, milestone_items: @milestone_items, show_preview: @preview_mentoring_template, preview_role: @preview_role_id, group: @group} ) %>");
+jQuery("#loading_results_<%= @milestone.id%>").hide();
+GroupTabs.adjustSlickSlideHeight(".connections-slick", 100);

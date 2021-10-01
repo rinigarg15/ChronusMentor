@@ -1,0 +1,31 @@
+en:
+  feature:
+    custom_terms:
+      mentor: Mentor
+      mentee: Mentee
+      mentoring_connection_v1: Connection
+      resource: Resource
+      program: Program
+      article: Article
+      admin: Administrator
+      meeting: Meeting
+      mentoring: Mentoring
+      career_development: Career Development
+      teacher: Teacher
+      downcase:
+        mentor: mentor
+        admin: administrator
+        teacher: teacher
+      pluralize:
+        mentor: Mentors
+        teacher: Teachers
+      articalize:
+        teacher: a Teacher
+      articalize_downcase:
+        teacher: a teacher
+      pluralize_downcase:
+        teacher: teachers
+      label:
+        base_term: Base Term
+        pluralize: Pluralize
+        articalize: Articalize

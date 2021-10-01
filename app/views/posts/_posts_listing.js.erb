@@ -1,0 +1,9 @@
+<% if post.root? %>
+  <% content = render(partial: "topics/posts_listing", locals: { topic: post.topic, posts: posts, show_in_sidepane: false } ) %>
+  <% content = "#{content}" if remotipart_submitted? %>
+  jQuery(".cjs_posts_listing").replaceWith("<%= j content %>");
+  jQueryResetPageTop();
+<% else %>
+  <% root = post.root %>
+  jQuery("#<%= post_comments_container_id(root) %>").replaceWith("<%= j post_comments_container(root) %>");
+<% end %>

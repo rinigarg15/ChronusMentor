@@ -1,0 +1,44 @@
+<% common_locals = { login_id: @login, security_setting: @security_setting } %>
+
+<%= ibox nil, ibox_id: "fc-login-container", ibox_class: "middle-box", content_class: "text-center" do %>
+  <div class="lead m-b-xl" id="fc-login-title">
+    <%= "display_string.Login".translate %>
+  </div>
+
+  <% if @chronussupport %>
+    <%= render partial: "sessions/login_form", locals: common_locals.merge!(auth_config: @auth_config, chronussupport: true) %>
+  <% else %>
+    <% if @login_sections.sum { |login_section| login_section[:auth_configs].size } == 1 %>
+      <% logo_url = @auth_config.logo_url if @auth_config.custom? %>
+      <%= render partial: "sessions/login_section", collection: @login_sections, locals: { total_count: 1, logo_url: logo_url, skip_auth_configs: true } %>
+      <%= render partial: "sessions/login_form", locals: common_locals.merge!(auth_config: @auth_config) %>
+    <% else %>
+      <%= render partial: "sessions/login_section", collection: @login_sections, locals: { total_count: @login_sections.size, auth_config_locals: common_locals.merge!(login_page: true, render_form: @auth_config.try(:token_based_soap_auth?)) } %>
+    <% end %>
+
+    <% unless logged_in_organization? %>
+      <% if @current_program.try(:allow_join_now?) %>
+        <div id="fc-join-program" class="m-t-xl">
+          <%= "login_page.content.not_a_member".translate(member: "display_string.member".translate, program_name: current_program.name) %>
+          <%= link_to("feature.user.action.join_now".translate(program: _Program), new_membership_request_path, class: "btn btn-white btn-block m-t-sm") %>
+        </div>
+      <% end %>
+
+      <% if program_view? %>
+        <div id="fc-login-issue-help-text" class="m-t text-muted hide">
+          <%= "login_page.content.logging_issue_html".translate(contact_admin: get_contact_admin_path(current_program)) %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    AuthConfig.handleLoginButton("<%= j 'display_string.Please_Wait'.translate %>");
+
+    <% if @auth_config.present? %>
+      jQuery("#cjs-login-modal-<%= @auth_config.id %>").modal("show");
+    <% end %>
+  });
+<% end %>

@@ -1,0 +1,12 @@
+<% add_new_upcoming_meeting = @page_controls_allowed && !@outside_group ? link_to(get_icon_content("fa fa-calendar-plus-o") + "feature.mentoring_model.button.add_new_meeting".translate(Meeting: _Meeting), "javascript:void(0)", onclick: %Q[jQueryShowQtip('', 600, '#{setup_meeting_group_path(@group.id, {format: :js, :common_form => false, ei_src: EngagementIndex::Src::CreateGroupMeeting::MENTORING_AREA_MEETING_LIST})}','',{modal: true, successCallback: function(){CalendarAvailabilityInfo.initialize()}})], :class => "btn btn-primary btn-sm pull-right cjs_set_ei_src") : "" %>
+<%= content_tag(:div, "feature.meetings.header.upcoming_meetings_v1".translate(Meetings: _Meetings), :class => "h5 p-sm b-b no-margins font-600") unless @outside_group %>
+<% if @meetings_to_be_held.blank? %>
+  <div class="p-sm text-center">
+    <%= content_tag(:div, add_new_upcoming_meeting, :class => "clearfix p-b-sm") if add_new_upcoming_meeting.present? %>
+    <%= "feature.meetings.content.no_upcoming_meetings_v1".translate(:meetings => _meetings) %>
+  </div>
+<% else %>
+  <%= top_bar_in_listing( { collection: @meetings_to_be_held }, {}, {}, {:right_most_content => add_new_upcoming_meeting} ) %>
+  <%= render partial: "meetings/meetings", :locals => { :meetings => @meetings_to_be_held, :group_admin_view => @group.present? && @is_admin_view, :last_meeting_id => @meetings_to_be_held.last[:meeting].id, :ei_src => @ei_src, from_connection_home_page_widget: false } %>
+  <%= bottom_bar_in_listing( { collection: @meetings_to_be_held, ajax: true, :param_name => 'upcoming_page', :params => {:format => :js, :controller => :meetings, :action => :index, from_my_availability: @from_my_availability, outside_group: @outside_group}.merge(@outside_group.present? ? {} : {:group_id => @group.try(:id)}) } ) %>
+<% end %>

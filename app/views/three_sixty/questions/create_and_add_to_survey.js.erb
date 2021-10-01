@@ -1,0 +1,13 @@
+<% if @question.valid? %>
+  <% if @survey_question.valid? %>
+    jQuery("#three_sixty_survey_oeqs").append('<%= j render(:partial => "three_sixty/surveys/survey_oeq", :locals => {:survey_oeq => @survey_question, :survey => @survey}) %>');
+    jQuery("#cjs_three_sixty_survey_oeq_<%= @survey_question.id %>").hide();
+    jQuery("#create_and_add_question_to_survey").replaceWith('<%= j render(:partial => "three_sixty/surveys/create_and_add_question", :locals => {:survey => @survey, :question => @current_organization.three_sixty_questions.new}) %>');
+    ThreeSixty.alternateColor("#three_sixty_survey_oeqs");
+    jQuery("#cjs_three_sixty_survey_oeq_<%= @survey_question.id %>").show();
+    jQuery(".cjs_three_sixty_create_and_add_to_survey_container").show()
+  <% end %>
+<% else %>
+  jQuery("#create_and_add_question_to_survey").replaceWith('<%= j render(:partial => "three_sixty/surveys/create_and_add_question", :locals => {:survey => @survey, :question => @question}) %>');
+  jQuery("#create_and_add_question_to_survey").show();
+<% end %>

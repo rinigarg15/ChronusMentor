@@ -1,0 +1,97 @@
+<div id="survey_report">
+  <%= hidden_field_tag :last_filter_params, @filter_params.to_json %>
+  <% if @survey.show_response_rates? && format != FORMAT::PDF %>
+    <%= render(partial: 'surveys/report_responses_count', :locals => {response_rate_hash:  @response_rate_hash, survey: @survey}) %> 
+  <% end %>
+
+  <% if @survey_questions.empty? %>
+    <div id="no_questions" class="text-muted p-sm text-center col-md-12">
+      <%= content_tag(:p, "feature.survey.content.status.no_questions_active_html".translate(add_questions: link_to("feature.survey.content.add_questions".translate, survey_survey_questions_path(@survey)))) %>
+    </div>
+  <% else %>
+    <% if @report_data.empty? %>
+      <div id="no_questions" class="text-muted well text-center col-md-12">
+        <%= "feature.survey.content.no_response".translate %>
+      </div>
+    <% else %>
+      <div class="col-md-12 p-l-0 p-r-0">
+        <% @report_data.question_responses.each do |question, answer_stats| %>
+          <% total_count = answer_stats.count; answer_data = answer_stats.data %>
+          <% collapsible_content content_tag(:span,"#{question.question_text} ") + content_tag(:span, "(#{"feature.survey.content.survey_response".translate(count: total_count)})", :class => "small font-bold").html_safe, [], false,
+            :render_panel => true,
+            :icon_class => "#{'fa fa-comments-o' unless format == FORMAT::PDF}",
+            :class => "no-vertical-margins",
+            :pane_content_class => "no-padding horizontal-scroll #{'table-responsive' unless format == FORMAT::PDF}",
+            :additional_header_class => "gray-bg" do %>
+            <table class="table table-bordered table-condensed <%=render_class_for_matrix_rating_question(question)%>">
+              <% if question.choice_based? %>
+                <% if question.matrix_question_type? %>
+                  <%= render(partial: 'surveys/report_matrix_question_content', :locals => {format: format, question: question, rating_question_responses: answer_data}) %>
+                <% else %>
+                  <% question.default_choice_records.each do |question_choice| %>
+                    <% percent = answer_data[question_choice.id] %>
+                    <tr>
+                      <td>
+                        <span class="col-md-5 <%= 'p-b-xs' if format == FORMAT::PDF %>">
+                          <%= question_choice.text %>
+                        </span>
+                        <span class="no-horizontal-padding col-md-7 progress no-vertical-margins">
+                          <%= content_tag(:div, "&nbsp;".html_safe , :style => "width: #{percent}%;", :class => "progress-bar") %>
+                        </span>
+                      </td>
+                      <td class="font-bold text-center" width="10%" nowrap><span><%= percent.to_f.round(2) %> %</span></td>
+                    </tr>
+                  <% end %>
+                  <% if question.allow_other_option? %>
+                    <% percent = answer_data["other"] %>
+                    <tr>
+                      <td>
+                        <span class="col-md-5 <%= 'p-b-xs' if format == FORMAT::PDF %>">
+                          <%= "display_string.Other".translate %>
+                        </span>
+                        <span class="no-horizontal-padding col-md-7 progress no-vertical-margins">
+                          <%= content_tag(:div, "&nbsp;".html_safe , :style => "width: #{percent}%;", :class => "progress-bar") %>
+                        </span>
+                      </td>
+                      <td class="font-bold text-center" width="10%" nowrap><span><%= percent.to_f.round(2) %> %</span></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              <% else %>
+                <% if answer_data.blank? %>
+                  <td colspan="2">
+                    <%= "feature.survey.header.No_response".translate %>
+                  </td>
+                <% else %>
+                  <% if format == FORMAT::PDF %>
+                    <tr>
+                      <td colspan="2"><%= content_tag(:i, "feature.survey.content.text_type_question_info".translate, :class => "p-l-xxs") %></td>
+                    </tr>
+                  <% else %>
+                    <% answer_data.each do |answer_text| %>
+                      <tr>
+                        <td colspan="2"><%= chronus_auto_link(answer_text) %></td>
+                      </tr>
+                    <% end %>
+                    <% if total_count > SurveyQuestion::ANSWERS_LIMIT_IN_REPORT %>
+                      <tr><td colspan="2" class="text-right">
+                      <%= link_to("feature.reports.actions.See_All_Responses_html".translate(count: total_count), "javascript:void(0)", data: {url: survey_survey_question_path(@survey, question, format: :js)}, class: "cjs_show_all_responses") %>
+                    </td></tr>
+                    <% end %>
+                    <% reset_cycle('rows')  %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </table>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  ReportFilters.showAllResponses();
+  CustomizeQuestions.sendOnloadMatrixRatingTableSizingRequest();
+  CustomizeQuestions.resizingWindow();
+</script>

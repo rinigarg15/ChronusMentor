@@ -1,0 +1,8 @@
+<div id='cjs_show_admin_view_details' class="m-t-xs">
+  <% source_info = {"action" => @campaign ? "edit" : "new", "controller" => "campaign_management/user_campaigns", "id" => @campaign ? @campaign.id : "" }%>
+  <% if admin_view_count == 1%>
+    <%= link_to(get_icon_content("fa fa-user") + "feature.campaigns.content.admin_view_link_html".translate(count: admin_view_count), admin_view_path(admin_view, source_info: source_info)) %>
+  <% else %>
+    <%= link_to(get_icon_content("fa fa-user") + "feature.campaigns.content.admin_view_links_html".translate(count: admin_view_count), admin_view_path(admin_view, source_info: source_info)) %>
+  <% end %>
+</div>

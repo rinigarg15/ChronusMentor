@@ -1,0 +1,22 @@
+en:
+  feature:
+    page:
+      header:
+        edit_program_overview_pages: Edit %{program} Overview pages
+      action:
+        add_content: Add content
+        add_page: Add page
+        program_overview_pages: "%{program} Overview pages"
+      content:
+        delete_confirmation: This will delete the page permanently.
+        empty: This page is empty!
+        under_construction: This page is under construction.
+        no_pages: There are no pages!
+        no_description: No description available.
+        content_hint: Please note that the layout may stretch or contract depending on the screen resolution of the viewer.
+      visibility:
+        logged_in: Logged in users only
+        both: Both logged in users and non logged in users
+      draft: draft
+      description:
+        reorder_programs_description_html: To reorder the %{programs}, simply <strong> drag and drop </strong> them to their new position and the position will be automatically saved.

@@ -1,0 +1,8 @@
+en:
+  feature:
+    situational_mentoring:
+      content:
+        Reason: 'Reason:'
+        Assigned_Mentors:
+          one: Assigned %{Mentor}
+          other: Assigned %{Mentors}

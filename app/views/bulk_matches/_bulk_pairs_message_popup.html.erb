@@ -1,0 +1,29 @@
+<% action_type = get_translated_text(BulkMatch::UpdateType::PUBLISH, bulk_match: @bulk_match ) %>
+<% default_value_for_message = "feature.connection.content.placeholder.create_new_message_optional".translate(mentor: _mentor, mentee: _mentee) %>
+
+<% modal_v3_popup action_type do %>
+  <%= existing_groups_alert(@drafted_group_ids, [], Group::Status::DRAFTED, :group, true) %>
+  <%= bulk_match_additional_users_alert(@drafted_group_ids, true) %>
+
+  <div id="bulk_match_update_notes" ng-controller="BulkMatchCtrl">
+    <%= form_tag "javascript:void(0)" do %>
+      <%= render_mentoring_model_selector(@mentoring_models) %>
+      <%= control_group do %>
+        <%= label_tag :message, default_value_for_message, for: "cjs_bulk_message", class: "sr-only" %>
+        <%= controls do %>
+          <%= text_area_tag :message, '' , id: "cjs_bulk_message", placeholder:  default_value_for_message, rows: 5, class: "form-control" %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:div, group_creation_email_notification_consequences_html, class: "help-block") %>
+      <% action_set do %>
+        <div class="pull-right m-t-xs">
+          <%= link_to_function "display_string.Cancel".translate, "closeQtip();", class: "btn btn-white" %>
+          <%= submit_tag action_type, 'ng-click' => "bulkUpdatePairStatus('#{@action_type}');", class: "btn btn-primary", data: { disable_with: "display_string.Please_Wait".translate } %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= javascript_tag "jQuery(document).ready(function() { angular.bootstrap(jQuery('#bulk_match_update_notes')); });" %>

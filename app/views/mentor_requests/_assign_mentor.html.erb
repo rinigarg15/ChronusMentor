@@ -1,0 +1,111 @@
+<% modal_title = assign_mentor ? nil : 'feature.preferred_mentoring.header.Preferred_Mentors'.translate(Mentors: _Mentors) %>
+<% modal_container  modal_title, :no_modal_header => assign_mentor,
+                    :modal_id => "modal_preferred_mentors_for_#{mentor_request.id}",
+                    :modal_body_class => "no-padding clearfix" do %>
+    <% favourite_mentors = mentor_request.request_favorites %>
+    <% match_results = match_results_per_mentor[mentor_request] %>
+    <% show_mentoring_models_and_assignment_form = @current_program.matching_by_mentee_and_admin? && mentor_request.active? && assign_mentor %>
+    <% if show_mentoring_models_and_assignment_form && @mentoring_models %>
+      <div>
+        <h3 class="p-sm table-bordered no-margins"><%= 'feature.mentor_request.action.Assign_Mentor'.translate(Mentor: _Mentor) %></h3>
+        <div class="p-md clearfix">
+          <%= render_mentoring_model_selector(@mentoring_models, id_suffix: mentor_request.id) %>
+        </div>
+      </div>
+    <% end %>
+    <% if @current_program.preferred_mentoring_for_mentee_to_admin? && favourite_mentors.present? %>
+      <% if assign_mentor %>
+        <h3 class="p-sm gray-bg table-bordered no-margins"><%= mentor_request.active? ? 'feature.mentor_request.header.assign_a_preferred_mentor'.translate(mentor: _mentor) : 'feature.preferred_mentoring.header.Preferred_Mentors'.translate(Mentors: _Mentors) %></h3>
+      <% end %>
+      <ul class="list-group p-xs clearfix">
+        <% favourite_mentors.each_with_index do |req_fav, req_fav_counter| %>
+          <li class="list-group-item clearfix col-sm-6 text-center no-borders">
+            <div class="media well flat-border m-b-sm">
+              <div class="clearfix">
+                <%= member_picture_v3(req_fav.favorite.member, {:size => :medium, :no_name => true}, {:class => "img-circle"}) %>
+                <div class="media-heading"><h4 class="m-b-0"><%= link_to_user(req_fav.favorite) %></h4></div>
+                <% if @current_user.can_manage_mentor_requests? || @current_program.allow_user_to_see_match_score?(current_user) %>
+                  <% match_score = match_results.present? ? match_results[req_fav.favorite.id] : nil %>
+                  <%= content_tag(:div, content_tag(:div, match_score_label(match_score, current_user.is_admin?), id: "match_percent_#{mentor_request.id}_#{req_fav.favorite.id}", class: " h4 no-margins text-success") + content_tag(:div, "feature.mentor_request.label.report.match".translate, class: "p-l-xxs"), class: "m-t-sm m-b-sm text-center") %>
+                  <%= tooltip("match_percent_#{mentor_request.id}_#{req_fav.favorite.id}", match_score_tool_tip(match_score, :second_person => _mentee)) %>
+                <% end %>
+
+                <%= status_indicator(req_fav.favorite, { :from_preferred_mentoring => true, consider_user_as_mentor: true, show_availability: current_user.can_manage_mentor_requests?, wrapper_options: { tag: :span, class: "m-t-sm" } } ) %>
+
+                <% unless req_fav.note.blank? %>
+                  <% trunc_text, truncated = truncate_html(h(req_fav.note), :max_length => 35, :status => true) %>
+                  <% situational_reason = content_tag(:div, trunc_text + (truncated ? link_to_function('display_string.show_more_raquo_html'.translate, "jQuery('#trunc_msg_#{req_fav.id}').hide();jQuery('#full_msg_#{req_fav.id}').show();", :class => 'see_more') : ""), :id => "trunc_msg_#{req_fav.id}") + (truncated ? content_tag(:div, content_tag(:span, req_fav.note, class: "p-r-xxs") + link_to_function('display_string.laquo_show_less_html'.translate, "jQuery('#trunc_msg_#{req_fav.id}').show();jQuery('#full_msg_#{req_fav.id}').hide();", :class => 'see_less')  ,:style => "display:none", id: "full_msg_#{req_fav.id}") : "") %>
+                  <%= embed_display_line_item("#{'feature.situational_mentoring.content.Reason'.translate }", situational_reason) %>
+                <% end %>
+
+                <% if @current_user.can_manage_mentor_requests? && mentor_request.active? && req_fav.favorite.slots_available > 0 %>
+                  <% favorite_mentor = req_fav.favorite %>
+                  <% quick_assign_params = {group: {mentor_name: "#{favorite_mentor.name_with_email}"}, mentor_request_id: "#{mentor_request.id}"} %>
+                  <% existing_connections_of_mentor = @current_program.allow_one_to_many_mentoring? && favorite_mentor.mentoring_groups.active || [] %>
+
+                  <%= link_to(get_icon_content("fa fa-check") + content_tag(:span, "display_string.Assign".translate),
+                    "javascript:void(0)",
+                    data: {url: groups_path(quick_assign_params)},
+                    class: "btn btn-primary btn-sm btn-block m-t-sm cjs_assign_mentor_request",
+                    id: "quick_assign_button_#{mentor_request.id}_#{favorite_mentor.id}") %>
+                <% end %>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+    
+    <% if show_mentoring_models_and_assignment_form %>
+      <%= horizontal_or_separator("m m-b-xl") if @current_program.preferred_mentoring_for_mentee_to_admin? && favourite_mentors.present? %>
+      <div class="clearfix">
+        <h3 class="p-sm table-bordered gray-bg no-margins"><%= 'feature.mentor_request.header.assign_any_mentor'.translate(mentor: _mentor) %></h3>
+
+
+        <% mreq_id = mentor_request.id %>
+        <div id="group_error_<%=  mreq_id%>" style="display: none;"></div>
+        <%= response_flash "group_duplicate_error_#{mreq_id}" %>
+        <div id="assignment_popup_<%= mreq_id %>" class="p-md clearfix">
+          <%= simple_form_for Group.new, url: groups_path, before: "ChronusValidator.ErrorManager.ClearResponseFlash('group_duplicate_error_#{mreq_id}');AssignMentor.clearErrorFlash('#{mreq_id}')", html: {class: "mentoring_topic_form", id: "new_group_#{mreq_id}"} do |f| %>
+            <p class="m-b">
+              <%= get_icon_content("fa fa-info-circle") + 'feature.mentor_request.content.mentor_assign_popup_text'.translate(mentor: _mentor, student_name: mentor_request.student.name) %>
+            </p>
+
+             <%= control_group do %>
+              <label class="control-label" for="group_mentor_<%=mreq_id%>"> <%= 'feature.mentor_request.content.mentor_name'.translate(Mentor: _Mentor) %> </label>
+              <%= controls do %>
+                <%= text_field_with_auto_complete :member, :group, {:name => "group[mentor_name]", :class => "form-control pull-left", :id => "group_mentor_#{mreq_id}", :autocomplete => "off"},
+                                                  { :min_chars => 3,
+                                                    :url => auto_complete_for_name_users_path(format: :json, role: RoleConstants::MENTOR_NAME, show_all_users: true, for_autocomplete: true),
+                                                    :param_name => 'search', :highlight => true} %>
+              <% end %>
+            <% end %>
+
+
+
+            <%= hidden_field_tag "mentor_request_id", mreq_id, id: "mentor_request_id_#{mreq_id}" %>
+            <%= hidden_field_tag "page", @page, id: "page_#{@page}_#{mreq_id}" %>
+
+            <% action_set(class: "pull-right m-t-sm") do %>
+              <%= link_to 'display_string.Cancel'.translate, "javascript:void(0);", :class => "popup_closebox btn btn-white", "data-dismiss" => "modal" %>
+              <%= f.button :submit, 'feature.mentor_request.action.Assign'.translate, :class => "btn btn-primary cjs_assign_mentor_request cjs_assign_mentor_request_submit" %>
+            <% end %>
+          <% end %>
+        </div>
+
+        <div id="select_connection_<%= mreq_id %>" style="display: none;" class="select_connection_popup clearfix">
+          <div id="select_wrapper_<%= mreq_id %>" class="p-sm">
+
+          </div>
+
+          <hr class="m-b-xs m-t-xs" />
+          <div class="navig_links  pull-right clearfix m">
+            <%= link_to_function 'display_string.Cancel'.translate, "AssignMentor.clearErrorFlash('#{mreq_id}');AssignMentor.selectAnotherMentor('#{mreq_id}');", :class => "btn btn-white", "data-dismiss" => "modal" %>
+            <%= link_to_function 'feature.mentor_request.action.choose_different_mentor_html'.translate(mentor: _mentor), "AssignMentor.selectAnotherMentor('#{mreq_id}')", :class => 'btn btn-primary go_back' %>
+            <%= image_tag "ajax-loader.gif", :width => 16, :height => 16, :id => "assign_loading_2_#{mreq_id}", :class => 'assign_2_loading', :style => 'display: none;' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<%= javascript_tag %Q[MentorRequests.assignMentor();] %>

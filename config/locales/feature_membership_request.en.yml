@@ -1,0 +1,102 @@
+en:
+  feature:
+    membership_request:
+      header:
+        membership_requests: Membership requests
+        your_pending_requests: Your Pending Requests
+        reject_request:
+          one: Reject request
+          other: Reject requests
+        signup_options: Sign-up options
+        complete_application: Complete Your Application
+        edit_member_application: Edit %{member_name}'s Application
+      content:
+        signup_instructions_line1: Thank you for your interest in joining!
+        signup_instructions_line2_html: Check your email %{email} for instructions to join.
+        signup_instructions_line3_1: Didn't get the email?
+        signup_instructions_line3_2_html: Please check your spam/clutter folder and move the email to your inbox to prevent any further emails being sent to your spam/clutter folder or %{url} to resend it.
+        reject_reason_specify_v1_html:
+          one: Please specify a reason for rejecting the request
+          other: Please specify a reason for rejecting the requests
+        requests: requests
+        bulk_accept_as_description: Accepting these requests will asssign the roles users have applied for.
+        bulk_accept_as_description_v1: Accepting these requests will assign the roles users have applied for.
+        select_at_least_one_request: Please select at least one request
+        requests_selected:
+          one: You have selected %{count} request.
+          other: You have selected %{count} requests.
+        role_description:
+          mentor: "%{Mentors} are professionals who guide and advise %{mentees} in their career paths to help them succeed. A %{mentor}'s role is to inspire, encourage, and support their %{mentees}."
+          student: "%{Mentees} are students who want guidance and advice to further their careers and to be successful. %{Mentees} can expect to strengthen and build their networks, and gain the skills and confidence necessary to excel."
+          mentor_description: "%{_Mentors} are professionals who guide and advise %{_mentees} in their career paths to help them succeed. A %{_mentor}'s role is to inspire, encourage, and support their %{_mentees}."
+          student_description: "%{_Mentees} are students who want guidance and advice to further their careers and to be successful. %{_Mentees} can expect to strengthen and build their networks, and gain the skills and confidence necessary to excel."
+          employee_description: "%{_Employees} can setup their career goals, create plans, and track their progress towards archiving the goals in the %{_Career_Development} %{_Program}."
+          faq_page_html: "%{title} FAQ &raquo"
+        already_have_account_html: Already have an account? %{sign_in}
+        send_registration_instructions_v1_html: Please enter your <b>email</b> and <b>captcha</b> below. We will send instructions to join the %{program} via email
+        enter_email_captcha_html: Please enter your <b>email address</b> and the <b>captcha</b> in the fields below.
+        send_registration_instructions_v2_html: We will send instructions to join the %{program} to the email address you provide.
+        registration_mail:
+          visit_program: Visit this %{program} now
+          non_draft_user_html: It looks like you are enrolled in %{program_name}. %{link_to_program}.
+        user_status_with_roles:
+          one: 'State: %{state}, Role: %{role_names}'
+          other: 'State: %{state}, Roles: %{role_names}'
+        suspended_user_existing_role_warning_html: "<b>Note:</b> The current role(s) of the user will be retained and the new role in which the user is accepted to will be added to the user."
+        tiles:
+          headers:
+            received: Received
+            pending: Pending
+            accepted: Accepted
+            rejected: Rejected
+          description:
+            received: Applications Received
+            pending: Applications Pending Decision
+            accepted: Accepted Applications
+            rejected: Rejected Applications
+      label:
+        edit_request: Edit Request
+        pending: Pending
+        accepted: Accepted
+        accept: Accept
+        rejected: Rejected
+        reject: Reject
+        ignore: Ignore
+        view_sent_messages: View Sent Messages
+        sent_between: Sent Between
+        bulk_ignore_confirm:
+          one: Are you sure you want to ignore selected request? This cannot be undone.
+          other: Are you sure you want to ignore selected requests? This cannot be undone.
+        requests_to_join_as: Show requests to join as
+        recent_first: Recent first
+        oldest_first: Oldest first
+        last_name_asc: Last Name (A-Z)
+        last_name_dsc: Last Name (Z-A)
+        no_request_matching_criteria: There are no membership requests matching your chosen criteria.
+        join_as: Join as
+        request_to_join_as: Request to join as
+        sent: Sent
+        status: Status
+        reason_for_rejection: Reason for rejection
+        message_sent: Message sent
+        as_role: as %{role}
+        by_person_on_time: by %{person} %{on_time}
+        accept_request:
+          one: Accept Request
+          other: Accept Requests
+        accept_request_as:
+          one: 'Accept request as '
+          other: 'Accept requests as '
+        optional_msg: Optional message
+        export_as_pdf: Export as PDF
+        export_as_csv: Export as CSV
+        accepted_by: Accepted By
+        accepted_on: Accepted on
+        accepted_role: Accepted Role
+        rejected_by: Rejected By
+        rejected_on: Rejected on
+        rejection_reason: Reason for rejection
+        current_user_status: Current Status
+        applicants_profile: Applicant's Profile
+      tooltip:
+        role_already_assigned_to_user: This role is already assigned to user. To remove it, go to users profile and change roles.

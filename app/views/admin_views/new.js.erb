@@ -1,0 +1,9 @@
+<% popup_title = "program_settings_strings.content.eligibility_rule_popup_heading".translate(role_name: @role.name) %>
+<% modal_v3_popup popup_title do %>
+  <div id="profile_questions_container">
+    <%= render partial: "admin_views/new", locals: {remote: true, render_only_profile_answers: true, program: @current_program, role: @role, format: :js} %>
+  </div>
+  <script type='text/javascript'>
+    jQuery('#remoteModal .modal-content').addClass('modal-lg');
+  </script>
+<% end %>

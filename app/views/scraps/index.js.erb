@@ -1,0 +1,13 @@
+<% if @home_page %>
+  <% wrapper_scraps = render :partial => 'scraps/scraps_connection_widget', locals: { scraps_count: @scraps_ids.count } %>
+  jQuery("#mentoring_area_tabs_content_<%= @group.id %>").html("<%= j wrapper_scraps %>")
+  <% if @scraps_ids.count > 0 %>
+    <% content = render :partial => 'scraps/scrap', :collection => @scraps_ids, locals: {home_page: true} %>
+    jQuery('.cjs_tabs_group_<%= @ref_obj.id %>').find('.display-scraps').html("<%= j content %>");
+  <% end %>
+  jQuery(".cjs_tabs_group_<%= @ref_obj.id %>").removeClass('hide');
+  GroupTabs.adjustSlickSlideHeight(".connections-slick", 100);
+<% else %>
+  jQuery('#cjs_paginated_scraps').html("<%= j(render :partial => 'groups/display_discussion_list', :locals => {:scraps_ids => @scraps_ids}) %>");
+  jQuery('#loading_results').hide();
+<% end %>

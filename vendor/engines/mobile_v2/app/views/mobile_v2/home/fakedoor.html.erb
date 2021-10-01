@@ -1,0 +1,18 @@
+<% @page_header =  append_text_to_icon("fa fa-chevron-left theme-font-color font-bold back_link p-m", "fakedoor_page.content.get_url".translate, {:icon_path => mobile_v2_verify_organization_path(show_program_form: true)}) %>
+<%=  ibox nil, :ibox_class => "middle-box no-vertical-margins clearfix fakedoor_page", :content_class => "no-border text-left p-t-0" do %>
+  <div class="pane no-border p-t-md p-l-xxs p-r-xxs">
+
+    <%= render :partial => "fakedoor_pane", :locals => {:header_text => "fakedoor_page.content.header_browser".translate, :para_text => "fakedoor_page.content.text_browser".translate(:history => link_to('fakedoor_page.label.history'.translate, "javascript:void(0);", :class => "history_link")).html_safe } %>
+
+    <%= horizontal_line(class: "m-b-sm m-t-xs") %>
+    <%= render :partial => "fakedoor_pane", :locals => {:header_text => "fakedoor_page.content.header_email".translate, :para_text => "fakedoor_page.content.text_email".translate } %>
+    <%= horizontal_line(class: "m-b-sm m-t-xs") %>
+
+    <%= render :partial => "fakedoor_pane", :locals => {:header_text => "fakedoor_page.content.header_url".translate, :para_text => "fakedoor_page.content.text_url".translate } %>
+  </div>
+<% end %>
+<script type="text/javascript">
+  jQuery(document).on('click', '.history_link', function(){
+    IAB.open('<%= MobileV2Constants::HISTORY_LINK %>', '_blank', InAppBrowserHelper.inAppBrowserOptions());
+  });
+</script>

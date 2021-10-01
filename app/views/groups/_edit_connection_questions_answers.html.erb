@@ -1,0 +1,14 @@
+<% connection_questions.each do |question| %>
+  <% answer = group.answer_for(question) || Connection::Answer.new(:question => question, :group => group) %>
+  <%= control_group do %>
+    <%= common_answer_label(question, :class => "control-label col-sm-3") %>
+    <%= controls(:class => "col-sm-9") do %>
+      <%= edit_common_answer_field(answer, question) %>
+      <% if question.required? %>
+        <% unless question.file_type? && answer.present? && answer.attachment_file_name.present? %>
+          <%= javascript_tag("RequiredFields.addScopedField('scope_connection_questions', 'common_answers_#{question.id}')") %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

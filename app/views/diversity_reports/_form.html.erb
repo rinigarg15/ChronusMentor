@@ -1,0 +1,27 @@
+<% organization = diversity_report.organization %>
+<% if selectable_profile_questions.empty? || organization.admin_views.empty? %>
+  <div>
+    <%= "feature.diversity_reports.no_segment_or_dimension_v1".translate %>
+  </div>
+<% else %>
+  <%= simple_form_for(diversity_report, remote: true) do |f| %>
+    <%= f.input :admin_view_id, collection: organization.admin_views, label_method: :title, value_method: :id, input_html: { class: "form-control no-padding no-border" }, label_html: { class: "control-label" }, label: "feature.diversity_reports.choose_user_segment".translate %>
+    <%= f.input :profile_question_id, collection: selectable_profile_questions, label_method: :question_text, value_method: :id, input_html: { class: "form-control no-padding no-border" }, label_html: { class: "control-label" } %>
+    <%= f.input :comparison_type, as: :radio_buttons, collection: get_comparison_type_options, label_method: :second, value_method: :first, required: true, label_html: { class: "m-b-0 control-label" } %>
+    <%= f.input :name, input_html: { class: "form-control" }, label_html: { class: "control-label" } %>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", class: 'btn btn-white', "data-dismiss" => "modal" %>
+      <%= submit_tag "feature.diversity_reports.create_button_text".translate, class: "btn btn-primary", data: {disable_with: 'display_string.Please_Wait'.translate} %>
+    <% end %>
+  <% end %>
+
+  <%= javascript_tag do %>
+    jQuery(function(){
+      jQuery("#diversity_report_admin_view_id").select2();
+      jQuery("#diversity_report_profile_question_id").select2();
+      CampaignManagement.bindAccessibilityAttributes();
+      jQuery("<label/>", {'class': 'sr-only', 'for': 'diversity_report_admin_view_id', text: '<%= "feature.diversity_reports.select_admin_view".translate %>'}).insertBefore("#diversity_report_admin_view_id");
+      jQuery("<label/>", {'class': 'sr-only', 'for': 'diversity_report_profile_question_id', text: '<%= "feature.diversity_reports.select_profile_question".translate %>'}).insertBefore("#diversity_report_profile_question_id");
+    });
+  <% end %>
+<% end %>

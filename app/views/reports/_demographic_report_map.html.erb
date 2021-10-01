@@ -1,0 +1,25 @@
+<% role_name_to_term_map = RoleConstants.program_roles_mapping(@current_program, pluralize: true) %>
+<%= javascript_tag "jQuery(document).ready(function() { DemographicReport.initializeMap(#{raw(locations.as_json)}); });" %>
+<%= ibox nil, ibox_id: "cjs_demographic_report_map", :content_class => "table-responsive" do %>
+  <table class="table table-bordered">
+    <tbody>
+      <tr>
+        <td colspan='3'><div id="map-canvas" class="google-map"></div></td>
+      </tr>
+      <tr>
+        <% if @show_for_all_roles %>
+          <td class='text-center'>
+            <h4><%= "feature.reports.label.most_users".translate %></h4>
+            <h3 class="font-600"><%= @most_users_country || '-' %></h3>
+          </td>
+        <% end %>
+        <% @roles.each do |role_name| %>
+          <td class='text-center'>
+            <h4><%= "feature.reports.label.most_role".translate(role: role_name_to_term_map[role_name]) %></h4>
+            <h3 class="font-600"><%= @most_role_country[role_name] || '-' %></h3>
+          </td>
+        <% end %>
+      </tr>
+    </tbody>
+  </table>
+<% end %>

@@ -1,0 +1,6 @@
+<% content = render(:partial => @subprogram_view ? 'role_questions/edit' : 'profile_questions/edit') %>
+<% pq_container_id = "#profile_question_value_#{@profile_question.id}" %>
+
+jQuery("<%= j content %>").insertAfter("<%= pq_container_id %>");
+jQuery("<%= pq_container_id %>").hide();
+jQuerySortable.disableDraggable("<%= pq_container_id %>");

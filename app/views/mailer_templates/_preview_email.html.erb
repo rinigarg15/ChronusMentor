@@ -1,0 +1,13 @@
+<div class="cjs_preview_email well white-bg">
+  <div class="false-label control-label"><%= "feature.email_customization.preview_title".translate %></div>
+  <div class="help_text">
+    <%= preview_mail_link_text(@mailer_template, @mentoring_model, facilitation_template_id: local_assigns[:facilitation_template_id]) %>
+    <%= image_tag("ajax-loader-small.gif",:class=>"ajax_loading",:style => "display:none"  ) %>
+  </div>
+  <p class="m-t-sm">
+    <b><%= "feature.email_customization.Note".translate %></b>
+    <%= "feature.email_customization.preview_message_v1".translate %>
+  </p>
+</div>
+<%= javascript_tag %Q[MailerTemplates.submitPreviewEmail(#{get_preview_email_js_options(local_assigns[:facilitation_template_id])})] %>
+

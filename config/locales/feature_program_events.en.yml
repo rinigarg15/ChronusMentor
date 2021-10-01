@@ -1,0 +1,106 @@
+en:
+  feature:
+    program_event:
+      header:
+        events: Events
+        create_new_event: Create New Event
+        update_event: Update Event
+        post_event: Post Event
+        test_email: Test Email
+        rsvp_yes: RSVP - YES
+        rsvp_no: RSVP - NO
+        rsvp_maybe: RSVP - MAYBE
+        set_reminder: Set Reminder
+        activity_feed: Activity Feed
+        guests: Guests
+        event_info: Event Information
+        event_url: Event URL
+      content:
+        update_time_and_send_invites: Update time and send invites
+        update_confirmation: Changing the date and time of the program event will clear the RSVPs for the users who responded and new invites will be sent. Continue?
+        example_emails: example1@gmail.com, example2@yahoo.com, example3@aol.com, ...
+        description_hint: Please note that the layout may stretch or contract depending on the screen resolution of the viewer.
+        test_email_detail_html: It is advisable to verify that the program event invitation is sent as expected in different email clients (outlook, gmail, yahoomail, etc) using &quot;Test Email&quot; action before creating the program event.
+        test_email: Test Email
+        start_time_error: Start time should be lesser than End time
+        required_fields_error: Please fill all the required fields. Fields marked * are required
+        notification_list_for_test_email: Please provide a comma separated list of email addresses to which the test email should be sent.
+        delete_confirmation: Are you sure you want to delete this program event? This cannot be undone.
+        not_responded_to_invite: You did not respond to the invite
+        attended: attended
+        not_attend: did not attend
+        may_have_attended: may have attended
+        invite_response_text: You %{response} this program event
+        no_events_with_status: There are no %{status} events.
+        click_here_to_create_event_html: "%{link} to create a new event."
+        event_activity_html: "%{user} %{program_event_context} the program event - %{program_event_title_link}"
+        may_be_attending: may be attending
+        are_attending: are attending
+        is_attending: is attending
+        are_not_attending: are not attending
+        is_not_attending: is not attending
+        admin_view_changed_text: The guest list for %{program_event_title} has changed since you last sent invitations. Would you like to update the list?
+        admin_view_changed_success: Guest list updated for %{program_event_title}
+        send_new_invite_button: Yes, update guest list
+        another_admin_view_was_selected_alert_v1: View is changed. Attendees will be updated accordingly.
+        search_guests: Search guests
+        added_to_removed_from_guest_list_confirmation: Updating guest list would add %{n_added_users} who got added and remove %{n_removed_users} who got removed from the view '%{view}' since guest list was updated last time.
+        added_to_guest_list_confirmation: Updating guest list would add %{n_added_users} who got added to the view '%{view}' since guest list was updated last time.
+        removed_from_guest_list_confirmation: Updating guest list would remove %{n_removed_users} who got removed from the view '%{view}' since guest list was updated last time.
+        added_to_removed_from_guest_list_email_note_html: Also, %{invite_email_link} will be sent to the %{added_users} who got added and %{delete_email_link} will be sent to the %{removed_users} who got removed.
+        added_to_guest_list_email_note_html: Also, %{invite_email_link} will be sent to the %{added_users} who got added.
+        removed_from_guest_list_email_note_html: Also, %{delete_email_link} will be sent to the %{removed_users} who got removed.
+        event_invite_notification: event invite notification
+        event_delete_notification: event delete notification
+      action:
+        post_event: Post Event
+        send_test_email: Send Test Email
+        edit_program_event: Edit Program Event
+        delete_program_event: Delete Program Event
+        import_guests_csv: Export Guest list to CSV
+        see_all_count: See all (%{count})
+        create_event: Create Event
+        view_event: View Event
+      label:
+        is_attending: Attending?
+        Attended: Attended
+        Attending: Attending
+        Not_attended: Not Attended
+        Not_attending: Not Attending
+        May_have_attended: May have Attended
+        May_be_Attending: May be Attending
+        Not_responded: Not Responded
+        Invited: Invited
+        remind_one_day_before_event: Remind me one day before the event
+        not_attend_confirm: Are you sure, you don't want to attend this program event?
+        date_v1: Date
+        time_v1: Time
+        location_v1: Location
+        invited_v1: Invited
+        upcoming_count: Upcoming (%{count})
+        past_count: Past (%{count})
+        drafted_count: Drafted (%{count})
+        upcoming: upcoming
+        past: past
+        drafted: drafted
+        no_details_available: No details available
+        DRAFTED: DRAFTED
+        Users: Users
+        no_title: "(No title)"
+        Date: Date
+        Time: Time
+        users_number: "%{count} users"
+        users_number_v2:
+          one: 1 user
+          other: "%{count} users"
+        view_details_html: view details %{arrow}
+        hide_details_html: hide details %{arrow}
+      description:
+        users_invited_from_view_html: Users that belong to the view '%{admin_view_title_link}'
+        users_invited_from_view_with_date_html: Users that belong to the view '%{admin_view_title_link}' as of %{date}
+      back_link:
+        program_events_v1: events
+        program_event_v1: event
+      placeholder:
+        Start_time: Start time
+        End_time: End time

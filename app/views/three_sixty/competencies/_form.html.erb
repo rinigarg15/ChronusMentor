@@ -1,0 +1,8 @@
+<%= simple_form_for competency, :remote => true, :format => :js, :html => {:id => "three_sixty_competency_from_#{competency.id}", :class => "form-horizontal"} do |f| %>
+  <%= f.input :title, :wrapper => :horizontal_input, :input_html => { :class => "form-control" } %>
+  <%= f.input :description, :wrapper => :horizontal_input, :input_html => { :class => "form-control", :rows => 5 } %>
+  <% action_set(:fields_required => :true, class: "pull-right") do %>
+    <a class='popup_closebox btn-white cancel btn' data-dismiss='modal'><%= "display_string.Cancel".translate %></a>
+    <%= f.button :submit, "display_string.Submit".translate %>
+  <% end %>
+<% end %>

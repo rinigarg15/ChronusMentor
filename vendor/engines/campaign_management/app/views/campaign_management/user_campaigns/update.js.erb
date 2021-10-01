@@ -1,0 +1,6 @@
+ChronusValidator.ErrorManager.ClearPageFlash();
+<% if @campaign.valid? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('campaign_create_flash', '<%= @success_flash_message %>', true);
+<% else %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('campaign_create_flash', '<%= @error_flash_message %>', false);
+<% end %>

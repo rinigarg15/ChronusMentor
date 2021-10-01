@@ -1,0 +1,21 @@
+<% ibox_title = "feature.mentoring_model.label.discussion_board".translate if show_title %>
+<%= ibox ibox_title, ibox_class: "cjs_topics_listing",  collapse_link_class: "hide", content_class: "no-padding" do %>
+  <% top_bar_options = {} %>
+  <% if forum.is_group_forum? %>
+    <% topic_action = new_topic_action(forum, false, true, class: "btn btn-sm btn-primary pull-right #{hidden_on_mobile}") %>
+    <% top_bar_options[:right_most_content] = topic_action %>
+    <% top_bar_options[:additional_class] = "#{hidden_on_mobile if topics.all.blank?}" %>
+    <% topics_badge_count_hash = current_user.get_unviewed_posts_count_by_topic(forum.group, topics.collect(&:id)) %>
+  <% end %>
+  <%= top_bar_in_listing( { collection: topics.all }, {}, {}, top_bar_options) %>
+
+  <% if topics.empty? %>
+    <div class="p-sm text-center">
+      <%= "feature.forum.content.no_conversations".translate %>
+    </div>
+  <% else %>
+    <%= content_tag(:div, listing_page(topics, partial: "forums/topic", collection_key: :topic, list_group_item_class: "pointer", locals: { home_page: home_page, topics_badge_count_hash: topics_badge_count_hash}), id: "cjs_topics_list") %>
+    <%= bottom_bar_in_listing( { collection: topics.all } ) %>
+  <% end %>
+  <% @mobile_floating_action = new_topic_action(forum, true) %>
+<% end %>

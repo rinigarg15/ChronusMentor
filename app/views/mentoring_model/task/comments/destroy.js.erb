@@ -1,0 +1,9 @@
+jQuery("#mentoring_model_task_comment_<%= @comment.id %>_container").fadeOut();
+MentoringAreaTracking.gaTrackTaskCommentDeleted(<%= @home_page_view %>);
+<% if @comments.blank? %>
+   jQuery(".task_<%= @task.id %>_edit_icon").addClass("hide");
+<% end %>
+<% if @comments_and_checkins.blank? %>
+  jQuery(".cjs_comments_container").hide();
+  jQuery(".cjs_no_comments_container").show();
+<% end %>

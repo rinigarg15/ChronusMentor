@@ -1,0 +1,9 @@
+<div id="cjs_filter_pane" class="pull-right">
+  <% filters = (render :partial => "program_invitations/filter_form").html_safe %>
+  <%= build_dropdown_filter("display_string.Filters".translate, filters, :btn_class => "no-margin pull-right dropdown_button_container", :for_filters => true, :id => "program_invitations_filter") %>
+  <%= link_to "feature.connection.action.clear_all".translate, program_invitations_path, :id => 'reset_all', :class => "pull-right has-next-1 #{'hide' unless @my_filters.any?}" %>
+
+  <div class="pull-right" id="cjs_applied_filters">
+    <%= render :partial => 'common/your_filters', :locals => {:onclick_function => "ProgramInvitationSearch.clearFilter", :new_filter => true} %>
+  </div>
+</div>

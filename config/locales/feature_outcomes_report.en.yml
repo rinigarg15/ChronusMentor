@@ -1,0 +1,101 @@
+en:
+  feature:
+    outcomes_report:
+      title:
+        user_outcomes_report: Users Total
+        outcomes_report: "%{Program} Outcomes Report"
+        total_connections: "%{Mentoring_Connections} Total"
+        registered_users: Users
+        registered_roles: "%{role}"
+        users: Users
+        users_total_connections: Users Connected
+        configure_positive_outcomes_popup_title: Configure Positive Outcomes Report
+        applied_filter_title: 'Selected filters:'
+        completed_connections_graph_title: Aggregate for Completed %{Mentoring_Connections}
+        connections_with_positive_outcome_graph_title: Aggregate for %{Mentoring_Connections} with positive outcome
+        ongoing_connections_graph_title: Ongoing %{Mentoring_Connections}
+        membership_outcomes_report: Membership Outcomes Report
+        all_users_role_filter: All Users
+        role_filter_title: 'Show only:'
+        go_to_detailed_report: Click here to go to Detailed Outcomes Report
+      header:
+        membership: Membership
+        matching: Matching
+        engagement_v1: Engagement - Completed %{groups_or_meetings_term}
+        positive_outcome: Positive Results Reported in Completed %{Mentoring_Connections}
+        connection_outcomes_report: "%{Mentoring_Connection} Summary Report"
+        mentoring_template: Template
+        started_on: Started On
+        group_status: Status
+        user_graph_ongoing_connection_label: in ongoing %{mentoring_connection}
+        user_graph_completed_connection_label: in completed %{mentoring_connection}
+        user_graph_positive_outcomes_connection_label: in %{mentoring_connection} with positive outcomes
+        registered_users_graph: Membership Trends
+        registered_users_table: Users Total
+        connection_report_connection_graph_header: "%{Mentoring_Connections} Trend"
+        connection_report_user_graph_header_html: Connected %{role} Trend
+      tooltip:
+        users_total_v1: This is the number of users in active state at some point in your %{program} during the selected time period.
+        users_connected: This is the number of users in at least one %{mentoring_connection} at some point during the selected time period.
+        mentoring_connections_total: This is the number of %{mentoring_connections} present at some point during the selected time period.
+        users_with_completed_mentoring_connections: This is the number of users who completed at least one %{mentoring_connection} at some point during the selected time period.
+        mentoring_connections_completed: This is the number of %{mentoring_connections} that were completed at some point during the selected time period.
+        users_reporting_positive_results: This is the number of users who completed %{a_mentoring_connection} and reported positive results in the %{mentoring_connection} survey(s) selected.
+        mentoring_connections_reporting_positive_results: This is the number of %{mentoring_connections} with at least one member reporting positive results in the selected survey during the selected time period.
+        users_with_completed_sessions: This is the number of users who attended at least one %{meeting} during the selected time period.
+        sessions_completed: This is the number of %{meetings} which were completed during the selected time period.
+        users_reporting_positive_meeting_results: This is the number of users who completed %{a_meeting} and reported positive results in the %{meeting} survey.
+        sessions_reporting_positive_results: This is the number of %{meetings} with at least one member reporting positive results in the selected survey during the selected time period.
+        connection_report_positive_outcome_tooltip: These results are reported by users in the surveys configured in program outcomes report.
+      content:
+        percent_previous_window_help_text: "% increase or decrease is compared to the previous %{days_count_text}"
+        percent_previous_window_help_text_html:
+          one: "% increase or decrease is compared to the previous 1 day"
+          other: "% increase or decrease is compared to the previous <b>%{count}</b> days"
+        progress_bar_tooltip_registered_html: "%{percentage} of registered %{role_name}"
+        progress_bar_tooltip_connected_html: "%{percentage} of connected %{role_name}"
+        progress_bar_tooltip_completed_html: "%{percentage} of %{role_name} with completed %{groups_or_meetings}"
+        progress_bar_tooltip_engagements_html: "%{percentage} of %{groups_or_meetings}"
+        progress_bar_tooltip_completed_engagements_html: "%{percentage} of completed %{groups_or_meetings}"
+        positive_outcomes_role_user_tooltip: "%{role_name} with completed %{groups_or_meetings} who reported positive results in the survey"
+        positive_outcomes_engagement_tooltip: Completed %{groups_or_meetings} where positive results were reported in the survey
+        positive_outcomes_extrpolation_tooltip: Extrapolated based on the survey response rate
+        metrics_based_on_surveys_list_v1_html: The following metrics are based on the responses from %{surveys_list}.
+        response_rate_html:
+          one: "%{percent_html} of users with completed %{groups_or_meeting_term} responded to this survey and the %{margin_of_error_html} stands at %{error_percentage_html}. The data is extrapolated accordingly."
+          other: "%{percent_html} of users with completed %{groups_or_meeting_term} responded to these surveys and the %{margin_of_error_html} stands at %{error_percentage_html}. The data is extrapolated accordingly."
+        margin_of_error: margin of error
+        configure_positive_outcomes_html: "%{click_here} to configure the reported positive outcomes section"
+        select_a_question: Select a survey question
+        select_a_option: Select a response
+        popup_content: Consider the %{mentoring_connection} has positive outcome if
+        new_users_count: new
+        suspended_users_count_v1: deactivated
+        detailed_connection_report_breakdown_text: Breakdown of total %{Mentoring_Connections}
+        reported_positive_outcomes: Reported positive outcomes
+        completed_connections_label: Completed %{Mentoring_Connections}
+        ongoing_connections_label: Ongoing %{Mentoring_Connections}
+        dropped_connections_label: Dropped %{Mentoring_Connections}
+        positive_outcome_connections_label: "%{Mentoring_Connections}"
+        total_users: Users
+        percent_change_label: "% change indicates comparison against %{start_date}-%{end_date}"
+      pdf_name: "%{Program}_Outcomes_Report"
+      detailed_report:
+        table:
+          users: Users
+          no_users: No Users
+          no_connections: No %{Mentoring_Connections}
+          in_selected_time_range: in selected time range
+          first_name: First Name
+          last_name: last Name
+          role: Role
+          created_at: Registered on
+          email: Email
+      highchart_graph:
+        reset_zoom: Reset zoom
+        reset_zoom_title: Reset zoom level 1:1
+        download_png: Download PNG
+        download_jpeg: Download JPEG
+        download_svg: Download SVG
+        download_csv: Download CSV
+        download_error: Download error. Please try after sometime.

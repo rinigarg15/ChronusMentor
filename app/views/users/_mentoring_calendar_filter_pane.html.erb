@@ -1,0 +1,22 @@
+<% mobile_footer_actions = { see_n_results: { results_link_text: "feature.calendar.content.back_to_calendar".translate },
+  reset_filters: { js: "BBQPlugin.applySavedFilters(this, '');", class: "#{'hide' if @my_filters.blank?}" } } %>
+
+<%= filter_container_wrapper(mobile_footer_actions) do %>
+  <% if @session_filters.present? %>
+    <div class="text-center p-xs b-b" id="apply_last_search">
+      <%= link_to_function append_text_to_icon("fa fa-undo","feature.user.filter.apply_last_search".translate), "BBQPlugin.applySavedFilters(this, '#{escape_javascript(@session_filters)}')", class: "font-bold" %>
+    </div>
+  <% end %>
+  <%= form_tag request.url, remote: true, method: :get, id: "search_filter_form", :class => "uninitplaceholder" do %>
+    <%= render :partial => "users/unique_filters" %>
+    <%= render :partial => "users/render_status_filters", locals: { status_filter_label: @status_filter_label, filter_fields: calendar_specific_filters(current_user, true), filter_param: @filter_field } %>
+    <% cache(CacheConstants::Programs::USER_FILTERS.call(@current_program.id, @role)) do %>
+      <%= render :partial => "users/question", :collection => @profile_filterable_questions, locals: { expand: true } %>
+      <div class="panel-group no-margins hide cjs_hidden_filters">
+        <%= render :partial => "users/question", :collection => @non_profile_filterable_questions %>
+      </div>
+    <% end %>
+    <%= render :partial => "common/filter_filtering" if @non_profile_filterable_questions.present? %>
+    <%= hidden_field_tag :ajax_filters %>
+  <% end %>
+<% end %>

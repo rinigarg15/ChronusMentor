@@ -1,0 +1,80 @@
+<% match_details, tags_count, matched_configs_or_preferences_count, total_match_configs_or_preferences_count = get_match_details_for_display(current_user, profile_user, program_questions_for_user) if current_user.present? && profile_user.present? %>
+<% match_score = current_user.match_score(profile_user.id) if can_see_match_label %>
+<% member_name = profile_member.name(name_only: true) %>
+<div class="no-margins ct_name_title" id="member_profile_summary">
+  <div class="pull-left p-r-xs">
+    <%= member_picture_v3 profile_member, {:no_name => true, :size => :large, :dont_link => true, :id => "profile_pic_to_change"}, {class: "img-circle circle-border m-b-xs"} %>
+    <% if local_assigns[:is_edit] %>
+      <div class="text-center">
+        <%= link_to "feature.user.photo.edit_picture".translate, edit_member_profile_picture_path(profile_member, :src => "profile") %>
+      </div>
+    <% end %>
+  </div>
+  <div class="pull-left col-xs-6 overflow-hidden no-padding cjs_profile_other_summary">
+    <div class="no-padding cjs_profile_other_summary_inner_container">
+      <div class="clearfix">
+        <h3 class="col-xs-12 p-t-xxs p-l-0 p-r-0 no-margins">
+          <div class="pull-left p-r-xxs">
+            <%= is_admin_editing ? link_to_user(profile_user, { no_hovercard: true } ) : member_name %>
+          </div>
+          <% if can_show_rating_for_the_user?(current_program, profile_user, current_user) %>
+            <div class="pull-left hide_in_affixed_container">
+              <%= display_coach_rating_and_reviews(profile_user) %>
+            </div>
+          <% elsif show_favorite_ignore_links %>
+            <span class="mentor_favorite_<%= profile_user.id %> m-l-xs pull-left animated">
+              <%= render partial: "users/show_favorite_links", locals: {mentor_id: profile_user.id, favorite_preferences_hash: favorite_preferences_hash, src: EngagementIndex::Src::AbstractPreference::USER_PROFILE_PAGE} %>
+            </span>
+          <% end %>
+        </h3>
+      </div>
+      <% if show_favorite_ignore_links %>
+        <% ignore_preference_user_ids = ignore_preferences_hash.keys %>
+        <% mentor_ignored = ignore_preference_user_ids.include?(profile_user.id) %>
+      <% end %>
+      <% if can_see_match_score %>
+        <% score_content = display_match_score(match_score, in_listing: true, mentor_id: profile_user.id, tooltip_options: {member_name: member_name, mentor_ignored: mentor_ignored}) %>
+      <% end %>
+      <% if current_user.present? && current_user.explicit_preferences_configured? && can_see_match_label %>
+        <% score_content = get_matched_preferences_label(matched_configs_or_preferences_count, total_match_configs_or_preferences_count, mentor_ignored,{show_no_match_label: get_show_match_lable_value(match_score)}) %>
+      <% end %>
+      <%= content_tag(:div, score_content, class: "m-t-xs mentor_match_score_#{profile_user.id} m-b-xs") if score_content.present? %>
+      <div class="font-bold font-16 hide_in_affixed_container m-t-xs"><%= icons_for_availability(profile_user, no_left_margin: true) if profile_user.present? %></div>
+      <% if profile_user %>
+        <% if @show_meeting_availability %>
+          <div class="p-l-0 m-t-xs hide_in_affixed_container">
+            <%= get_mentor_availability_text(profile_user) %>
+          </div>
+        <% end %>
+        <div class="p-l-0 m-t-xs hide_in_affixed_container">
+          <%= content_tag(:div, RoleConstants.to_program_role_names(current_program, profile_user.role_names).to_sentence, class: "m-b-xs") %>
+        </div>
+      <% end %>
+
+      <% unless is_self_view %>
+        <div class="no-padding hide_in_affixed_container">
+          <% if profile_member.dormant? %>
+            <div class="m-b-xs">
+              <%= "feature.profile.content.profile_imported_on_date".translate(date: DateTime.localize(profile_member.imported_at, format: :short)) unless profile_member.imported_at.nil? %>
+            </div>
+          <% else %>
+            <div class="m-b-xs">
+              <%= "feature.profile.content.member_since_date".translate(date: DateTime.localize(profile_member.created_at, format: :full_month_year)) %>
+            </div>
+            <% if is_admin_view && profile_user.present? %>
+              <% show_last_logged_in(profile_user, with_prefix: true) do |last_logged_in| %>
+                <div class="m-b-xs">
+                  <%= last_logged_in %>
+                </div>
+              <% end %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= link_to(('feature.match_config.content.show_compatibility'.translate + get_icon_content("fa fa-angle-right")).html_safe, "javascript:void(0);", class: "cjs_show_match_details h6 link-color hide_in_affixed_container", id: "show_compatibility_link_#{profile_user.id}", data: {url: match_details_user_path(id: profile_user.id, src: EngagementIndex::Src::MatchDetails::PROFILE_PAGE)}) if show_compatibility_link?(can_see_match_label, match_details.present?, match_score) %>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  initialize.initializeMatchDetailsPopup();
+</script>

@@ -1,0 +1,28 @@
+<div id="edit_profile" class="clearfix">
+  <div id="profile" class='mentor_profile clearfix'>
+    <div id="profile_completion">
+
+      <% experiment = chronus_ab_test(ProgramAbTest::Experiment::SIGNUP_WIZARD, !is_ie_less_than?(9)) %>
+      <%= experiment.render_wizard(profile_sections, section, -1, profile_user, current_program) unless local_assigns[:answer_mandatory_qs] %>
+
+      <% if section == MembersController::EditSection::GENERAL %>
+        <%= render_basic_information(profile_member, profile_user, true, program_questions_for_user, experiment: experiment, grouped_role_questions: grouped_role_questions) %>
+
+      <% elsif (section == MembersController::EditSection::PROFILE && local_assigns[:program_questions_for_user].present?)  || local_assigns[:answer_mandatory_qs] %>
+        <%= render :partial => "members/profile_section", :locals => {program_questions_for_user: local_assigns[:program_questions_for_user], pending_profile_questions: local_assigns[:pending_profile_questions], answer_mandatory_qs: local_assigns[:answer_mandatory_qs], :experiment => experiment} %>
+
+      <% elsif section == MembersController::EditSection::CALENDAR_SYNC_V2_SETTINGS && current_program.calendar_sync_v2_for_member_applicable? %>
+        <%= form_for profile_user, url: member_path(profile_member), html: {class: 'form-horizontal'} do |f| %>
+          <% ibox_options = {header_title: "program_settings_strings.tab.calendar".translate, no_collapse: true} %>
+          <%= render partial: "members/edit/settings_calendar_sync_v2" ,locals: {program: current_program, user: profile_user, ibox_options: ibox_options, form: f, show_submit: true, ei_src: EngagementIndex::Src::ConnectCalendar::FIRST_TIME_COMPLETION} %>
+        <%end %>
+        
+      <% elsif section == MembersController::EditSection::MENTORING_SETTINGS %>
+        <%= render_mentoring_settings_section(true) %>
+      <% end %>
+
+      <%= javascript_tag "jQuery(document).ready(function(){CustomizeSelect.selectExpandContract();});" %>
+      <%= javascript_tag("CustomizeProfileQuestions.disableSelectOnLoad()") %>
+    </div>
+  </div>
+</div>

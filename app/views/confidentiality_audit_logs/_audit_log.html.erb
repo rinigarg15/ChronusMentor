@@ -1,0 +1,6 @@
+<tr id="log_<%= audit_log.id %>">
+  <td class="col-xs-2"><%= link_to_user audit_log.user, :name_only => true %></td>
+  <td class="col-xs-3"><%= get_mentor_for_group(audit_log) %> :: <%=  get_mentees_for_group(audit_log) %></td>
+  <td class="col-xs-2"><%= formatted_time_in_words(audit_log.created_at.getlocal) %></td>
+  <td class="col-xs-5"><%= render_more_less(audit_log.reason) %></td>
+</tr>

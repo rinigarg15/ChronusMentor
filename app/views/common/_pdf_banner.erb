@@ -1,0 +1,21 @@
+<div id='program_header' class="pdf_banner_container clearfix">
+  <div id="program_name_pdf" class="clearfix row white-bg table-bordered p-xs p-l-sm m-b-sm">
+    <div class='clearfix program_logo media p-xxs'>
+      <% if !@hide_logo_in_pdf && program_context.logo_or_banner_url.present? %>
+        <%= content_tag(:div, class: "media-left program_logo_or_banner") do %>
+          <%= render_logo_or_banner(program_context, class: 'pull-left') %>
+        <% end %>
+      <% end %>
+      <div id="prog_name" class="media-body">
+        <div class="lead m-t-sm m-l-xxs">
+          <%=h organization_view? ? @current_organization.name : @current_program.name %>
+        </div>
+      </div>
+    </div>
+    <% if @title.present? %>
+      <div id="report_title" class="font-600 pull-right">
+        <%= @title %>
+      </div>
+    <% end %>
+  </div>
+</div>

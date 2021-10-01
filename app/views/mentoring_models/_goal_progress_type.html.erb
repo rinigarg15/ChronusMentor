@@ -1,0 +1,15 @@
+<%= choices_wrapper("feature.mentoring_model.header.goal_progress_type".translate, class: "m-l-lg #{"hide" unless visible }", id: "cjs_goal_progress_type") do %>
+  <label class="radio-inline">
+    <%= form.radio_button "goal_progress_type", MentoringModel::GoalProgressType::AUTO, disabled: disabled, checked: @mentoring_model.goal_progress_type == MentoringModel::GoalProgressType::AUTO, :class => 'radio_button' %>
+    <%= "feature.mentoring_model.label.task_progress".translate %>
+  </label>
+  <label class="radio-inline">
+    <%= form.radio_button "goal_progress_type", MentoringModel::GoalProgressType::MANUAL, disabled: disabled, checked: @mentoring_model.goal_progress_type == MentoringModel::GoalProgressType::MANUAL, :class => 'radio_button' %>
+    <%= "feature.mentoring_model.label.manual_progress".translate %>
+  </label>
+<% end %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    MentoringModels.goalProgressTypeSetting();
+  });
+<% end %>

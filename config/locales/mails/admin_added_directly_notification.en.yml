@@ -1,0 +1,15 @@
+en:
+  email_translations:
+    admin_added_directly_notification:
+      title_v4: Notification to new %{_admin} added to the %{_program}
+      description_v3: This email is sent to the new user added as %{_admin} to the %{_program} asking the user to signup
+      subject_v1: "{{invitor_name}} invites you to be {{customized_admin_term_articleized}}!"
+      content_v1_html: "{{invitor_name}} has invited you to join {{subprogram_or_program_name}} as {{customized_admin_term_articleized}}.<br/><br/>You can get started by reviewing the {{customized_subprogram_term}} and making any updates, if necessary.<br/>{{accept_and_signup_button}}"
+      accept_and_signup_text_html: Accept and sign up
+      tags:
+        url_invite:
+          description: Url for the user to click and accept the invitation
+        invitor_name:
+          description: Name of the administrator who added the user
+        accept_and_signup_button:
+          description: Accept and sign-up button

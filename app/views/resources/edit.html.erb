@@ -1,0 +1,6 @@
+<% @back_link = {:label => _Resources, :link => resources_path()} %>
+<% @title = @resource.title %>
+
+<div id="edit_resource">
+  <%= render :partial => "resources/form", :locals => {portals: @portals, tracks: @tracks, can_show_portals: @can_show_portals} %>
+</div>

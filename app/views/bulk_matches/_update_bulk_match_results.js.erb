@@ -1,0 +1,11 @@
+<% if @student_user_ids.present? && @mentor_user_ids.present? %>
+  <% student_options = {group_status: @group_or_recommendation_info, selected_mentors: @selected_mentors, suggested_mentors: @suggested_mentors, active_groups: @active_groups, drafted_groups: @drafted_groups, bulk_match_type: @bulk_match.type, orientation_type: @orientation_type, pickable_slots: @pickable_slots_for_mentees} %>
+  BulkMatch.students = <%= chr_json_escape(create_students_json_array(@student_users, student_options)) %>
+  <% mentor_options = {program: @current_program, orientation_type: @orientation_type, pickable_slots: @pickable_slots, recommended_count: @recommended_count, recommend_mentors: @recommend_mentors, drafted_groups: @drafted_groups, active_groups: @active_groups, bulk_match_type: @bulk_match.type, selected_students: @selected_mentees, suggested_students: @suggested_mentees, group_status: @group_or_recommendation_info} %>
+  BulkMatch.mentors = <%= chr_json_escape(create_mentors_json_array(@mentor_users, @mentor_slot_hash, mentor_options)) %>
+  BulkMatch.bulk_match_vars = <%= chr_json_escape(build_bulk_match_vars(@bulk_match)) %>
+<% end %>
+
+<% bulk_match_content = render(partial: "bulk_matches/find_matches", locals: {request_notes: @bulk_match.request_notes, orientation_type: @bulk_match.orientation_type, mentor_student_hash: @mentor_student_hash, student_mentor_hash: @student_mentor_hash}) %>
+jQuery(BulkMatch.loadingResultsImage).hide();
+jQuery('#bulk_match #find_match_content').replaceWith("<%= j(bulk_match_content) %>");

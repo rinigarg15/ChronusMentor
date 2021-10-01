@@ -1,0 +1,3 @@
+<%= ibox _Mentoring_Connections, :ibox_class => "activity-overview section-container", :content_class => "p-t-0 p-r-0 p-l-0" do %>
+  <%= available_groups_for_user_profile(@profile_user, current_user, current_program) %>
+<% end %>

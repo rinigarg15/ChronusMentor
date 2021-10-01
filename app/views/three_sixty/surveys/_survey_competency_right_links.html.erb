@@ -1,0 +1,9 @@
+<span class="pull-right" id="three_sixty_survey_add_questions_<%= survey_competency.id %>" style= <%= survey_competency.survey_questions.size == competency.questions.size ? "display:none" : "" %> >
+  <%= link_to(get_icon_content("fa fa-plus") + "feature.three_sixty.survey_question.add".translate, "#", :id => "new_three_sixty_survey_competency_question_#{survey_competency.id}", :class => "remote-popup-link btn btn-xs btn-white m-t-n-xs", :data => { :url => new_three_sixty_survey_question_path(survey, {:competency_id => survey_competency.id}) }) %>
+</span>
+<span class="cjs_three_sixty_actions", style ="display:none;">
+  <%= link_to(get_icon_content("fa fa-trash") + "display_string.Delete".translate, three_sixty_survey_competency_path(survey ,survey_competency), :remote => true, :method => :delete, :confirm => "feature.three_sixty.survey_competency.delete_warning_v1".translate, :class => "btn btn-xs btn-white m-t-n-xs") %>
+</span>
+<span class="pull-right">
+  <%= link_to(get_icon_content("fa fa-trash") + "display_string.Delete".translate, three_sixty_survey_competency_path(survey ,survey_competency), :remote => true, :method => :delete, :class => " btn btn-xs btn-white m-t-n-xs", data: {:confirm => "feature.three_sixty.survey_competency.delete_warning".translate}) %>
+</span>

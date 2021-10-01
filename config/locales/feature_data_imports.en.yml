@@ -1,0 +1,22 @@
+en:
+  feature:
+    data_imports:
+      header:
+        data_import_summary: Data Import Summary
+      content:
+        no_datat_imports: No data imports yet.
+        success_info_v1: 'Member records (created: %{created_count}, updated: %{updated_count}, suspended: %{suspended_count})'
+        skipped_info: Skipped due to availability of new version file
+        info_not_available: Information not available
+      label:
+        imported_at: Imported At
+        uploaded_file: Uploaded File
+        uploaded_at: Uploaded At
+        status: Status
+        additional_information: Additional Information
+        log_file: Error Log
+        success: Success
+        failed: Failed
+        skipped: Skipped
+        unknown: Unknown
+        log_file_not_present: NA

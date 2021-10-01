@@ -1,0 +1,42 @@
+<% @title = "feature.program.header.saml".translate %>
+<% @back_link = { label: "tab_constants.manage".translate, link: manage_organization_path } %>
+
+<%= wizard_headers(saml_sso_wizard_view, @saml_tab) do %>
+  <% if @saml_tab == SamlAuthConfigController::SamlHeaders::SETUP_AUTHCONFIG %>
+    <%= render partial: "auth_configs/setup_authconfig" %>
+  <% else %>
+    <div class="well p-lg p-b-0 p-t-sm clearfix">
+      <% if @saml_tab == SamlAuthConfigController::SamlHeaders::UPLOAD_IDP_METADATA %>
+        <%= form_tag saml_auth_config_upload_idp_metadata_path, method: :post, id: "cjs_upload_idp_metadata", class: "form-horizontal", multipart: true do %>
+          <%= content_tag(:div, get_icon_content("fa fa-info-circle") + "feature.program.content.idp_metadata_helptext".translate, class: "text-center row m-b h5") %>
+          <hr class="m-b-md m-t-xs" />
+          <%= control_group do %>
+            <label for="file" class="control-label col-sm-3"><%= "feature.program.content.idp_file_upload_text".translate %></label>
+            <%= controls(:class => "col-sm-9") do %>
+              <%= file_field_tag "file", accept: AuthConfig::SAML_METADATA_FILE_FORMATS.join(",") %>
+            <% end %>
+          <% end %>
+          <% if @current_organization.has_saml_auth? %>
+            <%= link_to saml_auth_config_download_idp_metadata_path, class: "btn btn-primary #{"disabled" unless @files_present}" do %>
+              <span><%= "display_string.Download".translate %></span>
+              <span data-toggle="tooltip" data-title='<%= "feature.program.content.idp_metadata_download_helptext".translate %>'><%= get_icon_content("fa fa-info-circle") %></span>
+            <% end %>
+          <% end %>
+          <% action_set(class: "pull-right m-b") do %>
+            <%= submit_tag("display_string.Upload".translate, class: "btn btn-primary", data: {disable_with: "display_string.Please_Wait".translate}) %>
+            <%= link_to "display_string.next".translate, saml_auth_config_saml_sso_path(tab: SamlAuthConfigController::SamlHeaders::GENERATE_SP_METADATA), class: "btn btn-primary" %>
+          <% end %>
+        <% end %>
+      <% elsif @saml_tab == SamlAuthConfigController::SamlHeaders::GENERATE_SP_METADATA %>
+        <div class="text-center">
+          <%= content_tag(:div, get_icon_content("fa fa-info-circle") + "feature.program.content.sp_metadata_helptext".translate, class: "m-b h5") %>
+          <hr class="m-b-md m-t-xs" />
+          <% action_set(class: "pull-right m-b") do %>
+            <%= link_to "display_string.Download".translate, saml_auth_config_generate_sp_metadata_path, class: "btn btn-primary" %>
+            <%= link_to "display_string.next".translate, saml_auth_config_saml_sso_path(tab: SamlAuthConfigController::SamlHeaders::SETUP_AUTHCONFIG), class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,47 @@
+<% new_view = @admin_view.new_record? %>
+<% editable_view = @admin_view.editable? %>
+<% @back_link = get_back_link(@source_info) %>
+<% @title = new_view ? "feature.admin_view.header.create_new_view".translate : "feature.admin_view.header.update_view_html".translate(:title => @admin_view.title) %>
+<% existing_views = (@all_admin_views - (new_view ? [] : [@admin_view])).collect(&:title) %>
+<% remote ||= false %>
+<% render_only_profile_answers ||= false %>
+<% format ||= :html %>
+
+<%= response_flash("cjs_admin_view_flash") %>
+<%= simple_form_for @admin_view, format: format, :html => {:class => "form-horizontal cjs_adminview_form"}, remote: remote do |form_object| %>
+  <% if render_only_profile_answers %>
+    <%= hidden_field_tag :is_org_view, true %>
+    <%= hidden_field_tag "admin_view[title]", get_admin_view_title(role, program, @admin_view) %>
+    <%= hidden_field_tag "admin_view[description]", "" %>
+    <%= hidden_field_tag "admin_view[role]", role.id %>
+    <%= hidden_field_tag "admin_view[default_view]", AbstractView::DefaultType::ELIGIBILITY_RULES_VIEW %>
+    <%= hidden_field_tag "admin_view[create_default_columns]", true %>
+    <%= hidden_field_tag "admin_view[allow_filter_update]", true %>
+    <%= render partial: "admin_views/profile_answer_fields", locals: {admin_view: @admin_view, profile_questions: @profile_questions, filter_params: @filter_params} %>
+    <%= render partial: "admin_views/eligibility_message", locals: {:role => @role} if @role.present? %>
+    <% action_set do %>
+      <div class="pull-right">
+        <%= form_object.button :submit, "display_string.Save".translate, :class => "cjs_admin_view_submit btn btn-primary" %>
+      </div>
+    <% end %>
+  <% else %>
+    <% if @current_organization.standalone? %>
+      <%= hidden_field_tag :is_program_view, @admin_view.is_program_view? %>
+    <% end %>
+    <% actions_locals = {:new_view => new_view, :editable_view => editable_view, :form_object => form_object, :used_as_filter => @used_as_filter} %>
+    <%= render :partial => "admin_views/title_and_filters", :locals => {:actions_locals => actions_locals, :editable_view => editable_view, :new_view => new_view, :form_object => form_object} %>
+    <div class="<%= "cjs_admin_view_step hide" if new_view || @used_as_filter %>">
+      <%= ibox admin_view_section_title(3, "feature.admin_view.header.Select_Fields".translate, :skip_step_title => !editable_view) do %>
+        <%= render :partial => "admin_views/select_columns", :locals => {admin_view: @admin_view, admin_view_columns: @admin_view_columns, program: @current_program} %>
+        <%= render :partial => "admin_views/new_view_actions", :locals => actions_locals %>
+      <% end %>
+    </div>
+    <%= render partial: "send_source_info", locals: {source_info: @source_info, form_object: form_object} if @used_as_filter %>
+    <%= render partial: "admin_views/eligibility_message", locals: {:role => @role} if @role.present? %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do  %>
+  ProgramSettings.membershipEligibilityAdvanceSetting();
+  AdminViewsNewView.inspectActions("<%= j('feature.admin_view.content.select_at_least_one_field'.translate) %>", "<%= j('feature.admin_view.content.view_title_dup'.translate) %>", "<%= j('feature.admin_view.content.fill_all_profile_answers'.translate) %>", '<%= current_locale %>', "<%= j (new_view ? "" : get_update_admin_view_confirm_text(@admin_view)) %>", <%= chr_json_escape "#{existing_views.to_json}" %>);
+<% end %>

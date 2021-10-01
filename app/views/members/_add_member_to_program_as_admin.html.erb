@@ -1,0 +1,18 @@
+<% modal_container "feature.profile.content.add_as_admin".translate(admin: _Admin), modal_id: "modal_add_user_to_program_as_admin" do %>
+  <%= simple_form_for member, url: add_member_as_admin_member_path(member), html: { method: :post, class: "form-horizontal", id: "exisiting_user_to_program_admin" } do %>
+    <%= control_group do %>
+      <%= label_tag 'Program', _Program, class: "control-label col-sm-3", for: "exisiting_user_to_program_admin_program_id" %>
+      <%= controls(class: "col-sm-9") do %>
+        <%= select_tag 'program_id', get_programs_and_portals_select_box(self, include_all_programs:  @programs_view_count > 1 ), id: "exisiting_user_to_program_admin_program_id", class: "form-control" %>
+      <% end %>
+    <% end %>
+
+    <%= email_notification_consequences_on_action_html(UserPromotedToAdminNotification, organization_or_program: @current_organization) %>
+    <hr/>
+    <% action_set class: "pull-right" do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", class: 'btn btn-white', data: { dismiss: "modal" } %>
+      <%= submit_tag "display_string.Add".translate, class: "btn btn-primary", data: { disable_with: "display_string.Please_Wait".translate } %>
+    <% end %>
+  <% end %>
+  <%= javascript_tag(%Q[SelectSeparator.addSelectSeparator('program_id', '#{"-"*60}','-1');]) %>
+<% end %>

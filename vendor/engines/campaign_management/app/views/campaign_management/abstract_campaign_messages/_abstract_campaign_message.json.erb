@@ -1,0 +1,9 @@
+<%= {
+  "id" => abstract_campaign_message.id,
+  "title" => campaign_message_link(abstract_campaign_message),
+  "total_sent" => abstract_campaign_message.emails.count,
+  "open_rate" => abstract_campaign_message.event_rate(CampaignManagement::EmailEventLog::Type::OPENED),
+  "click_rate" => abstract_campaign_message.event_rate(CampaignManagement::EmailEventLog::Type::CLICKED),
+  "schedule" => campaign_message_schedule_text(abstract_campaign_message),
+  "actions" => campaign_message_actions_control(abstract_campaign_message)
+}.to_json.html_safe %>

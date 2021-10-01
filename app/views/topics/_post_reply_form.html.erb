@@ -1,0 +1,3 @@
+<%= render layout: "common/new_comment_wrapper", locals: { object: [@forum, @topic, Post.new], attribute: :body, placeholder: "feature.forum.content.write_a_comment".translate, form_html_options: { id_suffix: root.id }, form_options: { remote: true }, input_id: "cjs_post_comment_#{root.id}" } do %>
+  <%= hidden_field_tag "post[parent_id]", root.id, id: "parent_id_#{root.id}" %>
+<% end %>

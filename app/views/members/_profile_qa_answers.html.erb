@@ -1,0 +1,10 @@
+<%= ibox nil, content_class: "no-padding" do %>
+  <% if @qa_answered_questions.any? %>
+    <% user_name_prefix = @profile_member == wob_member ? "display_string.Your".translate : "display_string.user_s".translate(user: @profile_member.name(:name_only => true)) %>
+    <%= listing_page(@qa_answered_questions, partial: "qa_questions/qa_question", collection_key: :qa_question, locals: { answer_hash: @latest_qa_answer, user_name_prefix: user_name_prefix } ) %>
+  <% else %>
+    <div class="p-sm text-center">
+      <%= "feature.profile.content.no_answers_contributed".translate(member_name: @profile_member.name) %>
+    </div>
+  <% end %>
+<% end %>

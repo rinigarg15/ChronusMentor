@@ -1,0 +1,17 @@
+<% modal_container("feature.profile_question.title.delete_profile_field".translate, modal_id: "profile_question_deletion_confirmation_modal") do %>
+  <div class="media no-margins" >
+    <div class="media-left">
+        <%= embed_icon("fa fa-exclamation-triangle fa-5x") %>
+    </div>
+    <div class="media-body" >
+      <div class="col-xs-12" >
+        <div class="cjs-delete-question-confirmation-message"></div>
+        <br>
+        <% action_set(class: "pull-right") do %>
+          <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", "data-dismiss" => "modal" %>
+          <%= link_to "display_string.Delete".translate, "javascript:void(0)", class: "btn btn-danger cjs-delete-question-confirm-button", data: { dismiss: "modal" } %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

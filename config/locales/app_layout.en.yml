@@ -1,0 +1,32 @@
+en:
+  app_layout:
+    header:
+      chronus: Chronus
+      access_revoked_in: Starting %{cutofftime}, you will be unable to access this website from your current browser.
+      update_your_browser_program: Please upgrade your browser to use %{program_name}
+      update_your_browser_nil_organization: Please upgrade your browser to use.
+    label:
+      super_user_signout_html: Super User (%{signout_link})
+      on_time: 'On: %{time}'
+      add_new_page: Add a new page
+      reorder_programs: Reorder %{programs}
+      new_page: New page
+      account: Account
+      view_profile: View Profile
+      edit_profile: Edit Profile
+      account_settings: Account Settings
+      my_programs_html: My %{programs}
+      browse_programs_html: Browse %{programs}
+      messages: Messages
+      requests: Requests
+      support: Support
+      join: Join
+      super_user_signout_text: Super User (sign out)
+      back_to_backlink_html: "&laquo; Back to %{back_link}"
+      learn_more: Learn more
+      learn_more_about_program_html: "%{learn_more} about %{program}"
+      contact_admin_v1: Contact %{Admin}
+      more: More
+      favorites: Favorites
+    content:
+      ios8_warning_html: If you are having trouble logging in, it is due to a browser setting introduced by iOS 8 - follow <a href='https://chronus-mentor.s3.amazonaws.com/static/SafariiOS8Instructions.pdf' target='_blank'>steps here</a> to update the setting and successfully log in.

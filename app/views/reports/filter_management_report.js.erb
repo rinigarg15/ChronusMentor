@@ -1,0 +1,8 @@
+jQuery('#loading_results').hide();
+jQuery('.dropdown-with-datepicker.open').removeClass('open');
+<% content = render_tiles_with_date_filter(@current_program, @tile, {date_range: @date_range, date_range_preset: @date_range_preset, engagement_type: @engagement_type}) %>
+<% tile_div_id = "##{@tile}"%>
+<% date_range_preset_content = get_date_range_preset_translated(@date_range_preset) %>
+jQuery("<%= tile_div_id %>").html('<%= j content %>');
+jQuery("<%= tile_div_id %>").parent().find("span.text-muted").first().text('<%= j date_range_preset_content %>');
+initialize.setDatePicker();

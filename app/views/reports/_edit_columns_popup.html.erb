@@ -1,0 +1,22 @@
+<% formatted_start_date = DateTime.localize(@start_date, format: :date_range) %>
+<% formatted_end_date = DateTime.localize(@end_date, format: :date_range) %>
+<% date_range = [formatted_start_date, formatted_end_date].join(DATE_RANGE_SEPARATOR) %>
+<% modal_v3_popup "feature.reports.actions.select_fields".translate do %>
+  <%= response_flash("cjs_edit_columns_popup_flash") %>
+  <%= form_tag groups_report_path, :id => "cjs_edit_columns_form" do %>
+    <%= render :partial => "layouts/translations/multiselect" %>
+    <label class="sr-only" for="cjs_groups_report_multiselect"><%= "feature.reports.actions.select_fields".translate %></label>
+    <%= select_tag "columns", get_groups_report_columns_for_multiselect(@report_view_columns.collect(&:column_key), @custom_term_options), :id => "cjs_groups_report_multiselect", :multiple => true %>
+    <%= hidden_field_tag :page, @page, id: nil %>
+    <%= hidden_field_tag :date_range, date_range, id: nil %>
+    <% action_set(:class => "pull-right m-t-xs") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "popup_closebox btn-white btn", "data-dismiss" => "modal" %>
+      <%= submit_tag "feature.reports.actions.update_view".translate, :class => "btn btn-primary", data: {:disable_with => "display_string.Please_Wait".translate} %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  GroupsReport.initializeMultiSelect();
+  GroupsReport.validateEditColumnsForm("<%= j('feature.admin_view.content.select_at_least_one_field'.translate) %>");
+<% end %>

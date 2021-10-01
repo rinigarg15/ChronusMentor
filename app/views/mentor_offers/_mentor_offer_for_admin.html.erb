@@ -1,0 +1,51 @@
+<%
+  offer_message = mentor_offer.message
+  message_present = offer_message.presence
+%>
+
+<div id="mentor_offer_<%= mentor_offer.id %>">
+  <div class="actions_box pull-right hidden-xs">
+    <%= dropdown_buttons_or_button(mentor_offers_actions(mentor_offer, is_manage_view), dropdown_title: 'display_string.Actions'.translate,  :dropdown_menu_class => "pull-right") %>
+  </div>
+
+  <div class="no-margins">
+    <div class='media-left'>
+      <label for="ct_mentor_offer_checkbox_<%=mentor_offer.id%>" class="sr-only"><%= "feature.mentor_request.content.select_this_label_v1".translate %></label>
+      <%= check_box_tag nil, mentor_offer.id, false, 
+                        :class               => "cjs_mentor_offer_record",
+                        :id                  => "ct_mentor_offer_checkbox_#{mentor_offer.id}",
+                        :'data-sender-id'    => mentor_offer.student.id,
+                        :'data-recipient-id' => mentor_offer.mentor.try(:id) %>
+    </div>
+    <div class='media-body p-l-m'>
+      <div class='list_content admin_list'>
+        <%= profile_field_container_wrapper("#{'feature.mentor_request.label.Sender'.translate}", link_to_user(mentor_offer.mentor), :answer_class => "font-bold", :class => "m-t-sm m-b-xs") %>
+        <%= profile_field_container_wrapper("#{'feature.mentor_request.label.Sent'.translate }", formatted_time_in_words(mentor_offer.created_at, :absolute => true), :class => "m-t-sm m-b-xs") %>
+        <%= profile_field_container_wrapper("#{'feature.mentor_offer.label.Message'.translate }", (message_present ? chronus_auto_link(offer_message) : "feature.mentor_offer.content.no_message".translate), :answer_class => message_present ? "" : "text-muted", :class => "m-t-sm m-b-xs") %>
+        <%= profile_field_container_wrapper("#{'feature.mentor_request.label.Recipient'.translate }", link_to_user(mentor_offer.student), :answer_class => "font-bold", :class => "m-t-sm m-b-xs") %>
+
+        <% if mentor_offer.rejected? ||  mentor_offer.closed?  || mentor_offer.withdrawn? %>
+          <% reason = mentor_offer.rejected? ? 'feature.mentor_offer.label.rejection_reason_v1'.translate : mentor_offer.closed? ? 'feature.mentor_offer.content.closing_reason'.translate : 'feature.mentor_offer.label.withdrawal_reason'.translate %>
+          <%= profile_field_container_wrapper(reason, (mentor_offer.response.present? ? mentor_offer.response : "common_text.Not_specified".translate), :answer_class => (mentor_offer.response.present? ? "" : "font-bold"), :class => "m-t-sm m-b-xs") %>
+          
+          <% if mentor_offer.closed? %>
+            <% closed_by = mentor_offer.closed_by %>
+              <% if closed_by.present? %>
+                <%= profile_field_container_wrapper("#{'feature.mentor_offer.label.closed_by'.translate}", link_to_user(closed_by), :answer_class => "font-bold", :class => "m-t-sm m-b-xs") %>
+              <% end %>
+              <% closed_at = mentor_offer.closed_at %>
+              <% if closed_at.present? %>
+                <%= profile_field_container_wrapper("#{'feature.mentor_offer.label.closed_at'.translate}", formatted_time_in_words(closed_at, :absolute => true), :class => "m-t-sm m-b-xs") %>
+              <% end %>
+          <% end %>
+        <% end %>        
+      </div>
+    </div>
+    <div class="actions_box col-xs-12 no-padding visible-xs">
+      <%= dropdown_buttons_or_button(mentor_offers_actions(mentor_offer, is_manage_view), dropdown_title: 'display_string.Actions'.translate,  
+        :btn_class => "btn-block m-t-sm",
+        :dropdown_menu_class => "col-xs-12 pull-right table-bordered",
+        :responsive_primary_btn_class => "col-xs-12") %>
+    </div>
+  </div>
+</div>

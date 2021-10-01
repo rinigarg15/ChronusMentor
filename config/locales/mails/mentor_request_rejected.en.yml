@@ -1,0 +1,26 @@
+en:
+  email_translations:
+    mentor_request_rejected:
+      title_v4: "%{_Mentor} request declined notification to %{_mentee}"
+      description_v3: This email (including a personal message from the %{_mentee}) is sent to the %{_mentee} when %{_a_mentor} declines the %{_mentoring_connection} request.
+      subject_v3: "{{mentor_name}} has declined your {{customized_mentoring_term}} request"
+      subject_v5: Request a new {{customized_mentor_term}} - {{mentor_name}} is unavailable at this time
+      content_v3_html: "<a href='{{mentor_url}}'>{{mentor_name}}</a> declined your request for {{customized_mentoring_term}} in <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a>. <br /> {{message_from_mentor}} <br /> We have many other great {{customized_mentors_term}} available who may align with some of your intended goals and objectives. <br /> {{view_mentors_button}} <br /> If you are unable to find {{customized_mentor_term_articleized}}, please reach out to one of the <a href='{{url_contact_admin}}'>{{customized_admin_term_pluralized}}</a> and we'd be happy to help you.<br/>"
+      content_v5_html: "<a href='{{mentor_url}}'>{{mentor_name}}</a> was unable to accept your request for {{customized_mentoring_term}}. <br/>{{message_from_mentor}} <br /> That's ok! There are still plenty of great {{customized_mentors_term}} who are eager to help. Connect now to find a new {{customized_mentor_term}}.<br />{{recommended_mentors}} <br /> If you are unable to find {{customized_mentor_term_articleized}}, please reach out to one of the <a href='{{url_contact_admin}}'>{{customized_admin_term_pluralized}}</a> and we'd be happy to help you.<br/>"
+      content_v7_html: "<a href='{{mentor_url}}'>{{mentor_name}}</a> was unable to accept your request for {{customized_mentoring_term}}. <br/>{{message_from_mentor}} <br /> That's ok! There are still plenty of great {{customized_mentors_term}} who are eager to help. Connect now to find a new {{customized_mentor_term}}.<br />{{recommended_mentors}} <br /> If you are unable to find {{customized_mentor_term_articleized}}, please reach out to one of the <a href='{{admin_url}}'>{{customized_admin_term_pluralized}}</a> and we'd be happy to help you.<br/>"
+      tags:
+        mentor_name:
+          description: Name of the mentor who has rejected the request
+          example: William Brown
+        url_mentors_listing:
+          description: Url to the mentor listing page
+        message_from_mentor:
+          description: Optional reason provided by the mentor when rejecting the mentor request
+          example: Sorry. I have already reached my limit.
+        view_mentors_button:
+          description: View Mentors listing page
+          view_mentors: View %{Mentors}
+        mentor_url:
+          description: Url to the profile of the mentor
+        url_contact_admin:
+          description: Url for the user to contact administrator

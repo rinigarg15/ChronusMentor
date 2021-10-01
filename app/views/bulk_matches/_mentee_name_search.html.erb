@@ -1,0 +1,15 @@
+<% label_text = is_mentee_to_mentor_view?(orientation_type) ? _Mentees : "feature.bulk_match.label.selected_role".translate(role: _Mentee) %>
+<% search_model =is_mentee_to_mentor_view?(orientation_type) ? "menteeNameSearch.name" : "menteeNameSearch" %>
+<th class="col-xs-4 cjs-td-mentees pointer" ng-click="getSortOptions('name', <%= orientation_type %>);" ng-class="getTableHeaderClass('name');">
+  <div class="col-xs-7 no-padding pointer">
+    <span class="pull-left"><%= label_text %></span>
+    <span class="text-muted small p-r-m" ng-class="getSortClass('name');"></span>
+  </div>
+  <div class="col-xs-5 no-padding" ng-click="$event.stopPropagation();">
+    <div class="input-group font-noraml table-bordered">
+      <span class="input-group-addon no-borders p-r-xxs p-l-xxs"><i class="fa fa-search fa-fw"></i></span>
+      <label for="mentee-name-search" class="sr-only"><%= "feature.bulk_match.label.role_name_search".translate(role: _mentee) %></label>
+      <input id="mentee-name-search" ng-model="<%= search_model %>" type="text" class="p-l-0 form-control no-borders input-sm" placeholder="<%= 'display_string.Search'.translate %>"/>
+    </div>
+  </div>
+</th>

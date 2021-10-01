@@ -1,0 +1,11 @@
+<%= link_to h(sidepane_asset.summary), qa_question_path(sidepane_asset) %>
+<div class="small p-t-xxs">
+  <%= get_icon_content("fa fa-clock-o no-margins") %>
+  <span class="text-muted">
+    <%= "feature.question_answers.content.posted_ago".translate(time_in_words: time_ago_in_words(sidepane_asset.created_at)) %>
+  </span>
+  <%= circle_separator %>
+  <span class="text-navy">
+    <%= "feature.question_answers.content.answer_count".translate(count: sidepane_asset.qa_answers_count) %>
+  </span>
+</div>

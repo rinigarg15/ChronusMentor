@@ -1,0 +1,20 @@
+<%
+  status = AbstractRequest::Status::REJECTED
+  placeholder_message = 'feature.meeting_request.content.close_request_popup.placeholder.message'.translate
+  message = ''
+  popup_title = 'feature.mentor_request.content.reject_popup.title_v1'.translate
+  mail_message = 'feature.mentor_request.content.reject_popup.mail_message_v3'.translate
+%>
+<%- modal_container "#{popup_title}", :modal_id => get_meeting_request_action_popup_id(meeting_request, status) do -%>
+  <%= simple_form_for meeting_request, :url => reject_with_notes_meeting_request_path(meeting_request, status: status, src: source), :method => :post do |f| %>
+    <%= response_flash "meeting_request_withdraw_flash" %>
+    <%= f.input :rejection_type, label: "display_string.Reason".translate+" *", :input_html => {:role => "radio", :'aria-checked' => "false", id: nil}, collection: get_rejection_reason_collection(meeting_request.id), as: :radio_buttons %>
+    <%= f.input :response_text, label: "display_string.Message".translate, :as => :text, required: true, :input_html => {:rows => "5", :placeholder => "#{placeholder_message}", :id => "meeting_request_response_text_#{meeting_request.id}", :class => "form-control"} %>
+    <%= hidden_field_tag "page", @page, id: nil %>
+    <div class="m-b-sm"><%= "#{mail_message}" %></div>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to_function 'display_string.Cancel'.translate, "AbstractRequestRejectOrWithdraw.cancel(#{meeting_request.id}, #{reject}, 'meeting_request_withdraw_flash', 'meeting_request');", :class => 'popup_closebox btn btn-white', "data-dismiss" => "modal" %>
+      <%= f.button :submit, 'display_string.Decline'.translate, :onclick => "return AbstractRequestRejectOrWithdraw.validateRejection(#{meeting_request.id}, '#{message}', 'meeting_request', #{reject});", :class => "btn btn-primary cjs_decline_meeting_request"  %>
+    <% end %>
+  <%- end -%>
+<% end %>

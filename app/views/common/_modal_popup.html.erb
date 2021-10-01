@@ -1,0 +1,28 @@
+<%#
+Locals:
+popup_title - popup name
+%>
+
+<% unless options[:no_header] %>
+  <div class="modal-header no-padding clearfix <%= options[:additional_class] %>">
+    <button type="button" class="close cjs-web-modal-cancel <%= options[:additional_close_button_class] %>" data-dismiss="modal"  aria-label="<%= "display_string.Close".translate %>">
+      <span class="p-sm pull-left" aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">
+      <%= content_tag(:span, get_icon_content("fa fa-chevron-left"), :class => "pull-left cjs-mobile-modal-cancel p-sm p-r-0", "data-dismiss" => "modal") %>
+      <span class='p-sm pull-left col-xs-10 col-sm-11'><%= popup_title %></span>
+    </h4>
+  </div>
+<% end %>
+
+<div class="modal-body clearfix <%= options[:modal_body_class] %>">
+  <%= capture(&binding) %>
+</div>
+
+<% if options[:modal_v3_footer_content].present? %>
+  <% footer_container_class = options[:footer_container_class].presence || "modal-footer p-t-sm p-b-sm" %>
+  <div class="<%= footer_container_class%>">
+    <%= options[:modal_v3_footer_content] %>
+    </div>
+  </div>
+<% end %>

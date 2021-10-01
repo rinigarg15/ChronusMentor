@@ -1,0 +1,24 @@
+<% selected_time_zone = object.time_zone.presence || local_assigns[:default_selected_time_zone].presence || "" %>
+<% selected_area = selected_time_zone.present? ? ActiveSupport::TimeZone.get_timezone_details(selected_time_zone)[:area] : "" %>
+<%= control_group do %>
+  <%= content_tag :div, "display_string.Time_Zone".translate, class: "false-label control-label #{local_assigns[:additional_container_label_class] || "col-sm-2"}" %>
+  <%= controls(class: local_assigns[:container_input_class] || "col-sm-10") do %>
+    <%= content_tag(:div, class: "row") do %>
+      <%= content_tag(:div, class: "col-md-4 p-b-xs") do %>
+        <%= label_tag "timezone_area", "common_text.prompt_text.Select_time_zone_area".translate, class: "sr-only" %>
+        <%= select_tag nil, options_for_select(get_timezone_areas_options, selected: selected_area), class: "form-control cjs-tz-region #{local_assigns[:tz_area_class]}", id: "timezone_area" %>
+      <% end %>
+      <%= content_tag(:div, class: "col-md-8") do %>
+        <% tz_identifier_element_options = { class: "form-control cjs-tz-identifier #{local_assigns[:tz_identifier_class]}" } %>
+        <% tz_identifier_element_options.merge!(id: local_assigns[:tz_identifier_element_id]) if local_assigns[:tz_identifier_element_id] %>
+        <%= label_tag (tz_identifier_element_options[:id] || tz_identifier_element_name), "common_text.prompt_text.Select_time_zone".translate, class: "sr-only" %>
+        <%= select_tag tz_identifier_element_name, options_for_select(get_timezone_locations_options, selected: selected_time_zone), tz_identifier_element_options %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+<% if local_assigns[:track_change] %>
+  <%= hidden_field_tag :orginal_time_zone_area, selected_area, class: "cjs_original_time_zone_area" %>
+  <%= hidden_field_tag :orginal_time_zone_identifier, selected_time_zone, class: "cjs_original_time_zone_identifier" %>
+<% end %>
+<%= javascript_tag %Q[CascadingSelect.initialize(".cjs-tz-region", ".cjs-tz-identifier", "timezone_area");] %>

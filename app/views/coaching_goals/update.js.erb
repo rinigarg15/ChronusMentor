@@ -1,0 +1,8 @@
+<% content = render(:partial => "coaching_goals/coaching_goal", :locals => { :coaching_goal => @coaching_goal, :is_show_page => true }) %>
+CoachingGoals.replaceFormWithGoal("<%= j content %>");
+<% if @recent_activity %>
+  <% ra_content = format_recent_activity(@recent_activity, nil, true, hide_links: true) %>
+  if(jQuery(".cjs_coaching_goal_activity_feed").length > 0){
+    CoachingGoals.appendContent("<%= j ra_content %>");  
+  }
+<% end %>  

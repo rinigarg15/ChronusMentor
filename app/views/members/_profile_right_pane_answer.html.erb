@@ -1,0 +1,10 @@
+<% user_name_prefix = @profile_member == wob_member ? "display_string.Your".translate : "display_string.user_s".translate(user: @profile_member.name(:name_only => true)) %>
+
+<div class="topic h5 no-margins m-b-xxs font-bold truncate-with-ellipsis whitespace-nowrap">
+  <%= link_to sanitize(sidepane_asset.content, :tags => %w[]), qa_question_path(sidepane_asset.qa_question) %>
+</div>
+<div class="text-muted inline p-t-xxs small">
+  <%= get_icon_content("fa fa-clock-o") + "display_string.time_ago".translate(time: time_ago_in_words(sidepane_asset.created_at)) %>
+  <%= circle_separator %>
+  <%= link_to "feature.profile.content.see_answers".translate, qa_question_path(sidepane_asset.qa_question) %>
+</div>

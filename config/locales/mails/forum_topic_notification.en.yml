@@ -1,0 +1,15 @@
+en:
+  email_translations:
+    forum_topic_notification:
+      title: "New conversation notification to forum members"
+      description: "This email is sent to forum members notifying them that there is a new conversation."
+      subject: "New Conversation in '{{forum_name}}'"
+      content_html: "<a href='{{link_to_initiator}}'>{{initiator_name}}</a> started a conversation <b>'{{conversation_title}}'</b> in the forum <b>'{{forum_name}}'</b>.<br/>{{reply_to_conversation_button}}"
+      reply_to_conversation: Reply to conversation
+      tags:
+        initiator_name:
+          description: Name of the user who started the conversation
+        link_to_initiator:
+          description: Link to profile of the user who started the conversation
+        reply_to_conversation_button:
+          description: Reply to conversation button

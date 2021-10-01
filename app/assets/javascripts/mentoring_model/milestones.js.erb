@@ -1,0 +1,160 @@
+var MentoringModelMilestones = {
+  milestoneContainer: ".cjs_milestone_container",
+  submitButtons: ".cjs_milestone_submit_btn",
+  cancelLinks: ".cjs_milestone_cancel_link",
+
+  initialize: function(){
+    jQuery(document).ready(function(){
+      MentoringModelMilestones.inspectAddNewMilestone();
+      MentoringModelMilestones.validateForms();
+      MentoringModelMilestones.inspectCancelLinks();
+      MentoringModelMilestones.reorderOptionalTasks();
+      MentoringModelTask.showMenuOnClick();
+      MentoringModelTask.hideMenuOnOutsideClick();
+      MentoringModelMilestones.showEditOnClick();
+    });
+  },
+
+  reorderOptionalTasks: function(){
+    jQuery(".cjs-sortable-list").sortable({
+      items: ".cjs-sortable-list-item",
+      cancel: ".cjs-sortable-list-item-disabled",
+      handle: ".cjs-sortable-list-item-handle",
+      stop: function(item, container, _super) {
+        jQuery(this).find(".cjs-sortable-list-item .cjs-sortable-list-item-inner-container").addClass("merge-top").eq(0).removeClass("merge-top");
+        var data = jQuery(this).sortable("serialize");
+        jQuery.ajax({data: data, type: 'POST', url: container.item.data("update-position-url")});
+      },
+      change: function(event, ui) {
+        jQuery(ui.item).find(".cjs-sortable-list-item-inner-container").removeClass("merge-top");
+      }
+    });
+  },
+
+  inspectCancelLinks: function(){
+    jQuery(document).on("click", MentoringModelMilestones.cancelLinks, function(event){
+      event.preventDefault();
+      closeQtip();
+      if(jQuery(this).closest(".modal").data('bs.modal').isShown == true){
+        jQuery(this).closest(".modal").modal('hide');
+      }
+      var milestoneContainer = jQuery(this).closest(MentoringModelMilestones.milestoneContainer);
+      var milestoneForm = milestoneContainer.find("form");
+      var descriptionEnclosure = milestoneContainer.find(".cjs_milestone_description");
+      var editFormContainer = descriptionEnclosure.find(".cjs_milestone_edit_form_container");
+      var milestoneDescriptionEnclosure = milestoneContainer.find(".cjs-milestone-attrs");
+
+      milestoneDescriptionEnclosure.show();
+    });
+  },
+
+  validateForms: function(){
+    jQuery(document).on("click", MentoringModelMilestones.submitButtons, function(){
+      var milestoneForm = jQuery(this).closest(".cjs_milestone_form");
+      var titleObj = milestoneForm.find(".cjs_milestone_title");
+      if(titleObj.val().blank()){
+        ChronusValidator.ErrorManager.ShowFieldError(titleObj);
+        return false;
+      }
+      else{
+        ChronusValidator.ErrorManager.HideFieldError(titleObj);
+      }
+      var targetUserType = jQuery(".cjs-target-filter-type-holder").data("target-user-type");
+      var targetUserId = jQuery(".cjs-target-filter-type-holder").data("target-user-id");
+      MentoringModelMilestones.targetUserType = jQuery("<input/>", {"name": "target_user_type", "type": "hidden", "value": targetUserType});
+      MentoringModelMilestones.targetUserId = jQuery("<input/>", {"name": "target_user_id", "type": "hidden", "value": targetUserId});
+      milestoneForm.prepend(MentoringModelMilestones.targetUserId);
+      milestoneForm.prepend(MentoringModelMilestones.targetUserType);
+      return true;
+    });
+  },
+
+  inspectAddNewMilestone: function(){
+    jQuery(".cjs_add_new_custom_milestone").on("click", function(event){
+      event.preventDefault();
+      jQueryShowQtip('#cjs_connection_milestones_container', 600, jQuery(this).attr("href"), "", {modal: true});
+    });
+  },
+
+  expandCurrentMilestone: function(milestoneIds, completed_milestones_count, minimum_completed_milestones){
+    var size = milestoneIds.length;
+    for (var i = 0; i < size; i++){
+      var linkObjectMilestone = jQuery(".cjs_milestone_description_handler_" + milestoneIds[i]);
+      linkObjectMilestone.click();
+    }
+
+    var completedMilestoneBar = jQuery(".cjs_completed_milestones_container");
+    if (completed_milestones_count < minimum_completed_milestones){
+      completedMilestoneBar.addClass("hide");
+    }
+  },
+
+  descriptionHandler: function(options){
+    options = getDefaultVal(options, {});
+    jQuery(".cjs-connection-plan-container").on("click", ".cjs_milestone_description_handler", function(){
+      var linkObject = jQuery(this);
+      var milestoneId = linkObject.data('milestone-id');
+      var linkObjectMilestone = jQuery(".cjs_milestone_description_handler_" + milestoneId)
+      var milestoneContainer = linkObjectMilestone.closest(MentoringModelMilestones.milestoneContainer);
+      var descriptionEnclosure = milestoneContainer.find(".cjs_milestone_description");
+      var showOnCollapseMilestone = milestoneContainer.find(".cjs_show_on_collapse_milestone");
+      if(linkObjectMilestone.hasClass("open")){
+        linkObjectMilestone.removeClass("open");
+        descriptionEnclosure.find(".cjs_milestone_form").remove();
+        descriptionEnclosure.find(".cjs_milestone_edit_form_container").hide();
+        showOnCollapseMilestone.fadeOut("fast");
+      }
+      else{
+        if(options.preview == true)
+        {
+          options.role = jQuery('.cjs_role:checked').val();
+        }
+        jQuery.ajax({
+          url: linkObject.data("url"),
+          data: options,
+          beforeSend: function(){
+            if(!jQuery('.listing_bottom_bar').hasClass("cjs_carousel_action") && jQuery("#cjs_connections_widget").hasClass("cjs_next_connection")) closeIbox(linkObject);
+            showOnCollapseMilestone.fadeIn("fast");
+            jQuery("#loading_results_" + milestoneId).show();
+          },
+          success: function(){
+            linkObjectMilestone.addClass("open");
+          }
+        });
+      }
+    });
+  },
+
+  showCompletedMilestones: function(){
+    jQuery(document).on("click", ".cjs_show_completed_milestones", function(){
+      jQuery.ajax({
+        url: jQuery(this).data("url"),
+        beforeSend: function(){
+          jQuery("#loading_results").show();
+        },
+        success: function(){
+          jQuery("#loading_results").hide();
+        }
+      });
+    });
+  },
+
+  addForm: function(milestoneId, content){
+    MentoringModels.actionItemFormReset();
+    var taskFormEnclosure = jQuery("#cjs_milestone_add_new_form_" + milestoneId + " .cjs-add-task-form-link");
+    taskFormEnclosure.append(content);
+    var taskForm = taskFormEnclosure.find(".cjs-mentoring-model-task-form");
+    if(taskForm.length == 0){
+      taskForm = taskFormEnclosure.find(".cjs_meeting_forms");
+      taskForm.hide();
+    }
+    taskForm.show();
+  },
+
+  showEditOnClick: function(){
+    jQuery(document).on("click", ".cjs_edit_milestone", function(event){
+      var url = jQuery(this).attr('data-url');
+      jQueryShowQtip("#inner_content", 600, url, "", {modal: true});
+    });
+  }
+}

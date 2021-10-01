@@ -1,0 +1,33 @@
+<div id="reset_password">
+  <%= ibox nil, ibox_class: "middle-box no-vertical-margins text-center p-m clearfix" do %>
+    <div class="lead text-center">
+      <%= "feature_password.title.change".translate %>
+    </div>
+
+    <%= simple_form_for @member, url: update_with_reset_code_url, html: { method: :post, id: "password_reset_form" } do |f| %>
+      <%= formatted_form_error(f, header_message: "flash_message.password_flash.creation_failed_v1".translate, message: nil) %>
+      <%= control_group do %>
+        <%= controls(class: "text-muted") do %>
+          <%= content_tag(:div, password_instructions, class: "text-left alert alert-info") %>
+        <% end %>
+      <% end %>
+
+      <%= f.input :password, as: :password, label_html: { class: "sr-only" }, error: false, required: true, input_html: { autocomplete: :off, class: "form-control", placeholder: "feature.profile.content.new_password".translate } %>
+      <%= f.input :password_confirmation, as: :password, label_html: { class: "sr-only" }, error: false, required: true, input_html: { autocomplete: :off, class: "form-control", placeholder: "feature.profile.label.retype_new_password".translate } %>
+      <%= hidden_field_tag :reset_code, params[:reset_code] if params[:reset_code] %>
+
+      <% action_set do %>
+        <%= link_to "display_string.Change".translate, 'javascript:void(0)', class: "btn btn-primary btn-block cjs_password_submit" %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  selector = ['#member_password','#member_password_confirmation'];
+  jQuery(document).ready(function(){
+    jQuery(".cjs_password_submit").click(function(){ 
+      ChangePasswordSettings.validateChangePasswordSettings(jQuery('#password_reset_form'), selector);
+    });
+  });
+<% end %>

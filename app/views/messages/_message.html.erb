@@ -1,0 +1,49 @@
+<% message = tab_data.messages_index[msg_id.root_id] %>
+<% msg_url = get_message_path(message, is_inbox, params.to_unsafe_h.slice(:include_system_generated, :search_filters)) %>
+<% last_msg = tab_data.messages_scope.present? && !wob_member.is_admin? ? tab_data.messages_scope.where(root_id:message.id).last : message.last_message_can_be_viewed(wob_member) %>
+<% details = is_inbox ? get_from_details(message, wob_member, {messages_scope:tab_data.messages_scope}) : get_to_details(message, wob_member, {messages_scope:tab_data.messages_scope}) %>
+
+<% unless last_msg.nil? %>
+  <li class="list-group-item col-xs-12 pointer <%= 'unread' if details[:unread] %>" id="cjs_message_<%= tab_number %>_<%= message.id %>" onclick="window.location='<%= msg_url %>'">
+    <div class="col-sm-10 no-padding">
+      <div class="col-sm-4 no-padding">
+        <div class="hidden-xs">
+          <%= details[:names] %>
+        </div>
+        <div class="col-xs-8 no-padding visible-xs truncate-with-ellipsis whitespace-nowrap">
+          <span data-toggle="tooltip" data-title="<%= strip_tags details[:names] %>">
+            <%= details[:names] %>
+          </span>
+        </div>
+        <div class="col-xs-4 no-padding visible-xs">
+          <span class="pull-right text-muted truncate-with-ellipsis whitespace-nowrap small">
+            <% right_content = "" %>
+            <% right_content = embed_icon("fa fa-paperclip fa-fw m-r-0") if tab_data.messages_attachments[message.root_id] %>
+            <%= right_content << formatted_time_in_words(last_msg.created_at, :time_or_date => true, :no_ago => true) %>
+          </span>
+        </div>
+
+      </div>
+      <div class="col-sm-8 truncate-with-ellipsis whitespace-nowrap no-padding hidden-xs">
+        <span class="<%= 'font-600' if details[:unread] %>">
+          <%= message.subject %>
+        </span>
+        <% message_content = preview_leaf_message_in_listing(last_msg) %>
+        <span class="text-muted">
+          <%= " - " + message_content %>
+        </span>
+      </div>
+      <div class="col-xs-12 m-t-xs no-padding truncate-with-ellipsis whitespace-nowrap visible-xs <%= 'font-600' if details[:unread] %>">
+        <%= message.subject %>
+      </div>
+      <div class="col-xs-12 m-t-xs no-padding truncate-with-ellipsis whitespace-nowrap visible-xs">
+        <%= message_content %>
+      </div>
+    </div>
+    <div class="pull-right hidden-xs">
+      <span class="text-muted">
+        <%= right_content %>
+      </span>
+    </div>
+  </li>
+<% end %>

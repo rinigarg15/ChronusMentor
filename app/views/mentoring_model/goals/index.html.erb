@@ -1,0 +1,12 @@
+<%= include_ckeditor_tag %>
+<%= render :layout => 'groups/show_layout', :locals => { show_tabs: true, goals_tab: true, show_page_actions: true } do %>
+  <%= render partial: "mentoring_model/goals/goal_index", locals: {goals: @goals, required_tasks: @required_tasks} %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    MentoringModelGoal.initialize();
+    TaskComment.toggleNewCommentForm();
+    TaskCheckin.toggleNewCheckInForm();
+  });
+<% end %>

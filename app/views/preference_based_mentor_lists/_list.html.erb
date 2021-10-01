@@ -1,0 +1,26 @@
+<% ref_obj = list.ref_obj %>
+<div class="col-sm-6 p-b-xxs cui-preference-based-mentor-list-item">
+  <div class="contact-box center-version no-margins slick_box">
+    <div class="b-t thick-border p-t-sm">
+      <div class="media large no-vertical-margins p-b-sm">
+        <div class="p-l-sm media-left cui-preference-based-mentor-list-icon">
+          <%= get_preference_based_mentor_lists_icon(ref_obj) %>
+        </div>
+        <div class="media-body cui-preference-based-mentor-list-item-content">
+          <%= render_ignore_preference_based_mentor_list(list) %>
+          <div class="cui-preference-based-mentor-list-item-title">
+            <h4 class="m-b-xs m-t-0"><%= get_preference_based_mentor_lists_title(ref_obj) %></h4>
+          </div>
+          <div class="cui-preference-based-mentor-list-item-description p-r-sm">
+            <span class="small text-muted"><%= get_preference_based_mentor_lists_description(ref_obj) %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-box-footer p-t-xxs font-600">
+      <div class="no-vertical-margins text-info">
+        <%= link_to(append_text_to_icon("fa fa-user-circle fa-fw m-r-xs", "common_text.search.view_all_in_caps".translate(results: UnicodeUtils.upcase(_mentors))), users_path(src: EngagementIndex::Src::BrowseMentors::POPULAR_CATEGORIES) + get_link_to_filtered_mentors_list(list)) %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1 @@
+jQuery("#three_sixty_survey_reviewer_container_<%= @survey_reviewer.id %>").html('<%= j(render(:partial => "three_sixty/survey_assessees/new_reviewer", :locals => {:survey => @survey, :survey_assessee => @survey_assessee, :survey_reviewer_groups => @survey_reviewer_groups, :survey_reviewer => @survey_reviewer, :for_new => false})) %>');

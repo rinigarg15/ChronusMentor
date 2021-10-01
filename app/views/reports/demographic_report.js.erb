@@ -1,0 +1,14 @@
+<% if @map_filter %>
+  <% content = render(:partial => "reports/demographic_report_map", :locals => {:locations => @locations}) %>
+  jQuery("#cjs_demographic_report_map").replaceWith("<%= j content %>");
+  <% if @filters_count.zero? %>
+    jQuery('.cjs-report-filter-count').hide();
+  <% else %>
+    jQuery('.cjs-report-filter-count').show();
+    jQuery('.cjs-report-filter-count').text('<%= @filters_count %>');
+  <% end %>
+<% else %>
+  <% content = render(:partial => "reports/demographic_report_table_view", :locals => {:locations => @locations_for_table, :report_view_columns => @report_view_columns}) %>
+  jQuery("#cjs_demographic_report_table_view").replaceWith("<%= j content %>");
+<% end %>
+jQuery("#loading_results").hide();

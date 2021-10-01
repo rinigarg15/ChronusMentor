@@ -1,0 +1,3 @@
+<% admin_to_user_for_non_admins = @message.is_a?(AdminMessage) && !@message.user_to_admin? && !@message.is_member_admin_for_this_msg?(wob_member) %>
+<% content = to_sentence_sanitize(display_message_receivers(@message, wob_member, admin_to_user_for_non_admins, nil)) %>
+jQuery(".cjs_message_receivers_<%= @message.id %>").html("<%= j content %>");

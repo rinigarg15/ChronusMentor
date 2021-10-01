@@ -1,0 +1,9 @@
+<script type="text/javascript">
+  var project_key = "<%= ENV['MOBILE_AIRBRAKE_API_KEY'] %>";
+  var airbrake   = new airbrakeJs.Client({projectKey: project_key});
+  window.onerror = airbrake.onerror;
+  airbrake.addFilter(function(notice) {
+    notice.context.environment = '<%= Rails.env %>';
+    return notice;
+  });
+</script>

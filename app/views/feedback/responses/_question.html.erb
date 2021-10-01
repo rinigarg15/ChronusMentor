@@ -1,0 +1,18 @@
+<div class="question" id= "answer_<%= question.id%>">
+  <%= control_group do %>
+    <%= common_answer_label question, :class => "control-label" %>
+    <% answer = answers_map[question.id] && answers_map[question.id].first %>
+    <% answer_question = (answer.present? ? answer.common_question : question) %>
+    <% multi_choice = (answer_question.question_type == CommonQuestion::Type::MULTI_CHOICE) %>
+    <% answer ||= question.answers.new(:user => current_user) %>
+    <%= controls do %>
+      <%= edit_common_answer_field(answer, question, multi_choice ? {:skip_quick_search => true} : {}) %>
+      <% if question.required? %>
+        <%= javascript_tag("RequiredFields.fieldIds.push('common_answers_#{question.id}')") %>
+      <% end %>
+      <% if answer.errors.any? %>
+        <%= javascript_tag("ChronusValidator.ErrorManager.ShowFieldError('common_answers_#{question.id}')") %>
+      <% end %>
+    <% end %>  
+  <% end %>  
+</div>

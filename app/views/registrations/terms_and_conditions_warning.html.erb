@@ -1,0 +1,26 @@
+<% member_name = wob_member.name(name_only: true)  %>
+
+<% modal_container nil, :modal_id => "modal_accept_t_and_c", :no_modal_header => true, modal_class: "cjs_no_keyboard" do %>
+  <div class="text-center">
+    <div class="lead"><%= 'feature.member.content.welcome_terms_v4'.translate(:member_name => member_name) %> </div>
+    <% urls = get_tnc_privacy_policy_urls %>
+    <%= 'feature.user.content.click_and_accept_v3_html'.translate(button_text: 'feature.membership_request.label.accept'.translate, terms_url: urls[:terms], privacy_policy_url: urls[:privacy_policy], cookies_url: urls[:cookies]) %>
+    <div id='signup' class='clearfix m-t-md'>
+      <%= simple_form_for wob_member, url: accept_terms_and_conditions_registrations_path do |f| %>
+        <%= hidden_field_tag :time_zone, "", :class => "cjs_time_zone" %>
+        <%= submit_tag 'feature.membership_request.label.accept'.translate, class: 'btn btn-primary', id: 'continue-terms' %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    computeTimeZone(<%= chr_json_escape "#{TimezoneConstants::VALID_TIMEZONE_IDENTIFIERS.to_json}" %>, <%= chr_json_escape "#{TimezoneConstants::OBSOLETE_TIMEZONES_HASH.to_json}" %>, '<%= "#{notify_new_timezone_path}" %>');
+    jQuery('#modal_accept_t_and_c').modal({
+      keyboard: false,
+      show: true,
+      backdrop: 'static'
+    });
+  });
+<% end %>

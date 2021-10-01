@@ -1,0 +1,36 @@
+/*
+ * This is a manifest file that'll automatically include all the stylesheets available in this directory
+ * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
+ * the top of the compiled file, but it's generally better to create a new file per style scope.
+  _self
+  jquery-ui-1.8.16.custom
+  jquery.tagit
+  jquery.uix.multiselect
+  select2
+  ui.daterangepicker
+  jquery.qtip
+  jquery.icheck
+  fullcalendar
+  diffy
+  overrides/jquery-ui
+  overrides/jquery.qtip.override
+  grid/bootstrap
+  grid/elements
+  grid/layout
+  grid/new_groups
+  grid/sprite_rules
+  grid/manage_sprite_rules
+  grid/progressive_form
+  popup
+  fonts
+  auto_logout
+  ui.multiselect
+  slider
+  profile_picture
+  campaign_management/campaign_management
+  trip
+  ng-grid
+  jquery.minicolors
+*/
+
+/*require new_pages*/

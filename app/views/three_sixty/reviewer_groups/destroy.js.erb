@@ -1,0 +1,3 @@
+<% if @reviewer_group.destroyed? %>
+  jQuery("#three_sixty_reviewer_group_<%= @reviewer_group.id %>").remove();
+<% end %>

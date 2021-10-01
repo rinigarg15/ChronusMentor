@@ -1,0 +1,16 @@
+<div class="cjs_completed_milestones_container p-t-xs p-b-sm">
+  <span><%= get_icon_content("fa fa-check-circle text-navy")%></span>
+  <% completed_milestones_count = completed_mentoring_model_milestone_ids_to_hide.size %>
+  <%= link_to "feature.milestones.label.Milestone.show_completed_milestones".translate(count: completed_milestones_count), "javascript:void(0)", data: { url: fetch_completed_milestones_group_mentoring_model_milestones_path(@group, format: :js, completed_milestones_link_id: "#cjs_completed_milestones_list", completed_mentoring_model_milestone_ids: completed_mentoring_model_milestone_ids_to_hide, target_user_id: target_user_id, target_user_type: target_user_type) }, class: "cjs_show_completed_milestones" %>
+</div>
+
+<div class="word_break" id="cjs_completed_milestones_list">
+</div>
+
+<%= render partial: "mentoring_model/milestones/milestone", collection: milestones, locals: { target_user_id: target_user_id, target_user_type: target_user_type, completed_mentoring_model_milestone_ids: completed_mentoring_model_milestone_ids } %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    MentoringModelMilestones.expandCurrentMilestone(<%= mentoring_model_milestone_ids_to_expand.presence || [] %>, <%=completed_milestones_count %>, <%=  MentoringModel::Milestone::MINIMUM_COMPLETED_MILESTONES_UNDER_BAR %>);
+  });
+<% end %>

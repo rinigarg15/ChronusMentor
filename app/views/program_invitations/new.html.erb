@@ -1,0 +1,14 @@
+<%= include_ckeditor_tag %>
+<% if current_user.can_invite_roles?  && !current_user.view_management_console? %>
+  <% @title = "feature.program_invitations.header.invite_friends".translate %>
+<% else %>
+  <% @title = "feature.program_invitations.header.invitations".translate %>
+<% end %>
+
+<% if current_user.is_admin? %>
+  <%= invitations_page_tabs_html %>
+  <% title = "feature.program_invitations.label.provide_user_details_to_invite".translate %>
+<% else %>
+  <% title = 'feature.program_invitations.address_book.header.enter_email'.translate %>
+<% end %>
+<%= render :partial => "program_invitations/form_invite_users", locals: { title: title, allowed_email_domains: @current_organization.security_setting.email_domain } %>

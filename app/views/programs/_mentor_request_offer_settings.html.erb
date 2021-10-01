@@ -1,0 +1,83 @@
+<div class="cjs_mentor_request_offer_settings <%= 'hide' if @current_program.matching_by_admin_alone? && !@current_program.mentor_offer_enabled? %>">
+  <h3 class="m-b-md">
+    <%= "program_settings_strings.label.matching_settings.connection_req_setting_v1".translate(Mentoring: _Mentoring) %>
+  </h3>
+
+  <div class="cjs_mentor_request_settings <%= 'hide' if @current_program.matching_by_admin_alone? %>">
+    <%= f.select :max_pending_requests_for_mentee, get_max_request_limit_for_mentee_options, { selected: @current_program.max_pending_requests_for_mentee, title: "program_settings_strings.content.max_pending_request_for_mentee_v1".translate(mentee: _mentee) } %>
+
+    <% if @current_program.matching_by_mentee_alone? %>
+      <%= control_group do %>
+        <%= content_tag(:div, "program_settings_strings.content.allow_mentoring_request_reminder_v1".translate, class: "false-label control-label") %>
+        <%= controls do %>
+          <div class="cui-reminder-settings">
+            <div class="clearfix">
+              <label class="checkbox inline pull-left has-next">
+                <%= f.check_box :needs_mentoring_request_reminder, value: true, class: "cjs-mentoring-request-reminder" %> <%= "display_string.Yes".translate %><span class="cjs-show-mentoring-request-reminder-checked <%= 'hide' unless @program.needs_mentoring_request_reminder? %>">, <%= "program_settings_strings.content.remind_them_after".translate %></span>
+              </label>
+              <label class="font-noraml cjs-show-mentoring-request-reminder-checked <%= 'hide' unless @program.needs_mentoring_request_reminder? %>">
+                <div class="col-sm-4 no-padding">
+                  <%= f.text_field :mentoring_request_reminder_duration, class: "form-control cjs-mentoring-request-reminder-duration", skip_title: true, wrapper: 'none', disabled: !@program.needs_mentoring_request_reminder?, data: { value: @program.mentoring_request_reminder_duration } %>
+                </div>
+                <%= content_tag(:span, "display_string.days".translate, class: "p-xxs p-l-sm p-r-sm m-t-xxs pull-left") %>
+              </label>
+            </div>
+            <%= email_notification_consequences_on_action_html(MentorRequestReminderNotification, div_class: "help-block #{"hide" unless f.object.needs_mentoring_request_reminder} cjs-show-mentoring-request-reminder-checked") %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= control_group do %>
+      <%= f.label "", "program_settings_strings.content.mentor_request_expiration_days_v2".translate, class: "control-label", for: "program_mentor_request_expiration_days" %>
+      <%= controls do %>
+        <div class="clearfix">
+          <div class="col-sm-2 no-padding">
+            <%= f.text_field :mentor_request_expiration_days, class: "form-control", skip_title: true, wrapper: 'none' %>
+          </div>
+          <%= content_tag(:span, 'display_string.days'.translate(count: :other), class: "p-xxs p-l-sm p-r-sm m-t-xxs pull-left") %>
+        </div>
+        <div class="help-block">
+          <%= email_notification_consequences_on_action_html(MentorRequestExpiredToSender, div_enclose: false) %>
+          <%= "program_settings_strings.content.mentor_request_expiration_days_notice".translate %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if super_console? %>
+    <div class="cjs_mentor_offer_settings <%= 'hide' unless @program.mentor_offer_enabled? %>">
+      <% pending_mentor_offers_count = @program.mentor_offer_needs_acceptance? ? @program.mentor_offers.pending.count : 0 %>
+      <% pending_mentor_offers = pending_mentor_offers_count > 0 %>
+      <%= control_group do %>
+        <% label = "program_settings_strings.content.mentor_offer_mentte_acceptance".translate(mentor: _Mentor, mentees: _mentees) %>
+        <%= content_tag(:div, label, :class => "false-label control-label") %>
+        <%= controls do %>
+          <%= choices_wrapper(label) do %>
+            <label class="radio inline">
+              <%= f.radio_button :mentor_offer_needs_acceptance, true, disabled: pending_mentor_offers %> <%= "display_string.Yes".translate %>
+            </label>
+            <label class="radio inline">
+              <%= f.radio_button :mentor_offer_needs_acceptance, false, disabled: pending_mentor_offers %> <%= "display_string.No".translate %>
+            </label>
+            <% if pending_mentor_offers %>
+              <div class="help-block">
+                <%= "program_settings_strings.content.mentor_offer_acceptance_mode_change_disbaled_html".translate(mentoring: _mentoring, count: pending_mentor_offers_count, link: mentor_offers_path(status: MentorOffer::Status::STATE_TO_STRING[MentorOffer::Status::PENDING])) %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= javascript_tag %Q[MatchingSettings.showOfferMentor();] %>
+    </div>
+  <% end %>
+
+  <%= control_group do %>
+    <%= controls(class: "has-above-tiny") do %>
+      <%= link_to(append_text_to_icon("fa fa-plus-circle", "program_settings_strings.label.matching_settings.Advanced_Options".translate), "javascript:void(0);", class: "cjs_matching_ongoing_advanced_setting_toggle no-underline #{'hide' if @current_program.matching_by_admin_alone?}", id: 'cjs_matching_ongoing_advanced_options') %>
+    <% end %>
+  <% end %>
+  <div id="cjs_matching_ongoing_advanced_setting" class="hide">
+    <%= render partial: "programs/matching_ongoing_advanced_settings", locals: { f: f } %>
+  </div>
+</div>

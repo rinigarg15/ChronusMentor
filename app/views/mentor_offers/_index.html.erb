@@ -1,0 +1,53 @@
+<% listing_info_options = {} %>
+<% if mentor_offers.any? %>
+  <% listing_info_options = { collection: mentor_offers } %>
+<% end %>
+
+<% if is_manage_view %>
+  <%= hidden_field_tag(:cjs_sort_field, params[:sort_field], class: 'cjs-sort-field') %>
+  <%= hidden_field_tag(:cjs_sort_order, params[:sort_order], class: 'cjs-sort-order') %>
+  <%= hidden_field_tag(:status, filter_params["status"], id: 'filter_tab') %>
+  <%= render :partial => 'mentor_offers/mentor_offer_report_tiles', :locals => {mentor_offer_hash: mentor_offer_hash} %>
+<% else %>
+  <% content_for_sidebar do %>
+    <div id="mentor_offer_sidebar">
+      <%= render partial: "mentor_offers/mentor_offer_sidebar" %>
+    </div>
+  <% end %>
+<% end %>
+<div id="results_pane" class="clearfix">
+  <%= inner_tabs(get_tabs_for_mentor_offers_listing(filter_params[:status]), {}) if is_manage_view %>
+  <%= ibox nil, :content_class => "no-padding" do %>
+    <% if filter_params[:filter_field] == AbstractRequest::Filter::ALL%>
+      <% if mentor_offers.size > 0 %>
+        <div class='pagination_box p-xs p-l-sm p-r-sm b-b clearfix'>
+          <%= mentor_offers_bulk_actions(is_manage_view) %>
+          <%= form_tag 'javascript:void(0)', id: "mentor_offers_export_form" do %>
+            <%= hidden_field_tag :mentor_offer_ids %>
+          <% end %>
+        </div>
+
+        <label for="cjs_primary_checkbox" class="sr-only"><%= "feature.mentor_request.content.select_all_label_v1".translate %></label>
+        <div class='pull-left m-t-md m-l-md m-r-lg'><%= check_box_tag :cjs_primary_checkbox %></div>
+      <% end %>
+    <% end %>
+
+    <%= top_bar_in_listing(listing_info_options, { show: true, applied_count: @my_filters.try(:size) }, basic_sort_by_id_options_for_top_bar(mentor_offers.any?, {on_select_function: is_manage_view ? "MeetingRequests.changeSortOptions" : "updateSortForMentorOffersAjax", sort_field: filter_params[:sort_field], sort_order: filter_params[:sort_order]})) %>
+    <% if mentor_offers.size == 0 %>
+      <div class="text-muted p-sm text-center">
+        <%= "feature.mentor_offer.content.no_mentoring_offer_v1".translate(mentoring: _mentoring) %>
+      </div>
+    <% else %>
+      <div class='listing clearfix'>
+        <%= render :partial => 'mentor_offers/select_all', :locals => {mentor_offers: mentor_offers, filter_params: filter_params} %>
+        <%= listing_page(mentor_offers, :partial => @mentor_offer_partial, :collection_key => :mentor_offer, :locals => {:is_manage_view => is_manage_view}) %>
+      </div>
+      <%= bottom_bar_in_listing( { collection: mentor_offers, params: {filters: filter_params, sort_field: filter_params[:sort_field], sort_order: filter_params[:sort_order], status: filter_params[:status]}, ajax: true }) if mentor_offers.any? %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  MentorOffers.initializeMaxLength(<%= mentor_offers.total_entries %>);
+<% end %>
+

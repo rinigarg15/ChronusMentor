@@ -1,0 +1,16 @@
+<% first_flag = @flags.first %>
+<% modal_v3_popup "feature.flag.header.Flags".translate do %>
+  <h4><%= "feature.flag.content.flagged_by_and_reason".translate %></h4>
+  <% @flags.each do |flag| %>
+    <div id="flag_<%= flag.id %>" class="p-xs b-b">
+      <div><%= flag.reason %></div>
+      <div class="small text-muted">
+        <%= "feature.flag.content.flagged_by_info_html".translate(flagged_by: link_to_user(flag.user), time_ago_in_words: formatted_time_in_words(flag.created_at, on_str: true)) %>
+      </div>
+    </div>
+  <% end %>
+
+  <% action_set(class: "m-t-sm pull-right") do %>
+    <%= flag_actions(first_flag, as_button: true, allow_all: true, allow_text: "feature.flag.action.Ignore_Flags".translate, delete_text: "feature.flag.action.Delete_content".translate(content: first_flag.content_type_name)) %>
+  <% end %>
+<% end %>

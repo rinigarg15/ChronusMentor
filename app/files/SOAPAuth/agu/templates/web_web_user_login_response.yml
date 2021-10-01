@@ -1,0 +1,4 @@
+uid: <%= Psych.to_json(self.multi_dimensional_hash_lookup(params, [:envelope, :body, :web_web_user_login_response, :web_web_user_login_result, :individual, :ind_cst_key])).chomp %>
+first_name: <%= Psych.to_json(self.multi_dimensional_hash_lookup(params, [:envelope, :body, :web_web_user_login_response, :web_web_user_login_result, :individual, :ind_first_name])).chomp %>
+last_name: <%= Psych.to_json(self.multi_dimensional_hash_lookup(params, [:envelope, :body, :web_web_user_login_response, :web_web_user_login_result, :individual, :ind_last_name])).chomp %>
+email: <%= Psych.to_json(self.multi_dimensional_hash_lookup(params, [:envelope, :body, :web_web_user_login_response, :web_web_user_login_result, :email, :eml_address])).chomp %>

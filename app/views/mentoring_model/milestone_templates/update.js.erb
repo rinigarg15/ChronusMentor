@@ -1,0 +1,4 @@
+<% arg_options = {locals: { milestone_template: @milestone_template, milestone_task_templates: @milestone_task_templates, collapsed: false }} %>
+<% content = render({partial: "mentoring_model/milestone_templates/milestone_template"}.merge(arg_options)) %>
+MilestoneTemplates.replaceTemplate("<%= j(@milestone_template.id.to_s) %>", "<%= j(content) %>");
+closeQtip();

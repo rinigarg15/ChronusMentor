@@ -1,0 +1,9 @@
+<div class="btn-group <%= local_assigns[:btn_group_class] %>">
+  <% attending_class = get_image_class(current_user, program_event, EventInvite::Status::YES) %>
+  <% not_attending_class = get_image_class(current_user, program_event, EventInvite::Status::NO) %>
+  <% maybe_attending_class = get_image_class(current_user, program_event, EventInvite::Status::MAYBE) %>
+
+  <%= link_to(get_icon_content("fa fa-check #{attending_class}") + content_tag(:span, 'display_string.Yes'.translate, class: "#{attending_class.blank? ? '' : 'm-l-xs m-r-xs'}"), "#", "data-target" => "#modal_invite_response_attending_#{src}_#{program_event.id}", "data-toggle" => "modal", :class => "btn btn-sm #{local_assigns[:btn_class]} #{attending_class.blank? ? 'active btn-primary' : 'btn-white'}") %>
+  <%= link_to(get_icon_content("fa fa-exclamation #{maybe_attending_class}") + content_tag(:span, 'display_string.Maybe'.translate, class: "#{maybe_attending_class.blank? ? '' : 'm-l-xs m-r-xs'}"), "#", "data-target" => "#modal_invite_response_maybe_attending_#{src}_#{program_event.id}", "data-toggle" => "modal", :class => "btn btn-sm #{local_assigns[:btn_class]} #{maybe_attending_class.blank? ? 'active btn-default' : 'btn-white'}") %>
+  <%= link_to(get_icon_content("fa fa-times #{not_attending_class}") + content_tag(:span, 'display_string.No'.translate, class: "#{not_attending_class.blank? ? '' : 'm-l-xs m-r-xs'}"), "#", "data-target" => "#modal_invite_response_not_attending_#{src}_#{program_event.id}", "data-toggle" => "modal", :class => "btn btn-sm #{local_assigns[:btn_class]} #{not_attending_class.blank? ? 'active btn-danger' : 'btn-white'}") %>
+</div>

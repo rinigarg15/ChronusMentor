@@ -1,0 +1,7 @@
+<%= ibox wob_member.admin? ? _Programs : "feature.profile.header.my_Programs".translate(programs: _Programs), {:ibox_class => "m-b-sm", :content_class => "p-xxs", :show_collapse_link => true} do %>
+  <ul id='programs' class="list-group">
+    <% @my_programs.each do |program| %>
+      <%= quick_link(program.name, program_root_path(:root => program.root), "fa fa-fw fa-th-large m-r-xs") %>
+    <% end %>
+  </ul>
+<% end %>

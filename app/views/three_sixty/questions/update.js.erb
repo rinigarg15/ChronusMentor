@@ -1,0 +1,17 @@
+<% if @question.competency.present? %>
+  <% if @question.valid? %>
+    jQuery("#competency_question_row_<%= @question.id %>").replaceWith('<%= j(render :partial => "three_sixty/competencies/question", :locals => {:question => @question, :competency => @question.competency, :show_actions => true}) %>');
+    ThreeSixty.alternateColor("#competency_questions_container_<%= @question.competency.id %>");
+    jQueryHighlight("#competency_question_row_<%= @question.id %>", 1000);
+  <% else %>
+    jQuery("#competency_question_row_<%= @question.id %>").html('<%= j(display_three_sixty_question_new_inline(@question, @question.competency, false)) %>');
+  <% end %>
+<% else %>
+  <% if @question.valid? %>
+    jQuery("#open_ended_question_row_<%= @question.id %>").replaceWith('<%= j(render :partial => "three_sixty/competencies/open_ended_question", :locals => {:open_ended_question => @question, :show_actions => true}) %>');
+    ThreeSixty.alternateColor("#open_ended_questions_container");
+    jQueryHighlight("#open_ended_question_row_<%= @question.id %>", 1000);
+  <% else %>
+    jQuery("#open_ended_question_row_<%= @question.id %>").html('<%= j(render(:partial => "three_sixty/competencies/new_open_ended_question", :locals => {:question => @question, :for_new => false})) %>');
+  <% end %>
+<% end %>

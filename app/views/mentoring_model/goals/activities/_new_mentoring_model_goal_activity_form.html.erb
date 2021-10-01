@@ -1,0 +1,11 @@
+<% modal_v3_popup "feature.connection.header.Update_Goal_Progress".translate do %>
+  <h4><%= @goal.title %></h4>
+  <%= simple_form_for @goal_activity, :url => group_mentoring_model_goal_activities_path(@group, @goal), :remote => true, :html => {:class => "has-below cjs_progress_bar_form"} do |f| %>
+    <%= render :partial => "mentoring_model/goals/activities/manual_progress_goal_activity_progress_bar", :locals => {:goal => @goal, :is_update_progress_popup => true} %>
+    <%= f.input :message, :as => :text, :input_html => { :rows => 5, :class => "cjs_manual_progress_goal_activity_message form-control"}, :placeholder => "feature.mentoring_model.label.goal_activity_message_placeholder".translate, :label_html => {:class => 'sr-only'} %>
+    <% action_set(:class => "pull-right") do %>
+      <%= cancel_link(nil, :qtip => true) %>
+      <%= f.button :submit, "display_string.Save".translate, :class => "cjs_manual_progress_goal_activity_submit_#{@goal.id}", :onclick => "return GoalActivity.validateForm('#{@goal.id}');" %>
+    <% end %>
+  <% end %>
+<% end %>

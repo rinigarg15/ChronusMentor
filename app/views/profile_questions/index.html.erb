@@ -1,0 +1,119 @@
+<%= include_ckeditor_tag %>
+<% @title = @program_level ? "feature.profile_customization.header.customize_user_profile_fields".translate : "feature.profile_customization.header.customize_user_form_fields".translate %>
+<% @sub_title = "display_string.All_Programs_v1".translate(Programs: _Programs) unless (@current_organization.standalone? || @program_level) %>
+<% labels_array = [{label: "feature.profile_customization.label.user_profile_form".translate, url: preview_profile_questions_path}] %>
+<% labels_array << {label: "feature.profile_customization.label.membership_request_form".translate, url: preview_profile_questions_path(preview_type: ProfileQuestionsController::PreviewType::MEMBERSHIP_FORM) } if is_membership_form_enabled?(program_context) %>
+<% @page_action = labels_array %>
+<% @page_action_options = {dropdown_title: "display_string.Preview".translate, large: true} %>
+
+<% if @current_organization.standalone? # do nothing %>
+<% elsif !@program_level %>
+  <% @page_action2 = [{ label: "display_string.All_Programs_v1".translate(Programs: _Programs), url: "javascript:void(0);", class: "cjs_filter_program cjs_filter_program_all_programs", data: {program_id: 0, program_name: "display_string.All_Programs_v1".translate(Programs: _Programs)} }] %>
+  <% @page_action2 << @current_organization.programs.map { |program| { label: program.name, url: "javascript:void(0);", class: "cjs_filter_program", data: {program_id: program.id, program_name: program.name} } } %>
+  <% @page_action2_options = {dropdown_title: "feature.profile_question.label.filter_by_programs".translate(program: _program), large: true, btn_group_btn_class: "cjs-dropdown-container-title"} %>
+<% end %>
+
+<% if super_console? && (@current_organization.standalone? || @program_level) %>
+  <%= render partial: "profile_questions/export_import"%>
+<% end %>
+
+<% if @show_membership_intruction %>
+  <% @page_action2 = get_page_action_for_join_instruction %>
+<% end %>
+
+<% if @program_level %>
+  <%= ibox nil, ibox_class: "cjs_add_pq_at_program_level_instruction hide" do %>
+    <%= "feature.profile_customization.content.add_pq_at_program_level_instruction".translate(add: "display_string.Add".translate) %>
+  <% end %>
+<% end %>
+
+<%= ibox nil, content_class: "no-padding", ibox_class: "no-vertical-margins" do %>
+  <div class="row m-0">
+    
+    <div class="col-xs-12 cjs-main-panel">
+      <div class="row border-bottom cjs_label_section_or_profile_question">
+        <div class="col-xs-4 p-xs b-r">
+          <span class="pull-right cjs_add_section_or_profile_question"> <%= link_to append_text_to_icon('fa fa-plus', "display_string.Add".translate), "javascript:void(0);", class: "cjs-new-section-invoker btn btn-xs btn-primary" %> </span>
+          <h3 class="m-b-xs">
+            <%= "feature.profile_customization.label.Section".translate %>
+            <span class="cjs-section-total-count small"></span>
+            <span class="cjs-section-total-count-including-hidden-sections hide small"></span>
+          </h3>
+        </div>
+        <div class="col-xs-8 p-xs">
+          <span class="pull-right cjs_add_section_or_profile_question"> <%= link_to append_text_to_icon('fa fa-plus', "display_string.Add".translate), "javascript:void(0);", class: "cjs-new-field-invoker btn btn-xs btn-primary", 'data-url': new_profile_question_path %> </span>
+          <% if @program_level %>
+            <span class="pull-right"> <%= link_to append_text_to_icon('fa fa-plus', "feature.profile_customization.action.add_fields".translate), "javascript:void(0);", class: "btn btn-xs btn-primary waves-effect dropdown-toggle cjs_add_pq_at_program_level" %> </span>
+            <span class="pull-right"> <%= link_to append_text_to_icon('fa fa-arrow-left', "feature.profile_customization.action.show_only_program_fields".translate), "javascript:void(0);", class: "btn btn-xs btn-primary waves-effect dropdown-toggle cjs_show_only_program_fields hide" %> </span>
+          <% end %>
+          <h3 class="m-b-xs"> 
+            <%= "feature.profile_customization.label.Profile_Question".translate %>
+            <span class="cjs-pq-count small"></span>
+            <span class="cjs-pq-count-for-add-pq-at-prg-level small hide"></span>
+          </h3>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-4 cjs-sections-containing-column cjs-slim-scroll-parent b-r p-r-0 p-l-0">
+          <div class="cjs-section-slim-scroll cjs-section-inner-container p-r-sm p-l-sm" id="sections_list">
+            <% @sections.each do |section| %>
+              <%= render partial: "sections/section", locals: {section: section, program_level: @program_level, visibility: @program_level ? @visible_section_ids.include?(section.id) : true} %>
+            <% end %>
+          </div>
+        </div>
+        <div class="col-xs-8 cjs-profile-questions-containing-column cjs-slim-scroll-parent p-r-0 p-l-0">
+          <div class="cjs-profile-question-slim-scroll cjs-profile-question-inner-container p-r-sm p-l-sm">
+            <% @sections.each do |section| %>
+              <div id="profile_questions_for_section_<%= section.id %>" class="cjs-profile-questions-for-section">
+                <% section.profile_questions.each do |profile_question| %>
+                    <%= render partial: "profile_questions/profile_question", locals: {profile_question: profile_question, program_level: @program_level} %>
+                <% end %>
+                <%= javascript_tag %Q[jQuerySortable.makeSortable('profile_questions_for_section_#{section.id}', '#{section.id}', '#{profile_question_url(section)}', 'cjs-profile-question-container', '.disabled_no_drop')] %>
+              </div>
+            <% end %>
+            <div class="question_answer_empty cjs-empty-section-placeholder clearfix text-center text-muted p-sm">
+              <%= "feature.profile_customization.content.no_fields".translate %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-4 cjs-profile-question-details-panel cjs-slim-scroll-parent hide p-r-0 p-l-0">
+      <div class="cjs-side-panel-slim-scroll p-r-sm p-l-sm">
+        <div class="row cjs-profile-question-details-container truncate-with-ellipsis animated fadeIn"></div>
+      </div>
+    </div>
+
+  </div>
+<% end %>
+<%= render partial: "profile_questions/deletion_warning_modal" %>
+
+<%# This is for confirmation message formatting when updating a question %>
+<%= update_delete_confirmation_template(block_class: "hide", block_id: "cjs-question-update-confirmation-template", base_text: "feature.profile_customization.content.update_delete_confirmation.base_update_text".translate(program: _program)) {} %>
+
+<%= javascript_tag do %>
+  jQuery(function(){
+    ProfileConfigUI.programLevel = <%= @program_level.present? %>;
+    <% if @program_level %>
+      ProfileConfigUI.setProgramFilterIdName(<%= current_program.id %>, '<%= current_program.name %>');
+      ProfileConfigUI.filterProfileQuestionsByProgram();
+    <% end %>
+    ProfileConfigUI.init();
+
+    jQuery(document).on("click", ".cjs-new-section-invoker", function() { jQueryShowQtip('', 0, '<%= new_section_url %>','') });
+
+    jQuery(document).on('click', '.cjs_destroy_choice', function() {
+      CustomizeQuestionChoices.destroyChoice(jQuery(this));
+    });
+    jQuery(document).on('click', '.cjs_add_choice', function() {
+      CustomizeQuestionChoices.addChoiceInPosition(jQuery(this));
+    });
+    jQuery(document).on('blur', 'ul.disabled_for_editing_false li input[type=text]', function() {
+      CustomizeQuestionChoices.refreshQuickSearch(jQuery(this));
+    });
+    <!-- script for dragging sections -->
+    jQuerySortable.makeSortable('sections_list', '', '<%= section_url(@sections.first) %>', '', '.cjs-no-drag', '');
+  });
+<% end %>

@@ -1,0 +1,38 @@
+<%= include_kendo %>
+<%= javascript_include_tag "jquery.tmpl.1.1.1.js" %>
+<%= javascript_include_tag "jquery.blockUI.js" %>
+<%= javascript_include_tag "ui.multiselect" %>
+
+<% @title = "feature.campaign.index.title_v1".translate %>
+<% @sub_title = content_tag(:span, get_page_subtitle("cui-campaign-take-tour", "feature.campaign.tour.take_tour".translate), class: "cjs-tool-tip", data: {desc: "feature.campaign.tour.tip".translate})  %>
+<% @hide_sub_title_arrow = true %>
+<% @page_action = {:label => "feature.campaign.index.create_new".translate, :url =>  new_campaign_management_user_campaign_path, class: "btn btn-primary btn-large cjs_ga_initiated_creation_directly" } %>
+
+<% if super_console? %>
+  <% @page_action2 = {:label => "feature.campaign.index.export_csv".translate, :url => export_csv_campaign_management_user_campaigns_path, class: "btn btn-primary btn-large"} %>
+
+  <%= ibox nil ,:ibox_class => "cjs-import-form-container" do %>
+    <%= simple_form_for :campaign, url: import_csv_campaign_management_user_campaigns_path, html: {class: "form-horizontal", multipart: true} do |f| %>
+      <%= f.input :template, :as => :file, :wrapper => :horizontal_input,  label: "feature.campaign.label.templates_csv".translate, required: true %>
+
+      <% action_set(class: "pull-right") do %>
+        <% f.button :submit, "display_string.Upload".translate, class: 'btn btn-primary cjs-importer-submit', data: {confirm: "feature.campaign.description.upload_csv_confirm".translate} %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<div id="campaigns-result" class="campaign-management-kendo-result">
+  <%= campaign_tabs(@presenter) %>
+  <%= ibox nil, :ibox_class => "cjs_table_enclosure clearfix" do %>
+    <div id="cjs_campaigns_result" class="k-content <%= 'cjs_analytics_present' if @presenter.show_analytics? %>">
+      <%= content_tag :div, "", id: "cjs_campaigns_kendogrid", data: { "new-campaign-id" => params[:new_campaign_id], "selected-campaign-id" => params[:selected_campaign_id] } %>
+      <%= initialize_campaigns_kendo_script(@presenter.target_state, @tour_taken, @less_than_ie9, @presenter.show_analytics?) %>
+    </div>
+  <% end %>
+</div>
+<%= render partial: "campaign_management/user_campaigns/tour_modal" %>
+
+<%= javascript_tag do %>
+  CampaignManagement.handleGA();
+<% end %>

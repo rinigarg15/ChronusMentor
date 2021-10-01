@@ -1,0 +1,36 @@
+<% if data.blank? %>
+  <div class="dim text-center"><%= "feature.reports.content.no_published_groups".translate(mentoring_connections: _mentoring_connections) %></div>
+  <%= render partial: "reports/management_report/groups_activity/engagement_metrics" %>
+<% else %>
+  <div class="col-md-6 p-r-xs p-l-0">
+    <div class="">
+      <%= content_tag(:h4, ("feature.reports.content.connection_with_activity".translate(Mentoring_Connections: _Mentoring_Connections) + content_tag(:span, "(#{get_date_range_preset_translated_for_activity_tile(date_range_preset)})", class: "small p-l-xxs")).html_safe, class: "m-t-md m-b-0") %>
+    </div>
+    <div class="clearfix text-center">
+      <div class="clearfix m-t-md" id="group_activity_summary"></div>
+    </div>
+    <div class="clearfix m-t-sm">
+      <ul class="stat-list">
+        <li class="m-b-sm row">
+          <span class="col-md-2">
+            <span class="label label-primary m-r-xs"><%= data[:groups_with_activity] %></span>
+          </span>
+          <div class="col-md-10"><%= "feature.reports.content.connection_with_activity".translate(Mentoring_Connections: _Mentoring_Connections) %></div>
+        </li>
+        <li class="m-b-sm row">
+          <span class="col-md-2">
+            <span class="label label m-r-xs"><%= data[:groups_with_no_activity] %></span>
+          </span>
+          <div class="col-md-10"><%= "feature.reports.content.connection_without_any_activity".translate(Mentoring_Connections: _Mentoring_Connections) %></div>
+        </li>
+      </ul>
+    </div>
+    <%= render partial: "reports/management_report/groups_activity/engagement_metrics" %>
+  </div>
+
+  <%= javascript_tag do %>
+    <% if data[:current_period_activity_hash][:groups] > 0 %>
+      GroupsReport.getConnectionActivityStats("group_activity_summary", <%= chr_json_escape(get_groups_report_activity_stats(data[:groups_report]).to_json) %>);
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,45 @@
+<% @title = _Resources %>
+<% @skip_rounded_white_box_for_content = true %>
+<% if @admin_view && !@reorder_view %>
+  <% drop_down_array = [{:label => "feature.resources.action.add_new_resource".translate(resource: _resource), :url => new_resource_path}] %>
+  <% drop_down_array << {:label => "feature.resources.action.reorder_resources".translate(resources: _resources), :url => resources_path(reorder: :true)} if program_view? && @resources.present? %>
+  <% dropdown_title = program_view? ? "display_string.Actions".translate : nil %>
+  <% @page_action = drop_down_array %>
+  <% @page_action_options = {:dropdown_title => dropdown_title, :large => true} %>
+<% end %>
+
+<% position_key = @admin_view ? "position_v1" : "position_end_user" %>
+
+<% sort_string = [] %>
+<% sort_string  << {:field => :position, :order => :asc, :label => "feature.resources.sort_options.#{position_key}".translate} if program_view? %>
+<% sort_string << {:field => :title, :order => :asc, :label => "feature.resources.sort_options.title_asc".
+    translate} %>
+<% sort_string << {:field => :title, :order => :desc, :label => "feature.resources.sort_options.title_dsc".
+    translate} %>
+<% other_params = {} %>
+<% other_params[:search] = @search_query if search_view? %>
+
+<% sort_options_text = {sort_url: resources_path, sort_field: @sort_field, sort_order: @sort_order, sort_info: sort_string, url_params: other_params} %>
+
+<% search_results_wrapper(@search_query) do %>
+  <% if @resources.empty? %>
+    <div class="ibox-content">
+      <div class="text-muted text-center">
+        <%= "feature.resources.content.no_resources_yet_v1".translate(:resources => _resources) %>
+        <% if @admin_view %>
+          <%= "feature.resources.content.create_resource_html".translate(click_here: link_to("display_string.Click_here".translate, new_resource_path, :class => "strong")) %>
+        <% end %>
+      </div>
+    </div>
+  <% elsif @reorder_view %>
+    <%= render :partial => "resources/reorder_resources", locals: {resources: @resources} %>
+  <% else %>
+    <%= ibox nil, {:content_class => "no-padding"} do %>
+      <%= top_bar_in_listing({collection: @resources}, {show: true}, sort_options_text) %>
+      <%= listing_page(@resources, partial: "resources/resource", collection_key: :resource) %>
+      <%= bottom_bar_in_listing({collection: @resources}) %>
+    <% end %>
+  <% end %>
+<% end %>
+<% resource_id = params[:resource_id].to_i if params[:resource_id].present? %>
+<%= javascript_tag %Q[jQueryScrollTo('#resource_#{resource_id}', true);] if resource_id %>

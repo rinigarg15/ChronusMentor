@@ -1,0 +1,69 @@
+@mixin default-structure {
+  #chronus_header {
+    .centered_inner_content{
+      padding-left: $header_links_padding;
+      @include centered-content($layout-min-width, $layout-max-width);
+    }
+  }
+
+  #header_alert{
+    .centered_inner_content{
+      @include centered-content($layout-min-width, $layout-max-width);
+    } 
+  }
+
+  #wob_header {
+    .centered_inner_content{
+      @include centered-content($layout-min-width, $layout-max-width);
+    }
+  }
+
+  #program_header #header_wrapper {
+    @include centered-content($layout-min-width, $layout-max-width);
+  }      
+
+  #centered_content {
+    #tab_box {
+      .navbar {
+        @include centered-content($layout-min-width, $layout-max-width);
+      }
+    }
+  }   
+
+  .home_page_layout #centered_content #tab_box {
+    @include centered-content($layout-min-width, $layout-max-width);
+    .navbar {
+      @include centered-content($layout-min-width, $layout-max-width);
+    }
+  }  
+
+  #centered_content {
+    #two_column_container {
+      @include centered-content($layout-min-width, $layout-max-width);
+    }
+    #single_column_container {
+      @include centered-content($layout-min-width, $layout-max-width);  
+    }
+  }   
+
+  #footer {
+    @include centered-content($layout-min-width, $layout-max-width);  
+    margin: 0 auto;
+  }
+}
+
+
+@mixin v2-structure {
+
+  #chronus_header {
+    @include centered-content($layout-min-width, $layout-max-width);
+  }
+
+  #centered_content #tab_box {
+    @include centered-content($layout-min-width, $layout-max-width);
+  }
+
+  #program_header {
+    @include centered-content($layout-min-width, $layout-max-width); 
+  }  
+}  

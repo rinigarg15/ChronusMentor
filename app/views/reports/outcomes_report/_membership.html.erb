@@ -1,0 +1,18 @@
+<%= ibox render(partial: "reports/outcomes_report/section_header_content", :locals => {:title => "feature.outcomes_report.header.membership".translate, path: detailed_user_outcomes_report_path}), no_collapse: true do %>
+  <div class="row">
+    <div class="<%= col %>-5">
+      <% total_locals = {total_id: "cjs_membership_total", total_title: get_outcomes_membership_section_total_title, groups_or_meeting_term: groups_or_meeting_term} %>
+      <% role_locals = {role_id_proc: Proc.new{|role| UserOutcomesReport::MembershipSectionElementId.for_role(role)}} %>
+      <% local_vars = [total_locals, role_locals].reduce(&:merge) %>
+
+      <%= render(partial: "reports/outcomes_report/common_left_section", locals: local_vars.merge(col: col)) %>
+    </div>
+
+    <div class="<%= col %>-1"></div>
+
+    <div class="<%= col %>-6">
+      <div id="registered-user-chart" class="cui-outcomes-dashboard-chart">
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,29 @@
+<% modal_v3_popup "feature.connection.action.update_owners".translate do %>
+  <p><%= "feature.connection.content.owners_description".translate(mentoring_connection: _mentoring_connection, administrator: _admin) %></p>
+  <%= response_flash "group_update_owner_flash_#{@group.id}" %>
+
+  <%= simple_form_for @group, :url => update_owners_group_path(@group, from_index: @from_index, tab_number: @tab_number, view: @view), :remote => true, :html => {:class => "group_update_form", id: "fetch_owners_form"} do |f| %>
+    <%= control_group do %>
+      <label class="control-label">
+        <%= "feature.connection.content.Owners".translate %>
+      </label>
+      <%= controls do %>
+        <%= hidden_field_tag("group_owner", @group.owner_ids.join(','), class: "col-xs-12 no-padding", :id => "group_owner_#{@group.id}", :data => {:select => get_group_members_data_for_select2(@group)}) %>
+        <span class="help-block">
+          <%= "feature.connection.content.admin_having_owner_privileges".translate(Admin: _Admin) %>
+        </span>
+      <% end %>
+    <% end %>
+
+    <%= email_notification_consequences_on_action_html(GroupOwnerAdditionNotification, div_enclose: true, div_class: "help-block") %>
+
+    <% action_set(:class=>"pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "display_string.Update".translate %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  Groups.initializeOwnerSelect2(<%= @group.id %>);
+<% end %>

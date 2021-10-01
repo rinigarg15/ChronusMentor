@@ -1,0 +1,283 @@
+$small_width: 40px;
+$default_input_width: 300px;
+
+$completed_color: #363636;
+$overdue_color: #D72E2E;
+$inprogress_color: #3B9C2B;
+$notstarted_color: #E3DDDA;
+
+$alert_background_color: #F7F7E0;
+//should be used only with bg-highlight
+$darker_alert_background_color: darken($alert_background_color, 10);
+$greenalert_background_color: #D8EBD5;
+$dark_background_color: #F7F6F6;
+$alert_red_background: #D72F2F;
+/* Colours for Q & A */
+
+$gray_for_hover: #F7F6F6;
+$gray_for_borders: #DDDDDD;
+$grayed: #888888;
+$gray_for_subheader: #555555;
+$width_for_title: 440px;
+$border-gray-style: 1px solid #dddddd;
+
+
+
+@mixin round-styling(){
+  overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 1px solid #eee;
+  -webkit-border-radius: 99em !important;
+  -moz-border-radius: 99em !important;
+  border-radius: 99em !important;
+  position:relative;
+  z-index: 0;
+}
+
+
+@mixin rounded-corners($radius) {
+ -webkit-border-radius: $radius;
+ -moz-border-radius: $radius;
+ border-radius: $radius;
+}
+
+@mixin linear-gradient($color){
+  background: $color;
+  background: -webkit-linear-gradient(rgba($color, 0), rgba($color, 1));
+  background: -moz-linear-gradient(rgba($color, 0), rgba($color, 1));
+  background: -ms-linear-gradient(rgba($color, 0), rgba($color, 1));
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0, FinishOpacity=100, StartY=0, FinishY=50, Style=1, StartX=0, FinishX=0)";
+  filter: alpha(Opacity=0,FinishOpacity=100,Style=1,StartY=0,FinishY=50,StartX=0,FinishX=0);
+}
+
+@mixin two-column-equal-height($width, $startcolor1, $endcolor1, $startcolor2, $endcolor2){
+  background-image: -webkit-linear-gradient(left, $startcolor1, $endcolor1 $width, $startcolor2 $width, $endcolor2 100%);
+  background-image: -moz-linear-gradient(left, $startcolor1, $endcolor1 $width, $startcolor2 $width, $endcolor2 100%);
+  background-image: -ms-linear-gradient(left, $startcolor1, $endcolor1 $width, $startcolor2 $width, $endcolor2 100%);
+  background-image: -o-linear-gradient(left, $startcolor1, $endcolor1 $width, $startcolor2 $width, $endcolor2 100%);
+  background-image: -webkit-gradient(linear, left top, right top, color-stop(0, $startcolor1), color-stop($width, $endcolor1), color-stop($width, $startcolor2), color-stop(100%, $endcolor2));
+}
+
+// @mixin gradient($start-position, $end-position, $color1, $color2){
+//   background-image: linear-gradient($start-position , $color1 0%, $color2 100%);
+//   background-image: -o-linear-gradient($start-position , $color1 0%, $color2 100%);
+//   background-image: -moz-linear-gradient($start-position , $color1 0%, $color2 100%);
+//   background-image: -webkit-linear-gradient($start-position , $color1 0%, $color2 100%);
+//   background-image: -ms-linear-gradient($start-position , $color1 0%, $color2 100%);
+//   background-image: -webkit-gradient(linear, $start-position, $end-position,color-stop(0, $color1), color-stop(1, $color2));
+// }
+
+@mixin centered-content($min-width, $max-width){
+  min-width: $min-width;
+  max-width: $max-width;
+  margin: 0 auto;
+}
+
+@mixin well($padding){
+  background-color: #FFFFFF;
+  border: 1px solid $border-color;
+  padding: $padding;
+}
+
+$error-border-width: 2px;
+$error-bg-color: #F2DEDE;
+$error-font-color: #B30000;
+
+$success-bg-color: #FFB;
+$success-font-color: #363636;
+$success-border-color: #CC5;
+
+$warning-bg-color: #FD9;
+$warning-font-color: #363636;
+$warning-border-color: #DA6;
+
+
+$primary-btn-font-color: white;
+$title-btn-font-color: white;
+$color-anchor: #315BB4;
+$color-anchor-hover: #333333;
+$color-anchor-active-visited: #315BB4;
+$block-bg-color-anchor: #5588BB;
+$block-color-anchor: #FFF;
+
+$disabled-color: #898989;
+$label-color: #898989;
+$font-color: #363636;
+$font-dim-color: #888;
+$font-green-color: #373;
+$font-red-color: #D72E2E;
+$font-orange-color: #F89406;
+$body-bg: #F5F5F5;
+$body-font-size: 80%;
+$body-font-family: 'Open Sans', sans-serif;
+$layout-min-width: 980px;
+$layout-max-width: 1280px;
+
+//Chronus Header
+$chronus-header-bg: image-url("v3/layout/chronus_header_bg.png") repeat-x scroll 0 0 #434B5E;
+$chronus-header-anchor-color: #FFFFFF;
+$chronus-header-menu-bgcolor: #FFFFFF;
+$chronus-header-menu-hover-bgcolor: #F7F6F6;
+$chronus-header-menu-color: #315BB4;
+$chronus-header-menu-hover-color: #315BB4;
+$chronus-header-menu-bot-bodcolor: #898989;
+$header_links_padding: 15px;
+$chronus-header-logo: url("https://s3.amazonaws.com/chronus-mentor-assets/global-assets/images/chronus_logo_white_small2.png") no-repeat scroll 0 11px transparent;
+
+//Footer background color
+$footer-bg: transparent;
+$footer-link-color: $color-anchor;
+
+//Filter pane
+$filter-text-color: #315BB4;
+
+//Program header
+$program-header-bgcolor: transparent;
+$program-header-color: #363636;
+$program-header-background: #CBD4E7;
+
+//Program header non-loggedin
+$program-header-shadow: 0 1px 5px #C5C5C5;
+
+//Centered content
+$centered-content-bgcolor: transparent;
+
+$dropdown-background-color: white;
+
+//Tabs
+$tab-bgcolor: #FFF;
+$tab-bg: $tab-bgcolor;
+$tab-color: $color-anchor;
+$tab-selected-color: #363636;
+$tab-selected-bgcolor: #EBEFF5;
+$tab-rt-bodcolor: #FFF;
+$tab-lt-bodcolor: #FFF;
+$tab-box-shadow: 0 1px 5px #C5C5C5;
+$hover-menu-bg-color: #f6f7fA;
+$dropdown-menu-color: #315bb4;
+$tab-box-height: 38px;
+$padding-tab-anchors : 6px 7px 7px;
+
+/*
+//Wob Header
+TODO_REMOVE
+$wob-header-switch-color: #005599;
+*/
+
+/*
+
+$tab-subtab-color: #CCC;
+
+//Buttons
+
+$button-default-bg: #8fb165;
+$button-default-bodcolor: #769253;
+$button-default-hover-bg: #8bc345;
+
+$button-button2-bg: $button-default-bg;
+$button-button2-bodcolor: $button-default-bodcolor;
+$button-button2-hover-bg: $button-default-hover-bg;
+
+//Pane
+$pane-bgcolor: #FFF;
+$pane-bg: $pane-bgcolor;
+$pane-bodcolor: #CCC;
+$pane-color: #363636;
+
+$hash-texture-bg: #F0FAFF url(https://chronus-mentor-assets.s3.amazonaws.com/v2/images/hash-texture.gif) repeat scroll 0 0;
+$hash-texture-bod: 1px solid #CDDBE8;
+*/
+
+$button-primary-bg: #3A62B7;
+$button-primary-bodcolor: #365FB6;
+$button-primary-hover-bg: #3A62B7;
+
+//Buttons in tab bar, like Join Now and Sign In
+$tab-btn-bg: $button-primary-bg;
+$tab-btn-bodcolor: $button-primary-bodcolor;
+$tab-btn-hover-bg: $button-primary-hover-bg;
+
+$button-default-color: #FFF;
+$button-secondary-color: #555555;
+$form-help-text-color: $font-dim-color;
+
+// Pagination
+$pagination-bg-color: #FFF;
+
+$light-border-color: #D7D4C6;
+$border-color: #DDDDDD;
+$seperation-border-color: #b2b2b2;
+$dark-border-color: rgba(77, 77, 77, 0.8);
+$background-color: white;
+$shadow-color: #AAAAAA;
+
+
+$offset_base: ($layout-min-width/12);
+$offset_increment: $layout-min-width / 12;
+
+$gutter: 8;
+$width_base: ($layout-min-width/12) - $gutter;
+$width_increment: $layout-min-width / 12;
+
+$pic-xlarge: 100px;
+$pic-large: 75px;
+$pic-medium: 50px;
+$pic-small: 35px;
+
+@mixin all-opacity($opacity) {
+  filter: alpha(opacity=($opacity*100));
+  opacity: $opacity;
+}
+
+@mixin all-box-sizing($value) {
+  box-sizing: $value;
+  -moz-box-sizing: $value;
+  -webkit-box-sizing: $value;
+}
+
+$logo-alignment: left;
+@mixin align-logo-in-banner($logo-alignment) {
+  float: $logo-alignment;
+  @if $logo-alignment == 'right' {
+    padding-right: 15px;
+  }
+}
+ 
+$pagination-blue: #2e6ab1;
+$pagination-black: #000033;
+
+@mixin pagination-color($val) {
+  ::-webkit-input-placeholder { /* WebKit browsers */
+      color:    $val;
+  }
+  :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+      color:    $val;
+  }
+  ::-moz-placeholder { /* Mozilla Firefox 19+ */
+      color:    $val;
+  }
+  :-ms-input-placeholder { /* Internet Explorer 10+ */
+      color:    $val;
+  }
+}
+
+$tab-dropdown-default-bod-color: #C5C5C5;
+$navbar-top-padding: 2px;
+$three-sixty-rating-color: #ADD8E6;
+
+/* Reporting */
+$section-scheme-0-prime-color: #a5acbc;
+$section-scheme-1-prime-color: #6b86c4;
+$section-scheme-2-prime-color: #7799af;
+$section-scheme-3-prime-color: #929293;
+$report-dropdown-link-desc-box-text-color: #404c5c;
+$report-alert-popup-text-color: #545964;
+$report-alert-popup-input-backgroud-color: #C7CFE1;
+$report-alert-popup-warning: #FF5400;
+$dropdown-button-color: #315BB4;
+$report-btn-desc-box-background-color: #FFFFFF;
+$detailed-outcomes-report-head-background-color: #EFEFEF;
+$detailed-outcomes-report-head-color: #4d607e;
+$detailed-outcomes-report-color: #363636;

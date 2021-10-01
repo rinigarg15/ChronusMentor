@@ -1,0 +1,9 @@
+<% local_vars = {preview_view_url: preview_view_details_match_reports_path(source_info: source_info), id_suffix: "mentor_distribution", form: nil} %>
+<div class="false-label control-label col-sm-3"><%= "feature.match_report.label.role_user_set".translate(role: _Mentor) %></div>
+<div class="controls col-sm-9">
+  <%= render :partial => "admin_views/admin_view_details", :locals => local_vars.merge({role_names: [RoleConstants::MENTOR_NAME]}) %>
+</div>
+<div class="false-label control-label col-sm-3"><%= "feature.match_report.label.role_user_set".translate(role: _Mentee) %></div>
+<div class="controls col-sm-9">
+  <%= render :partial => "admin_views/admin_view_details", :locals => local_vars.merge({role_names: [RoleConstants::ROLE_DISPLAY_NAME_MAPPING[RoleConstants::STUDENT_NAME]]}) %>
+</div>

@@ -1,0 +1,47 @@
+<% target_program = @program || @current_program %>
+<% target_roles = get_target_roles(@filter_role, @role, @roles, @profile_user) %>
+<% required = local_assigns[:required].nil? ? target_program && target_roles && question.required_for(target_program, target_roles) : local_assigns[:required] %>
+
+<div class="cjs_add_show cjs_inner_rounded_section inner_rounded_section education m-l-sm m-r-sm list-group-item <%= 'cjs_required' if required %>">
+  <%= fields_for_education(question, new_education) do |education_form| %>
+    <% if question.question_type == ProfileQuestion::Type::MULTI_EDUCATION %>
+      <div class="form-group form-group-sm">
+        <button type="button" class="close" onclick="CustomizeQuestions.removeEduExpFields(this, '.education', '<%= j("feature.education_and_experience.content.one_required_v1".translate) %>', '<%= j("common_text.confirmation.sure_to_delete".translate) %>')"><span class="sr-only"><%= "feature.education_and_experience.action.Remove_Education".translate %></span><%= embed_icon("fa fa-trash m-r-xxs") %></button>
+      </div>
+    <% end %>
+
+    <div class="education row" id="<%= (new_education.new_record?) ? "" : "education_#{new_education.id}" %>">
+      <%= control_group do %>
+        <% school_label_text = Education.human_attribute_name(:school_name) %>
+        <label class="col-sm-2 control-label false-label"><%= school_label_text %></label>
+        <%= controls(class: "col-sm-10") do %>
+          <%= education_form.text_field :school_name, class: "school_name form-control", id: nil, aria: { label: school_label_text } %>
+        <% end %>
+      <% end %>
+
+      <%= control_group do %>
+        <% degree_label_text = Education.human_attribute_name(:degree) %>
+        <label class="col-sm-2 control-label false-label"><%= degree_label_text %></label>
+        <%= controls(class: "col-sm-10") do %>
+          <%= education_form.text_field :degree, class: "degree form-control", id: nil, aria: { label: degree_label_text } %>
+        <% end %>
+      <% end %>
+
+      <%= control_group do %>
+        <% major_label_text = Education.human_attribute_name(:major) %>
+        <label class="col-sm-2 control-label false-label"><%= major_label_text %></label>
+        <%= controls(class: "col-sm-10") do %>
+          <%= education_form.text_field :major, class: "major form-control", id: nil, aria: { label: major_label_text } %>
+        <% end %>
+      <% end %>
+
+      <%= control_group do %>
+        <% graduation_year_label_text = Education.human_attribute_name(:graduation_year) %>
+        <label class="col-sm-2 control-label false-label"><%= graduation_year_label_text %></label>
+        <%= controls(class: "col-sm-10") do %>
+          <%= education_form.select :graduation_year, year_options_for_select(ProfileConstants.valid_graduation_years), {}, class: "graduation_year form-control", id: nil, aria: { label: graduation_year_label_text } %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

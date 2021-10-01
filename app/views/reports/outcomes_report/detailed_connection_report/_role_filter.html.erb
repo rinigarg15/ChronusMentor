@@ -1,0 +1,14 @@
+<div class="clearfix">
+  <%= choices_wrapper("display_string.Roles".translate, class: "role-filter-container pull-right") do %>
+    <span class="text-muted inline m-r-xs"><i> <%= "feature.outcomes_report.title.role_filter_title".translate %></i></span>
+    <%= content_tag(:label, :class => 'radio inline cui_role_filter_radio_btn') do
+        radio_button_tag("roleFilter", OutcomesReportUtils::RoleData::ALL_USERS, true, "ng-model" => "roleFilter", "ng-change" => %Q[applyRoleFilter('#{"feature.outcomes_report.title.users".translate} ')]) + "feature.outcomes_report.title.all_users_role_filter".translate
+      end %>
+
+    <% current_program.roles.for_mentoring.each do |role| %>
+      <%= content_tag(:label, :class => 'radio inline cui_role_filter_radio_btn m-l-xs') do
+          radio_button_tag("roleFilter", role.id, false, "ng-model" => "roleFilter", "ng-change" => "applyRoleFilter('#{role.customized_term.pluralized_term} ')") + role.customized_term.pluralized_term
+        end %>
+    <% end %>
+  <% end %>
+</div>

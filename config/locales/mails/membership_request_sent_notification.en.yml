@@ -1,0 +1,7 @@
+en:
+  email_translations:
+    membership_request_sent_notification:
+      title_v3: Confirmation of received membership request to the applicant
+      description_v4: This is a confirmation email sent to the applicant after successful submission of their membership application.
+      subject_v1: Your membership request has been received.
+      content_v3_html: Your request to join {{subprogram_or_program_name}} has been successfully received by the {{customized_subprogram_term}} {{customized_admin_term_pluralized}}.<br/><br/>The {{customized_admin_term_pluralized}} will review your application and you will receive an e-mail once the review is complete.<br/>

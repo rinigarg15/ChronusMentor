@@ -1,0 +1,1 @@
+jQuery(".cjs-profile-question-details-container").html('<%= j render :partial => 'profile_questions/get_role_question_settings', :locals => {:role_question => @role_questions[@role.id], :profile_question => @profile_question, :role => @role, :program => @program, program_level: params[:program_level]} %>');

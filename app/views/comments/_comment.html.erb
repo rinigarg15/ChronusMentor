@@ -1,0 +1,9 @@
+<% actions = get_comment_actions(comment) %>
+<%= render partial: "common/comment", locals: {
+  user_picture: user_picture(comment.user, { :no_name => true, :size => :small, outer_class: "pull-left no-margins" }, { class: "img-circle" } ),
+  user_link: link_to_user(comment.user, current_user: current_user),
+  comment_body: chronus_auto_link(comment.body),
+  comment_created: comment.created_at,
+  actions: dropdown_buttons_or_button(actions, dropdown_title: "", btn_class: "pull-right", btn_group_btn_class: "btn-sm btn-white", is_not_primary: true),
+  wrapper_id: comment_html_id(comment)
+} %>

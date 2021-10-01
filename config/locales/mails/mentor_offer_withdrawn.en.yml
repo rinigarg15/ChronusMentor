@@ -1,0 +1,20 @@
+en:
+  email_translations:
+    mentor_offer_withdrawn:
+      title_v2: "%{_Mentor} offer withdrawal notification to %{_mentee}"
+      description_v2: "%{_Mentors} can directly offer %{_mentoring} to %{_mentees}. This email (including a personal  message from the %{_mentor}) is sent to %{_a_mentee} when %{_a_mentor} withdraws the %{_mentoring} offer."
+      subject_v1: "{{mentor_name}} has withdrawn their offer for {{customized_mentoring_term}}"
+      content_v1_html: "<a href='{{mentor_url}}'>{{mentor_name}}</a> has withdrawn their offer for {{customized_mentoring_term}} you in {{subprogram_name}}. <br /> {{message_from_mentor}} <br /> You do not have to wait for another {{customized_mentor_term}} to reach out; you can visit the {{customized_subprogram_term}}'s {{customized_mentors_term}} page and find another {{customized_mentor_term}}. <br />{{view_mentors_button}} <br/> If you are unable to find {{customized_mentor_term_articleized}}, please reach out to one of the <a href='{{url_contact_admin}}'>{{customized_admin_term_pluralized}}</a> and we'd be happy to help you.<br/>"
+      tags:
+        mentor_name:
+          description: Name of the mentor who has withdrawn the mentor offer
+        message_from_mentor:
+          description: Reason provided by the mentor when withdrawing the mentor offer
+          example: Sorry mentee, but I have already offered mentoring to someone else. Thank you.
+        view_mentors_button:
+          description: View Mentors listing page
+          view_mentors: View %{Mentors}
+        mentor_url:
+          description: Url to the mentor's profile
+        url_contact_admin:
+          description: Url for the user to contact administrator

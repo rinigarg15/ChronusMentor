@@ -1,0 +1,41 @@
+<% error_set_expiry_flash_id = "error_set_expiry_flash_" %>
+<% modal_v3_popup "feature.connection.header.Set_Expiration_Date".translate(connection_name: @group.name) do %>
+  <%= simple_form_for @group, :remote => true, :url => update_expiry_date_group_path(@group, format: :js) do |f| %>
+    <%= response_flash(error_set_expiry_flash_id + @group.id.to_s) %>
+    <p><%= @group.expired? ? "feature.connection.content.help_text.expired_date_change_html".translate(mentoring_connection: _mentoring_connection, expiry_date: content_tag(:b, formatted_time_in_words(@group.expiry_time, :no_time => true))): "feature.connection.content.help_text.expiring_date_change_v1_html".translate(mentoring_connection: _mentoring_connection, expiry_date: content_tag(:b, formatted_time_in_words(@group.expiry_time, :no_time => true))) %>
+      <%= "feature.connection.content.help_text.reason_for_change_v1".translate %>
+    </p>
+
+    <%= control_group do %>
+      <%= label_tag :mentoring_period, set_required_field_label("feature.connection.header.new_expiration".translate), :class => "control-label", :for => "set_new_expiry_date_#{@group.id}" %>
+      <%= controls do %>
+        <%= construct_input_group([ { type: "addon", icon_class: "fa fa-calendar", class: "gray-bg" } ], []) do %>
+          <%= text_field_tag :mentoring_period, "", id: "set_new_expiry_date_#{@group.id}", class: "form-control", autocomplete: :off, data: date_picker_options(min_date: Date.current) %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if @profile_tab == MembersController::ShowTabs::MANAGE_CONNECTIONS %>
+      <%= hidden_field_tag(:manage_connections_member, @profile_member.id) %>
+      <%= hidden_field_tag(:filter, @filter_field) %>
+    <% end %>
+
+    <%= control_group do %>
+      <%= label_tag :revoking_reason, set_required_field_label(Group.human_attribute_name(:revoking_reason)), :class => "control-label", :for => "set_expiry_date_reason_#{@group.id}" %>
+      <%= controls do %>
+        <%= text_area_tag :revoking_reason, nil, :id => "set_expiry_date_reason_#{@group.id}", :class => "form-control", :rows => 5 %>
+      <% end %>  
+    <% end %>
+    <%= hidden_field_tag "view", @view %>
+    <%= hidden_field_tag "tab", @tab_number %>
+    <%= email_recipients_note("feature.connection.content.email_recipients_list".translate(mentoring_connection: _mentoring_connection)) %>
+
+    <% action_set(:class => "pull-right", :fields_required => true) do %>
+      <%= link_to_function "display_string.Cancel".translate, %Q[RenewalMentoringPeriod.clear("set_expiry_date_reason_#{@group.id}", "set_new_expiry_date_#{@group.id}", "","#{error_set_expiry_flash_id + @group.id.to_s}");],
+        :class => "btn cancel btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "feature.connection.action.Set_Expiration_Date".translate, :id => "change_expiry_date_button_#{@group.id}",:onclick => %Q[return RenewalMentoringPeriod.validate("set_expiry_date_reason_#{@group.id}", "set_new_expiry_date_#{@group.id}", "#{'flash_message.group_flash.mentoring_period_v1'.translate}","#{error_set_expiry_flash_id + @group.id.to_s}")] %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[initialize.setDatePicker();] %> 

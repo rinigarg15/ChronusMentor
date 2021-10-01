@@ -1,0 +1,9 @@
+<% email_template(local_assigns[:layout_options]) do %>
+  <% content = local_assigns[:email_template] %>
+  <% if Rails.env.development? || Rails.env.test? || Rails.env.staging? %>
+    <% raise_if_erb(content) %>
+  <% else %>
+    <% content = ERB.new(content).result(binding) %>
+  <% end %>
+  <%= Mustache.render(content, process_tags()).html_safe %>
+<% end %>

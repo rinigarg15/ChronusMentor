@@ -1,0 +1,28 @@
+en:
+  email_translations:
+    group_termination_notification:
+      title_v2: "%{_Mentoring_Connection} closure notification to members"
+      description: 'This email is sent to members of %{_a_mentoring_connection} when the %{_mentoring_connection} is closed due to any of the following reasons: the %{_admin} closed the %{_mentoring_connection}, a member left the %{_mentoring_connection}, the %{_mentoring_connection} expired or has been inactive too long.'
+      subject: Your {{customized_mentoring_connection_term}}, {{group_name}} has come to a close
+      content_html: 'This message is to inform you that your {{customized_mentoring_connection_term}}, {{group_name}}, has come to a close due to the following reason: <br /> {{reason_for_closure}}  <br /> You will be able to continue to access all the information inside the {{customized_mentoring_connection_term}}, but will be unable to use the {{customized_mentoring_connection_term}} to interact with the other members. <br /> <br /> If you wish to reactivate the {{customized_mentoring_connection_term}} or if you have any questions, please contact the {{customized_admin_term_pluralized}} <a href=''{{url_contact_admin}}''>here</a>.<br/>'
+      content_v1_html: 'This message is to inform you that your {{customized_mentoring_connection_term}}, {{group_name}}, has come to a close due to the following reason: <br /> {{reason_for_closure}}  <br /> You will be able to continue to access all the information inside the {{customized_mentoring_connection_term}}, but will be unable to use the {{customized_mentoring_connection_term}} to interact with the other members. <br /> <br /> If you wish to reactivate the {{customized_mentoring_connection_term}}, {{reactivate_connection}}'
+      tags:
+        group_name:
+          description_v1: Name of the %{_mentoring_connection}
+          example: Green and Smith
+        reason_for_closure:
+          description_v1: Reason for closing the %{_mentoring_connection}
+          example_v1_html: "<br/>%{_Mentoring_Connection} has ended.<br/>"
+          auto_terminated_inactivity_html: "<br/>Auto-terminated due to inactivity<br/>"
+          mentoring_connection_ended_html: "<br/>%{Mentoring_Connection} has ended<br/>"
+          admin_terminating_connection_html: "<br/>%{Mentoring_Connection} has been closed by the %{program} %{administrator}<br/>"
+          admin_terminating_connection_with_reason_html: "<br/>%{reason_for_closure}<br/>"
+          member_leaving_terminates_connection_html: "<br/>Closed due to %{name_of_person_terminating} leaving the %{Mentoring_Connection}<br/>"
+        url_contact_admin:
+          description: Url for the user to contact administrator
+        reactivate_connection:
+          description: Reactivate closed %{_mentoring_connection}
+          example: "please contact the %{_admin} <a href='http://www.chronus.com'> here </a>.<br/>"
+          end_user_reactivation_with_button_html: "please click below <br/>%{reactivate_button}"
+          admin_reactivation_html: "please contact the %{administrator} <a href='%{contact_admin_url}'>here</a>.<br/>."
+          reactivate_button_text: "Reactivate %{Mentoring_Connection}"

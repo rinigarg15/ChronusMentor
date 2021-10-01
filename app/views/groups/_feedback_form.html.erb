@@ -1,0 +1,17 @@
+<% modal_container "feature.connection.header.Provide_Feedback".translate, modal_id: "connection_inactivity_feedback_form" do %>
+  <%= response_flash("cjs-feedback-form-flash") %>
+  <div>
+    <%= "feature.connection.content.help_text.please_answer_feedback".translate(mentoring_connection: _mentoring_connection) %>
+    <%= content_tag(:p, "feature.connection.content.help_text.responses_visible_to_admin".translate(admin: _admin), class: "small dim") %>
+  </div>
+  <div id="feedback_answers">
+    <%= render partial: "groups/inactivity_feedback_form" %>
+  </div>
+<% end %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    ConnectionFeedback.bindCloseForSessionHide("<%= hide_item_users_path(item_key: UsersController::SessionHidingKey::INACTIVITY_CONNECTION_FEEDBACK) %>");
+    ConnectionFeedback.initializeForm();
+    CustomizeSelect.selectExpandContract();
+  });
+<% end %>

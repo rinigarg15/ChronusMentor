@@ -1,0 +1,7 @@
+<div class="container-fluid no-padding">
+  <div class="btn-group <%= options[:grid_class] || "col-xs-12 no-padding" %> <%= options[:btn_group_class] %>">
+    <% common_actions.each do |action| %>
+      <%= action %>
+    <% end %>
+  </div>
+</div>

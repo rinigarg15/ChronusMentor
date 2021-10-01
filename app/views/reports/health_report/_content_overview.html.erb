@@ -1,0 +1,33 @@
+<table class='table table-bordered table-condensed'>
+  <thead>
+    <tr>
+      <th>
+        <%= "feature.reports.label.content_activity".translate %>
+      </th>
+      <th>
+        <%= "feature.reports.label.total".translate %>
+      </th>
+      <th>
+        <%= "feature.reports.label.Last_Month".translate %>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% content_overview.history_metrics.each do |item, metric| %>
+      <% next unless content_overview.has_content?(item) %>
+      <tr>
+        <td>
+          <%= translated_health_report_content_name(content_overview.item_name(item)) %>
+        </td>
+        <td>
+          <%= metric.value %>
+        </td>
+        <td>
+          <%= metric.last_month %> 
+            <span class='change'><%= "feature.reports.content.percent_change".translate(percent: metric.last_change) %>
+            </span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

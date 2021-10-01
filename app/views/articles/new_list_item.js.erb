@@ -1,0 +1,5 @@
+<% content = render partial: "articles/#{@list_item_type}", :object => @new_list_item %>
+
+jQuery("#empty_list").hide();
+jQuery("#article_list_items").append("<%= j content %>");
+jQuery("#add_new_item").hide();

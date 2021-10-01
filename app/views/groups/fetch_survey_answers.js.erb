@@ -1,0 +1,5 @@
+jQuery("#loading_results").hide();
+jQuery('#filter_survey_answer_container').remove();
+<% if @survey_question %>
+  jQuery("#filter_survey_question_container").after("<%= j(get_survey_answer(@survey_question, {}, @is_reports_view)) %>");
+<% end %>

@@ -1,0 +1,26 @@
+<% tabs = [] %>
+<% tabs << {
+  label: get_icon_content(TOOLTIP_IMAGE_CLASS) + content_tag(:span, "feature.meetings.header.details_v1".translate, :class => "hidden-xs"),
+  url: meeting_path(meeting[:meeting], :current_occurrence_time => meeting[:current_occurrence_time], :src => local_assigns[:src]),
+  active: tab == Meeting::Tabs::DETAILS,
+  tab_class: "cjs_meeting_details_tab"
+} %>
+
+<% unless meeting[:meeting].group_meeting? %>
+  <% tabs << {
+    label: get_icon_content("fa fa-envelope fa-lg") + get_unread_scraps_count_label(wob_member, meeting[:meeting]) + content_tag(:span, "feature.mentoring_model.label.message_tab".translate, :class => "hidden-xs"),
+    url: meeting_scraps_path(:meeting_id => meeting[:meeting].id, :current_occurrence_time => meeting[:current_occurrence_time]),
+    active: tab == Meeting::Tabs::MESSAGES,
+    tab_class: "cjs_meeting_messages_tab"
+  } %>
+<% end %>
+
+<% tabs << {
+    label: get_icon_content("fa fa-file-text-o fa-lg") + content_tag(:span, "feature.meetings.header.notes".translate, :class => "hidden-xs"),
+    url: meeting_private_meeting_notes_path(meeting[:meeting], :current_occurrence_time => meeting[:current_occurrence_time]),
+    active: tab == Meeting::Tabs::NOTES,
+    tab_class: "cjs_meeting_notes_tab"
+  } %>
+
+<% tab_options = {} %>
+<%= inner_tabs(tabs, tab_options) %>

@@ -1,0 +1,2 @@
+<% content = @badge_counts == 0 ? "" : content_tag(:span, @badge_counts, class: "label label-danger cui_footer_menu_badge m-l-n-sm") %>
+jQuery(".cjs_connections_tab .fa-users").append("<%= j content %>");

@@ -1,0 +1,109 @@
+(function(angular, jQuery){
+
+  var featureReportApp = angular.module('featureReportApp', ['ngGrid']);
+
+  var featureReportCtrl = featureReportApp.controller('featureReportCtrl', ['$scope', '$timeout','programFeatureService', function($scope, $timeout, programFeatureService){
+
+    $scope.getUniqueInArray = function(array){
+       var u = {}, a = [];
+       for(var i = 0, l = array.length; i < l; ++i){
+          if(u.hasOwnProperty(array[i]) || array[i] == null) {
+             continue;
+          }
+          a.push(array[i]);
+          u[array[i]] = 1;
+       }
+       return a;
+    };
+
+    $scope.collect = function(objectArray, field){
+      var fieldValuesArray = new Array(objectArray.length);;
+      for (var i = 0; i < objectArray.length; i++) {
+        fieldValuesArray[i] = objectArray[i][field];
+      };
+      return fieldValuesArray;
+    };
+
+    $scope.getTableData = function(){
+      programFeatureService.getData().then(function(response) {
+        $scope.response = response;
+        $scope.columnDefs = response.header;
+        $scope.myData = response.all_program_array;
+        $scope.filterOnOptions = $scope.collect(response.header, "field");
+        $scope.numPinnedColumns = parseInt(response.pinned_header_length);
+        cellTemplate = "<div class='ngCellText colt{{$index}}'><img alt='yes' align='middle' ng-show='row.getProperty(col.field) == \"true\"' src='<%= asset_path(%Q(icons/tick.gif)) %>' /> <img alt='no' align='middle' ng-show='row.getProperty(col.field) == \"false\"' src='<%= asset_path(%Q(icons/rejected.gif)) %>' /></div>";
+        for(i=0; i < $scope.numPinnedColumns; i++){
+          $scope.columnDefs[i].width = "auto";
+          $scope.columnDefs[i].pinned = true;
+        }
+        for(i=$scope.numPinnedColumns; i < $scope.columnDefs.length; i++){
+          $scope.columnDefs[i].cellTemplate = cellTemplate;
+          $scope.columnDefs[i].resizable = true;
+          $scope.columnDefs[i].pinnable = false;
+          $scope.columnDefs[i].width = 100;
+          $scope.columnDefs[i].sortable = false;
+        }
+        $scope.dataLoaded = true;
+        jQuery(".cjs-filter-on").autocomplete({
+          minLength: 0,
+          source: $scope.filterOnOptions,
+          select: function (event, ui) {
+            $scope.initializeOptionsForSecondInput(ui.item.value);
+          }
+        }).focus(function(){            
+          jQuery(this).autocomplete("search");
+        });
+        jQuery('#loading_results').hide();
+      });
+    };
+
+    $scope.filterName = function(filterValue) {
+      var filterText = $scope.filterOn +':' + filterValue;
+      $scope.filterOptions.filterText = filterText;
+      if(!$scope.$$phase) $scope.$apply();
+    };
+
+    $scope.initializeOptionsForSecondInput = function(filterOn) {
+      $scope.filterOn = filterOn;
+      jQuery(".cjs-filter-value").autocomplete({
+        minLength: 0,
+        source: $scope.getUniqueInArray($scope.collect($scope.myData, filterOn)),
+        select: function (event, ui) {
+          $scope.filterName(ui.item.value);
+        }
+      }).focus(function(){            
+        jQuery(this).autocomplete("search");
+      });
+    };
+
+    $scope.initialize = function(){
+      jQuery('#loading_results').show();
+      $scope.columnDefs = [{field: "dummy_field", width: "auto", minWidth: 200}];
+      $scope.filterOnOptions = ["aa", "abs"];
+      $scope.filterOptions = {filterText: ''};
+      $scope.dataLoaded = false;
+      $scope.myData = '';
+      $scope.gridOptions = {
+        data: 'myData',
+        enablePinning: true,
+        columnDefs: 'columnDefs',
+        filterOptions: $scope.filterOptions,
+        enableColumnResize: true
+      };
+      $scope.getTableData();
+    };
+    $scope.initialize();
+  }]);
+
+  var programFeatureService = featureReportApp.factory('programFeatureService', function($http) {
+    var programFeatureService = {
+      getData: function() {
+        var promise = $http.get("/feature_report.json").then(function (response) {
+          return response.data;
+        });
+        return promise;
+      }
+    };
+    return programFeatureService;
+  });
+})(window.angular, window.jQuery);

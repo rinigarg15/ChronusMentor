@@ -1,0 +1,78 @@
+<% accept = @status == MembershipRequest::Status::ACCEPTED %>
+<% reject = @status == MembershipRequest::Status::REJECTED %>
+<% requests_count = @membership_requests.size %>
+<% title = 
+    if accept
+      "feature.membership_request.label.accept_request".translate(count: requests_count)
+    elsif reject
+      "feature.membership_request.header.reject_request".translate(count: requests_count)
+    else
+      "display_string.Confirmation".translate
+    end
+%>
+<div class="accept_reject_box">
+  <% modal_v3_popup title do %>
+    <%= simple_form_for @membership_request, :url => bulk_update_membership_requests_path(format: :js), remote: true  do |f| %>
+      <div class="clearfix">
+        <p>
+          <%= "feature.membership_request.content.requests_selected".translate(count: requests_count) %>
+          <% if accept && requests_count > 1 %>
+            <%= "feature.membership_request.content.bulk_accept_as_description_v1".translate %>
+          <% end %>
+        </p>
+        <%= hidden_field_tag "membership_request_ids", @membership_requests.map(&:id).join(MembershipRequestsController::SEPARATOR), class: "membership_request_ids", id: nil %>
+        <% if @status %>
+          <% if accept %>
+            <p> <%= "feature.membership_request.content.suspended_user_existing_role_warning_html".translate %> </p>
+            <% if requests_count == 1 && @membership_requests.first.roles.size > 1 %>
+              <% membership_request_user_roles = (@membership_requests.first.user.present? && @membership_requests.first.user.roles) || [] %>
+              <%= control_group(:class => "merge-bottom") do %>
+                <% role_names = @membership_requests.first.role_names %>
+                <%= content_tag(:div, "feature.membership_request.label.accept_request_as".translate(count: requests_count), :class => "control-label false-label") %>
+                <%= controls do %>
+                  <%= choices_wrapper("display_string.Roles".translate) do %>
+                    <% @membership_requests.first.roles.each do |role| %>
+                      <%= content_tag(:label, class: "checkbox inline has-next-1", id: "label_#{role.name}_role") do %>
+                        <% 
+                          checkbox_options = {
+                            id: "#{role.name}_role",
+                            class: "membership_request_role_checkboxes",
+                            "data-tooltip-message" => "feature.membership_request.tooltip.role_already_assigned_to_user".translate,
+                            "data-role-name" => role.name
+                          }
+                          checkbox_options.merge!({readonly: "readonly", onclick: "return false"}) if membership_request_user_roles.include?(role)
+                        %>
+                        <%= check_box_tag("membership_request[accepted_as][]", role.name, true,
+                          checkbox_options) %>
+                        <%= " #{role.customized_term.term} #{embed_icon('icon-info-sign invisible', '')}".html_safe %>
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                  <%= javascript_tag %Q[MembershipRequestBulkActionPopup.initializeCheckboxTooltips();] %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+          <%= hidden_field_tag "membership_request[status]", @status %>
+          <%= f.input :response_text, :as=> :text, :required => !accept, :label => accept ? "feature.membership_request.label.optional_msg".translate : "feature.membership_request.label.reason_for_rejection".translate, :input_html => {:placeholder => accept ? "" : "feature.membership_request.content.reject_reason_specify_v1_html".translate(count: requests_count, line_break: "<br/>".html_safe), :class=>"form-control", :rows=> 5 } %>
+          <%= email_notification_consequences_on_action_html(accept ? MembershipRequestAccepted : MembershipRequestNotAccepted, div_class: "m-b-sm", with_count: true, count: requests_count) %>
+        <% else %>
+          <div class= "m-b-sm"> <%= "feature.membership_request.label.bulk_ignore_confirm".translate(count: requests_count) %> </div>
+        <% end %>
+
+        <% action_set do %>
+        <div class="pull-right">
+          <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => 'btn-white btn', "data-dismiss" => "modal" %>
+          <% if accept %>
+            <%= f.button :submit, "feature.membership_request.label.accept".translate %>
+          <% elsif reject %>
+            <%= f.button :submit, "display_string.Submit".translate, :onclick => "return MembershipRequest.rejectRequest('membership_request_response_text')" %>
+          <% else %>
+            <%= f.button :submit, "display_string.Confirm".translate %>
+          <% end %>
+        </div>
+      <% end %>
+      </div>
+    <% end %>
+  <%  end %>
+</div>

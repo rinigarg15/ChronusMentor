@@ -1,0 +1,30 @@
+<div id="task_<%= task.id %>_comments_and_checkin_container" class="clearfix b-t">
+  <div class="text-center p-t-xs p-b-xs cjs_no_comments_container <%= 'hide' unless comments_and_checkins.size == 0 %> ">
+    <div class="p-sm text-center clearfix">
+      <span class="fa-stack fa-lg fa-3x text-navy">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-comments fa-stack-1x fa-inverse"></i>
+      </span>
+    </div>
+    <%= can_checkin_access ? "feature.common_tasks.content.no_comments_and_check".translate : "feature.mentoring_model_task_comment.content.no_comments_v1".translate  %>
+    <% if allow_task_actions %>
+      <% if can_checkin_access %>
+        <div class ="cjs_add_comment_or_checkin_link">
+          <%= link_to("feature.mentoring_model_task_comment.action.add_comment_v1".translate, "javascript:void(0)", class: "cjs_add_task_comment_sidepane") %>
+          <%= content_tag(:span, circle_separator) %>
+          <%= link_to("feature.group_checkin.add_checkin".translate, "javascript:void(0)", class: "cjs_add_task_checkin_sidepane") %>
+        </div>
+      <% else %>
+        <%= link_to("feature.mentoring_model_task_comment.action.add_comment_v1".translate, "javascript:void(0)", class: "cjs_add_task_comment_sidepane") %>
+      <% end %>
+    <% end %>
+  </div>
+  <% if comments_and_checkins.size > 0 %>
+    <div class="p-t-sm p-b-xs cjs_comments_container font-bold">
+      <%= content_tag(:div, "feature.mentoring_model_task_comment.content.comments".translate, class: "text-muted") %>
+    </div>
+    <div>
+      <%= render partial: "mentoring_model/task/comment_or_checkin", :collection => comments_and_checkins, locals: {group: group} %>
+    </div>
+  <% end %>
+</div>

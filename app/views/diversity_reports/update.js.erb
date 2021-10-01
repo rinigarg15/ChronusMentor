@@ -1,0 +1,3 @@
+jQuery(".cjs-container-diversity-report-<%= @diversity_report.id %> ibox").remove();
+jQuery("#remoteModal").modal('hide');
+jQuery(".cjs-container-diversity-report-<%= @diversity_report.id %>").replaceWith('<%= j(render partial: "diversity_reports/container", locals: {diversity_report: @diversity_report}) %>');

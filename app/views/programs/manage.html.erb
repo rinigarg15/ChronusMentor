@@ -1,0 +1,134 @@
+<% @title = "manage_strings.program.header.Manage".translate %>
+
+<% add_users_link = @show_add_user_options_popup ? "javascript:void(0)" : new_user_path %>
+<% add_users_link_options = @show_add_user_options_popup ? {class: "cjs_show_add_user_options_popup", data: {url: add_user_options_popup_users_path(format: :js)}} : {} %>
+
+<div id='manage'>
+  <% customize_pane_entries = [] %>
+  <% customize_pane_entries << link_box("manage-icon-settings", "manage_strings.common.Program_Settings".translate(Program: _Program), edit_program_path) if current_user.can_customize_program? %>
+  <% customize_pane_entries << link_box("manage-icon-program", "manage_strings.common.Program_Overview".translate(Program: _Program), pages_path) if current_user.can_manage_custom_pages? %>
+  <% customize_pane_entries << link_box("manage-icon-appearance", "manage_strings.common.Appearance_v1".translate(Program: _Program), themes_path) if (current_user.can_access_themes? && ((@current_program.private_themes.count > 1) || super_console?) )%>
+  <% customize_pane_entries << link_box("manage-icon-analytics", "manage_strings.program.Customize.Analytics".translate, edit_analytics_path) if super_console? %>
+  <% customize_pane_entries << link_box("manage-icon-forum", "manage_strings.program.Customize.Forums".translate, forums_path) if current_user.can_manage_forums? && @current_program.forums_enabled? %>
+  <% customize_pane_entries << link_box("manage-icon-email", "manage_strings.common.Emails_v1".translate, mailer_templates_path) %>
+  <% customize_pane_entries << link_box("manage-icon-resources", _Resources, resources_path) if @current_program.resources_enabled? %>
+  <% customize_pane_entries << link_box("manage-icon-data-import", "manage_strings.common.Data_Import_Summary".translate, data_imports_path) if @current_organization.standalone? && @current_organization.data_import_enabled? %>
+  <% if @current_organization.language_settings_enabled? && (@current_organization.standalone? || Language.supported_for(super_console?, wob_member, program_context).present?) %>
+    <% customize_pane_entries << link_box("manage-icon-language-setting", "manage_strings.organization.Administration.Language_Settings_v1".translate, translations_path) %>
+  <% end %>
+  <% customize_pane_entries << link_box("manage-icon-saml-sso", "feature.login_management.title".translate, auth_configs_path) if wob_member.admin? && @current_organization.standalone? && super_console? %>
+  <%= ibox "manage_strings.common.Customize".translate, if: customize_pane_entries.any? do %>
+    <div class='row-fluid clearfix'>
+      <div class="span" style="display: none;"></div>
+      <% customize_pane_entries.each do |entry| %>
+        <%= entry %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% general_entries = [] %>
+  <% general_entries << link_box("manage-icon-support", "manage_strings.common.Support".translate, get_support_url(src: "manage"), target: "_blank") if current_user.is_admin? %>
+  <% general_entries << link_box("manage-icon-admin-messages", "manage_strings.program.Administration.General.Admin_Messages_v2".translate(Admin: _Admin), admin_messages_path) if current_user.is_admin? %>
+  <% general_entries << link_box("manage-icon-announcements", "manage_strings.program.Administration.General.Announcements".translate, announcements_path) if current_user.can_manage_announcements? %>
+  <% general_entries << link_box("manage-icon-events", "manage_strings.program.Administration.General.Events".translate, program_events_path) if @current_program.program_events_enabled? && current_user.is_admin? %>
+
+  <% general_entries << link_box("manage-icon-campaign-management", "manage_strings.program.Administration.General.Campaign_Management_v1".translate, campaign_management_user_campaigns_path) if current_user.is_admin? && @current_program.campaign_management_enabled? %>
+
+  <!-- #CM_TODO - should we add this at org level -->
+  <% general_entries << link_box("manage-icon-survey", "manage_strings.program.Administration.General.Surveys".translate, surveys_path) if current_user.can_manage_surveys? %>
+  <% general_entries << link_box("manage-icon-three-sixty", "manage_strings.organization.Administration.Three_sixty_teedback_tool".translate, dashboard_three_sixty_surveys_path) if @current_organization.three_sixty_tool_enabled? %>
+  <% general_entries << link_box("manage-icon-add-program", "manage_strings.common.New_Program".translate(Program: _Program), new_program_path, absolute_img: true) if @current_organization.standalone? && wob_member.admin? && (super_console? || @current_organization.subprogram_creation_enabled?) %>
+  <% general_entries << link_box("manage-icon-flagged-content", "manage_strings.program.Administration.General.Flagged_Content".translate, flags_path, absolute_img: true) if current_user.is_admin? && @current_program.flagging_enabled? %>
+  <% general_entries << link_box("manage-icon-moderate-content", "manage_strings.program.Administration.General.Moderate_Forums".translate, moderatable_posts_path, absolute_img: true) if current_user.can_manage_forums? && @current_program.forums_enabled? && @current_program.moderation_enabled? %>
+  <% general_entries << link_box("manage-icon-export", "feature.program.content_pack.export_pack".translate, 'javascript:void(0);', id: 'export_solution_pack_popup_form', "data-toggle" => "modal", "data-target" => "#modal_export_solution_pack_popup_form") if super_console? && program_view? %>
+  <% general_entries << link_box("manage-icon-customize", "feature.messaging.manage.customize_contact_admin_setting_v1".translate(Admin: _Admin), contact_admin_settings_path) if super_console? %>
+
+  <% connection_entries = [] %>
+
+  <% if @current_program.ongoing_mentoring_enabled? %>
+    <% connection_entries << link_box("manage-icon-bulk-match", "manage_strings.program.Administration.Connection.Bulk_Match_v1".translate, bulk_match_path) if @current_program.bulk_match_enabled? && current_user.can_manage_connections? %>
+    <% connection_entries << link_box("manage-icon-bulk-match", "manage_strings.program.Administration.Connection.Recommend_Mentors".translate(Mentors: _Mentors), bulk_recommendation_path) if @current_program.mentor_recommendation_enabled? && current_user.can_manage_connections? %>
+    <% connection_entries <<  link_box("manage-icon-customize-connection-profile", "manage_strings.program.Administration.Connection.Customize_Connection_Profile".translate(Mentoring_Connections: _Mentoring_Connections), connection_questions_path()) if current_user.can_manage_connections? && @current_program.connection_profiles_enabled? %>
+    <% connection_entries << link_box("manage-icon-mentoring-connections", _Mentoring_Connections, groups_path) if current_user.can_manage_connections? %>
+    <% connection_entries << link_box("manage-icon-mentoring-requests", "manage_strings.program.Administration.Connection.Mentor_Requests_v1".translate(Mentoring: _Mentoring), manage_mentor_requests_path) if current_user.can_manage_mentor_requests? %>
+    <% connection_entries << link_box("manage-icon-mentoring-offers", "manage_strings.program.Administration.Connection.Mentor_Offers".translate(Mentoring: _Mentoring), manage_mentor_offers_path) if @current_program.mentor_offer_enabled? && @current_program.mentor_offer_needs_acceptance? %>
+  <% end %>
+
+  <% connection_entries << link_box("manage-icon-mentoring-connection-request", "manage_strings.program.Administration.Connection.Project_Requests".translate(Mentoring_Connection: _Mentoring_Connection), manage_project_requests_path) if current_user.can_manage_project_requests? %>
+  <% connection_entries << link_box("manage-icon-meeting-requests", "manage_strings.program.Administration.Connection.Meeting_Requests_v1".translate(Meeting: _Meeting), manage_meeting_requests_path) if current_user.is_admin? && @current_program.calendar_enabled? %>
+  <% connection_entries << link_box("manage-icon-customize-mentoring-request-form", "manage_strings.program.Administration.Connection.Customize_Mentor_Request_Form_v1".translate(Mentoring: _Mentoring), mentor_request_instructions_path) if @current_program.ongoing_mentoring_enabled? && super_console? && current_user.can_manage_mentor_requests? %>
+  <% if @current_program.ongoing_mentoring_enabled? %>
+    <% if @current_program.mentoring_connections_v2_enabled? %>
+      <% connection_entries << link_box("manage-icon-mentoring-connection-templates", "manage_strings.program.Administration.Connection.Mentoring_Connection_Templates_v1".translate(Mentoring_Connection: _Mentoring_Connection), mentoring_models_path) %>
+    <% end %>
+    <% connection_entries << link_box("manage-icon-mentoring-insights", "feature.mentoring_tips.header.mentoring_tips_v1".translate(Mentoring: _Mentoring), mentoring_tips_path) if @current_program.mentoring_insights_enabled? && current_user.can_manage_mentoring_tips? %>
+    <% connection_entries << link_box("manage-icon-admin-audit-logs", "features_list.confidentiality_audit_logs.title".translate, confidentiality_audit_logs_path) if current_user.can_view_audit_logs? && @current_program.confidentiality_audit_logs_enabled? %>
+  <% end %>
+
+  <% member_profiles_pane_entries = [] %>
+  <% member_profiles_pane_entries << link_box("manage-icon-all-users", "manage_strings.common.member_views".translate, admin_view_all_members_path) if @current_organization.org_profiles_enabled? && @current_organization.standalone? %>
+  <% member_profiles_pane_entries << link_box("manage-icon-all-users", "manage_strings.program.Administration.General.user_views".translate, admin_view_all_users_path) %>
+  <% member_profiles_pane_entries << link_box("manage-icon-membership-requests", "manage_strings.program.Administration.General.Membership_Requests".translate, membership_requests_path) if current_user.can_approve_membership_request? && @current_program.allow_join_now? %>
+  <% member_profiles_pane_entries << link_box("manage-icon-add-users", "manage_strings.program.Administration.Connection.add_user_profiles_v1".translate, add_users_link, add_users_link_options) if current_user.can_add_non_admin_profiles?  || current_user.can_manage_admins? %>
+  <% member_profiles_pane_entries << link_box("manage-icon-invitations", current_user.is_admin? ? "manage_strings.program.Administration.Connection.invitations".translate : "manage_strings.program.Administration.Connection.invite_users".translate, (@current_program.program_invitations.any? && current_user.is_admin?) ? program_invitations_path : invite_users_path(from: current_user.role_names)) if @can_invite_other_roles %>
+  <% member_profiles_pane_entries << link_box("manage-icon-blocked", "quick_links.program.account_blocked_users".translate, account_lockouts_members_path) if wob_member.admin? && @current_organization.login_attempts_enabled? && @current_organization.standalone? %>
+
+  <%= ibox "manage_strings.common.Administration".translate, if: general_entries.any? || connection_entries.any? do %>
+    <% if general_entries.any? %>
+      <div class ="bg-dark"><%= content_tag(:b, "manage_strings.program.header.General".translate) %></div>
+      <hr class="attach-top"/>
+      <div class ="row-fluid has-below-1 min-height-90 cui-general-admin-setting">
+        <div class="span" style="display: none;"></div>
+        <% general_entries.each do |entry| %>
+          <%= entry %>
+        <% end %>
+      </div>
+    <% end %>
+    <% if member_profiles_pane_entries.any? %>
+      <div class ="bg-dark"><b><%= "feature.admin_view.label.Users".translate %> </b></div>
+      <hr class="attach-top"/>
+      <div class ="row-fluid has-below-1">
+        <div class="span" style="display: none;"></div>
+        <% member_profiles_pane_entries.each do |entry| %>
+          <%= entry %>
+        <% end %>
+      </div>
+    <% end %>
+    <% if connection_entries.any? %>
+      <div class ="bg-dark"><b><%= _Mentoring_Connections %> </b></div>
+      <hr class="attach-top"/>
+      <div class ="row-fluid has-below-1 cui-admin-connection-setting">
+        <div class="span" style="display: none;"></div>
+        <% connection_entries.each do |entry| %>
+          <%= entry %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% profile_pane_entries = [] %>
+  <% profile_pane_entries << link_box("manage-icon-preview-profile", "manage_strings.organization.User_Form_Fields.Preview_Profile_Form".translate, preview_profile_questions_path(src: 'manage')) if current_user.can_manage_profile_forms? %>
+  <% profile_pane_entries << link_box("manage-icon-preview-membership", "manage_strings.organization.User_Form_Fields.Preview_Membership_Form".translate, preview_profile_questions_path(preview_type: ProfileQuestionsController::PreviewType::MEMBERSHIP_FORM, src: 'manage')) if is_membership_form_enabled?(current_program) && current_user.can_manage_membership_forms? %>
+  <% profile_pane_entries << link_box("manage-icon-customize-profile", "manage_strings.common.Customize_Profile".translate, profile_questions_path(src: 'manage')) if current_user.can_manage_profile_forms? %>
+
+  <%= ibox "manage_strings.organization.header.User_Form_Fields".translate, if: profile_pane_entries.any? do %>
+    <div class ="row-fluid has-below-1">
+      <div class="span" style="display: none;"></div>
+      <% profile_pane_entries.each do |entry| %>
+        <%= entry %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<%= render partial: "career_dev/organizations/portals_manage", locals: {portals: [], can_create_portal: @can_create_portal} if @can_create_portal %>
+
+<%= render partial: 'programs/export_solution_pack_popup' %>
+
+<% if @show_add_user_options_popup %>
+  <%= javascript_tag do %>
+    jQuery(document).ready(function(){
+      CsvImport.handleAddUserOptionsPopup();
+    });
+  <% end %>
+<% end %>

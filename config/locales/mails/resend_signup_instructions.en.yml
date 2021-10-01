@@ -1,0 +1,19 @@
+en:
+  email_translations:
+    resend_signup_instructions:
+      enabled_with_count_html:
+        zero: 'Note: An %{email} with the sign up instructions will be sent to all the selected users even if they are already signed up.'
+        one: An %{email} with sign up instructions will be sent to the user even if they are already signed up, are you sure?
+      disabled_with_count_html:
+        zero: 'Note: An %{email} with the sign up instructions is usually sent to all the selected users even if they are already signed up, but has been disabled. No email will be sent.'
+        one: An %{email} with sign up instructions is usually sent to the user even if they are already signed up, but has been disabled. No email will be sent.
+      title_v4: Resend sign-up instructions to user
+      description_v2: "%{_Admins} can resend the signup URL to a participant if the need to do so exists."
+      subject_v1: Sign-up for {{subprogram_or_program_name}}
+      content_v1_html: Welcome to {{subprogram_or_program_name}}! We look forward to your participation. <br />{{sign_up_button}}
+      tags:
+        url_invite:
+          description: Url for the user to click and complete the signup process
+        sign_up_button:
+          description: Sign up button
+          signup: Complete Sign Up

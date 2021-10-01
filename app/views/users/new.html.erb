@@ -1,0 +1,35 @@
+<% @title = "feature.user.header.add_users_manually".translate %>
+<% email_help_text = @current_organization.email_question_help_text %>
+
+<%= ibox nil, :content_class => "form-horizontal" do %>
+  <%= control_group do %>
+    <label class= "false-label control-label col-sm-3" for="user_email"><%= "feature.user.content.select_an_email".translate %></label>
+    <% hide_class = "hide" unless @email.present? %>
+    <% remove_addon_options = { type: "addon", class: "cjs_clear_email cancel_icon_container #{hide_class}", content: link_to(append_text_to_icon("fa fa-times text-default", content_tag(:span, "feature.user.content.reset_user_email".translate, :class => "sr-only")), new_user_path, :class => "clear_add_user_email_link") } %>
+    <%= controls class: "col-sm-9 p-l-0" do %>
+      <%= construct_input_group([], [remove_addon_options], {:input_group_class => "cjs_email_field_container add_user_email_input_field_without_cancel col-sm-12"}) do %>
+        <%= text_field_tag(:email, @email, {:class => "cjs_add_user_email email_text_field_with_cancel form-control", :disabled => (@email.present? && !@user.errors[:email].present?), :id => "user_email"}) %>
+      <% end %>
+      <%= content_tag(:div, email_help_text, class: "help-block small") if email_help_text.present? %>
+    <% end %>
+  <% end %>
+  <%= control_group do %>
+    <%= content_tag(:div, "feature.user.content.select_a_role".translate, :class => 'false-label control-label col-sm-3') %>
+    <%= controls :id => 'role_btn_group', :class => "col-sm-9 no-padding" do %>
+      <%= render_user_role_check_boxes(program: @current_program, :roles => @roles) %>
+      <%= loc_loading(:id => "more_fields_loading", :loader_class => "") %>
+    <% end %>
+  <% end %>
+  <%= controls(:class => 'cjs_add_user_initial_form pull-right') do %>
+    <%= submit_tag "#{"display_string.next".translate} &raquo;".html_safe, :id => 'cjs_add_user_next', :class => "btn btn-primary" %>
+  <% end %>
+<% end %>
+<div id="profile_form">
+  <% if @email.present? %>
+    <%= render :partial => "profile_form" %>
+  <% end %>
+</div>
+
+<%= javascript_tag "jQuery(document).ready(function(){NewMember.handleAddUserClickOnNext('#{new_user_path(format: :js)}', '#{validate_email_address_users_path}', '#{COMMON_SEPARATOR}');})" %>
+<%= javascript_tag "jQuery(document).ready(function(){NewMember.handleRoleChange('#{new_user_path(format: :js)}', '#{COMMON_SEPARATOR}');})" %>
+<%= javascript_tag "jQuery(document).ready(function(){NewMember.handleClearEmail(#{@email.present?});})" %>

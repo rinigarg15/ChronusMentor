@@ -1,0 +1,8 @@
+<% list = @group_checkins.map  { |group_checkin| render(group_checkin) } %>
+{
+  "data":[<%= safe_join(list, ', ') %>],
+  "total": <%= @total_count %>,
+  "totalHours": "<%= "feature.group_checkin.hrs".translate(count: @task_checkin_details[:total_hours]) %>",
+  "meetingHours": "<%= "feature.group_checkin.hrs".translate(count: @task_checkin_details[:meetings_hours]) %>",
+  "taskHours": "<%= "feature.group_checkin.hrs".translate(count: @task_checkin_details[:task_hours]) %>"
+ }

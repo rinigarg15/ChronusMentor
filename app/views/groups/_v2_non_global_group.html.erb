@@ -1,0 +1,36 @@
+<% if connection_questions.present? && (find_new || !group.published?) %>
+  <% connection_questions.first(GroupsHelper::MAX_CONNECTION_QUESTIONS_FOR_VIEW).each do |connection_question| %>
+    <%= group_listing_content(connection_question.question_text, formatted_common_answer(group.answer_for(connection_question), connection_question, no_paragraph: true), connection_answer: true, id: "#{group.id}_#{connection_question.id}", text_type: connection_question.text_type?) %>
+  <% end %>
+  <%= content_tag(:div, link_to("feature.connection.content.see_more_profile_html".translate, profile_group_path(group))) if connection_questions.size > GroupsHelper::MAX_CONNECTION_QUESTIONS_FOR_VIEW %>
+<% end %>
+
+<% if group.published? && !find_new %>
+  <% mentoring_model_roles = @current_program.roles.for_mentoring_models if local_assigns[:mentoring_model_roles].nil? %>
+  <% can_manage_milestones = group.can_manage_mm_milestones?(mentoring_model_roles) %>
+  <% can_manage_goals = group.can_manage_mm_goals?(mentoring_model_roles) %>
+  <% can_manage_tasks = group.can_manage_mm_tasks?(mentoring_model_roles) %>
+  <% survey_exists = show_manage_connections_view && @current_program.surveys.of_engagement_type.present? if local_assigns[:survey_exists].nil? %>
+  <% survey_answers = group.unique_survey_answers if survey_exists %>
+  <% if can_manage_tasks %>
+    <% tasks = group.mentoring_model_tasks %>
+  <% end %>
+  <% if is_manage_connections_view %>
+    <%= render partial: "groups/group_activity", locals: { tasks: tasks, group: group, group_roles: group_roles, survey_exists: survey_exists, survey_answers_size: (survey_answers || []).size } %>
+  <% else %>
+    <%= render partial: "groups/group_activity_for_end_users", locals: { group: group, group_roles: group_roles } %>
+  <% end %>
+
+  <div id="ct_milestones_content_<%= group.id %>">
+    <% locals = { group: group, survey_answers: survey_answers, tasks: tasks, show_manage_connections_view: show_manage_connections_view } %>
+    <% if can_manage_goals && can_manage_milestones %>
+      <%= render partial: "groups/group_display_mentoring_model_growth", locals: locals %>
+    <% elsif can_manage_goals %>
+      <%= render partial: "groups/group_display_mentoring_model_goals_growth", locals: locals %>
+    <% elsif can_manage_milestones %>
+      <%= render partial: "groups/group_display_mentoring_model_milestones_growth", locals: locals %>
+    <% elsif can_manage_tasks %>
+      <%= render partial: "groups/group_display_mentoring_model_tasks_growth", locals: locals %>
+    <% end %>
+  </div>
+<% end %>

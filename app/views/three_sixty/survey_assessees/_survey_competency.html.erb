@@ -1,0 +1,84 @@
+<hr/>
+<div class="clearfix well white-bg m-t-xs no-border">
+  <div class="col-xs-6">
+    <% competency = survey_competency.competency %>
+    <h3 class="m-b-sm"><%= competency.title %></h3>
+    <%= competency.description.present? ? competency.description : "feature.three_sixty.report.no_compentency_description".translate %>
+  </div>
+
+  <div class="col-xs-6 well white-bg no-border cui-page-break-avoid">
+      <% options = { :data => three_sixty_get_data_for_question_or_competency(competency_percentiles, competency, survey_reviewer_groups, reviewer_group_for_self), :additional_data_label => three_sixty_get_competency_additional_data(survey_reviewer_groups, average_competency_reviewer_group_answer_values, survey_competency, competency_infos, reviewer_group_for_self),  :color => ['#2A96BF', '#4DB4DB', '#71CADE'], :reviewer_group_names => three_sixty_reviewer_group_labels_for_competency(survey_reviewer_groups),
+                               :height => question_chart_height
+                             } %>
+      <%= link_to("", "#", :data => options, :class => "cjs-three-sixty-report-bar-chart", :id => "three_sixty_report_bar_graph_#{competency.id}") %>
+  </div>
+</div>
+
+<hr />
+<div class="clearfix m-t-xs no-border">
+  <div class="text-muted m-b-sm"><%= "feature.three_sixty.report.Questions".translate %></div>
+  <% survey_competency.survey_questions.each_slice(2) do |survey_question_pair| %>
+    <div class="clearfix cui-page-break-avoid m-t-sm">
+      <div class="col-xs-12">
+        <% survey_question_pair.each do |survey_question| %>
+          <div class="col-xs-6">
+            <div class="m-b-xxs font-600"><%= survey_question.question.title %></div>
+          </div>
+        <% end %>
+      </div>
+      <div class="clearfix">
+        <% survey_question_pair.each do |survey_question| %>
+          <div class="col-xs-6">
+            <% question = survey_question.question %>
+            <% if question.of_rating_type? %>
+              <div class="well no-border">
+                <div id='three_sixty_report_bar_question_<%= question.id %>'></div>
+                <% options = { :data => three_sixty_get_data_for_question_or_competency(question_percentiles, question, survey_reviewer_groups, reviewer_group_for_self),
+                               :additional_data_label => three_sixty_get_question_additional_data(survey_reviewer_groups, average_reviewer_group_answer_values, survey_question, question_infos, rating_answers_for_self),
+                               :color => ['#0F4172', '#287BDB', 'rgba(99,163,234,0.8)'], :reviewer_group_names => three_sixty_reviewer_group_lables(survey_reviewer_groups, reviewers, survey_question, reviewers_per_group),
+                               :height => question_chart_height
+                             } %>
+                <%= link_to("", "#", :data => options, :class => "cjs-three-sixty-report-bar-chart", :id => "three_sixty_report_bar_question_#{question.id}") %>
+              </div>
+            <% else %>
+              <div><%= "feature.three_sixty.report.Self".translate %></div>
+              <% answer = text_answers_for_self.find{ |answer| answer.three_sixty_survey_question_id == survey_question.id } %>
+              <% if answer.present? %>
+                <%= answer.answer_text %>
+              <% else %>
+                <div class="dim"><%= "feature.three_sixty.report.hyphen_not_answered".translate %></div>
+              <% end %>
+
+              <% if @current_organization.show_text_type_answers_per_reviewer_category? %>
+                <% survey_reviewer_groups.each do |srg|%>
+                  <div><%= srg.name.pluralize %></div>
+                  <% answers = three_sixty_text_answers_for(srg, survey_question, reviewers) %>
+                  <% if answers.any? %>
+                    <% answers.each do |answer| %>
+                      <div>- <%= italic_quot answer.answer_text %></div>
+                    <% end %>
+                  <% else %>
+                    <div class="text-muted"><%= "feature.three_sixty.report.hyphen_not_answered".translate %></div>
+                  <% end %>
+                <% end %>
+              <% else %>
+                <div><%= "feature.three_sixty.report.others".translate %></div>
+                <% answers = [] %>
+                <% survey_reviewer_groups.each do |srg|%>
+                  <% answers += three_sixty_text_answers_for(srg, survey_question, reviewers) %>
+                <% end %>
+                <% if answers.any? %>
+                  <% answers.each do |answer| %>
+                    <div>- <%= italic_quot answer.answer_text %></div>
+                  <% end %>
+                <% else %>
+                  <div class="text-muted"><%= "feature.three_sixty.report.hyphen_not_answered".translate %></div>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,32 @@
+<% mobile_footer_actions = { see_n_results: { results_count: @members.total_entries }} %>
+<%= filter_container_wrapper(mobile_footer_actions) do %>
+    <%= render :partial => 'common/your_filters', :locals => {:onclick_function => "UserImport.clearFilter", :reset_url_options => {:url => url_for(params.to_unsafe_h.merge(:search_filters => {}, :filter => nil, :view_id => nil))}, :new_filter => true} %>
+    <%= form_tag new_from_other_program_users_path, :method => :get, :id => 'search_filter_form', :remote => true do %>
+      <div id="quick_search" class="b-b p-sm filter_item">
+        <%= label_tag(:search_content, "feature.user.filter.quick_find".translate, for: "search_content", class: "sr-only") %>
+
+        <% right  = [
+          { type: "btn",
+            btn_options: {
+              class:'btn btn-primary'
+            },
+            content: get_icon_content("fa fa-search m-r-0") + set_screen_reader_only_content("display_string.Search".translate)
+          },
+          { type: "addon",
+            class: "btn btn-white cancel-search hide",
+            content: link_to(get_icon_content("fa fa-times m-r-0") + set_screen_reader_only_content("display_string.Cancel".translate), "javascript:void(0)", class: "text-default")
+          }
+        ] %>
+        <%= construct_input_group([], right) do %>
+          <%= filter_text_field(:search_content, "", class: "form-control", :placeholder => "feature.member.content.search_placeholder".translate) %>
+        <% end %>
+      </div>
+
+      <%= hidden_field_tag :sort_param, listing_options[:sort][:column], :class => 'cjs_user_hidden_params', :id => 'filter_sort_field' %>
+      <%= hidden_field_tag :sort_order, listing_options[:sort][:order], :class => 'cjs_user_hidden_params', :id => 'filter_sort_order' %>
+      <%= hidden_field_tag :items_per_page, listing_options[:items_per_page], :class => 'cjs_user_hidden_params' %>
+      <% if wob_member.admin? %>
+        <%= render(:partial => "users/filter_form", :locals => {:listing_options => listing_options}).html_safe %>
+      <% end %>
+    <% end %>
+<% end %>

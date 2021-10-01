@@ -1,0 +1,620 @@
+en:
+  feature:
+    reports:
+      header:
+        reports: Reports
+        report: Report
+        mentoring_calendar_report: Mentoring Calendar Report
+        mentoring_calendar_report_v1: "%{Mentoring} Calendar Report"
+        meeting_calendar_report: One-Time %{Meeting} Calendar Report
+        meeting_calendar_report_v1: "%{Meeting} Report"
+        program_health_report: Program Health Report
+        program_management_report: My Dashboard
+        program_outcomes_report: "%{Program} Outcomes Report"
+        executive_summary_report: Executive Summary Report
+        contract_management_report: "%{Mentor} Check-in Report"
+        demographic_report: Demographic Profile Report
+        demographic_report_v1: Geographic Distribution Report
+        mentoring_connections_report: "%{_Mentoring_Connection} Report"
+        mentoring_connection_activity_report: "%{Mentoring_Connection} Activity Report"
+        mentoring_connection_outcomes_report: "%{Mentoring_Connection} Outcomes Report"
+        program_goal_completion_report: "%{Program} Goal Completion Report"
+        activity_report: Activity Report
+        survey_report: survey report
+        program_activity: Program Activity
+        mentoring_activity: Mentoring Activity
+        mentoring_activity_v1: Activity
+        community_activity: Community Activity
+        detailed_reports: Detailed Reports
+        growth: Growth
+        connectivity: Connectivity
+        engagement: Engagement
+        tips_to_improve_engagement: Tips to improve engagement
+        content: Content
+        program_growth: Program Growth
+        program_health: Program Health
+        situations: Situations
+        mentoring_sessions: Mentoring Sessions
+        messages: 'Messages:'
+        tasks: 'Tasks:'
+        meetings: "%{Meetings}:"
+        New: New
+        activity_report_header:
+          activity_summary: Activity summary (%{date})
+          description: Description
+        health: Health Reports
+        outcome: Outcome Reports
+        user: User Reports
+        match_report: Match Report
+      default:
+        default_section_0_title: Membership
+        default_section_0_description: This section includes key metrics to help you manage membership in your %{program}
+        default_section_1_title: Matching
+        default_section_1_description: This section includes key metrics to help you manage matching in your %{program}
+        default_section_2_title: Engagement
+        default_section_2_description: This section includes key metrics to help you manage the engagements in your %{program}
+        default_section_3_title: Others
+        default_section_3_description: This section includes other key metrics to help you manage your %{program}
+        default_metric_0_title: Pending Membership Applications
+        default_metric_0_description: "%{Program} applicants who are awaiting your acceptance"
+        default_metric_1_title: Invitations Awaiting Acceptance
+        default_metric_1_description: Users who have been invited to join the %{program}, but have not finished their registration
+        default_metric_2_title: Application Accepted, Awaiting Signup
+        default_metric_2_description: "%{Program} applicants who have been accepted to the %{program}, but have not completed their profile or set a password"
+        default_metric_3_title: Registered Users with Unpublished Profiles
+        default_metric_3_description: Users who have set up a password in the system, but still need to complete and publish their profile
+        default_metric_4_title: Pending %{Mentoring} Requests
+        default_metric_4_description: "%{Mentoring} requests that have not yet been accepted or declined"
+        default_metric_5_title: Pending %{Meeting} Requests
+        default_metric_5_description: "%{Meeting} requests that have not yet been accepted or declined"
+        default_metric_6_title: Never Connected %{Mentees}
+        default_metric_6_description: "%{Mentees} who have never been connected"
+        default_metric_7_title: Currently Unconnected %{Mentees}
+        default_metric_7_description: "%{Mentees} who are currently not connected"
+        default_metric_8_title: "%{Connections} with no Activity"
+        default_metric_8_description: "%{Connections} that have never had activity via the %{mentoring} system"
+        default_metric_8_description_v1: "%{Connections} that are yet to start"
+        default_metric_9_title: "%{Connections} with no Recent Activity"
+        default_metric_9_description: "%{Connections} with no activity in the last month"
+        default_metric_9_description_v1: "%{Connections} that have started, but with no activity in recent time"
+        default_metric_10_title: "%{Connections} with Overdue Tasks"
+        default_metric_10_description: "%{Connections} with tasks that are overdue"
+        default_metric_10_description_v1: "%{Connections} that have started and currently active, but with tasks that are overdue"
+        default_metric_11_title: "%{Connections} at Risk"
+        default_metric_11_description: "%{Connections} with one or more users who responded to the inactivity survey saying they were unsatisfied"
+        default_metric_12_title: Flagged Content
+        default_metric_12_description: Content in community areas that has been flagged by users as inappropriate
+        default_metric_13_title: Unread Admin Messages
+        default_metric_13_description: Messages in the shared admin inbox
+        default_metric_14_title: Pending %{Connections} Requests
+        default_metric_14_description: "%{Connections} requests that have not yet been accepted or declined"
+        default_metric_15_title: "%{Connections} with no Recent Activity"
+        default_metric_15_description: "%{Connections} with no activity in the last month"
+        default_metric_16_title: "%{Connections} with Overdue Tasks"
+        default_metric_16_description: "%{Connections} with tasks that are overdue"
+        default_metric_17_title: "%{Mentors} yet to Publish Profile"
+        default_metric_17_description: "%{Mentors} who have set up a password in the system, but still need to complete and publish their profile"
+        default_metric_18_title: "%{Mentees} yet to Publish Profile"
+        default_metric_18_description: "%{Mentees} who have set up a password in the system, but still need to complete and publish their profile"
+        default_metric_19_title: "%{Mentors} With Low Profile Scores"
+        default_metric_19_description: "%{Mentors} whose profile score is less than 80%"
+        default_metric_20_title: "%{Mentees} With Low Profile Scores"
+        default_metric_20_description: "%{Mentees} whose profile score is less than 80%"
+        default_metric_21_title: Drafted %{Connections}
+        default_metric_21_description: "%{Connections} which are in drafted state"
+        default_metric_22_title: "%{Mentors} In Drafted %{Connections}"
+        default_metric_22_description: "%{Mentors} who are currently part of drafted %{connections}"
+        default_metric_23_title: "%{Mentees} In Drafted %{Connections}"
+        default_metric_23_description: "%{Mentees} who are currently part of drafted %{connections}"
+        default_metric_24_title: "%{Mentors} Yet To Be Drafted"
+        default_metric_24_description: "%{Mentors} who are neither part of ongoing %{connections} nor a part of drafted %{connections}"
+        default_metric_25_title: "%{Mentees} Yet To Be Drafted"
+        default_metric_25_description: "%{Mentees} who are neither part of ongoing %{connections} nor a part of drafted %{connections}"
+        default_metric_26_title: Never Connected %{Mentors}
+        default_metric_26_description: "%{Mentors} who have never been connected"
+        default_metric_27_title: "%{Mentors} With Pending %{Mentoring} Requests"
+        default_metric_27_description: "%{Mentors} who are having at least one pending %{mentoring} request"
+        default_metric_28_title: "%{Mentees} Who Sent %{Mentoring} Request But Not Connected"
+        default_metric_28_description: "%{Mentees} who sent at least one %{mentoring} request but are still not connected"
+        default_metric_29_title: "%{Mentees} Who Haven't Sent %{Mentoring} Request"
+        default_metric_29_description: Active %{Mentees} who haven't sent even one %{mentoring} request
+        alert:
+          default_alert_1_description: "%{Program} applicants who are awaiting your acceptance for more than 15 days"
+          default_alert_2_description: Invitations awaiting acceptance, which are sent 15 days before
+          default_alert_3_description: "%{Mentoring} requests received 15 days before and that have not yet been accepted or declined"
+          default_alert_4_description: "%{Meeting} requests received 7 days before and that have not yet been accepted or declined"
+          default_alert_5_description: "%{Mentees} who have joined over a month ago and never been connected"
+          default_alert_6_description: "%{Mentors} who have joined over a month ago and never been connected"
+      actions:
+        view_report: View Report
+        See_All_Responses_html: See All %{count} Responses &raquo;
+        send_out_announcements: Send out announcements
+        view_pending_mentor_requests_html: View pending %{mentor} requests &raquo;
+        enable_activity_tracking: Enable activity tracking
+        post_new_article: Post new %{article}
+        more_details_html: more details &raquo;
+        edit_columns: Edit Columns
+        select_fields: Select Fields to Display
+        update_view: Update View
+        confirm_metric_deletion_v1: Are you sure you want to delete this metric?
+        export_to_xls: Export to xls
+      label:
+        meetings_scheduled_v2: "%{Meetings} Accepted"
+        meetings_completed: "%{Meetings} Completed"
+        meetings_overdue: "%{Meetings} Pending Status"
+        meetings_cancelled: "%{Meetings} Dropped"
+        meeting_title: "%{Meeting} Title"
+        activity_report_name: Activity Report for %{role_names} from %{start_time} to %{end_time}
+        program_health_report_name: "%{Program} Health Report"
+        executive_summary_report_name: Executive Summary Report
+        group_activity_report_name: "%{Mentoring_Connection} Activity Report for %{program_name} from %{start_date} to %{end_date}.csv"
+        or: or
+        both: Both
+        mentoring_session: Mentoring Session
+        forum_posts: Forum Posts
+        forum_posts_v1: Forum posts
+        question_and_answers: Question & Answers
+        comments: Comments
+        mentors_availability: "%{mentor}'s availablity"
+        meetings_scheduled: Meetings scheduled
+        meetings_scheduled_v1: "%{Meetings} scheduled"
+        time_in_hours: Time (hours)
+        hours: hours
+        with_mentoring_connection: With %{mentoring_connections}
+        without_mentoring_connection: Without %{mentoring_connections}
+        with_connection: With Connection
+        with_connection_v1: With %{Mentoring_Connection}
+        without_connection: Without Connection
+        without_connection_v1: Without %{Mentoring_Connection}
+        export_to: Export To
+        csv: CSV
+        optgroup_label_admin_view: User
+        optgroup_label_flag_view: Flag
+        optgroup_label_connection_view: "%{Mentoring_Connection}"
+        optgroup_label_meeting_request_view: "%{Meeting} Request"
+        optgroup_label_admin_message_view: Admin Message
+        optgroup_label_membership_request_view: Membership Requests
+        optgroup_label_program_invitation_view: "%{Program} Invitations"
+        optgroup_label_mentor_request_view: "%{Mentor} Request View"
+        optgroup_label_project_request_view: "%{Mentoring_Connection} Request View"
+        pdf: PDF
+        filters: Filters
+        role: Role
+        role_only: "%{role} only"
+        date_range: Date Range
+        start_time: Start Time
+        members: Member(s)
+        summary: Summary
+        duration: Duration
+        location: Location
+        ongoing_mentoring: Ongoing Mentoring
+        ongoing_mentoring_v1: Ongoing %{Mentoring_Connection}
+        date: Date
+        users: Users
+        connections: Connections
+        connections_v1: "%{Mentoring_Connections}"
+        growth_information: Growth Information
+        active: Active
+        pending: Pending
+        closed: Closed
+        Last_Month: Last Month
+        online_activity: Online activity
+        content_type: Content Type
+        content_activity: Content & Activity
+        total: Total
+        by_mentors: By %{mentors}
+        by_mentees: By %{mentees}
+        not_available: Not available
+        x_percent: "(%{x}%)"
+        engagement: Engagement
+        content: Content
+        sending_announcements: sending announcements
+        availability_slot: Availability Slot
+        view_mentoring_session_feedback: View Mentoring Session Feedback
+        view_mentoring_session_feedback_v1: View Session Feedback
+        removed_user: Removed User
+        mentoring_session_time: 'Total Mentoring Session Time: %{session_length}'
+        mentoring_session_time_v1: 'Total Session Time: %{session_length}'
+        total_available_time: 'Total Available Time: %{available_time}'
+        pending_mentor_requests: pending %{mentor} requests
+        Pending_mentor_requests: Pending %{mentor} requests
+        last_month: last month
+        facilitation_messages: facilitation messages
+        tips: tips
+        insights: "%{mentoring} insights"
+        membership: Membership
+        count: Count
+        both_mentor_and_mentee: Both %{mentor} and %{mentee}
+        total_members_including_non_admins_html: Total members %{non_admins}
+        total_users_across_roles: Total Users across roles
+        total_unique_users: Total Unique Users
+        percentage_change_html:
+          one: 1 %{meeting} scheduled in the previous period
+          other: "%{count} %{meetings} scheduled in the previous period"
+        percentage_change_html_v1:
+          one: 1 in the previous period
+          other: "%{count} in the previous period"
+        users_have_multiple_roles:
+          one: "%{count} user has multiple roles"
+          other: "%{count} users have multiple roles"
+        total_users: Total Users
+        non_admins: "(non-admins)"
+        connection_status: Connection status
+        connection_status_v1: "%{Mentoring_Connection} status"
+        active_connections: Active connections
+        active_connections_v1: Active %{Mentoring_Connections}
+        closed_connections: Closed connections
+        closed_connections_v1: Closed %{Mentoring_Connections}
+        status: Status
+        total_situations: Total Situations
+        time_line: Time Line
+        hours_available: Hours Available
+        hours_engaged: Hours Engaged
+        last_x_to_y_days: Last %{y} to %{x} days
+        last_x_days: Last %{x} days
+        next_x_days: Next %{x} days
+        reset_all: reset all
+        reset_all_v1: Reset all
+        country: Country
+        most_role: 'Most %{role}:'
+        most_users: 'Most Users:'
+        select_report: Select a Report
+        select_section: Select a Section
+        add_customized_view: Name
+        back_to_report: Back to report
+        settings: Settings
+        attendees: Attendees
+        survey_status: Survey Status
+        select_survey: Select survey...
+        select_status: Select status...
+        attendee_profile: Attendee Profile
+        resources_rated_helpful: Times %{resources} were found helpful by %{program} participants
+        meetings_between: "%{Meetings} Between"
+        total_activities_period: Total activities in this period
+        ongoing_connections_period: Ongoing %{Connections} in this period
+        higher_activity_html: With higher activity %{tooltip}
+        higher_activity_tooltip: "%{Connections} with relatively higher activity"
+        lower_activity_html: With lower activity %{tooltip}
+        lower_activity_tooltip: "%{Connections} with relatively lower activity"
+        higher_activity: With higher activity
+        lower_activity: With lower activity
+        no_activity: With no activity
+        activity_trends: Activity Trends
+      content:
+        effectiveness_of_interactions_v1: Effectiveness of %{mentor}-%{mentee} interactions in the %{mentoring_area}
+        no_program_management_reports_exists: There are no %{program} management reports
+        contract_management_report_description: View and download a log of all %{mentor} check-ins across all %{mentoring_connections} in the %{program}
+        new_report_metric_v1: New Metric
+        edit_report_metric: Edit Report
+        avg_interactions_connections: Average interactions / %{mentoring_connection}
+        avg_interactions_connections_help_text: Average number of interactions per %{mentoring_area} in the last month
+        avg_interactions_connections_history_tip: Number of interactions in the last month compared to the total number of interactions so far
+        percent_connection_satisfaction_v1: "% %{Mentoring_Connection} Satisfaction"
+        percent_connection_satisfaction_help_text: Average satisfaction level reported by members for their %{mentoring_connections}
+        percent_active_connections_v1: "% Active %{Mentoring_Connections}"
+        percent_active_connections_help_text_v1: "% %{mentoring_connections} that are active either online or through other modes of communication viz., phone, face-to-face, etc.,"
+        improve_connectivity_tip1_html: "%{send_out_announcements} or individual messages to %{mentees} highlighting the profiles of %{mentors} available at their disposal and encourage them to get connected."
+        percentage_users_connected: "% %{users} connected"
+        avg_mentor_request_wait_time_v1: Average %{mentoring} request wait time.
+        avg_mentor_request_wait_time_help_text_v1: Time taken for a %{mentoring} request to be processed by the administrator(s)
+        n_of_ten_points: "%{n} of 10 points"
+        average_membership_request_wait_time: Average membership request wait time
+        content_help_text: Knowledge sharing and user-user interaction through %{artilces}, Q & A, Forums and Comments
+        tips_to_improve_activity_score: Tips to improve Activity Score
+        connectivity_help_text: Effectiveness of matching process in getting %{mentees} and %{mentors} connected with each other
+        mentoring_report_description_v2: An overview of %{_meetings} over time.
+        meeting_report_description: A detailed overview of the one-time %{mentoring} activity over a period of time
+        program_outcomes_report_description: Presents the outcomes of your %{program} in various stages
+        mentoring_connection_activity_report_description_v1: Insight into activities of %{_mentoring_connections} over time.
+        mentoring_connections_report_description_v1: Insight into each %{_mentoring_connection}'s progress and a list of all %{_mentoring_connections} in various statuses in the %{_program}.
+        survey_report_description:
+          one: Aggregated results of a survey that received 1 response
+          other: Aggregated results of a survey that received %{count} responses
+        demographic_report_description: A detailed report that provides insight into the distribution of users in the %{program}
+        mentoring_activity_summary_description_v1: This section summarizes the activity of users over the selected time period.
+        community_activity_summary_description: This section summarizes the community activity of users over the selected time period.
+        meeting_calendar_report_attendee_filter_placeholder: Start typing a name or email
+        enter_connection_name: Enter a %{connection} name
+        start_typing: Start typing...
+        program_activity_description_v1:
+          one: This activity tracks registered and active users in the %{program}. A user is considered as active on a particular day if the user has logged into the portal over the previous day.
+          other: This activity tracks registered and active users in the %{program}. A user is considered as active on a particular day if the user has logged into the portal over the previous %{count} days.
+        mentoring_activity_description_v1:
+          one: This section tracks users participating in %{mentoring_connections}. A user is considered as active in %{a_mentoring_connection} on a particular day if the user has used the %{mentoring_connection} of the portal over the previous day to interact with other members of the %{mentoring_connection}.
+          other: This section tracks users participating in %{mentoring_connections}. A user is considered as active in %{a_mentoring_connection} on a particular day if the user has used the %{mentoring_connection} of the portal over the previous %{count} days to interact with other members of the %{mentoring_connection}.
+        community_activity_description_v2: Community activity tracks users participating in knowledge sharing, collaboration and learning activities using %{resources}, %{articles}, forums and question & answers functionality of the %{program}.
+        program_activity_summary_description: This section summarizes the program activity of users over the selected time period.
+        registered:
+          trend: Registered
+          summary: Total Registered Users
+          summary_help_v1: Total number of users in the %{program} at the end of the reporting period.
+        active:
+          trend: Active
+          summary: Total Active Users
+          summary_help_v1: Total number of unique users who are active in the %{program} during the selected reporting period. A user is considered as active if the user has logged into the portal at least once during the selected reporting period.
+        inactive:
+          trend: Inactive
+          summary: Total Inactive Users
+          summary_help_v1: Total number of unique users who are not active in the %{program} during the selected reporting period. A user is considered as active if the user has logged into the portal at least once during the selected reporting period.
+        mentoring:
+          trend_v1: "%{mentoring_connections}"
+          summary_v1: Total users in %{mentoring_connections}
+          summary_help_v2: Total number of unique users participating in %{mentoring_connections} during the selected reporting period.
+        active_mentoring:
+          trend_v1: Active %{mentoring_connections}
+          summary_v1: Total active users in %{mentoring_connections}
+          summary_help_v2: Total number of unique users actively participating in %{mentoring_connections} during the selected reporting period. A user is considered as active in %{a_mentoring_connection} if they have engaged with other members within the %{mentoring_connection} area at least once during the selected reporting period.
+        inactive_mentoring:
+          trend_v1: Inactive %{mentoring_connections}
+          summary_v1: Total inactive users in %{mentoring_connections}
+          summary_help_v2: Total number of unique users participating in %{mentoring_connections} who are not active in %{program} during the selected reporting period.
+        community:
+          trend: Community
+          summary_v1: Total Unique Community Visitors
+          summary_help_v2: Total number of unique users using the %{resources}, %{articles}, forums and question & answers functionality of the %{program} to share, collaborate and learn knowledge during the selected reporting period.
+        resource:
+          summary: Total Unique %{Resource} Visitors
+          summary_help: Total number of unique users using the %{resources} functionality of the %{program} to share, collaborate and learn knowledge during the selected reporting period.
+        article:
+          summary_v1: Total Unique %{article} Visitors
+          summary_help_v1: Total number of unique users using the %{articles} functionality of the %{program} to share, collaborate and learn knowledge during the selected reporting period.
+        forum:
+          trend: Forum
+          summary_v1: Total Unique Forum Visitors
+          summary_help_v1: Total number of unique users using the forums functionality of the %{program} to share, collaborate and learn knowledge during the selected reporting period.
+        qa:
+          trend: Question & Answers
+          summary_v1: Total Unique Question & Answer Visitors
+          summary_help_v1: Total number of unique users using the question and answers functionality of the %{program} to share, collaborate and learn knowledge during the selected reporting period.
+        percent_change: "(%{percent}% change)"
+        inviting_them: inviting them
+        adding_their_profiles_directly: adding their profiles directly
+        get_more_mentors_by_inviting_or_adding_profiles_html: Reach out to more %{mentors} by %{inviting_them} or %{adding_their_profiles_directly}.
+        invite_them: invite them
+        invite_students_to_join_v1_html: Spread the word about the %{program} among the %{mentee} community and %{invite_them} to join the %{program}.
+        act_on_membership_request_asap: Act on future mentor requests as quickly as possible.
+        act_on_membership_request_asap_v1: Act on future requests for %{mentoring} as quickly as possible.
+        pending_membership_requests: pending membership requests
+        act_on_pending_membership_request_asap_html: Act on %{pending_membership_requests} as quickly as possible.
+        tips_to_improve_connectivity: Tips to improve connectivity
+        improve_connectivity_tip2_html: Encourage %{mentors} to complete their profiles by %{sending_announcements} or individual messages.
+        follow_up_with_unresponsive_mentors_v1: Follow up with unresponsive %{mentors} and encourage them to be responsive.
+        not_tracked: Not tracked.
+        ways_to_make_connection_html: "%{click_here} to know the ways in which %{mentors} and %{mentees} connect"
+        send_out_periodic_surveys: Send out periodic surveys
+        send_out_surveys_v1_html: "%{send_out_periodic_surveys} to identify the %{mentoring_connections} that are not doing so well."
+        tips_to_increase_content_contribution: Tips to increase content contribution
+        good_content_makes_community_valuable_v1: Great content makes %{program_name} community very valuable.
+        post_and_start_discussion_html: "%{post_new_article} and start a discussion in the forums."
+        post_new_article_to_encourage_knowledge_sharing_html: "%{post_new_article} to encourage knowledge sharing by %{mentors}."
+        start_discussion_in_form: Start a discussion in the forums.
+        encourage_mentors_to_write_new_articles_html: Encourage %{mentors} to write new articles by %{announcing_the_feature} and its value to %{mentors}.
+        announcing_the_feature: announcing the feature
+        set_examples_and_encourage_them_v2: Select %{role_names} who can set an example for others in the %{program} and send them messages encouraging them to post %{articles} or ask/answer questions.
+        set_proper_example_to_post_articles_v2: Select %{role_names} who can set an example for others in the %{program} and send them messages encouraging them to post %{articles}.
+        set_proper_examples_for_ask_answers_questions_v2: Select %{role_names} who can set an example for others in the %{program} and send them messages encouraging them to ask/answer questions.
+        program_health_directions_to_use: A quick snapshot of the overall health of the program. Click on the individual items to view detailed reports.
+        tips_to_improve_program_growth: Tips to improve %{program} growth
+        mentoring_sessions_not_found_v1: No %{Meetings} found matching your criteria. You can try the following.
+        broaden_search_through_proper_filtering: Broaden your search by clearing a few filters.
+        view_all_mentoring_sessions_v1: View all %{Meetings}
+        count_includes_active_users: 'Note: Count includes only active users.'
+        no_active_or_closed_mentoring_connections: There are no active or closed %{mentoring_connections} in the %{program}.
+        click_to_update_view_html: "%{Click_here} to update the view."
+        no_locations_available: This report is not available as there are no locations recorded for the users of this %{program}.
+        location_not_enabled: This report is not available as there are no locations recorded for the users of this %{program}. Please update the profile design to include a profile field of type 'Location'.
+        no_mentoring_connections_for_exporting: There are no %{mentoring_connections} in the view for exporting.
+        alert_for: Alert for '%{metric_name}'
+        alert_placeholder: Please include alert's description here. This will be used in metric and notification emails
+        greater: Greater Than
+        less: Less Than
+        equal: Equals
+        alert_me: Alert me when
+        add_alert: Alert has not been defined. Please add an alert
+        delete_alert: Delete Alert
+        delete_alert_confirm: Are you sure you want to delete the Alert?
+        operator: operator
+        dashboard: Dashboard
+        info_about_alert: Sends out a weekly e-mail to all %{program} %{admin} when the configured conditions are matched.
+        sent_on: Sent On
+        in_last: In Last
+        before_last: Before Last
+        equals: Equals
+        survey: Survey
+        survey_status: Survey Status
+        profile_question: Profile question
+        profile_question_v1: Select a profile question
+        profile_operator: Profile operator
+        profile_operator_v1: Choose an operator
+        profile_question_value: Profile question value
+        profile_question_value_v1: Enter a profile answer value
+        profile_question_choice: Profile question choice
+        profile_question_choice_v1: Select a profile question choice
+        completed: Completed
+        overdue: Overdue
+        filters: Filters
+        filter_report: Filter Report
+        export: Export
+        description:
+          health: Collection of reports that help in assessing the health of the %{_program} from matching, %{_mentoring_connection}, activity and survey point of view
+          outcome: Collection of reports that provide insight into the outcomes of the %{_program}
+          user: Collection of reports that provide insight into the distribution of users
+          membership_requests: A detailed report providing summary and a list of all the membership request applications submitted by users interested in signing up for the %{_program}.
+          membership_requests_v1: Summary data and a list of all membership request applications submitted by prospective participants.
+          invitations: A detailed report providing summary, delivery funnel statistics and a list of all the %{_program} invitations sent to the targeted users.
+          invitations_v1: Summary data, delivery funnel statistics, and a list of all %{_program} invitations sent to targeted users.
+          mentor_requests: A detailed report providing summary and a list of all the %{_mentoring} requests sent by %{_mentees} to the %{owner} in the %{_program}.
+          mentor_requests_v1: Summary data and a list of all %{_mentoring} requests sent by %{_mentees} to %{owner} in the %{_program}.
+          mentor_offers: A detailed report providing summary and a list of all the %{_mentoring} offers sent by %{_mentors} to the %{_mentees} in the %{_program}.
+          meeting_requests: A detailed report providing summary and a list of all the %{_meeting} requests sent by %{_mentees} to the %{_mentors} in the %{_program}.
+          match_report: A detailed report to assess the %{matching} process of the %{program}.
+        empty_surveys: You do not have any surveys with responses! Only surveys with responses will be listed here.
+        subcategory:
+          enrollment: Enrollment Health
+          matching: Matching Health
+          post_matching: Post Matching Health
+          meeting_surveys: "%{_Meeting} Surveys"
+          engagement_surveys: "%{_Mentoring_Connection} Surveys"
+          program_outcomes: "%{_Program} Outcomes"
+          program_surveys: "%{_Program} Survey Reports"
+          group_survey_outcome: "%{_Mentoring_Connection} Survey Outcome Reports"
+          meeting_survey_outcome: "%{_Meeting} Survey Outcome Reports"
+          utility: Utility Reports
+          user_view: User View Reports
+        current_status: Current Status
+        active_users: Active Users
+        Ongoing_Connections: Ongoing %{Connections}
+        All_Connections: All
+        active_users_tooltip: Users in the %{track} with published profiles
+        all_connected_users: All Connected Users
+        all_meetings: All %{Meetings}
+        connected_users: Connected Users
+        connected_users_tooltip: Active users who are in one or more ongoing %{connections}
+        connected_flash_users_tooltip: Active users who have taken part in one or more %{sessions}
+        connected_role_users: Connected %{plural_role_name}
+        as_of_today: As of today (%{date})
+        view_data_over_time_html: View data over time &raquo;
+        enrollment: Enrollment
+        matching: Matching
+        invitations_acceptance_rate_report: Invitations Acceptance Rate
+        applications_status_report: Applications Status
+        published_profiles_report: Published Profiles
+        mentor_requests: "%{mentoring} requests"
+        how_is_enrollment: How is enrollment in your %{track}?
+        how_is_matching: How is matching in your %{track}?
+        published_profiles: Published Profiles
+        invitations: Invitations
+        acceptance_rate: Acceptance Rate
+        published_rate: Published Rate
+        applications: Applications
+        email_campaigns: Email campaigns
+        view_enrollment_tips_html: View tips to improve enrollment &raquo;
+        campaign_tip_html: Set up an %{email_campaigns_link} that encourages users to publish and complete their profiles.
+        announcements: Announcements
+        announcement_tip_html: "%{announcements_link} come in handy for improving profile completion rates."
+        invitation_emails: invitation emails
+        invitations_tip_html: In your %{invitation_emails_link}, try experimenting with different subject lines to see what attracts your audience best. Keep body content succinct and make sure you have at least two reminders configured to catch stragglers.
+        view_matching_tips_html: View tips to improve matching &raquo;
+        matching_campaign_tip_html: "%{email_campaigns_link} can effectively nudge and motivate unmatched %{mentees} to send a %{mentoring} request."
+        configure_link_text: Configure
+        check_link_text: Check
+        mentor_request_reminder_tip_html: "%{configure_link_text} a reminder to %{mentors} about pending %{mentoring} requests. If you have a high rate of unresponsive %{mentors}, set up an additional reminder using %{email_campaigns_link}."
+        right_mix_tip: Make sure you have the right mix of %{mentors} for your %{mentees}' needs.
+        right_mix_tip_v1_html: "Make sure you have the right mix of %{mentors} for your %{mentees} needs. %{check_link_text} how the %{mentee} needs are distributed against the %{mentors} offerings."
+        artificial_scarcity_tip: Create artificial scarcity by setting matching deadlines. Use announcements to communicate reminders about those deadlines.
+        select_reports_to_show: Select reports to show
+        metrics_to_be_displayed: Metrics to be displayed
+        add_new_metric: Add new metric
+        active_announcements:
+          one: Active announcement
+          other: Active announcements
+        resources_viewed:
+          one: "%{Resource} viewed"
+          other: "%{Resources} viewed"
+        upcoming_events:
+          one: Upcoming event
+          other: Upcoming events
+        event_on: Event On
+        resources_marked_helpful:
+          one: "%{Resource} marked helpful"
+          other: "%{Resources} marked helpful"
+        view_all_resources_html: View All %{Resources} &raquo;
+        view_all_events_html: View All Events &raquo;
+        view_all_announcements_html: View All Announcements &raquo;
+        view_match_report_html: View Match Report &raquo;
+        other_activity: Other activity
+        articles_shared: "%{Articles} shared"
+        comments_on_articles: Comments on %{articles}
+        no_upcoming_events: No upcoming events in the %{program}
+        no_active_announcements: No active announcements in the %{program}
+        no_resources: No %{resources} in the %{program}
+        healthy_connections_in_time_period: How healthy are your %{mentoring_connections} in the selected time period?
+        engagements_health: "%{Mentoring_Connections} health"
+        successful_completed_meetings: How successful were the completed %{meetings}?
+        Completed_Meetings: Completed %{Meetings}
+        engagements_with_good_survey_responses: "%{Engagements} with positive survey responses"
+        engagements_without_survey_responses: "%{Engagements} without survey responses"
+        view_all_survey_responses_html: View Survey Responses &raquo;
+        survey_responses_count_v1: Survey responses (%{count})
+        engagements_health_report: "%{Engagements} health based on survey responses"
+        survey_responses_report: Individual survey responses for the selected time period
+        healthy_connection_text: Consider the %{engagements} healthy if the survey responses are any of
+        health_of_engagements: Health of %{engagements}
+        configure_connection_health: Configure health based on survey responses
+        engagements_with_not_good_survey_responses: "%{Engagements} with neutral or negative survey responses"
+        no_survey_responses: No survey responses in the selected time period
+        active_connections_in_time_period: How active are your %{mentoring_connections}?
+        connection_with_activity: "%{Mentoring_Connections} with activity"
+        connection_without_any_activity: "%{Mentoring_Connections} without any activity"
+        connection_activity_summary: "%{Mentoring_Connection} activity summary"
+        all_activities: Total activities
+        messages_exchanged: Messages exchanged
+        meetings_scheduled: "%{Meetings} scheduled"
+        view_activity_report_html: View Activity Report &raquo;
+        view_recent_meetings_html: View Recent %{Meetings} &raquo;
+        no_published_groups: No published %{mentoring_connections} in the current period
+        how_much_meeting_activity: How much activity was recorded in the %{meetings} in the selected time period?
+        other_engagement_metrics: Other engagement metrics
+        meetings_in: "%{Meetings} in selected time"
+        accepted_meetings: Accepted %{meetings}
+        scheduled_meetings: Scheduled
+        unscheduled_meetings: Unscheduled
+        meetings_pending_status: "%{Meetings} pending status"
+        completed_meetings: Completed %{meetings}
+        cancelled_meetings: Cancelled %{meetings}
+        activity_summary: Activity Summary
+        mentor_survey_responses: "%{Mentor} survey responses"
+        mentee_survey_responses: "%{Mentee} survey responses"
+        users_in_ongoing_closed: "% of users in ongoing or closed %{mentoring_connections}"
+        users_in_ongoing: "% of users in ongoing %{mentoring_connections}"
+        users_in_ongoing_draft: "% of users in draft or ongoing %{mentoring_connections}"
+        selected_time: selected time
+        scroll_survey_responses: Scroll Survey Responses
+      groups_report_columns:
+        group: "%{Mentoring_Connection}"
+        mentors: "%{Mentors}"
+        mentees: "%{Mentees}"
+        started_on: Started on
+        close_date: Close date
+        messages_count: Messages
+        messages_count_v1: My Messages
+        posts_count: Posts
+        meetings_count: "%{Meetings}"
+        tasks_count: Tasks Completed
+        tasks_count_v1: Tasks completed
+        total_activities: Total Activities
+        current_status: Current Status
+        survey_responses_count: Survey Responses
+        mentor_messages_count: "%{Mentor} Messages"
+        mentor_posts_count: "%{Mentor} Posts"
+        mentor_meetings_count: "%{Mentor} %{Meetings}"
+        mentor_tasks_count: "%{Mentor} Completed Tasks"
+        mentor_survey_responses_count: "%{Mentor} Survey Responses"
+        mentee_messages_count: "%{Mentee} Messages"
+        mentee_posts_count: "%{Mentee} Posts"
+        mentee_meetings_count: "%{Mentee} %{Meetings}"
+        mentee_tasks_count: "%{Mentee} Completed Tasks"
+        mentee_survey_responses_count: "%{Mentee} Survey Responses"
+      demographic_report_columns:
+        country: Country
+        employees_count: "%{Employees}"
+        mentors_count: "%{Mentors}"
+        mentees_count: "%{Mentees}"
+        all_users_count: All Users
+      tour:
+        help_text:
+          section: The dashboard contains multiple sections; each section comprises multiple reports. For example, this section shows data about %{program}
+          metric_count: You can click on the number in this report to go to the detailed data - in this case, all
+          configure_dropdown: You can click here to configure an alert for this report. The alert sends out weekly emails when configured conditions are matched.
+          add_report: You can click here to add a new report to your dashboard.
+      report_listing:
+        column:
+          program_id: Program ID
+          organization_id: Organization ID
+          active: Active
+          program_name: Program Name
+          organization_name: Organization Name
+          account_name: Account Name
+        label:
+          export: Export
+          getting_organization_data: Getting Features Data. Please Wait...

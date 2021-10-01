@@ -1,0 +1,10 @@
+en:
+  login_page:
+    action:
+      remember_me_v1: Keep me signed in
+      forgot_password: Forgot Password?
+    content:
+      not_a_member: If you are not a %{member} of %{program_name},
+      chronus_console: Chronus Console
+      passphrase: Passphrase
+      logging_issue_html: If you are having issues logging in, %{contact_admin}.

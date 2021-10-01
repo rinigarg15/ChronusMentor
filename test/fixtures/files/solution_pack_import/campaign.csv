@@ -1,0 +1,6 @@
+id,program_id,title,state,trigger_params,created_at,updated_at,type,featured,ref_obj_id
+1,2,Get users to sign up,1,{1=>[6]},2014-09-04 03:01:13 +0530,2014-09-04 03:01:13 +0530,CampaignManagement::UserCampaign,0,
+2,2,Get users to complete profiles,1,{1=>[131]},2014-09-09 19:29:43 +0530,2014-09-09 19:29:43 +0530,CampaignManagement::UserCampaign,0,
+3,2,Get users to sign up,0,{1=>[6]},2014-09-13 05:20:02 +0530,2014-09-13 05:20:02 +0530,CampaignManagement::UserCampaign,0,
+4,2,Program Invitations to sign up,0,,2014-09-13 05:20:02 +0530,2014-09-13 05:20:02 +0530,CampaignManagement::ProgramInvitationCampaign,1,
+5,2,Reminders,0,,2014-09-13 05:20:02 +0530,2014-09-13 05:20:02 +0530,CampaignManagement::SurveyCampaign,0,1

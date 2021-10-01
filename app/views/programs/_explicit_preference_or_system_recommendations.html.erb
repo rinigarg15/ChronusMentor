@@ -1,0 +1,5 @@
+<% if user.explicit_preferences_configured? %>
+  <%= render :partial => "programs/explicit_preference_recommendations", locals: { mentors_list: mentors_list } %>
+<% else %>
+  <%= render :partial => "programs/quick_connect_box" if can_render_system_reco_box %>
+<% end %>

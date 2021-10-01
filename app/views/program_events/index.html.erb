@@ -1,0 +1,37 @@
+<% @title = "feature.program_event.header.events".translate %>
+<% @skip_rounded_white_box_for_content = true %>
+<%= response_flash("cjs_program_events_flash") %>
+<% @page_action = {:label => "feature.program_event.action.create_event".translate, :url =>  new_program_event_path, :class => "btn btn-primary btn-large"} if current_user.is_admin? %>
+
+<div class="tabs-container">
+  <ul class="nav nav-tabs h5 no-margins", id="tab-box">
+    <li class="<%= (@tab_number==ProgramEventConstants::Tabs::UPCOMING || @tab_number.nil?) ? 'ct_active active' : '' %>", id='upcoming_tab'>
+      <%= link_to "feature.program_event.label.upcoming_count".translate(:count => @program_events_upcoming.count.to_s), program_events_path(:tab => ProgramEventConstants::Tabs::UPCOMING) %>
+    </li>
+    <li class="<%= (@tab_number==ProgramEventConstants::Tabs::PAST) ? 'ct_active active' : '' %>", id='past_tab'>
+      <%= link_to "feature.program_event.label.past_count".translate(:count => @program_events_past.count.to_s), program_events_path(:tab => ProgramEventConstants::Tabs::PAST) %>
+    </li>
+    <% if current_user.is_admin? %>
+      <li class="<%= (@tab_number==ProgramEventConstants::Tabs::DRAFTED) ? 'ct_active active' : '' %>", id='drafted_tab'>
+        <%= link_to "feature.program_event.label.drafted_count".translate(:count => @program_events_drafted.count.to_s), program_events_path(:tab => ProgramEventConstants::Tabs::DRAFTED) %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<% if @program_events.empty? %>
+  <%= ibox nil, :content_class => "text-center" do %>
+    <p><%= "feature.program_event.content.no_events_with_status".translate(:status => get_event_status_text(@tab_number)) %> <%= "feature.program_event.content.click_here_to_create_event_html".translate(:link => link_to("display_string.Click_here".translate, new_program_event_path)) if current_user.is_admin? && ![ProgramEventConstants::Tabs::PAST, ProgramEventConstants::Tabs::DRAFTED].include?(@tab_number) %></p>
+  <% end %>
+<% else %>
+  <%= ibox nil, :content_class => "p-xxs", :ibox_id => "program_events" do %>
+    <ul class="list-group">
+      <%= render :partial => 'program_event', :collection => @program_events, :locals => {admin_view_changed_events: @admin_view_changed_events} %>
+      <%= bottom_bar_in_listing(:collection => @program_events) if @program_events.any? %>
+    </ul>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  programEvent.initShowMoreLessInvitedDetails();
+<% end %>

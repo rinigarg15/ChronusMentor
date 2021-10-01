@@ -1,0 +1,12 @@
+<% allow_goal_edit_action = @page_controls_allowed && !goal.from_template? && manage_mm_goals_at_end_user_level?%>
+<div class = '<%= "cjs_display_goal_info_and_form_#{goal.id}" %>' >
+  <div class = "cjs_goal_display">
+    <%= content_tag :div, goal.title, :class => "word_break" %>
+    <%= link_to "feature.mentoring_model.button.edit_goal".translate, "#", "data-toggle" => "modal", "data-target" => "#edit_goal_popup_#{goal.id}" if allow_goal_edit_action %>
+  </div>
+  <% if allow_goal_edit_action %>
+    <% modal_container "feature.mentoring_model.button.edit_goal".translate, :modal_id => "edit_goal_popup_#{goal.id}" do %>
+    <%= render :partial => "mentoring_model/goals/goal_form", :locals => {goal: goal, method: :patch, show_option: "", text_size: "form-control", show_remove_link: true, fields_required: false, url: group_mentoring_model_goal_path(@group, goal, :format => :js)} %>
+  <% end %>
+  <% end %>
+</div>

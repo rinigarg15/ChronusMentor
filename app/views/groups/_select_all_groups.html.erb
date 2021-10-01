@@ -1,0 +1,13 @@
+<div id="cjs_select_all_option" class="bg-warning hide p-sm text-center">
+  <% total_size = content_tag(:b, total_size, :class => "cjs_total_list_count") %>
+  <div id="cjs_select_all_message">
+    <% connection_count = content_tag(:b, group_size, id: "cjs_current_list_count") %>
+    <%= content_tag(:span, "feature.connection.content.help_text.all_on_page_selected_html".translate(connection_count: connection_count, mentoring_connections: _mentoring_connections), class: "m-r-xxs") %>
+    <%= content_tag(:u, "feature.connection.content.help_text.select_all_html".translate(total_size: total_size, mentoring_connections: _mentoring_connections), class: "pointer font-bold", id: "cjs_select_all_handler", data: { url: select_all_ids_groups_path(groups_listing_filter_params.merge(filter_field: filter_field, tab: @tab_number)) } ) %>
+    <%= get_icon_content("fa fa-spinner fa-spin m-r-0 cjs_select_all_loader hide") %>
+  </div>
+  <div id="cjs_clear_all_message" class="hide">
+    <%= content_tag(:span, "feature.connection.content.help_text.all_selected_html".translate(total_size: total_size, mentoring_connections: _mentoring_connections), class: "m-r-xxs") %>
+    <%= content_tag(:u, "feature.connection.content.help_text.clear_selection".translate, id: "cjs_clear_all_handler", class: "font-bold pointer") %>
+  </div>
+</div>

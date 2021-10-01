@@ -1,0 +1,9 @@
+# config/solano_mongo.yml
+# This config is used ONLY by Tddium.
+
+test:
+  clients:
+    default:
+      database: <%= ENV['TDDIUM_MONGOID_DB'] %>
+      hosts:
+        - <%= ENV['TDDIUM_MONGOID_HOST'] %>:<%= ENV['TDDIUM_MONGOID_PORT'] %>

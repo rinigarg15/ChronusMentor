@@ -1,0 +1,3 @@
+<% modal_container truncate_html("#{'feature.meetings.content.attendees'.translate} - #{meeting.topic}", max_length: 50), modal_id: "all_attendees_#{meeting.id}", modal_footer_class: "gray-bg no-margins p-t-sm p-b-sm", modal_footer_content: get_all_attendees_modal_footer, modal_body_class: "scrollable-modal-body" do %>
+  <%= safe_join(attendees, horizontal_line(class: "m-t-xs m-b-xs"))  %>
+<% end %>

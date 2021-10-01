@@ -1,0 +1,126 @@
+en:
+  feature:
+    recent_activity:
+      content:
+        announcement_creation_html: "%{user} posted a new announcement: %{title_link}"
+        announcement_update_html: "%{user} updated the announcement: %{title_link}"
+        topic_creation_html: "%{user} started a conversation '%{link_to_conversation}'"
+        post_creation_html: "%{user} discussed %{title_link}"
+        post_creation_v1_html: "%{user} posted in the conversation '%{link_to_conversation}'"
+        create_membership_request_html: "%{user} sent %{request_to_join_link} the %{program}"
+        mentor_join_program_html: "%{user} joined the %{program} as %{a_mentor}"
+        gp_mentor_join_program_starts_with_you_html: You joined the %{program} as %{a_mentor}
+        admin_add_mentor_html: "%{user} has been added as %{a_mentor} in the %{program}"
+        admin_add_mentor_same_user_html: "%{user} have been added as %{a_mentor} in the %{program}"
+        request_to_join: request to join
+        mentoring_request_v1: request for %{mentoring}
+        mentoring_offer_v1: offer for %{mentoring}
+        mentor_request_creation_html: "%{user} sent a %{mentoring_request} to %{mentor_link}"
+        gp_mentor_request_creation_starts_with_you_html: You sent a %{mentoring_request} to %{mentor_link}
+        gp_mentor_request_creation_ends_with_you_html: "%{user} sent a %{mentoring_request} to you"
+        mentor_request_acceptance_html: "%{user} accepted to mentor %{student_link}"
+        mentor_request_acceptance_v1_html: "%{user} accepted to connect with %{student_link}"
+        gp_mentor_request_acceptance_starts_with_you_html: You accepted to connect with %{student_link}
+        gp_mentor_request_acceptance_ends_with_you_html: "%{user} accepted to connect with you"
+        mentor_request_rejection_html: "%{user} declined mentoring request from %{student_link}"
+        mentor_request_rejection_v1_html: "%{user} declined request for %{mentoring} from %{student_link}"
+        gp_mentor_request_rejection_starts_with_you_html: You declined request for %{mentoring} from %{student_link}
+        gp_mentor_request_rejection_ends_with_you_html: "%{user} declined request for %{mentoring} from you"
+        mentor_request_withdrawal_html: "%{user} withdrew mentoring request sent to %{mentor_link}"
+        mentor_request_withdrawal_v1_html: "%{user} withdrew request for %{mentoring} sent to %{mentor_link}"
+        gp_mentor_request_withdrawal_starts_with_you_html: You withdrew request for %{mentoring} sent to %{mentor_link}
+        gp_mentor_request_withdrawal_ends_with_you_html: "%{user} withdrew request for %{mentoring} sent to you"
+        program_creation_html: "%{owner_link} created the %{program}: %{program_link}"
+        user_suspension_html: "%{user} suspended the membership of %{target_user} from %{program}"
+        user_suspension_v1_html: "%{user} deactivated the membership of %{target_user} from %{program}"
+        user_activation_html: "%{user} activated %{target_user}"
+        user_promotion_html: "%{user} now %{role}"
+        article_creation_html: "%{user} published %{a_article} - %{title_link}"
+        your_article_marked_as_helpful_html: "%{user} marked your %{article} %{article_link} helpful"
+        article_marked_as_helpful_html: "%{user} marked the %{article} %{article_link} helpful"
+        comment: comment
+        your_article_comment_creation_html: "%{user} posted a %{comment_link} on your %{article} - %{article_link}"
+        article_comment_creation_html: "%{user} posted a %{comment_link} on the %{article} - %{article_link}"
+        admin_creation_html: "%{user} joined as an %{admin}"
+        mentoring_area_scrap_creation_html: "%{user} sent a message"
+        scrap_creation_html: "%{user} %{message_link} in your %{mentoring_connection_link} with %{group_name}"
+        task_creation_html: "%{user} created a goal: %{title_link}"
+        task_due_date_change_html: "%{user} modified due date for the goal: %{title_link} %{activity_message}"
+        task_mark_done_html: "%{user} completed the goal: %{title_link}"
+        task_mark_undone_html: "%{user} revoked the goal: %{title_link}"
+        admin_common_task_creation_html: "%{user} created a goal: %{title_link} for %{connections_size} %{mentoring_connections}"
+        common_task_creation_html: 'The %{admin} has created a goal for your %{mentoring_connections}: %{paths}'
+        group_reactivation_html: "%{user} reactivated %{group_link}"
+        group_change_expirity_date_html: "%{user} changed the end date of %{group_link}"
+        own_group_member_addition_html: "%{admin} added %{user} to a %{mentoring_connection}"
+        group_member_addition_html: "%{admin} added %{user} to your %{mentoring_connection}"
+        group_member_removal_html: "%{admin} removed %{user} from your %{mentoring_connection}"
+        group_member_leaving_html: "%{user} left the %{mentoring_connection} %{group}"
+        group_terminating_html: The %{mentoring_connection} %{group} is now closed.
+        mentoring_offer_direct_addition_html: "%{user} added %{offered_to_name} to the %{mentoring_connection}"
+        mentoring_offer_creation_student_html: You received a %{mentoring_offer} from %{mentor}
+        mentoring_offer_creation_mentor_html: You offered mentoring to %{student}
+        mentoring_offer_creation_mentor_v1_html: You offered %{mentoring_connection} to %{student}
+        mentoring_offer_creation_html: "%{mentor} sent a mentoring offer to %{student}"
+        mentoring_offer_creation_v1_html: "%{mentor} sent an offer for %{mentoring} to %{student}"
+        mentoring_offer_acceptance_student_html: You accepted %{mentor}'s mentoring offer
+        mentoring_offer_acceptance_student_v1_html: You accepted %{mentor}'s offer for %{mentoring}
+        mentoring_offer_acceptance_mentor_html: "%{student} accepted your mentoring offer"
+        mentoring_offer_acceptance_mentor_v1_html: "%{student} accepted your offer for %{mentoring}"
+        mentoring_offer_acceptance_html: "%{student} accepted %{mentor}'s mentoring offer"
+        mentoring_offer_acceptance_v1_html: "%{student} accepted %{mentor}'s offer for %{mentoring}"
+        mentoring_offer_rejection_student_html: You declined %{mentor}'s mentoring offer
+        mentoring_offer_rejection_student_v1_html: You declined %{mentor}'s offer for %{mentoring}
+        mentoring_offer_rejection_mentor_html: "%{student} declined your mentoring offer"
+        mentoring_offer_rejection_mentor_v1_html: "%{student} declined your offer for %{mentoring}"
+        mentoring_offer_rejection_html: "%{student} declined %{mentor}'s mentoring offer"
+        mentoring_offer_rejection_v1_html: "%{student} declined %{mentor}'s offer for %{mentoring}"
+        mentor_offer_withdrawal_html: "%{mentor} withdrew offer for %{mentoring} sent to %{student}."
+        mentor_offer_withdrawal_student_html: "%{mentor} withdrew offer for %{mentoring} sent to you."
+        mentor_offer_withdrawal_mentor_html: You withdrew offer for %{mentoring} sent to %{student}
+        forum_creation_html: "%{admin} created a new forum %{forum_link}"
+        created: created
+        updated: updated
+        declined: declined
+        accepted: accepted
+        end_user_milestone_task_owner_updated_html: "%{user} assigned the task %{template_task_title} for %{owner} in the milestone"
+        end_user_milestone_task_updated_html: "%{user} set the task %{template_task_title} as unassigned in the milestone"
+        milestone_task_status_updated_revoked_html: "%{user} marked the task %{template_task_title} as Not completed in the milestone"
+        milestone_task_status_updated_html: "%{user} %{activity_message} the task %{template_task_title} in the milestone"
+        milestone_status_updated_html: "%{user} %{activity_text} the milestone %{template_milestone}"
+        qa_question_creation_html: "%{user} asked a question %{question_link}"
+        qa_answer_creation_same_user_html: "%{user} posted an answer for your question %{question_link}"
+        qa_answer_creation_html: "%{user} posted an answer for the question %{question_link}"
+        coaching_goal_creation_html: "%{user} created a new goal: %{goal_link}"
+        coaching_goal_updated_html: "%{user} updated the target of the goal %{goal_link} to %{date}"
+        invalid_ra: Invalid RA.
+        about_time_ago: About %{time} ago
+        the_mentoring_connection_between_members_html: the %{mentoring_connection} between %{group_members}
+        your_mentoring_connection_with_link_html: your %{mentoring_connection} with %{mentor_links}
+        attending_dash: Attending? -
+        meeting_content_html: "%{user} %{meeting_context} the meeting - %{meeting_activity_message}"
+        meeting_content_v1_html: "%{user} %{meeting_context} the %{meeting} - %{meeting_activity_message}"
+        milestone_message_html: "%{user} %{message} the milestone"
+        view_the_milestone_in_groups_html: View the milestone in %{groups}
+        task_content_html: "%{user} %{message} the task %{template_task_title} for the milestone %{template_milestone_title}."
+        view_the_task_in_groups_html: View the task in %{groups}
+        process_updated_by_persent_html: "%{user} updated the progress of '%{coaching_goal}' to %{percent}%"
+        own_comment_on_the_goal_html: "%{user} have left a comment on the goal '%{coaching_goal}'"
+        comment_on_the_goal_html: "%{user} has left a comment on the goal '%{coaching_goal}'"
+        activity: Activity
+      action:
+        read_full_announcement: Read full announcement
+        all_announcement: All announcements
+        view_request: View request
+        visit_mentoring_area_v1: Visit %{Mentoring_Area}
+        read_article: Read %{article}
+        browse_all_articles: Browse all %{articles}
+        read_comment: Read comment
+        view_goal_details: View goal details
+        view_offer: View offer
+        view_mentoring_connection: View %{mentoring_connection}
+        visit_the_forum: Visit the forum
+        view_question: View Question
+        view_answer: View Answer
+        view_meeting_v1: View %{meeting}
+        view_conversation: View conversation

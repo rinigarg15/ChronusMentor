@@ -1,0 +1,325 @@
+#!/usr/bin/env ruby
+require 'aws-sdk-v1'
+require 'trollop'
+require 'fileutils'
+require_relative './user_mgmt_config.rb'
+require_relative './../../lib/ops/user_mgmt_helpers.rb'
+require_relative './user_mgmt.rb'
+include CmIamConfig
+
+def generate_new_ga_secret_for_deploy
+  FileUtils.chmod 0755,GOOGLE_AUTHENTICATOR_BIN_PATH
+  execute_cmd "su deploy -c 'google-authenticator #{REDIRECT_STDOUT_TO_STDERR}'"
+  FileUtils.chmod 0700,GOOGLE_AUTHENTICATOR_BIN_PATH
+end
+
+def update_ga_for_all_user_accounts
+  execute_cmd "/usr/local/chronus/bin/ops/replicate_ga.sh"
+end
+
+def rotate_ga
+  generate_new_ga_secret_for_deploy
+  update_ga_for_all_user_accounts
+
+  success_log "Google Authenticator secret key has been successfully changed"
+  info_log "Please note down the secret key"
+
+rescue Exception => e
+  error_log "Rotating request failed: #{e.message}"
+end
+
+def read_app_ssh_keys_from_env_dir(s3,env)
+  bucket_name = "#{CRED_STORE_BUCKET_PREFIX}-app"
+  obj_name = "#{env}/app_#{env}/#{env}-#{APP_SSH_KEY_NAME_SUFFIX}"
+  bucket = s3.buckets[bucket_name]
+  obj = bucket.objects[obj_name]
+  obj.read
+rescue Exception => e
+    error_log "read_app_ssh_keys_from_env_dir failed: #{e.message}"
+    raise e
+end
+
+def push_ssh_keys_to_app_env_dir(keypair,env,s3,options={})
+  bucket_name = "#{CRED_STORE_BUCKET_PREFIX}-app"
+  obj_name = "#{env}/app_#{env}/#{env}-#{APP_SSH_KEY_NAME_SUFFIX}"
+
+  bucket = s3.buckets[bucket_name]
+  objects_collection = bucket.objects
+
+  privkey = keypair['private_key']
+  pubkey = keypair['public_key']
+
+  # Create overwrites if the object already exists
+  objects_collection.create(obj_name,privkey,options)
+
+
+  # Let us store the public key as well. It can be used when an instance is recreated from a disaster. We need to manually laydown the pub key in the authorized_keys file for app & admin user as the chef scripts cannot take care of these!
+  public_key_object_name = "#{obj_name}.pub"
+  objects_collection.create(public_key_object_name,pubkey,options)
+
+rescue Exception => e
+    error_log "push_ssh_key_to_app_creds_dir failed: #{e.message}"
+    raise e
+end
+
+def get_env_creds_obj(s3,env)
+  bucket_name = "#{CRED_STORE_BUCKET_PREFIX}-app"
+  obj_path = "#{env}/app_#{env}/#{ENV_CREDS_S3_OBJ_NAME}"
+  bucket = s3.buckets[bucket_name]
+  bucket.objects[obj_path]
+end
+
+# Reads the env creds and returns the json
+def read_env_creds(s3,env)
+  obj = get_env_creds_obj(s3,env)
+  YAML.load(obj.read)
+rescue Exception => e
+  error_log "read_env_creds failed: #{e.message}"
+  raise e
+end
+
+# Accepts env creds in json, converts to yml and stores it in s3
+def set_env_creds(s3,env,creds)
+  obj = get_env_creds_obj(s3,env)
+  obj.write(creds.to_yaml)
+rescue Exception => e
+  error_log "set_env_creds failed: #{e.message}"
+  raise e  
+end
+
+def show_super_console_passwords(envs)
+  
+  s3 = AWS::S3.new
+  # Read the super console password for all the envs and print them 
+  bucket_name = "#{CRED_STORE_BUCKET_PREFIX}-app"
+  bucket = s3.buckets[bucket_name]
+  envs.each_pair do |env, env_params|
+    env_user = "app_#{env}"
+    obj_path = "#{env}/#{env_user}/#{ENV_CREDS_S3_OBJ_NAME}"
+    obj = bucket.objects[obj_path]
+    env_creds = YAML.load(obj.read)
+    info_log "#{env} -> #{env_creds[SUPER_CONSOLE_PASS_PHRASE_NAME]}"
+  end
+rescue Exception => e
+    error_log "show_super_console_passwords failed: #{e.message}"
+    raise e
+end
+
+def rotate_super_console_password(env_name,new_password)
+  s3 = AWS::S3.new
+
+  env_creds = read_env_creds(s3,env_name)
+  env_creds[SUPER_CONSOLE_PASS_PHRASE_NAME] = new_password
+  set_env_creds(s3,env_name,env_creds)
+
+  success_log "Super Console Password for #{env_name.upcase} successfully changed to #{new_password}"
+  info_log "Please do a deploy for the changes to be effective"
+rescue Exception => e
+  error_log "rotate_super_console_password failed"
+  raise e
+end
+
+def rotate_app_ssh_keys(envs,ssh_username)
+  s3 = AWS::S3.new
+
+  envs.each_pair do |env_name, env_params|
+    begin
+      keypair = create_new_ssh_keypair("app-#{env_name}-#{curr_ts}")
+      push_ssh_keys_to_app_env_dir(keypair,env_name,s3,:server_side_encryption => :aes256)
+      success_log "Successfully pushed the key to creds dir for #{env_name.upcase} environment. Please run chef-client to sync the latest creds in all the servers of #{env_name.upcase}"
+    rescue Exception => e
+      error_log "Rotating app ssh keys failed for #{env_name.upcase} with reason: #{e.message}"
+    end
+  end
+  rescue Exception => e
+    error_log "rotate_app_ssh_keys failed with reason: #{e.message}"
+    raise e
+end
+
+
+def check_if_awsuser_is_authorized(access_key,secret_key,aws_user)
+  iam = AWS::IAM.new
+    begin
+     ak_collection = iam.users[aws_user].access_keys
+     info_log "Provided access key doesn't match with the specified aws user. Continuing anyway!" unless ak_collection.map(&:id).include? access_key
+     info_log "The specified aws user is not part of IAM ops Group" unless iam.groups['ops'].users.map(&:name).include? aws_user  
+    rescue Exception => e
+    # In case of bootstrapping, the provided aws user name would be ubuntu / admin
+      info_log "The aws user doesn't exist! Continuing the sanity check anyway"
+      return
+    end
+end
+
+def check_if_awsuser_can_read_env_creds(envs)
+  s3 = AWS::S3.new
+  envs.each_pair do |env_name, env_params|
+    begin
+      read_env_creds(s3,env_name)
+    rescue Exception => e
+      abort "aws user cannot read the environment creds of #{env_name.upcase} "
+    end
+  end
+    success_log "The specified aws user is authorized to read the env creds of all the necessary envs"
+end
+
+def check_if_awsuser_can_read_appssh_keys(envs)
+  s3 = AWS::S3.new
+  envs.each_pair do |env_name, env_params|
+    begin
+      read_app_ssh_keys_from_env_dir(s3,env_name)
+    rescue Exception => e
+      abort "The specified aws user cannot read app ssh key of #{env_name.upcase}"
+    end
+  end
+    success_log "The specified aws user can read app ssh keys of all necessary environments"
+end
+
+def aws_options_sanity_check(opts)
+    # Validate the AWS access keys
+  if !opts[:aws_key] && !ENV['CM_IAM_ACCESS_KEY']
+    error_log("aws access key not set - Either pass it as -O or set it in CM_IAM_ACCESS_KEY environment variable ")
+    abort
+  end
+
+  if !opts[:aws_secret_key] && !ENV['CM_IAM_SECRET_ACCESS_KEY']
+    error_log("aws access key not set - Either pass it as -W or set it in CM_IAM_SECRET_ACCESS_KEY environment variable ")
+    abort
+  end
+end
+
+def get_env_hash(env_name,deploy_info)
+  if deploy_info.has_key?(env_name)
+    {env_name => deploy_info[env_name]}
+  else 
+    abort "Not a valid environment name" 
+  end
+end
+
+# Validates inputs! Initializes aws-sdk as part of the validation, if required
+def inputs_sanity_check(access_key,secret_key,aws_user,subcmd,subcmd_ops,deploy_info)
+  case subcmd
+    when "googleAuth"
+      # Only a sudoer user can run this script on the gateway instances. So, need to check anything! 
+    when "appSSHKey"
+      # Make sure the force option is present
+      if !subcmd_ops[:force]
+        error_log "Please provide the --force option"
+        info_log "Type --help for information on --force option"
+        info_log "Get the list of active users by running
+awk -F ':' '{ print $1}' /etc/passwd | grep -E '^dev_|^ops_'
+        "
+        abort
+      end
+      env_name = subcmd_ops[:env]
+      env_hash = get_env_hash(env_name,deploy_info)
+      begin
+        check_if_awsuser_is_authorized(access_key,secret_key,aws_user)
+        check_if_awsuser_can_read_appssh_keys(env_hash)
+      rescue
+        abort "Inputs Sanity check failed. Exiting!"
+      end
+
+    when "superConsolePwd"
+      env_hash = deploy_info
+      if !subcmd_ops[:show]
+        abort "Environment name should be specified" if subcmd_ops[:env].nil?
+        abort "New super console password should be specified" if  subcmd_ops[:password].nil?
+        env_name = subcmd_ops[:env]
+        env_hash = get_env_hash(env_name,deploy_info)
+      end
+      begin
+        check_if_awsuser_is_authorized(access_key,secret_key,aws_user)  
+        check_if_awsuser_can_read_env_creds(env_hash)
+      rescue
+        abort "Inputs Sanity Check failed"
+      end
+  end
+end
+
+SUB_COMMANDS = %w(
+  googleAuth
+  appSSHKey 
+  superConsolePwd
+)
+
+global_opts = Trollop::options do
+  version "Shared Key Rotation Utilities 1.0.0 (c) 2013 Chronus"
+  banner <<-EOS
+This utility is meant for Ops users to rotate shared keys 
+Usage:
+      rotate [options] [subcommand] [subcommand_options]
+where [options] are
+EOS
+  opt :aws_key, "AWS Access key. Defaults to CM_IAM_ACCESS_KEY env variable", :short => '-O', :type => :string
+  opt :aws_secret_key, "AWS Access Secret key. Defaults to CM_IAM_SECRET_ACCESS_KEY env variable", :short => '-W', :type => :string
+  opt :aws_user, "The sudoer account on the environment", :required => true, :type => :string
+  banner <<-EOS
+and [subcommand] can be one of:
+ #{SUB_COMMANDS}
+Use rotate [subcommand] -h for help on the usage of subcommands
+EOS
+  stop_on SUB_COMMANDS
+end
+
+cmd = ARGV.shift # get the subcommand
+subcmd_ops = case cmd
+  when "googleAuth" # parse delete options
+    Trollop::options do
+    end
+  when "appSSHKey" # parse delete options
+    Trollop::options do
+      opt :env, "Optional Argument. If specified, this utility rotates app ssh key of the specified environment", :type => :string, :required => true
+      opt :force, "Forcefully rotate the appSSHKeys. The active user accounts on the gateway will not be able to do a deploy unless an ops guy reprovisions them with the new app ssh keys!"
+    end
+  when "superConsolePwd"
+    Trollop::options do
+      opt :show, "Don't rotate. Just display the existing password for all the environments"
+      opt :env, "If specified without the show option, this utility changes the super console password for the specified environment", :type => :string
+      opt :password, "New Super Console password", :type => :string, :short => '-p'
+    end
+  else
+    Trollop::die "unknown subcommand #{cmd.inspect}"
+  end
+
+deploy_info = parse_deploy_yml
+aws_options_sanity_check(global_opts)
+access_key, secret_key, aws_user = parse_aws_details(global_opts)
+# Validate the inputs
+initialize_aws(access_key,secret_key,DEFAULT_AWS_REGION)
+info_log "Running a sanity check..."
+inputs_sanity_check(access_key,secret_key,aws_user,cmd,subcmd_ops,deploy_info)
+info_log "Sanity Check successful"
+
+# Sub command handlers go here
+case cmd
+when "googleAuth"
+  begin
+    rotate_ga
+  rescue Exception => e
+    abort "Rotating Google Authenticator Secret key failed"
+  end
+when "appSSHKey"
+  begin
+    envs_hash = deploy_info
+    if !subcmd_ops[:env].nil?
+      env_name = subcmd_ops[:env]
+      envs_hash = {env_name => deploy_info[env_name]}
+    end
+    rotate_app_ssh_keys(envs_hash,aws_user)
+  rescue Exception => e
+    abort "Rotating app ssh key of the production servers failed #{e.message}"
+  end
+when "superConsolePwd"
+  begin
+    if !subcmd_ops[:show]
+      rotate_super_console_password(subcmd_ops[:env],subcmd_ops[:password])
+    else
+      show_super_console_passwords(deploy_info)
+    end
+  rescue Exception => e
+    abort "Rotating Super Console Password failed : #{e.message}"
+  end
+end
+
+
+

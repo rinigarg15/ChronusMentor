@@ -1,0 +1,61 @@
+<% modal_v3_popup "feature.user.content.change_roles.popup_title".translate do %>
+  <% current_user_roles = @profile_user.role_names %>
+  <% reasons_for_not_removing_role = get_reasons_for_not_removing_roles(@profile_user, @current_program, @non_admin_roles) %>
+
+  <div id="add_role_form" class='clearfix'>
+    <%= form_tag change_roles_user_path(@profile_user), method: :post, id: 'change_roles_form' do %>
+      <%= response_flash "change_roles_popup_flash_container" %>
+      <%= control_group do %>
+        <div class="false-label control-label">
+          <% if @profile_user == current_user %>
+            <%= "feature.user.content.change_roles.popup_same_user_help_text".translate %>
+          <% else %>
+            <%= "feature.user.content.change_roles.popup_different_user_help_text".translate(name: @profile_user.name) %>
+          <% end %>
+        </div>
+
+        <%= controls do %>
+          <%= choices_wrapper("display_string.Roles".translate) do %>
+            <% @admin_roles.each do |role| %>
+              <%= content_tag(:label, class: "checkbox-inline no-horizontal-margins p-sm", id: "change_#{role.name}_role") do %>
+                <%= check_box_tag("role_names[]", role.name, current_user_roles.include?(role.name), class: "change_roles_checkbox", disabled: !can_manage_admin_role, id: "role_names_#{role.name}") %>
+                <%= " #{role.customized_term.term} #{get_icon_content('fa fa-info-circle') if can_manage_admin_role}".html_safe %>
+              <% end %>
+            <% end %>
+            <% @non_admin_roles.each do |role| %>
+              <%= content_tag(:label, class: "checkbox-inline no-horizontal-margins p-sm", id: "change_#{role.name}_role") do %>
+                <%= check_box_tag("role_names[]", role.name, current_user_roles.include?(role.name), class: "change_roles_checkbox", disabled: reasons_for_not_removing_role[role.name].present? , id: "role_names_#{role.name}") %>
+                <%= " #{role.customized_term.term} #{get_icon_content('fa fa-info-circle')}".html_safe %>
+              <% end %>
+            <% end %>
+            <% reasons_for_not_removing_role.each do |role_name, reasons| %>
+              <% if reasons.present? %>
+                <%= tooltip("change_#{role_name}_role", reason_list(reasons)) %>
+              <% end %>
+            <% end %>
+            <%= hidden_field_tag "role_names_str", current_user_roles.join(','), :id => 'hidden_roles' %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% unless @profile_user == current_user %>
+        <% default_value = "feature.user.content.change_roles.message_placeholder".translate(name: @profile_user.name) %>
+        <%= control_group(class: "m-b-sm clearfix") do %>
+          <%= label_tag :role_change_reason, "display_string.Message".translate, :class => 'control-label', :for => "role_change_reason_text" %>
+          <%= controls do %>
+            <%= text_area_tag :role_change_reason, '', :id => "role_change_reason_text", :class => "form-control", :rows => 3, :placeholder => default_value %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <hr/>
+      <% action_set(class: "pull-right clearfix") do %>
+        <a class='popup_closebox cancel btn btn-white' data-dismiss="modal"><%= "display_string.Cancel".translate %></a>
+        <%= submit_tag "display_string.Submit".translate, :class => "btn btn-primary cjs_submit" %>
+      <% end %>
+    <% end %>
+  </div>
+  <% flash_message = "flash_message.user.role_change_submit_failure".translate %>
+  <% tooltip_text = "feature.user.content.change_roles.user_must_have_atleast_one_role".translate %>
+  <% all_role_names = (@admin_roles + @non_admin_roles).collect(&:name) %>
+  <%= javascript_tag %Q[ChangeRoles.setRoles("#{j(all_role_names.to_json)}");ChangeRoles.setDefaultValues("#{tooltip_text}");ChangeRoles.setHiddenFieldValuesAndDisableCheckbox();ChangeRoles.roleChangesMade("#{flash_message}");] %>
+<% end %>

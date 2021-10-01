@@ -1,0 +1,11 @@
+<% popup_id = "calendar_address" %>
+<% @page_action = { label: get_icon_content("fa fa-refresh") + "feature.calendar.title.sync_email_clients_v1".translate, url: "javascript:void(0)", data: { toggle: "modal", target: "#calendar_sync_popup" }, class: "btn btn-primary cjs_show_calendar_sync_popup", js_class: "cjs_show_calendar_sync_popup" } %>
+<div id="ics_calendar_options">
+  <% modal_container "feature.calendar.title.sync_email_clients_v1".translate, {modal_id: "calendar_sync_popup", modal_body_class: "no-padding"} do %>
+    <%= render :partial => "/meetings/calendar_address_modal_popup", :locals => {:popup_id => popup_id} %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  Meetings.trackCalendarSyncPopupView();
+<% end %>

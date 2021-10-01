@@ -1,0 +1,24 @@
+en:
+  feature:
+    group:
+      label:
+        select_all: Select all %{mentoring_connection} to perform an action
+      mentor_no_longer_mentor:
+        one: "%{user_names} is no longer a %{mentor}"
+        other: "%{user_names} are no longer %{mentors}"
+      content:
+        mentoring_area: "%{mentoring} Session"
+        please_select_one_group: This action cannot be performed on multiple mentoring_connection at once.
+        please_select_one_group_v1: This action cannot be performed on multiple %{mentoring_connection} at once.
+        request_meeting_html: Request %{Meeting} &raquo;
+        request_meeting_v1_html: Requesting Meeting &raquo;
+        request_meeting_v2_html: Requesting %{Meeting} &raquo;
+        create_success_html: The %{resource} has been successfully published. %{click_here} to view the resource.
+        create_success_v1_html: The %{resource} has been successfully published. %{click_here} to view the %{resource}.
+      action:
+        mentoring_session: "%{mentoring} Session"
+        help_text: "You have selected a %{mentoring} request."
+        a_mentee_name: "Term for Mentee articalized"
+        show_past_meetings: "Show Past %{meeting} ()"
+        timezoneflash_message: "Your browser time zone doesn't match up with your profile. Stay on top of your %{meeting} by resetting your time zone here."
+        comment_in_invalid_program: "You can comment only on %{article} in your program"

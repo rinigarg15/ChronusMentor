@@ -1,0 +1,20 @@
+<% modal_v3_popup "feature.connection.header.withdraw_connection".translate(Mentoring_Connection: _Mentoring_Connection, connection_name: @group.name) do %>
+  <%= simple_form_for @group, :url => withdraw_group_path(@group, src: @source), :remote => false, :html => {:id => "withdraw_#{@group.id}"} do |f| %>
+    <%= control_group do %>
+      <label class="control-label sr-only" for="withdraw_message">
+        <%= "feature.connection.content.message".translate %> 
+      </label>
+      <%= controls do %>
+        <%= f.text_area :termination_reason, :name => "withdraw_message", :id => "withdraw_message", :required => true, :class => "form-control required-field", :rows => "5", placeholder: "feature.connection.content.placeholder.withdrawal_reason".translate %>
+      <% end %>
+    <% end %>
+    <hr class="m-t-xs m-b-sm"/>
+    <% withdrawal_email_link = current_user.can_manage_connections? ? link_to("feature.connection.content.withdrawn_email_label".translate(mentoring_connection: _mentoring_connection), edit_mailer_template_path(AvailableProjectWithdrawn.mailer_attributes[:uid])) : "feature.connection.content.withdrawn_email_label".translate(mentoring_connection: _mentoring_connection) %>
+    <% rejected_email_link = current_user.can_manage_connections? ? link_to("feature.connection.content.request_rejected_email_label".translate(mentoring_connection: _mentoring_connection), edit_mailer_template_path(ProjectRequestRejected.mailer_attributes[:uid])) : "feature.connection.content.request_rejected_email_label".translate(mentoring_connection: _mentoring_connection) %>
+    <p> <%= "feature.connection.content.withdrawal_email_note_html".translate(mentoring_connection: _mentoring_connection, Mentoring_connection: _mentoring_connection.capitalize, withdrawal_email_link: withdrawal_email_link, rejected_email_link: rejected_email_link) %> </p>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white cancel", "data-dismiss" => "modal" %>
+      <%= submit_tag "feature.connection.action.Withdraw_Connection_v1".translate(Mentoring_Connection: _Mentoring_Connection), :class => 'btn btn-primary', data: {:disable_with => "display_string.Please_Wait".translate}, :onclick => "ProjectRequests.gaTrackProjectPublishWithdraw(false, false, #{@source == "profile"}); return ValidateRequiredFields.validateFormElements(jQuery(this));" %>
+    <% end %>
+  <% end %>
+<% end %>

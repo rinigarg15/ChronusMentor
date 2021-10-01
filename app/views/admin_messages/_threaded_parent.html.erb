@@ -1,0 +1,14 @@
+<% @threaded_parent_hash = {} unless @threaded_parent_hash %>
+<% @threaded_parent_hash[msg.id] = content_tag(:div, class: "b-l p-l-xs m-t-xs") do %>
+  <div><%= "feature.messaging.content.message_written_by".translate(:time => formatted_time_in_words(msg.created_at, :no_ago => true), :sender => (msg.auto_email? ? _Admin : msg.sender_name)) %></div>
+  <div class="p-xxs text-muted">
+    <%= message_content_format(msg) %>
+  </div>
+<% end %>
+<% if msg.parent %>
+  <% @threaded_parent_hash[msg.id] += content_tag(:div, class: "b-l p-l-xs m-t-xs") do %>
+    <% @threaded_parent_hash[msg.parent.id] = render :partial => 'admin_messages/threaded_parent', :locals => {:msg => msg.parent} unless @threaded_parent_hash[msg.parent.id] %>
+    <%= @threaded_parent_hash[msg.parent.id] %>
+  <% end %>
+<% end %>
+<%= @threaded_parent_hash[msg.id] %>

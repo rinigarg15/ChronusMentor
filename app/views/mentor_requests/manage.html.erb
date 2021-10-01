@@ -1,0 +1,22 @@
+<% @back_link = {:label => "feature.reports.content.dashboard".translate, :link => management_report_path} if @src_path == ReportConst::ManagementReport::SourcePage %>
+<% @title = set_view_title(@metric, @title) %>
+
+<% @report_actions = {
+    url: manage_mentor_requests_path,
+    data_js: %Q[MentorRequests.getReportFilterData();],
+    reset_js: %Q[commonUserProfileFilter.resetFilter();commonReportFilters.resetOtherFilters();],
+    ga_label: ReportsController::GoogleAnalytics::MENTOR_REQUESTS_REPORT_LABEL,
+    time_filter: { time: {start: @start_time, end: @end_time}, date_range_preset: DateRangePresets::PROGRAM_TO_DATE, label: "feature.membership_request.label.sent_between".translate },
+    export: get_mentor_requests_export_options(@current_program),
+    other_filters_partial: "mentor_requests/manage_filters",
+    pre_filter_js: %Q[MentorRequests.resetSelectedIds();]
+  } %>
+
+<%= response_flash("cjs_mentor_requests_flash") %>
+<div id='mentor_requests'>
+  <%= render :partial => "mentor_requests/manage", :locals => {:filter_params => @filter_params, action_params: @action_params, is_request_manager_view_of_all_requests: true, mentor_requests: @mentor_requests, match_results_per_mentor: @match_results_per_mentor, tiles_data: @tiles_data, list_field: @list_field} %>
+</div>
+
+<%= javascript_tag do %>
+  commonReportFilters.initializeSwitchTab();
+<% end %>

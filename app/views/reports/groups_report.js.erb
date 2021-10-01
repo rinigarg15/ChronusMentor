@@ -1,0 +1,23 @@
+jQuery("#loading_results").hide();
+closeQtip();
+<% if @chart_updated %>
+  <% content = render :partial => "reports/groups_report_chart_view", :locals => {:groups_report => @groups_report, point_interval: @point_interval, start_date: @start_date, end_date: @end_date} %>
+  jQuery("#cjs_groups_report_chart_view").html("<%= j content %>");
+<% end %>
+
+<% locals = {:groups_report => @groups_report, :groups => @groups, :report_view_columns => @report_view_columns, :totals_hash => @groups_report.totals, sub_filter: @sub_filter, search_filters: @search_filters, member_filters: @member_filters} %>
+<% content = render :partial => "reports/groups_report_table_result", :locals => locals %>
+jQuery("#cjs_groups_report_table_result").html("<%= j content %>");
+jQuery('.cjs_reports_time_filter').html('<%= j get_reports_time_filter({start: @start_date, end: @end_date}) %>');
+jQuery('.dropdown-with-datepicker.open').removeClass('open');
+<% if @filters_count.zero? %>
+  jQuery('.cjs-report-filter-count').hide();
+<% else %>
+  jQuery('.cjs-report-filter-count').show();
+  jQuery('.cjs-report-filter-count').text('<%= @filters_count %>');
+<% end %>
+initialize.setDatePicker();
+initialize.initializeTooltip();
+initialize.initializeStopFilterPropogation();
+
+GroupSearch.updateCustomTaskStatusText("<%= j(get_task_status_custom_filter_text(group_params[:search_filters])) %>");

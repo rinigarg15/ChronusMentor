@@ -1,0 +1,4 @@
+<div class="m-b-xs p-b-xxs clearfix" id="<%= options[:container_id] %>" >
+  <div <%= options[:heading_id].present? ? "id=#{options[:heading_id]}" : "" %> class="font-600 col-sm-3 truncate-with-ellipsis whitespace-nowrap no-padding <%= options[:heading_class] %>"  data-title='<%= heading %>' data-toggle='tooltip' data-html=true><%= heading %></div>
+  <div class="no-padding col-sm-9 <%= options[:content_class] %>"><%= content.html_safe %></div>
+</div>

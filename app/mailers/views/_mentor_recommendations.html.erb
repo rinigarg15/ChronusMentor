@@ -1,0 +1,45 @@
+<link rel="stylesheet" type="text/css" href="<%= Rails.root.to_s + '/app/assets/stylesheets/profile_picture.css' %>">
+<table border="0" cellpadding="0" cellspacing="0" width="580" class="responsive-table" style="table-layout: fixed;line-height: 21px; color:#333333; ">
+  <tbody>
+    <% @preferences.each do |preference| %>
+      <tr style="border-top: 3px solid #eeeeee; <%= (preference == @preferences.last) ? 'border-bottom: 3px solid #eeeeee;' : '' %>">
+        <% if @program.allow_user_to_see_match_score?(@receiver) %>
+          <td style="padding: 10px;" colspan="1">
+            <span style="font-size: 1.6em; color: #337733; font-weight: bold;"><%= @match_array[preference.preferred_user.id] %>%</span>
+            <br/>
+            <span style=""><%= "common_text.match".translate %></span>
+          </td>
+        <% end %>
+        <td style="padding: 10px; width: 60">
+          <%= user_picture_in_email(preference.preferred_user, {:item_link => member_url(preference.preferred_user.member, :subdomain => @program.organization.subdomain, :root => @program.root, :src => :mail), :no_name => true, :size => :medium}, :style => "border: none; border-radius: 50%") -%>
+        </td>
+        <td style="padding-top: 10px; padding-bottom: 10px; padding-left: 10px;" colspan="2">
+          <%= link_to(preference.preferred_user.member.name(name_only: true), member_url(preference.preferred_user.member, :subdomain => @program.organization.subdomain, :root => @program.root, :src => :mail)) %>
+          <br/>
+          <span style="color:#888888; line-height:15px; font-size: 0.8em;">
+            <%= quick_connect_mentor_info(preference.preferred_user, @receiver, @program) %>
+          </span>
+        </td>
+        <td style="padding-top: 10px; padding-bottom: 10px" colspan="1">
+          <div style="float: right">
+            <% if @program.matching_by_mentee_alone? %>
+              <%= link_to("common_text.Connect".translate, member_url(preference.preferred_user.member, :subdomain => @program.organization.subdomain, :root => @program.root, :src => :mail, :show_mentor_request_popup => true), class: "button" ) %>
+            <% end %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+    <% if @program.matching_by_mentee_and_admin_with_preference? %>
+      <tr>
+        <td colspan="1"></td>
+        <td colspan="1"></td>
+        <td colspan="1"></td>
+        <td style="padding-top: 10px; padding-bottom: 10px" colspan="2">
+          <div style="float: right">
+            <%= link_to("feature.mentor_recommendation.Request_Connection".translate(Connection: @_Mentoring_Connection_string), new_mentor_request_url(:subdomain => @program.organization.subdomain, :root => @program.root, :src => :mail), class: "button" ) %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>  

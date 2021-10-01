@@ -1,0 +1,44 @@
+<% url = get_url_for_group_actions_form(@source, :update_bulk_actions) %>
+<% modal_v3_popup "feature.connection.action.Make_Available_v2".translate(Mentoring_Connection: _Mentoring_Connection, Mentoring_Connections: _Mentoring_Connections, count: @group_ids.size) do %>
+  <%= form_tag url, remote: (@source != "profile"), id: "bulk_groups_make_available" do %>
+    <p><%= "feature.connection.content.help_text.make_available_v2".translate(Mentoring_Connection: _Mentoring_Connection, Mentoring_Connections: _Mentoring_Connections, role_string: RoleConstants.human_role_string(@current_program.mentoring_roles_with_permission(RolePermission::SEND_PROJECT_REQUEST).pluck(:name), program: @current_program, pluralize: true, no_capitalize: true), count: @group_ids.size) %></p>
+
+    <% if @show_start_date_field %>
+      <div class="panel panel-default col-xs-12 p-xs btn-warning">
+        <%= content_tag(:div, get_icon_content("fa fa-info-circle"), class: "col-xs-1") %>
+        <%= content_tag(:div, "feature.connection.content.start_date_past_warning".translate(mentoring_connection: _mentoring_connection), class: "col-xs-11 no-padding") %>
+      </div>
+      <%= content_tag(:div, "feature.connection.content.new_start_date_label".translate, class: "control-label false-label m-b-xs") %>
+      <%= content_tag(:label, "feature.meetings.form.date".translate, class: "sr-only", for: "circle_start_date_form") %>
+      <%= construct_input_group([ { type: "addon", icon_class: "fa fa-calendar" } ], [], {:input_group_class => "m-b-md"}) do %>
+        <%= text_field_tag("start_date", "", :class => "form-control", :id => "circle_start_date_form", data: date_picker_options({ min_date: Date.current })) %>
+      <% end %>
+      <%= hidden_field_tag "with_new_start_date", true %>
+    <% end %>
+
+    <%= control_group do %>
+      <label class="control-label sr-only" for="make_available_message">
+        <%= "feature.connection.content.message".translate %>
+      </label>
+      <%= controls do %>
+        <%= text_area_tag("bulk_actions[message]", nil, id: "make_available_message", placeholder: "feature.connection.content.message".translate, rows: "5", class: "form-control cjs_make_available_message") %>
+      <% end %>
+    <% end %>
+    <%= hidden_field_tag "bulk_actions[action_type]", Group::BulkAction::MAKE_AVAILABLE %>
+    <%= hidden_field_tag "bulk_actions[group_ids]", @group_ids %>
+    <%= hidden_field_tag "bulk_actions[tab_number]", @tab_number %>
+    <%= email_notification_consequences_on_action_html(PendingGroupAddedNotification, div_enclose: true, div_class: "m-b-xs", with_count: false, count: @group_ids.size) %>
+    <% action_set(:class=>"pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= submit_tag "feature.connection.action.Make_Available_v2".translate(Mentoring_Connection: _Mentoring_Connection, Mentoring_Connections: _Mentoring_Connections, count: @group_ids.size), class: 'cjs_make_available btn btn-primary', data: {disable_with: "display_string.Please_Wait".translate}, onclick: "return Groups.validateCircleStartDate(#{@show_start_date_field});" %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  <%# This is needed to submit the add members from the add members page %>
+  Groups.addMembers.submitAddMembers();
+  jQuery(document).ready(function() {
+    initialize.setDatePicker();
+  });
+<% end %>  

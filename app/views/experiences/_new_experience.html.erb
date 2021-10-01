@@ -1,0 +1,80 @@
+<% target_program = @program || @current_program %>
+<% target_roles = get_target_roles(@filter_role, @role, @roles, @profile_user) %>
+<% required = local_assigns[:required].nil? ? target_program && target_roles && question.required_for(target_program, target_roles) : local_assigns[:required] %>
+
+<div class="cjs_add_show inner_rounded_section cjs_inner_rounded_section experience m-l-sm m-r-sm list-group-item <%= 'cjs_required' if required %>">
+  <%= fields_for_experience(question, new_experience) do |experience_form| %>
+    <% if question.question_type==ProfileQuestion::Type::MULTI_EXPERIENCE  %>
+      <div class="form-group form-group-sm">
+        <button type="button" class="close" onclick="CustomizeQuestions.removeEduExpFields(this, '.experience', '<%= j("feature.education_and_experience.content.one_required_v1".translate) %>', '<%= j("common_text.confirmation.sure_to_delete".translate) %>')"><span class="sr-only"><%= "feature.education_and_experience.action.Remove_Position".translate %></span><%= embed_icon("fa fa-trash m-r-xxs") %></button>
+      </div>
+    <% end %>
+    <div class="experience row" id="<%= (new_experience.new_record?) ? "" : "experience_#{new_experience.id}" %>">
+      <%= control_group do %>
+        <% company_label_text = Experience.human_attribute_name(:company) %>
+        <label class="col-sm-2 control-label"><%= company_label_text %></label>
+        <%= controls(class: "col-sm-10") do %>
+          <%= experience_form.text_field :company, :class => "company form-control", id: nil, aria: { label: company_label_text } %>
+        <% end %>
+      <% end %>
+
+      <%= control_group do %>
+        <% job_title_label_text = Experience.human_attribute_name(:job_title) %>
+        <label class="col-sm-2 control-label"><%= job_title_label_text %></label>
+        <%= controls(class: "col-sm-10") do %>
+          <%= experience_form.text_field :job_title, :class => "job_title form-control", id: nil, aria: { label: job_title_label_text } %>
+        <% end %>
+      <% end %>
+
+      <%= experience_form.hidden_field :current_job, id: nil %>
+      <%= control_group do %>
+        <div class="col-sm-2 false-label control-label"><%= 'feature.education_and_experience.content.time_period'.translate %></div>
+        <%= controls(class: "col-sm-10") do %>
+          <label class="checkbox">
+            <%= check_box_tag nil, '0', new_experience.current_job?, id: nil, class: "current_job", onclick: "EditUser.toggleCurrentJob(jQuery(this))" %>
+            <%= 'feature.education_and_experience.content.current_job_v1'.translate %>
+          </label>
+        <% end %>
+      <% end %>
+
+      <div class="form-group m-b-xs">
+        <div class="col-sm-10 col-sm-offset-2 no-padding">
+          <% month_opts = Experience.valid_months_array %>
+          <% start_month_label_text = "feature.education_and_experience.content.start_month".translate %>
+          <label class="sr-only"><%= start_month_label_text %></label>
+          <div class="col-sm-6">
+            <%= experience_form.select :start_month, month_opts, {}, :class => "start_month form-control input-compact inline form-control", id: nil, aria: { label: start_month_label_text } %>
+          </div>
+          <% start_year_label_text = "feature.education_and_experience.content.start_year".translate %>
+          <label class="sr-only"><%= start_year_label_text %></label>
+          <div class="col-sm-6">
+            <%= experience_form.select :start_year, year_options_for_select, {}, :class => "start_year form-control input-compact inline form-control", id: nil, aria: { label: start_year_label_text } %>
+          </div>
+        </div>
+      </div>
+      <div class="form-group m-b-xs">
+        <div class="col-sm-10 col-sm-offset-2">
+          <div class="experience_time_period_to col-xs-12 font-600 text-center"><%= "display_string.to_for_dates_only".translate %></div>
+        </div>
+      </div>
+      <div class="form-group m-b-xs">
+        <div class="col-sm-10 col-sm-offset-2 no-padding">
+          <% display_none_style = "style='display: none;'".html_safe %>
+          <span class="end_time_selector" <%= display_none_style if new_experience.current_job? %> >
+            <% end_month_label_text = "feature.education_and_experience.content.end_month".translate %>
+            <label class="sr-only"><%= end_month_label_text %></label>
+            <div class="col-sm-6">
+              <%= experience_form.select :end_month, month_opts, {}, :class => "end_month form-control input-compact inline form-control", id: nil, aria: { label: end_month_label_text } %>
+            </div>
+            <% end_year_label_text = "feature.education_and_experience.content.end_year".translate %>
+            <label class="sr-only"><%= end_year_label_text %></label>
+            <div class="col-sm-6">
+              <%= experience_form.select :end_year, year_options_for_select, {}, :class => "end_year form-control input-compact inline form-control", id: nil, aria: { label: end_year_label_text } %>
+            </div>
+          </span>
+          <span class="end_time_present col-sm-12 text-center" <%= display_none_style if !new_experience.current_job? %>><%= "display_string.present".translate %></span>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

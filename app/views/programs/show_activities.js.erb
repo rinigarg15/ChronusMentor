@@ -1,0 +1,13 @@
+<% container_id, more_url =
+  if @is_my
+    ["show_more_my_activities", get_program_ra_path(offset_id: @new_offset_id, my: 1, src: @src, per_page: @per_page)]
+  elsif @is_conn
+    ["show_more_conn_activities", get_program_ra_path(offset_id: @new_offset_id, connection: 1, src: @src, per_page: @per_page)]
+  else
+    ["show_more_all_activities", get_program_ra_path(offset_id: @new_offset_id, src: @src, per_page: @per_page)]
+  end
+%>
+<% content = render(partial: "programs/recent_activities", locals: { more_id: container_id, more_url: more_url } ) %>
+
+jQuery("#<%= container_id %>").replaceWith("<%= j content %>");
+ShowAndHideToggle();

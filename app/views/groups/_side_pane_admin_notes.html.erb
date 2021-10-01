@@ -1,0 +1,22 @@
+<% if !(group.rejected? || group.withdrawn?) || group.notes.present? %>
+  <% allow_edit = !(group.rejected? || group.withdrawn?) %>
+  <%= ibox "feature.connection.header.admin_notes".translate(Admin: _Admin), ibox_id: "admin_group_notes_section" do %>
+    <div class="text-center text-muted cjs-admin-group-notes-description <%= 'hide' if group.notes.present? %>">
+      <p><%= "feature.connection.content.help_text.admin_notes_description".translate(mentoring_connection: _mentoring_connection) %></p>
+      <%= link_to append_text_to_icon("fa fa-plus-circle", "feature.connection.action.Add_Notes".translate), "javascript:void(0)", class: "cjs-admin-group-notes-link font-bold", data: { url: fetch_notes_group_path(group, src: "profile") } %>
+    </div>
+
+    <div class="cjs-admin-group-notes-container <%= 'hide' if group.notes.blank? %>">
+      <blockquote class="m-sm h5 font-noraml">
+        <p class="cjs-admin-group-notes">
+          <%= group.notes %>
+        </p>
+      </blockquote>
+      <% if allow_edit %>
+        <div class="b-t text-center p-t-sm">
+          <%= link_to append_text_to_icon("fa fa-pencil", "display_string.Edit".translate), "javascript:void(0)", class: "cjs-admin-group-notes-link font-bold", data: { url: fetch_notes_group_path(group, src: "profile") } %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

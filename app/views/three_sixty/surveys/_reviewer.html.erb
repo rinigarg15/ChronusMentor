@@ -1,0 +1,11 @@
+<% unless reviewer.reviewer_group.is_for_self? %>
+  <li class="clearfix p-r-0 list-group-item cjs_three_sixty_parent animated fadeInDown" id="three_sixty_survey_reviewer_container_<%= reviewer.id %>" >
+    <div class="col-xs-9 no-padding">
+      <%= get_safe_string + content_tag(:span, reviewer.name, :class => "font-bold") +" <" + (mail_to reviewer.email) + ">, " + content_tag(:span, reviewer.reviewer_group.name, :class => "text-muted") %>
+    </div>
+    <div class="col-xs-3 no-padding text-right">
+      <%= link_to(get_icon_content("fa fa-pencil text-default") + set_screen_reader_only_content("display_string.Edit".translate), edit_three_sixty_survey_assessee_reviewer_path(survey, survey_assessee, reviewer), :remote => true, :method => :get, :id => "edit_three_sixty_survey_reviewer_#{reviewer.id}") %>
+      <%= link_to(get_icon_content("fa fa-trash text-default") + set_screen_reader_only_content("display_string.Delete".translate), three_sixty_survey_assessee_reviewer_path(survey, survey_assessee, reviewer), :remote => true, :method => :delete, data: {:confirm => "feature.three_sixty.reviewer.delete_warning".translate}) %>
+    </div>
+  </li>
+<% end %>

@@ -1,0 +1,11 @@
+<%= three_sixty_survey_show_view_bar(@view, @survey) do %>
+  <%= render :layout => "three_sixty/survey/show", :locals => {:survey => @survey, :survey_competencies => @survey_competencies, :answers => [], :assessee => nil, :survey_reviewer => nil, :is_for_self => false, :is_for_preview => true, :no_tabs => false, :survey_oeqs => @survey_oeqs} do %>
+    <div class="m-t clearfix no-borders noshadow">
+      <div class="pull-right">
+        <%= link_to("feature.three_sixty.survey.discard".translate, three_sixty_survey_path(@survey), :method => :delete, data: {:confirm => "feature.three_sixty.survey.delete_warning".translate}, :class => "btn btn-white has-next") %>
+        <%= link_to("feature.three_sixty.survey.add_survey_assessees_html".translate, add_assessees_three_sixty_survey_path(@survey), :class => "btn btn-primary") %>
+      </div>
+      <%= link_to("feature.three_sixty.survey.back_to_questions_html".translate, add_questions_three_sixty_survey_path(@survey), :class => "btn btn-primary pull-left") %>
+    </div>
+  <% end %>
+<% end %>

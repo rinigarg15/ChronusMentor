@@ -1,0 +1,20 @@
+<div class="well well-sm clearfix gray-bg">
+  <div class="col-sm-7 no-horizontal-padding">
+    <div class="media">
+      <div class="media-left">
+      <i class="fa-3x m-r-xs fa fa-fw fa-comments"></i>
+      </div>
+      <div class="media-body">
+        <h4 class="m-b-xs"><%= survey.name %></h4>
+        <div class="text-muted">
+          <%= get_icon_content("fa fa-clock-o") + "feature.survey.content.drafted_on".translate(time: formatted_time_in_words(dsr.last_answered_at, :no_time => true, :no_ago => true)) %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-5 no-horizontal-padding">
+    <div class="col-md-12 col-xs-12 no-horizontal-padding">
+      <%= link_to("feature.survey.content.complete_survey".translate, participate_survey_path(survey, options), class: "btn btn-primary btn-block-xs waves-effect m-t-xs pull-right") %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<%
+  if reject
+    status = AbstractRequest::Status::REJECTED
+    message = 'feature.mentor_request.content.reject_popup.message'.translate
+    title = "feature.mentor_offer.header.reject_offer_v2"
+    help_text = "rejection_reason_help_text_v2"
+    sent_to = _mentor
+  else
+    status = AbstractRequest::Status::WITHDRAWN
+    message = 'feature.mentor_request.content.withdraw_popup.message'.translate
+    title = "feature.mentor_offer.header.withdraw_offer"
+    help_text = "withdrawal_reason_help_text"
+    sent_to = _mentee
+  end
+%>
+<div class="reject_withdraw_mentor_offer_popup">
+  <%- modal_container title.translate(user: mentor_offer.mentor.name, :Mentoring => _Mentoring), :modal_id => "modal_mentor_offer_reject_withdraw_link_#{mentor_offer.id}" do -%>
+    <%= simple_form_for mentor_offer do |f| %>
+      <%= f.hidden_field :status, :value => status, id: "mentor_offer_status_#{mentor_offer.id}" %>
+      <%= f.input :response, :input_html => {:rows => 5, :class => "form-control", :id => "mentor_offer_response_text_#{mentor_offer.id}"}, :required => true, :label => "feature.mentor_offer.label.reason".translate %>
+      <%= hidden_field_tag "page", @page, id: "mentor_offer_page_#{mentor_offer.id}" %>
+      <div class="m-b-sm"><%= "feature.mentor_offer.content.#{help_text}".translate(sent_to: sent_to) %></div>
+      <% action_set(:class => "pull-right", :fields_required => true) do %>
+        <%= link_to_function "display_string.Cancel".translate, "MentorOfferRejectorWithdraw.onCancel(#{mentor_offer.id})" ,:class => 'btn btn-white', "data-dismiss" => "modal" %>
+        <%= f.button :submit, "display_string.Submit".translate, :onclick => "return MentorOfferRejectorWithdraw.onSubmit(#{mentor_offer.id});" %> 
+      <% end %>
+    <% end %>
+  <%- end -%>
+</div>

@@ -1,0 +1,11 @@
+<% locals = {
+  member: @member,
+  program_invitation: @program_invitation,
+  password: @password,
+  profile_answers_map: params[:profile_answers],
+  auth_config: @auth_config || @current_organization.chronus_auth
+} %>
+<% content = render(partial: "users/signup_form", locals: locals) %>
+
+toastr.clear();
+jQuery(".cjs-signup-form").replaceWith("<%= j content %>");

@@ -1,0 +1,20 @@
+<div class="m-t">
+  <% if v2_non_global_group %>
+    <% display_vertically = (find_new || !group.published?) %>
+    <% show_requests_and_slots = (is_manage_connections_view || current_user.is_owner_of?(group)) && (group.open? || group.withdrawn?) %>
+    <div id="group_members_container_<%= group.id %>">
+      <%= get_group_members_list(group, group_roles, show_requests_and_slots, display_vertically: display_vertically) %>
+    </div>
+    <% if is_manage_connections_view && !group.rejected? && !group.proposed? %>
+      <div class="cjs_mentoring_model_title">
+        <%= display_mentoring_model_info(group.mentoring_model, false, false, display_vertically: display_vertically) %>
+      </div>
+    <% end %>
+  <% else %>
+    <% [ { label: (group.mentors.size > 1 ? _Mentors : _Mentor), content: safe_join(group.mentors.collect { |mentor| link_to_user(mentor) }, COMMON_SEPARATOR) },
+      { label: (group.students.size > 1 ? _Mentees : _Mentee), content: safe_join(group.students.collect { |student| link_to_user(student) }, COMMON_SEPARATOR) }
+    ].each do |users_per_role| %>
+      <%= embed_display_line_item(users_per_role[:label], users_per_role[:content]) %>
+    <% end %>
+  <% end %>
+</div>

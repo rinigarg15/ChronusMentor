@@ -1,0 +1,18 @@
+<% root = @scrap.root %>
+<% @skip_hiding_loader = true %>
+<% if !@home_page %>
+  jQuery("#loading_results").show();
+<% end %>
+<% if @scraps_size != 0 %>
+  <% content = render partial: "scraps/scrap", :collection => [root], locals: {home_page: @home_page} %>
+  Discussions.reloadScrapThread("<%= j content %>", "<%= root.id.to_s %>", null, "<%= scrap_path(root, format: :js, home_page: @home_page) %>");
+<% elsif @home_page %>
+  jQuery('#SidebarRightHomeContent .close-link').click();
+  jQuery('.cjs_messages_tab_home_page_'+"<%= @group.id %>").click();
+  MentoringAreaTracking.gaTrackMessageDeleted(true);
+<% elsif @scrap.is_group_message? %>
+  window.location.href = '<%= group_scraps_path(:group_id => @group.id) %>';
+  MentoringAreaTracking.gaTrackMessageDeleted(false);
+<% else %>
+  window.location.href = '<%= meeting_scraps_path(:meeting_id => @meeting.id, :current_occurrence_time => @meeting.first_occurrence.to_s) %>';
+<% end %>

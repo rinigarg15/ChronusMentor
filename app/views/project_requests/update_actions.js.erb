@@ -1,0 +1,27 @@
+<% if !@flash_error.present? %>
+  <% if @src_path == EngagementIndex::Src::PUBLISH_CIRCLE_WIDGET %>
+    ProjectRequests.trackRequestAcceptReject(<%= params[:request_type].to_i == AbstractRequest::Status::ACCEPTED %>, chrGoogleAnalytics.eventLabel.GA_PUBLISH_CIRCLE_WIDGET, chrGoogleAnalytics.eventLabelId.GA_PUBLISH_CIRCLE_WIDGET_LABEL_ID);
+  <% elsif @src_path == EngagementIndex::Src::BrowseMentors::HEADER_NAVIGATION %>
+    ProjectRequests.trackRequestAcceptReject(<%= params[:request_type].to_i == AbstractRequest::Status::ACCEPTED %>, chrGoogleAnalytics.eventLabel.GA_MENTORING_AREA_ACTIVITY_LABEL_HEADER_NAVIGATION, chrGoogleAnalytics.eventLabelId.GA_MENTORING_AREA_ACTIVITY_HEADER_NAVIGATION_LABEL_ID);
+  <% elsif @src_path == "email" %>
+    ProjectRequests.trackRequestAcceptReject(<%= params[:request_type].to_i == AbstractRequest::Status::ACCEPTED %>, chrGoogleAnalytics.eventLabel.GA_EMAIL, chrGoogleAnalytics.eventLabelId.GA_EMAIL_LABEL_ID);
+  <% end %>
+<% end %>
+
+<% if @flash_error %>
+  closeQtip();
+  ChronusValidator.ErrorManager.ShowResponseFlash('cjs_project_requests_flash', '<%= @flash_error %>', false);
+<% elsif @flash_notice %>
+  <% if @critical_mass_group.present? %>
+    jQueryShowQtip(null, null, '<%= fetch_publish_group_path(@critical_mass_group, src: "profile", reached_critical_mass: true) %>','');
+  <% else %>
+    closeQtip();
+  <% end %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('cjs_project_requests_flash', '<%= @flash_notice %>', true);
+  <% if @is_manage_view %>
+    eval(commonReportFilters.preFilterFunction);
+    commonReportFilters.submitData();
+  <% else %>
+    ProjectRequests.applyFilters();
+  <% end %>
+<% end %>

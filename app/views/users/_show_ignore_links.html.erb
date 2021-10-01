@@ -1,0 +1,11 @@
+<% ignore_preference_user_ids = ignore_preferences_hash.keys %>
+<% mentor_ignored = ignore_preference_user_ids.include?(mentor_id) %>
+<% ignore_preference_id = ignore_preferences_hash[mentor_id] if mentor_ignored %>
+<% ignore_text = not_recommendations_view(recommendations_view) ? get_ignored_text(mentor_ignored) : content_tag(:i, "", :class => "fa fa-lg fa-close").html_safe %>
+<% ignore_preference_url = get_ignore_preference_url(mentor_ignored, {preference_marked_user_id: mentor_id, ignore_preference_id: ignore_preference_id, recommendations_view: recommendations_view,show_match_config_matches: show_match_config_matches}) %>
+<% ignore_preference_method_type = get_preference_method_type(mentor_ignored) %>
+<%= hidden_field_tag "recommendations_#{mentor_id}", recommendations_view, class: "recommendations_#{mentor_id}", id: "" %>
+<%= hidden_field_tag "ignore_preference_url_#{mentor_id}", ignore_preference_url, class: "ignore_preference_url_#{mentor_id}", id: "" %>
+<%= hidden_field_tag "ignore_preference_method_type_#{mentor_id}", ignore_preference_method_type, class: "ignore_preference_method_type_#{mentor_id}", id: "" %>
+<% tooltip = { "data-title" => get_ignored_tooltip_text(mentor_ignored), "data-toggle" => "tooltip", "data-placement" => "bottom" } %>
+<%= content_tag(:div, ignore_text, {class: "pointer cjs_ignore_feature"}.merge(tooltip), id: "cjs_ignore_link_#{mentor_id}") %>

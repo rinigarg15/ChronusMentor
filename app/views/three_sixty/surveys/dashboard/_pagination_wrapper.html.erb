@@ -1,0 +1,3 @@
+<% additional_params = {:params => ({:sort_param => @options[:sort_param], :sort_order => @options[:sort_order], :format => :js, :published => @options[:published]}).merge!(@options[:params] || {}) } %>
+  <%= pagination_bar(objects, {:no_side_entry_name => true}.merge(additional_params)) %>
+<%= yield %>

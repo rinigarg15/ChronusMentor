@@ -1,0 +1,13 @@
+<% program_id = local_assigns[:program_id] %>
+<% survey_satisfaction_configuration_hash = local_assigns[:survey_satisfaction_configuration_hash] || {} %>
+<li class="col-xs-12 list-group-item no-horizontal-padding p-sm cjs_survey_satisfaction_configuration_for_program_<%= program_id %>">
+  <div class="col-xs-4">
+    <h4 class="whitespace-nowrap truncate-with-ellipsis m-b-0"><%= survey_satisfaction_configuration_hash[:program_name] %></h4>
+  </div>
+  <div class="col-xs-4">
+    <%= get_survey_satisfaction_configuration_state(survey_satisfaction_configuration_hash) %>
+  </div>
+  <div class="col-xs-4">
+    <%= get_survey_satisfaction_configuration_actions(program_id, survey_satisfaction_configuration_hash) %>
+  </div>
+</li>

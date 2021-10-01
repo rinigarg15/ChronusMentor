@@ -1,0 +1,35 @@
+<% is_new_record = section.new_record? %>
+<% unless is_new_record %>
+  <% random_id = section.id %>
+  <% form_id = "edit_section_form_#{random_id}" %>
+  <% flash_id = "edit_section_error_flash_#{random_id}" %>
+  <% js_method = "" %>
+  <% title_id = "edit_section_title_#{random_id}"%>
+<% else %>
+  <% form_id = "add_new_section_form" %>
+  <% flash_id = "new_section_error_flash" %>
+  <% js_method = "jQuery('#add_new_profile_question').show();jQuery('#new_section_form').remove();" %>
+  <% title_id = "new_section_title"%>
+<% end %>
+<%= simple_form_for section, :remote => true, :html => {:class => 'form-horizontal', :id => "#{form_id}"} do |f| %>
+  <%= response_flash flash_id %>
+  <%= control_group do %>
+    <%= f.label "display_string.Title".translate, :for => "#{title_id}_#{form_id}", :class => "col-sm-2" %>
+    <%= controls(class: "col-sm-10") do %>
+      <%= f.input_field :title, :as => :string,:id => "#{title_id}_#{form_id}", :class => "form-control" %>
+    <% end %>
+  <% end %>
+  <%= hidden_field_tag :role, @role, id: "role_#{section.id}" %>
+  <%= control_group do %>
+    <%= f.label :description, :for => "section_description_#{form_id}", :class => "col-sm-2" %>
+    <%= controls(class: "col-sm-10") do %>
+      <%= f.text_area :description, :id => "section_description_#{form_id}", :class => "form-control", :rows => 5 %>
+    <% end %>
+  <% end %>
+  <% action_set(class: "clearfix") do %>
+    <div class="pull-right">
+      <%= link_to_function "display_string.Cancel".translate, "#{js_method}", :class => "btn popup_closebox btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "display_string.Save".translate,:onclick => %Q[return Section.validateForm("#{flash_id}","#{title_id}_#{form_id}",'#{j("feature.profile_customization.content.fill_required_fields".translate)}');] %>
+    </div>
+  <% end %>
+<% end %>

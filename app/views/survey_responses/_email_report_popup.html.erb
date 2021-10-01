@@ -1,0 +1,67 @@
+<% modal_v3_popup("feature.survey.email_report.popup.heading".translate) do %>
+  <div>
+    <%= response_flash "email_report_flash_container" %>
+    <%= form_tag(path, :method => :post, :remote => true, :id => "cjs_email_report_form", :class => "form-horizontal") do %>
+      <%= control_group do %>
+        <%= label_tag "cjs_email_report_subject", "feature.survey.email_report.popup.subject".translate, :class => 'control-label col-sm-3' %>
+        <%= controls(class: "col-sm-9") do %>
+          <%= text_field_tag("subject", subject, :class => "form-control", id: "cjs_email_report_subject") %>
+        <% end %>
+      <% end %>
+
+      <%= control_group do %>
+        <%= label_tag "member_recipient", "feature.survey.email_report.popup.to".translate, :class => 'control-label col-sm-3' %>
+        <%= controls(class: "cjs_email_recipients_container col-sm-9") do %>
+          <% right = { type: "btn",
+            btn_options: {
+              class:'cjs_email_report_add btn btn-primary',
+            },
+            content: "display_string.Add".translate
+          } %>
+          <%= construct_input_group({}, right) do %>
+          <%= text_field_with_auto_complete :member, :recipient, {  :placeholder => "feature.survey.email_report.popup.start_typing".translate,
+                                            :class => "cjs_email_report_recipient form-control pull-left", :autocomplete => "off"},
+                                            { :min_chars => 3,
+                                              :url => auto_complete_for_name_or_email_members_path(format: :json),
+                                              :param_name => 'search', highlight: true } %>
+          <% end %>
+
+
+          <div class="cjs_email_help_text text-muted m-l-xs"><%=  %></div>
+          <div style="" class="col-xs-12 no-padding">
+            <div class="cjs_email_error text-danger m-l-xs hide"><%= "feature.survey.email_report.popup.invalid_email".translate %></div>
+            <div class="cjs_email_label_sample_container hide">
+              <!-- The html below is used to add labels -->
+              <div class="tag-label btn btn-outline btn-default btn-xs noshadow m-xs">
+                <span class="cjs_tab_name"></span>
+                <%= link_to(append_text_to_icon("fa fa-times text-default", set_screen_reader_only_content("display_string.Remove".translate)), 'javascript:void(0)', class: "close-tag") %>
+                <input type="hidden" value="" name="recipients[]" class="cjs_email_recipients_label_input hide">
+              </div>
+            </div>
+            <div class="cjs_email_label_container col-xs-12 no-horizontal-padding clearfix">
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+
+      <%= control_group do %>
+        <%= label_tag "cjs_email_report_body", "feature.survey.email_report.popup.message".translate, :class => 'control-label col-sm-3' %>
+        <%= controls(class: "col-sm-9") do %>
+          <%= text_area_tag("message", content, :class => "form-control form-text", id: "cjs_email_report_body") %>
+        <% end %>
+      <% end %>
+
+      <% unless @response_id.present? %>
+        <%= hidden_field_tag("email_response_ids", nil, :class => "cjs_email_report_response_ids") %>
+        <%= hidden_field_tag("email_responses_sort_field", nil) %>
+        <%= hidden_field_tag("email_responses_sort_dir", nil) %>
+        <%= javascript_tag %Q[EmailReport.setResponseFilterSortParams();] %>
+      <% end %>
+
+      <% action_set(class: "pull-right") do %>
+        <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => 'popup_closebox btn-white btn', "data-dismiss" => "modal" %>
+        <%= submit_tag "display_string.Send".translate, :class => 'btn btn-primary cjs_submit', data: {:disable_with => "display_string.Please_Wait".translate} %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

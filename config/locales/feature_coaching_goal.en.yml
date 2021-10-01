@@ -1,0 +1,19 @@
+en:
+  feature:
+    coaching_goal:
+      header:
+        Due_Date: "Due Date:"
+        Progress: Progress
+        Description: Description
+        Goals: Goals
+        Goal_Activity: Goal Activity
+      action:
+        Add_New_Goal: Add New Goal
+      content:
+        last_activity_on: Last activity on %{time}
+        no_activity_yet: No activity on this goal yet
+        delete_confirm: Are you sure you want to delete this goal?
+        added_on: Added on %{date}
+        no_goals_yet_html: "There are no goals yet. %{Click_here} to create one."
+        message_placeholder: Leave a comment or feedback
+        current_progress: "Current Progress: %{progress_percent}"

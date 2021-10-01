@@ -1,0 +1,23 @@
+<% form_for_membership_roles = get_enrollment_form(new_membership_request_path(organization_level: true, from_enrollment: true), @program, @membership_roles, is_checkbox: @is_checkbox, label: "feature.enrollment.apply_v1".translate, form_id: "enrollment_form_membership") %>
+
+<% form_for_join_roles = get_enrollment_form(create_enrollment_registrations_path(format: :js, organization_level: true), @program, @join_roles, is_checkbox: @is_checkbox, label: "feature.enrollment.join_v2_html".translate(message: get_icon_content(TOOLTIP_IMAGE_CLASS, id: 'enrollment_form_join_label')), form_id: "enrollment_form_join") %>
+
+<% modal_v3_popup enrollment_popup_title(@program.name) do %>
+  <%= response_flash "enrollment_popup_flash_container" %>
+  <% if @membership_roles.present? && @join_roles.present? %>
+    <%= content_tag(:div, :class => "clearfix") do %>
+      <%= content_tag(:div, form_for_membership_roles, class: "clearfix") %>
+      <%= horizontal_or_separator %>
+      <%= content_tag(:div, form_for_join_roles, class: "clearfix") %>
+    <% end %>
+  <% else %>
+    <%= form_for_membership_roles if @membership_roles.present? %>
+    <%= form_for_join_roles if @join_roles.present? %>
+  <% end %>
+  <%= tooltip('enrollment_form_join_label', "feature.enrollment.no_approval".translate) %>
+<% end %>
+
+<%= javascript_tag do %>
+  Enrollment.initialize();
+  initialize.initializeTooltip();
+<% end %>

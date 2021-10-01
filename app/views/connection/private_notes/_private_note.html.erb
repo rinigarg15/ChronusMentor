@@ -1,0 +1,67 @@
+<% private_note = @edit_private_note == private_note ? @edit_private_note : private_note %>
+<% is_update = @edit_private_note == private_note %>
+<% update_errors = is_update && private_note.errors.any? %>
+
+<div id="note_<%= private_note.id %>" class="private_note list-group-item animation-fill-mode-none z-index-not-important">
+  <div class="show_box" id="show_note_<%= private_note.id %>">
+    <% if @page_controls_allowed %>
+      <% dropdown_options = {
+        btn_class: "pull-right",
+        dropdown_title: "",
+        is_not_primary: true,
+        btn_group_btn_class: "btn-white btn-sm dropdown_options_#{private_note.id}"
+        }
+      %>
+      <%= dropdown_buttons_or_button([
+        {
+          label: append_text_to_icon("fa fa-pencil-square-o text-default", "display_string.Edit".translate),
+          class: 'edit',
+          data: { toggle: "modal", target: "#cjs_edit_note_modal_#{private_note.id}" }
+        },
+        {
+          label: append_text_to_icon("fa fa-trash text-default","display_string.Delete".translate),
+          url: group_connection_private_note_path(@group, private_note),
+          method: :delete,
+          data: { 
+            confirm: "feature.connection.content.delete_confirm_note".translate
+          },
+          class: 'delete'
+        }], dropdown_options) 
+      %>
+    <% end %>
+    <div class="media-left">
+      <%= get_icon_content("fa fa-file-text-o no-margins", :container_class => "fa-circle", :stack_class => "fa-1x") %>
+    </div>
+    <div class="media-body">
+      <div class="word_break m-r-xl">
+        <%= textilize_without_paragraph(auto_link(private_note.text, :all, {:target => "_blank"})).html_safe %>
+      </div>
+      <div class="p-t-xxs">
+        <span class='small text-muted dim p-t-xxs'>
+            <%= append_text_to_icon("fa fa-clock-o no-margins",formatted_time_in_words(private_note.created_at, :no_ago => true)) %>
+        </span>
+        <% if private_note.attachment? && !update_errors %>
+          <span class="p-t-xxs <%= hidden_on_mobile %>">
+            <%= vertical_separator %>
+            <%= link_to(append_text_to_icon("fa fa-paperclip text-default", private_note.attachment_file_name), private_note.attachment.url, :target => "_blank", :class => 'text-muted small attachment') %>
+          </span>
+          <div class="p-t-xxs <%= hidden_on_web %>">
+            <%= link_to(append_text_to_icon("fa fa-paperclip text-default", private_note.attachment_file_name), private_note.attachment.url, :target => "_blank", :class => "text-muted small attachment #{mobile_app_class_for_download_files}", :data => {:filename => private_note.attachment_file_name, :targeturl => private_note.attachment.url}) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <% if @page_controls_allowed %>
+    <% modal_container "feature.connection.action.Edit_Note".translate, { modal_id: "cjs_edit_note_modal_#{private_note.id}" } do %>
+      <%= render :partial => "connection/private_notes/edit_note", :locals => {:update_errors => update_errors, :private_note => private_note} %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  <% if is_update && update_errors %>
+    ChronusValidator.ErrorManager.ShowResponseFlash("private_note_flash_container", "<%= private_note.errors.full_messages.to_sentence %>");
+  <% end %>
+<% end %>

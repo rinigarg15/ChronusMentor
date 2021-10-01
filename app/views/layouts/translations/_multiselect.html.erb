@@ -1,0 +1,15 @@
+<script type="text/javascript">
+ jQuery.ui.multiselect.locale = {
+   addAll: "<%= j('feature.admin_view.multiselect.Add_all'.translate) %>",
+   removeAll: "<%= j('feature.admin_view.multiselect.Remove_all'.translate) %>",
+   itemsCount: "<%= j('feature.admin_view.multiselect.items_count'.translate(:count => '#{count}')) %>",
+   itemsTotal: "<%= j('feature.admin_view.multiselect.items_total'.translate(:count => '#{count}')) %>",
+   busy: "<%= j('feature.admin_view.multiselect.please_wait'.translate) %>",
+   errorDataFormat: "<%= j('feature.admin_view.multiselect.error_data_format'.translate) %>",
+   errorInsertNode: "<%= j('feature.admin_view.multiselect.error_insert_node_html'.translate(:item => '[#{key}] => #{value}'.html_safe)) %>",
+   errorReadonly: "<%= j('feature.admin_view.multiselect.error_readonly'.translate(:option => '#{option}')) %>",
+   errorRequest: "<%= j('feature.admin_view.multiselect.error_request'.translate(:status => '#{status}')) %>",
+   availableFieldsText: "<%= j('feature.admin_view.multiselect.Available_Fields'.translate) %>",
+   searchAmongOptions: "<%= j('feature.admin_view.multiselect.search_among_options'.translate)%>"
+ }
+</script>

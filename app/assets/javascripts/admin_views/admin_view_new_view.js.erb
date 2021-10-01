@@ -1,0 +1,1530 @@
+var AdminViewsNewView = {
+  // Assumptions made below in dateRangeNeverSelector are based on the date range picker jQuery plugin and
+  // the text specified in the presetRanges array.
+  // When we upgrade the plugin, please make sure this works :)
+  
+  selectedAdvancedOptionText: "",
+  lastSelectedAdvancedOption: "",
+  lastSelectedAdvancedOptionValue: "",
+  currentAdvancedOptionRoleRequestType: "",
+  connectionStatusFilterData: "",
+  dateRangeNeverClass: "ui-daterangepicker-never",
+  neverText: "Never",
+  timelineTypeValue: {
+    neverVal: "<%= AdminView::TimelineQuestions::Type::NEVER %>",
+    beforeVal: "<%= AdminView::TimelineQuestions::Type::BEFORE %>",
+    afterVal: "<%= AdminView::TimelineQuestions::Type::AFTER %>",
+    dateRangeVal: "<%= AdminView::TimelineQuestions::Type::DATE_RANGE %>",
+    textValues: ["<%= AdminView::TimelineQuestions::Type::BEFORE_X_DAYS %>", "<%= AdminView::TimelineQuestions::Type::IN_LAST_X_DAYS %>"]
+  },
+  rolesAndStatusData: "",
+  matchingMenteeAloneVal: null,
+  matchingMenteeAdminVal: null,
+  programRoleStateFilterActions: {
+    allActiveMembers: {"parent_filter_1": {"child_filter_1": {"state": ["active"], "program": [], "role": []}}},
+    actions: [<%= AdminView::ProgramRoleStateFilterActions::ALL_MEMBERS %>, <%= AdminView::ProgramRoleStateFilterActions::ADVANCED %>],
+    filters: [<%= AdminView::ProgramRoleStateFilterActions::ALL_ACTIVE_MEMBERS %>, <%= AdminView::ProgramRoleStateFilterActions::ALL_INACTIVE_MEMBERS %>],
+    initialized: false
+  },
+
+  updateRoleFilterElementsVisibility: function() {
+    var rowsCount = jQuery(".cjs-roles-filter-row.cjs-in-use .cjs-roles-filter-and-text").length;
+    // show delete icon except for the last row
+    jQuery(".cjs-roles-filter-row.cjs-in-use .cjs-delete-roles-filter-row").show();
+    jQuery(".cjs-roles-filter-row.cjs-in-use").eq(0).find(".cjs-delete-roles-filter-row").hide();
+    // show all AND except last AND
+    jQuery(".cjs-roles-filter-row.cjs-in-use .cjs-roles-filter-and-text").show();
+    jQuery(".cjs-roles-filter-row.cjs-in-use .cjs-roles-filter-and-text").eq(rowsCount - 1).hide();
+    // hide all "ADD" except last
+    jQuery(".cjs-roles-filter-row.cjs-in-use .cjs-add-roles-filter-row").hide();
+    jQuery(".cjs-roles-filter-row.cjs-in-use .cjs-add-roles-filter-row").eq(rowsCount - 1).show();
+    // show all containers
+    jQuery(".cjs-roles-filter-row.cjs-in-use .cjs-roles-filter-and-text-container").show();
+    jQuery(".cjs-roles-filter-row.cjs-in-use .cjs-roles-filter-and-text-container").eq(rowsCount - 1).hide();
+    jQuery(".cjs-roles-filter-row.cjs-in-use .cjs-add-roles-filter-row-container").hide();
+    jQuery(".cjs-roles-filter-row.cjs-in-use .cjs-add-roles-filter-row-container").eq(rowsCount - 1).show();
+  },
+
+  addRoleFilterRow: function(typeVal, rolesVal) {
+    if(typeof(typeVal) == "undefined" || typeVal == null || typeVal.length == 0) typeVal = "include";
+    var template = jQuery(jQuery(".cjs-roles-filter-template").clone());
+    template.removeClass("cjs-roles-filter-template").removeClass("hide").addClass("cjs-in-use");
+    var thisIndex = AdminViewsNewView.rolesAndStatusData.index;
+    template.data('index', thisIndex);
+    AdminViewsNewView.rolesAndStatusData.index += 1;
+    jQuery.each(template.find('label'), function(index, element) {
+      jQuery(element).attr('for', jQuery(element).attr('for').replace("0", thisIndex));
+    });
+    jQuery.each(template.find('select'), function(index, baseElement) {
+      var element = jQuery(baseElement);
+      element.attr('id', element.attr('id').replace('0', thisIndex));
+      element.attr('name', element.attr('name').replace('0', thisIndex));
+      element.prop('disabled', false);
+      if(element.attr('id').match(/cjs-role-type/)) element.val(typeVal);
+      if(element.attr('id').match(/cjs_new_view_filter_roles/)) {
+        element.val(rolesVal);
+        element.select2();
+        var labelTemplate = element.closest(".cjs-roles-filter-select2-container").find("label").clone();
+        labelTemplate.attr('for', element.closest(".cjs-roles-filter-select2-container").find("input").attr('id'));
+        element.closest(".cjs-roles-filter-select2-container").prepend(labelTemplate);
+        template.find("ul.select2-choices").attr('style', function(i, styleStr) {
+          var ret = ((typeof(styleStr) == 'undefined') || (styleStr == null)) ? "" : styleStr;
+          return ret + 'min-height: 34px !important;';
+        });
+        template.find("div.form-control.select2-container").attr('style', function(i, styleStr) {
+          var ret = ((typeof(styleStr) == 'undefined') || (styleStr == null)) ? "" : styleStr;
+          return ret + 'min-height: 34px !important; height: inherit;';
+        });
+      }
+    });
+    jQuery(".cjs-role-filter-rows-container").append(template);
+    AdminViewsNewView.updateRoleFilterElementsVisibility();
+  },
+
+  updateRoleSpecificFiltersVisibility: function() {
+    if(AdminViewsNewView.matchingMenteeAloneVal != null && AdminViewsNewView.matchingMenteeAdminVal != null) AdminViewsNewView.showHideFiltersBasedOnRoles(AdminViewsNewView.matchingMenteeAloneVal, AdminViewsNewView.matchingMenteeAdminVal);
+  },
+
+  rolesAndStatusInit: function() {
+    jQuery(document).on("click", ".cjs-delete-roles-filter-row", function() {
+      jQuery(this).closest(".cjs-roles-filter-row").remove();
+      AdminViewsNewView.updateRoleFilterElementsVisibility();
+      AdminViewsNewView.updateRoleSpecificFiltersVisibility();
+    });
+    jQuery(document).on("click", ".cjs-add-roles-filter-row", function() {
+      AdminViewsNewView.addRoleFilterRow("", []);
+    });
+    if(AdminViewsNewView.rolesAndStatusData.data) {
+      jQuery.each(AdminViewsNewView.rolesAndStatusData.data, function(index, value) {
+        AdminViewsNewView.addRoleFilterRow(value["type"], value["roles"]);
+      });
+      if(AdminViewsNewView.rolesAndStatusData.data.length == 0) AdminViewsNewView.addRoleFilterRow("", []);
+    }
+    AdminViewsNewView.updateRoleSpecificFiltersVisibility();
+    jQuery(document).on("change", ".cjs-roles-filter-type", function() {
+      AdminViewsNewView.updateRoleSpecificFiltersVisibility();
+    });
+  },
+
+  updateConnectionStatusFilterElementsVisibility: function() {
+    var connectionStatusFilterRowsInUse = jQuery(".cjs-connection-status-filter-row.cjs-in-use");
+    // always show the first category box and hide all others
+    connectionStatusFilterRowsInUse.find(".cjs-connection-status-filter-category").hide().eq(0).show();
+    // if first category box is advance filters
+    if(connectionStatusFilterRowsInUse.find(".cjs-connection-status-filter-category").eq(0).val() == "<%= AdminView::ConnectionStatusCategoryKey::ADVANCED_FILTERS %>") {
+      jQuery(".cjs-connection-status-category-dependent-visibility").show();
+      // show delete icon except for the first row
+      connectionStatusFilterRowsInUse.find(".cjs-delete-connection-status-filter-row").show();
+      jQuery(".cjs-connection-status-filter-row.cjs-in-use").eq(0).find(".cjs-delete-connection-status-filter-row").hide();
+      // show all AND except last AND
+      connectionStatusFilterRowsInUse.find(".cjs-connection-status-filter-and-text").show().eq(-1).hide();
+      // hide all "ADD" except last
+      connectionStatusFilterRowsInUse.find(".cjs-add-connection-status-filter-row").hide().eq(-1).show();
+      // show all containers
+      connectionStatusFilterRowsInUse.find(".cjs-connection-status-filter-and-text-container").show().eq(-1).hide();
+      connectionStatusFilterRowsInUse.find(".cjs-add-connection-status-filter-row-container").hide().eq(-1).show();
+      jQuery.each(jQuery(".cjs-connection-status-filter-and-text-container, cjs-add-connection-status-filter-row-container"), function(index, element) {
+        if(jQuery(element).find(':visible').length == 0) jQuery(element).hide(); // hide container if no visible elements
+      });
+    } else { // if first category box is not advance filters
+      jQuery.each(jQuery(".cjs-connection-status-filter-row.cjs-in-use"), function(index, element) {
+        if(index != 0) jQuery(element).find('.cjs-delete-connection-status-filter-row').click(); // remove all row except first
+      });
+      jQuery(".cjs-connection-status-category-dependent-visibility").hide();
+    }
+  },
+
+  updateProgramRoleStateFilterElementsVisibility: function() {
+    var ProgramRoleStateFilterParentRowsInUse = jQuery(".cjs-program-role-state-filter-parent-row.cjs-in-use");
+    ProgramRoleStateFilterParentRowsInUse.find(".cjs-program-role-state-filter-and-text-container").show().eq(-1).hide();
+    AdminViewsNewView.updateProgramRoleStateFilterDeleteVisibility(ProgramRoleStateFilterParentRowsInUse);
+    jQuery.each(ProgramRoleStateFilterParentRowsInUse, function(index, element) {
+      AdminViewsNewView.updateProgramRoleStateFilterChildElementsVisibility(index, element);
+    });
+  },
+
+  updateProgramRoleStateFilterChildElementsVisibility: function(index, element) {
+    var ProgramRoleStateFilterChildRowsInUse = jQuery(element).find(".cjs-program-role-state-filter-child-row.cjs-in-use");
+    ProgramRoleStateFilterChildRowsInUse.find(".cjs-program-role-state-filter-or-text").show().eq(0).css('visibility', 'hidden');
+    ProgramRoleStateFilterChildRowsInUse.find(".cjs-add-program-role-state-filter-parent-row").hide().eq(-1).show();
+  },
+
+  updateTemplateInputsAttributes: function(template, thisIndex) {
+    jQuery.each(template.find('select, input'), function(index, baseElement) {
+      var element = jQuery(baseElement);
+      element.attr('id', element.attr('id').replace('0', thisIndex));
+      element.attr('name', element.attr('name').replace('0', thisIndex));
+      element.prop('disabled', false);
+    });
+  },
+
+  addConnectionStatusFilterRow: function(categoryVal, typeVal, operatorVal, countVal) {
+    var template = jQuery(jQuery(".cjs-connection-status-filter-template").clone());
+    template.removeClass("cjs-connection-status-filter-template").removeClass("hide").addClass("cjs-in-use");
+    var thisIndex = AdminViewsNewView.connectionStatusFilterData.index;
+    template.data('index', thisIndex);
+    AdminViewsNewView.connectionStatusFilterData.index += 1;
+    jQuery.each(template.find('label'), function(index, element) {
+      jQuery(element).attr('for', jQuery(element).attr('for').replace("0", thisIndex));
+    });
+    AdminViewsNewView.updateTemplateInputsAttributes(template, thisIndex);
+    template.find(".cjs-connection-status-filter-category").val(categoryVal);
+    template.find(".cjs-connection-status-filter-type").val(typeVal);
+    template.find(".cjs-connection-status-filter-operator").val(operatorVal);
+    template.find(".cjs-connection-status-filter-countvalue").val(countVal);
+    jQuery(".cjs-connection-status-filter-rows-container").append(template);
+    AdminViewsNewView.updateConnectionStatusFilterElementsVisibility();
+  },
+
+  addProgramRoleStateFilterParentRow: function(options){
+    options = getDefaultVal(options, {});
+    var childRows = getDefaultVal(options.childRows, {});
+    var template = jQuery(jQuery(".cjs-program-role-state-filter-parent-template").clone());
+    template.removeClass("cjs-program-role-state-filter-parent-template").removeClass("hide").addClass("cjs-in-use");
+    var thisIndex = AdminViewsNewView.programRoleStateFilterData.parent_index;
+    var childTemplate = template.find('.cjs-program-role-state-filter-child-template');
+    AdminViewsNewView.updateTemplateInputsAttributesForNewFilter(childTemplate, thisIndex, 0);
+    template.data('index', thisIndex);
+    AdminViewsNewView.programRoleStateFilterData.parent_index += 1;
+    jQuery(".cjs-program-role-state-filter-parent-rows-container").append(template);
+    jQuery.each(childRows, function(index, value) {
+      AdminViewsNewView.addProgramRoleStateFilterChildRow(template, thisIndex, value);
+    });
+    if(Object.keys(childRows).length == 0) AdminViewsNewView.addProgramRoleStateFilterChildRow(template, thisIndex, {});
+    AdminViewsNewView.updateProgramRoleStateFilterElementsVisibility();
+  },
+
+  initializeProgramRoleStateSelect: function(container){
+    container.find('.cjs-init-select2').find('select').select2();
+  },
+
+  initializeProgramRoleStateData: function(paramsHash){
+    AdminViewsNewView.programRoleStateFilterData.data = JSON.parse(paramsHash);
+  },
+
+  handleProgramRoleStateVisibility: function(selector){
+    jQuery(selector).on('click', function(){
+      var element = this;
+      if (jQuery(element).hasClass("active")) return false;
+      var noConfirm = (AdminViewsNewView.getActiveProgramRoleStateAction() != <%= AdminView::ProgramRoleStateFilterActions::ADVANCED %>);
+      jQuery(selector).blur();
+      chronusConfirm(
+        jsCommonTranslations.changeCurrentStateOfFilters, 
+        function(){
+          jQuery('.cjs-program-role-state-container').slideUp();
+          AdminViewsNewView.makeProgramRoleStateActionActive(element, selector);
+          AdminViewsNewView.setProgramRoleStateFilterBasedOnActionButton(element);
+          if(!jQuery(element).hasClass("cjs-program-role-state-actions-all-members")){ jQuery('.cjs-program-role-state-container').slideDown(); }
+        },
+        undefined, jsCommonTranslations.popup.yes, jsCommonTranslations.popup.no, noConfirm
+      );
+    });
+  },
+
+  makeProgramRoleStateActionActive: function(element, selector){
+    jQuery(selector).removeClass("active");
+    var action = AdminViewsNewView.getProgramRoleStateAction(element);
+    jQuery(element).addClass("active")
+  },
+
+  handleProgramRoleStateFilterChildElementsVisibility: function(selector){
+    jQuery(document).on('change', selector, function(){
+      var childRow = jQuery(this).closest('.cjs-program-role-state-filter-child-row');
+      AdminViewsNewView.updateProgramRoleStateFilterHelpTextVisibility(childRow);
+    });
+  },
+
+  getHiddenChildFilter: function(name, id){
+    return jQuery("<input>", {type: "hidden", name: name, id: id + "-dummy"});
+  },
+
+  appendHiddenChildFilters: function(childRow){
+    jQuery.each(childRow.find('.cjs-init-select2'), function(index, filterContainer){
+      var filterName = jQuery(filterContainer).find('select').attr('name');
+      var filterId = jQuery(filterContainer).find('select').attr('id');
+      jQuery(filterContainer).append(AdminViewsNewView.getHiddenChildFilter(filterName, filterId));
+    });
+  },
+
+  addProgramRoleStateFilterChildRow: function(parent_template, parent_index, select_val){
+    var template = jQuery(parent_template.find(".cjs-program-role-state-filter-child-template").clone());
+    template.removeClass("cjs-program-role-state-filter-child-template").removeClass("hide").addClass("cjs-in-use");
+    var thisIndex = AdminViewsNewView.programRoleStateFilterData.child_index;
+    template.data('index', thisIndex);
+    AdminViewsNewView.programRoleStateFilterData.child_index += 1;
+    jQuery.each(template.find('label'), function(index, element) {
+      jQuery(element).attr('for', jQuery(element).attr('for').replace("parent-0", "parent-" + parent_index));
+      jQuery(element).attr('for', jQuery(element).attr('for').replace("child-0", "child-" + thisIndex));
+    });
+    AdminViewsNewView.updateTemplateInputsAttributesForNewFilter(template, parent_index, thisIndex);
+    if(Object.keys(select_val).length > 0){
+      jQuery.each(select_val, function(index, value) {
+        template.find(".cjs-program-role-state-filter-" + index).val(value);
+      });
+    }
+    AdminViewsNewView.appendHiddenChildFilters(template);
+    parent_template.find(".cjs-program-role-state-filter-child-rows-container").append(template);
+    AdminViewsNewView.initializeProgramRoleStateSelect(template);
+    AdminViewsNewView.updateProgramRoleStateFilterElementsVisibility();
+    AdminViewsNewView.updateProgramRoleStateFilterHelpTextVisibility(template);
+  },
+
+  updateTemplateInputsAttributesForNewFilter: function(template, parent_index, child_index) {
+    jQuery.each(template.find('select, input'), function(index, baseElement) {
+      var element = jQuery(baseElement);
+      element.attr('id', element.attr('id').replace('child-0', "child-" + child_index));
+      element.attr('id', element.attr('id').replace('parent-0', "parent-" + parent_index));
+      element.attr('name', element.attr('name').replace('child_filter_0', "child_filter_" + child_index));
+      element.attr('name', element.attr('name').replace('parent_filter_0', "parent_filter_" + parent_index));
+      element.prop('disabled', false);
+    });
+  },
+
+  updateProgramRoleStateFilterDeleteVisibility: function(parentRows){
+    var childRows = parentRows.find('.cjs-program-role-state-filter-child-row.cjs-in-use');
+    if(childRows.length == 1) childRows.find('.cjs-delete-program-role-state-filter-row').hide();
+    else childRows.find('.cjs-delete-program-role-state-filter-row').show();
+  },
+
+  updateProgramRoleStateFilterHelpTextVisibility: function(childRow){
+    var selectors = ["program", "role"];
+    jQuery.each(selectors, function(index, value){
+      var optionsLength = childRow.find('.cjs-program-role-state-filter-' + value).select2('data').length;
+      childRow.find('.cjs-program-role-state-filter-' + value + '-help-text').toggle(optionsLength <= 1);
+      childRow.find('.cjs-program-role-state-filter-' + value + '-help-text-v1').toggle(optionsLength > 1);
+    });
+  },
+
+  connectionStatusFiltersInit: function() {
+    jQuery(document).on("click", ".cjs-delete-connection-status-filter-row", function() {
+      jQuery(this).closest(".cjs-connection-status-filter-row").remove();
+      AdminViewsNewView.updateConnectionStatusFilterElementsVisibility();
+    });
+    jQuery(document).on("click", ".cjs-add-connection-status-filter-row", function() {
+      AdminViewsNewView.addConnectionStatusFilterRow("", "", "", "");
+    });
+    if(AdminViewsNewView.connectionStatusFilterData.data) {
+      jQuery.each(AdminViewsNewView.connectionStatusFilterData.data, function(index, value) {
+        AdminViewsNewView.addConnectionStatusFilterRow(value["<%= AdminView::ConnectionStatusFilterObjectKey::CATEGORY %>"] || "", value["<%= AdminView::ConnectionStatusFilterObjectKey::TYPE %>"] || "", value["<%= AdminView::ConnectionStatusFilterObjectKey::OPERATOR %>"] || "", value["<%= AdminView::ConnectionStatusFilterObjectKey::COUNT_VALUE %>"] || "");
+      });
+      if(AdminViewsNewView.connectionStatusFilterData.data.length == 0) AdminViewsNewView.addConnectionStatusFilterRow("", "", "", "");
+    }
+    jQuery(document).on("change", ".cjs-connection-status-filter-category", function() {
+      var firstCategorySelectBox = jQuery(".cjs-connection-status-filter-row.cjs-in-use .cjs-connection-status-filter-category").eq(0);
+      // reset value 
+      if(firstCategorySelectBox.val() != "<%= AdminView::ConnectionStatusCategoryKey::ADVANCED_FILTERS %>") {
+        var container = firstCategorySelectBox.closest(".cjs-connection-status-filter-row");
+        container.find(".cjs-connection-status-filter-type, .cjs-connection-status-filter-operator, .cjs-connection-status-filter-countvalue").val("");
+      }
+      AdminViewsNewView.updateConnectionStatusFilterElementsVisibility();
+    });
+    AdminViewsNewView.updateConnectionStatusFilterElementsVisibility();
+  },
+
+  programRoleStateFiltersInit: function() {
+    AdminViewsNewView.programRoleStateFilterData = getDefaultVal(AdminViewsNewView.programRoleStateFilterData, ({ data: [], parent_index: 1, child_index: 1 }));
+    if(!AdminViewsNewView.programRoleStateFilterActions.initialized){
+      jQuery(document).on("click", ".cjs-delete-program-role-state-filter-row", function() {
+        child_elements_including_template = jQuery(this).closest(".cjs-program-role-state-filter-parent-row").find(".cjs-program-role-state-filter-child-row")
+        if(child_elements_including_template.length <= 2){
+          jQuery(this).closest(".cjs-program-role-state-filter-parent-row").remove();
+        }
+        else{
+          jQuery(this).closest(".cjs-program-role-state-filter-child-row").remove();
+        }
+        AdminViewsNewView.updateProgramRoleStateFilterElementsVisibility();
+      });
+
+      jQuery(document).on("click", ".cjs-add-program-role-state-filter-parent-row", function() {
+        AdminViewsNewView.addProgramRoleStateFilterParentRow();
+      });
+
+      jQuery(document).on("click", ".cjs-add-program-role-state-filter-child-row", function() {
+        parent_template = jQuery(this).closest(".cjs-program-role-state-filter-parent-row.cjs-in-use")
+        parent_index = parent_template.data('index');
+        AdminViewsNewView.addProgramRoleStateFilterChildRow(parent_template, parent_index, {});
+      });
+
+      jQuery(document).on("change", ".cjs-program-role-state-advanced-trigger", function(){
+        AdminViewsNewView.makeProgramRoleStateActionActive(jQuery(".cjs-program-role-state-actions-advanced"), ".cjs-program-role-state-actions");
+      });
+
+      jQuery(document).on("click", ".cjs-program-role-state-advanced-trigger-button", function(){
+        AdminViewsNewView.makeProgramRoleStateActionActive(jQuery(".cjs-program-role-state-actions-advanced"), ".cjs-program-role-state-actions");
+      });
+
+      AdminViewsNewView.programRoleStateFilterActions.initialized = true;
+    }
+
+    if(AdminViewsNewView.programRoleStateFilterData.data) {
+      jQuery.each(AdminViewsNewView.programRoleStateFilterData.data, function(index, value) {
+        AdminViewsNewView.addProgramRoleStateFilterParentRow({childRows: value});
+      });
+      if(Object.keys(AdminViewsNewView.programRoleStateFilterData.data).length == 0) AdminViewsNewView.addProgramRoleStateFilterParentRow();
+    }
+
+    AdminViewsNewView.updateProgramRoleStateFilterElementsVisibility();
+  },
+
+  inspectActions: function(selectFieldMsg, titleDupMsg, profileAnsMsg, currentLocale, confirmationMessage, existing_views){
+    jQuery(document).ready(function(){
+      AdminViewsNewView.handleFormSubmission(selectFieldMsg, titleDupMsg, profileAnsMsg, confirmationMessage, existing_views);
+      AdminViewsNewView.initializeDatePicker();
+      AdminViewsNewView.handleDateProfileQuestionOperator();
+      AdminViewsNewView.neverOptionCloner(jQuery("select.cjs_timeline_type").eq(0));
+      AdminViewsNewView.inspectCustomSelects();
+      AdminViewsNewView.initializeCustomSelects();
+      AdminViewsNewView.addOneMore();
+      AdminViewsNewView.addOneMoreSurveyFilter()
+      AdminViewsNewView.removeQuestion();
+      AdminViewsNewView.multiSelect(currentLocale);
+      AdminViewsNewView.inspectNextButtons();
+      AdminViewsNewView.showRatingInputFields();
+      AdminViewsNewView.rolesAndStatusInit();
+      AdminViewsNewView.connectionStatusFiltersInit();
+      AdminViewsNewView.programRoleStateFiltersInit();
+    });
+  },
+
+  handleFormSubmission: function(selectFieldMsg, titleDupMsg, profileAnsMsg, confirmationMessage, existing_views){
+    jQuery("form.cjs_adminview_form .cjs_admin_view_submit").on("click", function(event){
+      event.preventDefault();
+      var isValid = AdminViewsNewView.validations(selectFieldMsg, titleDupMsg, profileAnsMsg, existing_views);
+      if(isValid){
+        var form = jQuery(this).closest("form.cjs_adminview_form");
+        if(confirmationMessage.length){
+          chronusConfirm(confirmationMessage, function(){
+            AdminViewsNewView.setValuesAndSubmitForm(form);
+          });
+        }else{
+          AdminViewsNewView.setValuesAndSubmitForm(form);
+        }
+      }else{
+        return false;
+      }
+    });
+  },
+
+  setValuesAndSubmitForm: function(form){
+    jQuery(form).find(".cjs_timeline_date_picker, .cjs_profile_question_single_date_value_field").each(function(){
+      elementValue = jQuery(this).data("kendoDatePicker").value();
+      if(elementValue){
+        jQuery(this).val(kendo.toString(elementValue, datePickerTranslations.dateRangeFormat));
+      }
+    });
+    jQuery(form).find(".timeline_units_enclosure").each(function(index, element){
+      AdminViewsNewView.updateTimelineFields(jQuery(element).find(".cjs_timeline_questions"));
+    });
+    jQuery(form).find('.cjs_date_type_profile_question_container').each(function(index, element){
+      AdminViewsNewView.updateDateProfileFields(jQuery(element));
+    });
+    jQuery(form).find(".cjs_remove_on_submit").attr("disabled", true);
+    form.submit();
+  },
+
+  setProgramRoleStateFilterBasedOnActionButton: function(element){
+    var action = AdminViewsNewView.getProgramRoleStateAction(element);
+    var form = jQuery(element).closest("form");
+    if(AdminViewsNewView.isProgramRoleStateFilter(action)) AdminViewsNewView.clearExistingProgramRoleStateFilters();
+    switch(action){
+      case <%= AdminView::ProgramRoleStateFilterActions::ALL_MEMBERS %>: AdminViewsNewView.setProgramRoleStateAllMembers(form);
+              break;
+      case <%= AdminView::ProgramRoleStateFilterActions::ALL_ACTIVE_MEMBERS %>: AdminViewsNewView.setProgramRoleStateAllActiveMembers(form);
+              break;
+      case <%= AdminView::ProgramRoleStateFilterActions::ALL_INACTIVE_MEMBERS %>: AdminViewsNewView.setProgramRoleStateAllInactiveMembers(form);
+              break;
+      case <%= AdminView::ProgramRoleStateFilterActions::ADVANCED %>: AdminViewsNewView.setProgramRoleStateAllMembers(form, false);
+    }
+  },
+
+  isProgramRoleStateAction: function(action){
+    return (jQuery.inArray(action, AdminViewsNewView.programRoleStateFilterActions.actions) != -1)
+  },
+
+  isProgramRoleStateFilter: function(action){
+    return (jQuery.inArray(action, AdminViewsNewView.programRoleStateFilterActions.filters) != -1)
+  },
+
+  clearExistingProgramRoleStateFilters: function(){
+    jQuery(".cjs-program-role-state-filter-parent-row.cjs-in-use").remove();
+  },
+
+  getProgramRoleStateAction: function(element){
+    return jQuery(element).data('type');
+  },
+
+  getActiveProgramRoleStateAction: function(){
+    return AdminViewsNewView.getProgramRoleStateAction(".cjs-program-role-state-actions.active");
+  },
+
+  setProgramRoleStateAllMembers: function(form, value){
+    value = getDefaultVal(value, true);
+    jQuery(form).find('.cjs-program-role-state-all-members').val(value);
+  },
+
+  setProgramRoleStateAllActiveMembers: function(form, inclusion){
+    AdminViewsNewView.setProgramRoleStateAllMembers(form, false);
+    inclusion = getDefaultVal(inclusion, '<%= AdminView::ProgramRoleStateFilterObjectKey::INCLUDE %>');
+    jQuery(form).find('.cjs-program-role-state-filter-inclusion').val(inclusion);
+    AdminViewsNewView.initializeProgramRoleStateData(JSON.stringify(AdminViewsNewView.programRoleStateFilterActions.allActiveMembers));
+    AdminViewsNewView.programRoleStateFiltersInit();
+  },
+
+  setProgramRoleStateAllInactiveMembers: function(form){
+    AdminViewsNewView.setProgramRoleStateAllActiveMembers(form, '<%= AdminView::ProgramRoleStateFilterObjectKey::EXCLUDE %>');
+  },
+
+  updateDateProfileFields: function(dateQuestionContainer){
+    var componentMapping = {
+      datePicker: ["<%= AdminView::ProfileQuestionDateType::DATE_RANGE %>", "<%= AdminView::ProfileQuestionDateType::BEFORE %>", "<%= AdminView::ProfileQuestionDateType::AFTER %>"],
+      singleDate: ["<%= AdminView::ProfileQuestionDateType::BEFORE %>", "<%= AdminView::ProfileQuestionDateType::AFTER %>"],
+      numberOfDays: ["<%= AdminView::ProfileQuestionDateType::IN_LAST %>", "<%= AdminView::ProfileQuestionDateType::IN_NEXT %>"]
+    };
+
+    var selectedOperator = dateQuestionContainer.find('.cjs_profile_question_date_operator').val();
+    var numberOfDays = dateQuestionContainer.find('.cjs_profile_question_number_of_days');
+    var profileQuestionDateValue = dateQuestionContainer.find('.cjs_date_picker_for_profile_question');
+
+    if(selectedOperator.blank() || (componentMapping.numberOfDays.indexOf(selectedOperator) == -1)) numberOfDays.val("");
+    if(selectedOperator.blank() || (componentMapping.datePicker.indexOf(selectedOperator) == -1)) profileQuestionDateValue.val("");
+    if(componentMapping.singleDate.indexOf(selectedOperator) > -1){
+      var dateValue = dateQuestionContainer.find('.cjs_profile_question_single_date_value_field').val();
+      if(selectedOperator == "<%= AdminView::ProfileQuestionDateType::BEFORE %>"){
+        var previousDay = dateValue.blank() ? dateValue : kendo.toString(kendo.date.previousDay(new Date(dateValue)), datePickerTranslations.dateRangeFormat);
+        dateValue = ["", previousDay];
+      }
+      else if(selectedOperator == "<%= AdminView::ProfileQuestionDateType::AFTER %>"){
+        var nextDay = dateValue.blank() ? dateValue : kendo.toString(kendo.date.nextDay(new Date(dateValue)), datePickerTranslations.dateRangeFormat);
+        dateValue = [nextDay, ""];
+      }
+      profileQuestionDateValue.val(dateValue.join(datePickerTranslations.dateRangeSeparator));
+    }
+  },
+
+  updateTimelineFields: function(timelineQuestion) {
+    var timelineType = timelineQuestion.closest(".timeline_units_enclosure").find(".cjs_timeline_type");
+    if(timelineQuestion.val() == "") timelineType.val("");
+    AdminViewsNewView.updateTimelineTextField(timelineType);
+  },
+
+  updateTimelineTextField: function(timelineType) {
+    var typeSelectVal = timelineType.val();
+    var textbox = timelineType.closest("div.timeline_units_enclosure").find(".cjs_timeline_text");
+    var inputGroup = timelineType.closest("div.timeline_units_enclosure").find("input");
+    if(typeSelectVal == "") textbox.val("");
+    if(typeSelectVal == AdminViewsNewView.timelineTypeValue.neverVal) textbox.val(AdminViewsNewView.neverText);
+    if(typeSelectVal == AdminViewsNewView.timelineTypeValue.beforeVal || typeSelectVal == AdminViewsNewView.timelineTypeValue.afterVal) {
+      textbox.val(inputGroup.filter(".cjs_timeline_date_picker").val());
+    }
+    if(typeSelectVal == AdminViewsNewView.timelineTypeValue.dateRangeVal) {
+      textbox.val(inputGroup.filter(".cjs_timeline_date_range_picker").val());
+    }
+  },
+
+  multiSelect: function(currentLocale){
+    jQuery("#cjs_admin_view_multiselect").uixmultiselect({
+      availableListPosition: 'left',
+      locale: currentLocale,
+      splitRatio: 0.48,
+      sortable: true
+    });
+  },
+
+  initializeDatePicker: function(){
+    initialize.setDatePicker();
+    initialize.initializeDateRangePicker();
+  },
+
+  adjustUiForLocationTypeQuestion: function(selectBoxObj, set) {
+    var container = AdminViewsNewView.getQuestionContainer(selectBoxObj);
+    container.find(".cjs-profile-question-control").toggleClass("col-sm-3", !set).toggleClass("col-sm-2", set);
+    container.find(".cjs-profile-question-location-scope-control").toggleClass("hide", !set);
+    container.find(".cjs-profile-question-location-scope-control").find("select.cjs-profile-question-location-scope-select").prop("disabled", !set);
+    var textElement = container.find(".cjs-profile-question-text-input-control input.cjs_input_hidden");
+    container.find("label.cjs_input_hidden_label").attr('for', textElement.attr('id'));
+    textElement.removeClass("select2-offscreen");
+    textElement.toggleClass('no-padding', set);
+    if(set) {
+      container.find(".select2-container").remove();
+      textElement.prop('type', 'hidden');
+      textElement.addClass('no-border');
+      textElement.select2({
+        multiple: true,
+        separator: "<%= AdminView::LOCATION_VALUES_SPLITTER %>",
+        id: function(object) { return object },
+        ajax: {
+          url: textElement.data('remote-data-path'),
+          data: function(term) {
+            return {
+              search: term,
+              scope: jQuery(this).closest("div.cjs_admin_views_container_box").find("select.cjs-profile-question-location-scope-select").val()
+            }
+          },
+          results: function(data) {
+            return { results: data };
+          }
+        },
+        formatResult: function(location, container) {
+          removeFastClickForSelect2(container);
+          return location;
+        },
+        formatSelection: function(data) { return data; },
+        initSelection: function(element, callback) {
+          var data = [];
+          jQuery(element.val().split("<%= AdminView::LOCATION_VALUES_SPLITTER %>")).each(function(index, content) {
+            data.push(content);
+          });
+          callback(data);
+        }
+      });
+      textElement.hide();
+      container.find(".cjs-profile-question-text-input-control").show();
+      container.find(".select2-container").css({height: 'inherit'});
+      AdminViewsNewView.toggleAdditionalTextBox(container.find("select.cjs_show_profile_input_field"));
+    } else {
+      if(textElement.data('select2')) textElement.select2('destroy');
+      textElement.removeClass('no-border');
+      textElement.prop('type', 'text');
+    }
+  },
+
+  updateQuestionOperatorSelectBox: function(operatorSelectBox, selectorClass) {
+    if(!operatorSelectBox.find("option:selected").hasClass(selectorClass)) operatorSelectBox.val('');
+    operatorSelectBox.find("option." + selectorClass).show().prop('disabled', false);
+  },
+
+  adjustUiForChoiceBasedQuestion: function(selectBoxObj) {
+    var operatorSelectBox = AdminViewsNewView.getQuestionContainer(selectBoxObj).find(".cjs-profile-question-operator-control select");
+    operatorSelectBox.find("option").hide().prop('disabled', true);
+    if(selectBoxObj.find("option:selected").hasClass("cjs-choice-based-question"))
+      AdminViewsNewView.updateQuestionOperatorSelectBox(operatorSelectBox, "cjs-show-choice-based");
+    else if(selectBoxObj.find("option:selected").hasClass("cjs-location-type-question"))
+      AdminViewsNewView.updateQuestionOperatorSelectBox(operatorSelectBox, "cjs-show-location-based");
+    else if(selectBoxObj.find("option:selected").hasClass("cjs-file-manager-type-question")) AdminViewsNewView.updateQuestionOperatorSelectBox(operatorSelectBox, "cjs-show-file-manager");
+    else AdminViewsNewView.updateQuestionOperatorSelectBox(operatorSelectBox, "cjs-show-non-choice-based"); // non-choice based question
+  },
+
+  adjustUiForAdditionalTextBox: function(questionContainer){
+    questionContainer.find(".cjs-profile-question-text-input-control input.cjs_input_hidden").val('');
+    var choiceElement = questionContainer.find(".cjs-profile-question-text-input-control input.cjs_choices_hidden");
+    questionContainer.find("label.cjs_choices_hidden_label").attr('for', choiceElement.attr('id'));
+    choiceElement.removeClass("select2-offscreen");
+    questionContainer.find("div.cjs_choices_hidden").remove();
+    var choicesSelectBox = questionContainer.find(".cjs-profile-question-text-input-control");
+    choicesSelectBox.find(".cjs_choices_hidden").val("");
+    var operatorSelectBox = questionContainer.find(".cjs-profile-question-operator-control select");
+    operatorSelectBox.val("");
+    choicesSelectBox.hide();
+  },
+
+  handleDateTypeQuestion: function(questionContainer, options){
+    options = getDefaultVal(options, {});
+
+    var selectedQuestion = questionContainer.find('.cjs-profile-question-selector option:selected');
+    var otherInputFields = questionContainer.find(".cjs-profile-question-operator-control");
+    var isDateQuestion = selectedQuestion.hasClass("cjs_date_question");
+    dateRangePickerContainer = questionContainer.find('.cjs_date_type_profile_question_container');
+    dateRangePickerContainer.toggle(isDateQuestion);
+    questionContainer.find(otherInputFields).toggle(!isDateQuestion);
+  },
+
+  handleDateProfileQuestionOperator: function(){
+    var componentMapping = {
+      "": "",
+      "<%= AdminView::ProfileQuestionDateType::FILLED %>": "",
+      "<%= AdminView::ProfileQuestionDateType::NOT_FILLED %>": "",
+      "<%= AdminView::ProfileQuestionDateType::BEFORE %>": ".cjs_profile_question_single_date_value",
+      "<%= AdminView::ProfileQuestionDateType::AFTER %>": ".cjs_profile_question_single_date_value",
+      "<%= AdminView::ProfileQuestionDateType::DATE_RANGE %>": ".cjs_profile_question_date_range_value",
+      "<%= AdminView::ProfileQuestionDateType::IN_LAST %>": ".cjs_profile_question_number_of_days, .cjs_profile_question_number_of_days_text",
+      "<%= AdminView::ProfileQuestionDateType::IN_NEXT %>": ".cjs_profile_question_number_of_days, .cjs_profile_question_number_of_days_text"
+    };
+
+    jQuery(document).on('change', '.cjs_profile_question_date_operator', function(){
+      var selectedOperator = jQuery(this).val();
+      var closestDateContainer = jQuery(this).closest(".cjs_date_type_profile_question_container");
+      AdminViewsNewView.toggleDateQuestionComponents(selectedOperator, closestDateContainer, componentMapping);
+    });
+  },
+
+  toggleDateQuestionComponents: function(selectedOperator, dateContainer, mapping){
+    var visibleClass;
+    jQuery.each(mapping, function(key, value){
+      var isSelectedOperator = (key == selectedOperator);
+      if(isSelectedOperator) {visibleClass = value;}
+      dateContainer.find(value).toggle(isSelectedOperator || (visibleClass == value));
+    });
+    dateContainer.find('.cjs_profile_question_date_components').toggle(!(mapping[selectedOperator].blank()));
+  },
+
+  inspectCustomSelects: function(){
+    jQuery(document).on("change", "select.cjs_show_input_field", function(){
+      AdminViewsNewView.toggleAdditionalTextBox(jQuery(this));
+    });
+
+    jQuery(document).on("change", "select.cjs-profile-question-selector", function(){
+      var questionContainer = AdminViewsNewView.getQuestionContainer(jQuery(this));
+      questionContainer.find(".select2-container").remove();
+      AdminViewsNewView.adjustUiForChoiceBasedQuestion(jQuery(this));
+      AdminViewsNewView.adjustUiForAdditionalTextBox(questionContainer);
+      AdminViewsNewView.adjustUiForLocationTypeQuestion(jQuery(this), AdminViewsNewView.customSelectBoxHasClass(jQuery(this), "cjs-location-type-question"));
+
+      var options = {parentContainer: ".cjs_hidden_input_box_container", selectedQuestion: ".cjs-profile-question-selector", otherInputFields: ".cjs-profile-question-operator-control", hasInputGroup: false};
+      AdminViewsNewView.handleDateTypeQuestion(questionContainer, options);
+    });
+
+    jQuery(document).on("change", "select.cjs-profile-question-location-scope-select", function(){
+      jQuery(this).closest("div.cjs_admin_views_container_box").find(".cjs-profile-question-text-input-control input.cjs_input_hidden").select2('val', ''); 
+    });
+
+    jQuery(document).on("change", "select.cjs_timeline_questions", function(){
+      AdminViewsNewView.enforceTimelineQuestionDependencies(jQuery(this));
+    });
+
+    jQuery(document).on("change", "select.cjs_timeline_type", function(){
+      jQuery(this).closest("div.timeline_units_enclosure").find("input").val("");
+      AdminViewsNewView.enforceTimelineTypeDependencies(jQuery(this));
+    });
+
+    jQuery(document).on("change", "select.cjs_meeting_requests_type", function(){
+      AdminViewsNewView.disableSelectedMeetingRequestOptions(jQuery(this));
+    });
+
+    jQuery(document).on("change", "select.cjs_meeting_requests_operator_type", function(){
+      AdminViewsNewView.handleMeetingRequestOperators(jQuery(this));
+    });
+
+    jQuery("select.cjs_show_rating_input_field").on("click", function(){
+      AdminViewsNewView.showRatingInputFields();
+    });
+
+    jQuery(document).on("change", "select.cjs-survey-question-selector", function(){
+      AdminViewsNewView.adjustUiForSurveyQuestion(jQuery(this));
+    });
+  },
+
+  showInputField: function(separator, isProfile){
+    var operatorSelectClass = isProfile ? "select.cjs_show_profile_input_field" : "select.cjs_show_survey_input_field";
+    jQuery(document).on("change", operatorSelectClass, function(){
+        var questionContainer = AdminViewsNewView.getQuestionContainer(jQuery(this));
+        var questionSelectBox = questionContainer.find("select.cjs-profile-question-selector");
+        if(isProfile && AdminViewsNewView.customSelectBoxHasClass(questionSelectBox, "cjs-location-type-question")){
+          AdminViewsNewView.toggleAdditionalTextBox(jQuery(this));
+        }else{
+          questionContainer.find("input.cjs_choices_hidden").val("");
+          questionContainer.find("input.cjs_input_hidden").val("");
+          questionContainer.find("div.cjs_choices_hidden").remove();
+          AdminViewsNewView.toggleAdditionalChoiceTextBox(jQuery(this), jQuery(this).data("qci"), jQuery(this).data("qct"), separator, isProfile);
+        }
+    });
+  },
+
+  adjustUiForSurveyQuestion: function(element) {
+    var operatorSelectBox = AdminViewsNewView.getQuestionContainer(element).find(".cjs-survey-question-operator-control select");
+    operatorSelectBox.find("option").hide().prop('disabled', true);
+    if(element.find("option:selected").hasClass("cjs-choice-based-question")){
+     AdminViewsNewView.updateQuestionOperatorSelectBox(operatorSelectBox, "cjs-show-choice-based");
+    }
+    else {
+     AdminViewsNewView.updateQuestionOperatorSelectBox(operatorSelectBox, "cjs-show-non-choice-based");
+    }
+    operatorSelectBox.val("");
+    var choicesSelectBox = AdminViewsNewView.getQuestionContainer(element).find(".cjs-survey-question-text-input-control").val("");
+    choicesSelectBox.find(".cjs_choices_hidden").val("");
+    choicesSelectBox.find(".cjs_input_hidden").val("");
+    choicesSelectBox.hide();
+  },
+
+  toggleAdditionalChoiceTextBox: function(selectBoxObj, questionChoicesIds, questionChoicesTexts, separator, isProfile){
+    selectBoxObj = isProfile ? selectBoxObj : jQuery(selectBoxObj.last());
+    selectBoxObj.each(function(){
+      var additionalBoxObj = "";
+      if(isProfile && AdminViewsNewView.customSelectBoxHasClass(jQuery(this), "cjs_show_match_text_box")){
+        additionalBoxObj = AdminViewsNewView.getAdditionalBox(jQuery(this));
+      }else{
+        additionalBoxObj = AdminViewsNewView.getAdditionalTextBox(jQuery(this), questionChoicesIds, questionChoicesTexts, separator, isProfile);
+      }
+      var inputContainerClass = isProfile ? ".cjs-profile-question-text-input-control" : ".cjs-survey-question-text-input-control";
+      if(ReportFilters.customSelectBoxHasClass(jQuery(this), "cjs_additional_text_box")){
+        additionalBoxObj.show();
+        additionalBoxObj.closest(inputContainerClass).show();
+      }
+      else{
+        additionalBoxObj.closest(inputContainerClass).hide();
+      }
+    });
+  },
+
+  getAdditionalTextBox: function(selectBoxObj, questionChoicesIds, questionChoicesTexts, separator, isProfile){
+    var selectorClass = isProfile ? ".cjs-profile-question-selector option:selected" : ".cjs-survey-question-selector option:selected";
+    var questionContainer = AdminViewsNewView.getQuestionContainer(selectBoxObj);
+    var selectedQuestion = questionContainer.find(selectorClass);
+    var inputBox = questionContainer.find("input.cjs_input_hidden");
+    if(selectedQuestion.hasClass("cjs-choice-based-question")) {
+      inputBox = questionContainer.find(".cjs_choices_hidden");
+      AdminViewsNewView.showSelect2QuestionChoices(selectBoxObj, questionChoicesIds, questionChoicesTexts, separator, isProfile);
+    }
+    return inputBox;
+  },
+
+  showSelect2QuestionChoices: function(selector, questionChoicesIds, questionChoicesTexts, separator, isProfile){
+    var selectorClass = isProfile ? ".cjs-profile-question-selector" : ".cjs-survey-question-selector";
+    var questionContainer = AdminViewsNewView.getQuestionContainer(selector);
+    var selectedQuestionValue = questionContainer.find(selectorClass).val();
+    var select2BoxId = questionContainer.find(".cjs_choices_hidden").attr("id");
+    questionContainer.find("input.cjs_input_hidden").hide();
+    AdminViewsNewView.displaySelect2Choices(questionChoicesIds[selectedQuestionValue], questionChoicesTexts[selectedQuestionValue], separator, select2BoxId);
+      questionContainer.find(".select2-container").css({height: 'inherit'});
+  },
+
+  displaySelect2Choices: function(choicesIdsString, choicesTextsString, separator, elementId){
+    var choicesIds = choicesIdsString.split(separator);
+    var choicesTexts = choicesTextsString.split(separator);
+    var choicesArray = [];
+    var length = choicesIds.length;
+    for(var i = 0; i < length; i++) {
+      choicesArray.push({id: choicesIds[i], text: choicesTexts[i]})
+    }
+    var ans_div = jQuery("#" + elementId);
+    ans_div.select2({
+      allowClear: true,
+      placeholder: ans_div.data('placeholder'),
+      multiple: true,
+      tags: choicesArray,
+      createSearchChoice: false,
+      initSelection: function (element, callback) {
+         var data = [];
+         var newAnswerVal = [];
+         jQuery(ans_div.val().split(",")).each(function () {
+            var idIndex = choicesIds.indexOf(this.valueOf());
+            var id = choicesIds[idIndex];
+            var text = choicesTexts[idIndex];
+            if(idIndex > -1){
+              newAnswerVal.push(id);
+              data.push({id: id, text: text});
+            }
+        });
+        ans_div.val(newAnswerVal.join());
+        callback(data);
+      },
+      formatResult: function(result, container, query, escapeMarkup){
+        removeFastClickForSelect2(container);
+        return result.text;
+      }
+    });
+  },
+
+  toggleAndText: function(prefix_id){
+    var questionsSize = jQuery(".cjs_survey_report_filter_container").size();
+    if(prefix_id != questionsSize){
+      jQuery("#admin_view_survey_survey_questions_questions_" + prefix_id + "_question_container").find(".inline-block").show(); 
+    }
+  },
+
+  addOneMoreSurveyFilter: function(){
+    jQuery(document).on("click", "div.survey_filter a.cjs_add_one_more_link", function(event){
+      event.preventDefault();
+      var nameField = jQuery(this).data("prefix");
+      var idField = jQuery(this).attr("data-cloning-id");
+      var nameTypeField = jQuery(this).data("type");
+      var questionsOptions = jQuery(this).data("questions-options");
+      var url = jQuery(this).data("url");
+      jQuery(this).attr("data-cloning-id", parseInt(idField) + 1);
+      var controlBlock = jQuery(this).closest(".form-group");
+      var oldComponent = controlBlock.find("div.cjs_admin_views_container_box").last();
+      controlBlock.find("span.inline-block").last().show();
+      var newComponent = oldComponent.clone();
+      AdminViewsNewView.resetSurveyComponents(newComponent, nameField, idField, nameTypeField, questionsOptions, url);
+      oldComponent.closest("div.cjs_controls_enclosure").append(newComponent);
+    });
+  },
+
+  resetSurveyComponents: function(component, nameAttr, idAttr, nameType, questionsOptions, url){
+    var selectObj = component.find("select");
+    var labelObj = component.find("label");
+    var idAttrSurvey = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType, "survey_id");
+    var idAttrQuestion = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType, "question");
+    var idAttrOperator = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType, "operator");
+    var idAttrValue = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType, "value");
+    var idAttrChoices = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType,"choice");
+    var idAttrSurveyContainer = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType,"survey_container");
+    var idAttrQuestionContainer = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType,"question_container");
+
+    component.find("div.cjs_choices_hidden").remove();
+
+    
+    jQuery(selectObj[0]).attr({value: "", name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "survey_id"), id: idAttrQuestion, "data-url": url, "data-prefix-id": idAttr, "data-questions-size": idAttr});
+    jQuery(selectObj[1]).attr({value: [questionsOptions,""], name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "question"), id: idAttrQuestion, prompt: questionsOptions});
+    jQuery(selectObj[1]).find('[value!=""]').remove();
+    jQuery(selectObj[2]).attr({value: "", name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "operator"), id: idAttrOperator});
+    component.find(".cjs_input_hidden").val('').attr({name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "value"), id: idAttrValue});
+    component.find(".cjs_choices_hidden").val('').attr({name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "choice"), id: idAttrChoices});
+    component.find(".survey_container").attr({id: idAttrSurveyContainer});
+    component.find(".question_container").attr({id: idAttrQuestionContainer});
+
+    jQuery(labelObj[0]).prop({"for": idAttrSurvey});
+    jQuery(labelObj[1]).prop({"for": idAttrQuestion});
+    jQuery(labelObj[2]).prop({"for": idAttrOperator});
+    jQuery(labelObj[3]).prop({"for": idAttrValue});
+    jQuery(labelObj[4]).prop({"for": idAttrChoices});
+
+    component.find(".cjs_show_survey_input_field").closest(".cjs-survey-question-text-input-control").hide();
+    component.find(".cjs_input_hidden").show();
+    component.find(".cjs_input_hidden").closest(".cjs-survey-question-text-input-control").hide();
+    component.find("span.inline-block").hide();
+    component.find(".cjs_delete_profile_question").show();
+  },
+
+  handleMeetingRequestOperators: function(selectBoxObj){
+    if(AdminViewsNewView.customSelectBoxHasClass(selectBoxObj, "cjs_additional_range_text_box")){
+      AdminViewsNewView.showRangeBox(selectBoxObj);
+      AdminViewsNewView.hideValueBox(selectBoxObj);
+    }
+    else if(AdminViewsNewView.customSelectBoxHasClass(selectBoxObj, "cjs_additional_text_box")){
+      AdminViewsNewView.hideRangeBox(selectBoxObj);
+      AdminViewsNewView.showValueBox(selectBoxObj);
+    }
+    else{
+      AdminViewsNewView.hideRangeBox(selectBoxObj);
+      AdminViewsNewView.hideValueBox(selectBoxObj);
+    }
+  },
+
+  initializeCustomSelects: function(){
+    jQuery("select.cjs_timeline_questions").each(function(index, element){
+      AdminViewsNewView.enforceTimelineQuestionDependencies(jQuery(element));
+    });
+
+    jQuery("select.cjs_timeline_type").each(function(index, element){
+      AdminViewsNewView.enforceTimelineTypeDependencies(jQuery(element));
+    });
+
+    jQuery("select.cjs-profile-question-selector").each(function(index, element){
+      AdminViewsNewView.adjustUiForLocationTypeQuestion(jQuery(element), AdminViewsNewView.customSelectBoxHasClass(jQuery(element), "cjs-location-type-question"));
+      AdminViewsNewView.adjustUiForChoiceBasedQuestion(jQuery(element));
+
+      var options = {parentContainer: ".cjs_hidden_input_box_container", selectedQuestion: ".cjs-profile-question-selector", otherInputFields: ".cjs-profile-question-operator-control", hasInputGroup: false};
+      var closestParent = jQuery(element).closest(".cjs_hidden_input_box_container");
+      AdminViewsNewView.handleDateTypeQuestion(closestParent);
+      closestParent.find('.cjs_profile_question_date_operator').trigger('change');
+    });
+  },
+
+  neverOptionCloner: function(timelineTypeSelect) {
+    AdminViewsNewView.neverOptionClone = timelineTypeSelect.find("option[value=<%= AdminView::TimelineQuestions::Type::NEVER %>]").clone();
+  },
+
+  hasNeverOption: function(timelineTypeSelect) {
+    return (timelineTypeSelect.find("option[value=<%= AdminView::TimelineQuestions::Type::NEVER %>]").length > 0);
+  },
+
+  checkAndRemoveNeverOption: function(timelineTypeSelect) {
+    timelineTypeSelect.find("option[value=<%= AdminView::TimelineQuestions::Type::NEVER %>]").remove();
+  },
+
+  checkAndAddNeverOption: function(timelineTypeSelect) {
+    if(!AdminViewsNewView.hasNeverOption(timelineTypeSelect)) {
+      AdminViewsNewView.neverOptionClone.clone().appendTo(timelineTypeSelect);
+    }
+  },
+
+  timelineTextBoxUpdateVisibility: function(typeSelect) {
+    var typeSelectVal = typeSelect.val();
+    var inputGroup = typeSelect.closest("div.timeline_units_enclosure").find(".cjs_input_container");
+    var daysBox = typeSelect.closest("div.timeline_units_enclosure").find("span.cjs_timeline_days");
+    inputGroup.hide();
+    daysBox.hide();
+    if(typeSelectVal == "" || typeSelect.is(':hidden') || typeSelectVal == AdminViewsNewView.timelineTypeValue.neverVal) return;
+    if(typeSelectVal == AdminViewsNewView.timelineTypeValue.beforeVal || typeSelectVal == AdminViewsNewView.timelineTypeValue.afterVal) {
+      inputGroup.filter(".cjs_timeline_date_picker_container").show();
+    }
+    if(typeSelectVal == AdminViewsNewView.timelineTypeValue.dateRangeVal) {
+      inputGroup.filter(".cjs_timeline_date_range_picker_container").show();
+    }
+    if(AdminViewsNewView.timelineTypeValue.textValues.contains(typeSelectVal)) {
+      inputGroup.filter(".cjs_timeline_text").show();
+      daysBox.show();
+    }
+  },
+
+  timelineTextBoxUpdateValue: function(typeSelect) {
+    var typeSelectVal = typeSelect.val();
+    var inputText = typeSelect.closest("div.timeline_units_enclosure").find("input.cjs_timeline_text");
+    if(typeSelectVal == AdminViewsNewView.timelineTypeValue.neverVal) {
+      inputText.val(AdminViewsNewView.neverText);
+    }
+  },
+
+  enforceTimelineTypeDependencies: function(typeSelect) {
+    AdminViewsNewView.timelineTextBoxUpdateVisibility(typeSelect);
+    AdminViewsNewView.timelineTextBoxUpdateValue(typeSelect);
+  },
+
+  enforceTimelineQuestionDependencies: function(selectObj) {
+    var selectObjVal = selectObj.val();
+    var timelineTypeSelect = selectObj.closest("div.timeline_units_enclosure").find("select.cjs_timeline_type");
+    if(selectObjVal == "") {
+      timelineTypeSelect.hide();
+    } else if (selectObjVal == "<%= AdminView::TimelineQuestions::JOIN_DATE %>") {
+      timelineTypeSelect.show();
+      AdminViewsNewView.checkAndRemoveNeverOption(timelineTypeSelect);
+    } else {
+      timelineTypeSelect.show();
+      AdminViewsNewView.checkAndAddNeverOption(timelineTypeSelect);
+    }
+    AdminViewsNewView.enforceTimelineTypeDependencies(timelineTypeSelect);
+  },
+
+  removeQuestion: function(){
+    jQuery(document).on("click", ".cjs_delete_profile_question", function(){
+      var controlBlock = jQuery(this).closest(".form-group-sm");
+      jQuery(this).closest("div.cjs_admin_views_container_box").remove();
+      controlBlock.find("span.inline-block").last().hide();
+      AdminViewsNewView.disableSelectedOptionsOnLoad();
+    });
+  },
+
+  addOneMore: function(){
+    jQuery("div.filter a.cjs_add_one_more_link").click(function(event){
+      event.preventDefault();
+      var nameField = jQuery(this).data("prefix");
+      var idField = jQuery(this).data("id");
+      jQuery(this).data("id", parseInt(idField) + 1);
+      var nameTypeField = jQuery(this).data("type");
+      var controlBlock = jQuery(this).closest(".form-group");
+      var oldComponent = controlBlock.find("div.cjs_add_one_more_div").find("div.cjs_admin_views_container_box");
+      controlBlock.find("span.inline-block").last().show();
+      var newComponent = oldComponent.clone();
+      var controlGroupHasTimeline = controlBlock.find("div.false-label").hasClass('timeline');
+      var meetingRequestFilter = controlBlock.find(".cjs_meeting_requests_type");
+      var isProfileQuestionFilter = controlBlock.find(".cjs_show_profile_input_field").length > 0;
+      if(controlGroupHasTimeline){
+        AdminViewsNewView.resetTimelineComponents(newComponent, nameField, idField, nameTypeField);
+      } else {
+        AdminViewsNewView.resetComponents(newComponent, nameField, idField, nameTypeField, meetingRequestFilter.length, isProfileQuestionFilter);
+      }
+      oldComponent.closest("div.cjs_controls_enclosure").append(newComponent);
+      initialize.reInitializeDateRangePicker(newComponent);
+      initialize.reInitializeDatePicker(newComponent.find('.cjs_profile_question_single_date_value_field'));
+      if(meetingRequestFilter.length) {
+        AdminViewsNewView.disableSelectedMeetingRequestOptions(newComponent.find("select")[0]);
+      }
+      if(controlGroupHasTimeline){
+        newComponent.find("input").removeClass("cjs-date-picker-added");
+        AdminViewsNewView.initializeDatePicker();
+      }
+    });
+  },
+
+  replaceAttrNameto: function(obj, attribute, from, to) {
+    var str = obj.attr(attribute);
+    str = str.replace(from, to);
+    obj.attr(attribute, str);
+  },
+
+  replaceNameAndIdto: function(obj, from, to) {
+    AdminViewsNewView.replaceAttrNameto(obj, "id", from, to);
+    AdminViewsNewView.replaceAttrNameto(obj, "name", from, to);
+  },
+
+  replaceLabelForto: function(obj, from, to) {
+    AdminViewsNewView.replaceAttrNameto(obj, "for", from, to);
+  },
+
+  resetTimelineComponents: function(component, nameAttr, idAttr, nameType){
+    var selectObj = component.find("select");
+    var labelObj = component.find("label");
+    var from = '1';
+    selectObj.attr('value', '');
+    selectObj.each(function(index, element){
+      AdminViewsNewView.replaceNameAndIdto(jQuery(element), from, idAttr);
+    });
+    labelObj.each(function(index, element){
+      AdminViewsNewView.replaceLabelForto(jQuery(element), from, idAttr);
+    });
+    selectObj.eq(1).data('question-id', idAttr).hide();
+    var inputObj = component.find("input");
+    inputObj.attr('value', '');
+    inputObj.closest(".cjs_input_container").hide();
+    inputObj.each(function(index, element){
+      element = jQuery(element);
+      if(element.hasClass("cjs-date-picker-added")){
+        // Used 'attr' since 'data' will update rand-id only in cache and not in the DOM
+        rand_id = generateRandomIdForDatepicker();
+        element.attr("data-rand-id", "datepicker-" + rand_id);
+
+        if(element.hasClass("cjs_daterange_picker_start")){
+          idPrefix = "cjs_daterange_picker_start_";
+          newId = idPrefix + rand_id;
+          component.find("label[for^='" + idPrefix + "']").attr("for", newId);
+          element.attr("id", newId);
+        }
+
+        if(element.hasClass("cjs_daterange_picker_end")){
+          idPrefix = "cjs_daterange_picker_end_";
+          newId = idPrefix + rand_id;
+
+          component.find("label[for^='" + idPrefix + "']").attr("for", newId);
+          element.attr("id", newId);
+        }
+
+        // Resetting the range for the newly added daterange-picker inputs
+        element.data("min-date", "");
+        element.data("max-date", "");
+      }
+      if(!element.data("ignore")){
+        AdminViewsNewView.replaceNameAndIdto(element, from, idAttr);
+      }
+    });
+    component.find("span.inline-block").hide();
+    component.find(".cjs_delete_profile_question").show();
+  },
+
+  resetComponents: function(component, nameAttr, idAttr, nameType, isMeetingRequestFilter, isProfileQuestionFilter){
+    var selectObj = component.find("select");
+    var labelObj = component.find("label");
+    var idAttrQuestion = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType, "question");
+    var idAttrOperator = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType, "operator");
+    var idAttrScope    = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType, "scope");
+    var idAttrValue = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType, "value");
+    var idAttrChoices = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType, "choice");
+    var idAttrDateOperator = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType, "date_operator");
+    var idAttrDateValue = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType, "<%= ProfileQuestionsHelper::DATE_VALUE %>");
+    var idAttrSingleDateValue = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType, "single_date_value");
+    var idAttrNoOfDays = AdminViewsNewView.constructIdAttrs(nameAttr, idAttr, nameType, "<%= ProfileQuestionsHelper::NUMBER_OF_DAYS %>");
+    var idAttrContains = nameAttr.replace(/\[/g, "").replace(/\]/g, "_") + idAttr;
+
+    jQuery(selectObj[0]).attr({value: "", name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "question"), id: idAttrQuestion});
+    jQuery(selectObj[1]).attr({value: "", name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "operator"), id: idAttrOperator});
+    jQuery(selectObj[2]).attr({value: "<%= AdminView::LocationScope::COUNTRY %>", name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "scope"), id: idAttrScope});
+    component.find("input.cjs_input_hidden").val('').attr({name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "value"), id: idAttrValue});
+    component.find(".cjs_choices_hidden").val('').attr({name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "choice"), id: idAttrChoices});
+
+    component.find(".cjs_date_picker_for_profile_question").val('').attr({name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "<%= ProfileQuestionsHelper::DATE_VALUE %>"), id: idAttrDateValue});
+    component.find(".cjs_profile_question_date_operator").val('').attr({name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "date_operator"), id: idAttrDateOperator});
+    component.find(".cjs_profile_question_single_date_value_field").val('').attr({name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "single_date_value"), id: idAttrSingleDateValue});
+    var numberOfDaysField = component.find(".cjs_profile_question_number_of_days");
+    numberOfDaysField.val('').attr({name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "<%= ProfileQuestionsHelper::NUMBER_OF_DAYS %>"), id: idAttrNoOfDays});
+
+    jQuery(labelObj[0]).prop({"for": idAttrOperator});
+    jQuery(labelObj[1]).prop({"for": idAttrQuestion});
+    jQuery(labelObj[2]).prop({"for": idAttrScope});
+    jQuery(labelObj[3]).prop({"for": idAttrValue});
+    jQuery(labelObj[4]).prop({"for": idAttrChoices});
+    component.find('label[for=admin_view_profile_questions_questions_1_date_operator]').prop({"for": idAttrDateOperator});
+    component.find('label[for=admin_view_profile_questions_questions_1_date_value]').prop({"for": idAttrDateValue});
+    component.find('label[for=admin_view_profile_questions_questions_1_single_date_value]').prop({"for": idAttrSingleDateValue});
+    component.find('label[for=admin_view_profile_questions_questions_1_number_of_days]').prop({"for": idAttrNoOfDays});
+
+    if(isMeetingRequestFilter){
+      AdminViewsNewView.resetMeetingRequestComponents(component, nameAttr, idAttr, nameType, idAttrContains);
+    }
+    else if(isProfileQuestionFilter){
+      component.find(".select2-container").remove();
+      component.find("div.cjs_choices_hidden").remove();
+      component.find("input.cjs_input_hidden").show();
+      component.find("input.cjs_input_hidden").closest(".cjs-profile-question-text-input-control").hide();
+      component.find('.cjs_date_type_profile_question_container, .cjs_profile_question_date_components, .cjs_profile_question_number_of_days, .cjs_profile_question_single_date_value, .cjs_profile_question_date_range_value, .cjs_profile_question_number_of_days_text').hide();
+      component.find('.cjs-profile-question-operator-control').show();
+    }
+    else {
+      component.find("input").hide().val('').removeClass("cjs-date-picker-added").attr({
+        name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "value"),
+        id: idAttrContains
+      });
+      jQuery(labelObj[3]).prop({"for": idAttrContains});
+    }
+
+    component.find("span.inline-block").hide();
+    component.find(".cjs-range-connector").hide();
+    component.find(".cjs_delete_profile_question").show();
+    var profileQuestionSelectObj = selectObj.eq(0);
+    AdminViewsNewView.adjustUiForLocationTypeQuestion(profileQuestionSelectObj, AdminViewsNewView.customSelectBoxHasClass(profileQuestionSelectObj, "cjs-location-type-question"));
+  },
+
+  resetMeetingRequestComponents: function(component, nameAttr, idAttr, nameType, idAttrContains){
+    var inputObj = component.find("input");
+    var labelObj = component.find("label");
+    jQuery(inputObj[0]).attr({value: "", name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "value"), id: idAttrContains});
+    jQuery(labelObj[2]).prop({"for": idAttrContains});
+    jQuery(inputObj[1]).attr({value: "", name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "start_value"), id: idAttrContains + "_start_value"});
+    jQuery(labelObj[3]).prop({"for": idAttrContains + "_start_value"});
+    jQuery(inputObj[2]).attr({value: "", name: AdminViewsNewView.constructNameAttrs(nameAttr, idAttr, nameType, "end_value"), id: idAttrContains + "_end_value"});
+    jQuery(labelObj[4]).prop({"for": idAttrContains + "_end_value"});
+    inputObj.hide();
+    labelObj.hide();
+  },
+
+  disableSelectedMeetingRequestOptions: function(selectObj){
+    CustomizeProfileQuestions.disableSelectedOptions(selectObj, "select.cjs_meeting_requests_type");
+  },
+
+  constructNameAttrs: function(nameAttr, idAttr, nameType, suffix){
+    return ("admin_view" + nameAttr + "[" + nameType + "_" + idAttr + "][" + suffix + "]");
+  },
+
+  constructIdAttrs: function(nameAttr, idAttr, nameType, suffix){
+    nameAttr = nameAttr.replace(/\[/g, "_").replace(/\]/g, "_").replace(/\__/g, "_");
+    return ("admin_view" + nameAttr + nameType + "_" + idAttr + "_" + suffix);
+  },
+
+  invalidProfileAnswerFields: function(){
+    var parentDiv = jQuery(".cjs_controls_enclosure");
+    var profile_divs = parentDiv.find(".prof-ques-cont");
+    var returnVal = false;
+    for(var i = 1; i <= profile_divs.length; i++){
+      var question = jQuery("#admin_view_profile_questions_questions_" + i +"_question");
+      var operator = jQuery("#admin_view_profile_questions_questions_" + i +"_operator");
+      var val_element = 'admin_view[profile][questions][questions_'+i+'][value]';
+      var value = jQuery("input[name="+"'"+val_element+"'"+"]");
+      var choiceElement = 'admin_view[profile][questions][questions_'+i+'][choice]';
+      var choice = jQuery("input[name="+"'"+choiceElement+"'"+"]");
+      var choiceSelect2 = choice.closest(".cjs-profile-question-text-input-control").find(".select2-container.cjs_choices_hidden");
+      var isDateQuestion = question.find('option:selected').hasClass('cjs_date_question');
+      if(question.val() == ""){
+        ChronusValidator.ErrorManager.ShowFieldError(question);
+        returnVal = true;
+      }
+      else ChronusValidator.ErrorManager.HideFieldError(question);
+      if((operator.val() == "" || operator.val() == null) && !isDateQuestion){
+        ChronusValidator.ErrorManager.ShowFieldError(operator);
+        returnVal = true;
+      }
+      else ChronusValidator.ErrorManager.HideFieldError(operator);
+      if(value.is(":visible") && value.val() == ""){
+        ChronusValidator.ErrorManager.ShowFieldError(value);
+        returnVal = true;
+      }
+      else ChronusValidator.ErrorManager.HideFieldError(value);
+
+      if(choiceSelect2.is(":visible") && choice.val() == ""){
+        ChronusValidator.ErrorManager.ShowFieldError(choiceSelect2);
+        returnVal = true;
+      }
+      else ChronusValidator.ErrorManager.HideFieldError(choiceSelect2);
+    }
+    return returnVal;
+  },
+
+  validations: function(selectFieldMsg, titleDupMsg, profileAnsMsg, existing_views){
+    var titleObj = jQuery("#admin_view_title");
+    var multiSelectObj = jQuery("#cjs_admin_view_multiselect");
+    var dateObjs = jQuery(".cjs_admin_view_date");
+    var popupDiv = jQuery("#profile_questions_container");
+    var isValid = true;
+
+    dateObjs.each(function() {
+      if(!jQuery(this).val().blank()) {
+        isValid = isValid & DateValidator.validateProperDate(jQuery(this).attr('id'), 'cjs_admin_view_flash');
+      }
+    });
+    if(!isValid) return false;
+
+    if(titleObj.length > 0){
+      if(titleObj.val().blank()){
+        ChronusValidator.ErrorManager.ShowFieldError(titleObj);
+        jQueryScrollTo("#admin_view_title", false);
+        return false;
+      }
+      else if(jQuery.inArray(titleObj.val(), existing_views) != -1){
+        ChronusValidator.ErrorManager.ShowFieldError(titleObj);
+        AdminViewsNewView.addFlash(titleDupMsg);
+        return false;
+      }
+      else{
+        ChronusValidator.ErrorManager.HideFieldError(titleObj);
+      }
+    }
+
+    if(multiSelectObj.length && multiSelectObj.val() == null){
+      AdminViewsNewView.addFlash(selectFieldMsg);
+      return false;
+    }
+    else {
+      ChronusValidator.ErrorManager.ClearResponseFlash("cjs_admin_view_flash");
+    }
+
+    if(popupDiv.length > 0 && AdminViewsNewView.invalidProfileAnswerFields()){
+      return false;
+    }
+
+    lastConnectionType = jQuery("#cjs_last_connection_type").val();
+    if (lastConnectionType){
+      appropriateBox = jQuery('#' + jQuery("#cjs_last_connection_type").find(':selected').data('obj_name'));
+      if (appropriateBox.val().blank()){
+        if(appropriateBox.attr("id") == "cjs_last_connection_date_range"){
+          DateRangePicker.showErrors(appropriateBox);
+        }else{
+          ChronusValidator.ErrorManager.ShowFieldError(appropriateBox);
+        }
+        return false;
+      }
+      else{
+        if(appropriateBox.attr("id") == "cjs_last_connection_date_range"){
+          DateRangePicker.hideErrors(appropriateBox);
+        }else{
+          ChronusValidator.ErrorManager.HideFieldError(appropriateBox);
+        }
+        return true;
+      }
+    }
+    return true;
+  },
+
+  lastConnectionUpdateVisibility: function(){
+    jQuery('#cjs_last_connection_type').on('change',function() {
+      jQuery('.cjs_last_connection_enclosure').find(".cjs_input_container").each(function(){
+        ChronusValidator.ErrorManager.HideFieldError(jQuery(this).hide());
+      });
+      boxId = jQuery("#cjs_last_connection_type").find(':selected').data('obj_name');
+      appropriateBox = jQuery('#' + boxId + '_container').show();
+      if(boxId == "cjs_last_connection_days") {
+        jQuery('#cjs_last_connection_days_label').show();
+      }
+      else
+        jQuery('#cjs_last_connection_days_label').hide();
+    });
+  },
+
+  addFlash: function(message){
+    ChronusValidator.ErrorManager.ShowResponseFlash("cjs_admin_view_flash", message);
+    jQueryScrollTo("#cjs_admin_view_flash", false);
+  },
+
+  inspectNextButtons: function(){
+    jQuery(".cjs_slider_button").click(function(){
+      var nextButton = jQuery(this);
+      var hiddenStep = nextButton.closest("form").find(".cjs_admin_view_step:hidden:first")
+      nextButton.hide();
+      hiddenStep.slideDown(1000);
+      jQueryScrollTo(hiddenStep, false, 1500)
+    });
+  },
+
+  toggleAdditionalTextBox: function(selectBoxObj){
+    var additionalBoxObj = AdminViewsNewView.getAdditionalBox(selectBoxObj);
+    if(AdminViewsNewView.customSelectBoxHasClass(selectBoxObj, "cjs_additional_text_box")){
+      additionalBoxObj.show();
+    }
+    else{
+      additionalBoxObj.hide();
+    }
+  },
+
+  customSelectBoxHasClass: function(selectBoxObj, selectorClass){
+    return (selectBoxObj.find("option[value='" + selectBoxObj.val() + "']").hasClass(selectorClass));
+  },
+
+  getQuestionContainer: function(selectBoxObj) {
+    return selectBoxObj.closest("div.cjs_hidden_input_box_container");
+  },
+
+  getAdditionalBox: function(selectBoxObj){
+     return AdminViewsNewView.getQuestionContainer(selectBoxObj).find(".cjs_input_hidden");
+  },
+
+  getTimelineSelectBox: function(inputField){
+    return (inputField.closest("div").find("select.cjs_timeline_questions"));
+  },
+
+  disableSelectedOptionsOnLoad: function(){
+    jQuery(document).ready(function() {
+      jQuery("select.cjs_meeting_requests_type").each(function(index, value){
+        CustomizeProfileQuestions.disableSelectedOptions(value, "select.cjs_meeting_requests_type");
+      });
+    });
+  },
+
+  hideRangeBox: function(selectBoxObj){
+    selectBoxObj.closest("div.cjs_admin_views_container_box").find(".cjs_input_start_range").hide();
+    selectBoxObj.closest("div.cjs_admin_views_container_box").find(".cjs_input_end_range").hide();
+    selectBoxObj.closest("div.cjs_admin_views_container_box").find(".cjs-range-connector").hide();
+  },
+
+  showRangeBox: function(selectBoxObj){
+    selectBoxObj.closest("div.cjs_admin_views_container_box").find(".cjs_input_start_range").show();
+    selectBoxObj.closest("div.cjs_admin_views_container_box").find(".cjs_input_end_range").show();
+    selectBoxObj.closest("div.cjs_admin_views_container_box").find(".cjs-range-connector").show();
+  },
+
+  hideValueBox: function(selectBoxObj){
+    selectBoxObj.closest("div.cjs_admin_views_container_box").find(".cjs_input_hidden").hide();
+  },
+
+  showValueBox: function(selectBoxObj){
+    selectBoxObj.closest("div.cjs_admin_views_container_box").find(".cjs_input_hidden").show();
+  },
+
+  showRatingInputFields: function(){
+    var select_val = jQuery("select.cjs_show_rating_input_field").val();
+    jQuery('.cjs_rating_option').hide();
+    jQuery('.cjs_rating_' + select_val).show();
+  },
+
+  trackRoleChange: function(matchingMenteeAlone, matchingMenteeAdmin){
+    AdminViewsNewView.matchingMenteeAloneVal = matchingMenteeAlone;
+    AdminViewsNewView.matchingMenteeAdminVal = matchingMenteeAdmin;
+    jQuery(document).on("change", ".new_view_filter_roles", function() {
+      AdminViewsNewView.showHideFiltersBasedOnRoles(matchingMenteeAlone, matchingMenteeAdmin);
+    });
+  },
+
+  showHideFiltersBasedOnRoles: function(matchingMenteeAlone, matchingMenteeAdmin){
+    var selectedRole = "";
+    jQuery("select.new_view_filter_roles").each(function(index, element){
+      if(jQuery(element).closest("div.cjs-roles-filter-row").find(".cjs-roles-filter-type").val() == "include") {
+        var selectBoxvalue = jQuery(element).val();
+        if(selectBoxvalue) jQuery(selectBoxvalue).each(function(i, val){ selectedRole += ("," + val); });
+      }
+    });
+    var mentorIncluded = (jQuery.inArray("mentor" , selectedRole.split(",")) != -1);
+    var menteeIncluded = (jQuery.inArray("student", selectedRole.split(",")) != -1);
+
+    if(mentorIncluded && menteeIncluded){
+      jQuery(".cjs_mentor_mentee_applicable").show();
+      jQuery(".cjs_mentee_applicable").show();
+      jQuery(".cjs_mentor_applicable").show();
+      jQuery(".cjs_ongoing_mentoring_divider").show();
+    }
+    else if(mentorIncluded){
+      jQuery(".cjs_mentor_mentee_applicable").show();
+      jQuery(".cjs_mentee_applicable").hide();
+      jQuery(".cjs_mentor_applicable").show();
+
+      if(!matchingMenteeAlone){
+        jQuery(".cjs_ongoing_mentoring_divider").hide();
+      }
+    }
+    else if(menteeIncluded){
+      jQuery(".cjs_mentor_mentee_applicable").show();
+      jQuery(".cjs_mentee_applicable").show();
+      jQuery(".cjs_mentor_applicable").hide();
+
+      if(matchingMenteeAlone || matchingMenteeAdmin){
+        jQuery(".cjs_ongoing_mentoring_divider").show(); 
+      }
+    }
+    else{
+      jQuery(".cjs_mentor_mentee_applicable").hide();
+    }
+    AdminViewsNewView.updateConnectionStatusFilterElementsVisibility();
+  },
+
+  showHideAdvancedOptionsLink: function(){
+    jQuery(".cjs_requests_filter").on('change', function(){
+      var selectedOption = jQuery(this).val();
+      var advancedOptionLink = jQuery(this).parent().next().find(".cjs_advanced_option_link");
+      var advancedOptionLinkText = jQuery(this).parent().next().find(".cjs_advanced_option_link_text");
+      if(selectedOption == ""){
+        advancedOptionLink.addClass("hide");
+        advancedOptionLinkText.addClass("hide");
+      }
+      else{
+        advancedOptionLink.removeClass("hide");
+        advancedOptionLinkText.removeClass("hide");
+      }
+    });
+  },
+
+  initializeAdvancedOptionsLinks: function(){
+    var allRequestsFilter = jQuery(".cjs_requests_filter");
+    for(var i=0;i<allRequestsFilter.length;i++){
+      if(allRequestsFilter[i].value != ""){
+        jQuery("#"+allRequestsFilter[i].id).parent().next().find(".cjs_advanced_option_link").removeClass("hide");
+      }
+      else{
+        jQuery("#"+allRequestsFilter[i].id).parent().next().find(".cjs_advanced_option_link_text").addClass("hide");
+      }
+    }
+  },
+
+  trackRoleRequestType: function(){
+    jQuery(".cjs_advanced_option_link").on('click', function(){
+      AdminViewsNewView.currentAdvancedOptionRoleRequestType = jQuery(this).attr("id").split("_").slice(jQuery(this).attr("id").split("_").length - 3).join("_");
+      jQuery("#popup_advanced_options_for_"+AdminViewsNewView.currentAdvancedOptionRoleRequestType).modal('show');
+      
+    });
+  },
+
+  trackSelectedAdvancedOptionType: function(inLastText, daysText, afterText, beforeText, changeOptionText, advancedOptionText){
+    jQuery(".cjs_input_advanced_options").on('change', function(){
+      AdminViewsNewView.lastSelectedAdvancedOptionValue = jQuery(this).val();
+      AdminViewsNewView.lastSelectedAdvancedOptionValueForHiddenField = AdminViewsNewView.lastSelectedAdvancedOptionValue;
+      if(jQuery(this).hasClass("cjs-date-picker-added") && AdminViewsNewView.lastSelectedAdvancedOptionValue)
+        AdminViewsNewView.lastSelectedAdvancedOptionValueForHiddenField = kendo.toString(new Date(AdminViewsNewView.lastSelectedAdvancedOptionValue), datePickerTranslations.dateRangeFormat);
+      AdminViewsNewView.lastSelectedAdvancedOption = jQuery(this).closest(".cjs_show_hide_sub_selector").find(".cjs_advanced_options_radio_btn").attr("class");
+      AdminViewsNewView.getRequestDurationValue = jQuery(this).closest(".cjs_show_hide_sub_selector").find(".cjs_advanced_options_radio_btn").val();
+      AdminViewsNewView.updateAdvancedLinkText(inLastText, daysText, afterText, beforeText, changeOptionText, advancedOptionText);
+    });
+  },
+
+  updateAdvancedLinkText: function(inLastText, daysText, afterText, beforeText, changeOptionText, advancedOptionText){
+    var advancedOptionLinkDom = jQuery("#advanced_options_for_" + AdminViewsNewView.currentAdvancedOptionRoleRequestType);
+    var selectedOptionText = jQuery("#selected_option_text_for_" + AdminViewsNewView.currentAdvancedOptionRoleRequestType);
+    var hiddenFieldAdvancedOptions = jQuery("#hidden_advanced_options_for_" + AdminViewsNewView.currentAdvancedOptionRoleRequestType + "_" + AdminViewsNewView.getRequestDurationValue);
+    hiddenFieldAdvancedOptions.val(AdminViewsNewView.lastSelectedAdvancedOptionValueForHiddenField);
+    var hiddenFieldRequestDuration = jQuery("#hidden_advanced_options_for_" + AdminViewsNewView.currentAdvancedOptionRoleRequestType + "_request_duration");
+    hiddenFieldRequestDuration.val(AdminViewsNewView.getRequestDurationValue);
+    
+
+    if(jQuery.inArray("cjs_radio_last_days", AdminViewsNewView.lastSelectedAdvancedOption.split(" ")) != -1){
+      selectedOptionText.html(inLastText + AdminViewsNewView.lastSelectedAdvancedOptionValue + daysText);
+    }
+    else if(jQuery.inArray("cjs_radio_after", AdminViewsNewView.lastSelectedAdvancedOption.split(" ")) != -1){
+      selectedOptionText.html(afterText + AdminViewsNewView.lastSelectedAdvancedOptionValue);
+    }
+    else if(jQuery.inArray("cjs_radio_before", AdminViewsNewView.lastSelectedAdvancedOption.split(" ")) != -1){
+      selectedOptionText.html(beforeText + AdminViewsNewView.lastSelectedAdvancedOptionValue);
+    }
+    else if(jQuery.inArray("cjs_radio_ever", AdminViewsNewView.lastSelectedAdvancedOption.split(" ")) != -1){
+      selectedOptionText.html("");
+    }
+
+
+    if(jQuery.inArray("cjs_radio_ever", AdminViewsNewView.lastSelectedAdvancedOption.split(" ")) == -1){
+      advancedOptionLinkDom.html(changeOptionText);
+    }
+    else{
+      advancedOptionLinkDom.html(advancedOptionText); 
+    }
+  },
+
+  changeAdvancedOptionsLinkText: function(inLastText, daysText, afterText, beforeText, changeOptionText, advancedOptionText){
+    jQuery(".cjs_advanced_options_radio_btn").on('change', function(){
+      var inputField = jQuery("#" + jQuery(this).data("input-id-prefix") + AdminViewsNewView.currentAdvancedOptionRoleRequestType);
+
+      AdminViewsNewView.getRequestDurationValue = jQuery(this).val();
+      AdminViewsNewView.lastSelectedAdvancedOptionValue = inputField.val();
+      AdminViewsNewView.lastSelectedAdvancedOptionValueForHiddenField = AdminViewsNewView.lastSelectedAdvancedOptionValue;
+      if(inputField.hasClass("cjs-date-picker-added") && AdminViewsNewView.lastSelectedAdvancedOptionValue)
+        AdminViewsNewView.lastSelectedAdvancedOptionValueForHiddenField = kendo.toString(new Date(AdminViewsNewView.lastSelectedAdvancedOptionValue), datePickerTranslations.dateRangeFormat);
+      AdminViewsNewView.lastSelectedAdvancedOption = jQuery(this).attr("class");
+      AdminViewsNewView.updateAdvancedLinkText(inLastText, daysText, afterText, beforeText, changeOptionText, advancedOptionText);
+    });
+  },
+
+  captureSelectedOptionText: function(){
+    jQuery(".cjs_advanced_option_link").on('click', function(){
+      var selectedText = jQuery(this).siblings().find("option:selected").text();
+      AdminViewsNewView.selectedAdvancedOptionText = selectedText;
+      AdminViewsNewView.showSelectedOptioninPopup();
+    });
+  },
+
+  showSelectedOptioninPopup: function(){
+    jQuery(".cjs_selected_option_text").text(AdminViewsNewView.selectedAdvancedOptionText);
+  },
+
+  displaySurveyQuestions: function(){
+    jQuery(document).on("change", '.survey_selector', function(){
+      survey_ele = jQuery(this);
+      jQuery.ajax({
+        url: survey_ele.data("url"),
+        data: {survey_id: survey_ele.val(), prefix_id: survey_ele.data("prefix-id"), rows_size: survey_ele.data("rows-size")},
+        beforeSend: function(){
+          jQuery("#loading_results").show();
+        }
+      });
+    });
+  }
+}

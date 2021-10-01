@@ -1,0 +1,20 @@
+<% url = for_new ? three_sixty_survey_assessee_reviewers_path(survey, survey_assessee, :format => :js) : three_sixty_survey_assessee_reviewer_path(survey, survey_assessee, survey_reviewer, :format => :js) %>
+<%= simple_form_for survey_reviewer, url: url, remote: true, html: { class: "cui_three_sixty_inline_question", id: nil} do |f| %>
+  <div class="clearfix">
+    <div class="col-sm-3">
+      <%= content_tag(:label, "name", :for => "three_sixty_review_name_#{survey_assessee.id}_#{survey_reviewer.id}", class: "sr-only") %>
+      <%= f.input(:name, :as => :string, :input_html => {:id => "three_sixty_review_name_#{survey_assessee.id}_#{survey_reviewer.id}", :class => "input-sm form-control", :placeholder => "feature.three_sixty.reviewer.placeholder.name".translate}, :label => false) %>
+    </div>
+    <div class="col-sm-3">
+      <%= content_tag(:label, "email", :for => "three_sixty_review_email_#{survey_assessee.id}_#{survey_reviewer.id}", class: "sr-only") %>
+      <%= f.input(:email, :as => :string, :input_html => {:id => "three_sixty_review_email_#{survey_assessee.id}_#{survey_reviewer.id}", :class => "input-sm form-control", :placeholder => "feature.three_sixty.reviewer.placeholder.email".translate}, :label => false) %>
+    </div>
+    <div class="col-sm-3">
+      <%= content_tag(:label, "reviewer group", :for => "three_sixty_review_reviewer_group_#{survey_assessee.id}_#{survey_reviewer.id}", class: "sr-only") %>
+      <%= f.input(:three_sixty_survey_reviewer_group_id, :collection => [["common_text.prompt_text.Select".translate, nil]] + three_sixty_survey_reviewer_group_options(survey_reviewer_groups), :selected => survey_reviewer.three_sixty_survey_reviewer_group_id, :input_html => { :class => 'input-sm form-control', :id => "three_sixty_review_reviewer_group_#{survey_assessee.id}_#{survey_reviewer.id}"}, :label => false) %>
+    </div>
+    <div class="pull-right">
+      <%= f.button :submit, for_new ? "display_string.Add".translate : "display_string.Save".translate, :id => '', :class => "btn-sm" %>
+    </div>
+  </div>
+<% end %>

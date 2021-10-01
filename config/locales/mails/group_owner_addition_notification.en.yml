@@ -1,0 +1,16 @@
+en:
+  email_translations:
+    group_owner_addition_notification:
+      title_v2: "%{_Mentoring_Connection} new owner notification to the user added as owner"
+      description_v2: This email is sent to a participant when they are added as %{_a_Mentoring_Connection} owner.
+      subject_v1: You are now an owner of {{group_name}}
+      content_v1_html: Congratulations! We've added you as an owner to the {{customized_mentoring_connection_term}}, {{group_name}}. <br/>{{mentoring_connection_button}}
+      button_text: Visit the %{mentoring_connection}
+      tags:
+        url_mentoring_connection:
+          description_v1: Url of the %{_mentoring_connection}
+        group_name:
+          description: Name of the mentoring area
+          example: Smith and Doe
+        mentoring_connection_button:
+          description_v1: Visit %{_Mentoring_Connection} Button

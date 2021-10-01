@@ -1,0 +1,28 @@
+<%= ibox "feature.profile.header.personal_notes".translate, :show_collapse_link => true do %>
+  <% if @profile_user.admin_notes.blank? %>
+    <div class="text-center text-muted clearfix" id="admin_note">
+      <%= "feature.profile.content.personal_notes_describe".translate(name: @profile_user.name) %>
+      <%= link_to_function (get_icon_content("fa fa-plus-circle") + "feature.profile.actions.add_personal_note".translate), "jQuery('#edit_note_form').fadeIn(); jQuery('#add_note').hide(); jQuery('#admin_note').hide()", :class => 'strong clearfix text-center', :id => 'add_note'  %>
+    </div>
+  <% else %>
+    <div id="admin_note" class="animated fadeInDown">
+      <blockquote class="m-sm h5 font-noraml">
+        <%= chronus_auto_link(@profile_user.admin_notes) %>
+      </blockquote>
+      <div class="b-t p-t-sm text-center">
+        <%= link_to_function append_text_to_icon("fa fa-pencil", "display_string.Edit".translate), "jQuery('#edit_note_form').show(); jQuery('#admin_note').hide()", id: 'edit_admin_note_link', style: "display: #{@profile_user.admin_notes.blank? ? 'none' : ''}", class: "font-bold" %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= simple_form_for @profile_member, :remote => true, :html => {:id => 'edit_note_form', class: "animated fadeInDown", :style => 'display:none;'} do |user_form| %>
+    <%= simple_fields_for @profile_user do |f| %>
+      <% default_value = "feature.profile.content.personal_notes_hint".translate(name: @profile_member.name) %>
+      <div class="clearfix">
+        <%= f.input :admin_notes, :as => :text, :placeholder => default_value, :label_html => {:class => 'sr-only'}, :input_html => {:class => "form-control", :rows => 6} %>
+      </div>
+      <%= f.button :submit, "display_string.Save".translate, :class => "pull-right btn btn-sm btn-primary m-l-xs" %>
+      <%= link_to_function "display_string.Cancel".translate, "jQuery('#edit_note_form').hide(); jQuery('#admin_note').show(); jQuery('#add_note').show();", :class => 'btn btn-white pull-right btn-sm m-l-xs' %>
+    <% end %>
+  <% end %>
+<% end %>

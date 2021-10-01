@@ -1,0 +1,9 @@
+<div id="role_description_block_<%=role.name%>" class = "has-below-2">
+  <% role_name_term_mapping = RoleConstants.program_roles_mapping(@current_program, roles: [role]) %>
+  <% role_description, role_description_edit = get_role_description_and_edit_options(@current_organization, role, role_name_term_mapping[role.name]) %>
+  <%= role_description_edit.html_safe %>
+</div>
+<div id="role_description_edit_block_<%=role.name%>" class = "hide has-below-4">
+  <%= content_tag(:label, "program[role_description][#{role.name}]_label" ,:for => "program_role_description_#{role.name}", :class => "sr-only") %>
+  <%= text_area_tag "program[role_description][#{role.name}]", role_description, :rows => 4, :class => "col-md-6" %>
+</div>

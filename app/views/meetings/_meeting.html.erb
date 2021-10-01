@@ -1,0 +1,55 @@
+<% current_occurrence_time = meeting[:current_occurrence_time] %>
+<% meeting_id = get_meeting_html_id(meeting) %>
+<% meeting = meeting[:meeting] %>
+<% show_recurring_options = meeting.recurrent? %>
+<% group = meeting.group %>
+<% show_actions = true %>
+
+<% meeting_header = h(meeting.topic) + (meeting.recurrent? ? get_icon_content("m-l-xs fa fa-retweet", data: { toggle: "tooltip", title: get_recurrent_meeting_icon_tooltip_text(meeting) } ) : "") %>
+<% meeting_sub_header = get_meeting_creation_date_text(meeting) %>
+<% attending_buttons = content_tag(:div, (render partial: "meetings/fetch_response_buttons", locals: { meeting: meeting, wob_member: wob_member, current_occurrence_time: current_occurrence_time, group: group, show_actions: show_actions, is_admin_view: @is_admin_view, src: local_assigns[:rsvp_src], outside_group: @outside_group, from_connection_home_page_widget: from_connection_home_page_widget } ), class: "cjs_response_buttons col-lg-4 col-md-5 #{"hide" if meeting.archived?(current_occurrence_time) || (group.present? && !group.active?)}") %>
+
+<% meeting_data_and_time_pane_content = render(partial: "meetings/meeting_data_and_time_pane", locals: { meeting: meeting, group_admin_view: group_admin_view, current_occurrence_time: current_occurrence_time, show_actions: show_actions, meeting_id: meeting_id, meeting_messages: local_assigns[:meeting_messages], meeting_notes: local_assigns[:meeting_notes], from_connection_home_page_widget: from_connection_home_page_widget } ) %>
+<% meeting_feedback_content = render(partial: "meetings/meeting_feedback", locals: { meeting: meeting, group_admin_view: group_admin_view, current_occurrence_time: current_occurrence_time, survey_src: survey_src } ) %>
+
+<%= render partial: "meetings/rsvp_popup", locals: { meeting: meeting, current_occurrence_time: current_occurrence_time } %>
+<div id="<%= meeting_id %>">
+  <% source = from_connection_home_page_widget ? EngagementIndex::Src::AccessMentoringArea::HOME_PAGE_TITLE : local_assigns[:src] %>
+  <%= get_meeting_dropdown_edit_delete(meeting, meeting_id, current_occurrence_time, show_recurring_options, group, ei_src: ei_src, from_popup: local_assigns[:from_popup], outside_group: @outside_group, from_connection_home_page_widget: from_connection_home_page_widget) unless group_admin_view %>
+  <%= meeting_content meeting_header: meeting_header, meeting_sub_header: meeting_sub_header, attending_buttons: attending_buttons, meeting_total_header_class: "col-lg-7 col-md-6 p-l-0 p-r-0 m-r-0 col-xs-10", meeting: meeting, current_occurrence_time: current_occurrence_time, show_meeting_hyperlink: true, src: source %>
+
+  <% if local_assigns[:send_message_allowed] %>
+    <% send_meeting_message_content = 
+      content_tag(:div, class: "m-b-md table-bordered p-xxs white-bg no-border-radius col-xs-12 col-md-12") do %>
+        <%= content_tag(:div, "feature.meetings.content.meeting_widget_message_placeholder".translate, class: "text-muted small m-t-xs col-xs-12 col-md-10") %>
+        <%= content_tag(:span, get_icon_content("fa fa-paper-plane-o m-r-0"), class: "pull-right btn btn-xs btn-warning") %>
+        <%= content_tag(:div, get_icon_content("fa fa-paperclip"), class: "pull-right m-t-xxs m-r-xxs text-default") %>
+    <% end %> 
+    
+    <%= link_to(send_meeting_message_content, "javascript:void(0)", class: "cjs-new-scrap-link-#{meeting.id}") %>
+    <%= render partial: 'groups/new_ajax_scrap_form', locals: { new_scrap: meeting.scraps.new, home_page: true } %>
+  <% end %>
+
+  <div class="<%= hidden_on_mobile %> clearfix">
+    <div class="row">
+      <div class="col-lg-7 col-md-6 p-r-0 b-r m-r-n-xxs">
+        <%= render(partial: "meetings/meeting_details", locals: { meeting: meeting, current_occurrence_time: current_occurrence_time, show_actions: show_actions } ) %>
+      </div>
+      <div class="col-lg-4 col-md-5 clearfix p-t-xxs b-l">
+        <%= meeting_data_and_time_pane_content %>
+        <%= meeting_feedback_content %>
+      </div>
+    </div>
+  </div>
+  <div class="<%= hidden_on_web %> clearfix">
+    <%= render(partial: "meetings/meeting_details", locals: { meeting: meeting, current_occurrence_time: current_occurrence_time, show_actions: show_actions } ) %>
+    <div class="clearfix p-t-sm">
+      <%= meeting_data_and_time_pane_content %>
+      <%= meeting_feedback_content %>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  MeetingForm.setMeetingTimePopup(".cjs_set_meeting_time_<%=meeting_id%>", "<%= meeting_id %>", "<%= edit_meeting_path(meeting, current_occurrence_time: current_occurrence_time, show_recurring_options: show_recurring_options, outside_group: @outside_group, set_meeting_time: true, ei_src: ei_src) %>");
+<% end %>

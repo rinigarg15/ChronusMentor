@@ -1,0 +1,29 @@
+<% profile_user = current_user %>
+<% image = profile_score.image.zero? %>
+
+<div class="cjs_profile_status_box_body">
+  <% visible_questions_count = image ? 3 : 4 %>
+  <% visible_questions, hidden_questions = @unanswered_questions[0..visible_questions_count], @unanswered_questions[(visible_questions_count + 1)..-1] %>
+  <ul class="list-group cjs_visible_answers">
+      <%= unanswered_question_in_sidebar(nil, current_user, url: edit_member_profile_picture_path(profile_user.member, src: "profile_c"), home_page: home_page, image: image) if image %>
+      <% visible_questions.each do |question|%>
+        <%= unanswered_question_in_sidebar(question, current_user, url: edit_member_path(profile_user.member, src: "profile_c", prof_c: true, scroll_to: "question_#{question.id}", ei_src: EngagementIndex::Src::EditProfile::SIDEBAR_COMPLETE_PROFILE), home_page: home_page) %>
+      <% end %>
+  </ul>
+  <% if hidden_questions.present? %>
+    <ul class="list-group hide cjs_hidden_answers b-t">
+      <% hidden_questions.each do |question|%>
+        <%= unanswered_question_in_sidebar(question, current_user, url: edit_member_path(profile_user.member, src: "profile_c", prof_c: true, scroll_to: "question_#{question.id}", ei_src: EngagementIndex::Src::EditProfile::SIDEBAR_COMPLETE_PROFILE), home_page: home_page) %>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <div class='p-b-sm p-t-xs b-t'>
+    <div class='text-right clearfix'>
+      <% if hidden_questions.present? %>
+        <%= link_to 'display_string.show_more_down_html'.translate(down_arrow: "").capitalize, "javascript:void(0)", class: 'font-600 cjs_see_hidden_answers' %>
+        <%= link_to 'display_string.show_less_up_html'.translate(down_arrow: "").capitalize, "javascript:void(0)", class: 'font-600 cjs_see_less_answers p-t-m', style: "display: none" %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<% connection_question = question %>
+<% title = connection_question.question_text%>
+<% options ||= { id: "q_#{connection_question.id}" } %>
+<% options.merge!(get_profile_filter_wrapper_for_groups(title, is_reports_view))%>
+<% selected_values = group_params[:connection_questions].try(:[], "#{connection_question.id}") %>
+<% input_group_class_options = is_reports_view ? {input_group_class: "col-xs-12"} : {} %>
+
+<% profile_filter_wrapper title, selected_values.blank?, false, false, options do %>
+  <% if connection_question.select_type? %>
+    <div class="choices_wrapper">
+      <div class="m-b-xs font-bold">
+        <%= render_select_all_clear_all("GroupSearch.selectAllChoices('#{connection_question.id}')", "GroupSearch.deSelectAllChoices('#{connection_question.id}')", clear_all_options: { id: "reset_filter_connection_question_#{connection_question.id}" }) %>
+      </div>
+      <% choices = connection_question.values_and_choices %>
+      <% html_options = (choices.size > Group::DEFAULT_VISIBLE_CHOICES) ? { data: { slim_scroll: true } } : {} %>
+      <%= content_tag(:div, html_options) do %>
+        <%= get_formatted_choices_for_connection_question(choices, connection_question.id, selected_values) %>
+      <% end %>
+    </div>
+  <% else %>
+    <%= construct_input_group({}, groups_filter_input_group_submit_options(get_input_group_options(is_reports_view)), input_group_class_options) do %>
+      <%= label_tag "connection_questions[#{connection_question.id}]", title, class: 'sr-only', for: "connection_questions_#{connection_question.id}" %>
+      <%= text_field_tag "connection_questions[#{connection_question.id}]", selected_values, class: "form-control input-sm", placeholder: "feature.reports.content.start_typing".translate %>
+      <%= link_to_function("display_string.Clear".translate, "jQuery('#connection_questions_#{connection_question.id}').val('');GroupSearch.applyFilters();", id: "reset_filter_connection_question_#{connection_question.id}", class: 'btn btn-xs clear_filter hide') %>
+    <% end %>
+  <% end %>
+<% end %>

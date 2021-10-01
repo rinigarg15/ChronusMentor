@@ -1,0 +1,17 @@
+<% modal_container "feature.profile.header.suspend_membership".translate(name: member.name), modal_id: "modal_suspend_membership_link" do %>
+  <%= form_tag update_state_member_path(member), method: :patch, id: "suspend_member_form" do %>
+    <%= control_group do %>
+      <%= label_tag :state_change_reason, set_required_field_label("display_string.Reason".translate), class: 'control-label' %>
+      <%= controls do %>
+        <%= text_area_tag :state_change_reason, nil, rows: 3, class: "form-control" %>
+      <% end %>
+    <% end %>
+    <%= hidden_field_tag :new_state, Member::Status::SUSPENDED %>
+    <%= get_note_for_suspension(@current_organization) %>
+    <%= horizontal_line %>
+    <% action_set class: "pull-right" do %>
+      <%= link_to_function "display_string.Cancel".translate, "ReasonForReject.clear('state_change_reason')", class: 'btn btn-white', "data-dismiss" => "modal" %>
+      <%= submit_tag "display_string.Suspend".translate, class: 'btn btn-primary', onclick: "return ReasonForReject.validate('state_change_reason')",  data: { disable_with: "display_string.Please_Wait".translate } %>
+    <% end %>
+  <% end %>
+<% end %>

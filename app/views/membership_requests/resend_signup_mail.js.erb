@@ -1,0 +1,6 @@
+<% if @is_valid %>
+  flashMsg = "<%= 'flash_message.membership.resend_email_with_instructions'.translate(program: _program) %>";
+  ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", flashMsg, true);
+<% else %>
+  window.location.href = '<%= program_root_path %>';
+<% end %>

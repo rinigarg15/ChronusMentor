@@ -1,0 +1,65 @@
+development: 
+  host: 'localhost'
+  port: '6379'
+  user: ''
+  password: <%= ENV['REDIS_PASSWORD'] %>
+  namespace_suffix: <%= Rails.env %>
+
+test: &test
+  host: 'localhost'
+  port: '6379'
+  user: ''
+  password: <%= ENV['REDIS_PASSWORD'] %>
+  namespace_suffix: <%= Rails.env + ENV['TEST_ENV_NUMBER'].to_s %>
+
+cucumber:
+  <<: *test
+
+common: &common
+  port: '14630'
+  user: 'chronus_platform_prod'
+  password: <%= ENV['REDIS_PASSWORD'] %>
+  namespace_suffix: <%= Rails.env %>
+  host: 'pub-redis-14630.us-east-1-2.1.ec2.garantiadata.com'
+
+production: &production_settings
+  <<: *common
+
+staging: &staging_settings
+  <<: *common
+
+standby:
+  <<: *common
+
+performance:
+  <<: *common
+
+productioneu:
+  <<: *common
+
+generalelectric:
+  <<: *common
+
+veteransadmin:
+  <<: *common
+
+nch:
+  <<: *common
+
+demo:
+  <<: *common
+
+opstesting:
+  <<: *common
+
+scanner:
+  <<: *common
+
+training:
+  <<: *common
+
+releasestaging1:
+  <<: *common
+
+releasestaging2:
+  <<: *common

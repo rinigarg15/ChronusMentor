@@ -1,0 +1,599 @@
+var CustomizeProfileQuestions = {
+  stringType: "<%= ProfileQuestion::Type::STRING %>",
+  multyStringType: "<%= ProfileQuestion::Type::MULTI_STRING %>",
+  fileType: "<%= ProfileQuestion::Type::FILE %>",
+  skypeType: "<%= ProfileQuestion::Type::SKYPE_ID %>",
+  emailType: "<%= ProfileQuestion::Type::EMAIL %>",
+  nameType: "<%= ProfileQuestion::Type::NAME %>",
+  multiChoiceOptionsLimit: <%= MUTLI_CHOICE_TYPE_OPTIONS_LIMIT %>,
+  placeholderQuestionChoices: "<%= 'feature.profile_question.choices.label.question_choice_placeholder'.translate %>",
+
+  fieldTypeOnChangeHandler: function(selectElement, section_id, q_id, allowHandlerArray, newQuestion, noConfirmation){
+    chronusConfirm(jsProfileQuestionTranslation.changingFieldTypeConfirmText, function() {
+        CustomizeProfileQuestions.fieldTypeChangeHandler(selectElement, section_id, q_id, allowHandlerArray, newQuestion);
+        CustomizeProfileQuestions.showOrHideMultipleFieldTooltip(jQuery(selectElement).val());
+        ProfileConfigUI.adjustUiCommon();
+      }, function(){
+        jQuery(selectElement).val(jQuery(selectElement).data("originalType"));
+        CustomizeProfileQuestions.fieldTypeChangeHandler(selectElement, section_id, q_id, allowHandlerArray, newQuestion);
+        CustomizeProfileQuestions.showOrHideMultipleFieldTooltip(jQuery(selectElement).val());
+        return false;
+      }, jsCommonTranslations.popup.yes, jsCommonTranslations.popup.no, noConfirmation);
+  },
+  
+  fieldTypeChangeHandler: function(selectElement, section_id, q_id, allowHandlerArray, newQuestion){
+    CustomizeProfileQuestions.checkMultipeChoice(selectElement, q_id);
+    CustomizeProfileQuestions.checkTextOnly(selectElement);
+    CustomizeProfileQuestions.checkRoleQuestionFilterable(q_id);
+    CustomizeProfileQuestions.changeAllowHandler(selectElement, allowHandlerArray);
+    if(newQuestion){
+      CustomizeProfileQuestions.addDescription(selectElement, q_id, section_id);
+    }
+  },
+
+  showOrHideMultipleFieldTooltip: function(questionType){
+    jQuery(".cjs_multi_tooltip").hide();
+    jQuery("[data-question-type=" + questionType + "]").show();
+  },
+
+  showImportActionModal: function(){
+    jQuery(".cjs_import_profile_questions").on("click", function(){
+      jQuery("#profile_questions_import_modal").modal("show");
+    });
+  },
+
+  checkTextOnly: function(selectElement){
+    var checkBox = jQuery(selectElement).closest("div.controls").find(".cjs_text_only_checkbox");
+    var checkBoxEnclosure = checkBox.parent();
+    if([CustomizeProfileQuestions.stringType, CustomizeProfileQuestions.multyStringType].indexOf(jQuery(selectElement).val()) != -1){
+      checkBox.prop({"disabled": false});
+      checkBoxEnclosure.show();
+    }
+    else{
+      checkBox.prop({"disabled": true});
+      checkBoxEnclosure.hide();
+    }
+  },
+
+  changeAllowHandler: function(selectElement, allowableArray){
+    var checkBox = jQuery(selectElement).closest("div.controls").find(".allow_multiple_checkbox");
+    var checkBoxEnclosure = checkBox.parent();
+    if(jQuery.inArray(parseInt(selectElement.value), allowableArray) != -1){
+      checkBox.prop({"disabled": false});
+      checkBoxEnclosure.show();
+      checkBoxEnclosure.find(".allow_tooltip").addClass("hide");
+      checkBoxEnclosure.find(".allow_tooltip_" + selectElement.value).removeClass("hide");
+    }
+    else{
+      checkBox.prop({"disabled": true});
+      checkBoxEnclosure.hide();
+    }
+  },
+
+  updateRoleQuestion: function(questionId){
+    jQuery("form#edit_profile_question_" + questionId + " input[type='submit']").on("click", function(event){
+      event.preventDefault();
+      var form = jQuery("form#edit_profile_question_" + questionId);
+      var destroyRoleQuestion = (form.find(".cjs_profile_question_role:checked").length <= 0);
+      var matchConfigQuestionsUnchecked = (form.find("input[data-has_match_config='true'].cjs_profile_question_role:not(:checked)").length > 0);
+      var confirmationMessage = "";
+
+      if(matchConfigQuestionsUnchecked)
+        confirmationMessage = jsProfileQuestionTranslation.tiedToMatchConfigsConfirm;
+      else if(destroyRoleQuestion)
+        confirmationMessage = jsProfileQuestionTranslation.removeProgramConfirm;
+
+      if(confirmationMessage.length)
+        chronusConfirm(confirmationMessage, function() { form.submit(); }, function() { return false; } );
+      else
+        form.submit();
+    });
+  },
+
+  isQuestionChoiceUpdated: function(questionId, questionChoicesElement, allowOtherOptionEnabled) {
+    var newChoiceFound = false;
+    var initialQuestionChoices = CustomizeQuestionChoices.initialQuestionChoices[questionId];
+    questionChoicesElement.find("li").each(function(){
+      existingText = initialQuestionChoices[parseInt(jQuery(this).data('choiceId'))];
+      newChoiceFound = newChoiceFound || (existingText !== jQuery(this).find("input[type=text]").val());
+    })
+    newChoiceFound = newChoiceFound || (Object.keys(initialQuestionChoices).length !== questionChoicesElement.find("li").length);
+    return !isObjectEmpty(initialQuestionChoices) && !allowOtherOptionEnabled && questionChoicesElement.is(":visible") && newChoiceFound
+  },
+
+  updateProfileQuestion: function(questionId, sectionId, confirmTexts, options){
+    options = getDefaultVal(options, {});
+    var formId = options.formId ? options.formId : ("edit_profile_question_" + questionId);
+    jQuery("form#" + formId + " input[type='submit']").on("click", function(event){
+      event.preventDefault();
+      CustomizeProfileQuestions.submitForm(questionId, sectionId, confirmTexts, formId, options);
+    });
+  },
+
+  submitForm: function(questionId, sectionId, confirmTexts, formId, options){
+    options = getDefaultVal(options, {});
+    var form = jQuery("form#" + formId);
+    var questionChoicesElement = form.find("#profile_question_choices_list_" + questionId);
+    var allowOtherOptionElement = form.find("profile_question[allow_other_option]");
+    var allowOtherOptionEnabled = allowOtherOptionElement.is(":visible") && allowOtherOptionElement.is(":checked");
+    var questionChoiceUpdated = CustomizeProfileQuestions.isQuestionChoiceUpdated(questionId, questionChoicesElement, allowOtherOptionEnabled)
+    var tiedToMatchConfigs = (form.find("input[data-has_match_config='true'].cjs_profile_question_role").length > 0);
+    var destroyRoleQuestion = ProfileConfigUI.programLevel ? (form.find(".cjs_profile_question_role:visible:checked").length <= 0) : false;
+    var matchConfigQuestionsUnchecked = (form.find("input[data-has_match_config='true'].cjs_profile_question_role:not(:checked)").length > 0);
+    var confirmationMessageSkeleton = jQuery("#cjs-question-update-confirmation-template");
+    var confirmationMessage = "";
+
+    if(questionId != 0){
+      if(!ProfileConfigUI.programLevel) {
+        if(confirmTexts.dependencyConfirmation.length)
+          confirmationMessage += confirmTexts.dependencyConfirmation;
+        if(tiedToMatchConfigs && (matchConfigQuestionsUnchecked || questionChoiceUpdated))
+          confirmationMessage += confirmTexts.matchingConfirmation;
+        if(questionChoiceUpdated)
+          confirmationMessage += confirmTexts.choicesUpdatedConfirmation;
+      }
+      else if(options.programRoleListing){
+        if(matchConfigQuestionsUnchecked)
+          confirmationMessage += jsProfileQuestionTranslation.tiedToMatchConfigsConfirm;
+        else if(destroyRoleQuestion)
+          confirmationMessage += jsProfileQuestionTranslation.removeProgramConfirm;
+      }
+    }
+
+    if(confirmationMessage.length){
+      if(!ProfileConfigUI.programLevel) {
+        confirmationMessageSkeleton.find(".cjs-update-delete-confirmation-list").html(confirmationMessage);
+        confirmationMessage = confirmationMessageSkeleton.html();
+        confirmationMessageSkeleton.find(".cjs-update-delete-confirmation-list").html("");
+      }
+      chronusConfirm(confirmationMessage, function() { if (!options.skip_ck_editor){ CustomizeProfileQuestions.loadProfileQuestionDescription(questionId, sectionId); } if(options.currentElement) { jQuery(options.currentElement).data('original_value', jQuery(options.currentElement).is(':checked')); } form.submit(); }, function() { if(options.currentElement) { jQuery(options.currentElement).click(); }; jQuery("#loading_results").hide(); return false; },
+        jsCommonTranslations.popup.yes, jsCommonTranslations.popup.no);
+    } 
+    else {
+      if (!options.skip_ck_editor){
+        CustomizeProfileQuestions.loadProfileQuestionDescription(questionId, sectionId);
+      }
+      if(options.currentElement) { 
+        jQuery(options.currentElement).data('original_value', jQuery(options.currentElement).is(':checked'));
+      }
+      form.submit();
+    }
+  },
+
+  deleteQuestion: function(questionId, confirmMessage){
+    jQuery("#cjs-delete-question-link-" + questionId).on("click", function(event){
+      var url = jQuery(this).data("url");
+      var modalElement = jQuery("#profile_question_deletion_confirmation_modal");
+      modalElement.find('.cjs-delete-question-confirmation-message').html(confirmMessage);
+      modalElement.find('.cjs-delete-question-confirm-button').unbind('click').on("click", function(){
+        jQuery.ajax({
+          url: url,
+          beforeSend: function(){
+            jQuery("#loading_results").show();
+          },
+          method: 'DELETE'
+        });
+      });
+      modalElement.modal('show');
+      event.stopPropagation();
+    });
+  },
+
+  cancelQuestion: function(id, secId, isNew){
+    if(isNew == "true"){
+      jQuery('#profile_question_'+ secId +'_new').remove();
+      jQuery('#add_new_profile_question').show();
+      jQuery('#add_new_question_' + secId).show()
+    }else{
+      jQuery('.cjs_profile_question_'+id).click();
+    }
+  },
+
+  cancelRoleQuestion: function(id){
+    jQuery('#profile_question_value_'+id).toggle();
+    jQuery('#edit_profile_question_'+id).remove();
+  },
+
+  checkMultipeChoice : function(element, id){
+      element = jQuery(element)
+      var value = element.val()
+      if ((value == "2")||(value == "3")||(value == "4")||(value == "7") || (value == "15")) {
+          jQuery("#choices_"+id).show();
+      } else {
+          jQuery("#choices_"+id).hide();
+      }
+
+      if (value == "7") {
+        jQuery("#rank_question_info_"+id).show();
+      }else if(jQuery("#rank_question_info_"+id).length){
+        jQuery("#rank_question_info_"+id).hide();
+      }
+
+      if (value == "2" || value == "3" || value == "15") {
+        CustomizeQuestions.showOtherOptionText(id);
+      }
+      else {
+        CustomizeQuestions.hideOtherOptionText(id);
+      }
+
+      if (value == "15") {
+        jQuery("#options_count_" + id).show();
+        jQuery("#choices_" + id + " label[for='profile_question_info_" + id + "']").text("Options");
+      }
+      else {
+        jQuery("#options_count_" + id).hide();
+        jQuery("#choices_" + id + " label[for='profile_question_info_" + id + "']").text("Choices");
+      }
+  },
+
+  addDescription: function(element, q_id, section_id) {
+    var elementVal = jQuery(element).val();
+    //Skype type question
+    if(elementVal == CustomizeProfileQuestions.skypeType){
+      jQuery("#help_text_" + section_id + '_' + q_id).val(jsCommonTranslations.skypeHelpText);
+    }
+    else{
+      CustomizeQuestions.addFileDescription(element, q_id, section_id);
+    }
+    CKEDITOR.instances['help_text_' + section_id + '_' +  q_id].destroy(true);
+    CkeditorConfig.initCkeditor("#help_text_" + section_id + '_' + q_id, {height: "100px"}, CkeditorConfig.minimalCkOptions());
+  },
+
+  checkRoleQuestionFilterable :function(prof_id){
+    var quesType = jQuery('#profile_question_question_type_'+prof_id);
+    var roleQuestions = jQuery("#profile_question_"+prof_id+" .role_questions_filterable")
+
+    for (i = 0; i < roleQuestions.length; i++){
+      var currentElement = jQuery(roleQuestions[i]);
+      if(quesType.val() == CustomizeProfileQuestions.fileType){
+          currentElement.val(false);
+          jQuery(currentElement).attr('disabled', true);
+      } else {
+          jQuery(currentElement).attr('disabled', false);
+      }
+    }
+  },
+
+  allSelected: function(className) {
+    return jQuery(className).length == jQuery(className + ":checked").length;
+  },
+
+  someSelected: function(className) {
+    return jQuery(className + ":checked").length > 0;
+  },
+
+  noneSelected: function(className) {
+    return jQuery(className + ":checked").length == 0;
+  },
+
+  updateFilterElement: function(profQuestionId, roleId, filterElement, questionType) {
+    if(questionType == CustomizeProfileQuestions.nameType){
+      filterElement.prop('checked', true).prop('disabled', true).closest("label").addClass("text-muted");
+    } else if(!this.allSelected(".role_questions_private_" + profQuestionId + "_" + roleId + "_restricted") || questionType == CustomizeProfileQuestions.fileType) {
+      filterElement.prop('checked', false).prop('disabled', true).closest("label").addClass("text-muted");
+    } else {
+      filterElement.prop('disabled', false).closest("label").removeClass("text-muted");
+    }
+  },
+
+  updateInSummaryElement: function(profQuestionId, roleId, inSummaryElement, isNameType) {
+    if(isNameType) {
+      inSummaryElement.prop('checked', true).prop('disabled', true).closest("label").addClass("text-muted");
+    } else if (this.noneSelected(".role_questions_private_" + profQuestionId + "_" + roleId + "_restricted_role")) {
+      inSummaryElement.prop('checked', false).prop('disabled', true).closest("label").addClass("text-muted");
+    } else {
+      inSummaryElement.prop('disabled', false).closest("label").removeClass("text-muted");
+    }
+  },
+
+  updateRequiredMembersipProfileElement: function(adminOnlyEditableElement, showUserElement, requiredElement, membershipElement, profileElement, question_type, conditionalElement, is_conditional_question_set) {
+    if(!(question_type == CustomizeProfileQuestions.nameType || question_type == CustomizeProfileQuestions.emailType)) {
+      if (adminOnlyEditableElement.is(':checked') || !showUserElement.is(':checked')) {
+        requiredElement.prop('checked', false).val(false).prop('disabled', true).closest("label").addClass("text-muted");
+        membershipElement.prop('checked', false).val(false).prop('disabled', true).closest("label").addClass("text-muted");
+        profileElement.prop('checked', true).val(true).prop('disabled', true).closest("label").addClass("text-muted");
+      } else {
+        requiredElement.prop('disabled', false).val(true).closest("label").removeClass("text-muted");
+        membershipElement.prop('disabled', false).val(true).closest("label").removeClass("text-muted");
+        profileElement.prop('disabled', false).val(true).closest("label").removeClass("text-muted");
+      }
+    } else {
+      profileElement.prop('checked', true).val(true).prop('disabled', true).closest("label").addClass("text-muted");
+      membershipElement.prop('checked', true).val(true).prop('disabled', true).closest("label").addClass("text-muted");
+      requiredElement.prop('checked', true).val(true).prop('disabled', true).closest("label").addClass("text-muted");
+    }
+  },
+
+  updateAdminOnlyEditableElement: function(showUserElement, adminOnlyEditableElement) {
+    if(!showUserElement.is(":checked")) {
+      adminOnlyEditableElement.prop('checked', true).val(true).prop('disabled', true).closest("label").addClass("text-muted");
+    } else {
+      adminOnlyEditableElement.prop('disabled', false).closest("label").removeClass("text-muted");
+    }
+  },
+
+  updateOptions: function(profileQuestionId, roleId, questionType) {
+    var showUserElement = jQuery('#role_questions_private_'+profileQuestionId+'_'+roleId+'_'+"<%=RoleQuestion::PRIVACY_SETTING::USER_AND_ADMIN_ONLY%>");
+    if (this.someSelected(".role_questions_private_" + profileQuestionId + "_" + roleId + "_restricted")) {
+      showUserElement.prop('checked', true).prop('disabled', true);
+    } else {
+      showUserElement.prop('disabled', false);
+    }
+
+    CustomizeProfileQuestions.updateOptionsAndIncludeIn(profileQuestionId, roleId, questionType);
+  },
+
+  updateOptionsAndIncludeIn: function(prof_ques_id, role_id, question_type, is_conditional_question_set) {
+    if(typeof(question_type) == "undefined"){
+      question_type = jQuery('#profile_question_question_type_' + prof_ques_id).val();
+    }
+    var profileElement = jQuery('#role_questions_available_for_profile_'+prof_ques_id+'_'+role_id);
+    var membershipElement = jQuery('#role_questions_available_for_membership_'+prof_ques_id+'_'+role_id);
+    var adminOnlyEditableElement = jQuery('#role_questions_admin_only_editable_'+prof_ques_id+'_'+role_id);
+    var requiredElement = jQuery('#role_questions_required_'+prof_ques_id+'_'+role_id);
+    var inSummaryElement = jQuery('#role_questions_in_summary_'+prof_ques_id+'_'+role_id);
+    var filterElement = jQuery('#role_questions_filterable_'+prof_ques_id+'_'+role_id);
+    var conditionalElement = jQuery('#profile_question_'+prof_ques_id+'_conditional_question_id');
+    var showUserElement = jQuery("#role_questions_private_" + prof_ques_id +"_" + role_id + "_<%= RoleQuestion::PRIVACY_SETTING::USER_AND_ADMIN_ONLY %>");
+
+    this.updateFilterElement(prof_ques_id, role_id, filterElement, question_type);
+    this.updateInSummaryElement(prof_ques_id, role_id, inSummaryElement, question_type == CustomizeProfileQuestions.nameType);
+    this.updateRequiredMembersipProfileElement(adminOnlyEditableElement, showUserElement, requiredElement, membershipElement, profileElement, question_type, conditionalElement, is_conditional_question_set);
+    if(question_type != CustomizeProfileQuestions.nameType) {
+      this.updateAdminOnlyEditableElement(showUserElement, adminOnlyEditableElement);
+    }
+  },
+
+  initAdminOnlyEditableCheckbox: function(profileQuestionId, RoleId, question_type) {
+    jQuery("#role_questions_admin_only_editable_" + profileQuestionId + "_" + RoleId).change(function(){
+      CustomizeProfileQuestions.updateOptionsAndIncludeIn(profileQuestionId, RoleId, question_type);
+    });
+  },
+
+  toggleSettingsDisplay: function(prof_ques_id, sec_id, role_id, question_type, is_conditional_question_set){
+    jQuery('#role_question_settings_' + sec_id +'_'+prof_ques_id+'_'+ role_id).toggle();
+    this.updateOptionsAndIncludeIn(prof_ques_id, role_id, question_type, is_conditional_question_set);
+  },
+
+  handleConditionalSettingsDependencies: function(profileQuestionId) {
+    if(!(jQuery('.cjs_show_conditional_checkbox').is(':checked'))){
+      jQuery('#profile_question_' + profileQuestionId + '_conditional_question_id').prop('selectedIndex', 0);
+      jQuery('#profile_question_' + profileQuestionId + '_conditional_match_text').val('');
+      jQuery(".cjs_conditional_question_select_container, .cjs_conditional_response_text").hide();
+    }
+    else if ((jQuery('.cjs_select_conditional_question').val()).trim().length > 0){
+      jQuery(".cjs_conditional_question_select_container, .cjs_conditional_response_text").show();
+    }
+    else if((jQuery('.cjs_select_conditional_question').val()).trim().length == 0) {
+      jQuery(".cjs_conditional_response_text").hide();
+    }
+    ProfileConfigUI.adjustUiCommon();
+  },
+
+  toggleConditionalSettingsDisplay: function(prof_ques_id, sec_id){
+    jQuery('#conditional_settings_' + sec_id +'_'+prof_ques_id).toggle();
+    CustomizeProfileQuestions.handleConditionalSettingsDependencies(prof_ques_id);
+    ProfileConfigUI.adjustUiCommon();
+  },
+
+  toggleProgramEditDisplay: function(checkBoxElement, prof_ques_id, sec_id, role_id){
+    jQuery('#program_edit_settings_' + sec_id + '_' + prof_ques_id + '_' + role_id).toggle();
+    var roleQuestionBox = jQuery('#role_question_settings_' + sec_id +'_'+prof_ques_id+'_'+ role_id);
+    if(roleQuestionBox) {
+      var availableForCheckboxes = roleQuestionBox.find(".cjs_available_for").find("input[type='checkbox']");
+      if(jQuery(checkBoxElement).is(":checked") && !availableForCheckboxes.is(":checked")){
+        // By default profile will be checked.
+        availableForCheckboxes.each(function(index, checkboxElement){
+          if(jQuery(checkboxElement).hasClass("cjs_available_for_profile"))
+            jQuery(checkboxElement).prop("checked", true);
+        });
+      }
+      roleQuestionBox.hide();
+    }
+  },
+
+  displayProgramList: function(ques_id){
+    jQuery('#profile_question_configured_help_icon_'+ques_id+'_ttip').show();
+  },
+
+  checkAvailableFor: function(checkBoxElement){
+    var checkboxObj = jQuery(checkBoxElement);
+    var available_for_flag = checkboxObj.closest("form").find("[name=available_for_flag]");
+    var roleQuestionBox = checkboxObj.closest(".cjs_available_for");
+    if(!roleQuestionBox.find("input[type='checkbox']").is(":checked")){
+      var roleQuestionSetting = roleQuestionBox.parent();
+      var roleQuestionSettingEnclosure = roleQuestionSetting.parent();
+      available_for_flag.val(false);
+    }
+    else {
+      available_for_flag.val(true);
+    }
+  },
+
+  disableSelectedOptions: function(selectBoxElement, selectBoxType) {
+    var selectedValues = [];
+    var selectedBox = jQuery(selectBoxElement);
+    var allBoxes = selectedBox.closest("div.controls").find(selectBoxType);
+    var otherBoxes = allBoxes.not(selectedBox);
+
+    allBoxes.each(function(index, selectedElement){
+      if(selectedElement.value != "" && selectedElement.value != "other"){
+        selectedValues.push(selectedElement.value);
+      }
+    });
+
+    CustomizeProfileQuestions.resetSelectedOptions(allBoxes);
+    CustomizeProfileQuestions.disableOption(allBoxes, selectedValues);
+  },
+
+  resetSelectedOptions: function(selectBoxes){
+    selectBoxes.find("option").attr("disabled", false);
+  },
+
+  disableOption: function(selectBoxes, selectedValues){
+    jQuery.each(selectedValues, function(index, selectedValue){
+      selectBoxes.find('option[value="' + selectedValue + '"]').attr("disabled", true);
+    });
+    
+    //Remove disabled for an option in its own select container
+    selectBoxes.each(function(index, selectedElement){
+      var selectedValue = selectedElement.value;
+      jQuery(selectedElement).find('option[value="' + selectedValue + '"]').attr("disabled", false);
+    });
+  },
+
+  calculateOptionsRange: function(q_id) {
+    count = CustomizeQuestionChoices.getExistingChoices(q_id).length;
+    var selectedVal = parseInt(jQuery("#profile_question_options_count_" + q_id).find('option:selected').val());
+    jQuery("#profile_question_options_count_" + q_id).children().remove();
+    for(i=1; i <= count; i++) {
+      var appendHtml = "";
+      if(selectedVal == i)
+        appendHtml = "<option value='" + i + "' selected=true>" + i + "</option>";
+      else
+        appendHtml = "<option value='" + i + "'>" + i + "</option>";
+      jQuery("#profile_question_options_count_"+q_id).append(appendHtml);
+    }
+  },
+
+  disableSelectOnLoad: function(){
+    jQuery(document).ready(function() {
+      jQuery("select.cjs_ordered_option").each(function(index, value){
+         CustomizeProfileQuestions.disableSelectedOptions(value, "select");
+       });
+     });
+   },
+
+  handleTextValidation: function(id,scope) {
+    if (jQuery("#membership_sections_list").length) {
+       if(jQuery("#profile_answers_"+id+"_0").val() == "other") {
+         RequiredFields.fieldIds.push("other_option_"+ id +"_0 input");
+       } 
+       else {
+         var index = RequiredFields.fieldIds.indexOf("other_option_"+ id +"_0 input")
+         if (index != -1) {
+           RequiredFields.fieldIds.splice(index, 1);
+         }
+       } 
+    }
+    else {
+      if(jQuery("#new_mentor").length)
+        scope = "mentor";
+      else if (jQuery("#new_student").length)
+        scope = "student";
+      if(jQuery("#profile_answers_"+id+"_0").val() == "other") {
+        RequiredFields.addScopedField(scope, "other_option_"+ id +"_0 input");
+      }
+      else {
+        RequiredFields.removeScopedField(scope, "other_option_"+ id +"_0 input");
+      } 
+    }
+  },
+
+  toggleQuestionInputField: function(dependent_field_id, conditional_question_id, matchTexts, is_profile_completion){
+    if (jQuery(conditional_question_id).length>0){
+      var inputTextChoices = CustomizeProfileQuestions.getAnswerInputText(conditional_question_id);
+      CustomizeProfileQuestions.showHideField(dependent_field_id, inputTextChoices, matchTexts, is_profile_completion);
+    }
+    var dependent_id_string = dependent_field_id.id.split("_");
+    var conditional_id = dependent_id_string[dependent_id_string.length - 1];
+    CustomizeProfileQuestions.toggleDependentQuestionsInputField('.cjs_dependent_' + conditional_id, '.cjs_question_' + conditional_id, is_profile_completion);
+  },
+
+  toggleDependentQuestionsInputField: function(dependentQuestionClass, conditional_question_id, is_profile_completion){
+    jQuery(dependentQuestionClass).each(function(index) {
+      var matchTexts = [];
+      jQuery(this).find('input[name=match_text]:hidden').each(function() {
+        matchTexts.push(jQuery(this).val());
+      });
+      CustomizeProfileQuestions.toggleQuestionInputField(this, conditional_question_id, matchTexts, is_profile_completion);
+    })
+  },
+
+  getAnswerInputText: function(conditional_question_id){
+    var inputValues = []
+    if(jQuery(conditional_question_id).is(":visible")){
+      jQuery(conditional_question_id + ' select').each(function(index){
+        if (jQuery(this).is(":visible")){
+          if (jQuery(this).val != "") {
+            inputValues.push(jQuery(this).val().replace(/^\s+|\s+$/g, '').toUpperCase());
+          }
+        }
+      })
+      jQuery(conditional_question_id + ' input').each(function(index){
+        if ((jQuery(this).is(':checkbox') || jQuery(this).is(':radio')) && jQuery(this)[0].checked && jQuery(this).is(":visible")) {
+          inputValues.push(jQuery(this).val().replace(/^\s+|\s+$/g, '').toUpperCase());
+        }
+        else if (!(jQuery(this).is(':checkbox') || jQuery(this).is(':radio')) && jQuery(this).is(":visible")){
+          inputValues.push(jQuery(this).val().replace(/^\s+|\s+$/g, '').toUpperCase());
+        }
+      })
+      jQuery(conditional_question_id + ' textarea').each(function(index){
+        if (jQuery(this).is(":visible")){
+          inputValues.push(jQuery(this).val().replace(/^\s+|\s+$/g, '').toUpperCase());
+        }
+      })
+    }
+    return inputValues;
+  },
+
+  showHideImportLinkedIn: function(){
+    jQuery('.import_linkedin').each(function(index, linkedin_link){
+      var showlink = false;
+      jQuery(linkedin_link).closest('.cjs_section').find('.cjs_experience').each(function(i_exp, question){
+        showlink = showlink || jQuery(question).is(':visible');
+      });
+      if (!showlink){
+        jQuery(linkedin_link).hide();
+      }
+      else{
+        jQuery(linkedin_link).show();
+      }
+    });
+  },
+
+  showHideField: function(field_to_show_hide, inputTextChoices, matchTexts, is_profile_completion){
+    var matchChoice = "";
+    for(i=0; i < matchTexts.length; i++) {
+      matchChoice = matchTexts[i].replace(/^\s+|\s+$/g, '').toUpperCase();
+      if (inputTextChoices.indexOf(matchChoice) == -1){
+        jQuery(field_to_show_hide).hide();
+        if (jQuery(field_to_show_hide).is('.cjs_experience')){
+          CustomizeProfileQuestions.showHideImportLinkedIn();
+        }
+        if (is_profile_completion){
+          jQuery(field_to_show_hide).find('.control-group:first').removeClass('incomplete_field bg-darkerhighlight');
+        }
+      }
+      else{
+       jQuery(field_to_show_hide).show();
+       if (jQuery(field_to_show_hide).is('.cjs_experience')){
+         jQuery(field_to_show_hide).closest('.cjs_section').find('.import_linkedin').show();
+       }
+       if (is_profile_completion && CustomizeProfileQuestions.getAnswerInputText("#" + field_to_show_hide.id).join(',').blank()){
+         jQuery(field_to_show_hide).find('.control-group:first').addClass('incomplete_field bg-darkerhighlight') ;
+       }
+       break;
+      }
+    }
+  },
+
+  showHideConditional: function(ele) {
+    jQuery(ele).select2({
+      placeholder: function(){
+        jQuery(ele).data('placeholder');
+      },
+      formatResult: function(result, container){
+        removeFastClickForSelect2(container);
+        return result.text;
+      }
+    });
+    GroupUpdate.bindAccessibilityAttributes(jQuery(ele).parent().attr("id"));
+  },
+
+  loadProfileQuestionDescription: function(q_id, section_id){
+    jQuery('#help_text_' + section_id + '_' + q_id).val(CKEDITOR.instances['help_text_' + section_id + '_' + q_id].getData());
+    return true;
+  }
+
+};

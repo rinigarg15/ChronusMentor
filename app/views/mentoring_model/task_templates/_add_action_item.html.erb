@@ -1,0 +1,41 @@
+<% if manage_mm_tasks_at_admin_level? || manage_mm_messages_at_admin_level? %>
+  <div class="cjs-add-task-form-link cjs-add-action-items-links-container b-t p-sm clearfix">
+    <% action_items = [] %>
+    <% action_items << {
+        :label => append_text_to_icon("fa fa-check-square-o","feature.mentoring_model.button.add_new_task".translate),
+        :url => new_mentoring_model_task_template_path(@mentoring_model, new_task_template_options(task_template_options)),
+        :data => {:'action-id' => MentoringModel::TaskTemplate::ActionItem::DEFAULT},
+        :class => "text-muted"
+      } if manage_mm_tasks_at_admin_level? %>
+
+    <% action_items << {
+        :label => append_text_to_icon("fa fa-envelope-o","feature.mentoring_model.label.new_facilitation_message".translate),
+        :url => new_mentoring_model_facilitation_template_path(@mentoring_model, new_task_template_options(task_template_options)),
+        :class => "text-muted"
+      } if manage_mm_messages_at_admin_level? %>
+
+    <% action_items << {
+        :label => append_text_to_icon("fa fa-calendar-plus-o","feature.mentoring_model.button.set_up_a_meeting".translate),
+        :url => new_mentoring_model_task_template_path(@mentoring_model, new_task_template_options(task_template_options).merge(setup_meeting: true)),
+        :data => {:'action-id' => MentoringModel::TaskTemplate::ActionItem::MEETING},
+        :class => "text-muted"
+      } if manage_mm_meetings_at_end_user_level?(@mentoring_model) %>
+
+    <% action_items << {
+        :label => append_text_to_icon("fa fa-dot-circle-o","feature.mentoring_model.button.create_goal_plan".translate),
+        :url => new_mentoring_model_task_template_path(@mentoring_model, new_task_template_options(task_template_options).merge(create_goal: true)),
+        :data => {:'action-id' => MentoringModel::TaskTemplate::ActionItem::GOAL},
+        :class => "text-muted"
+      } if manage_mm_goals_at_end_user_level?(@mentoring_model) %>
+
+    <% action_items << {
+        :label => append_text_to_icon("fa fa-comments-o","feature.mentoring_model.button.new_engagement_survey".translate),
+        :url => new_mentoring_model_task_template_path(@mentoring_model, new_task_template_options(task_template_options).merge(new_survey: true, action_item_id: params[:action_item_id])),
+        :data => {:'action-id' => MentoringModel::TaskTemplate::ActionItem::ENGAGEMENT_SURVEY},
+        :class => "text-muted"
+      } if (manage_mm_engagement_surveys_at_admin_level?(@mentoring_model) && MentoringModel::TaskTemplate.action_item_list(@current_program)[MentoringModel::TaskTemplate::ActionItem::ENGAGEMENT_SURVEY].present?) %>
+
+    <%= build_dropdown_button(content_tag(:span, "feature.mentoring_model.label.add_a_new_action_v2".translate ), action_items, :is_not_primary => true, :primary_btn_class => "btn btn-white btn-sm btn-block-xs add-action-opener", :btn_class => "cjs-menu-link-holder cjs-add-new-action-container btn-group-block-xs pull-right") %>
+    <div class="cjs-action-item-response-container hide"></div>
+  </div>
+<% end %>

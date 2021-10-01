@@ -1,0 +1,17 @@
+<%= simple_form_for password, as: :member_email, remote: true do |f| %>
+  <div class="m-b-md">
+    <%= "#{'feature_password.content.enter_email_v1_html'.translate} #{'feature_password.content.send_instructions'.translate}".html_safe %>
+  </div>
+
+  <%= f.input :email, placeholder: "display_string.Email".translate, label_html: { class: "sr-only" }, input_html: { class: "form-control" } %>
+  <%= label_tag("captcha", "captcha.placeholder".translate, for: "captcha", class: "sr-only") %>
+  <%= display_captcha(nil, placeholder: 'captcha.label_v1'.translate, input_html: { required: false, class: "form-control m-b-sm" } ) %>
+
+  <% action_set(class: "m-t-md") do %>
+    <%= submit_tag "feature_password.content.send_instructions_v1".translate, class: 'btn btn-primary btn-block cjs_submit_btn', data: {disable_with: false} %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  ForgotPassword.validateForgotPasswordForm("<%= j 'feature_password.content.send_instructions_v1'.translate %>", "<%= j 'display_string.Please_Wait'.translate %>");
+<% end %>

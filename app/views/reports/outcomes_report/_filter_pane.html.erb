@@ -1,0 +1,6 @@
+<%= render partial: "reports/outcomes_report/date_range_filters", :locals => {:start_date => start_date, :end_date => end_date, program_start_date: program_start_date} %>
+<% mobile_footer_actions = { see_n_results: {results_link_text:  "feature.reports.label.back_to_report".translate}} %>
+<%= filter_container_wrapper mobile_footer_actions do %>
+  <applied-filters klass="AppliedProfileFilters"></applied-filters>
+  <%= render partial: "reports/outcomes_report/profile_question_filters" %>
+<% end %>

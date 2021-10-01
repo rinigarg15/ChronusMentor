@@ -1,0 +1,26 @@
+<% @title = "feature.forum.title.forums".translate %>
+<% @page_action = {:label => "feature.forum.action.new_forum".translate, :url => new_forum_path, :class => "btn btn-primary btn-large"} %>
+
+<%= ibox nil, content_class: "no-padding" do %>
+  <%= top_bar_in_listing( { collection: @forums }, { show: true } ) %>
+  <% if @forums.empty? %>
+    <div class="text-center p-sm">
+      <%= "feature.forum.content.no_forum_html".translate(:click_here => link_to("display_string.Click_here".translate, new_forum_path)) %>
+    </div>
+  <% else %>
+    <%= listing_page(@forums, partial: "forums/forum", collection_key: :forum) %>
+    <%= bottom_bar_in_listing( { collection: @forums } ) %>
+  <% end %>
+<% end %>
+
+<% content_for_sidebar do %>
+  <% mobile_footer_actions = { see_n_results: { results_count: @forums.total_entries } } %>
+  <%= filter_container_wrapper(mobile_footer_actions) do %>
+    <% profile_filter_wrapper "feature.forum.content.available_for".translate, false, false, true do %>
+      <%= radio_button_filter "display_string.All".translate, @filter_field, Forum::For::ALL, :filter %>
+      <% @current_program.roles_without_admin_role.each do |role| %>
+        <%= radio_button_filter role.customized_term.term, @filter_field, role.name, :filter %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

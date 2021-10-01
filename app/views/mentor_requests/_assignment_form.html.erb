@@ -1,0 +1,39 @@
+<% mreq_id = mentor_request.id %>
+<div id="group_error_<%=  mreq_id%>" style="display: none;"></div>
+<%= response_flash "group_duplicate_error_#{mreq_id}" %>
+<div id="assignment_popup_<%= mreq_id %>">
+  <%= simple_form_for Group.new, :url => groups_path, :remote => true, :before => "ChronusValidator.ErrorManager.ClearResponseFlash('group_duplicate_error_#{mreq_id}');AssignMentor.clearErrorFlash('#{mreq_id}')", :html => {:class => "mentoring_topic_form form-horizontal", id: "new_group_#{mreq_id}"} do |f| %>
+    <h4 class="has-below-1">
+      <%= 'feature.mentor_request.content.mentor_assign_popup_text'.translate(mentor: _mentor, student_name: mentor_request.student.name) %>
+    </h4>
+
+     <%= control_group do %>
+      <label class="control-label" for="group_mentor_<%=mreq_id%>"> <%= 'feature.mentor_request.content.mentor_name'.translate(Mentor: _Mentor) %> </label>
+      <%= controls do %>
+        <%= text_field_tag :group, "mentor", :name => "group[mentor_name]", :id => "group_mentor_#{mreq_id}", :value => "", :class => "jquery_server_autocomplete", :data => {:autocomplete_url =>
+          auto_complete_for_name_users_path(format: :json, role: RoleConstants::MENTOR_NAME, show_all_users: true), :indicator => "loading_mentor_#{mreq_id}"} %>
+        <%= image_tag 'ajax-loader.gif', :width => 16, :height => 16, :id => "loading_mentor_#{mreq_id}", :style => 'display: none;' %>
+      <% end %>
+    <% end %>
+    
+    <%= hidden_field_tag "mentor_request_id", mreq_id %>
+    <%= hidden_field_tag "page", @page, id: nil %>
+
+    <% action_set do %>
+      <%= f.button :submit, 'feature.mentor_request.action.Assign'.translate, :class => "btn btn-primary" %>      
+      <%= link_to 'display_string.Cancel'.translate, "javascript:void(0);", :class => "cancel popup_closebox btn-white btn" %>
+    <% end %>
+  <% end %>
+</div>
+
+<div id="select_connection_<%= mreq_id %>" style="display: none;" class="select_connection_popup">
+  <div id="select_wrapper_<%= mreq_id %>">
+
+  </div>
+
+  <div class="navig_links has-above-1 clearfix">
+    <%= link_to_function 'feature.mentor_request.action.choose_different_mentor_html'.translate(mentor: _mentor), "AssignMentor.selectAnotherMentor('#{mreq_id}')", :class => 'btn btn-primary go_back' %>    
+    <%= link_to_function 'display_string.Cancel'.translate, "AssignMentor.clearErrorFlash('#{mreq_id}');AssignMentor.selectAnotherMentor('#{mreq_id}');", :class => "cancel popup_closebox btn-white btn" %>
+    <%= image_tag "ajax-loader.gif", :width => 16, :height => 16, :id => "assign_loading_2_#{mreq_id}", :class => 'assign_2_loading', :style => 'display: none;' %>
+  </div>
+</div>

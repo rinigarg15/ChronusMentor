@@ -1,0 +1,5 @@
+jQuery('div.common_questions').replaceWith("<%= j render :partial => 'profile_questions/preview_result_pane', :locals => { :profile_questions => @membership_profile_questions, :is_membership_preview => true } %>");
+toastr.clear();
+<% if @filter_role.empty? %>
+  ChronusValidator.ErrorManager.ShowPageFlash(false, "<%= j 'feature.profile_customization.content.select_one_of_the_role'.translate %>");
+<% end %>

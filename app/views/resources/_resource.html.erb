@@ -1,0 +1,28 @@
+<% drop_down_array = [{:label => "feature.resources.label.view_details".translate, :url => resource_path(resource)}] %>
+<% drop_down_array << [{:label => "feature.resources.label.edit_resource".translate(resource: _resource), :url => edit_resource_path(resource)}] if @admin_view %>
+<% drop_down_array << [{:label => "feature.resources.action.delete_resource".translate(resource: _resource), :url => resource_path(resource), :method => :delete, :class => 'delete', data: {:confirm => "common_text.confirmation.sure_to_delete_this".translate(title: _resource)}}] if @admin_view && !(program_view? && can_access_resource?(resource)) %>
+<% buttons_for_mobile = Marshal.load(Marshal.dump(drop_down_array)) %>
+
+<div id="resource_<%= resource.id %>">
+  <%= dropdown_buttons_or_button(drop_down_array, btn_class: "pull-right hidden-xs") %>
+  <div class="media-left">
+    <%= get_icon_content("fa fa-book m-r-0", container_class: "fa-circle", stack_class: "fa-2x") %>
+  </div>
+  <div class="media-body">
+    <h4 class="m-b-xxs">
+      <%= link_to resource.title, resource_path(resource), :class => "m-r-xs" %>
+      <% if program_view? && @admin_view && resource.resource_publications.find{|resource| resource.program_id == @current_program.id}.show_in_quick_links? %>
+        <%= get_icon_content('fa fa-check-circle m-r-0', :data => { :title => "feature.resources.content.show_in_quick_links_tooltip_html_v1".translate(resource: _resource), :toggle => "tooltip" } ) %>
+      <% end %>
+      <% if program_view? && @admin_view && can_access_resource?(resource) %>
+        <span class="text-navy m-t-0 m-b-0">
+          <%= "feature.resources.content.global_resource".translate(resource: _resource) %>
+          <%= get_icon_content(TOOLTIP_IMAGE_CLASS + " cjs-tool-tip", :data => { :title => "feature.resources.content.organization_resource_tooltip_html".translate(:program => _program, :resource => _resource, :organization_name => @current_organization.name), :toggle => "tooltip" } ) %>
+        </span>
+      <% end %>
+    </h4>
+    <%= render :partial => "resources/resource_info", :locals => {:resource => resource}%>
+  </div>
+
+  <%= dropdown_buttons_or_button(buttons_for_mobile, btn_class: "m-t-sm visible-xs btn-block btn-group-sm clearfix", responsive_primary_btn_class: "col-xs-10", responsive_caret_class: "col-xs-2", dropdown_menu_class: "col-xs-12 table-bordered") %>
+</div>

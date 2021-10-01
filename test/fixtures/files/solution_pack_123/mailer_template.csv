@@ -1,0 +1,3 @@
+id,program_id,uid,enabled,source,subject,created_at,updated_at,campaign_message_id
+679,47,y0o38izo,TRUE,Test Source,Test Subject,2014-05-05 11:17:54 +0530,2014-05-05 11:17:56 +0530,
+679,47,ezkgp8mo,TRUE,"Source with {{invalid_tag}}","Subject with {{invalid_tag}}",2014-05-05 11:17:54 +0530,2014-05-05 11:17:56 +0530,

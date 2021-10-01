@@ -1,0 +1,17 @@
+<% if @survey_assessee.destroyed? %>
+  <% if @options && @options[:from_dashboard] %>
+    <% @options = @options.merge(:params => {:action => "dashboard", :controller => "three_sixty/surveys"}) %>
+    <% if @survey_assessees.present? %>
+      jQuery("#three_sixty_published_survey").html("<%= j(render :partial => 'three_sixty/surveys/dashboard/published_surveys', :locals => {:objects => @survey_assessees}) %>");
+    <% else %>
+      jQuery("#three_sixty_published_survey").html("<%= 'feature.three_sixty.dashboard.no_published_surveys'.translate %>");
+    <% end %>
+    ChronusValidator.ErrorManager.ShowResponseFlash("cjs_survey_assessee_view_flash", '<%="feature.three_sixty.assessee.delete_message".translate %>', true);
+  <% else %>
+    <% if params[:view] == ThreeSixty::Survey::SURVEY_SHOW %>
+      ThreeSixty.removeDestroyedElementFromTable("three_sixty_survey_notify_reviewers_<%= @survey_assessee.id %>");
+    <% else %>
+      ThreeSixty.removeDestroyedElementFromTable("three_sixty_survey_assessee_container_<%= @survey_assessee.id %>");
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,7 @@
+<% help_text = group.mentoring_model.forum_help_text %>
+
+<% if help_text.present? %>
+  <%= ibox "feature.connection.header.about_discussion_board".translate do %>
+    <%= chronus_auto_link(help_text) %>
+  <% end %>
+<% end %>

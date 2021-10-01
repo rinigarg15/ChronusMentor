@@ -1,0 +1,52 @@
+<% modal_container "feature.profile_customization.header.customize_user_profile_summary".translate, modal_id: "update_profile_summary_fields_form", modal_content_class: "animated fadeIn" do %>
+    <%= form_tag update_profile_summary_fields_role_questions_path, :method => :post do %>
+      <p><%= "feature.profile_customization.content.customize_summary_description".translate %></p>
+      <div class="well white-bg">
+        <p><%= embed_icon('fa fa-lock') %><%= "feature.profile_customization.content.limited_visibility".translate %></p>
+        <p><%= "feature.profile_customization.content.not_available".translate %></p>
+      </div>
+      <div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th><%= "feature.profile_customization.label.fields".translate %></th>
+              <%= @current_program.roles_without_admin_role.collect{|role| content_tag(:th, role.customized_term.term) }.inject(:+) %>
+            </tr>
+          </thead>
+          <tbody id="profile_fields_options">
+            <% @non_membership_profile_questions.each do |profile_question| %>
+              <% profile_question_role_questions = profile_question.role_questions %>
+              <tr id='common_fields_<%=profile_question.id%>'>
+                <td id ="profile_field_values"><%= profile_question.question_text %></td>
+                <% @current_program.roles_without_admin_role.each do |role| %>
+                  <% role_question = profile_question_role_questions.find{|rq| rq.role_id == role.id} %>
+                  <% if role_question.present? %>
+                    <% if  role_question.extra_private? && !profile_question.email_type? %>
+                      <td><%= embed_icon('fa fa-lock') %></td>
+                    <% else %>
+                      <td>
+                        <% role_name = role.customized_term.term %>
+                        <%= label_tag("fields[]", "feature.profile_customization.label.include_this_question_profile".translate(role_name: role_name), :for => "common_fields_#{profile_question.question_text}_#{role_name}", :class => "hide") %>
+                        <%=  show_in_summary_check_box(role_question, name: "fields[]", value: role_question.id, id: "common_fields_#{profile_question.question_text}_#{role_name}", class: "check_box") %>
+                      </td>
+                    <% end %>
+                  <% else %>
+                    <td><%= "feature.profile_customization.label.na".translate %></td>
+                  <% end %>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="m-t-xs">
+      <% action_set(class: "pull-right") do %>
+        <div class="clearfix">
+          <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :data => {dismiss: "modal"}, :class => 'popup_closebox btn-white btn' %>
+          <%= submit_tag "display_string.Save".translate, :class => "btn btn-primary" %>
+        </div>
+      <% end %>
+      </div>
+    <% end %>
+
+<% end %>

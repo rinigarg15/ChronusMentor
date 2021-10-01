@@ -1,0 +1,36 @@
+<% header_content = capture do %>
+  <%= "feature.mentoring_model.header.survey_responses_v1".translate %>
+  <% if survey_answers.present? %>
+    <% overdue_survey_tasks = tasks.of_engagement_survey_type.overdue.count %>
+    <%= content_tag(:span, "feature.connection.content.n_Completed".translate(count: survey_answers.size) + ", " + "feature.connection.content.n_Overdue".translate(count: overdue_survey_tasks), class: "pull-right font-noraml") %>
+  <% end %>
+  
+<% end %>
+
+<%= panel nil, panel_class: "panel-default no-borders m-b-sm", panel_body_class: "p-t-0", header_content: header_content do %>
+  <% if survey_answers.present? %>
+    <ul class="list-group">
+      <% survey_answers.first(DEFAULT_TRUNCATION_ROWS_LIMIT).each do |answer| %>
+        <%= display_survey_response_link(answer, {url: survey_response_group_path(answer.group, get_data_hash_for_survey_response_link(answer))}) %>
+      <% end %>
+      <% if survey_answers.size > DEFAULT_TRUNCATION_ROWS_LIMIT %>
+        <div id="cjs_hidden_responses_<%= group.id %>" class="hide b-t">
+          <% survey_answers[DEFAULT_TRUNCATION_ROWS_LIMIT..-1].each do |answer| %>
+            <%= display_survey_response_link(answer, {url: survey_response_group_path(answer.group, get_data_hash_for_survey_response_link(answer))}) %>
+          <% end %>
+        </div>
+        <div class="font-noraml cjs_show_all_responses_container text-center m-t-sm">
+          <%= link_to ("display_string.show_all_v1".translate + get_icon_content("fa fa-angle-down m-l-xxs m-r-0")).html_safe, "javascript:void(0)", class: "btn btn-xs btn-primary cjs_show_all_responses btn-outline", data: { group_id: group.id } %>
+        </div>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="text-muted p-t-xs">
+      <%= "feature.mentoring_model.header.no_survey_response".translate %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  GroupSearch.showAllResponses();
+<% end %>

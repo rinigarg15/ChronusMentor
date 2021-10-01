@@ -1,0 +1,415 @@
+var CampaignManagement = {
+
+  GA_CATEGORY: "Campaign Management",
+  GA_ACTION_INITIATED_CREATION: "Initiated Creation",
+  GA_ACTION_CREATED: "Created",
+  GA_ACTION_ADD_EMAIL: "Add Email",
+  GA_ACTION_START: "Start",
+  GA_ACTION_STOP: "Stop",
+  GA_LABEL_DIRECT: "Directly",
+  GA_LABEL_DUPLICATE: "Duplication",
+  GA_LABEL_DRAFT_STATE: "Draft State",
+  GA_LABEL_ACTIVE_STATE: "Active State",
+  GA_LABEL_NEW_EMAIL: "New Email",
+  GA_VALUE_DIRECT: 0,
+  GA_VALUE_DUPLICATE: 1,
+  GA_VALUE_DRAFT_STATE: 2,
+  GA_VALUE_ACTIVE_STATE: 3,
+  GA_VALUE_NEW_EMAIL: 4,
+
+  TAKE_TOUR_POPUP: "campaign-management_take_tour_popup",
+  TAKE_TOUR: "campaign-management_take_tour",
+  DISMISS_TOUR: "campaign-management_dismiss_tour",
+  CAMPAIGN_ADMIN_VIEW_SELECTOR: "campaign_admin_views",
+
+  AnalyticsParams: {
+    takeTourButtonPopup: window.location.pathname + "?gid=" + this.TAKE_TOUR_POPUP,
+    takeTourButton: window.location.pathname + "?gid=" + this.TAKE_TOUR,
+    dismissTourButton: window.location.pathname + "?gid=" + this.DISMISS_TOUR
+  },
+
+  validateCampaign: function() {
+    jQuery(".campaign_management_user_campaign_form input[type=submit]").on('click', function(){
+      var titleElement = jQuery(this).closest(".campaign_management_user_campaign_form").find("#campaign_management_user_campaign_title");
+      var adminViewValueElement = jQuery(this).closest(".campaign_management_user_campaign_form").find("#campaign_admin_views");
+      var adminViewErrorElement = jQuery(this).closest(".campaign_management_user_campaign_form").find(".select2-container");// change it to select2-choices for multiple
+      if(titleElement.length > 0 && adminViewValueElement.length > 0){
+        var titleValue = ValidateRequiredFields.checkNonMultiInputCase(titleElement);
+        if(adminViewValueElement.val().blank()){
+          adminViewValue = ValidateRequiredFields.checkNonMultiInputCase(adminViewErrorElement);
+        }
+        else{
+          adminViewValue = true;
+          ChronusValidator.ErrorManager.HideFieldError(adminViewErrorElement);
+        }
+        return titleValue && adminViewValue;
+      }else{
+        return false;
+      }
+    });
+  },
+
+  validateCampaignMessage: function(min, max, invalidDurationMessage) {
+    var form = jQuery(".campaign_management_abstract_campaign_message_form input[type=submit]").closest(".campaign_management_abstract_campaign_message_form")
+    CKEDITOR.instances.campaign_management_abstract_campaign_message_mailer_template_source.updateElement();
+    var subjectElement = form.find("#campaign_management_abstract_campaign_message_mailer_template_subject");
+    var durationElement = form.find("#campaign_message_duration");
+    var messageElement = form.find("#campaign_management_abstract_campaign_message_mailer_template_source");
+    var messageElement2 = form.find("#cke_campaign_management_abstract_campaign_message_mailer_template_source");
+
+    if(subjectElement.length > 0 && durationElement.length > 0 && messageElement.length > 0){
+      var subjectValue  = ValidateRequiredFields.checkNonMultiInputCase(subjectElement);
+      var durationValue = ValidateRequiredFields.checkNonMultiInputCase(durationElement) && ValidateRequiredFields.checkForIntegerInRange(durationElement, true, min, max, invalidDurationMessage);
+      var messageValue  = ValidateRequiredFields.checkNonMultiInputCase(messageElement);
+      if(!messageValue)
+        ValidateRequiredFields.checkNonMultiInputCase(messageElement2);
+      else
+        ChronusValidator.ErrorManager.HideFieldError(messageElement2);
+      return subjectValue && durationValue && messageValue;
+    }
+    else{
+      return false;
+    }
+  },
+
+  submitPreviewEmail: function(){
+    jQuery("a#cjs_preview_email_link").click(function(){
+      CKEDITOR.instances.campaign_management_abstract_campaign_message_mailer_template_source.updateElement();
+      var subjectElement = jQuery(this).closest(".campaign_management_abstract_campaign_message_form").find("#campaign_management_abstract_campaign_message_mailer_template_subject");
+      var subjectValue  = ValidateRequiredFields.checkNonMultiInputCase(subjectElement);
+
+      var messageElement = jQuery(this).closest(".campaign_management_abstract_campaign_message_form").find("#campaign_management_abstract_campaign_message_mailer_template_source");
+      var messageElement2 = jQuery(this).closest(".campaign_management_abstract_campaign_message_form").find("#cke_campaign_management_abstract_campaign_message_mailer_template_source");
+
+      var messageValue = ValidateRequiredFields.checkNonMultiInputCase(messageElement);
+      if(!messageValue)
+        ValidateRequiredFields.checkNonMultiInputCase(messageElement2);
+      else
+        ChronusValidator.ErrorManager.HideFieldError(messageElement2);
+      if(messageValue && subjectValue)
+      {
+        if(jQuery(this).data('track-ga')){
+          SurveysGoogleAnalytics.handleTestRerminder(jQuery(this).data('type'));
+        }
+        jQuery.ajax({
+          url : jQuery(this).attr('href'),
+          type: "POST",
+          data: jQuery("form #sender_id, form #campaign_management_abstract_campaign_message_mailer_template_subject, form #campaign_management_abstract_campaign_message_mailer_template_source").serialize(),
+          beforeSend : function(){
+            jQuery('.cjs_preview_email img.ajax_loading').show();
+          },
+          complete: function(){
+            jQuery('.cjs_preview_email img.ajax_loading').hide();
+          }
+        });
+      }
+      return false;
+    });
+  },
+
+  getDetailView: function(data){
+    var results = "";
+    if(data.separator){
+      results += "<div class='separator'></div>";
+    } else {
+      results += "<dl class='dl-horizontal dl-comfort dl-left cm-adminview' id='adminview_"+ data.id +"'>";
+      results += "<div><img alt='" + data.icon + "' src='/assets/" + data.icon + "' class='has-next has-below-04'></img><span class='strong'>" + data.title + "</span></div>";
+      if(data.description){
+        results += "<span class='dim'>" + data.description + "</span>";
+      }
+    }
+    return results;
+  },
+
+  bindAccessibilityAttributes: function(){
+    jQuery(".select2-container").each(function(){
+      var container = jQuery(this);
+      var bubbleInput = container.find("ul input.select2-input");
+      var regularDropDownSearch = container.find("div.select2-search input.select2-input");
+      var controlLabel = container.closest(".form-group").find("label.control-label");
+      var select2Id;
+      if(bubbleInput.length > 0){
+        select2Id = bubbleInput.attr("id");
+        controlLabel.attr("for", select2Id);
+      }
+      else if(regularDropDownSearch.length > 0){
+        select2Id = container.find(".select2-focusser.select2-offscreen").attr("id");
+        controlLabel.attr("for", select2Id);
+        var select2SearchId  = "chronus-select2-dropdown-input-search-custom-" + Math.floor(Math.random()*100000);
+        regularDropDownSearch.attr("id", select2SearchId);
+        container.append(jQuery("<label>", {
+          "for": select2SearchId,
+          "html": jsCommonTranslations.searchUsers,
+          "class": "sr-only"
+        }));
+      }
+    });
+  },
+
+  initializePlugin: function(oneToMany, detailedView){
+    jQuery(".cjs-members-select2").each(function(){
+      var select2Element = jQuery(this);
+      select2Element.select2({
+        multiple: oneToMany,
+        id: function(object){
+          return object.id;
+        },
+        ajax: {
+          url: select2Element.data("url"),
+          data: function(term){
+            return {
+              search: term
+            }
+          },
+          results: function(data){
+            return {
+              results: data
+            };
+          }
+        },
+        formatResult: function(data){
+          if(detailedView)
+            return jQuery(JST["templates/admin_views/admin_view_listing"]({
+              data: data
+            }));
+          else
+            return data.title;
+        },
+        formatSelection: function(data){
+          if(data.icon != undefined)
+            return jQuery(JST["templates/admin_views/selected_admin_view"]({
+              data: data
+            }));
+          return data.title;
+        },
+        initSelection: function(element, callback){
+          var data = [];
+          jQuery(element.val().split(",")).each(function(index, content) {
+            var temp = {};
+            temp['title'] = content;
+            data.push(temp);
+          });
+          callback(data);
+        }
+      });
+    });
+  },
+
+  showAnalytics: function (element) {
+    jQuery.ajax({
+      url: element.data("path"),
+      data: {'id' : element.data("campaign-id")},
+      beforeSend: function(){
+        jQuery('#customizable_profile #loading_results').show();
+      },
+      success: function(){
+        jQuery('#customizable_profile #loading_results').hide();
+      }
+    });
+  },
+
+  setAdminViewLink: function(element, action, controller, viewId){
+    var admin_view_id = element.val();
+    if("create" == admin_view_id) {
+      var url = element.data('new-admin-view-url');
+      window.location.href = url;
+    } else {
+      var url = element.data('show-admin-view-url');
+      var c_id = element.data('campaign-id');
+      jQuery.ajax({
+        url : url,
+        data: {
+          id: admin_view_id,
+          campaign_id: c_id,
+          source_info: {
+            action: action,
+            controller: controller,
+            id: viewId
+          }
+        }
+      });
+    }
+  },
+
+  setAdminNameSelect2: function(value, id){
+    jQuery('#s2id_sender_id').select2("data", {title: value, id: id});
+  },
+
+  initCkeditorOptions: function(selectOptions, label) {
+    CKEDITOR.config.strinsert_strings = JSON.parse(selectOptions);
+    CKEDITOR.config.strinsert_button_label = CKEDITOR.config.strinsert_button_title = CKEDITOR.config.strinsert_button_voice = label;
+  },
+
+  adjustTopBar: function(){
+    CampaignManagement.setTopBarDivisionWidth();
+    jQuery(window).on('resize', function(){
+      CampaignManagement.setTopBarDivisionWidth();
+    });
+  },
+
+  setTopBarDivisionWidth: function(){
+    var wizardContainer = jQuery("#campaign_management_tab_bar");
+    WizardView.configureHeaders(wizardContainer);
+  },
+
+//Paramters for initializeTour:
+//1. tourTaken: specifies whether tour has been taken by a user already (one can use the OneTimeFlag model)
+//2. popUpId: "id" for the welcome window that asks user if he wants to take the tour.
+//3. path: one_time_flags_path(format: :js), to mark that a user has seen the pop up window.
+//4. messageTag: the tag for the current tour which is used to store that a user has taken the current tour in OneTimeFlag model.
+
+  initializeTourIcon: function(iconId){
+    jQuery(document).on("click", iconId, function(){
+      TripSteps.tripIndex = 0;
+      TripSteps.restart();
+      Analytics.gaTrack(CampaignManagement.AnalyticsParams.takeTourButton);
+    });
+  },
+
+  initializeTour: function(tourTaken, popUpId, path, messageTag){
+    if (!tourTaken && CampaignsKendo.setupTourOnce) {
+      jQuery(document).ready(function(){jQuery(popUpId).modal();});
+      TourFeature.trackTourTaken(path, messageTag);
+      CampaignsKendo.setupTourOnce = false;
+    }
+    jQuery(document).on("click", ".campaign-management-tour", function(){
+      jQuery("#campaign-management-tour-modal").modal('toggle');
+      TripSteps.restart();
+      Analytics.gaTrack(CampaignManagement.AnalyticsParams.takeTourButtonPopup);
+    });
+    CampaignManagement.initializeTourIcon(".cui-campaign-take-tour");
+    jQuery(document).on('click', '.cjs-set-campaign-management-dismiss', function(){
+      Analytics.gaTrack(CampaignManagement.AnalyticsParams.dismissTourButton);
+    });
+  },
+
+  initializeTourForCampaignDetailsPage: function(tourTaken, path, messageTag){
+    if (!tourTaken) {
+      TripSteps.start();
+      TourFeature.trackTourTaken(path, messageTag);
+    }
+    CampaignManagement.initializeTourIcon(".cui-campaign-take-tour");
+  },
+
+  initializeTourForCampaignEmailsPage: function(tourTaken, path, messageTag, lessThanIE9){
+
+    var numberOfTips = 4;
+    var tipContent = [jsCampaignEmailTourTranslation.FromFieldHelptText, jsCampaignEmailTourTranslation.insertVariableHelptText, jsCampaignEmailTourTranslation.scheduleHelptText, jsCampaignEmailTourTranslation.testEmailHelptText];
+    var selectors = [".cui-campaign-message-from:first", ".cke_combo:last", "#campaign_message_duration", "#cjs_preview_email_link"];
+    var highlight = selectors;
+    var direction = ["bottom", "right", "top", "top"];
+    var exposeElements = ["", "expose", "", ""];
+    var tipAttributes = [tipContent, selectors, highlight, direction, exposeElements];
+    //setting up the trip steps
+    TourFeature.SetupTrip(numberOfTips, tipAttributes, lessThanIE9);
+
+    if (!tourTaken) {
+      TripSteps.start();
+      TourFeature.trackTourTaken(path, messageTag);
+    }
+    CampaignManagement.initializeTourIcon(".cui-campaign-take-tour");
+  },
+
+  clonePopup: function(){
+    jQuery(".cjs_cm_clone_popup").on("click", function(){
+      var url = jQuery(this).data("url");
+      jQueryShowQtip("#inner_content", 600, url, "", {modal: true});
+    });
+  },
+
+  clonePopupSaveAsDraft: function(){
+    jQuery(".cjs_campaign_clone_draft").on("click", function(){
+      jQuery("#cjs_campaign_clone_draft_field").val(true)
+      return true;
+    });
+  },
+
+  handleCmapaignMessageSave: function(min, max, invalidDurationMessage, confirmationMessage, okText, cancelText, isDraft){
+    var form = jQuery(".campaign_management_abstract_campaign_message_form input[type=submit]").closest(".campaign_management_abstract_campaign_message_form")
+    jQuery(".cjs_campaign_message_submit").click(function(MIN, MAX){
+      if (CampaignManagement.validateCampaignMessage(min, max, invalidDurationMessage)){
+        if(isDraft){
+          chronusConfirm(confirmationMessage, function(){ jQuery("#cjs_start_campaign").val(true); CampaignManagement.gaAddEmailDraftState(); CampaignManagement.gaStartFromNewEmail(); form.submit(); }, function(){ CampaignManagement.gaAddEmailDraftState(); form.submit(); }, okText, cancelText);
+          return false;
+        }
+        else{
+          return true
+        }
+      }
+      else{
+        return false
+      }
+    });
+  },
+
+  stopConfirmation: function(confirmationMessage){
+    jQuery(document).on("click", ".disable_campaign_action", function(event){
+      var url = jQuery(this).data("url");
+      chronusConfirm(confirmationMessage, function(){ CampaignManagement.handleGAStop(); window.location.href = url; });
+      return false;
+    });
+  },
+
+  handleGA: function(){
+    CampaignManagement.handleGAInitiatedCreation();
+    CampaignManagement.handleGACreated();
+    CampaignManagement.handleGAAddEmail();
+    CampaignManagement.handleGAStart();
+  },
+
+  handleGAInitiatedCreation: function(){
+    jQuery(document).on("click", ".cjs_ga_initiated_creation_directly", function(){
+      chrGoogleAnalytics.addEvent(CampaignManagement.GA_CATEGORY, CampaignManagement.GA_ACTION_INITIATED_CREATION, CampaignManagement.GA_LABEL_DIRECT, CampaignManagement.GA_VALUE_DIRECT)
+      return true;
+    });
+    jQuery(document).on("click", ".cjs_cm_clone_popup", function(){
+      chrGoogleAnalytics.addEvent(CampaignManagement.GA_CATEGORY, CampaignManagement.GA_ACTION_INITIATED_CREATION, CampaignManagement.GA_LABEL_DUPLICATE, CampaignManagement.GA_VALUE_DUPLICATE)
+      return true;
+    });
+  },
+
+  handleGACreated: function(){
+    jQuery(document).on("click", ".cjs_ga_created_directly", function(){
+      chrGoogleAnalytics.addEvent(CampaignManagement.GA_CATEGORY, CampaignManagement.GA_ACTION_CREATED, CampaignManagement.GA_LABEL_DIRECT, CampaignManagement.GA_VALUE_DIRECT)
+      return true;
+    });
+    jQuery(document).on("click", ".cjs_ga_created_duplicate", function(){
+      chrGoogleAnalytics.addEvent(CampaignManagement.GA_CATEGORY, CampaignManagement.GA_ACTION_CREATED, CampaignManagement.GA_LABEL_DUPLICATE, CampaignManagement.GA_VALUE_DUPLICATE)
+      return true;
+    });
+  },
+
+  gaAddEmailDraftState: function(){
+    chrGoogleAnalytics.addEvent(CampaignManagement.GA_CATEGORY, CampaignManagement.GA_ACTION_ADD_EMAIL, CampaignManagement.GA_LABEL_DRAFT_STATE, CampaignManagement.GA_VALUE_DRAFT_STATE)
+    return true;
+  },
+
+  handleGAAddEmail: function(){
+    jQuery(document).on("click", ".cjs_ga_add_email_active_state", function(){
+      chrGoogleAnalytics.addEvent(CampaignManagement.GA_CATEGORY, CampaignManagement.GA_ACTION_ADD_EMAIL, CampaignManagement.GA_LABEL_ACTIVE_STATE, CampaignManagement.GA_VALUE_ACTIVE_STATE)
+      return true;
+    });
+  },
+
+  gaStartFromNewEmail: function(){
+    chrGoogleAnalytics.addEvent(CampaignManagement.GA_CATEGORY, CampaignManagement.GA_ACTION_START, CampaignManagement.GA_LABEL_NEW_EMAIL, CampaignManagement.GA_VALUE_NEW_EMAIL)
+    return true;
+  },
+
+  handleGAStart: function(){
+    jQuery(document).on("click", ".cjs_ga_start_from_duplicate", function(){
+      chrGoogleAnalytics.addEvent(CampaignManagement.GA_CATEGORY, CampaignManagement.GA_ACTION_START, CampaignManagement.GA_LABEL_DUPLICATE, CampaignManagement.GA_VALUE_DUPLICATE)
+      return true;
+    });
+    jQuery(document).on("click", ".start_user_campaign_action", function(){
+      chrGoogleAnalytics.addEvent(CampaignManagement.GA_CATEGORY, CampaignManagement.GA_ACTION_START, CampaignManagement.GA_LABEL_DRAFT_STATE, CampaignManagement.GA_VALUE_DRAFT_STATE)
+      return true;
+    });
+  },
+
+  handleGAStop: function(){
+    console.log('dsddsdsds');
+    chrGoogleAnalytics.addEvent(CampaignManagement.GA_CATEGORY, CampaignManagement.GA_ACTION_STOP)
+    return true;
+  }
+}

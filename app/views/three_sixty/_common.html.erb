@@ -1,0 +1,11 @@
+<ul class="nav nav-tabs h5 no-margins", id="tab-box">
+  <li class="<%= active_tab == ThreeSixty::CommonController::Tab::SURVEYS ? 'ct_active active' : '' %>">
+    <%= link_to "feature.three_sixty.surveys_tab".translate, dashboard_three_sixty_surveys_path %>
+  </li>
+  <li class="<%= active_tab == ThreeSixty::CommonController::Tab::COMPETENCIES ? 'ct_active active' : '' %>">
+    <%= link_to "feature.three_sixty.competencies_tab_v1".translate, three_sixty_competencies_path %>
+  </li>
+  <li class="<%= active_tab == ThreeSixty::CommonController::Tab::SETTINGS ? 'ct_active active' : '' %>">
+    <%= link_to "feature.three_sixty.settings_tab".translate, three_sixty_reviewer_groups_path %>
+  </li>
+</ul>

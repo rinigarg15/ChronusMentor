@@ -1,0 +1,33 @@
+<% @title = get_icon_content("fa fa-file-archive-o") + "feature.program.content_pack.solution_packs".translate %>
+<%= ibox nil do %>
+    <table id="solution_packs" class="table table-bordered table-striped table-vertical-centered table-responsive">
+        <thead>
+            <tr>
+                <th> <%= SolutionPack.human_attribute_name("description") %> </th>
+                <th> <%= "display_string.Organization".translate %> </th>
+                <th> <%= SolutionPack.human_attribute_name("program") %> </th>
+                <th> <%= SolutionPack.human_attribute_name("created_at") %> </th>
+                <th> <%= SolutionPack.human_attribute_name("created_by") %> </th>
+                <th> <%= "display_string.Download".translate %> </th>
+            </tr>
+        </thead>
+        <tbody>
+          <% @solution_packs.each do |solution_pack| %>
+            <%
+              program = solution_pack.program
+              org = program.try(:organization)
+            %>
+
+            <tr>
+                <td><%= solution_pack.description %></td>
+                <td> <%= link_to org.name, root_organization_url(:domain => org.domain, :subdomain => org.subdomain) if program.present? %>
+                </td>
+                <td><%= link_to program.name, program_root_url(:subdomain => program.organization.subdomain, :root => program.root) if program.present? %></td>
+                <td><%= solution_pack.created_at.strftime("%m/%d/%Y") %></td>
+                <td><%= solution_pack.created_by %></td>
+                <td><%= link_to "display_string.Download".translate, solution_pack.attachment.url %></td>
+            </tr>
+          <% end %>
+        </tbody>
+    </table>
+<% end %>

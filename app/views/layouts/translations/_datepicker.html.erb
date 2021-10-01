@@ -1,0 +1,12 @@
+<%= javascript_tag do %>
+  var datePickerTranslations = {
+    prevText: '<%= j("datepicker.prev_text".translate) %>',
+    nextText: '<%= j("datepicker.next_text".translate) %>',
+    monthNames: '<%= j("datepicker.month_names".translate) %>'.split(" "),
+    monthNamesInDefaultLocale: '<%= j("datepicker.month_names".translate(locale: :en)) %>'.split(" "),
+    fullDateFormat: '<%= j 'kendo_date_picker.formats.full_display_no_time'.translate %>',
+    dateRangeFormat: '<%= j 'kendo_date_picker.formats.date_range'.translate %>',
+    dateRangeSeparator: '<%= j DATE_RANGE_SEPARATOR %>',
+    clearSelection: '<%= j("datepicker.clear_selection".translate) %>'
+  };
+<% end %>

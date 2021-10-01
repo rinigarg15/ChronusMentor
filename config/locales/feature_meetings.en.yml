@@ -1,0 +1,400 @@
+en:
+  feature:
+    meetings:
+      header:
+        rolename_email_id: "%{role_name} Email"
+        upcoming_meetings: Upcoming Meetings
+        upcoming_meetings_v1: Upcoming %{Meetings}
+        feedback_on: Feedback on %{topic}
+        request_meeting: Request Meeting
+        request_meeting_v1: Request %{Meeting}
+        request_meeting_v2: Meet with %{mentor_name}
+        edit_meeting: Edit Meeting
+        edit_meeting_v1: Edit %{Meeting}
+        connect: Connect
+        sessions_report_name: Mentoring Sessions and Availability Slots %{from_date_range} to %{to_date_range}
+        sessions_report_name_v1: "%{Meetings} and Availability Slots %{from_date_range} to %{to_date_range}"
+        Meetings_v1: "%{Meetings}"
+        past_meetings: Past %{Meetings}
+        upcoming: Upcoming
+        past: Past
+        enter_topic_and_description: 1. Enter Topic & Description
+        select_meeting_times: 2. Select %{Meeting} Times
+        propose_meeting_times: 2. Propose %{Meeting} Times
+        enter_details: 1. Enter Details
+        select_times: 2. Select Times
+        propose_times: 2. Propose Times
+        details: Details
+        details_v1: Details
+        details_v2: Details (in %{time_zone})
+        notes: Notes
+        rsvp: RSVP
+        rsvp_change_popup: RSVP Change
+        change: "(Change)"
+        tips: Tips
+        meeting_area_tip_message: Send and receive personalized messages related to the %{meeting} from the messages tab.
+        meeting_area_tip_note: Capture the %{meeting} notes, followups and %{resource} attachments from the notes tab.
+        cancelled_option: No, it was cancelled
+        rescheduled_option_html: "%{Meeting} is yet to happen? %{update_time}"
+        update_time: Update Time
+        meeting_state_popup: Did your %{meeting}, "%{meeting_topic}" with %{attendee} take place?
+        meeting_state_popup_single_member: Did your %{meeting}, "%{meeting_topic}" take place?
+        update_meeting_status: Update %{Meeting} Status
+        state: Status
+        completed: Completed
+        cancelled: Cancelled
+        canceled: Canceled
+        attending: Attending
+        not_attending: Not Attending
+        scheduled: Scheduled
+        overdue: Overdue
+        pending: Pending
+        accept_meeting_request: Welcome to your %{meeting} area!
+      flash_message:
+        inactive_meeting: The %{meeting} you are trying to access does not exist.
+        connection_widget_creation_success_html: The %{meeting} has been created successfully. Visit %{meeting} %{meeting_area_url}.
+        connection_widget_edit_success_html: The changes to this %{meeting} were successfully saved and the attendees were notified about the update. Visit updated %{meeting} %{meeting_area_url}.
+        no_permission_to_edit: "You do not have the permission to change the %{meeting} time. Please reach out to your %{mentors} to change the %{meeting} time."
+      content:
+        successful_connect: You are successfully connected
+        successful_connect_msg: A notification regarding the new %{meeting} schedule has been sent to %{mentee_name}
+        successful_connect_footer_html:
+          one: For %{current_month}, you have 1 %{meeting} scheduled and can accept requests for %{meeting_request_limit} more. %{Change_limit}
+          other: For %{current_month}, you have %{count} %{meeting} scheduled and can accept requests for %{meeting_request_limit} more. %{Change_limit}
+        successful_connect_footer_limit_reached_html:
+          one: For %{current_month}, you have 1 %{meeting} scheduled and cannot accept requests for more. %{Change_limit}
+          other: For %{current_month}, you have %{count} %{meeting} scheduled and cannot accept requests for more. %{Change_limit}
+        duration_in_minutes: "%{minutes} min"
+        duration_in_hour_v1:
+          one: 1 hr
+          other: "%{count} hrs"
+        no_upcoming_meetings_v1: There are no upcoming %{meetings}.
+        no_past_meetings_v1: There are no past %{meetings}.
+        sure_to_attend_meeting_v3_html: You are about to decline this %{meeting} and notify %{owner_name}. If you would like to propose another time for the %{meeting}, choose "Reschedule".
+        sure_to_attend_meeting_v3_owner: You are about to decline this %{meeting}. If you would like to propose another time for the %{meeting}, choose "Reschedule".
+        rsvp_change_meeting_text: How would you like to proceed?
+        no_location: No location specified
+        messages:
+          one: "%{count} message"
+          other: "%{count} messages"
+        notes:
+          one: "%{count} note"
+          other: "%{count} notes"
+        unread_messages: "%{count} unread"
+        no_meeting_time_set: No %{meeting} time set
+        accept_meeting: Accept %{Meeting}
+        decline_meeting_reason_text: Provide a reason
+        accept_and_propose: Accept and Propose
+        accept_and_send: Accept and Send
+        propose_meeting_time: Propose a time
+        connect_with_name: Connect with %{name}
+        set_meeting_time: Set %{meeting} time
+        set_meeting_location: Set %{meeting} location
+        meeting_time_not_set: "%{Meeting} time not set"
+        update_and_notify_mentee_help_text: Update the %{meeting} time and notify %{mentee_name}
+        create_meeting_v1: Create a %{Meeting}
+        topic_help_text: What do you need help with?
+        past_meeting_creation_help_text_v1: You are registering a %{meeting} in the past. Attendees will not get notified.
+        description_help_text_v2: Please include in the description the purpose of the %{meeting} and any other relevant details like your background information or the type of %{meeting} you are requesting.
+        description_help_text_v4: Send a note to %{mentor_name} about what you are looking for. The request can be seen only by %{mentor_name} and the %{program} %{administrators}.
+        propose_meeting_time_header_text_v2: You are just a step away from accepting this request, would you like to propose a new %{meeting} time?
+        propose_meeting_time_header_text_dual_request_mode_1: You are just a step away from accepting a %{meeting_duration} %{meeting}.
+        propose_meeting_time_header_text_dual_request_mode_2: We recommend that you propose a %{meeting} time.
+        propose_meeting_time_header_text_dual_request_mode_3: Please note that completing this action will notify %{mentee_name}.
+        default_message_dual_request_mode: I am not able to accept %{a_mentoring_connection} at this point.
+        default_slot_message_dual_request_mode: I am proposing a time for %{a_meeting} instead.
+        default_acceptance_message_dual_request_mode: I am open for %{a_meeting} instead and would like to discuss further on the next steps.
+        removed_user: Removed User
+        mentor_availability: "%{name}'s Availability"
+        meeting_with_v1: "%{Meeting} with %{user}"
+        view_in_meetings_v1: View this event in my %{meetings}
+        invalid_attendees_v1: Attendees for this %{meeting} have not been set.
+        invalid_date: Please enter valid date.
+        invalid_start_end_date: Until date must be greater than When
+        due_date_out_of_range: Due date out of range
+        hide_for_this_session_tooltip: Hide for this session
+        match_score_html: "%{match_score} match"
+        meeting_scheduled_in_program_v1: "%{Meeting} scheduled in your %{program}"
+        propose_slots_or_availability_text_required_v1: Please propose at least one timeslot or enter your availability preferences.
+        meeting_time:
+          any_day: Any day
+          weekdays: Weekdays
+          weekends: Weekends
+          morning: morning
+          afternoon: afternoon
+          evening: evening
+        repeat: Repeat
+        repeat_by: Repeat by
+        repeat_on: Repeat on
+        repeat_every: Repeat every
+        every: every
+        until_v1: until
+        edit_question: Would you like to change this %{meeting} only, all %{meetings} in the series or this and all following %{meetings} in the series?
+        delete_only_this_help_text: All other %{meetings} in the series will be retained.
+        delete_following_help_text: This and all the following %{meetings} will be deleted.
+        delete_all_help_text: All %{meetings} in the series will be deleted.
+        edit_only_this_help_text: All other %{meetings} in the series will remain unchanged.
+        edit_following_help_text: This and all the following %{meetings} will be updated.
+        edit_all_help_text: All %{meetings} in the series will be updated.
+        about_to_modify_html: You are about modify <b>%{meeting_topic}</b> scheduled for %{time}.
+        start_and_time_duration: "%{start_time} %{duration}"
+        edit_confirmation: This change will reflect across all %{meetings} in the series. Are you sure?
+        attendees: Attendees
+        calendar_sync:
+          page_title_v1: Subscribe to your %{meetings} from your own calendar
+          introduction_para_v2: The 'Subscribe to Calendar' option helps you to keep track of your %{meetings} by syncing your %{meetings} to Google Calendar, Apple Calendar, Outlook or any calendar that allows you to subscribe by URL. Once subscribed, you will see all your %{meeting} details from your own calendar.
+          few_things_to_note: 'A FEW THINGS TO NOTE:'
+          note_point_1_v1: All past and upcoming %{meetings} will be added to your calendar.
+          note_point_2_v1: Only %{meetings} scheduled with specific times will be added to your calendar.
+          note_point_3_v1: The initial sync will happen instantly, but subsequent updates and new %{meetings} may take up to a day to show in your calendar.
+          note_point_4_v1: The calendar subscription is one-way. Changes must be made within Chronus in order to reflect in both places. Updates made directly to your calendar will not be reflected in Chronus.
+          to_subscribe_to_calendar: To Subscribe to Calendar
+          subscribe_calendar_point_1: Goto 'My %{Meetings}' listing page.
+          subscribe_calendar_point_2: On right top, click on 'Subscribe to Calendar'.
+          subscribe_calendar_point_3: User has to copy the calendar URL from the 'Subscribe to Calendar' pop-up, before he/she wants to subscribe %{mentoring} calendar %{meetings}. Below is the list of calendar applications to which a user can add his/her %{mentoring} calendar URL, but it is not limited to it.
+          sync_with_google: Sync with Google Calendar
+          sync_with_outlook: Sync with Microsoft Outlook Calendar
+          sync_with_ical: Sync with iCal
+          sync_with_google_point_1: Open Google Calendar
+          sync_with_google_point_2: On the left side, find 'Other calendars', click the down arrow and select Add by URL.
+          sync_with_google_point_3: Enter the copied %{mentoring} calendar URL in the field provided as shown below.
+          sync_with_google_point_4: After pasting the URL in the field provided, click on Add calendar. The calendar will appear on the left side under 'Other calendars'. As in below case, a calendar with the name same as URL has been added. Calendar name can be changed by using the 'Calendar Settings' option that opens on click on down arrow button.
+          for_outlook_2007: For Outlook 2007
+          outlook_2007_point_1: Open the Outlook 2007 and click on the Tools -> Account Settings.
+          outlook_2007_point_2: Now, go to the Internet Calendars tab and click on New.
+          outlook_2007_point_3: Paste the %{mentoring} calendar URL into the box for location of the Internet Calendar and click on the Add button.
+          outlook_2007_point_4: Confirm or edit the Folder Name and other options and click on the OK button.
+          outlook_2007_point_5: Click on the Close button, now go to Mail view and click on Send/Receive which will connect and download the calendar entries to your computer.
+          outlook_2007_point_6: Click on Calendars -> Other Calendars and check on the box next to the calendar you just created.
+          outlook_2007_point_7: Your added %{mentoring} calendar %{meetings} will then appear in your calendar view.
+          for_outlook_2010: For Outlook 2010
+          outlook_2010_point_1: Open Outlook 2010 calendar and click the Home tab on the Ribbon.
+          outlook_2010_point_2: Under Manage Calendars click on Open Calendar -> From Internet.
+          outlook_2010_point_3: Paste the %{mentoring} calendar URL into the New Internet Calendar field and click OK.
+          outlook_2010_point_4: Click 'Yes' to the dialog box that comes up verifying you want to subscribe to it.
+          outlook_2010_point_5: Now your %{mentoring} calendar has been added to Outlook and you can see it under 'Other Calendars'.
+          for_outlook_2013_and_2016: For Microsoft Outlook 2016 & Microsoft Outlook 2013
+          outlook_2016_2013_point_1: In Outlook, click File > Account Settings > Account Settings.
+          outlook_2016_2013_point_2: In the Account Settings pop-up, click on the Internet Calendars tab, click New.
+          outlook_2016_2013_point_3: Paste the %{mentoring} calendar URL you copied in the 'New Internet Calendar Subscription' popup and click Add.
+          outlook_2016_2013_point_4: In the Folder Name box, type the name of the calendar as you want it to appear in Outlook, and then click OK.
+          outlook_2016_2013_point_5: When you start Outlook, it checks automatically for updates and downloads any changes.
+          outlook_2016_2013_point_6: If you keep Outlook open, it also periodically checks for and downloads updates.
+          for_outlook_web_app: For Outlook Web App - Office 365, Outlook Web App - Office 365 Small Business, Outlook Web App
+          outlook_web_app_point_1: Sign in to Office 365 or Outlook Web App and select Calendar.
+          outlook_web_app_point_2: Right-click in the navigation pane where you see Other calendars. Or, touch and hold if you're using a touch device. Select Open calendar.
+          outlook_web_app_point_3: Enter the %{mentoring} calendar URL in the Internet calendar box, and then select Open.
+          outlook_web_app_point_4: The calendar will automatically be added to your calendar view. In a few minutes, you'll be able to see all of the %{meetings} in the calendar.
+          sync_with_ical_point_1: In Calendar, choose File > New Calendar Subscription.
+          sync_with_ical_point_2: Enter the %{mentoring} calendar URL, then click Subscribe.
+          sync_with_ical_point_3: Enter a name for the calendar and choose a color to help you identify it on your calendar.
+          sync_with_ical_point_4: Choose iCloud from the Location menu, then click OK.
+        location_help_text: Enter a location, phone number or Skype ID
+        all_mentors: All %{Mentors}
+        meeting_description: Description
+        message_description: Message description
+        go_to_meeting_area: To go to the %{meeting} area,
+        reschedule_meeting: To reschedule the %{meeting},
+        view_reschedule_meetings: To reschedule/ view your %{meetings},
+        Location: Location
+        current_and_next_month_text: "(%{current_month} & %{next_month})"
+        mentor_availability_with_timezone: "%{mentor_name}'s Availability (%{time_zone})"
+        mentee_availability_text: "%{mentee_name}'s Availability :"
+        send_message: Send a Message
+        send_message_help_text: Drop a note to %{mentee_name} on the next steps for the %{meeting}
+        record_past_meeting_text: If you would like to record a past %{meeting} that has already happened
+        change_slot: "( Change Slot )"
+        propose_other_times: Propose other times
+        propose_meeting_time_text: Propose a %{Meeting} Time
+        your_availability: Your Availability
+        your_availability_instruction: Help %{mentor_name} schedule/reschedule the %{meeting} time by providing your general availability preferences.
+        mentee_availability_placeholder_msg: 'Ex: Available on weekdays from 8am - 10am.'
+        propose_times_for_meeting: Propose Times (%{time_zone})
+        propose_times_for_meeting_instruction_v1: Propose a few dates and times for %{mentor_name} to choose from. If you would like the %{mentor} to propose a time, fill "Your Availability" below.
+        propose_another_timeslot: Propose Another Timeslot
+        propose_location_placeholder: Location, Phone or Skype
+        send_message_placeholder: Describe the next steps for the %{meeting}
+        proposed_slot_message_placeholder: Add a note to %{mentee_name}
+        propose_slot_detail_header_placeholder: Propose a date, time and place
+        meeting_time_cannot_be_in_past: "%{Meeting} times cannot be in the past."
+        request_meeting_x_hours_in_advance_v1: "%{Meeting} to %{mentor_name} should be requested %{number_of_hours} hours in advance."
+        mentor_unavailable_during_proposed_slot: "%{mentor_name} is not available for %{meeting} during proposed time. Please select some other time."
+        meeting_select_time_help_text: It's quicker to schedule from one of the above time slots that %{mentor_name} already marked as available.
+        mentee_request_limit_exceeded_html: You cannot send any more %{meeting} requests as you have reached the limit for the number of concurrent pending requests. %{click_here} to view your pending requests.
+        mentee_request_limit_exceeded_tooltip_v1: You cannot send any more %{meeting} requests as you have reached the limit for the number of concurrent pending requests. Please withdraw a pending request to send a new request.
+        mentee_meeting_limit_exceeded: You cannot send any more %{meeting} requests as you have reached the limit for the number of %{meetings} in %{calendar_month}
+        mentee_meeting_limit_exceeded_tooltip: You cannot send any more %{meeting} requests as you have reached the limit for the number of %{meetings}
+        mentor_limit_exceeded: "%{mentor_name} has already reached the limit for the number of %{meetings} in %{calendar_month} and is not available for %{meetings}"
+        mentor_limit_exceeded_tooltip: "%{mentor_name} has already reached the limit for the number of %{meetings} and is not available for %{meetings}"
+        selected_proposed_slot_detail: "%{slot_timing} (%{slot_minutes} mins)"
+        created_on: Created on
+        no_description_provided: No description provided.
+        provide_feedback_on_past_meetings: Provide Feedback On Past %{meetings}
+        accepted_on: 'Accepted on: %{time}'
+        meeting_was_on: "%{meeting} was on: %{time}"
+        meeting_yet_to_happen: "%{meeting} yet to happen?"
+        update_meeting: Update %{meeting}
+        decline: Decline
+        rsvp_decline: Decline %{Meeting}
+        reschedule: Reschedule
+        rsvp_reschedule: Reschedule %{Meeting}
+        repeats:
+          every_day_until:
+            one: Daily until %{date}
+            other: Every %{count} days until %{date}
+          every_week_until:
+            one: Weekly until %{date}
+            other: Every %{count} weeks until %{date}
+          every_month_until:
+            one: Monthly until %{date}
+            other: Every %{count} months until %{date}
+        on_Weekdays: on Weekdays
+        on_Weekends: on Weekends
+        on_dates: on %{dates}
+        on_the_date: on the %{date}
+        not_on_date: not on %{date}
+        nth_day_of_month: "%{nth_day} day of the month"
+        no_upcoming_meetings_text: You have no upcoming %{meetings}.
+        add_new_meeting: Add New %{Meeting}
+        meeting_widget_message_placeholder: Send a message or Ask a question
+      action:
+        view_feedback: View Feedback
+        provide_feedback: Provide Feedback
+        edit_details: Edit Details
+        delete_meeting_v1: Delete %{Meeting}
+        add_meeting_v1: Add New %{Meeting}
+        view_calendar_v1_html: View %{name}'s Calendar
+        only_this: Only this %{meeting}
+        following: Following %{meetings}
+        all: All %{meetings}
+        proceed_to_select_times: Proceed to Select Times
+        proceed_to_propose_times: Proceed to Propose Times
+        choose_slot: Choose
+        set_location: Set Location
+      form:
+        mentee_name: "%{Mentee} name"
+        when: When
+        start_time: Start Time
+        end_time: End Time
+        Invite: Invite
+        topic: Topic
+        description: Description
+        invitees: Invitees
+        date: Date
+        time: Time
+        location: Location
+        proposed_time: Proposed Time
+        request_id: Request ID
+        note: Note
+        next_day: next day
+    mentoring_slot:
+      content:
+        availability_slot: Availability Slot
+        recurrence_availability_slot_text: This is a recurrent availability slot. Changing the recurrence period will effect all the following availablity slots. Are you sure you want to continue?
+      form:
+        day_of_month: Day of the month
+        day_of_week: Day of the week
+      repeats:
+        Never: Never
+        Daily: Daily
+        Weekly: Weekly
+        Monthly: Monthly
+      report_headers:
+        Title: Title
+        Members: Member(s)
+        Start_Time: Start Time
+        Duration: Duration (hours)
+        Location: Location
+        mentor_survey_completed: "%{Mentor} Survey Completed"
+        mentee_survey_completed: "%{Mentee} Survey Completed"
+    meeting_request:
+      auto_expire_message: This request was closed automatically since the %{mentor} did not respond within %{expiration_days} days.
+      action:
+        close_request: Close Request
+        close_requests: Close Requests
+        withdraw: Withdraw Request
+        accept_request: Accept this time
+        decline_request: Decline request
+      content:
+        sent: Sent
+        reason_for_closing: Reason for closing
+        closed_by: Closed By
+        closed_at: Closed At
+        empty_reqs_v1: There are no %{meeting} requests matching the chosen criteria
+        select_atleast_one_request_v1: Select at least one request
+        select_this_label_v1: Select at least one request
+        proposed_times: Proposed Times
+        meeting_timezone: "(%{time_zone})"
+        proposed_times_help_text: You can accept this request by choosing %{a_meeting} time from the list of proposed times or proposing %{a_meeting} time.
+        slot_time_error: "%{Meeting} time cannot be in the past"
+        close_request_popup:
+          title:
+            one: Close Request
+            other: Close Requests
+          help_text_v1:
+            one: You have selected a request.
+            other: You have selected %{count} requests.
+          placeholder:
+            message: Please add a note describing why you are unable to accept this request
+            reason_v1:
+              one: Enter a reason for closing the request.
+              other: Enter a reason for closing the requests.
+          action:
+            close_request:
+              one: Close Request
+              other: Close Requests
+        closing_reason: Reason for closing
+        closing_reason_no_match_v1: Not the right match for this %{mentee}
+        closing_reason_limit_reached: Reached my limit and cannot take more %{mentees}
+        closing_reason_busy_v1: Busy at this time and cannot take a %{mentee} for some time
+        closing_reason_other_v1: Other
+        accepted_with_slot_text: Your request for a %{meeting} is accepted. The %{meeting} time was confirmed.
+        accepted_and_proposed_slot_text: Your request for a %{meeting} is accepted. The %{meeting} time was updated.
+        accepted_and_proposed_slot_with_message: Your request for a %{meeting} is accepted. The %{meeting} time was updated. %{message}
+        accepted_with_message_text: Your request for a %{meeting} is accepted. The %{meeting} time was not set. %{message}
+        accepted_request_scrap_subject: "%{mentor_name} has accepted your request for a %{meeting}!"
+        show_accept_send_message_section_link_text_html: Can't decide on the time? %{send_message_url} without proposing a time.
+        send_message: Send a message
+        show_accept_propose_slot_section_link_text_html: "%{propose_slot_url} to propose a new %{meeting} time and send a message."
+      label:
+        sender_email: Sender Email
+        recipient_email : Recipient Email
+        reason_for_closure: Reason for Closure
+        reason_for_decline: Reason for Decline
+        requests_all: All Requests
+        pending: Pending
+        accepted: Accepted
+        declined: Declined
+        withdrawn: Withdrawn
+        closed: Closed
+        sender: Sender
+        recipient: Recipient
+        Sender: Sender
+        Recipient: Recipient
+        to: Notify
+        topic: Topic *
+        description: Description *
+        date: Date*
+        available_dates: Available Dates for this %{meeting}
+        pick_a_date: Pick a date
+        pick_a_date_enhanced_ui_html: Choose a date with more than one available slot. Use %{previous_button} and %{next_button} to navigate.
+        pick_a_time_with_zone: Pick a Time (%{time_zone})
+        available_slots_with_zone: Available Slots in Time Zone (%{time_zone})
+        times_with_zone: Times (%{time_zone})*
+        location: Location
+        timeslot: Timeslot*
+        select_meeting_title: Select %{meeting} title
+        select_meeting_description: Select %{meeting} description
+        select_a_date: Select a date
+        send_message_with_proposed_slot: Send a message along with proposing a slot.
+        reply_message: Reply to Message
+      header:
+        view: View
+        req_with_status: Show requests with status
+        title_v1: "%{Meeting} Requests"
+        received_meeting_req_v1: Received %{Meeting} Requests
+        sent_meeting_req_v1: Sent %{Meeting} Requests
+        all_meeting_req: All %{Meeting} Requests
+        manage_meeting_requests_v1: "%{Meeting} Requests"
+        requests_for_meeting: "%{meeting} requests"
+        request_title: "%{Meeting} Request"

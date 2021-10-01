@@ -1,0 +1,6 @@
+<% if @overall_impact_hash[:connections_created] %>
+  <% content = rollup_body_box(box_icon_class: "fa-share-alt", text_number: @overall_impact_hash[:connections_created][:current], text_number_class: "cjs_global_reports_overall_impact_connections_created_number") %>
+  <% content << get_percentage_difference_rollup(@overall_impact_hash[:connections_created]) %>
+  jQuery(".cjs_global_reports_overall_impact_connections_created").html("<%= j(content) %>")
+  NumberCounter.initCounter('.cjs_global_reports_overall_impact_connections_created_number', {format: true});
+<% end %>

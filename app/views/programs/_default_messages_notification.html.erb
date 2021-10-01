@@ -1,0 +1,23 @@
+<% label = "program_settings_strings.content.default_notification_setting_for_other_activities_v2".translate(program: _program) %>
+
+<%= f.fields_for notification_setting do |ns| %>
+  <%= control_group do %>
+    <%= content_tag(:div, label, :class => "control-label false-label") %>
+    <%= choices_wrapper(label) do %>
+      <%= controls do %>
+        <label class="radio">
+          <%= ns.radio_button :messages_notification, UserConstants::DigestV2Setting::ProgramUpdates::IMMEDIATE %>
+          <%= "feature.profile.content.notify_setting_all_v1".translate(message_or_activity: "feature.profile.label.message".translate(count: 1)) %>
+        </label>
+        <label class="radio">
+          <%= ns.radio_button :messages_notification, UserConstants::DigestV2Setting::ProgramUpdates::DAILY %>
+          <%= "feature.profile.content.notify_setting_daily_v1".translate(message_or_activity: "feature.profile.label.message".translate(count: 2)) %>
+        </label>
+        <label class="radio">
+          <%= ns.radio_button :messages_notification, UserConstants::DigestV2Setting::ProgramUpdates::WEEKLY %>
+          <%= "feature.profile.content.notify_setting_weekly_v1".translate(message_or_activity: "feature.profile.label.message".translate(count: 2)) %>
+        </label>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

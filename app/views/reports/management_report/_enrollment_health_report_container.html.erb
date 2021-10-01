@@ -1,0 +1,7 @@
+<div class="col-md-6 cjs-tile-container cjs_tile_<%= DashboardReportSubSection::Tile::ENROLLMENT %>">
+  <%= render(partial: "reports/management_report/report_tile_settings", locals: {tile: DashboardReportSubSection::Tile::ENROLLMENT}) %>
+  <h3 class="font-noraml"><%= "feature.reports.content.how_is_enrollment".translate(track: _program) %></h3>
+  <div class="ibox" id="enrollment_health_report">
+    <%= render(partial: "common/tile_placeholder") %>
+  </div>
+</div>

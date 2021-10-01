@@ -1,0 +1,6 @@
+<%= field_set_wrapper("feature.admin_view.label.Timeline".translate, false, @filter_params.present? && timeline_accordion_collapse?(@filter_params[:timeline])) do %>
+  <%= control_group do %>
+    <div class="control-label col-sm-2 timeline false-label"><%= "feature.admin_view.label.Timeline".translate %></div>
+    <%= generate_admin_view_timeline_filters(@filter_params) %>
+  <% end %>
+<% end %>

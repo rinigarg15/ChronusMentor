@@ -1,0 +1,11 @@
+soap_header:
+  "tns:AuthorizationToken":
+    "tns:Token": <%= Psych.to_json("#{params['base_authorization_username']};#{params['base_authorization_password']}").chomp %>
+message_tag: "ExecuteMethod"
+message:
+  serviceName: "AAP.Service.NF.Account"
+  methodName: "GetWebLoginByAAPId"
+  parameters:
+    Parameter:
+      Name: "AAPID"
+      Value: <%= Psych.to_json(params["username"]).chomp %>

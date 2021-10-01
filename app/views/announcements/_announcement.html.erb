@@ -1,0 +1,28 @@
+<% announcement_title = get_announcement_title(announcement) %>
+<% td_class = announcement.expired? ? 'text-muted' : ''%>
+
+<tr>
+  <td class="col-sm-4 col-md-5" colspan="4">
+    <%= content_tag(:div, (announcement.attachment? ? get_icon_content("fa fa-paperclip") : get_icon_content("fa")), :class => "media-left") + content_tag(:div, link_to(truncate(announcement_title.gsub(/([\n\t])/, " "), :length => 150, :separator => ' '), announcement.published? ? announcement_path(announcement) : edit_announcement_path(announcement), :class => td_class), :class => "media-body") %>
+  </td>
+  <td class="col-sm-2 text-center" colspan="2">
+    <span class =<%= td_class %>><%= get_announcement_recipients(announcement) %></span>
+  </td>
+  <td class="col-sm-2 text-center" colspan="2">
+    <span class =<%= td_class %>><%= formatted_time_in_words(announcement.updated_at, :no_time => true, :absolute => true) %></span>
+  </td>
+  <td class="col-sm-2 col-md-1 text-center" colspan="2">
+    <span class =<%= td_class %>><%= announcement.expiration_date ? formatted_date_in_words(announcement.expiration_date) : "--" %></span>
+    <% if announcement.expired? %>
+      <strong class = 'text-muted small'> <%= "feature.announcements.label.expired".translate %> </strong>
+    <% end %>
+  </td>
+  <td class="col-sm-2 text-center" nowrap>
+    <div class="clearfix text-center">
+      <% common_actions = [] %>
+      <% common_actions << (link_to get_icon_content("fa fa-pencil") + "display_string.Edit".translate, edit_announcement_path(announcement), :class => "btn btn-white btn-xs btn-block-xxs cjs-tool-tip", :data => {:desc => "display_string.Edit".translate }) %>
+      <% common_actions << (link_to get_icon_content("fa fa-trash") + "display_string.Delete".translate, announcement_path(announcement), :method => :delete, :class => "btn btn-white btn-xs btn-block-xxs cjs-tool-tip", :data => {:desc => get_delete_or_discard_text(announcement, :capitalize => true), :confirm => "feature.announcements.content.delete_or_discard_warning".translate(:delete_or_discard => get_delete_or_discard_text(announcement, :capitalize => false))}) %>
+      <%= render_button_group(common_actions, :btn_group_class => "text-center", :grid_class => " ") %>
+    </div>
+  </td>
+</tr>

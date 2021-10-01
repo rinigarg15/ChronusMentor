@@ -1,0 +1,20 @@
+en:
+  email_translations:
+    mentor_request_closed_for_recipient:
+      title_v2: "%{_Mentor} request closed notification to %{_mentor}"
+      description_v2: "%{_Mentees} can request a specific %{_mentor}. When %{_a_admin} closes the %{_mentor} request, they can include a personalized message in this system-generated email; the email is then sent to the requested %{_mentor}."
+      subject_v2: The {{customized_mentoring_term}} request from {{sender_name}} is now closed
+      content_v3_html: We have closed <a href='{{sender_url}}'>{{sender_name}}</a>'s request for {{customized_mentoring_term}} in <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a>.<br /> {{message_from_admin_as_quote}}<br /> If this is an error and you intended to accept {{sender_name}}'s request, please <a href='{{url_contact_admin}}'>contact</a> the {{customized_admin_term}} immediately.<br/>
+      tags:
+        url_contact_admin:
+          description: Url for the user to contact administrator
+        sender_name:
+          description: Name of the mentee whose request was closed
+          example: William Brown
+        message_from_admin:
+          description: Reason provided by the admin when closing the mentor request
+          example_v1: Sorry. The request is invalid.
+        admin_name:
+          example: Administrator
+        message_from_admin_as_quote:
+          description: Optional message sent by the administrator

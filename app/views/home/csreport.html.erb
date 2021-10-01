@@ -1,0 +1,113 @@
+<%= javascript_include_tag "//ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.2/jquery.dataTables.min.js" %>
+<%= javascript_include_tag "FixedColumns.min.js" %>
+<%= stylesheet_link_tag "//ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.2/css/jquery.dataTables.css" %>
+
+<style>
+  #app_content #page_canvas{
+    width: auto;
+    padding: 20px;
+  }
+
+  #orgs_wrapper{
+    margin-bottom: 40px;
+  }
+</style>
+
+<table id="orgs" class="has-below-2">
+  <thead>
+    <tr>
+      <th rowspan="2" style="width: 200px">Organiztion</th>
+      <th rowspan="2" style="width: 200px">Programs</th>
+      <th rowspan="2">Program Type</th>
+      <th rowspan="2">Number of licenses</th>
+      <th rowspan="2">Registered (% of number of licenses)</span></th>
+      <th colspan="2">Connected Users</th>
+      <th rowspan="2">Users Visited in last <%= params[:week] ? 'week' : 'month' %> (% of Registered)</span></th>
+    </tr>
+    <tr>
+      <th>Ongoing(% of Registered)</th>
+      <th>Active(% of Connected)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @csreport.orgs.each do |org| %>
+      <% progs = @csreport.progs.select{|p| p.parent_id == org.id} %>
+      <% progs.each do |pro| %>
+        <tr>
+          <td>
+            <%= org.account_name %> <%= link_to(org.name, root_organization_url(:domain => org.domain, :subdomain => org.subdomain), :target => "_blank") %> 
+          <span class="dim small">on <%= DateTime.localize(org.created_at, format: :abbr_short) %></span>
+        </td>
+          <%= render :partial => "home/prog_csreport", :locals => {:pro => pro, :org => org} %>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+
+<div class='well has-above-2'>
+  <h3>TODO / Notes</h3>
+  <ol>
+    <li>
+      Only the increase in the registered users count is factored from the last week. We need to add users removed / suspended to this computation
+    </li>
+    <li>
+      Row 2: Change over <%= params[:week] ? 'week' : 'month' %>
+    </li>
+    <li>
+      Row 3: Change over <%= params[:week] ? 'month' : 'quarter' %>
+    </li>
+    <li>
+      Active connected users are the users who visited the <%= _mentoring_connection %> in last <%= params[:week] ? 'week' : 'month' %>.
+    </li>
+    <li>
+      The third row metric does not makes sense of Active Connected Users and User Visits.
+    </li>
+  </ol>
+</div>
+
+
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  var oTable = jQuery('#orgs').dataTable( {
+    "bPaginate": false,
+    "sScrollX": "100%",
+    "sScrollY": "650px"
+  } );
+
+  new FixedColumns( oTable, {
+    "iLeftWidth": 150,
+    "fnDrawCallback": function ( left, right ) {
+      var that = this, groupVal = null, matches = 0, heights = [], index = -1;
+      
+      /* Get the heights of the cells and remove redundant ones */
+      jQuery('tbody tr td', left.body).each( function ( i ) {
+        var currVal = jQuery(this).html();
+        
+        /* Reset values on new cell data. */
+        if (currVal != groupVal) {
+          groupVal = currVal;
+          index++;
+          heights[index] = 0;
+          matches = 0;
+        } else  {
+          matches++;
+        }
+        
+        heights[ index ] += jQuery(this.parentNode).height();
+        if ( currVal == groupVal && matches > 0 ) {
+          this.parentNode.parentNode.removeChild(this.parentNode);
+        }
+      } );
+
+      /* Now set the height of the cells which remain, from the summed heights */
+      jQuery('tbody tr td', left.body).each( function ( i ) {
+        that.fnSetRowHeight( this.parentNode, heights[ i ] );
+      } );
+    }
+  } );
+
+
+} );
+</script>

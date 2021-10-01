@@ -1,0 +1,7 @@
+<%= render :layout => 'common/report_tiles' do %>
+  <%= render_report_tiles(tiles_data[:received], "fa fa-address-card-o", "feature.mentor_request.label.Received".translate, "", {percentage: tiles_data[:percentage], prev_periods_count: tiles_data[:prev_periods_count]}) %>
+  <%= render_report_tiles(tiles_data[:pending], "fa fa-exclamation-triangle ", 'feature.mentor_request.status.Pending'.translate, "") %>
+  <%= render_report_tiles(tiles_data[:accepted], "fa fa-check", 'feature.mentor_request.status.Accepted'.translate, "") %>
+  <%= render_report_tiles(tiles_data[:other], "fa fa-close", "feature.admin_view.label.Others_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS,'', :id => 'other_tile_desc', )),"" ) %>
+  <%= tooltip("other_tile_desc", mentor_request_reject_tile_tooltip) %>
+<% end %>

@@ -1,0 +1,33 @@
+<% if @error_flash %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("meeting_edit_flash", '<%= "#{@error_flash}. #{@meeting.errors.full_messages.to_sentence}" %>', false);
+<% else %>
+  Meetings.gaTrackMeetingEdit(<%= @from_connection_home_page_widget %>, <%= @from_meeting_area %>, <%= @set_meeting_location %>);
+  <% if @from_connection_home_page_widget %>
+    jQuery("#loading_results").hide();
+    closeQtip();
+    <% if current_user.can_be_shown_flash_meetings_widget? %>
+      jQuery("#cjs_flash_meetings_widget").html();
+      ConnectionsWidget.getConnectionsWidgetData("<%= flash_meetings_widget_path(format: :js) %>");
+    <% else %>
+      jQuery(".cjs_meetings_tab_home_page_<%= @group.id %> a").click();
+    <% end %>
+    ChronusValidator.ErrorManager.ShowResponseFlash("flash_container","<%= j 'feature.meetings.flash_message.connection_widget_edit_success_html'.translate(:meeting => _meeting, :meeting_area_url => link_to("display_string.here".translate, meeting_path(@meeting, current_occurrence_time: @current_occurrence_time), target: '_blank')) %>", true);
+  <% else %>
+    closeQtip();
+    jQuery('#loading_results').hide();
+    <% if @group %>
+      <% is_meeting_listing_group = (!@from_meeting_area && !@outside_group) %>
+      jQuery('.visible-xs #side_pane_meetings_mobile').replaceWith('<%= j(render("groups/side_pane_meetings", {upcoming_meetings: @upcoming_meetings_in_next_seven_days, initialize_rsvp_js: false, mobile_only: true, meetings_tab: is_meeting_listing_group})) %>');
+      jQuery('.side_pane_meetings_container #side_pane_meetings').replaceWith('<%= j(render("groups/side_pane_meetings", {upcoming_meetings: @upcoming_meetings, initialize_rsvp_js: false, meetings_tab: is_meeting_listing_group})) %>');
+    <% end %>
+    jQuery("#upcoming_meetings").html('<%= j(render(:partial => "meetings/upcoming_meetings")) %>');
+    jQuery("#archived_meetings").html('<%= j(render(:partial => "meetings/archived_meetings")) %>');
+    Meetings.handleRsvpPopup();
+    <% if @outside_group %>
+      jQuery('#calendar').fullCalendar('refetchEvents');
+      jQuery('#mentoring_calendar').fullCalendar('refetchEvents');
+    <% end %>
+    ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", "<%= 'flash_message.user_flash.meeting_updation_success_v1'.translate(:meeting => _meeting) %>", true);
+    jQueryHighlight('<%= "#meeting_#{@meeting.id}_#{@current_occurrence_time.to_i}" %>');
+  <% end %>
+<% end %>

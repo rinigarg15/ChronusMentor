@@ -1,0 +1,21 @@
+<h3 class="p-b-xxs"><%= "feature.three_sixty.survey.your_details".translate %></h3>
+<div class="well white-bg square-well clearfix form-horizontal">
+  <%= control_group do %>
+    <label class="control-label col-sm-3" for="three_sixty_survey_reviewer_name"><%= "feature.three_sixty.survey.your_name".translate %></label>
+    <%= controls(:class => "col-sm-9") do %>
+      <%= text_field_tag "three_sixty_survey_reviewer[name]", "#{survey_reviewer.try(:name)}", :class => "form-control" %>
+    <% end %>
+  <% end %>
+  <%= control_group do %>
+    <label class="control-label col-sm-3" for="three_sixty_survey_reviewer_email"><%= "feature.three_sixty.survey.your_email_address".translate %></label>
+    <%= controls(:class => "col-sm-9") do %>
+      <%= text_field_tag "three_sixty_survey_reviewer[email]", "#{survey_reviewer.try(:email)}", :disabled => true, :class => "form-control" %>
+    <% end %>
+  <% end %>
+  <%= control_group do %>
+    <label class="control-label col-sm-3" for="three_sixty_survey_reviewer_group"><%= "feature.three_sixty.survey.your_relationship_to_the_person_being_assessed".translate %></label>
+    <%= controls(:class => "col-sm-9") do %>
+      <%= text_field_tag "three_sixty_survey_reviewer[group]", "#{survey_reviewer.try(:group_name)}", :disabled => true, :class => "form-control" %>
+    <% end %>
+  <% end %>
+</div>

@@ -1,0 +1,151 @@
+---
+MentoringModel:
+- :disassociate_drafted_groups
+- :templates_cleanup
+MentoringModel::TaskTemplate:
+- :_notify_mentoring_model__task_template_observer_for_after_destroy
+- :_notify_mentoring_model__task_template_observer_for_before_destroy
+MentoringModel::Task:
+- :_notify_mentoring_model__task_observer_for_after_destroy
+MentoringModel::Milestone:
+- :reindex_followups
+ResourcePublication:
+- :_notify_resource_publication_observer_for_after_destroy
+Meeting:
+- :_notify_meeting_observer_for_after_destroy
+Post:
+- :_notify_post_observer_for_after_destroy
+Connection::Membership:
+- :_notify_membership_observer_for_after_destroy
+- :cleanup_mentoring_model_tasks
+- :reindex_es
+- :fix_mentoring_model_tasks
+- :_notify_membership_observer_for_before_destroy
+User:
+- :_notify_user_observer_for_after_destroy
+Group:
+- :set_marked_for_destroy
+MentoringModel::GoalTemplate:
+- :_notify_mentoring_model__goal_template_observer_for_after_destroy
+- :_notify_mentoring_model__goal_template_observer_for_before_destroy
+MentoringModel::MilestoneTemplate:
+- :_notify_mentoring_model__milestone_template_observer_for_after_destroy
+CampaignManagement::AbstractCampaign:
+- :cleanup_campaign_jobs
+- :cleanup_campaign_statuses
+Member:
+- :_notify_member_observer_for_after_destroy
+AbstractMessage:
+- :_notify_abstract_message_observer_for_after_destroy
+Article:
+- :_notify_article_observer_for_after_destroy
+Article::Publication:
+- :_notify_article__publication_observer_for_after_destroy
+- :destroy_program_activities
+Connection::Activity:
+- :es_reindex_group
+Education:
+- :_notify_education_observer_for_after_destroy
+Experience:
+- :_notify_experience_observer_for_after_destroy
+Feedback::Response:
+- :_notify_feedback__response_observer_for_after_destroy
+Manager:
+- :_notify_manager_observer_for_after_destroy
+- :_notify_manager_observer_for_before_destroy
+MatchConfig:
+- :update_match_indexes
+ProgramEvent:
+- :handle_cancelled_event_scenario
+Publication:
+- :_notify_publication_observer_for_after_destroy
+RecommendationPreference:
+- :destroy_recommendation_if_no_preferences
+- :reindex_preferred_user
+MentorRecommendation:
+- :reindex_followups
+RoleQuestion:
+- :delete_match_configs
+Theme:
+- :_notify_theme_observer_for_before_destroy
+ThreeSixty::SurveyAnswer:
+- :_notify_three_sixty__survey_answer_observer_for_after_destroy
+ThreeSixty::SurveyQuestion:
+- :destroy_survey_competency_if_no_questions
+ActsAsTaggableOn::Tagging:
+- :_notify_acts_as_taggable_on__tagging_observer_for_after_destroy
+- :remove_unused_tags
+Connection::MenteeMembership:
+- :_notify_membership_observer_for_after_destroy
+- :cleanup_mentoring_model_tasks
+- :reindex_es
+- :fix_mentoring_model_tasks
+- :_notify_membership_observer_for_before_destroy
+Connection::MentorMembership:
+- :_notify_membership_observer_for_after_destroy
+- :cleanup_mentoring_model_tasks
+- :reindex_es
+- :fix_mentoring_model_tasks
+- :_notify_membership_observer_for_before_destroy
+Connection::CustomMembership:
+- :_notify_membership_observer_for_after_destroy
+- :cleanup_mentoring_model_tasks
+- :reindex_es
+- :fix_mentoring_model_tasks
+- :_notify_membership_observer_for_before_destroy
+Program:
+- :_notify_program_observer_for_after_destroy
+CareerDev::Portal:
+- :_notify_program_observer_for_after_destroy
+CampaignManagement::ProgramInvitationCampaign:
+- :cleanup_campaign_jobs
+- :cleanup_campaign_statuses
+CampaignManagement::SurveyCampaign:
+- :cleanup_campaign_jobs
+- :cleanup_campaign_statuses
+CampaignManagement::UserCampaign:
+- :cleanup_campaign_jobs
+- :cleanup_campaign_statuses
+- :set_marked_for_destroy
+CampaignManagement::UserCampaignMessage:
+- :stop_campaign_if_no_campaign_messages
+AdminMessage:
+- :_notify_abstract_message_observer_for_after_destroy
+Message:
+- :_notify_abstract_message_observer_for_after_destroy
+Scrap:
+- :_notify_abstract_message_observer_for_after_destroy
+AdminView:
+- :_notify_admin_view_observer_for_after_destroy
+SurveyAnswer:
+- :_notify_survey_answer_observer_for_after_destroy
+MemberMeeting:
+- :_notify_member_meeting_observer_for_after_destroy
+Role:
+- :_notify_role_observer_for_after_destroy
+MemberLanguage:
+- :reindex_es
+QaAnswer:
+- :_notify_qa_answer_observer_for_after_destroy
+ActivityLog:
+- :reindex_user
+MentorOffer:
+- :_notify_mentor_offer_observer_for_after_destroy
+ProfileAnswer:
+- :_notify_profile_answer_observer_for_after_destroy
+RoleReference:
+- :reindex_elasticsearch
+UserStat:
+- :reindex_user
+MentorRequest:
+- :_notify_mentor_request_observer_for_after_destroy
+ProjectRequest:
+- :_notify_project_request_observer_for_after_destroy
+AnswerChoice:
+- :_notify_answer_choice_observer_for_after_destroy
+QuestionChoice:
+- :_notify_question_choice_observer_for_after_destroy
+ProfilePicture:
+- :reindex_es_user
+UserPreferenceChoice:
+- :destroy_invalid_explicit_preferences

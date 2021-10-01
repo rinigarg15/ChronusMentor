@@ -1,0 +1,18 @@
+<div>
+  <div class="cjs_display_connect_calendar hide">
+    <div class=" alert alert-info m-b-md text-xs-center text-sm-left">
+      <%= link_to_function(get_icon_content("fa fa-times") + set_screen_reader_only_content("display_string.Remove".translate), "", class: "cjs_hide_connect_calendar_alert_box pull-right") %>
+      <div class="m-r">
+      <%= get_icon_content("fa fa-calendar-plus-o text-info", {container_class: "fa-circle", stack_class: "fa-1x m-r-sm hidden-xs"}) %>
+      <%= "feature.calendar_sync_v2.prompt.prompt_text_html".translate(connect_calendar_link: link_to("feature.calendar_sync_v2.action.connect_your_calendar".translate, edit_member_url(wob_member, section: MembersController::EditSection::SETTINGS, scroll_to: MembersController::EditSection::CALENDAR_SYNC_V2_SETTINGS, focus_settings_tab: true, ei_calendar_connect_src: EngagementIndex::Src::ConnectCalendar::HOMEPAGE_PROMPT), class: ""), meetings: _meetings)%>
+      </div>
+    </div>
+  </div>
+
+  <%= javascript_tag do %>
+    jQuery(function(){
+      SchedulingAssistant.initializeForm();
+      SchedulingAssistant.showConnectCalendarAlert();
+    });
+  <% end %>
+</div>

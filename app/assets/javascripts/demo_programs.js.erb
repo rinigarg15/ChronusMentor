@@ -1,0 +1,34 @@
+var SalesDemo = {
+  organizationNameErrorMessage: preJsTranslations.demoPrograms.organizationNameErrorMessage,
+  subdomainNameErrorMessage: preJsTranslations.demoPrograms.subdomainNameErrorMessage,
+
+  validateForm: function() {
+    SalesDemo.clearAllErrors();
+    var organizationNameEmpty = jQuery("#organization_name").val().length === 0;
+    var subdomainNameEmpty = jQuery("#organization_program_domain_subdomain").val().length === 0;
+    var errorMessage = "";
+
+    if(organizationNameEmpty){
+      errorMessage = SalesDemo.organizationNameErrorMessage;
+      ChronusValidator.ErrorManager.ApplyFieldStatus(false, jQuery('#organization_name'));
+    }
+    if(subdomainNameEmpty){
+      errorMessage = errorMessage + (errorMessage == "" ? "" : ", ") + SalesDemo.subdomainNameErrorMessage;
+      ChronusValidator.ErrorManager.ApplyFieldStatus(false, jQuery('#organization_program_domain_subdomain'));
+    }
+    if(errorMessage !== ""){
+      ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", errorMessage);
+      return false;
+    } else {
+      jQuery('#loading_results').show();
+      return true;
+    }
+  },
+
+  clearAllErrors: function() {
+    ChronusValidator.ErrorManager.ApplyFieldStatus(true, jQuery('#organization_name'));
+    ChronusValidator.ErrorManager.ApplyFieldStatus(true, jQuery('#organization_program_domain_subdomain'));
+    ChronusValidator.ErrorManager.ClearResponseFlash("flash_container");
+  }
+
+}

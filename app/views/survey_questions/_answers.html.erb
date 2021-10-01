@@ -1,0 +1,13 @@
+<% if @answers.empty? %>
+  <div id="no_questions" class="text-muted text-center">
+    <%= "feature.question_answers.content.no_answers_message".translate %>
+  </div>
+<% else %>
+  <table class="table table-bordered table-condensed table-striped" id="all_responses">
+    <% @answers.each do |answer| %>
+      <tr>
+        <td ><%= answer.answer_text %></td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

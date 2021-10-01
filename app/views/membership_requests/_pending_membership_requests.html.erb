@@ -1,0 +1,6 @@
+<% pending_membership_requests = local_assigns[:pending_membership_requests] %>
+<% if pending_membership_requests.present? %>
+  <%= ibox "feature.membership_request.header.your_pending_requests".translate, { show_collapse_link: true, collapse_link_class: "pull-right" } do %>
+    <%= listing_page(pending_membership_requests, collection_key: :membership_request, partial: "membership_requests/pending_membership_request", list_group_item_padding: "p-b-xs p-t-xs" ) %>
+  <% end %>
+<% end %>

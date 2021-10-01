@@ -1,0 +1,2 @@
+jQuery("#profile_section_<%= @section.id %> .cjs-section-title-container").text("<%= j(@section.title.try(:html_safe)) %>");
+jQuery('#edit_section_<%= @section.id %>').modal("hide");

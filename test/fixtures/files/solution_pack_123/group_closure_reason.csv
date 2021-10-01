@@ -1,0 +1,7 @@
+id,reason,is_deleted,is_completed,is_default,program_id,created_at,updated_at
+1,Accomplished goals of mentoring connection,false,true,false,2,2014-08-18 06:05:05 UTC,2014-08-18 06:05:05 UTC
+2,Lack of communication or availability between participants,false,false,false,2,2014-08-18 06:05:05 UTC,2014-08-18 06:05:05 UTC
+3,Needs changed and no longer seeking this particular mentoring connection,false,false,false,2,2014-08-18 06:05:05 UTC,2014-08-18 06:05:05 UTC
+4,Other,false,false,false,2,2014-08-18 06:05:05 UTC,2014-08-18 06:05:05 UTC
+5,Auto terminated due to inactivity,false,false,true,2,2014-08-18 06:05:05 UTC,2014-08-18 06:05:05 UTC
+6,Mentoring Connection has ended,false,true,true,2,2014-08-18 06:05:05 UTC,2014-08-18 06:05:05 UTC

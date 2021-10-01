@@ -1,0 +1,46 @@
+<% feedback_survey = @current_program.feedback_survey %>
+<% if @current_program.connection_feedback_enabled? %>
+  <%= render :partial => 'reports/metric_item', :locals => {:name => "feature.reports.content.percent_active_connections_v1".translate(Mentoring_Connections: _Mentoring_Connections),
+  :percent_metric => engagement.active_connections, :opts => {
+    :help_text => "feature.reports.content.percent_active_connections_help_text_v1".translate(mentoring_connections: _mentoring_connections),
+    :no_empty_content => !@current_program.connection_feedback_enabled? }} %>
+
+  <% if feedback_survey.present? && feedback_survey.survey_questions.find_by(question_mode: CommonQuestion::Mode::EFFECTIVENESS) %>
+    <%= render :partial => 'reports/metric_item', :locals => {:name => "feature.reports.content.percent_connection_satisfaction_v1".translate(Mentoring_Connection: _Mentoring_Connection),
+    :percent_metric => engagement.overall_satisfaction, :opts => {
+      :help_text => "feature.reports.content.percent_connection_satisfaction_help_text".translate(mentoring_connections: _mentoring_connections),
+      :no_empty_content => !@current_program.connection_feedback_enabled?}} %>
+  <% end %>
+<% else %>
+  <div class="m-b-xs">
+    <%= "feature.reports.content.not_tracked".translate %> <%= link_to "feature.reports.actions.enable_activity_tracking".translate, edit_program_path %>
+  </div>
+<% end %>
+
+<%= panel "feature.reports.label.online_activity".translate, panel_id: 'online_engagement', panel_class: "panel-default m-t" do %>
+  <%= render :partial => 'reports/metric_item', :locals => {:name => "feature.reports.content.avg_interactions_connections".translate(mentoring_connection: _mentoring_connection), :percent_metric =>engagement.posts_per_connection, :opts => {
+  :span_text => 'feature.reports.label.last_month'.translate,
+  :history => engagement.post_history,
+  :history_tip => "feature.reports.content.avg_interactions_connections_history_tip".translate,
+  :help_text => "feature.reports.content.avg_interactions_connections_help_text".translate(:mentoring_area => _mentoring_connection)}} %>
+<% end %>
+
+<% if @current_program.connection_feedback_enabled? && !engagement.connection_mode.no_data? %>
+  <% unless is_pdf_request %>
+    <div id = "show_mode_text" class='m-t-sm'>
+      <%= "feature.reports.content.ways_to_make_connection_html".translate(click_here: link_to_function("display_string.Click_here".translate, "jQuery('#show_mode_text').hide();ChronusEffect.OpenContent('mode_image', 1)"), mentors: _mentors, mentees: _mentees) %>
+    </div>
+  <% end %>
+  <div id='mode_image' class='m-t-sm clearfix'>
+    <% unless is_pdf_request %>
+      <%= link_to_function get_icon_content('fa fa-trash text-default') + set_screen_reader_only_content("display_string.hide".translate), "ChronusEffect.CloseContent('mode_image', 1);jQuery('#show_mode_text').show()", :id => 'close', :class => 'pull-right m-b-xs' %>
+    <% end %>
+    <div id="health_report_mode_chart" class="col-sm-12 pull-right no-margin"></div>
+    <%= javascript_tag do %>
+      <%= render :partial => 'reports/executive_summary_pie_chart.js.erb', :locals => {:options => health_report_mode_chart_data(engagement), :format => format} %>
+      jQuery(document).ready(function(){
+        jQuery("#mode_image").hide();
+      });
+    <% end %>
+  </div>
+<% end %>

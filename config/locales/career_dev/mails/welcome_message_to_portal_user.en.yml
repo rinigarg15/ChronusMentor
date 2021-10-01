@@ -1,0 +1,22 @@
+en:
+  email_translations:
+    welcome_message_to_portal_user:
+      title_v1: Welcome message to a member who is added from another %{_program}
+      description: This email is sent to a current member to welcome them to the %{_program}.
+      subject: "{{receiver_first_name}}, welcome to {{subprogram_or_program_name}}!"
+      content_html: You have been added as {{user_role}} in {{subprogram_or_program_name}}.<br/><br/><a href='{{url_visit_program}}'>Click here</a> to visit {{subprogram_or_program_name}}.<br/>
+      tags:
+        user_role:
+          description: Role of the user
+          example_v1: "%{role}"
+        administrator_name:
+          description: Name of the administrator who added the member
+        url_edit_profile:
+          description: Url to the profile where the member can perform edits
+        visit_program_button:
+          description: Visit the program button
+          visit: Visit %{program_name}
+        url_visit_program:
+          description: Url to visit the program for the first time
+        url_contact_admin:
+          description: Url for the user to contact administrator

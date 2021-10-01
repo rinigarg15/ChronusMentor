@@ -1,0 +1,2 @@
+jQuery('#results_pane').html("<%= j(render(:partial => 'meeting_requests/index', :locals => {:filter_params => @filter_params, is_manage_view: @is_manage_view})) %>");
+MeetingRequests.maintainTriStateCheckbox(true);

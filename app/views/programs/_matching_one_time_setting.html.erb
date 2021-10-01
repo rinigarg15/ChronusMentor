@@ -1,0 +1,127 @@
+<div class="cjs_one_time_matching_setting_details has-above-7 <%= 'hide' unless @program.calendar_enabled? %>">
+  <h2 class="has-below"> <%= "program_settings_strings.label.mentoring_mode.one_time_settings_title_v1".translate(:Mentoring => _Mentoring) %> </h2>
+  <hr class="no-margin"/>
+  <%= control_group(class: "has-above-2") do %>
+    <%= content_tag(:div, "program_settings_strings.label.matching_settings.how_does_matching_happen".translate, :class => "control-label false-label") %>
+    <%= controls do %>
+      <label class="checkbox">
+        <%= check_box_tag nil, 1, true, id: 'not_needed', class: "vertical-align-text-bottom", disabled: true %>
+        <%= "program_settings_strings.content.allow_mentee_to_send_meeting_request".translate(Mentees: _Mentees, meeting: _meeting, :mentors => _mentors) %>
+      </label>
+    <% end %>
+  <% end %>
+  <%= f.simple_fields_for :calendar_setting do |cal_setting| %>
+    <%= control_group do %>
+      <% label = "program_settings_strings.content.meeting_preference_options".translate(mentors: _mentors, meeting: _meeting).capitalize %>
+      <%= content_tag(:div, label, :class => "false-label control-label") %>
+      <%= controls do %>
+        <%= choices_wrapper(label) do %>
+          <label class="checkbox">
+            <%= cal_setting.check_box :allow_mentor_to_configure_availability_slots, checked: @calendar_setting.allow_mentor_to_configure_availability_slots? %>
+            <%= "program_settings_strings.content.allow_mentor_to_configure_availability_slots".translate(mentors: _mentors) %>
+            <p class="text-muted small m-b-0"><%= "program_settings_strings.content.availability_slots_help_text".translate(mentors: _mentors, Mentors: _Mentors, meetings: _meetings) %></p>
+          </label>
+          <label class="checkbox" >
+            <%= cal_setting.check_box :allow_mentor_to_describe_meeting_preference, checked: @calendar_setting.allow_mentor_to_describe_meeting_preference? %>
+            <%= "program_settings_strings.content.allow_mentor_to_describe_meeting_preference_v1".translate(mentors: _mentors) %>
+            <p class="text-muted small"><%= "program_settings_strings.content.meeting_preference_help_text".translate(Mentors: _Mentors) %></p>
+          </label>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= control_group do %>
+      <%= cal_setting.label :slot_time_in_minutes, :class => "control-label" %>
+      <%= controls do  %>
+        <%= cal_setting.select :slot_time_in_minutes, CalendarSetting::ALLOWED_SLOT_TIME_AS_OPTION.collect{|x| [x[0].call, x[1]] }, {:selected => (@calendar_setting.slot_time_in_minutes.present? ? @calendar_setting.slot_time_in_minutes : Meeting::SLOT_TIME_IN_MINUTES)}, {:onChange => 'trackingPeriod(this.value)', :class => "form-control", skip_title: true, :wrapper => 'none' } %>
+      <% end %>
+    <% end %>
+    <%= control_group do %>
+      <% label = "program_settings_strings.content.allow_mentors_create_meetings_v1".translate(mentors: _mentors, :meetings => _meetings) %>
+      <%= content_tag(:div, label, :class => "false-label control-label") %>
+      <%= controls do %>
+        <%= choices_wrapper(label) do %>
+          <label class="radio inline">
+            <%= cal_setting.radio_button(:allow_create_meeting_for_mentor, true, checked: @calendar_setting.allow_create_meeting_for_mentor?, :class => 'radio_button') %> <%= "display_string.Yes".translate %>
+          </label>
+          <label class="radio inline">
+            <%= cal_setting.radio_button(:allow_create_meeting_for_mentor, false, checked: !@calendar_setting.allow_create_meeting_for_mentor?, :class => 'radio_button') %> <%= "display_string.No".translate %>
+          </label>
+        <% end %>
+      <% end %>
+    <% end %>
+    <h3 class="has-below-3"> <%= "program_settings_strings.label.matching_settings.meeting_req_settings".translate(:Meeting => _Meeting) %> </h3>
+    <%= control_group(class: "attach-bottom") do %>
+      <%= content_tag(:div, "program_settings_strings.content.request_meeting_prior_to_v3".translate(Mentees: _Mentees, :meetings => _meetings), :class => "control-label false-label no-padding", :for => "program_calendar_setting_advance_booking_time") %>
+      <%= controls(class: "controls") do %>
+        <div class="col-sm-2 no-padding">
+          <%= cal_setting.label :advance_booking_time, "program_settings_strings.content.hours_in_advance".translate, :class => "control-label false-label sr-only" %>
+          <%= cal_setting.text_field :advance_booking_time, as: :string, :class => "form-control", :skip_title => true, wrapper: 'none', value: @calendar_setting.advance_booking_time %>
+        </div>
+        <%= content_tag(:span, "program_settings_strings.content.hours_in_advance".translate, :class => "p-xxs p-l-sm p-r-sm pull-left m-t-xxs") %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= control_group do %>
+    <%= content_tag(:div, "program_settings_strings.content.allow_meeting_request_reminder_v1".translate(meeting: _meeting), class: "false-label control-label") %>
+    <%= controls do %>
+      <div class="cui-reminder-settings">
+        <div class="clearfix">
+          <label class="checkbox inline pull-left has-next">
+            <%= f.check_box :needs_meeting_request_reminder, class: "cjs-meeting-request-reminder" %> <%= "display_string.Yes".translate %><span class="cjs-show-meeting-request-reminder-checked <%= 'hide' unless @program.needs_meeting_request_reminder? %>">, <%= "program_settings_strings.content.remind_them_after".translate %></span>
+          </label>
+          <label class="font-noraml cjs-show-meeting-request-reminder-checked <%= 'hide' unless @program.needs_meeting_request_reminder? %>">
+            <div class="col-sm-4 no-padding">
+              <%= f.text_field :meeting_request_reminder_duration, class: "form-control cjs-meeting-request-reminder-duration", skip_title: true, wrapper: 'none', disabled: (!@program.needs_meeting_request_reminder?), data: {value: @program.meeting_request_reminder_duration} %>
+            </div>
+            <%= content_tag(:span, "display_string.days".translate, :class => "p-xxs p-l-sm p-r-sm m-t-xxs pull-left") %>
+          </label>
+        </div>
+        <%= email_notification_consequences_on_action_html(MeetingRequestReminderNotification, div_class: "help-block #{"hide" unless f.object.needs_meeting_request_reminder} cjs-show-meeting-request-reminder-checked", translation_extras: {meeting: _meeting}) %>
+      </div>
+    <% end %>
+  <% end %>
+  <%= control_group do %>
+    <%= f.label "", "program_settings_strings.content.meeting_request_expiration_days_v1".translate, :class => "control-label", :for => "program_meeting_request_auto_expiration_days"  %>
+    <%= controls do %>
+      <div class="clearfix">
+        <div class="col-sm-2 no-padding">
+          <%= f.text_field :meeting_request_auto_expiration_days, :class => "form-control", :skip_title => true, :wrapper => 'none' %>
+        </div>
+        <%= content_tag(:span, 'display_string.days'.translate(count: :other), :class => "p-xxs p-l-sm p-r-sm m-t-xxs pull-left")  %>
+      </div>
+      <div class="help-block">
+        <%= email_notification_consequences_on_action_html(MeetingRequestExpiredNotificationToSender, div_enclose: false, translation_extras: {meeting: _meeting}) %>
+        <%= "program_settings_strings.content.meeting_request_expiration_days_notice".translate(:meeting => _meeting) %>
+      </div>
+    <% end %>
+  <% end %>
+  <h3 class="has-below-3"> <%= "program_settings_strings.label.matching_settings.meeting_limits".translate(:Meeting => _Meeting) %> </h3>
+  <%= f.simple_fields_for :calendar_setting do |cal_setting| %>
+    <%= control_group do %>
+      <%= cal_setting.label :max_meetings_for_mentee, "program_settings_strings.content.max_meetings_for_mentee".translate(mentee: _mentee, meetings: _meetings), :class => 'control-label no-padding', :for => "max_meetings_for_mentee" %>
+      <%= controls do %>
+        <div class="no-padding">
+          <%= cal_setting.text_field :max_meetings_for_mentee, :class => "form-control inline", value: @calendar_setting.max_meetings_for_mentee, :id => "max_meetings_for_mentee", :skip_title => true, :wrapper => 'none' %>
+        </div>
+      <% end %>
+    <% end %>
+    <%= control_group do %>
+      <%= cal_setting.label :max_pending_meeting_requests_for_mentee, "program_settings_strings.content.max_pending_requests_mentee".translate(mentee: _mentee, mentor: _mentor), :class => 'control-label no-padding', :for => "max_pending_meeting_requests_for_mentee" %>
+      <%= controls do %>
+        <div class="no-padding">
+          <%= cal_setting.select :max_pending_meeting_requests_for_mentee, get_max_request_limit_for_mentee_options, {:selected => @calendar_setting.max_pending_meeting_requests_for_mentee}, :skip_title => true, :class => "form-control inline", :id => "max_pending_meeting_requests_for_mentee", :wrapper => 'none' %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+jQuery(function(){
+  jQuery(".cjs-meeting-request-reminder").on("click", function(){
+    jQuery(this).is(":checked") ? jQuery(".cjs-show-meeting-request-reminder-checked").show() : jQuery(".cjs-show-meeting-request-reminder-checked").hide();
+    jQuery(".cjs-meeting-request-reminder-duration").prop("disabled", !jQuery(this).is(":checked"));
+  });
+  CalendarSettingForm.validateMatchingCalendarSettingForm('matching_setting_flash', '<%= j("common_text.error_msg.required_missing".translate) %>', '<%= j("program_settings_strings.content.enter_a_valid_value".translate(:meeting => _meeting)) %>');
+});
+<% end %>

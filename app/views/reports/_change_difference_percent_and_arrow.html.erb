@@ -1,0 +1,7 @@
+<div class="stat-percent font-bold" ng-class="<%= value_name %> > 0 && 'text-info' || (<%= value_name %> < 0 && 'text-danger' || '')" ng-show="<%= show_change %>">
+  <span ng-hide="<%= value_name %> == null" class="<%= change_count %>">{{(<%= value_name %>) | number:0}}</span>
+  <span ng-hide="<%= value_name %> == null" class="<%= change_percent %>">%</span>
+  <i class="fa fa-level-up" ng-show="<%= value_name %> > 0"></i>
+  <i class="fa fa-level-down" ng-show="<%= value_name %> < 0"></i>
+  <span ng-show="<%= value_name %> == null" class="cui-data-section-head-change-percent"><%= "display_string.n_a".translate %></span>
+</div>

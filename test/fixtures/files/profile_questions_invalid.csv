@@ -1,0 +1,2 @@
+Section Name,Section Description,Field Name,Field Type,Allow Multiple Responses,Options,Options Count,Allow to Specify Different Answer,Field Description,Include for Mentor|Mentee,Include in Profile,Include in Membership Form,Visibility,Editable by Admin Only,Mandatory,Show in Listing,Available for Search
+Basic Information,,,location,,,,,,yes,yes,yes|no,everyone|user_and_his_members,no,no|yes,yes,yes

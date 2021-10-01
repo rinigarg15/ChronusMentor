@@ -1,0 +1,69 @@
+<% mentor = mentor_match %>
+<% labels = status_indicator(mentor, { :mentor_required_questions => @mentor_required_questions, consider_user_as_mentor: true, show_availability: true, :mentors_with_slots => @mentors_with_slots_for_matching, wrapper_options: { class: "m-t-xs" } } ) %>
+<% if @mentors_with_slots_for_matching[mentor.id].present? %>
+  <% actions = get_match_mentor_actions(mentor, @student, btn_class: "hidden-xs pull-right") %>
+  <% actions_block = get_match_mentor_actions(mentor, @student, btn_class: "col-xs-12 no-padding visible-xs btn-block m-t-sm", dropdown_menu_class: "col-xs-12 pull-right table-bordered", btn_group_btn_class: "col-xs-12") %>
+<% end %>
+
+<div>
+  <%= actions %>
+  <div class="media-left">
+    <%= user_picture(mentor, { :no_name => true, :size => :large }, { class: "img-circle" } ) %>
+  </div>
+
+  <div class="media-body">
+    <h3 class="m-b-0">
+      <%= link_to_user mentor, no_hovercard: true %>
+      <% if can_show_rating_to_the_viewer?(current_program, current_user) %>
+        <div class="inline m-l-xs">
+          <%= display_coach_rating_and_reviews(mentor) %>
+        </div>
+      <% end %>
+    </h3>
+    <% if @student_document_available %>
+      <% match_score = @match_results[mentor.id] %>
+      <% if match_score %>
+        <div class="m-t-xs">
+          <div>
+            <%= link_to "feature.bulk_match.label.show_details".translate, "javascript:void(0)", class: "cjs-show-match-config-summary", data: {url: fetch_summary_details_bulk_matches_path(mentor_id: mentor.id, student_id: @student.id, src: "find_a_mentor")} %>
+            <span class="pull-left p-r-xxs p-t-1"><%= display_match_score(match_score, in_listing: true, tooltip_options: { second_person: _mentee } ) %></span>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+    <% if labels.present? %>
+      <%= labels %>
+    <% end %>
+    <div class="m-t-xs">
+      <span>
+        <% connections_count = @mentor_connections_count[mentor.id].to_i %>
+        <%= link_to_wrapper !connections_count.zero?, url: groups_path(tab: Group::Status::ACTIVE, member_filters: { @current_program.find_role(RoleConstants::MENTOR_NAME).id => mentor.name_with_email } ) do %>
+          <%= "#{'feature.connection.content.n_ongoing_mentoring_connections'.translate(count: connections_count, mentoring_connections: _Mentoring_Connections, mentoring_connection: _Mentoring_Connection)}" %>
+        <% end %>
+      </span>
+      <span><%= COMMON_SEPARATOR %></span>
+      <span><%= "#{'feature.mentoring_slot.label.Available_Slots'.translate(count: @mentors_available_slots[mentor.id])}" %></span>
+    </div>
+    <% if @mentors_of_student[mentor.id].present? %>
+      <div class="font-bold m-t-xxs">
+        <%= "feature.user.content.mentor_has_n_previous_connection".translate(:mentoring_connections => _mentoring_connections, :mentoring_connection => _mentoring_connection, :mentor => _mentor, :student_name => @student.name, count: @mentors_of_student[mentor.id].size) %>
+      </div>
+    <% end %>
+  </div>
+
+
+  <div class="cjs_mentor_container m-t">
+    <%= link_to "feature.user.content.view_profile_summary_html".translate, "javascript:void(0)", :class => "cjs_show_and_hide_toggle_sub_selector cjs_show_and_hide_toggle_show font-bold" %>
+    <div class="hide cjs_show_and_hide_toggle_sub_selector cjs_show_and_hide_toggle_content">
+      <div class="section-pane">
+        <%= render :partial => "users/show_profile_summary_fields", :locals => {:user => mentor, :role => RoleConstants::MENTOR_NAME, :profile_last_updated_at => local_assigns[:profile_last_updated_at]} %>
+        <% show_last_logged_in(mentor) do |last_logged_in| %>
+          <%= profile_field_container("feature.user.label.Last_Login".translate, last_logged_in, { :class => "m-t-sm m-b-xs" } ) %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <%= actions_block %>
+</div>
+
+<%= javascript_tag %Q[UserListing.showMatchConfigSummaryPopup();] %>

@@ -1,0 +1,4 @@
+<%= ibox nil, ibox_class: "no-margin", content_class: "no-padding" do %>
+  <%= render partial: "topics/post_content", locals: { post: root, is_root: true } %>
+  <%= post_comments_container(root) %>
+<% end %>

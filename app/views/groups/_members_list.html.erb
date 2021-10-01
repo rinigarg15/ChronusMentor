@@ -1,0 +1,28 @@
+<% track_activity_url = engagement_index_track_activity_path %>
+<%= ibox "#{"feature.connection.header.Members".translate} (#{@group.members.size})", ibox_id: "group_info", collapse_link_class: "hide", show_collapse_link: true, content_class: "p-xxs list-group" do %>
+  <% if @group.members.exists? %>
+    <% role_id_users_count_map = @group.memberships.group(:role_id).count %>
+    <% @current_program.roles.for_mentoring.includes(customized_term: :translations).each do |role| %>
+      <% users_in_role = role_id_users_count_map[role.id].to_i %>
+      <% term_to_display = (users_in_role == 1) ? role.customized_term.term : role.customized_term.pluralized_term %>      
+      <% collapsible_content("#{term_to_display} (#{users_in_role})", [], true, { render_panel: true, additional_header_class: "p-sm p-r-md cjs_users_of_role_panel_header", class: "cjs_users_of_role_panel b-b m-b-0", pane_content_class: "p-t-0 no-horizontal-padding", collapsible: !users_in_role.zero?, id: "#{role.name}_users" }) do %>
+        <div class= "text-center cjs_users_of_role_loading_results">
+          <span><%= "display_string.Loading".translate %></span>
+          <%= get_icon_content("fa fa-spinner fa-spin") %>
+        </div>
+        <div id="users_of_role_<%= role.id %>" data-url="<%= get_users_of_role_group_path(@group, role_id: role.id) %>" data-loaded=false></div>
+      <% end %>
+    <% end %>
+  <% else %>
+    <div class="text-center m-sm">
+      <%= "feature.connection.content.No_users_yet".translate(mentoring_connection: _mentoring_connection) %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function() {
+    Groups.loadRoleUsers(<%= !@group.program.allow_one_to_many_mentoring? %>);
+    EngagementIndex.trackActivity("<%= track_activity_url %>");
+  });
+<% end %>

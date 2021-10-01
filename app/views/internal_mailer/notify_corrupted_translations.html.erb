@@ -1,0 +1,49 @@
+<% if @problematic_interpolation_keys.any? %>
+  </br>
+  The following translations from phraseapp have interpolation errors:
+  <ol>
+    <% @problematic_interpolation_keys.each do |hash| %>
+      <li> 
+        <%= hash[:key] %>
+        <ul>
+          <li>en_version: <%= hash[:en] %></li>
+          <li><%= "#{hash[:locale]}_version: #{hash[:other]}" %></li>
+        </ul>
+      </li>
+    <% end %>
+  </ol>
+  </br>
+<% end %>
+
+<% if @problematic_html_keys.any? %>
+  </br>
+  The following translations from phraseapp have <b>HTML</b> errors:
+  <ol>
+    <% @problematic_html_keys.each do |hash| %>
+      <li> 
+        <%= hash[:key] %>
+        <ul>
+          <li>en_version: <%= hash[:en] %></li>
+          <li><%= "#{hash[:locale]}_version: #{hash[:other]}" %></li>
+        </ul>
+      </li>
+    <% end %>
+  </ol>
+  </br>
+<% end %>
+
+<% if @warning_html_keys.any? %>
+  </br>
+  The following translations from phraseapp <b>may</b> have <b>HTML</b> errors:
+  <ol>
+    <% @warning_html_keys.each do |hash| %>
+      <li> 
+        <%= hash[:key] %>
+        <ul>
+          <li>en_version: <%= hash[:en] %></li>
+          <li><%= "#{hash[:locale]}_version: #{hash[:other]}" %></li>
+        </ul>
+      </li>
+    <% end %>
+  </ol>
+<% end %>

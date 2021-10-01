@@ -1,0 +1,39 @@
+<% modal_v3_popup "feature.project_request.content.new_request_popup.title".translate(mentoring_connection: @project_request.group.name) do %>
+  <div id="new_project_request">
+    <%= simple_form_for(@project_request, :remote => true, :format => :js, :html => {:id => "new_project_request_form"}) do |f| %>
+      <%= response_flash "new_project_request_popup_flash_container" %>
+      <%= f.input :group_id, :as => :hidden, :input_html => {:value => @project_request.group_id} %>
+      <%= f.input :from_page, :as => :hidden, :input_html => {:value => @from_page} %>
+      <%= hidden_field_tag :src, @src_path %>
+      <% roles_count = @project_request_roles.count %>
+      <% if roles_count == 1 %>
+        <%= hidden_field_tag("project_request[sender_role_id]", @project_request_roles.first.id) %>
+      <% else %>
+        <%= control_group do %>
+          <div class="false-label control-label">
+            <%= 'feature.project_request.content.new_request_popup.role_selector_label'.translate %>
+          </div>
+          <%= controls do %>
+            <%= choices_wrapper("display_string.Roles".translate) do %>
+              <% @project_request_roles.each do |role| %>
+                <label class="radio inline", name = "project_request[sender_role_id]">
+                  <%= radio_button_tag "project_request[sender_role_id]", RoleConstants.human_role_string([role.name], :program => @current_program), false, disabled: !@available_roles.include?(role), value: role.id, class: "cjs_project_request_sender_role_id" %>
+                  <%= role.customized_term.term %>
+                </label>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= f.input :message, :as => :text, :placeholder => "feature.project_request.content.new_request_popup.default_txt_v1".translate, :label => 'feature.project_request.content.new_request_popup.label.message'.translate, :input_html => {:class => "form-control", :rows => 5} %>
+
+      <% action_set(:fields_required => true, :class => "pull-right") do %>
+        <%= link_to_function "display_string.Cancel".translate, "closeQtip();", class: "popup_closebox btn-white btn cancel" %>
+        <%= f.button :submit, 'feature.project_request.content.new_request_popup.action.send_request'.translate, id: "new_project_request_submit" %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+<%= javascript_tag do %>
+  ProjectRequests.initNewRequestForm("<%= j('common_text.error_msg.required_field_msg'.translate) %>");
+<% end %>

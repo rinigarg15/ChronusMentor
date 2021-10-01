@@ -1,0 +1,11 @@
+<table class="table table-striped pane cjs_sortable_view_result" id="drafted_surveys_table">
+  <thead>
+    <tr class='pane-header cjs_list_view_header cui_table_sort'>
+      <%= three_sixty_survey_assessees_sorting_and_pagination(@options[:sort_param], @options[:sort_order], @options[:published]) %>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody class = "survey_view_results">
+    <%= render :partial => 'three_sixty/surveys/dashboard/survey', :collection => objects  %>
+  </tbody>
+</table>

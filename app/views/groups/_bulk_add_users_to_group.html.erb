@@ -1,0 +1,38 @@
+<%= content_tag(:div, class: "light-gray-bg m-b p-b-xxs") do %>
+  <%= content_tag(:div, class: "clearfix m-l") do %>
+    <%= image_tag(group.logo_url, { class: "media-object img-circle pull-left m-r", size:  "50x50"}) %>
+    <%= content_tag(:span) do %>
+      <%= render_group_name(group, @current_user) %>
+      <%= content_tag(:br, get_group_label_for_auto_complete(group, "fa fa-clock-o")) %>
+    <% end %>
+  <% end %>
+  <%= horizontal_line(class: "m-t-xs m-b-xs") %>
+  <%= content_tag(:div, class: "m-l") do %>
+    <%= get_group_members_list(group, group_roles, true, display_vertically: true) %>
+  <% end %>
+<% end %>
+<%= simple_form_for group, html: { class: "add_members_form" }, wrapper: :horizontal_input_group, remote: true do |f| %>
+  <%= control_group do %>
+    <%= controls do %>
+      <%= f.hidden_field  :src, value: "admin_view" %>
+      <%= render partial: "groups/add_users_select2_auto_complete", locals: { user_role_hash: get_users_role_hash(@current_program, users, group) } %>
+    <% end %>
+  <% end %>
+  <%= control_group do %>
+    <%= control_group do %>
+      <%= controls do %>
+        <%= f.text_area :message, class: "form-control", placeholder: "feature.connection.content.placeholder.create_new_message_optional".translate(mentor: _mentor, mentee: _mentee), rows: 3 %>
+      <% end %>
+    <% end %>
+    <%= control_group do %>
+      <%= controls do %>
+        <% addition_mailer = group.pending? ? PendingGroupAddedNotification : GroupMemberAdditionNotificationToNewMember %>
+        <%= email_notification_consequences_on_action_html(addition_mailer) %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", data: {dismiss: "modal" } %>
+      <%= f.button :submit, "display_string.Submit".translate, data: { disable_with: "display_string.Please_Wait".translate } %>
+  <% end %>
+<% end %>

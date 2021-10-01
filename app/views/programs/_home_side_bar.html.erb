@@ -1,0 +1,31 @@
+<%= ibox nil, :ibox_class => "" do %>
+  <div class="media" id="profile_preview">
+    <div class="text-center">
+      <div class="h5 no-margins">
+        <%= "feature.member.content.welcome_terms_v5".translate(:member_name => wob_member.name) %>
+      </div>
+      <div class="text-muted p-t-xs">
+        <%= quick_connect_mentor_info(current_user, current_user, current_program, { welcome_widget: true }) %>
+      </div>
+      <%= member_picture_v3 wob_member, {:size => :large, :no_name => true, :outer_class => "m-b-md"}, {:class => " image_with_initial_dimensions_xlarge img-circle", :id => "profile_pic_to_change"} %>
+    </div>
+    <% show_profile_completion_content = current_user.is_mentor_or_student? && @current_program.profile_completion_alert_enabled? && need_profile_complete_sidebar?(current_user) && current_user.profile_score.sum < 100 %>
+    <% if show_profile_completion_content %>
+      <%= render('members/profile_completion', :profile_user => current_user, :home_page => true) %>
+    <% end %>
+    <div class="media-body text-center <%= show_profile_completion_content ? "" : "p-t-sm" %>">
+      <%= link_to(get_icon_content("fa fa-pencil-square-o") + "feature.profile.actions.Edit_Profile".translate, edit_member_path(wob_member, ei_src: EngagementIndex::Src::EditProfile::HOMEPAGE_SIDEBAR), :class => "btn btn-white btn-xs m-r-sm") %>
+      <%= link_to(get_icon_content("fa fa-user") + "feature.profile.actions.view_profile".translate, member_path(wob_member), :class => "btn btn-white btn-xs") %>
+    </div>
+
+    <%= render_add_role_without_approval(current_user, current_program) %>
+  </div>
+<% end %>
+
+<%= render :partial => "programs/program_events" if @unanswered_program_events.present? %>
+
+<% if is_recent_activities_present && show_ra_in_side_pane %>
+  <%= render :partial => 'programs/activity_feed_box',
+    :locals => {:tabs => get_program_tabs(@current_program, @my_all_connections_count, @src),
+    :update_url => update_prog_home_tab_order_path} %>
+<% end %>

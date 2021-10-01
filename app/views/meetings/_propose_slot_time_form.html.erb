@@ -1,0 +1,42 @@
+<% unlimited_slot = local_assigns[:unlimited_slot].to_s.to_boolean %>
+<% allowed_individual_slot_duration = @current_program.get_calendar_slot_time %>
+<% start_time = local_assigns[:start_time] || Meeting.valid_start_time_boundaries %>
+<% end_time = local_assigns[:end_time] || Meeting.valid_end_time_boundaries %>
+<% slot_start_time = local_assigns[:slot_start_time] || DateTime.localize(Time.now.beginning_of_day + 8.hours, format: :short_time_small) %>
+<% slot_end_time = local_assigns[:slot_end_time] || DateTime.localize(Time.now.beginning_of_day + 8.hours + allowed_individual_slot_duration.minutes, format: :short_time_small) %>
+<% start_time_label = local_assigns[:start_time_label] || {class: "cjs_slot_start_time_label", for: "meeting_propose_start_time_of_day"} %>
+<% end_time_label = local_assigns[:end_time_label] || {class: "cjs_slot_end_time_label", for: "meeting_propose_end_time_of_day"} %>
+<% start_time_attributes = local_assigns[:start_time_attributes] || {name: "meeting[propose_start_time_of_day]", class: "cjs_slot_start_time"} %>
+<% end_time_attributes = local_assigns[:end_time_attributes] || {name: "meeting[propose_end_time_of_day]", class: "cjs_slot_end_time"} %>
+<% input_group_class = local_assigns[:input_group_class] || {start: "col-sm-6 pull-left col-xs-6 input-group-sm", end: "input-group-sm"} %>
+<% additional_classes = local_assigns[:additional_classes] || {addon_class: "gray-bg", text_class: "h6"} %>
+<% hidden_field_name = local_assigns[:hidden_field_name] || "end_time_of_day" %>
+<% help_text_class = "hide" unless local_assigns[:shortlist_slots] %>
+<div class="cjs_calendar_sync_v2">
+  <div class="m-t-n-xs m-b-sm col-xs-12 no-padding text-muted cjs_shortlist_help_text small <%= help_text_class %>"><%= "feature.calendar_sync_v2.content.shortlist_help_text".translate %></div>
+  <div class="meeting_date_container">
+    <% left = [ { type: "addon", icon_class: "fa fa-clock-o", class: "gray-bg" } ] %>
+    <%= construct_input_group(left, [], input_group_class: input_group_class[:start]) do %>
+      <%= content_tag(:label, "feature.meetings.form.start_time".translate, class: "sr-only #{start_time_label[:class]}", for: "#{start_time_label[:for]}") %>
+      <%= select_tag start_time_attributes[:name], options_for_select(start_time, slot_start_time), class: "form-control #{start_time_attributes[:class]}", disabled: local_assigns[:disable_start_end_times].to_s.to_boolean, data: start_time_attributes[:data], onchange: local_assigns[:start_time_onchange] %>
+    <% end %>
+    <% left = unlimited_slot ? [ { type: "addon", content: "display_string.to_for_dates_only".translate, class: "no-borders #{additional_classes[:addon_class]}" } ] : [] %>
+    <%= content_tag(:div, "display_string.to_for_dates_only".translate, :class => "inline m-r-xs m-l-sm") unless unlimited_slot %>
+    <%= construct_input_group(left, [], input_group_class: "#{input_group_class[:end]} #{'inline' unless unlimited_slot}") do %>
+      <%= content_tag(:label, "feature.meetings.form.end_time".translate, class: "sr-only #{end_time_label[:class]}", for: "#{end_time_label[:for]}") %>
+      <% if !unlimited_slot %>
+        <% slot_end_time_text = local_assigns[:no_slots_available] ? "feature.announcements.label.expires_on_default".translate : slot_end_time %>
+        <%= hidden_field_tag hidden_field_name, slot_end_time_text, class: end_time_attributes[:class] %>
+        <%= content_tag(:div, slot_end_time_text, class: "#{additional_classes[:text_class]} font-noraml to_text") %>
+      <% else %>
+        <%= select_tag end_time_attributes[:name], options_for_select(end_time, slot_end_time), class: "form-control #{end_time_attributes[:class]}", disabled: local_assigns[:disable_start_end_times].to_s.to_boolean, data: end_time_attributes[:data] %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(function(){
+    CalendarSyncV2.initializeCalendarSyncV2Status(<%= @current_program.calendar_sync_v2_enabled? %>)
+  });
+<% end %>

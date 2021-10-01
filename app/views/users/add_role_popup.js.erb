@@ -1,0 +1,17 @@
+<% modal_v3_popup "feature.profile.header.add_role_header".translate , modal_id: "confirm_add_role"  do %>
+  <%= simple_form_for current_user, url: add_role_user_path(current_user), html: {method: :post, id: "add_role_auto_approval_form" } do %>
+    <%= control_group do %>
+      <%= controls do %>
+        <% if @to_add_role.present? %>
+          <%= "feature.profile.content.add_other_role_confirmation".translate(to_add_role: @to_add_role.customized_term.articleized_term_downcase, program: _program) %>
+        <% else %>
+          <%= @error_flash %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", class: 'btn btn-white', "data-dismiss" => "modal" %>
+      <%= submit_tag "display_string.Confirm".translate, class: "btn btn-primary", data: {disable_with: 'display_string.Please_Wait'.translate}, onclick: "AddRoleAutoApproval.track_add_role_auto_approval();" if @to_add_role.present? %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,40 @@
+<% match_score = local_assigns[:match_score] %>
+<% match_score_and_status = local_assigns[:match_score_and_status] %>
+<% modal_v3_popup  "feature.bulk_recommendation.header.match_config_summary".translate, additional_class: "cjs-match-config-summary-modal" do %>
+  <div id="student_records_comparision_<%= @student.id %>" class="detailed_comparision cui_match_config_summary">
+    <% student_mentor_array = mentee_to_mentor_match ? [@student, @mentor] : [@mentor, @student] %>
+    <% second_person_name = mentee_to_mentor_match ? display_member_name(@student.member) : display_member_name(@mentor.member) %>
+    <div class="row m-xs">
+      <% student_mentor_array.each_with_index do |user, index| %>
+        <% user_name = display_member_name(user.member) %>
+        <% offset_class = (index == 0) ? "col-xs-offset-4" : "" %>
+        <div class="col-xs-4 p-xs m-t-n <%= offset_class %>">
+          <div class="media-left">
+            <%= user_picture(user, {size: :medium, member_name: user_name, bulk_match_view: true, row_fluid: true}, { }) %>
+          </div>
+          <div class="media-body p-t-xs">
+            <b><%= link_to_user_for_admin(user, content_text: user_name) %></b>
+            <%= display_match_score(match_score.to_i, in_listing: true, class_name: "small", match_score_color_class: "text-danger", tooltip_options: {second_person: second_person_name}) if (index == 1) %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <% if @match_configs.present? || local_assigns[:supplementary_matching_pairs].present? %>
+      <div class="row b-t m-xs">
+        <div class="col-xs-4 p-t-xxs p-b-xxs p-l-xs text-muted">
+          <b><%= "feature.bulk_match.content.profile_fields_compared".translate %></b>
+        </div>
+        <div class="col-xs-4 p-t-xxs p-b-xxs p-l-xs text-muted">
+          <b><%= "feature.bulk_match.content.response_of_role".translate(role: mentee_to_mentor_match ? _Mentee : _Mentor) %></b>
+        </div>
+        <div class="col-xs-4 p-t-xxs p-b-xxs p-l-xs text-muted">
+          <b><%= "feature.bulk_match.content.response_of_role".translate(role: mentee_to_mentor_match ? _Mentor : _Mentee) %></b>
+        </div>
+      </div>
+    <% end %>
+    <%= render partial: "bulk_matches/match_config_row", collection: @match_configs, as: :question_pair, locals: {student: @student, mentor: @mentor, match_score_and_status: match_score_and_status, mentee_to_mentor_match: mentee_to_mentor_match} %>
+    <%= render partial: "bulk_matches/match_config_row", collection: local_assigns[:supplementary_matching_pairs], as: :question_pair, locals: {student: @student, mentor: @mentor, mentee_to_mentor_match: mentee_to_mentor_match} %>
+    <%= render partial: "bulk_matches/supplementary_matching_pair_form", locals: {student: @student, mentor: @mentor, mentee_to_mentor_match: mentee_to_mentor_match} %>
+  </div>
+<% end %>
+<%= javascript_tag %Q[BulkMatch.initializeTooltipInsideModal();] %>

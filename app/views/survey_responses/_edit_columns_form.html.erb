@@ -1,0 +1,34 @@
+<div id="cjs_update_survey_response_column" class="scroll-6">
+  <%= response_flash("cjs_survey_response_view_flash") %>
+  <%= render :partial => 'layouts/translations/multiselect' %>
+  <%= simple_form_for @survey, :html => {:class => "form-horizontal"} do |f| %>
+
+    <div>
+      <label for="cjs_survey_response_view_uixmultiselect" class="sr-only"><%= "feature.survey.responses.action.select_fields".translate %></label>
+      <select id="cjs_survey_response_view_uixmultiselect" class="has-below-2 cjs_survey_response_view_uixmultiselect multiselect survey_response_column_multiselect" multiple="multiple" name="survey[survey_response_columns][]">
+        <optgroup label="<%= "feature.survey.responses.action.default_fields".translate %>">
+          <%= populate_survey_response_column_options(@survey, SurveysController::SurveyResponseColumnGroup::DEFAULT) %>
+        </optgroup>
+
+        <optgroup label="<%= "feature.survey.responses.action.survey_question_fields".translate %>">
+          <%= populate_survey_response_column_options(@survey, SurveysController::SurveyResponseColumnGroup::SURVEY) %>
+        </optgroup>
+
+        <optgroup label="<%= "feature.survey.responses.action.profile_question_fields".translate %>">
+          <%= populate_survey_response_column_options(@survey, SurveysController::SurveyResponseColumnGroup::PROFILE) %>
+        </optgroup>
+      </select>
+    </div>
+
+    <% action_set :class => "has-above-2 no_padding pull-right" do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => "popup_closebox btn-white btn", "data-dismiss" => "modal" -%>
+      <%= f.button :submit, "feature.survey.responses.action.update_columns".translate %>
+    <% end %>
+  <% end %>
+</div>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    ProgressReports.multiSelect('<%= current_locale %>');
+    ProgressReports.UpdateColumnValidations("<%= j('feature.survey.responses.action.select_at_least_one_field'.translate) %>");
+  });
+<% end %>

@@ -1,0 +1,31 @@
+<%= render partial: 'common/your_filters', locals: {onclick_function: "ProjectRequests.clearFilter", :bottom_border => true} %>
+<div id="filter_request_pane">
+  <% status_filter_first = true %>
+  <%= form_tag url_for(params.to_unsafe_h.merge(page: 1)), remote: true, method: :get, id: 'filter_form', class: 'clearfix' do %>
+    <% if current_user.owned_groups.exists? && !current_user.can_manage_project_requests? && current_user.can_send_project_request? %>
+      <%= get_view_filter_for_project_requests(filter_params) %>
+      <% status_filter_first = false %>
+    <% end %>
+    <%= get_status_filter_for_project_requests(filter_params, status_filter_first) %>
+    <% profile_filter_wrapper "feature.project_request.content.filters.sent_between".translate, false, false, false do %>
+      <% right = [{ type: "btn",
+        btn_options: {
+          class:'btn btn-primary btn-sm filter_actions form-actions submit_project_request_filters'
+        },
+          content: "display_string.Go".translate
+      }, { type: "btn",
+        btn_options: {
+          class:'clear_filter btn btn-sm btn-white',
+          id: "reset_filter_sent_between"
+        },
+        content: "display_string.Clear".translate
+      }] %>
+      <% daterange_values = filter_params[:start_time].present? ? { start: filter_params[:start_time].to_date, end: filter_params[:end_time].to_date } : {} %>
+      <%= construct_daterange_picker("filters[sent_between]", daterange_values, max_date: Date.current, right_addon: right, input_size_class: "input-sm") %>
+    <% end %>
+    <% if current_user.project_manager_or_owner? %>
+      <%= get_search_filter_for_project_requests(:requestor, filter_params, false, false) %>
+      <%= get_search_filter_for_project_requests(:project, filter_params, false, false) %>
+    <% end %>
+  <% end %>
+</div>

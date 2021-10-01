@@ -1,0 +1,14 @@
+<%= include_kendo %>
+<% modal_v3_popup "feature.match_report.label.mentee_needs".translate(Mentee: _Mentee) + "  " + "display_string.by".translate + "  " + match_config.mentor_question.profile_question.question_text, modal_body_class: "cjs_mentor_distribution_popup " do %>
+  <div class="cjs_table_enclosure no-border">
+    <div id="cjs_discrepany_data" class="k-content">
+      <div id="cjs_discrepancy_data_kendogrid">
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  MatchReport.initializeKendoGridForMenteeNeeds("#cjs_discrepancy_data_kendogrid", <%= raw get_kendo_options_for_mentee_needs(match_config).to_json %>);
+<% end %>
+

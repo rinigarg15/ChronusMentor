@@ -1,0 +1,13 @@
+<% listing_page_options = {
+  list_group_item_padding: "p-l-sm p-r",
+  partial: "groups/member_info",
+  collection_key: :user,
+  locals: {
+    group: @group,
+    show_skype: @show_skype,
+    allow_individual_messaging: @allow_individual_messaging
+  }
+} %>
+<% members_info = listing_page(@members_in_role, listing_page_options) %>
+
+jQuery("#users_of_role_<%= @role_id %>").html("<%= j members_info %>");

@@ -1,0 +1,27 @@
+en:
+  feature:
+    portal:
+      header:
+        setup_new_portal: "Setup New %{Career_Development} %{Portal}"
+        new_portal: "New %{Portal}"
+        tracks: "%{Programs}"
+        career_development_programs: "%{Career_Development} %{Programs}"
+      content:
+        number_of_licenses_help_text: "How many users do you think would be part of the %{portal}?"
+        existing_program: (existing %{program})
+        existing_program_will_be_moved_html: "The existing %{program} '%{program_name}' will be moved to %{root_path}. If you wish, you can change the name and the web address below."
+        common_parent_program_creation_html: "A common parent %{program} will be created for '%{program_name}' and the new %{program} through which you can manage common settings across the two %{programs}. Please provide a name for the parent program."
+        tab_captions:
+          portal_details: "%{Portal} Details"
+          org_portal_details: Portal Details
+      label:
+        portal_name: "Name of the %{portal}"
+        number_of_licenses: Number of licenses
+        configure_portal: How would you like to configure the %{portal} ?
+        name: Name
+        web_address: Web address
+        parent_program: Parent %{program}
+      content_pack:
+        use_solution_pack: Use a solution pack
+        upload_solution_pack: "Upload the solution pack *"
+      will_do_myself: I will do it all by myself

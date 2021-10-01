@@ -1,0 +1,3 @@
+<% modal_v3_popup "feature.member.content.update_your_profile".translate, {additional_close_button_class: "hide"} do %>
+  <%= render(:partial => "members/edit_first_visit", :locals => {pending_profile_questions: @pending_profile_questions, profile_user: @profile_user, program: @current_program, profile_member: @profile_member, grouped_role_questions: @grouped_role_questions, answer_mandatory_qs: true, last_section: true, section: MembersController::EditSection::PROFILE}) %>
+<% end %>

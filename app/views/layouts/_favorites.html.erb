@@ -1,0 +1,9 @@
+<% can_show_favorites = current_user && current_user.allowed_to_ignore_and_mark_favorite? %>
+
+<% if can_show_favorites %>
+  <% favorite_count = @current_user.valid_favorite_users.count %>
+  <% icon_content = get_icon_content("fa fa-star") %>
+  <li class ="pogram-header-icons p-r-sm <%= hidden_on_mobile %>">
+    <%= link_to content_tag(:big, icon_content + content_tag(:span, favorite_count > 0 ? "#{favorite_count}" : "", class: "label label-warning m-b-md animated")) + content_tag(:span, "app_layout.label.favorites".translate), favorite_preferences_path, id: "favorite_in_header", class: "no-waves count-info item" %>
+  </li>
+<% end %>

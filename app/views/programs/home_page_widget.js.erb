@@ -1,0 +1,2 @@
+jQuery("#cjs_home_page_widget").html("<%= escape_javascript(render partial: 'programs/home_page_widget_content', locals: {projects: @projects, show_all_projects_option: @show_all_projects_option, connection_question: @connection_question, connection_question_answer_in_summary_hash: @connection_question_answer_in_summary_hash} ) %>");
+HomePageWidget.adjustHomePageWidgetHeight();

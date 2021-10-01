@@ -1,0 +1,46 @@
+<%= ibox nil, :ibox_class => "text-center clearfix enrollment_program_#{program.id}" do %>
+  <% if program.logo_or_banner_url.present? %>
+    <div class="centered_content program_logo_or_banner">
+      <%= link_to(render_logo_or_banner(program), program_root_path(:root => program.root), :target => "_blank") %>
+    </div>
+  <% end %>
+  <div class="media-body p-t-sm">
+    <div class="m-b-md">
+      <h2 class="media-heading lead font-noraml no-margins">
+        <%= link_to(program.name, program_root_path(:root => program.root), :target => "_blank") %>
+      </h2>
+
+      <% if local_assigns[:logged_in_enrollment] %>
+          <div class="clearfix m-t-sm">
+            <% if program_user.try(:role_names).present? %>
+              <% status_string = program_user.try(:suspended?) ? " (" + "display_string.Deactivated".translate + ")" : "" %>
+              <%= display_user_states_in_program(program, program_user.role_names, status_string) %>
+            <% end %>
+
+            <% if options[:prog_mem_req_pending_roles].present? %>
+              <% status_string =  " (#{"feature.enrollment.role_request_pending_v2".translate})" %>
+              <%= display_user_states_in_program(program, options[:prog_mem_req_pending_roles].collect(&:name), status_string) %>
+            <% end %>
+          </div>
+      <% end %>
+    </div>
+
+    <div class="m-t-sm text-muted">
+      <% if program.description.blank? %>
+        <%= 'feature.page.content.no_description'.translate %>
+      <% else %>
+        <%= chronus_auto_link(program.description) %>
+      <% end %>
+    </div>
+
+
+    <div class="m-t-sm">
+      <% if local_assigns[:logged_in_enrollment] %>
+        <%= display_user_actions_in_program(program_user, program, options.merge({:btn_class => "btn-sm btn-block-xs"})) %>
+      <% end %>
+      <% unless logged_in_organization? || !program.allow_join_now? %>
+        <%= link_to("feature.user.action.join_now".translate(:program => _Program), new_membership_request_path(:root => program.root), :class => "btn btn-primary btn-sm btn-block-xs") %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

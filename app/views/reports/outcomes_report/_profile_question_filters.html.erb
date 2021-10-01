@@ -1,0 +1,5 @@
+<div ng-cloak>
+  <form id="search_filter_form">
+    <%= render :partial => "/users/question", :collection => @profile_questions, locals: {show_first_filter: true, options: {:modern_filter => true}} %>
+  </form>
+</div>

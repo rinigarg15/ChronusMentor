@@ -1,0 +1,40 @@
+<% select_box_base_name = local_assigns[:program] ? "admin_view[connection_status][status_filters][status_filter_0]" : "admin_view[member_status][connection_status][status_filter_0]"%>
+<div class="cjs-connection-status-filter-rows-container">
+  <div class="cjs-connection-status-filter-template cjs-connection-status-filter-row hide row m-b-sm">
+    <div class="col-sm-3">
+      <%= generate_connection_status_filter_object_select(select_box_base_name, AdminView::ConnectionStatusFilterObjectKey::CATEGORY) %>
+    </div>
+    <div class="col-sm-3">
+      <%= generate_connection_status_filter_object_select(select_box_base_name, AdminView::ConnectionStatusFilterObjectKey::TYPE, program: local_assigns[:program]) %>
+    </div>
+    <div class="col-sm-2">
+      <%= generate_connection_status_filter_object_select(select_box_base_name, AdminView::ConnectionStatusFilterObjectKey::OPERATOR) %>
+    </div>
+    <div class="col-sm-2">
+      <%= generate_connection_status_filter_count_value_text_box(select_box_base_name, AdminView::ConnectionStatusFilterObjectKey::COUNT_VALUE) %>
+    </div>
+    <div class="col-sm-2 m-t-sm cjs-connection-status-filter-and-text-container cjs-connection-status-category-dependent-visibility">
+      <%= content_tag :span, "display_string.AND".translate, class: "cjs-connection-status-filter-and-text" %>
+      <%= get_icon_content("fa fa-trash cjs-delete-connection-status-filter-row") %>
+    </div>
+    <div class="col-sm-2 cjs-add-connection-status-filter-row-container cjs-connection-status-category-dependent-visibility">
+      <%= link_to "javascript:void(0)", class: "btn-sm btn btn-white waves-effect m-t-xxs cjs-add-connection-status-filter-row" do %>
+        <%= get_icon_content("fa", class: "fa fa-plus-circle fa-lg") %>
+        <%= set_screen_reader_only_content("display_string.Add".translate) %>
+      <% end %>
+      <%= get_icon_content("fa fa-trash cjs-delete-connection-status-filter-row") %>
+    </div>
+  </div>
+</div>
+<%= javascript_tag do %>
+  AdminViewsNewView.connectionStatusFilterData = { data: [], index: 1 };
+  <% base_name = local_assigns[:program] ? :connection_status : :member_status %>
+  <% status_name = local_assigns[:program] ? :status_filters : :connection_status %>
+  <% (filter_params.try(:[], base_name).try(:[], status_name) || {}).each do |key, value| %>
+    var tmpHsh = {};
+    <% value.each do |hsh_key, hsh_val| %>
+      tmpHsh["<%= j(hsh_key) %>"] = "<%= j(hsh_val) %>";
+    <% end %>
+    AdminViewsNewView.connectionStatusFilterData.data.push(tmpHsh);
+  <% end %>
+<% end %>

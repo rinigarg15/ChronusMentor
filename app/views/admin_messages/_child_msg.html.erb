@@ -1,0 +1,12 @@
+<% # Preview the message if it is in messages_to_preview array or if the unread message is lesser than the thresold. %>
+<% preview_message = child_msg.in?(messages_to_preview) || ((msgs_size - messages_to_preview.size) <= AbstractMessage::READ_MESSAGE_THRESOLD) %>
+<% expand_message = child_msg.in?(messages_to_expand) %>
+<% if preview_message %>
+  <% from_to_details = message_from_to_names(child_msg, wob_member, skip_to_names: true, no_hovercard: true) %>
+  <% date = formatted_time_in_words(child_msg.created_at, :short_date => true, :no_ago => true) %>
+  <% time = formatted_time_in_words(child_msg.created_at, :short_time => true, :no_ago => true) %>
+  <% time_or_date = formatted_time_in_words(child_msg.created_at, :time_or_date => true, :no_ago => true) %>
+<% end %>
+
+<%= render partial: "admin_messages/preview_section", locals: { msg: child_msg, preview_message: preview_message, expand_message: expand_message, from_to_details: from_to_details, date: date, time: time, viewing_member: wob_member, time_or_date: time_or_date } %>
+

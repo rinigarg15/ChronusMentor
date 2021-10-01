@@ -1,0 +1,15 @@
+<% label = "feature.membership_request.label.requests_to_join_as".translate %>
+<%= ibox "", header_content: content_tag(:b, label), content_class: "p-t-0" do %>
+	<%= choices_wrapper(label) do %>
+	  <%= content_tag(:label, :class => 'radio font-noraml') do %>
+	    <%= radio_button_tag(:role, MembershipRequestService::Filter::Role::ALL, true) + "display_string.Any".translate %>
+	  <% end %>
+	  <% @current_program.roles.non_administrative.each do |role| %>
+	    <%= content_tag(:label, :class => 'radio font-noraml') do %>
+	      <%= radio_button_tag(:role, role.name, false) + RoleConstants.human_role_string([role.name], program: @current_program) %>
+	    <% end %>
+	  <% end %>
+	<% end %>
+<% end %>
+
+<%= render :partial => 'reports/profile_filter', locals: {profile_questions: @membership_filterable_questions, title: "feature.membership_request.label.applicants_profile".translate} %>

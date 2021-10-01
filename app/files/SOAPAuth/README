@@ -1,0 +1,40 @@
+The SOAPAuth folder contains the WSDL files and the YML files required for SOAP authentication.
+
+INTEGRITY
+=========
+
+To maintain the integrity of the folder contents,
+
+digest.yml file, which contains the digest for all the folders, is included. The values in the file are compared against the digest computed during the execution of test/unit/lib/authentication_models/soap_auth_test.rb
+
+GENERATE DIGEST
+===============
+
+Whenever the folder contents are updated INTENTIONALLY,
+
+update the digest.yml with the digest computed using the below command
+find <FOLDER_PATH> -type f | sort -u | xargs cat | md5sum
+
+WSDL FILES IN CLOUD
+===================
+
+AAP:
+Test - https://test2015.nfaap.org/xweb/secure/netforumxml.asmx?WSDL
+Production - https://ws.nfaap.org/xweb/secure/netforumxml.asmx?WSDL
+
+AAO: https://nf.aaoinfo.org/xweb/secure/netforumxml.asmx?WSDL
+
+PhiMu: https://patriot.phimu.org/webservices/PatriotV2ForPMWeb.asmx?WSDL
+
+RELATED JIRA TICKETS
+====================
+
+AAP: https://chronus.atlassian.net/browse/AP-12834
+AAO: https://chronus.atlassian.net/browse/AP-13897
+PhiMu: https://chronus.atlassian.net/browse/AP-14949
+
+CHECK BEFORE DELETION
+=====================
+
+The folder can be deleted ONLY when the following criteria is met in all Production environments -
+AuthConfig.where(auth_type: AuthConfig::Type::SOAP).size == 0

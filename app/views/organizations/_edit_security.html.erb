@@ -1,0 +1,72 @@
+<%= org_f.fields_for :security_setting do |security_setting_form| %>
+  <% login_expiry_enabled = !@current_organization.login_expiry_disabled? %>
+  <%= control_group do %>
+    <%= content_tag(:div, "program_settings_strings.content.enable_autologout_v1_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS + " cjs-tool-tip",'', :id => 'autologoutlabel', "data-desc" => "program_settings_strings.content.autologout_tooltip_v1".translate)), :class => "false-label control-label") %>
+    <%= controls do %>
+      <label class="checkbox inline pull-left">
+        <%= check_box_tag :login_exp_per_enable, 1, login_expiry_enabled, :class => "cjs_primary_checkbox" %> <%= "display_string.Enable".translate %>
+      </label>
+      <label class="cjs_hidden_control m-t-xxs col-xs-10 no-horizontal-padding font-noraml <%= get_toggle_class_for_security(login_expiry_enabled) %>">
+        <%= content_tag(:span, ", #{"program_settings_strings.content.autologout_after".translate}", :class => "p-xxs p-l-0 p-r-sm m-t-xxs pull-left") %>
+        <div class="col-sm-4 no-padding">
+          <%= security_setting_form.select(:login_expiry_period, get_login_expiry_array_display, :skip_title => true, :wrapper => :none, :class => "form-control input-sm", :title => "program_settings_strings.content.autologout_after".translate) %>
+        </div>
+        <%= content_tag(:span, "program_settings_strings.content.of_inactivity".translate, :class => "p-xxs p-l-sm p-r-sm m-t-xxs pull-left") %>
+      </label>
+    <% end %>
+  <% end %>
+
+  <% if super_console? %>
+    <%= security_setting_form.text_field :email_domain, placeholder: "program_settings_strings.content.allow_multiple_email_domains_placeholder".translate %>
+  <% end %>
+
+  <% if @current_organization.chronus_auth.present? %>
+    <% locals_hash = {:locals => {:security_setting_form => security_setting_form}} %>
+    <%= render ({:partial => "organizations/account_lockout_settings"}).merge(locals_hash)  %>
+    <% if super_console? %>
+      <%= render ({:partial => "organizations/password_settings"}).merge(locals_hash) %>
+      <%= control_group do %>
+        <%= content_tag(:div, "program_settings_strings.content.enable_remember_me_v1_html".translate(icon: embed_icon(TOOLTIP_IMAGE_CLASS + " cjs-tool-tip",'', "data-desc" => "program_settings_strings.content.enable_remember_me_tool_tip_desc_v1".translate)), :class => "false-label control-label") %>
+        <%= controls do %>
+          <%= choices_wrapper("program_settings_strings.content.enable_remember_me_v1_html".translate(icon: "")) do %>
+            <label class="radio inline">
+              <%= security_setting_form.radio_button :can_show_remember_me, true -%> <%= "display_string.Yes".translate %>
+            </label>
+            <label class="radio inline">
+              <%= security_setting_form.radio_button :can_show_remember_me, false -%> <%= "display_string.No".translate %>
+            </label>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= control_group do %>
+        <%= content_tag(:div, "program_settings_strings.content.allowed_ips_v1_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS + " cjs-tool-tip",'', :id => 'allowed_ipslabel', "data-desc" => "program_settings_strings.content.allowed_ips_tooltip_v2".translate)), :class => "false-label control-label") %>
+        <%= controls do %>
+          <div class = "cjs_controls_enclosure">
+            <% allowed_ips = @current_organization.security_setting.allowed_ip_values %>
+            <div id = "cjs_add_one_more_div">
+              <%= get_ip_container(allowed_ips[0], @current_organization.standalone?, {:additional_class => "hide"}) %>
+            </div>
+            <% if allowed_ips.size > 1 %>
+              <% allowed_ips[1..-1].each do |ip_address| %>
+                <%= get_ip_container(ip_address, @current_organization.standalone?) %>
+              <% end %>
+            <% end %>
+          </div>
+          <%= add_one_more_link %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <% if super_console? %>
+    <%= control_group do %>
+      <%= content_tag(:div, "program_settings_strings.content.enable_search_engine_indexing".translate, class: "false-label control-label") %>
+      <%= controls do %>
+        <label class="checkbox inline pull-left">
+          <%= security_setting_form.check_box :allow_search_engine_indexing %> <%= "display_string.Enable".translate %>
+        </label>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[SecuritySettings.initialize();] %>

@@ -1,0 +1,5 @@
+jQuery('.cjs_selected_task').removeClass("gray-bg cjs_selected_task")
+jQuery('#mentoring_model_task_<%= @task.id %>').addClass("gray-bg cjs_selected_task");
+<% content = render partial: "mentoring_model/tasks/common_details_sidepane", locals: {group: @group, task: @task, checkin: @checkin, comment: @comment, comments_and_checkins: @comments_and_checkins, can_checkin_access: @can_checkin_access} %>
+GroupTabs.showHideContentInSidebar("<%= j content %>");
+MentoringAreaTracking.gaTrackTaskViewed(<%= @home_page_view %>);

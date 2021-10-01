@@ -1,0 +1,25 @@
+en:
+  feature:
+    mentor_recommendation:
+      header:
+        banner:
+          recommendation_text: "%{Mentor} Recommendations"
+          recommendation_text_mobile: Recommendations
+          admin_recommendation_tooltip: Recommendations from your %{program} %{admin}
+      recommended_badge: Recommended
+      Request_Connection: Request %{Connection}
+      Message_from_admin: 'Message from %{Admin}:'
+      back_link: request %{connection}
+      you_may_also: You may also
+      search_using_filters: Search using filters
+      position:
+        one: 1st
+        two: 2nd
+        three: 3rd
+        four: 4th
+        five: 5th
+        six: 6th
+        seven: 7th
+        eight: 8th
+        nine: 9th
+        ten: 10th

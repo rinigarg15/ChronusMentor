@@ -1,0 +1,42 @@
+<%
+popup_title = "feature.profile.content.offer_mentoring_to_student_v2".translate(student_name: @student.name, mentoring: _mentoring)
+if @current_program.mentor_offer_needs_acceptance?
+  submit_text = "feature.profile.label.offer".translate
+  optional_message_for_mentee = "feature.profile.content.optional_message_to_mentee_when_needs_acceptance".translate(student_name: @student.name)
+else
+  submit_text = "display_string.Add".translate
+  if @can_add_to_existing_group
+    optional_message_for_mentee = "feature.profile.content.optional_msg_to_student".translate(student_name: @student.name)
+  else
+    optional_message_for_mentee = "feature.profile.content.optional_message_to_mentee_when_cannot_add_to_group".translate(student_name: @student.name, a_mentoring_connection: _a_mentoring_connection)
+  end
+end
+%>
+<% modal_v3_popup popup_title do %>
+  <div id="select_connection_<%= @student.id %>">
+    <div id="select_wrapper_<%= @student.id %>">
+      <%= form_tag mentor_offers_path, :id => "offer_mentoring_form_#{@student.id}" do %>
+        <%= control_group do %>
+          <label class="control-label" for="mentroing_offer_message_<%=@student.id%>"> <%= optional_message_for_mentee %> </label>
+          <%= controls do %>
+            <%= text_area_tag :message, nil, :id => "mentroing_offer_message_#{@student.id}", :class => "form-control", :rows => 5 %>
+          <% end %>
+          <%= hidden_field_tag :student_id, @student.id %>
+          <%= hidden_field_tag :group_id %>
+          <%= hidden_field_tag :src, @src, id: "" %>
+          <% if @can_add_to_existing_group %>
+            <%= render :partial => "users/choose_offer_mentoring_group", :locals => {
+              :student => @student,
+              :mentor => @mentor,
+              :popup_title => popup_title,
+              :submit_text => submit_text} %>
+          <% else %>
+            <% action_set(class: "m-t pull-right") do %>
+              <%= submit_tag "feature.profile.content.offer_mentoring_v1".translate(:Mentoring => _Mentoring), :class => 'btn btn-primary', data: {:disable_with => "display_string.Please_Wait".translate} %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

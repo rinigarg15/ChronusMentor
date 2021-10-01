@@ -1,0 +1,743 @@
+en:
+  feature:
+    connection:
+      title: Title
+      name_v1: "%{Mentoring_Connection} Name"
+      name_v2: "%{Mentoring_Connection} Name *"
+      wizard_header:
+        description: DESCRIBE %{Mentoring_Connection}
+        add_members: ADD MEMBERS
+      Logo: Logo
+      Picture: Picture
+      header:
+        total_time: Total Time
+        all_meetings: All %{Meetings}
+        all_tasks: All Tasks
+        available_since: Available Since
+        proposed_date_with_order: Proposed date (%{order})
+        rejected_date_with_order: Rejected date (%{order})
+        withdrawn_date_with_order: Withdrawn date (%{order})
+        customize_profile_v1: Customize %{Mentoring_Connection} Profile Fields
+        create_a_new_v1: Create a New %{Mentoring_Connection}
+        propose_a_new: Propose a New %{Mentoring_Connection}
+        start_a_new: "Start a New %{Mentoring_Connection}"
+        new: New %{Mentoring_Connection}
+        ongoing_connections_html: Ongoing Connections (%{connection_count})
+        ongoing_connections_v1_html: Ongoing %{Mentoring_Connections} (%{connection_count})
+        drafted_connections_html: Drafted Connections (%{connection_count})
+        drafted_connections_v1_html: Drafted %{Mentoring_Connections} (%{connection_count})
+        closed_connections_html: Closed Connections (%{connection_count})
+        closed_connections_v1_html: Closed %{Mentoring_Connections} (%{connection_count})
+        ongoing_html: Ongoing (%{connection_count})
+        drafted_html: Drafted (%{connection_count})
+        closed_html: Closed (%{connection_count})
+        pending_html: Pending (%{connection_count})
+        available_html: Available (%{connection_count})
+        open_html: Open (%{connection_count})
+        proposed_html: Proposed (%{connection_count})
+        rejected_html: Rejected (%{connection_count})
+        Recently_active: Recently active
+        Most_active: Most active
+        Least_active: Least active
+        Recently_connected: Recently connected
+        Expiration_time: Expiration time
+        connection_name: "%{Mentoring_Connection} Name"
+        mentoring_connection_slots_availability: "%{Mentoring_Connection} Slots Availability"
+        slots_available_for: Slots Available For Any Of
+        slots_unavailable_for: Slots Unavailable For Any Of
+        Expires_in: Expires in
+        Expires_on: Expires on
+        Started_on: Started on
+        Recent_connection_started_on: Started on ( recent %{connection} )
+        Close_date: Close date
+        Closes_on: Closes on
+        Closed_on: Closed on
+        Closure_reason: Closure Reason
+        Created_by: Created by
+        Drafted_since: Drafted since
+        add_or_update_notes_v1: "%{Add_or_Update} Notes - %{connection_name}"
+        Set_Expiration_Date: Set Expiration Date - %{connection_name}
+        new_expiration: New Expiration Date
+        discard_connection: Discard %{Mentoring_Connection} - %{connection_name}
+        delete_connection: Delete %{Mentoring_Connection} - %{connection_name}
+        close_connection: Close %{Mentoring_Connection} - %{connection_name}
+        reactivate_connection_v1: Reactivate %{Mentoring_Connection} - %{connection_name}
+        publish_connection: Publish %{Mentoring_Connection} - %{connection_name}
+        withdraw_connection: Withdraw %{Mentoring_Connection} - %{connection_name}
+        bulk_discard_connections: Discard %{Mentoring_Connections}
+        bulk_close_connections: Close %{Mentoring_Connections}
+        bulk_reactivate_connections_v1: Reactivate %{Mentoring_Connections}
+        bulk_publish_connections: Publish %{Mentoring_Connections}
+        bulk_publish_connections_message: "%{Mentoring_Connection} publish is in progress. Please wait"
+        bulk_export_connections: Export %{Mentoring_Connections} as CSV
+        Notes: Notes
+        View_Notes_v1: View Notes
+        admin_notes: "%{Admin} Notes"
+        Notes_by_administrator: Notes by %{admin}
+        edit_name_and_picture: Edit Name and Picture
+        set_circle_start_date_popup_propose_workflow_header: "Do you want to set a start date for your %{mentoring_connection}?"
+        set_start_date_popup_header: "Set Start Date - %{group_name}"
+        Goals: Goals
+        Goal: Goal
+        Provide_Feedback: Provide Feedback
+        Members: Members
+        connection_summary: "%{Mentoring_Connection} Summary"
+        Started: Started
+        Update_Goal_Progress: Update Goal Progress
+        Edit_Goal: Edit %{goal_name}
+        Connection_Activity: "%{Mentoring_Connection} Activity"
+        Mentoring_Objective_v1: Objective of the %{Mentoring_Connection}
+        Assign_Mentor: Assign %{Mentor}
+        save_as_draft: Save as Draft
+        available_to_join: Include only available %{mentoring_connections}
+        milestone:
+          Milestones: Milestones
+        Overdue: Overdue
+        In_Progress: In Progress
+        Completed: Completed
+        status:
+          Status: Status
+          Active: Active
+          Inactive: Inactive
+          Ongoing: Ongoing
+          Closed: Closed
+          Drafted: Drafted
+          Pending: Pending
+          Available: Available
+          Not_Started: Not Started
+          Proposed: Proposed
+          Rejected: Rejected
+          Withdrawn: Withdrawn
+        group_status:
+          not_started: Not Started
+          started_inactive: Started and currently Inactive
+          started_active: Started and currently Active
+        Message: Message
+        Edit_Profile: Edit Profile
+        public_connection_html: Public %{mentoring_connection} %{embed_icon}
+        Profile: Profile
+        default_fields_v1: "%{Mentoring_Connection} Fields"
+        connection_profile_fields: "%{Mentoring_Connection} Profile Fields"
+        user_profile_fields: "%{Role} Profile Fields"
+        started_label: "Started on: "
+        start_label: "Starts on: "
+        drafted_label: 'Drafted: '
+        pending_label: 'Available Since: '
+        created_label: 'Created By: '
+        closed_label: 'Closed By: '
+        proposed_label: 'Proposed on: '
+        proposed_by_label: 'Proposed by: '
+        removed_user_label: Removed User
+        rejected_label: 'Rejected on: '
+        unread_messages: "%{message_count} Unread"
+        pending_task: "%{task_count} Pending"
+        my_group: My %{Mentoring_Connection}
+        no_connections: You don't have any ongoing %{mentoring} %{mentoring_connection}.
+        browse_mentor: Browse %{Mentors}
+        browse_resources: Browse %{Resources}
+        ongoing_circles: Ongoing %{Mentoring_Connection}
+        proposed_circles: Proposed %{Mentoring_Connection}
+        upcoming_meetings: "%{meeting_count} Upcoming"
+        last_activity_on: 'Last Activity on: %{last_activity_time}'
+        rejected_by_label: 'Rejected by: '
+        discover_new: Discover New
+        propose_new: Propose New
+        start_new: Start New
+        view_all: VIEW ALL
+        mentoring_connection_id: "%{Mentoring_Connection} Id"
+        role: "%{Role}"
+        role_id: "%{Role} Id"
+        survey_status_filter:
+          labels:
+            survey_status: Survey Status
+            group_response_as: Survey
+            survey_task_status: Status
+            survey_task_status_complete: Completed
+            survey_task_status_not_completed: Not Completed
+            survey_task_status_overdue: Overdue
+          placeholder:
+            select_survey: Select a survey
+        survey_response_filter:
+          labels:
+            survey_response: Survey Response
+            group_response_as_v1: "%{Mentoring_Connection} with users response for:"
+            survey_question: 'Survey Question :'
+            survey_answer: 'Survey Answer :'
+          placeholder:
+            select_survey: Select a survey
+            select_question: Select your question
+            select_choices: Select Choices
+        pending_group_header_alert_for_non_members: This %{group_term} has not started yet. If you join, you will be notified once it starts.
+        pending_group_header_alert_for_members: This %{group_term} has not started yet. You will be notified once it starts.
+        pending_group_header_alert_for_owners: "This %{group_term} has not started yet. Publish your %{group_term} for access to collaboration tools and %{resources}. If you want, others may continue to find and join your %{group_term} after it's published."
+        group_not_started_yet: This %{group_term} has not started yet.
+        pending_group_header_alert_for_owners_and_admins_1: Publish the %{group_term} for access to collaboration tools and %{resources}.
+        pending_group_header_alert_for_owners_and_admins_2: If you want, others may continue to find and join the %{group_term} after it's published.
+        pending_group_header_alert_for_owners: "This %{group_term} has not started yet. Publish your %{group_term} for access to collaboration tools and %{resources}. If you want, others may continue to find and join your %{group_term} after it's published."
+        pending_group_with_future_start_date_for_admin: "The %{group} will start on %{start_date}."
+        pending_group_with_future_start_date_for_non_members: "The %{group} will start on %{start_date}. If you join, you will be notified once it starts."
+        pending_group_with_future_start_date_for_members: "The %{group} will start on %{start_date}. You will be notified once it starts."
+        pending_group_with_past_start_date_owners_and_admins_html: "The %{group} didn't start on %{start_date} as users are yet to join the %{group}. Please %{set_start_date_url} or publish the circle manually."
+        proposed_group_header_alert_for_proposer: Your proposed %{mentoring_connection} is awaiting acceptance from %{admin}. You will be notified once the %{admin} accepts your %{mentoring_connection}.
+        proposed_group_header_alert_for_admin: Please accept and make the %{mentoring_connection} available for users.
+        click_here_to_explore_html: "%{click_here_link} to explore other %{mentoring_connections} if you would like to join them."
+        check_in_time: Check-in Time
+        withdrawn_html: Withdrawn (%{connection_count})
+        bulk_withdraw_connections: Withdraw %{Mentoring_Connections}
+        withdrawn_label: 'Withdrawn on: '
+        withdrawn_by_label: 'Withdrawn by: '
+        about_discussion_board: About Discussion Board
+        join_project_requests_title: Users Requesting to Join %{connection}
+        create_duplicate: Create Duplicate %{Mentoring_Connection}
+      action:
+        done_customizing: Done Customizing
+        manage: Manage %{Mentoring_Connections}
+        find_new_projects: Find new %{mentoring_connections}
+        all_projects: All %{mentoring_connections}
+        create_new_v1: Create New %{Mentoring_Connection}
+        find_a_mentor: Find %{a_Mentor}
+        pending_mentor_requests: Pending %{Mentor} Requests
+        create_and_publish: Create and Publish
+        Publish_Connection_v1: Publish %{Mentoring_Connection}
+        Make_Available: Make %{Mentoring_Connection} Available
+        Make_Available_v2:
+          one: Make %{Mentoring_Connection} Available
+          other: Make %{Mentoring_Connections} Available
+        Discard_Connection_v1: Discard %{Mentoring_Connection}
+        delete_connection: Delete %{Mentoring_Connection}
+        Assign_Template_v1: Assign %{Mentoring_Connection} Plan Template
+        Reactivate_Connection_v1: Reactivate %{Mentoring_Connection}
+        Close_Connection_v1: Close %{Mentoring_Connection}
+        Export_Connections: Export %{Mentoring_Connections} as CSV
+        Join_Project: Join %{Mentoring_Connection}
+        Set_Expiration_Date: Set Expiration Date
+        view_all: View All %{Mentoring_Connections}
+        View_Profile: View Profile
+        Visit_Mentoring_Area_v1: Visit %{Mentoring_Area}
+        reset_all_v1: Reset all
+        clear_all: Clear all
+        reset: reset
+        Reactivate: Reactivate
+        Close: Close
+        Messages: Messages
+        Setup_Meeting_v1: Setup %{Meeting}
+        New_Goal: New Goal
+        Contact_Admin: Contact %{admin_term}
+        change: "(change)"
+        extend: "(Extend)"
+        request_for_change_v1: "(Request for change)"
+        Add_New_Note: Add New Note
+        New_Note: New Note
+        Add_Note: Add Note
+        Add_Notes: Add Notes
+        Add_New_Object: Add New %{Object}
+        Add_or_Update_Notes: Add/Update Notes
+        manage_members_v1: Manage Members
+        Assign: Assign
+        Update_View: Update View
+        send_message: Send Message
+        Save_and_Mark_Available: Save and Make %{Mentoring_Connection} Available
+        Add_Members: Add Members
+        Join: Join %{Mentoring_Connection}
+        accept_and_mark_available: Accept & Make Available
+        reject: Reject %{Mentoring_Connection}
+        update_owners: Add/Remove Owners
+        Edit_Note: Edit Note
+        Withdraw_Connection_v1: Withdraw %{Mentoring_Connection}
+        duplicate_connection: Duplicate %{Mentoring_Connection}
+        duplicate: Duplicate
+        set_start_date: Set Start Date
+      content:
+        users_number:
+          one: 1 user
+          other: "%{count} users"
+        send_message_to_all: All users in the selected %{mentoring_connections} (%{users_count_string})
+        send_message_to_role: All %{role_term} in the selected %{mentoring_connections} (%{users_count_string})
+        send_message_to_owners: All owners of the selected %{mentoring_connections} (%{users_count_string})
+        message: Message
+        goals_status_v2: Goals Status
+        tasks_overdue_status_v2: Tasks Overdue
+        tasks_pending_status_v2: Tasks Pending
+        tasks_completed_status_v2: Tasks Completed
+        milestones_overdue_status_v2: Milestones Overdue
+        milestones_pending_status_v2: Milestones Pending
+        milestones_completed_status_v2: Milestones Completed
+        mentor_meetings_activity: "%{mentor_name} %{meetings_name}"
+        mentor_messages_activity: "%{mentor_name} Messages"
+        mentor_login_activity: "%{mentor_name} Login Instances"
+        mentee_meetings_activity: "%{mentee_name} %{meetings_name}"
+        mentee_messages_activity: "%{mentee_name} Messages"
+        proposed_by: Proposed by
+        proposed_at: Proposed at
+        rejected_by: Rejected by
+        rejected_at: Rejected at
+        withdrawn_at: Withdrawn at
+        withdrawn_by: Withdrawn by
+        survey_responses: No. of Survey Responses
+        mentee_login_activity: "%{mentee_name} Login Instances"
+        meetings_activity: "%{role_name} %{meetings_name}"
+        role_profile_fields: "%{role_name} profile fields"
+        messages_activity: "%{role_name} Messages"
+        posts_activity: "%{role_name} Posts"
+        login_activity: "%{role_name} Login Instances"
+        mentoring_model_templates: "%{Mentoring_Connection} Template"
+        mentoring_model_templates_v1: "%{Mentoring_Connection} Plan Template"
+        Active_since: Active since
+        Last_activity: Last activity
+        Started_on: Started on
+        Expires_on: Expires on
+        Created_by: Created by
+        Drafted_since: Drafted since
+        Available_since: Available since
+        Pending_requests: Pending %{Mentoring_Connection} requests
+        situations: Situations
+        notes: Notes
+        total_slots: Number of slots (%{role_name})
+        slots_taken: Number of slots taken (%{role_name})
+        slots_remaining: Number of remaining slots (%{role_name})
+        start_date: Start Date
+        see_more_profile_html: See full profile &raquo;
+        No_activity_yet: No activity yet
+        No_more_activities: No more activities to show.
+        No_Milestones_yet: No Milestones yet
+        No_Goals_yet: No Goals yet.
+        No_Tasks_V2_Yet: No Tasks Yet.
+        No_entries_yet: No entries yet.
+        No_notes: You do not have any personal notes.
+        No_tasks_yet: There are no Tasks in the milestone yet.
+        No_online_activity: No online activity for past 30 days
+        No_milestone_progress: No milestones in progress
+        no_emails: No e-mails (No e-mails will be sent)
+        no_emails_v1: No emails (No emails will be sent)
+        No_more_messages: No more messages to show.
+        No_messages_yet: No messages yet.
+        No_users_yet: No users in the %{mentoring_connection} yet.
+        no_columns: No columns to display.
+        join_as: Join As
+        select_role: Select your role in this %{mentoring_connection}
+        request_pending:
+          one: request pending
+          other: requests pending
+        n_slots_left:
+          zero: No slot left
+          one: "%{count} slot left"
+          other: "%{count} slots left"
+        n_slots_left_v1:
+          zero: "All slots filled!"
+          one: "%{count} slot left"
+          other: "%{count} slots left"
+        n_mentors:
+          one: "%{count} %{mentor}"
+          other: "%{count} %{mentors}"
+        n_students:
+          one: "%{count} %{student}"
+          other: "%{count} %{students}"
+        expires_soon: expires soon
+        export_as_csv_html: Export %{connections} as %{CSV}
+        about_time_ago: About %{time} ago
+        Situation:
+          one: Situation
+          other: Situations
+        Goal_Progress: Goal Progress
+        Milestone_Progress: Milestone Progress
+        create_new_task_html: "%{Click_here} to create one."
+        Auto_termination: Auto termination
+        Closed_by: Closed by
+        Closed_on: Closed on
+        Closes_on: Closes on
+        Closes_in: Closes in
+        View_Reason: "(View reason)"
+        auto_closed: Auto closed
+        Reason: Reason
+        Reason_for_closure: Reason for closure
+        Reason_for_rejection: Reason for rejection
+        email_recipients_list: members of the %{mentoring_connection}
+        proposer_recipient: proposer of the %{mentoring_connection}
+        withdrawal_email_note_html: "%{Mentoring_connection} members will receive %{withdrawal_email_link} and users who have sent a join request will receive %{rejected_email_link} on %{mentoring_connection} withdrawal"
+        withdrawn_email_label: withdrawn %{mentoring_connection} email
+        request_rejected_email_label: "%{mentoring_connection} request rejected email"
+        delete_confirm_goal: Are you sure you want to delete the goal? This action cannot be undone.
+        delete_confirm_milestone: Are you sure you want to delete this milestone?
+        delete_confirm_task: Are you sure you want to delete this task?
+        delete_confirm_note: Are you sure you want to delete this note? This cannot be undone.
+        delete_confirm_scrap: Are you sure you want to delete the message?
+        meeting_attending: You are attending
+        meeting_not_attending: You are not attending
+        privacy_tip_self_html: This page is private to %{you} and is not visible to the other members of this %{mentoring_connection}.
+        privacy_tip_all: This page is private between you and the other members of this %{mentoring_connection}.
+        time_since_last_activity: "%{time_period} since last activity"
+        notify_attendees: Notify %{meeting} attendees
+        notify_attendees_helptext: Copy of this note will be sent to the attendees inbox
+        message_note_subject: "%{name} shared a note in %{topic}"
+        Not_set: Not set
+        due_by_time: Due by %{time}
+        within: within
+        Reason_for_withdrawal: Reason for withdrawal
+        project_available_for_text: "Available for %{number_of_days} days"
+        view_project: "View %{mentoring_connection}"
+        start_date_label: "Start Date"
+        new_start_date_label: "New Start Date *"
+        circle_start_date_label: "%{Mentoring_Connection} start date"
+        set_start_date_propose_flow_notice_text: "Congratulations! You will be notified once your %{mentoring_connection} proposal gets accepted. When do you want to start your %{mentoring_connection}?"
+        set_start_date_propose_without_approval_flow_notice_text: "Congratulations! When do you want to start your %{mentoring_connection}?"
+        set_start_date_circle_start_info: "Your %{mentoring_connection} will start on the specified date as long as at least one %{mentor} and one %{mentee} has joined."
+        set_date: "Set date"
+        change_date: "Change date"
+        start_date_past_warning: "Start date of the %{mentoring_connection} is already past. Please set a new start date before you make it available."
+        please_select_new_start_date: "Please selecte new start date."
+        bulk_make_available_failure_message_html: "Couldn't complete the action as the start date of %{mentoring_connection}(s) %{connections_with_past_dates} are already past. Please set a new start for mentioned %{mentoring_connection_term} to complete the action in bulk."
+        set_a_new_start_date: "set a new start date"
+        auto_publish_circle_message: "%{Mentoring_Connection} got published on defined start date."
+        similar_circles_content_description_for_admins: "Here are similar %{mentoring_connections}."
+        similar_circles_content_description: "Here are similar %{mentoring_connections}. Explore and join instead of creating one."
+        notice:
+          expired: The mentoring period has ended.
+          expired_v1: The %{mentoring_connection} has ended.
+          expired_v2_html: The %{mentoring_connection} %{connection_name} has ended. Click %{click_link} to reactivate.
+          about_to_expire: The mentoring period comes to an end in %{time_period}.
+          about_to_expire_v1: The %{mentoring_connection} comes to an end in %{time_period}.
+          recently_reactivated: The %{connection} was recently reactivated. This %{connection} ends in %{time_period}.
+          recently_expiry_date_changed: The mentoring period was recently changed. This %{connection} ends in %{time_period}.
+          recently_expiry_date_changed_v1: The duration of this %{connection} was recently changed. This %{connection} ends in %{time_period}.
+          Contact_admin_to_extend_html: "%{Contact_Admin} to extend your mentoring period."
+          Contact_admin_to_extend_v1_html: "%{Contact_Admin} to extend the duration of your %{mentoring_connection}."
+          published_with_pending_requests_html: "Congratulations on publishing %{group_url}! There are outstanding request(s) to join your %{mentoring_connection}. Please respond below."
+          bulk_publish_with_pending_requests: "The selected %{mentoring_connections} got published. There are few users who would like to join these %{mentoring_connections}. Please respond to the below requests as well."
+          published_groups_with_pending_requests_html: "Some %{mentoring_connections} got published with outstanding pending request(s). Please visit <a href='%{project_listing_url}'>here</a> and respond to those requests."
+        status:
+          active: active
+          inactive: inactive
+          closed: closed
+          ongoing: ongoing
+          drafted: drafted
+          available: available
+          pending: pending
+          proposed: proposed
+          rejected: rejected
+          withdrawn: withdrawn
+        tracking_inactive:
+          one: The following %{mentoring_connections} appear to be inactive for more than 1 day.
+          other: The following %{mentoring_connections} appear to be inactive for more than %{count} days.
+        hide_desc_and_laquo_html: "&laquo; Hide description"
+        create_new_connection_html: 'Create a new %{mentoring_connection} %{mentor} :: %{mentee}'
+        add_to_existing:
+          one: Add %{mentee} to %{mentor}'s existing %{mentoring_connection}
+          other: Add %{mentee} to one of %{mentor}'s existing %{mentoring_connections}
+        help_text:
+          assign_template: Please assign a template for the following %{Mentoring_Connections}
+          assign_template_v2_html:
+            one: Please assign a template for <b>%{Mentoring_Connection_Name}</b>
+            other: Please assign a template for %{count} %{Mentoring_Connections}
+          accept_proposal_html: "%{count} proposed %{mentoring_connections} will be accepted and will be made available for %{role_string} to join"
+          reject_proposal_html: "%{count} proposed %{mentoring_connections} will be rejected"
+          withdraw_proposal_html: "%{count} available %{mentoring_connections} will be withdrawn"
+          make_available: The following %{Mentoring_Connections} will be made available for %{students} to join
+          make_available_v2:
+            one: "%{count} %{Mentoring_Connection} will be made available for %{role_string} to join"
+            other: "%{count} %{Mentoring_Connections} will be made available for %{role_string} to join"
+          customize_html: The %{Mentoring_Connection} profile form includes the following fields in addition to the default profile fields %{name_and_logo}. To reorder the fields, simply drag and drop them to their new position and the position will be automatically saved.
+          name_and_logo: "(name, logo)"
+          name_and_picture: "(name, picture)"
+          tracking_disabled: Tracking of inactivity in %{mentoring_connections} is currently disabled
+          no_connection_mentor_html: The %{mentor} does not have any connection. %{Click_here} to create a new connection.
+          no_connection_mentee_html: The %{mentee} does not have any connection. %{Click_here} to find a %{mentor}.
+          no_connection_mentor_v1_html: The %{mentor} does not have any %{mentoring_connections}. %{Click_here} to create a new %{mentoring_connection}.
+          no_connection_mentee_v1_html: The %{mentee} does not have any %{mentoring_connections}. %{Click_here} to find a %{mentor}.
+          no_connection_filter: There are no %{status} mentoring connections.
+          no_connection_filter_v1: There are no %{status} %{mentoring_connections}.
+          no_connection_filter_v2: The user does not have any %{status} %{mentoring_connections}. Switch tabs to see %{mentoring_connections} in other states.
+          no_connections: No %{Mentoring_Connections} found matching your criteria. You can try the following.
+          no_upcoming_meetings: No upcoming meetings.
+          no_upcoming_meetings_v1: No upcoming %{meetings}.
+          all_on_page_selected_html: All %{connection_count} %{mentoring_connections} on this page are selected.
+          select_all_html: Select all %{total_size} %{mentoring_connections} in this list
+          all_selected_html: All %{total_size} %{mentoring_connections} in this list are selected.
+          clear_selection: Clear selection
+          clear_filters: Broaden your search by clearing a few filters.
+          add_remove_members_html: Please click %{Save} once you are done.
+          expired_date_change_html: The %{mentoring_connection} has already expired on %{expiry_date}.
+          expiring_date_change_html: The current expiry date for the %{mentoring_connection} is %{expiry_date}.
+          expiring_date_change_v1_html: The current expiration date for the %{mentoring_connection} is %{expiry_date}.
+          reason_for_change: Please provide a reason for changing the expiry date.
+          reason_for_change_v1: Please provide a reason for changing the expiration date.
+          discard_connection: Are you sure you want to discard this %{mentoring_connection}? All information related to this %{mentoring_connection} will be removed.
+          delete_connection: Are you sure you want to delete this %{mentoring_connection}? All information related to this %{mentoring_connection} will be deleted.
+          close_connection_with_goals: Please provide a reason why you want to close the %{mentoring_connection}. The members of the %{mentoring_connection} can still see the old discussions and goals but they will not be able to modify them or create new goals or post to the discussion board.
+          close_connection_without_goals: Please provide a reason why you want to close the %{mentoring_connection}. The members of the %{mentoring_connection} can still see the old discussions but they will not be able to modify them or post to the discussion board.
+          close_connection_without_goals_v1: Please provide a reason why you want to close the %{mentoring_connection}.
+          close_connection_old_discussions_meetings: The members of the %{mentoring_connection} can still see the old discussions, past %{meetings}.
+          close_connection_new_discussions_meetings: But they will not be able to post a new message or see any scheduled %{meetings} or modify them.
+          close_connection_v2_html: Please provide a reason for closing the %{mentoring_connection}. <b>Members of a %{mentoring_connection} that is closed as "complete" will still receive scheduled survey reminders.</b> All members of the %{mentoring_connection} will still be able to view past discussions, %{meetings}, and %{mentoring_connection} details, but will be unable to post new content, complete tasks, or modify content in the %{mentoring_connection} area.
+          reactivate_connection: Please provide a reason for reactivating the %{mentoring_connection}. All the members of the %{mentoring_connection} will be notified through email with the reason.
+          bulk_discard: Are you sure you want to discard the following %{mentoring_connections}?
+          bulk_discard_v2:
+            one: Are you sure you want to discard %{count} %{mentoring_connection}?
+            other: Are you sure you want to discard %{count} %{mentoring_connections}?
+          info_loss_on_discard: All information related to these %{mentoring_connections} will be removed.
+          bulk_publish: 'The following %{mentoring_connections} will be published:'
+          bulk_publish_v2:
+            one: "%{count} %{mentoring_connection} will be published"
+            other: "%{count} %{mentoring_connections} will be published"
+          bulk_reactivate: 'The following %{mentoring_connections} will be reactivated:'
+          bulk_reactivate_v2:
+            one: "%{count} %{mentoring_connection} will be reactivated."
+            other: "%{count} %{mentoring_connections} will be reactivated."
+          bulk_set_expiry: 'The expiry date will be updated for the following %{mentoring_connections}:'
+          bulk_set_expiry_v2:
+            one: The expiry date will be updated for %{count} %{mentoring_connection}.
+            other: The expiry date will be updated for %{count} %{mentoring_connections}.
+          bulk_set_expiration:
+            one: The expiration date will be updated for %{count} %{mentoring_connection}.
+            other: The expiration date will be updated for %{count} %{mentoring_connections}.
+          bulk_close: 'Please provide a reason for closing the following %{mentoring_connections}:'
+          bulk_close_v2:
+            one: Please provide a reason for closing %{count} %{mentoring_connection}.
+            other: Please provide a reason for closing %{count} %{mentoring_connections}.
+          bulk_close_connection_with_goals: The members of the %{mentoring_connections} can still see the old discussions and goals but they will not be able to modify them or create new goals or post to the discussion board.
+          bulk_close_connection_without_goals: The members of the %{mentoring_connections} can still see the old discussions but they will not be able to modify them or post to the discussion board.
+          bulk_export: 'Following %{mentoring_connections} will be included in the downloaded csv:'
+          bulk_export_v2:
+            one: "%{count} %{mentoring_connection} will be included in the downloaded csv."
+            other: "%{count} %{mentoring_connections} will be included in the downloaded csv."
+          goals_not_set: Goals have not been set for this %{mentoring_connection} yet.
+          admin_created_task: This task is created by %{administrator} and cannot be edited
+          goal_visible_to_all: Visible to everyone in this %{mentoring_connection}, including all %{mentors} and all %{mentees}.
+          goal_visible_to_some: Visible only to %{student_name} and all %{mentors} in this %{mentoring_connection}.
+          goal_visible_to_me: Visible only to you and all %{mentors} in this %{mentoring_connection}.
+          please_answer_feedback: Please help us understand the progress of this %{mentoring_connection} by answering a few questions.
+          answers_visible_to_admin: Your answers will be seen only by the %{admin}.
+          responses_visible_to_admin: Your responses will be seen only by the %{admin}.
+          milestone_list: Here are the milestones for your mentoring connection. Please review and work towards completing them.
+          milestone_list_v1: Here are the milestones for your %{mentoring_connection}. Please review and work towards completing them.
+          scrap_reply: If you need a quick response for your message then click here and set the period within which you expect a reply.
+          set_availability_html: In order for people to schedule meetings with you, you will need to %{add_time_to_your_availability_calendar}.
+          set_availability_v1_html: In order for people to schedule %{meetings} with you, you will need to %{add_time_to_your_availability_calendar}.
+          set_meeting_html: Before scheduling a meeting, make sure everyone is available. %{Open_the_groups_availability_calendar}.
+          set_meeting_v1_html: Before scheduling a %{meeting}, make sure everyone is available. %{Open_the_groups_availability_calendar}.
+          add_time_to_cal: add time to your availability calendar
+          Open_group_avail_cal: Open the group's availability calendar
+          Open_group_avail_cal_v1: Open the %{mentoring_connection}'s availability calendar
+          mentoring_obj_html: "%{user} requested a mentor for the following"
+          mentoring_obj_v1_html: "%{user} requested a %{mentor} for the following"
+          message_to_members: Type your message to %{mentors} and %{mentees}.
+          leave_group_reason: Please provide a reason for %{leaving_this_group_text}.
+          leave_group_confirmation: By clicking %{leaving_this_group_link}, you confirm that you are %{leaving_this_group_text}.
+          leave_mentoring_connection_name: Leave '%{mentoring_connection_name}'
+          leave_message_to_owner: Leave a message for the owner of the %{mentoring_connection}
+          public_connection: Making the %{mentoring_connection} profile public will enable all the users of the %{program} to view the %{mentoring_connection}. Please note that the mentoring area remains exclusive to the members of the %{mentoring_connection}.
+          public_connection_v1: Making the %{mentoring_connection} profile public will enable all the users of the %{program} to view the %{mentoring_connection}. Please note that the %{mentoring_connection} remains exclusive to the members of the %{mentoring_connection}.
+          private_notes_mentor: You can use this section to add notes to your private journal about the %{mentee}(s), attach files, or record offline mentoring conversations with the %{mentee}(s).
+          private_notes_mentor_v1: You can use this section to add notes to your private journal about the %{mentee}(s), attach files, or record offline conversations with the %{mentee}(s).
+          private_notes_mentee: You can use this section to add notes to your private journal, track your progress towards the mentoring goals, attach files, or record offline mentoring conversations with the %{mentor}.
+          private_notes_mentee_v1: You can use this section to add notes to your private journal, track your progress towards the goals, attach files, or record offline conversations with the %{mentor}.
+          private_notes_help_text: You can use this section to add notes to your private journal, track your progress towards the goals, attach files, or record offline conversations
+          private_notes_help_text_meeting: You can capture notes and file attachments for this %{meeting} from this space. %{add_first_note}
+          private_notes_add_your_first_note: Add your first note.
+          milestone_completion_html: Congratulations! You have completed the milestone. Would you like to start the next milestone - %{next_milestone_title} ?
+          pre_milestone_completion: Congratulations, you have completed all the tasks. Would you like to mark the milestone completed ?
+          pending_tasks_milestone_html: You are attempting to complete a milestone. %{n_pending_tasks_is_or_are} not completed. Please select one of the actions below.
+          notification_to_members: " The details provided above will be included in the email notification to members of the %{mentoring_connection}"
+          n_tasks_is_or_are:
+            one: 1 task is
+            other: "%{count} tasks are"
+          please_select_atleast_one: Please select at least one %{mentoring_connection}
+          auto_termination_reason: The %{mentoring_connection} was closed due to inactivity
+          auto_expiry_reason: The mentoring period has ended
+          auto_expiry_reason_v1: The %{mentoring_connection} has ended
+          scrap_author_left: The person who posted this message is no more a member of this mentoring area
+          scrap_author_left_v1: The person who posted this message is no more a member of this %{mentoring_area}
+          accept_and_mark_available_assign_owner: Owners of the %{mentoring_connection} can manage users, tasks and the duration of the %{mentoring_connection}. They can also start and end the %{mentoring_connection} at any point of time.
+          admin_notes_description: You can attach a personal note or description about this %{mentoring_connection}.
+          expiry_days_text: Expiring in %{time}
+        placeholder:
+          no_messages: You have no unread messages.
+          no_topics: You have no unread conversations.
+          send_new_message: Send a Message
+          create_new_message: Type your message to %{mentor} and %{mentee}
+          start_new_conversation: Start a Conversation
+          reply_to_conversation: Reply to Conversation
+          withdrawal_reason: Please share the reason for your withdrawal
+          create_new_message_optional: Type your message to %{mentor} and %{mentee}. This is optional
+          create_new_note: Type your notes for this %{mentoring_connection}. This will be visible only to the %{admins}.
+          bulk_create_new_note: Type your notes for these %{mentoring_connections}. This is optional and will be visible only to the %{admins}.
+          type_your_message: Type your message here...
+          type_your_reply: Type your post here...
+          type_your_note: Type your note here...
+          subject: Subject...
+          accept_and_mark_available_message:
+            one: This message will be sent to %{name} in an email notifying them of the acceptance of the proposal.
+            other: This message will be sent to the proposers in an email notifying them of the acceptance of the proposals.
+          add_new_comment: Add New Comment
+        n_days:
+          one: 1 day
+          other: "%{count} days"
+        n_Overdue: "%{count} Overdue"
+        n_Completed: "%{count} Completed"
+        n_Pending: "%{count} Pending"
+        publish_success: "%{Mentoring_Connections} published successfully"
+        draft_success: "%{Mentoring_Connections} drafted successfully"
+        discard_success: "%{Mentoring_Connections} discarded successfully"
+        reactivate_success: "%{Mentoring_Connections} reactivated successfully"
+        set_expiry_success: Expiry date updated successfully
+        set_expiration_success: Expiration date updated successfully
+        close_success: "%{Mentoring_Connections} closed successfully"
+        template_success: The template information for the %{Mentoring_Connections} has been applied successfully
+        make_available_success: The %{Mentoring_Connections} have been made available successfully
+        accept_and_make_available_success:
+          one: The %{Mentoring_Connections} has been accepted and made available successfully
+          other: The %{Mentoring_Connections} have been accepted and made available successfully
+        reject_group_success: The %{Mentoring_Connections} have been rejected successfully
+        withdrawn_group_success:
+          one: The %{Mentoring_Connections} has been withdrawn successfully
+          other: The %{Mentoring_Connections} have been withdrawn successfully
+        notification_freq: How frequently would you like to receive notifications about activities related to your %{mentoring_connection}-%{Connection_name}?
+        daily_digest: Daily digest (One e-mail per day summarizing all updates)
+        daily_digest_v1: Daily digest (One email per day summarizing all updates)
+        weekly_digest: Weekly digest (One e-mail per week summarizing all updates)
+        weekly_digest_v1: Weekly digest (One email per week summarizing all updates)
+        not_recommended: This is not recommended.
+        remove_attachment_html: Remove attachment - %{file_name}
+        duration_hint: Enter the duration in days
+        last_activity_time: 'last activity: %{time}'
+        connection_needing_attention: Connections which need attention
+        connection_needing_attention_v1: "%{Connections} which need attention"
+        Overdue_milestones: Overdue milestones
+        Overdue_Tasks: Overdue tasks
+        Completed_on_date: Completed on %{date}
+        task_expired: This goal has crossed the due date
+        Due_date: Due %{date}
+        To_be_removed: To be removed
+        n_active_connections:
+          one: active %{mentoring_connection}
+          other: active %{mentoring_connections}
+        n_archived_connections:
+          one: archived %{mentoring_connection}
+          other: archived %{mentoring_connections}
+        n_mentoring_connections:
+          one: "%{mentoring_connection}"
+          other: "%{mentoring_connections}"
+        n_ongoing_mentoring_connections:
+          one: 1 Ongoing %{mentoring_connection}
+          other: "%{count} Ongoing %{mentoring_connections}"
+        active_and_archived_connections_html: active and %{archived_count} archived %{mentoring_connections}
+        To_be_added: To be added
+        A_removed_member: A removed member
+        sent_a_message: sent a message
+        via_email: via email
+        reply_within: requesting a reply within %{reply_period}
+        Overdue_goals: Overdue goals
+        In_progress_goals: In progress goals
+        Completed_goals: Completed goals
+        n_not_started: "%{not_started_size} Not Started"
+        n_overdue: "%{overdue_size} Overdue"
+        n_in_progress: "%{in_progress_size} In Progress"
+        n_completed: "%{completed_size} Completed"
+        n_pending: "%{pending_size} Pending"
+        Not_started_milestones: Not started milestones
+        In_progress_milestones: In progress milestones
+        Completed_milestones: Completed milestones
+        I: I
+        Said: 'said:'
+        requested_reply_within: Requested reply within %{reply_str}
+        n_remaining_messages:
+          one: Show %{count} old message...
+          other: Show %{count} old messages...
+        number_of_remaining_messages:
+          one: Show %{count} old message
+          other: Show %{count} old messages
+        label:
+          my_connection: My %{Mentoring_Connection}
+          request_pending: Request pending approval
+          no_slots: Not available to join
+          pending: "%{Mentoring_Connection} not started"
+          assign_owner_html: Assign %{user} as the owner %{info} for the %{mentoring_connection}
+          assign_owner_v1_html: Assign %{user} as the owner for the %{mentoring_connection}
+          Reason: Reason
+          Additional_Details: Additional Details
+          dir_name:
+            message: Message Attachments
+            discussion: Discussion Attachements
+            personal_note: Personal Note Attachements
+            personal_note_v1: Personal Note Attachments
+        owner: Owner
+        proposer: proposer
+        owner_actions: Actions
+        Owners: Owners
+        admin_having_owner_privileges: "%{Admin} will always be having owner privileges"
+        error:
+          can_not_be_blank: "%{Objects} can't be blank"
+        owners_description: Owner of the %{mentoring_connection} get to perform all the action %{administrator} can, like start the %{mentoring_connection}, end the %{mentoring_connection}, manage members of the %{mentoring_connection}
+        update_successful: Owners are updated successfully in this %{mentoring_connection}.
+        connect_with_mentor: Would you like to connect with %{a_mentor}?
+        provide_a_rating: Provide a rating
+        existing_groups_alert:
+          following_set_already_actively_connected:
+            one: The following set of users in the selected %{mentoring_connection_term} is already actively connected.
+            other: The following sets of users in the selected %{mentoring_connection_term} are already actively connected.
+          following_set_status_connections:
+            one: The following set of users in the selected %{mentoring_connections} is part of multiple %{group_status} %{mentoring_connections}.
+            other: The following sets of users in the selected %{mentoring_connections} are part of multiple %{group_status} %{mentoring_connections}.
+          drafted_as_mentors_to_in_groups_html:
+            one: "%{mentors_list} is drafted as %{a_mentor} to %{students_list} in %{groups_list}."
+            other: "%{mentors_list} are drafted as %{mentors} to %{students_list} in %{groups_list}."
+          mentors_to_in_groups_html:
+            one: "%{mentors_list} is %{a_mentor} to %{students_list} in %{groups_list}."
+            other: "%{mentors_list} are %{mentors} to %{students_list} in %{groups_list}."
+          was_mentors_to_in_groups_html:
+            one: "%{mentors_list} was %{a_mentor} to %{students_list} in %{groups_list}."
+            other: "%{mentors_list} were %{mentors} to %{students_list} in %{groups_list}."
+          selected_users_already_connected: The selected users are already connected with each other in the following %{mentoring_connections}.
+        assign_template_alert:
+          individual_action_message_1: The updated template does not have %{Messages_or_Discussion_boards} enabled.
+          individual_action_message_2: If you go ahead with this change, the users of the %{mentoring_connection} will no longer be able to see the %{messages_or_discussions}.
+          bulk_action_message_1: Some of the selected %{mentoring_connections} have been configured to have %{Messages_or_Discussion_boards} based on their existing template.
+          bulk_action_message_2: Changing the template to '%{template_name}' will disable %{Messages_or_Discussion_boards} and will result in loss of %{messages_or_discussions} for users in the following %{mentoring_connections}.
+        allow_to_join: Allow new users to send requests to join this %{circle}.
+        allow_to_join_with_slots: Allow new users to send requests to join this %{circle} for the available slots.
+        no_meetings_yet: No %{meetings} scheduled yet
+        allow_users_to_join: Allow users of the following roles to request to join this %{connection}
+        single_project_requestor:
+          one: There is 1 user who has requested to join %{mentoring_connection_term} which has already started.
+          other: There is 1 user who has requested to join %{count} %{mentoring_connection_term} which have already started.
+        multiple_project_requestors:
+          one: There are %{users_count} users who have requested to join %{mentoring_connection_term} which has already started.
+          other: There are %{users_count} users who have requested to join %{count} %{mentoring_connection_term} which have already started.
+        project_allow_join_update_success: The %{connection} join settings have been updated.
+        allow_or_stop_user_requests: Allow/Stop User requesting to join
+        choose_an_option: Please choose an option below
+        slot_limit: "%{slots_left} out of %{max_limit} slots left"
+        no_limit: No slot limit
+        max_slot_limit_per_role: Maximum number of %{mentoring_connections} %{role_term} can join
+        bulk_limit_exceeded: Please select %{count} or fewer %{mentoring_connections_term} to complete the required action.
+        assign_previous_template: Duplicate %{mentoring_connections} with previously assigned template
+        assign_new_template: Duplicate %{mentoring_connections} with new template
+        duplicate_success:
+          one: '%{count} out of %{total_number_of_groups} %{mentoring_connections} was duplicated successfully.'
+          other: '%{count} out of %{total_number_of_groups} %{mentoring_connections} were duplicated successfully.'
+        duplicate_errors:
+          one: '%{count} %{mentoring_connection} was not duplicated.'
+          other: '%{count} %{mentoring_connections} were not duplicated.'
+        duplicate_draft_success:
+          one: '%{count} out of %{total_number_of_groups} %{mentoring_connections} was drafted successfully.'
+          other: '%{count} out of %{total_number_of_groups} %{mentoring_connections} were drafted successfully.'
+        duplicate_draft_errors:
+          one: '%{count} %{mentoring_connection} was not drafted.'
+          other: '%{count} %{mentoring_connections} were not drafted.'
+      maximum_users_to_join_v1: Maximum number of %{users} who can participate
+      limit_includes_you: Please note that this limit includes you
+      export_pdf:
+        title: "%{group} Summary Report"
+        header:
+          summary: Summary
+          activity_overview: Activity Overview
+          goals: Goals
+          tasks: Tasks
+          milestones: Milestones
+          my_notes: My Personal Notes
+        content:
+          as_of_content: As of %{content}
+          start_date: Start Date
+          end_date: End Date
+          survey_responses: Survey Responses
+          meetings_attended: "%{meetings} Attended"
+          messages_sent: Messages Sent

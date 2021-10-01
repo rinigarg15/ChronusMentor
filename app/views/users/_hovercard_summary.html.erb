@@ -1,0 +1,51 @@
+<%= ibox nil, :ibox_id => "cjs_hovercard_container_#{container_id}", :ibox_class => "cjs-hovercard-container cui-hovercard-container animated fadeIn", :content_class => "no-padding" do %>
+  <div class="media p-sm">
+    <div class="media-left">
+      <%= user_picture(user, {no_name: true, size: :medium, row_fluid: true}, {:class => "img-circle"}) %>
+    </div>
+    <div class="media-body">
+      <div class="col-xs-12 no-padding">
+        <div class="m-t-xxs pull-left m-r-xs">
+          <%= link_to_user user, content_text: user.name(name_only: true), class: "font-600", no_hovercard: true %>
+          <%= icons_for_availability(user) %>
+        </div>
+        <div class="inline">
+          <%= display_coach_rating_and_reviews(user) if can_show_rating_for_the_user?(current_program, user, current_user) %>
+        </div>
+      </div>
+      <%= content_tag(:div, :class => "m-b-xxs small col-xs-12 no-padding") do %>
+        <%= content_tag(:span, user_roles, class: "font-600") %>
+        <%= content_tag(:span, owner_content_for_user_name(viewing_group, user), class: "text-muted") if viewing_group %>
+      <% end %>
+      <%= content_tag(:div, user.email, class: "small m-b-xxs col-xs-12 no-padding") if show_email %>
+      <% if user.id != current_user.id %>
+        <% show_last_logged_in(user, no_format: true, no_placeholder: true) do |last_logged_in| %>
+          <%= content_tag(:div, get_icon_content("fa fa-clock-o no-margins") + "feature.connection.content.time_since_last_activity".translate(time_period: time_ago_in_words(last_logged_in).capitalize), class: "small m-b-xxs text-muted col-xs-12 no-padding") %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <% hovercard_actions = get_hovercard_actions(current_user, user, viewing_group) %>
+  <% if hovercard_actions.present? %>
+    <%= content_tag(:div, hovercard_actions, :class => "p-xs b-t") %>
+  <% end %>
+  <% profile_summary = display_profile_summary(user, in_summary_questions, true) %>
+  <% #TODO: IE_Issue - always shows a scrollbar even if its less than max height %>
+  <% if profile_summary.present? || groups.present? %>
+    <div class="small gray-bg hovercard-scroll-content cui_hovercard_section_max_height">
+      <%= content_tag(:div, show_user_groups_in_hovercard(groups, user, current_user), :class => "b-t p-sm") if groups.present? %>
+      <%= content_tag(:div, profile_summary, :class => "b-t p-sm") if profile_summary.present? %>
+    </div>
+  <% end %>
+<% end %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    jQuery('.hovercard-scroll-content').slimScroll({
+      height: ''
+    });
+    CoachFeedback.displayRating();
+    CoachFeedback.showRatingPopup();
+    CoachFeedback.showPopupOnClick();
+    MentorRequests.showRequestConnectionPopup();
+  });
+<% end %>

@@ -1,0 +1,5 @@
+<% is_mentor_action = (@filter_field == AbstractRequest::Filter::TO_ME) %>
+<% member = (is_mentor_action ? mentor_request.student : mentor_request.mentor) %>
+
+<%= render :partial => "mentor_requests/mentor_request_content", :locals => { mentor_request: mentor_request, member: member, is_mentor_action: is_mentor_action, source: EngagementIndex::Src::AcceptMentorRequest::MENTOR_REQUEST_LISTING_PAGE, match_results_per_mentor: match_results_per_mentor } %>
+<%= javascript_tag "MentorRequestForm.init_disable('#{j('display_string.Please_Wait'.translate)}');" %>

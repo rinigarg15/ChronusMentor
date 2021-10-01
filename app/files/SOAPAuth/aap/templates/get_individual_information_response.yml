@@ -1,0 +1,2 @@
+is_member: <%= Psych.to_json(self.multi_dimensional_hash_lookup(params, [:envelope, :body, :get_individual_information_response, :get_individual_information_result, :individual_objects, :individual_object, :cst_member_flag])).chomp %>
+ind_cst_key: <%= Psych.to_json(self.multi_dimensional_hash_lookup(params, [:envelope, :body, :get_individual_information_response, :get_individual_information_result, :individual_objects, :individual_object, :ind_cst_key])).chomp %>

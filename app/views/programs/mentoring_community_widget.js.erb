@@ -1,0 +1,3 @@
+<% if @unconnected_user_widget_content.size > 0 %>
+  jQuery("#cjs_community_widget").html("<%= j (render partial: 'programs/mentoring_community_widget_content', locals: {community_content: @unconnected_user_widget_content}) %>");
+<% end %>

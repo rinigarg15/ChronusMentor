@@ -1,0 +1,60 @@
+<%= include_ckeditor_tag %>
+<% flash_id = "cjs_new_admin_message_popup_flash" %>
+
+<% modal_v3_popup "feature.messaging.title.send_message".translate do %>
+  <div id="new_admin_message_popup">
+    <%= simple_form_for @admin_message, remote: (@for_groups || @is_a_bulk_action || @is_groups_bulk_action) , html: { id: "new_message_popup" } do |f| %>
+      <%= response_flash (flash_id) %>
+      <% if @is_a_bulk_action %>
+        <%= hidden_field_tag "admin_message[receiver_ids]", @receiver_member_ids.join(AdminMessagesController::SEPARATOR) %>
+        <%= hidden_field_tag "admin_message[user_or_member_ids]", (@selected_users || @selected_members || @all_receiver_users).map(&:id).join(AdminMessagesController::SEPARATOR) %>
+        <%= hidden_field_tag "bulk_action", true %>
+      <% elsif @is_groups_bulk_action %>
+        <%= hidden_field_tag "admin_message[connection_ids]", @selected_groups.collect(&:id).join(AdminMessagesController::SEPARATOR) %>
+        <%= hidden_field_tag "bulk_action_groups", true %>
+      <% else %>
+        <%= hidden_field_tag "admin_message[connection_ids]", @connection.id %>
+      <% end %>
+
+      <%= control_group do %>
+        <label class="false-label control-label">
+          <%= 'feature.messaging.label.to'.translate %>
+        </label>
+        <%= controls do %>
+          <% if @is_a_bulk_action %>
+            <div>
+              <% if @program_event.present? %>
+                <%= render(partial: "program_events/selected_users", locals: { member_count: @receiver_member_ids.size, tab: @tab, program_event: @program_event}) %>
+              <% else %>
+                <%= render(partial: "admin_views/selected_users", locals: { users_or_members: @selected_users || @selected_members }) %>
+              <% end %>
+            </div>
+            <% if @src != MembershipRequest.name %>
+              <label class="checkbox">
+                <%= check_box_tag "includes_suspended", "1", false %>
+                <%= program_view? ? 'feature.messaging.content.include_deactivated_users'.translate : 'feature.messaging.content.include_suspended_users'.translate %>
+              </label>
+            <% end %>
+          <% elsif @is_groups_bulk_action %>
+            <%= label_tag("admin_message[connection_send_message_type_or_role]", 'feature.messaging.label.to'.translate, class: "sr-only") %>
+            <%= select_tag 'admin_message[connection_send_message_type_or_role]', options_for_select(options_for_bulk_send_message_to_groups(@selected_groups.collect(&:id), @current_program)), class: "form-control" %>
+          <% else %>
+            <span class="form-control-static">
+              <%= @connection.name %>
+            </span>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= f.input :subject, label: Message.human_attribute_name(:subject), as: :string, input_html: { class: "form-control" } %>
+      <%= f.input :content, label: Message.human_attribute_name(:content), as: :text, input_html: { rows: 5 , class: "form-control cjs_admin_message_content"} %>
+      <%= f.input :attachment, as: :file, label: "feature.announcements.label.add_an_attachment".translate %>
+
+      <% action_set(class: "pull-right") do %>
+        <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", "data-dismiss" => "modal" %>
+        <%= f.button :submit, "display_string.Send".translate, id: 'cjs_popup_send_msg_button' %>
+      <% end %>
+    <% end %>
+    <%= javascript_tag %Q[Messages.initNewAdminMessageValidation("#{j('feature.messaging.content.subject_and_message_required'.translate)}", "#{flash_id}");] %>
+  </div>
+<% end %>

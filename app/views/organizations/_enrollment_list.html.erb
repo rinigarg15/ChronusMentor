@@ -1,0 +1,21 @@
+<div class="clearfix row hidden-xs">
+  <%= render_multi_column_variable_height_blocks(2, :additional_class => "p-l-sm p-r-sm") do |renderable_items| %>
+    <% programs.each_with_index do |program, index| %>
+      <% program_user = @users[program.id].try(:first) %>
+      <% program_pending_membership_request_roles = @membership_requests.select{|mreq| mreq.program_id == program.id}.collect(&:roles).flatten %>
+      <% options = {:program_roles => @programs_allowing_roles[program.id], :prog_mem_req_pending_roles => program_pending_membership_request_roles} %>
+
+      <% renderable_items[index % 2] <<  render(:partial => "organizations/programs_listing", :locals => {:program => program, :options => options, :program_user => program_user, :program_pending_membership_request_roles => program_pending_membership_request_roles, :logged_in_enrollment => true}) %>
+    <% end %>
+  <% end %>
+</div>
+
+<div class="clearfix visible-xs">
+  <% programs.each_with_index do |program, index| %>
+    <% program_user = @users[program.id].try(:first) %>
+    <% program_pending_membership_request_roles = @membership_requests.select{|mreq| mreq.program_id == program.id}.collect(&:roles).flatten %>
+    <% options = {:program_roles => @programs_allowing_roles[program.id], :prog_mem_req_pending_roles => program_pending_membership_request_roles} %>
+
+    <%= render(:partial => "organizations/programs_listing", :locals => {:program => program, :options => options, :program_user => program_user, :program_pending_membership_request_roles => program_pending_membership_request_roles, :logged_in_enrollment => true}) %>
+  <% end %>
+</div>

@@ -1,0 +1,34 @@
+<%= ibox "feature.article.header.Publications".translate do %>
+  <%= "feature.article.content.published_programs_desc".translate(article: _article, programs: _programs) %>
+  <div class="has-above has-below">
+    <% @published_programs.each do |program| %>
+      <%= content_tag(:div, link_to("#{h(program.name)} &raquo;".html_safe, article_path(@article, :root => program.root), :target => "blank")) %>
+    <% end %>
+  </div>
+  <%= embed_icon "icon-article", link_to("feature.article.action.add_remove_publication".translate, "javascript:void(0);", :id => "change_article_publications") %>
+<% end %>
+
+<% popup "feature.article.action.add_remove_publication".translate, "change_article_publications", :position => :center do %>
+  <%= form_tag(publish_article_path(@article), :id => "article_publish_form") do %>
+    <%= "feature.article.content.publish_desc".translate(programs: _programs, article: _article) %>
+    <%= control_group do %>
+      <% @publishable_programs.each do |program| %>
+        <%= controls do %>
+          <%= choices_wrapper(_Programs) do %>
+            <label class="checkbox">
+              <%= check_box_tag "article[publish_to][]", program.id, @article.published_in_program?(program), :id => "article_publish_to_#{program.id}" %>
+              <%= program.name %>
+            </label>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <p class="help-block"><%= "feature.article.content.publish_note".translate(program: _program, article: _article) %></p>
+
+    <% action_set do %>
+      <%= submit_tag "display_string.Update".translate, :class => 'btn btn-primary', data: {:disable_with => "display_string.Please_Wait".translate} %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => "popup_closebox btn-white btn" -%>
+    <% end %>
+  <% end %>
+<% end %>

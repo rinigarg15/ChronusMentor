@@ -1,0 +1,24 @@
+<div>
+  <% if top_match_configs.select{|config| config[:student_need_count] == 0}.count == MatchReportsController::TOP_DISCREPANCY %> 
+    <h1 class="text-center"><%= get_icon_content("fa fa-info-circle fa-lg") %></h1>
+    <div class="text-center"><%= "feature.match_report.content.no_recommendations_text".translate(mentors: _mentors, mentees: _mentees) %></div>
+  <% else %>
+    <h4><%= top_match_configs.first[:discrepancy] <= 0 ? "feature.match_report.label.top_mentors_text".translate(mentor: _mentor, mentee: _mentee) : "feature.match_report.label.recommendation_for_mentors".translate(mentors: _mentors) %></h4>
+    <div class="clearfix m-t-md">
+      <table>
+        <% top_match_configs.each do |config| %>
+          <tr>
+            <td class="p-b-m">
+              <div class="m-r-md">
+                <span class="label label-yellow cjs_mentor_recommendations_count"><%= config[:discrepancy] %></span>
+              </div>
+            </td>
+            <td class="p-b-m">
+              <div class="cjs_mentor_recommendations_label"><%= "feature.match_report.label.mentor_discrepancy_label_html".translate(Mentors: _Mentors, choice: config[:student_answer_choice], mentor_question: match_config_question_texts_hash[config[:match_config_id]]) %></div>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
+</div>

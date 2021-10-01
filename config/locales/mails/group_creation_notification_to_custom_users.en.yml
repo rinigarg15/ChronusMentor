@@ -1,0 +1,28 @@
+en:
+  email_translations:
+    group_creation_notification_to_custom_users:
+      title_v3: "%{_Mentoring_Connection} creation notification to %{_third_role}"
+      description_v3: When %{_a_admin} creates %{_a_mentoring_connection}, this email goes out to the %{_third_role}.
+      subject_v1: You have been added to {{customized_connection_term_articleized}}, {{group_name}}!
+      content_v2_html: You have been assigned to {{group_name}}.<br /><br />{{message_from_admin}}<ul><li>Please review your profile and that verify all the information there is still correct. Update your profile information if anything is wrong or no longer valid. This will help your {{customized_mentoring_term}} partners learn more about you and your common interests.</li><li>Connect with them today in the {{customized_mentoring_connection_term}} area.</li><li>Start by reviewing initial tasks for you and your {{customized_mentoring_term}} partners.</li><li>Your {{customized_mentoring_connection_term}} will end as of {{mentoring_connection_expiry_date}}.</li></ul>{{mentoring_area_button}}<br />If you have any questions, please contact me <a href='{{url_contact_admin}}'>here</a>.<br/>
+      visit_your_connection: Visit your %{mentoring_connection} area
+      tags:
+        url_mentoring_connection:
+          description_v1: Url of the %{_mentoring_connection} created
+        mentoring_connection_expiry_date:
+          description_v2: "%{_Mentoring_Connection} expiration date"
+          example: December 24, 2013
+        message_from_admin:
+          description: Optional message sent by the administrator
+          example: Please connect.
+        role_name_articleized:
+          description_v1: Role of the member added to the %{_mentoring_connections} appended with (a/an)
+        group_name:
+          description: Name of the mentoring area
+          example: Smith and Doe
+        url_signup:
+          description: Url to the sign up page. Use this only when the users have not already signed up in the program.
+        mentoring_area_button:
+          description_v1: "%{_Mentoring_Connection} button"
+        url_contact_admin:
+          description: Url for the user to contact administrator

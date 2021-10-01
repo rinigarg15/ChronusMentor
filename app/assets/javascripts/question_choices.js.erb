@@ -1,0 +1,281 @@
+var CustomizeQuestionChoices = {
+
+  multiChoiceOptionsLimit: <%= MUTLI_CHOICE_TYPE_OPTIONS_LIMIT %>,
+  placeholderQuestionChoices: "<%= 'feature.profile_question.choices.label.question_choice_placeholder'.translate %>",
+  placeholderRows: "<%= 'feature.common_questions.label.rows_place_holder'.translate %>",
+  initialQuestionChoices: {},
+  initialRows: {},
+
+  destroyChoice: function(thisElement, commonQuestionType){
+    var questionType = CustomizeQuestionChoices.getQuestionType(commonQuestionType);
+    var rowOrChoice = CustomizeQuestionChoices.getRowOrChoiceBasedOnQuestionType(questionType);
+    var questionId = thisElement.data(questionType + '-question-id');
+    var choiceId = thisElement.data('choice-id');
+    var newOrder = CustomizeQuestionChoices.getNewOrderArray(true, questionId, commonQuestionType);
+    if(newOrder.indexOf(choiceId.toString()) != -1)
+      newOrder.splice(newOrder.indexOf(choiceId.toString()), 1);
+    jQuery('#' + questionType + '_question_' + questionId + '_new_order').val(newOrder);
+    jQuery('#' + questionType + '_question_' + questionId +"_" + choiceId + "_container").remove();
+    CustomizeQuestionChoices.handleQuestionChoiceCountChange(questionId, commonQuestionType);
+    if(jQuery('#' + questionType + '_question_' + rowOrChoice + '_' + questionId + ' ul li').length == 0)
+      CustomizeQuestionChoices.addChoiceToList([""], questionId, true, commonQuestionType);
+  },
+
+  enableChoiceBasedActions: function(questionId, initialRowsOrQuestionChoices, commonQuestionType) {
+    var questionType = CustomizeQuestionChoices.getQuestionType(commonQuestionType);
+    CustomizeQuestionChoices.enableChoiceChangedActions(questionId, initialRowsOrQuestionChoices, commonQuestionType);
+    if(commonQuestionType == "matrix")
+      return;
+    jQuery("#cjs_bulk_add_choices_" + questionId).on('click', function() {
+      jQuery("#question_choice_bulk_add_" + questionId).modal('show').find('form')[0].reset();
+      if(CustomizeQuestionChoices.isOnlyEmptyQuestionChoicePresent(questionId, commonQuestionType))
+        jQuery('#question_choice_bulk_add_' + questionId + ' .cjs_bulk_add_choices_radio_group').hide();
+      else
+        jQuery('#question_choice_bulk_add_' + questionId + ' .cjs_bulk_add_choices_radio_group').show();
+    });
+  },
+
+  enableChoiceChangedActions: function(questionId, initialRowsOrQuestionChoices, commonQuestionType) {
+    var questionType = CustomizeQuestionChoices.getQuestionType(commonQuestionType);
+    if(questionType == "matrix")
+      CustomizeQuestionChoices.initialRows[questionId] = initialRowsOrQuestionChoices;
+    else
+      CustomizeQuestionChoices.initialQuestionChoices[questionId] = initialRowsOrQuestionChoices;
+    CustomizeQuestionChoices.enableDraggable(questionId, commonQuestionType);
+    CustomizeQuestionChoices.handleQuestionChoiceCountChange(questionId, commonQuestionType);
+  },
+
+  isOnlyEmptyQuestionChoicePresent: function(questionId, commonQuestionType) {
+    existingChoices = CustomizeQuestionChoices.getExistingChoices(questionId, commonQuestionType);
+    return (existingChoices.length == 1 && existingChoices[0] == "");
+  },
+
+  enableDraggable: function(questionId, commonQuestionType) {
+    var questionType = CustomizeQuestionChoices.getQuestionType(commonQuestionType);
+    if(questionType == "profile" && !jQuery('#profile_question_choices_list_' + questionId).hasClass('disabled_for_editing_false'))
+      return;
+    var rowOrChoice = CustomizeQuestionChoices.getRowOrChoiceBasedOnQuestionType(questionType);
+
+    jQuery('#' + questionType + '_question_' + rowOrChoice + '_list_' + questionId).sortable({
+      items: "> li.list-group-item",
+      update: function(event, ui){
+        new_order = jQuery('#' + questionType + '_question_' + rowOrChoice + '_list_' + questionId).sortable("toArray", {attribute: "data-choice-id"});
+        jQuery('#' + questionType + '_question_' + questionId + '_new_order').val(new_order);
+      }
+    });
+    jQuery('#' + questionType + '_question_' + rowOrChoice + '_list_' + questionId + ' li.list-group-item').removeClass("draggable");
+    jQuery(document).on({
+      mouseenter: function () {
+        ProfileConfigUI.setResetDraggableIndication(this, true);
+      },
+      mouseleave: function () {
+        ProfileConfigUI.setResetDraggableIndication(this, false);
+      }
+    }, '#' + questionType + '_question_' + rowOrChoice + '_list_' + questionId + ' li.list-group-item');
+  },
+
+  getExistingChoices: function(questionId, commonQuestionType) {
+    var questionType = CustomizeQuestionChoices.getQuestionType(commonQuestionType);
+    var rowOrChoice = CustomizeQuestionChoices.getRowOrChoiceBasedOnQuestionType(questionType);
+
+    return jQuery.makeArray(jQuery('#' + questionType + '_question_' + rowOrChoice + '_' + questionId + ' ul li input[type=text]').map(function(){
+        return jQuery(this).val();
+    }));
+  },
+
+  addOrReplaceChoices: function(questionId, commonQuestionType) {
+    var questionType = CustomizeQuestionChoices.getQuestionType(commonQuestionType);
+    jQuery('#cjs_' + questionType + '_question_bulk_add_' + questionId + ' input[type=submit]').on('click', function() {
+      var enteredChoices = jQuery('#' + questionType + '_question_' + questionId + '_new_options').val().split(",").map(function(choice){
+        return choice.trim();
+      });
+      var existingChoices = CustomizeQuestionChoices.getExistingChoices(questionId, commonQuestionType);
+
+      newChoices = enteredChoices;
+      var appendContent = false;
+      if(jQuery('#bulk_add_mode_' + questionId + '_add_options').is(':checked'))
+      {
+        newChoices = enteredChoices.filter(function(a){
+          return existingChoices.indexOf(a) == -1;
+        });
+        appendContent = !CustomizeQuestionChoices.isOnlyEmptyQuestionChoicePresent(questionId, commonQuestionType)
+      }
+      CustomizeQuestionChoices.addChoiceToList(newChoices, questionId, appendContent, commonQuestionType);
+      CustomizeQuestionChoices.handleQuestionChoiceCountChange(questionId, commonQuestionType);
+      if(questionType == "profile"){
+        ProfileConfigUI.adjustUiCommon();
+      }
+    });
+  },
+
+  addChoiceInPosition: function(thisElement, commonQuestionType) {
+    var questionType = CustomizeQuestionChoices.getQuestionType(commonQuestionType);
+    var questionId = thisElement.data(questionType + '-question-id');
+    var choiceId = thisElement.data('choice-id');
+    var newOrder = CustomizeQuestionChoices.getNewOrderArray(true, questionId, commonQuestionType);
+    var index = newOrder.indexOf(choiceId.toString()) + 1;
+    var newChoiceId = CustomizeQuestionChoices.getMaxChoiceId(questionId, commonQuestionType) + 1;
+    newOrder.splice(index, 0, newChoiceId.toString());
+    var content = CustomizeQuestionChoices.generateTemplateContent(questionId, newChoiceId, '', commonQuestionType);
+    thisElement.parent('li.cjs_quicksearch_item').after(content);
+    jQuery('#' + questionType + '_question_' + questionId + '_' + newChoiceId + '_text').focus();
+    CustomizeQuestionChoices.handleQuestionChoiceCountChange(questionId, commonQuestionType);
+    jQuery('#' + questionType + '_question_' + questionId + '_new_order').val(newOrder);
+  },
+
+  getNewOrderArray: function(appendContent, questionId, commonQuestionType) {
+    var questionType = CustomizeQuestionChoices.getQuestionType(commonQuestionType);
+    newOrderStr = jQuery('#' + questionType + '_question_' + questionId + '_new_order').val();
+    if(!appendContent || newOrderStr == undefined || newOrderStr == "")
+      return [];
+    else
+      return newOrderStr.split(",");
+  },
+
+  refreshQuickSearch: function(thisElement, commonQuestionType) {
+    var questionType = CustomizeQuestionChoices.getQuestionType(commonQuestionType);
+    var rowOrChoice = CustomizeQuestionChoices.getRowOrChoiceBasedOnQuestionType(questionType);
+    var questionId = thisElement.parents("ul.disabled_for_editing_false").data(questionType + 'QuestionId');
+    CustomizeQuestionChoices.handleQuestionChoiceCountChange(questionId, commonQuestionType);
+    thisElement.next().text(thisElement.val());
+    jQuery('#quick_find_' + questionType + '_question_' + rowOrChoice + '_' + questionId).quicksearch('#' + questionType + '_question_' + rowOrChoice + '_' + questionId + ' .cjs_quicksearch_item');
+  },
+
+  getMaxChoiceId: function(questionId, commonQuestionType) {
+    var questionType = CustomizeQuestionChoices.getQuestionType(commonQuestionType);
+    var rowOrChoice = CustomizeQuestionChoices.getRowOrChoiceBasedOnQuestionType(questionType);
+    var choiceIds = jQuery('#' + questionType + '_question_' + rowOrChoice + '_list_' + questionId + ' li').map(function(){
+      return jQuery(this).data('choiceId');
+    });
+    choiceIdsArray = jQuery.makeArray(choiceIds)
+    if(choiceIds.length == 0)
+    {
+      return 0;
+    }
+    return choiceIdsArray.max();
+  },
+
+  getQuestionType: function(commonQuestionType){
+    return ((typeof commonQuestionType !== "undefined") ? commonQuestionType : "profile");
+  },
+
+  generateTemplateContent: function(questionId, choiceId, choiceText, commonQuestionType) {
+    var questionType = CustomizeQuestionChoices.getQuestionType(commonQuestionType)
+    if(questionType == "common")
+      return CustomizeQuestionChoices.generateCommonTemplateContent(questionId, choiceId, choiceText);
+    else if(questionType == "matrix")
+      return CustomizeQuestionChoices.generateMatrixTemplateContent(questionId, choiceId, choiceText);
+    else
+      return CustomizeQuestionChoices.generateProfileTemplateContent(questionId, choiceId, choiceText);
+  },
+
+  generateProfileTemplateContent: function(profileQuestionId, choiceId, choiceText){
+    return JST["templates/profile_questions/question_choice"]({
+            profile_question_id: profileQuestionId || 0,
+            choice_id: choiceId,
+            choice_text: choiceText,
+            disabled_for_editing: false,
+            placeholder_text: CustomizeQuestionChoices.placeholderQuestionChoices
+          });
+  },
+
+  generateCommonTemplateContent: function(commonQuestionId, choiceId, choiceText){
+    return JST["templates/common_questions/question_choice"]({
+            common_question_id: commonQuestionId || "new",
+            choice_id: choiceId,
+            choice_text: choiceText,
+            placeholder_text: CustomizeQuestionChoices.placeholderQuestionChoices
+          });
+  },
+
+  generateMatrixTemplateContent: function(matrixQuestionId, questionId, questionText){
+    return JST["templates/common_questions/row_question"]({
+            matrix_question_id: matrixQuestionId || "new",
+            question_id: questionId,
+            question_text: questionText,
+            placeholder_text: CustomizeQuestionChoices.placeholderRows
+          });
+  },
+
+  getChoicesCount: function(questionId, commonQuestionType) {
+    return CustomizeQuestionChoices.getExistingChoices(questionId, commonQuestionType).filter(function(choice){
+      return choice != "";
+    }).length;
+  },
+
+  handleQuestionChoiceCountChange: function(questionId, commonQuestionType) {
+    var questionType = CustomizeQuestionChoices.getQuestionType(commonQuestionType);
+    var rowOrChoice = CustomizeQuestionChoices.getRowOrChoiceBasedOnQuestionType(questionType);
+    var count = CustomizeQuestionChoices.getChoicesCount(questionId, commonQuestionType);
+    var countId = (questionType == "matrix") ? '#columns_' + questionId + " .cjs-row-count" : '#choices_' + questionId + " .cjs-qc-count";
+    jQuery(countId).text("(" + count + ")");
+    if(questionType == "profile")
+      CustomizeProfileQuestions.calculateOptionsRange(questionId);
+    if(count > CustomizeQuestionChoices.multiChoiceOptionsLimit)
+      jQuery('#quick_find_' + questionType + '_question_' + rowOrChoice + '_' + questionId).show();
+    else{
+      jQuery('#quick_find_' + questionType + '_question_' + rowOrChoice + '_' + questionId).val("");
+      jQuery('#quick_find_' + questionType + '_question_' + rowOrChoice + '_' + questionId).quicksearch('#' + questionType + '_question_' + rowOrChoice + '_' + questionId + ' .cjs_quicksearch_item');
+      jQuery('#quick_find_' + questionType + '_question_' + rowOrChoice + '_' + questionId).hide();
+    }
+  },
+
+  addChoiceToList: function(choices, questionId, appendContent, commonQuestionType){
+    var allContent = "";
+    var questionType = CustomizeQuestionChoices.getQuestionType(commonQuestionType);
+    var rowOrChoice = CustomizeQuestionChoices.getRowOrChoiceBasedOnQuestionType(questionType);
+    maxQuestionChoiceId = CustomizeQuestionChoices.getMaxChoiceId(questionId, commonQuestionType);
+    var existingChoices = CustomizeQuestionChoices.getExistingChoices(questionId, commonQuestionType);
+    var existingChoicesHtml = jQuery.makeArray(jQuery('#' + questionType + '_question_' + rowOrChoice + '_' + questionId + ' ul li'));
+    newOrder = CustomizeQuestionChoices.getNewOrderArray(appendContent, questionId, commonQuestionType);
+    jQuery.each(choices, function(index, text) {
+      if(jQuery.inArray(text, existingChoices) == -1)
+      {
+        choiceId = CustomizeQuestionChoices.getChoiceId(questionId, maxQuestionChoiceId, index, text, commonQuestionType);
+        allContent += CustomizeQuestionChoices.generateTemplateContent(questionId, choiceId, text, commonQuestionType);
+        newOrder.push((choiceId).toString());
+      }
+      else{
+        currentChoiceHtml = jQuery(existingChoicesHtml.filter(function(element){
+          return jQuery(element).find('input[type=text]').val() == text;
+        }));
+        allContent += currentChoiceHtml[0].outerHTML;
+        newOrder.push(currentChoiceHtml.data('choiceId').toString());
+      }
+    });
+    jQuery('#' + questionType + '_question_' + questionId + '_new_order').val(newOrder);
+    if(!appendContent)
+      jQuery('#' + questionType + '_question_' + rowOrChoice + '_' + questionId + ' ul li').remove();
+    jQuery(allContent).appendTo('#' + questionType + '_question_' + rowOrChoice + '_' + questionId + ' ul').fadeIn('slow');
+    jQuery('#' + questionType + '_question_' + rowOrChoice + '_list_' + questionId + ' li.list-group-item').removeClass("draggable");
+    jQuery('#quick_find_' + questionType + '_question_' + rowOrChoice + '_' + questionId).quicksearch('#' + questionType + '_question_' + rowOrChoice + '_' + questionId + ' .cjs_quicksearch_item');
+  },
+
+  getInitialChoiceId: function(questionId, text, commonQuestionType) {
+    var questionType = CustomizeQuestionChoices.getQuestionType(commonQuestionType);
+    if(questionType == "matrix")
+      hsh = CustomizeQuestionChoices.initialRows[questionId];
+    else
+      hsh = CustomizeQuestionChoices.initialQuestionChoices[questionId];
+
+    for(key in hsh) {
+      if (hsh[key] == text)
+        return key;
+    }
+    return -1;
+  },
+
+  getChoiceId: function(questionId, maxQuestionChoiceId, index, text, commonQuestionType){
+    var choiceId = CustomizeQuestionChoices.getInitialChoiceId(questionId, text, commonQuestionType);
+    if(choiceId != -1)
+      return choiceId;
+    return maxQuestionChoiceId + index + 1;
+  },
+
+  getRowOrChoiceBasedOnQuestionType: function(questionType){
+    if(questionType == "matrix")
+      return "rows";
+    else
+      return "choices";
+  }
+}

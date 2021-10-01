@@ -1,0 +1,11 @@
+closeQtip();
+jQuery("#loading_results").hide();
+<% content = render(:partial => "meetings/meeting_area", locals: {meeting: @meeting.build_recurring_meeting(Meeting.parse_occurrence_time(@current_occurrence_time)), :show_actions => true, :is_admin_view => false, :meeting_feedback_survey => @meeting_feedback_survey, :src => @src} ) %>
+<% if @meeting.completed? %>
+  ChronusValidator.ErrorManager.ShowPageFlash(true, '<%= "flash_message.meeting_area_flash.completed_meeting".translate(:meeting => _meeting) %>');
+<% elsif @meeting.cancelled? %>
+  ChronusValidator.ErrorManager.ShowPageFlash(true, '<%= "flash_message.meeting_area_flash.cancelled_meeting".translate(:meeting => _meeting) %>');
+<% end %>
+
+MeetingForm.updateMeetingAreaState("<%= j content %>");
+

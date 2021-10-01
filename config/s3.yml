@@ -1,0 +1,93 @@
+#
+# This file is used by paper clip storage, assets deployment, log management and database backup code.
+# s3_assets_bucket is used for assets deployment.
+# bucket_base_name is used for log management and database backups.
+#
+
+default_creds: &default_creds
+  region: <%= defined?(S3_REGION) ? S3_REGION : "us-east-1" %>
+
+production:
+  <<: *default_creds
+  s3_assets_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'mentor-assets-production-backup' : 'mentor-assets-production' %>
+  bucket_base_name: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'groups-logs-backup' : 'groups-logs' %>
+  customer_feed_bucket: chronus-mentor-customer-feeds-production
+
+productioneu:
+  <<: *default_creds
+  s3_assets_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'mentor-assets-productioneu-backup' : 'mentor-assets-productioneu' %>
+  bucket_base_name: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'groups-productioneu-logs-backup' : 'groups-productioneu-logs' %>
+  customer_feed_bucket: chronus-mentor-customer-feeds-productioneu
+  region: <%= defined?(S3_REGION) ? S3_REGION : "eu-central-1" %>
+
+generalelectric:
+  <<: *default_creds
+  s3_assets_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'mentor-assets-generalelectric-backup' : 'mentor-assets-generalelectric' %>
+  bucket_base_name: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'groups-generalelectric-logs-backup' : 'groups-generalelectric-logs' %>
+
+veteransadmin:
+  <<: *default_creds
+  s3_assets_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'mentor-assets-veteransadmin-backup' : 'mentor-assets-veteransadmin' %>
+  bucket_base_name: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'groups-veteransadmin-logs-backup' : 'groups-veteransadmin-logs' %>
+
+nch:
+  <<: *default_creds
+  s3_assets_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'mentor-assets-nch-backup' : 'mentor-assets-nch' %>
+  bucket_base_name: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'groups-nch-logs-backup' : 'groups-nch-logs' %>
+
+demo:
+  <<: *default_creds
+  s3_assets_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'mentor-assets-demo-backup' : 'mentor-assets-demo' %>
+  bucket_base_name: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'groups-demo-logs-backup' : 'groups-demo-logs' %>
+
+staging:
+  <<: *default_creds
+  s3_assets_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'mentor-assets-staging-backup' : 'mentor-assets-staging' %>
+  bucket_base_name: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'groups-staging-logs-backup' : 'groups-staging-logs' %>
+  customer_feed_bucket: chronus-mentor-customer-feeds-staging
+
+standby:
+  <<: *default_creds
+  s3_assets_bucket: chronus-mentor-cdntest
+  bucket_base_name: groups-standby-logs
+
+development:
+  <<: *default_creds
+  s3_assets_bucket: groups-assets
+  customer_feed_bucket: chronus-mentor-customer-feeds-staging
+
+performance:
+  <<: *default_creds
+  s3_assets_bucket: mentor-assets-performance
+  bucket_base_name: groups-performance-logs
+
+opstesting:
+  <<: *default_creds
+  s3_assets_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'mentor-assets-opstesting-backup' : 'mentor-assets-opstesting' %>
+  bucket_base_name: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'groups-opstesting-logs-backup' : 'groups-opstesting-logs' %>
+
+scanner:
+  <<: *default_creds
+  s3_assets_bucket: mentor-assets-scanner
+  bucket_base_name: groups-scanner-logs
+
+training:
+  <<: *default_creds
+  s3_assets_bucket: mentor-assets-training
+  bucket_base_name: groups-training-logs
+
+releasestaging1:
+  <<: *default_creds
+  s3_assets_bucket: mentor-assets-releasestaging1
+  bucket_base_name: groups-releasestaging1-logs
+
+releasestaging2:
+  <<: *default_creds
+  s3_assets_bucket: mentor-assets-releasestaging2
+  bucket_base_name: groups-releasestaging2-logs
+
+test: &test
+  <<: *default_creds
+
+cucumber:
+  <<: *test

@@ -1,0 +1,18 @@
+<% profile_user = @profile_member.user_in_program(sidepane_asset) %>
+<div class="font-bold m-b-sm"><%= link_to(sidepane_asset.name, root_path(:root => sidepane_asset.root), :data => {toggle: "tooltip", :title => sidepane_asset.name}) %></div>
+<div class="m-b-sm">
+  <% status_string = profile_user.suspended? ? " (" + "display_string.Deactivated".translate + ")" : "" %>
+  <%= display_user_states_in_program(sidepane_asset, @profile_member.user_in_program(sidepane_asset).role_names, status_string) %>
+</div>
+<% if profile_user %>
+  <p class="text-muted m-b-sm small">
+    <%= get_icon_content("fa fa-clock-o fa-fw") + "feature.profile.content.joined_on_html".translate(date: formatted_time_in_words(profile_user.created_at, no_ago: true, no_time: true)).capitalize %>
+  </p>
+<% end %>
+<div>
+<% actions = [link_to(append_text_to_icon("fa fa-user", "feature.profile.actions.view_profile".translate), member_path(@profile_member, :root => sidepane_asset.root), class: "btn btn-white btn-xs")] %>
+  <% if @profile_member == wob_member || wob_member.admin? %>
+    <% actions << link_to(append_text_to_icon("fa fa-pencil", "feature.profile.actions.edit_profile".translate), edit_member_path(@profile_member, :root => sidepane_asset.root, ei_src: EngagementIndex::Src::EditProfile::GLOBAL_PROFILE), class: "btn btn-white btn-xs") %>
+  <% end %>
+  <%= render_button_group(actions) if actions.present? %>
+</div>

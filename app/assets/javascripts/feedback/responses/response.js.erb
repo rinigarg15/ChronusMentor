@@ -1,0 +1,54 @@
+var CoachFeedback = {
+  initializeCoachRating: function(){
+    jQuery('#mentor_rating').raty({
+      half: true,
+      hints: ['', '', '', '', ''],
+      click: function(score, evt) {
+        jQuery('#feedback_response_rating').val(score);
+      }
+    });
+  },
+
+  renderPopup: function(url){
+    ChronusValidator.ErrorManager.ClearResponseFlash("flash_container");
+    jQueryShowQtip('#inner_content', 650, url,'',{modal: true});
+  },
+
+  showPopupOnClick: function(){
+    jQuery('.cjs_mentor_rating').on('click', function(){
+      var url = jQuery(this).data("url");
+      CoachFeedback.renderPopup(url);
+    });
+  },
+
+  displayRating: function(){
+    jQuery('.display-star-rating').raty({
+      readOnly: true,
+      space: false,
+      half: true,
+      noRatedMsg: "",
+      hints: ['', '', '', '', ''],
+      score: function() {
+        return jQuery(this).attr('data-score');
+      }
+    });
+  },
+
+  showRatingPopup: function(){
+    jQuery('.show_mentor_ratings').on('click', function(){
+      var url = jQuery(this).data("url");
+      CoachFeedback.renderPopup(url);
+    });
+  },
+
+  showRatingPopupOpened: function(elementId){
+    var elementId = "#"+elementId;
+    var url = jQuery(elementId).data("url");
+    CoachFeedback.renderPopup(url);
+  },
+
+  addIdToRatingInput: function(){
+    var element = jQuery(".coach-rating-popup [name='score']");
+    element.attr("id", "mentor_score");
+  }
+}

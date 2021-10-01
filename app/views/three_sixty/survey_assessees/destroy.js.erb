@@ -1,0 +1,3 @@
+<% if @survey_assessee.destroyed? %>
+  jQuery("#three_sixty_survey_assessee_container_<%= @survey_assessee.id %>").remove();
+<% end %>

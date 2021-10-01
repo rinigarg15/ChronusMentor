@@ -1,0 +1,155 @@
+<% @page_action =  get_health_report_dropdown_options %>
+<% @page_action_options = {:dropdown_title => "feature.reports.label.export_to".translate, :embed_icon => true} %>
+
+<% @title = "feature.reports.header.program_health_report".translate %>
+<% @back_link = back_to_reports_options(@category) %>
+<% @skip_rounded_white_box_for_content = true %>
+<% col = (format == FORMAT::HTML) ? "col-sm" : "col-xs" %>
+<div id='health_report'>
+  <%= render :partial => 'reports/overview', :locals => {:format => format, :is_pdf_request => is_pdf_request, :health_report => health_report}, :formats => [FORMAT::HTML] %>
+
+  <%= ibox "feature.reports.header.detailed_reports".translate do %>
+    <ul class="list-group">
+      <li id='growth_box' class='list-group-item clearfix'>
+        <div class="<%= col %>-7 m-t-xs m-b <%= 'b-r' if (format == FORMAT::HTML) %>" id='growth_table'>
+          <h3 class="m-b-xs"><%= "feature.reports.header.growth".translate %></h3>
+          <% if is_pdf_request %>
+            <%= render :partial => 'reports/health_report/growth', :locals => {:format => format, :growth => health_report.growth} %>
+          <% else %>
+            <%= get_loader("growth_loader") %>
+            <%= get_content_after_page_load(health_report_path(:report => HealthReports::GROWTH, :format => :js)) %>
+          <% end %>
+        </div>
+        <div id='growth_tips' class="<%= col %>-5 m-t-xs m-b">
+          <h3 class="m-b-sm"><%= "feature.reports.content.tips_to_improve_program_growth".translate(program: _program) %></h3>
+          <ul>
+            <% role_name, role_name_term = current_program.has_role?(RoleConstants::EMPLOYEE_NAME) ? [RoleConstants::EMPLOYEE_NAME, _employees] : [RoleConstants::MENTOR_NAME, _mentors] %>
+            <li class="m-b-xs">
+              <%= "feature.reports.content.get_more_mentors_by_inviting_or_adding_profiles_html".translate(mentors: role_name_term, inviting_them: link_to("feature.reports.content.inviting_them".translate, invite_users_path(:role => role_name, :from => current_user.role_names)), adding_their_profiles_directly: link_to("feature.reports.content.adding_their_profiles_directly".translate, new_user_path(:role => role_name)) ) %>
+            </li>
+            <% role_name, role_name_term = current_program.has_role?(RoleConstants::EMPLOYEE_NAME) ? [RoleConstants::EMPLOYEE_NAME, _employee] : [RoleConstants::STUDENT_NAME, _mentee] %>
+            <li class="m-b-xs">
+              <%= "feature.reports.content.invite_students_to_join_v1_html".translate(program: _program, mentee: role_name_term, invite_them: link_to("feature.reports.content.invite_them".translate, invite_users_path(:role => role_name, :from => current_user.role_names))) %>
+            </li>
+            <% if @current_program.allow_join_now? %>
+              <li class="m-b-xs">
+                <% if @current_program.membership_requests.pending.empty? %>
+                  <%= "feature.reports.content.act_on_membership_request_asap_v1".translate(:mentoring => _mentoring) %>
+                <% else %>
+                  <%= "feature.reports.content.act_on_pending_membership_request_asap_html".translate(pending_membership_requests: link_to("feature.reports.content.pending_membership_requests".translate, membership_requests_path)) %>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </li>
+
+      <% if @current_program.ongoing_mentoring_enabled? %>
+        <li id='connectivity_box' class='list-group-item clearfix'>
+          <div class="<%= col %>-7 m-t-xs m-b <%= 'b-r' if (format == FORMAT::HTML) %>" id='connectivity'>
+            <h3 class="m-b-sm"><%= "feature.reports.header.connectivity".translate %></h3>
+            <% if is_pdf_request %>
+              <%= render :partial => 'reports/health_report/connectivity', :locals => {:format => format, :connectivity => health_report.connectivity} %>
+            <% else %>
+              <%= get_loader("connectivity_loader") %>
+              <%= get_content_after_page_load(health_report_path(:report => HealthReports::CONNECTIVITY, :format => :js)) %>
+            <% end %>
+          </div>
+          <div id='connectivity_tips' class="<%= col %>-5 m-t-xs m-b">
+            <h3 class="m-b-sm"><%= "feature.reports.content.tips_to_improve_connectivity".translate %></h3>
+            <% connectivity_tips = [] %>
+            <% connectivity_tips << "feature.reports.content.improve_connectivity_tip1_html".translate(send_out_announcements: link_to("feature.reports.actions.send_out_announcements".translate, new_announcement_path), mentees: _mentees, mentors: _mentors) %>
+            <% connectivity_tips << "feature.reports.content.improve_connectivity_tip2_html".translate(mentors: _mentors, sending_announcements: link_to("feature.reports.label.sending_announcements".translate, new_announcement_path)) %>
+            <% if @current_program.matching_by_mentee_and_admin? %>
+              <% if @current_program.mentor_requests.active.empty? %>
+                <% connectivity_tips << "feature.reports.content.act_on_membership_request_asap".translate(:mentoring => _mentoring) %>
+              <% else %>
+                <% connectivity_tips << "feature.reports.content.act_on_pending_membership_request_asap_html".translate(pending_membership_requests: link_to("feature.reports.label.pending_mentor_requests".translate(mentor: _mentor), manage_mentor_requests_path)) %>
+              <% end %>
+            <% elsif @current_program.matching_by_mentee_alone? %>
+              <% connectivity_tips << "feature.reports.content.follow_up_with_unresponsive_mentors_v1".translate(mentors: _mentors) %> <%= link_to("feature.reports.actions.view_pending_mentor_requests_html".translate(mentor: _mentor), manage_mentor_requests_path) %>
+            <% end%>
+            <% if connectivity_tips.present? %>
+              <ul>
+                <% connectivity_tips.each do |tip| %>
+                  <%= content_tag(:li, tip, class: "m-b-xs") %>
+                <% end %>
+              </ul>
+            <% end %>
+          </div>
+        </li>
+
+        <li id='engagement_box' class='list-group-item clearfix cui-page-break'>
+          <div class="<%= col %>-7 m-t-xs m-b <%= 'b-r' if (format == FORMAT::HTML) %>" id='engagement'>
+            <h3 class="m-b-sm"><%= "feature.reports.header.engagement".translate %></h3>
+            <% if is_pdf_request %>
+              <%= render :partial => 'reports/health_report/engagement', :locals => {:format => format, :engagement => health_report.engagement, :is_pdf_request => is_pdf_request} %>
+            <% else %>
+              <%= get_loader("engagement_loader") %>
+              <%= get_content_after_page_load(health_report_path(:report => HealthReports::ENGAGEMENT, :format => :js)) %>
+            <% end %>
+          </div>
+          <div id='engagement_tips' class="<%= col %>-5 m-t-xs m-b">
+            <h3 class="m-b-sm"><%= "feature.reports.header.tips_to_improve_engagement".translate %></h3>
+            <ul class='tip_list for_table_row'>
+              <li class="m-b-xs">
+                <%= "feature.reports.content.send_out_surveys_v1_html".translate(send_out_periodic_surveys: link_to("feature.reports.content.send_out_periodic_surveys".translate, surveys_path), mentoring_connections: _mentoring_connections) %>
+              </li>
+            </ul>
+          </div>
+        </li>
+      <% end %>
+
+      <% has_article_feature = @current_program.articles_enabled? %>
+      <% has_qa_feature = @current_program.qa_enabled? %>
+      <% has_forums_feature = @current_program.forums_enabled? %>
+
+      <% if @current_program.community_features_enabled? %>
+        <li id='content_overview_box' class='list-group-item clearfix'>
+          <div class="<%= col %>-7 <%= 'b-r' if (format == FORMAT::HTML) %> m-t-xs" id='content_overview'>
+            <h3 class="m-b-sm"><%= "feature.reports.header.content".translate %></h3>
+            <% if is_pdf_request %>
+              <%= render :partial => 'reports/health_report/content_overview', :locals => {:content_overview => health_report.content_overview} %>
+            <% else %>
+              <%= get_loader("content_overview_loader") %>
+              <%= get_content_after_page_load(health_report_path(:report => HealthReports::CONTENT_OVERVIEW, :format => :js)) %>
+            <% end %>
+          </div>
+          <div id='content_tips' class="<%= col %>-5 m-t-xs m-b">
+            <h3 class="m-b-sm"><%= "feature.reports.content.tips_to_increase_content_contribution".translate %></h3>
+            <ul>
+              <li class="m-b-xs">
+                <%= "feature.reports.content.good_content_makes_community_valuable_v1".translate(:program_name => @current_program.name) %>
+                <% if has_article_feature && has_forums_feature && @current_program.forums.any? %>
+                  <%= "feature.reports.content.post_and_start_discussion_html".translate(post_new_article: link_to("feature.reports.actions.post_new_article".translate(article: _article), new_article_path)) %>
+                <% elsif has_article_feature %>
+                  <%= "feature.reports.content.post_new_article_to_encourage_knowledge_sharing_html".translate(post_new_article: link_to("feature.reports.actions.post_new_article".translate(article: _article), new_article_path), mentors: (current_program.has_role?(RoleConstants::EMPLOYEE_NAME) ? _employees : _mentors)) %>
+                <% elsif has_forums_feature && @current_program.forums.any? %>
+                  <%= "feature.reports.content.start_discussion_in_form".translate %>
+                <% end %>
+              </li>
+              <% if has_article_feature %>
+                <li class="m-b-xs">
+                  <%= "feature.reports.content.encourage_mentors_to_write_new_articles_html".translate(announcing_the_feature: link_to("feature.reports.content.announcing_the_feature".translate, new_announcement_path), mentors: (current_program.has_role?(RoleConstants::EMPLOYEE_NAME) ? _employees : _mentors)) %>
+                </li>
+              <% end %>
+              <% if has_article_feature && has_qa_feature %>
+                <li class="m-b-xs">
+                  <%= "feature.reports.content.set_examples_and_encourage_them_v2".translate(role_names: RoleConstants.human_role_string(current_program.roles.non_administrative.default.collect(&:name), :program => current_program, :no_capitalize => true, :pluralize => true), program: _program, articles: _articles) %>
+                </li>
+              <% elsif has_article_feature %>
+                <li class="m-b-xs">
+                  <%= "feature.reports.content.set_proper_example_to_post_articles_v2".translate(role_names: (current_program.has_role?(RoleConstants::EMPLOYEE_NAME) ? _employees : _mentors), program: _program, articles: _articles) %>
+                </li>
+              <% elsif has_qa_feature %>
+                <li class="m-b-xs">
+                  <%= "feature.reports.content.set_proper_examples_for_ask_answers_questions_v2".translate(role_names: RoleConstants.human_role_string(current_program.roles.non_administrative.default.collect(&:name), :program => current_program, :no_capitalize => true, :pluralize => true), program: _program) %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>

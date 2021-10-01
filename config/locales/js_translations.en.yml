@@ -1,0 +1,59 @@
+en:
+  js_translations:
+    alert: Alert
+    ok: OK
+    confirmation: Confirmation
+    cancel: Cancel
+    characters: characters
+    character: character
+    over: over
+    left: left
+    search_users: Search Users
+    content:
+      search_all_columns: 'Search all columns:'
+      vote_up_confirm: Changing your vote will also delete your comment. Are you sure you want to proceed?
+      when_asterisk: When *
+      you_have_unsaved_changes: You have unsaved changes.
+      change_current_state_of_filters: This action will change the current state of the filters. Continue?
+    error:
+      problems_performing_operation: Problems performing the operation
+      value_greater_than_zero: The value should be a number greater than 0
+      fix_password_error_v1: Password doesn't match confirmation.
+      experiences_invalid: One or more of your experiences is invalid
+      enter_valid_dates: Enter valid dates
+      end_date_before_start_date: Repetition end date should be after the start date
+      date_range_error: End date should be after the start date
+      email_address_format_error: Please enter a valid email address
+    htmlContentEmbedder:
+      insecure_content_warning_header: 'Warning: Presence of Insecure content'
+      insecure_content_warning_footer_for_admin: You may choose to re-edit the content or proceed with the current version of the page
+      insecure_content_warning_footer_for_others: Please re-edit the content to proceed.
+      see_preview_for_current_content: Please click on "Preview" to see how the page would look with the current content.
+      insecure_url_and_content_warning: The page contains the following insecure links and vulnerable content which may result in the page not being rendered as desired.
+      insecure_content_warning: The page contains the following vulnerable content which may result in the page not being rendered as desired.
+      insecure_url_warning: The page contains the following insecure links which may result in the page not being rendered as desired.
+      show_insecure_links: Show Insecure Links
+      hide_insecure_links: Hide Insecure Links
+      show_insecure_content: Show Vulnerable Content
+      hide_insecure_content: Hide Vulnerable Content
+      continue_editing: Re-edit content
+      proceed_anyways: Ignore and Proceed anyway
+      preview: Preview
+      ask_approach: How do you want to proceed?
+      system_clean: Allow the system to clean the vulnerable content and publish (Recommended)
+      system_clean_short: Yes (Recommended)
+      self_clean: No, I will remove the vulnerable content by myself
+      dont_clean: Ignore warnings and publish content
+      rm_content_and_link: Please remove the vulnerable content and insecure links before you publish the content
+      rm_links: Please remove the insecure links before you publish the content
+      prompt_to_clean: Do you want the system to clean the vulnerable content and publish?
+      ok: OK
+      proceed: Proceed
+      tagsWarningHeader: 'Error: Tags can''t be used'
+      tagsWarningText: The usage of tags are not supported. Please remove the below tags from the content to proceed further.
+    select2:
+      no_matches_found: No matches found
+      enter_more_characters: Please enter more characters
+      enter_fewer_characters: Please enter fewer characters
+      searching: Searching...
+      loading_more_results: Loading more results...

@@ -1,0 +1,13 @@
+<% is_task_template = task_template.is_a?(MentoringModel::TaskTemplate) %>
+<% is_facilitation_template = task_template.is_a?(MentoringModel::FacilitationTemplate) %>
+<% task_draggable = (is_task_template && !task_template.required? && !@read_only) %>
+<% dragabble_class = 'draggable cursor-move cjs-sortable-list-item-handle' %>
+<div class="animated fadeInDown animation-fill-mode-none z-index-not-important list-group-item no-padding cjs-task-template-container cjs-task-template-container-<%= task_template.id %> cjs-sortable-list-item <%= "cjs-sortable-list-item-disabled" if is_facilitation_template || task_template.required? %>" id="<%= task_template.class.name.underscore.gsub("/", "_") %>_<%= task_template.id %>" data-id="<%= task_template.id %>" data-post-url="<%= update_positions_mentoring_model_task_template_path(@mentoring_model, task_template) if is_task_template %>">
+  <div class="p-sm clearfix <%= dragabble_class if task_draggable %> cjs-sortable-list-item-inner-container cjs-task-template-edit-action-<%= task_template.id %>">
+    <% if is_task_template %>
+      <%= render partial: "mentoring_model/task_templates/task_template_content", locals: {task_template: task_template} %>
+    <% elsif is_facilitation_template %>
+      <%= render partial: "mentoring_model/task_templates/facilitation_template_content", locals: {facilitation_template: task_template} %>
+    <% end %>
+  </div>
+</div>

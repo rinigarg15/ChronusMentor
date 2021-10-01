@@ -1,0 +1,18 @@
+en:
+  email_translations:
+    mobile_app_login:
+      title: Login to the %{program} in Mobile App.
+      description: This email is sent to the users when they try to login to the mobile app using through the email address experiment. Please do not disable this email.
+      subject: Confirm your email on {{organization_name}}
+      content_html: We just need to verify that {{email}} is your email address, and then we will help you to log in to your {{organization_name}}.<br/></br><b>From your mobile device</b>, tap the button below to confirm:</br>{{mobile_app_login_button}}If you didn't make this request, you can ignore this email and no further action will take place.</br>
+      tags:
+        mobile_app_login_button:
+          description: Login to your %{program}
+          example: Login to your %{program}
+          confirm_login: Confirm to login to your %{program}
+        organization_name:
+          description: "Organization name"
+          example: "Chronus"
+        email:
+          description: "Email Address"
+          example: "test@example.com"

@@ -1,0 +1,12 @@
+<% options = {only_quick_links: true, admin_view: wob_member.admin?} %>
+<% resources = current_user.accessible_resources(options).includes(:translations) %>
+
+<li class="dropdown <%= subtab_class %>">
+  <%= link_to(get_safe_string + get_icon_content("fa fa-fw fa-book") + _Resources + content_tag(:span, "", :class => "fa arrow"), tab_info.url, :class => 'dropdown-toggle navigation_tab_link') %>
+  <ul class="nav nav-second-level">
+    <li><%= link_to "tab_constants.sub_tabs.all_resources".translate, resources_path(src: EngagementIndex::Src::BrowseMentors::SIDE_NAVIGATION, sub_src: EngagementIndex::SideBarSubSrc::MENTORING_COMMUNITY), :class => "truncate" %></li>
+    <% resources.each do |res| %>
+      <li><%= link_to h(res.title), resource_path(res, src: EngagementIndex::Src::BrowseMentors::SIDE_NAVIGATION, sub_src: EngagementIndex::SideBarSubSrc::MENTORING_COMMUNITY), :class=> "truncate" %></li>
+    <% end %>
+  </ul>
+</li>

@@ -1,0 +1,22 @@
+en:
+  email_translations:
+    new_project_request_to_admin_and_owner:
+      title_v3: Request to %{_admins} and %{_mentoring_connection} owners to join %{_mentoring_connection}
+      description_v2: This email is sent to the %{_program} %{_admins} and the %{_mentoring_connection} owners when a user asks to join %{_a_mentoring_connection}
+      subject_v1: "{{student_name}} requests to join the {{customized_mentoring_connection_term}}, {{project_name}}"
+      content_v1_html: "{{student_name}} has requested to join the {{customized_mentoring_connection_term}}, <a href='{{url_project}}'>{{project_name}}</a>, in <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a>.<br/><ul><li>You can view {{project_requester_name}}'s profile to learn more about them and determine if it is a good fit.</li><li>If the {{customized_mentoring_connection_term}} is a good fit, please accept their request as soon as possible.</li><li>If you must decline, please do so in a timely manner and be tactful.</li></ul>{{view_request_button}}"
+      view_request: View Request
+      tags:
+        project_name:
+          description: Name of the project
+          example: Develop TO-DO Android App
+        url_project:
+          description: Url to the project page
+        student_name:
+          description: Name of the student
+        url_project_requests_listing:
+          description: Url of the project requests listing
+        project_requester_name:
+          description: Name of person who requested for project
+        view_request_button:
+          description: View request button

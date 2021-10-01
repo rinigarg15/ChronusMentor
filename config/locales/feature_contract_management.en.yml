@@ -1,0 +1,18 @@
+en:
+  feature:
+    contract_management:
+      title: "%{Mentor} Check-in Report"
+      task: Task
+      headings:
+        date: Date
+        duration: Time
+        type: Type
+        comment: Comment
+        title: Title
+      content:
+        no_checkin: There are no check-ins to report on
+      kendo:
+        filters:
+          checkboxes:
+            statuses:
+              task: Task

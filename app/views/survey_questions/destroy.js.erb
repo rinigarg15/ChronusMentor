@@ -1,0 +1,7 @@
+<% if @survey_question.errors.blank? %>
+  jQuery("#common_question_<%=@common_question.id%>").addClass("animated fadeOutUp")
+  setTimeout(function() {
+    jQuery("#common_question_<%=@common_question.id%>").remove()
+  }, 1000)
+  jQuery("#survey_questions_count").html("<%= @survey.survey_questions.count %>")
+<% end %>

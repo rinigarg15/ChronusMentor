@@ -1,0 +1,16 @@
+<% modal_container "feature.program_event.header.post_event".translate , :modal_id => "modal_publish_program_event" do %>
+  <%= simple_form_for @program_event, :url => publish_program_event_path(@program_event), :method => :post, :html => {:id => "publish_program_event_#{@program_event.id}"} do %>
+    <%= control_group do %>
+      <%= controls do %>
+        <label class="checkbox inline">
+          <%= check_box_tag 'program_event[email_notification]', true, !current_program.email_template_disabled_for_activity?(NewProgramEventNotification) %>
+          <%= email_notification_consequences_on_action_html(NewProgramEventNotification, div_enclose: false, common_text: true) %>
+        </label>
+      <% end %>
+    <% end %>
+    <% action_set(:class => "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => 'popup_closebox btn-white btn', "data-dismiss" => "modal" %>
+      <%= submit_tag "display_string.Post".translate, :class => "btn btn-primary", data: {:disable_with => 'display_string.Please_Wait'.translate} %>
+    <% end %>
+  <% end %>
+<% end %>

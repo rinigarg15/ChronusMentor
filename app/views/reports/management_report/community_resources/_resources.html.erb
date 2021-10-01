@@ -1,0 +1,5 @@
+<div id="<%= DashboardReportSubSection::Type::CommunityResources::RESOURCES %>">
+  <%= render(partial: "reports/management_report/community_resources/resources_type_counts", locals: {data: data[:resource_views], type: :view_count}) %>
+  <hr/>
+  <%= render(partial: "reports/management_report/community_resources/resources_type_counts", locals: {data: data[:resouce_helpful_count], type: :helpful_count}) %>
+</div>

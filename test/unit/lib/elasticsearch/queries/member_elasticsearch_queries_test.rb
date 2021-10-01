@@ -1,0 +1,17 @@
+require_relative './../../../../test_helper'
+
+class MemberElasticsearchQueriesTest < ActiveSupport::TestCase
+
+  def test_get_filtered_members
+    assert_equal_unordered [members(:anna_univ_mentor), members(:moderated_mentor), members(:requestable_mentor), members(:no_mreq_mentor), members(:inactive_user), members(:f_mentor_student), members(:nch_mentor), members(:no_mreq_admin), members(:no_mreq_student), members(:not_requestable_mentor)], Member.get_filtered_members("mentor", match_fields: ["name_only", "email"]).to_a
+    assert_equal_unordered [members(:moderated_mentor), members(:requestable_mentor), members(:no_mreq_mentor), members(:f_mentor_student), members(:no_mreq_admin), members(:no_mreq_student), members(:not_requestable_mentor)], Member.get_filtered_members("mentor", match_fields: ["name_only", "email"], with: { organization_id: programs(:org_primary).id } ).to_a
+    assert_equal_unordered [members(:anna_univ_mentor)], Member.get_filtered_members("mentor", match_fields: ["name_only", "email"], with: { organization_id: programs(:org_anna_univ).id }, without: { state: Member::Status::SUSPENDED } ).to_a
+    assert_equal_unordered [members(:anna_univ_mentor).id], Member.get_filtered_members("mentor", match_fields: ["name_only", "email"], with: { organization_id: programs(:org_anna_univ).id }, without: { state: Member::Status::SUSPENDED}, source_columns: [:id]).to_a
+    assert_equal_unordered [members(:moderated_mentor), members(:requestable_mentor), members(:no_mreq_mentor), members(:f_mentor_student), members(:no_mreq_admin), members(:no_mreq_student), members(:not_requestable_mentor)].map { |member| [member.id.to_s, member.name(name_only: true)] }, Member.get_filtered_members("mentor", match_fields: ["name_only", "email"], with: { organization_id: programs(:org_primary).id }, without: { state: Member::Status::SUSPENDED }, source_columns: [:id, :name_only]).to_a.collect { |member| [member.id, member.name_only] }
+    assert_equal_unordered [members(:portal_employee), members(:no_mreq_mentor), members(:f_mentor)], Member.get_filtered_members(nil, geo: { point: [80.2496, 13.0604], distance: "1km", field: "location_answer.location.point" } ).to_a # 1km from Chennai
+    assert_equal_unordered [members(:portal_employee), members(:robert), members(:no_mreq_mentor), members(:f_mentor), members(:inactive_user), members(:no_mreq_student)], Member.get_filtered_members(nil, geo: { point: [80.2496, 13.0604], distance: "2000km", field: "location_answer.location.point" } ).to_a # 2000km from Chennai. Includes New Delhi
+
+    assert_equal [members(:f_mentor_student), members(:moderated_mentor), members(:no_mreq_admin), members(:no_mreq_mentor), members(:no_mreq_student), members(:not_requestable_mentor), members(:requestable_mentor)], Member.get_filtered_members("mentor", match_fields: ["name_only", "email"], with: { organization_id: programs(:org_primary).id }, sort_field: "email.sort", sort_order: "asc").to_a
+    assert_equal [members(:no_mreq_admin), members(:no_mreq_mentor)], Member.get_filtered_members("mentor", match_fields: ["name_only", "email"], with: { organization_id: programs(:org_primary).id }, sort_field: "email.sort", sort_order: "asc", per_page: 2, page: 2).to_a
+  end
+end

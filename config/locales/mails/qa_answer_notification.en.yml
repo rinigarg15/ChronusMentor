@@ -1,0 +1,30 @@
+en:
+  email_translations:
+    qa_answer_notification:
+      title_v2: New answer notification to followers of a question
+      description_v1: This email is sent to people following a question when a member posts an answer.
+      subject_v1: New answer to '{{question_summary}}'
+      content_v2_html: "{{link_to_answerer}} posted a new answer to the following question:<br/><br/><b style='color:#24869e;'>{{question_summary}}</b><br/>{{question_description}}<br/><b style='color:#24869e;'>Answer:</b><br/>{{answer}}<br/><table class='responsive-table' border='0'><tr><td>{{mark_it_helpful_button}}</td><td style='padding-left:15px;'>{{view_all_responses_button}}</td></tr></table><br/>"
+      view_response_button_text: View All Responses
+      mark_it_helpful_button_text: Mark Answer Helpful
+      tags:
+        url_question:
+          description: Url of the question
+        answerer_name:
+          description: Name of the member who answered the question
+        question_description:
+          description: Description of the question which is answered
+          example: Need to know what I need to do, what rules to follow to get the most of this.
+        question_summary:
+          description: Summary of the question which is answered
+          example_v1: When is the next networking event for program members?
+        answer:
+          description: Summary of the answer
+          example_v1: The next networking event is coming next Saturday at 5:00 pm.
+        view_all_responses_button:
+          description: View All Responses button
+        mark_it_helpful_button:
+          description: Mark it helful button
+        link_to_answerer:
+          description: Link to profile of member who answered the question
+          example_html: "<a href='http://www.chronus.com'>William Smith</a>"

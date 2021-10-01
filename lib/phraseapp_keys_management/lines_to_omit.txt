@@ -1,0 +1,1 @@
+main_translation_key = "email_translations.#{mail_klass.name.underscore}"

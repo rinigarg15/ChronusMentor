@@ -1,0 +1,7 @@
+[caps]
+platformName = "ios"
+deviceName = "iPhone 6"
+platformVersion = "8.1"
+app = "test/mobile_app_files/Chronus.app"
+autoAcceptAlerts = true
+nativeInstrumentsLib = true

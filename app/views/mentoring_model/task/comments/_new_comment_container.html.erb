@@ -1,0 +1,10 @@
+<%= response_flash("cjs_task_comment_error_message_#{task.id}") %>
+<div id="cjs-add-new-comment-container-<%= task.id %>">
+  <div class="pull-right has-before-1">
+    <%= link_to content_tag(:i, "", :class => "icon-plus pull-left")+"feature.mentoring_model_task_comment.action.add_comment".translate(comment: MentoringModel::Task::Comment.model_name.human), "javascript:void(0)", class: "cjs-toggle-new-comment-form", data: {task_id: "#{task.id}"} -%>
+  </div>
+  <div class="has-padding-above-tiny">
+    <hr class="embossed has-above"/>
+  </div>
+</div>
+<%= render partial: "mentoring_model/task/comments/new_comment_form", locals: {group: group, task: task, comment: comment} %>

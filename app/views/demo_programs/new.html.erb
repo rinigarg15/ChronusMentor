@@ -1,0 +1,23 @@
+<%  @title = "feature.demo_programs.title.setup_demo_program".translate %>
+<%= ibox nil do %>
+  <% if @program_creation_running %>
+    <%= "feature.demo_programs.information.already_creating".translate %>
+  <% else %>
+    <%= simple_form_for @organization, :url => demo_programs_path, :html => {:class => 'form-horizontal'} do |f| %>
+      <%= f.input :name, :as => :string, :wrapper => :horizontal_input, :label => "feature.demo_programs.label.organization_name".translate, required: false, :input_html => {:class => "form-control"} %>
+      <%= f.simple_fields_for @program_domain do |program_domain| %>
+        <%= control_group do
+              label_tag("organization_program_domain_subdomain", "feature.demo_programs.label.web_address".translate, :class => "control-label col-sm-3") +
+              controls(class: "col-sm-9") do
+                content_tag(:span, text_field_tag("organization[program_domain][subdomain]", "", :id => "organization_program_domain_subdomain", :class => "form-control"), :class => "col-sm-8 no-padding") + content_tag(:span, " .#{get_demo_program_url}", :class => "m-xxs p-t-xxs pull-left p-l-xxs")
+              end
+            end
+        %>
+      <% end %>
+
+      <%= f.submit "feature.demo_programs.label.setup_program".translate, :class => 'pull-right btn btn-primary controls', :onclick => "return SalesDemo.validateForm()" %>
+    <% end %>
+
+    <% @loading_results_message = "feature.demo_programs.label.creating_program".translate %>
+  <% end %>
+<% end %>

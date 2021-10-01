@@ -1,0 +1,30 @@
+<% question_choices_ids, question_choices_texts = get_question_choices_for_select2(survey_questions) %>
+<% operator_options = survey_operator_options_for_survey_filter(filter_params)  %> 
+<%= content_tag(:div, :class => "m-t-lg col-sm-10 p-l-0 question_container", :id => "admin_view_survey_survey_questions_questions_#{prefix_id}_question_container") do %>
+  <%= label_tag("admin_view[survey][survey_questions][questions_#{prefix_id}][question]", "feature.admin_view.header.select_profile_question_label".translate, :for => "admin_view_survey_survey_questions_questions_#{prefix_id}_question", :class => "sr-only") %>
+  <%= controls(class: "col-sm-5") do %>
+    <%= select_tag("admin_view[survey][survey_questions][questions_#{prefix_id}][question]", options_for_select(survey_questions.collect{|sq| [sq.question_text_for_display,  "answers#{sq.id}", class: "#{"cjs-choice-based-question" if sq.choice_or_select_type?}"]}, filter_params[:question]), :class => "form-control cjs-survey-question-selector", :id => "admin_view_survey_survey_questions_questions_#{prefix_id}_question", prompt: "feature.admin_view.label.select_survey_question_placeholder".translate) %>
+  <% end %>
+  <%= label_tag("admin_view[survey][survey_questions][questions_#{prefix_id}][operator]", "feature.admin_view.header.profile_question_operator_label".translate, :for => "admin_view_survey_survey_questions_questions_#{prefix_id}_operator", :class => "sr-only") %>
+  <%= controls(class: "col-sm-3 cjs-survey-question-operator-control") do %>
+    <%= select_tag("admin_view[survey][survey_questions][questions_#{prefix_id}][operator]",  options_for_select(operator_options, filter_params[:operator]), :class => "form-control cjs_show_survey_input_field", :id => "admin_view_survey_survey_questions_questions_#{prefix_id}_operator", data: {qci: question_choices_ids.to_json, qct: question_choices_texts.to_json}) %>
+  <% end %>
+  <%= content_tag(:div, :class => "col-sm-3 cjs-survey-question-text-input-control m-r-xs hide") do %>
+    <%= label_tag("admin_view[survey][survey_questions][questions_#{prefix_id}][value]", "feature.survey.survey_report.filters.label.select_value_label".translate, :for => "admin_view_survey_survey_questions_questions_#{prefix_id}_value", :class => "sr-only") %>
+    <%= text_field_tag("admin_view[survey][survey_questions][questions_#{prefix_id}][value]", filter_params[:value], :class => "cjs_input_hidden form-control", :id => "admin_view_survey_survey_questions_questions_#{prefix_id}_value") %>
+    <%= label_tag("admin_view[survey][survey_questions][questions_#{prefix_id}][choice]", "feature.survey.survey_report.filters.label.select_value_label".translate, :for => "admin_view_survey_survey_questions_questions_#{prefix_id}_choice", :class => "sr-only") %>
+    <%= hidden_field_tag("admin_view[survey][survey_questions][questions_#{prefix_id}][choice]", filter_params[:choice], :class => "cjs_choices_hidden no-padding form-control", :id => "admin_view_survey_survey_questions_questions_#{prefix_id}_choice", :data => {:placeholder => "feature.connection.header.survey_response_filter.placeholder.select_choices".translate}) %>
+  <% end %>
+  <%= content_tag(:div, class: "m-b-sm m-t-xs") do %>
+    <%= content_tag(:span, "display_string.AND".translate, :class => "inline-block m-r-xs #{"hide" if rows_size == prefix_id}") %>
+    <%= content_tag(:span, get_icon_content('fa fa-trash') + set_screen_reader_only_content("display_string.Delete".translate), 
+      :class => " pointer cjs_delete_profile_question #{"hide" if prefix_id == 1}") %>
+ <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  <% if filter_params[:value].present? || filter_params[:choice].present? %>
+    AdminViewsNewView.toggleAdditionalChoiceTextBox(jQuery("select.cjs_show_survey_input_field"), <%= question_choices_ids.to_json.html_safe %>, <%= question_choices_texts.to_json.html_safe %>, "<%= CommonQuestion::SELECT2_SEPARATOR %>");
+  <% end %>
+  AdminViewsNewView.toggleAndText(<%= prefix_id %>);
+<% end %>

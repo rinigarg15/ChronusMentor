@@ -1,0 +1,95 @@
+#!/usr/bin/env ruby
+
+require 'trollop'
+require File.expand_path('../lib/aws_creds', __FILE__)
+require 'fileutils'
+
+SUB_COMMANDS = %w(add remove list push pull)
+global_opts = Trollop::options do
+  banner "app_secure_config -- utility to securely manage sensitive application configuration variables like passwords etc. Supported operations are #{SUB_COMMANDS}"
+  opt :env, "Deployment environment. Supported values are #{AWSCredential::Manager::DEPLOYMENT_ENVS}", :short => "-e", :type => :string, :default => "development"
+  opt :user, "Owner of aws credentials. This option is typically used by users with operations and admin privileges.", :short => "-u", :type => :string, :default => "#{AWSCredential::Manager::DEFAULT_USER}"
+  opt :credential_dir, "Fully qualified path name of the credentials directory. Specified along --user option. This option is typically used by users with operations and admin privileges.", :short => "-d", :type => :string, :default => "#{AWSCredential::Manager::DEFAULT_USER_CRED_DIR}"
+  stop_on SUB_COMMANDS
+end
+
+default_env_file = "#{File.expand_path('../../config/.env', __FILE__)}"
+
+cmd = ARGV.shift # get the subcommand
+cmd = "list" if cmd.nil?
+cmd_opts = case cmd
+  when "add"
+    Trollop::options do
+      opt :var, "configuration variable to be added. e.g. --var VAR=value", :short => "-v", :type => :string, :required => true
+    end
+  when "remove"
+    Trollop::options do
+      opt :var, "configuration variable to be removed.", :type => :string, :short => "-v", :required => true
+    end
+  when "pull"
+    Trollop::options do
+      opt :env_file, "file to which all the configuration variables of the specified environment will be saved as name=value pairs", :short => "-f", :type => :string, :default => default_env_file
+    end
+  when "push"
+    Trollop::options do
+      opt :env_file, "file from which the configuration variables (specified as name=value pairs) will be read and merged to the specified environment", :short => "-f", :type => :string, :default => default_env_file
+    end
+  when "list"
+  else
+    Trollop::die "unknown subcommand #{cmd.inspect}"
+  end
+
+deploy_env = global_opts[:env]
+
+creds_user = global_opts[:user_given] ? global_opts[:user] : "#{global_opts[:user]}_#{deploy_env}"
+creds_dir = global_opts[:credential_dir_given] ? global_opts[:credential_dir] : "#{global_opts[:credential_dir]}/#{creds_user}"
+
+cred_mgr = AWSCredential::Manager.new(creds_user, creds_dir)
+app_user = "app_#{deploy_env}"
+
+case cmd
+when "add"
+  env_name_value = cmd_opts[:var]
+  if env_name_value =~ /\A([A-Za-z0-9_]+)=(.*)\z/
+    key, value = $1, $2
+    cred_mgr.add_env_var(app_user, key, value)
+    puts "#{env_name_value} added to #{deploy_env} environment"
+  else
+    puts "Invalid var specification #{env_name_value}: Skipping.."
+  end
+when "remove"
+  env_name = cmd_opts[:var]
+  removed = cred_mgr.remove_env_var(app_user, env_name)
+  if removed
+    puts "#{env_name} removed from #{deploy_env} environment"
+  else
+    puts "#{env_name} doesn't exist in #{deploy_env} environment"
+  end
+when "pull"
+  env_file = cmd_opts[:env_file]
+  if File.exist?(env_file)
+    ts = Time.now.strftime('%Y_%m_%d-%H_%M_%S')
+    bk_file = "/tmp/.env_#{ts}"
+    FileUtils.mv(env_file, bk_file) 
+    puts "#{env_file} already exist. Backing up to #{bk_file}"
+  end
+  cred_mgr.pull_env_vars(app_user, env_file)
+  puts "Variables saved to #{env_file}"
+when "push"
+  env_file = cmd_opts[:env_file]
+  puts "#{env_file} doesn't exist" unless File.exist?(env_file)
+  cred_mgr.push_env_vars(app_user, env_file)
+  puts "Variables from #{env_file} merged to #{deploy_env} environment"
+when "list"
+	env_list = cred_mgr.list_env_vars(app_user)
+  if env_list.empty?
+    puts "No variables configured"
+  else
+    puts "Variables configured for #{deploy_env} environment =>"
+  end
+  env_list.keys.sort.each do |key|
+    puts "#{key}=#{env_list[key]}"
+  end
+else
+  puts "Unsupported command specified : #{cmd}"
+end

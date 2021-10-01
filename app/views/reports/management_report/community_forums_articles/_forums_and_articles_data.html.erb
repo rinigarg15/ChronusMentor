@@ -1,0 +1,11 @@
+<% unless data.nil? %>
+  <li class="row">
+    <div class="col-xs-8 p-r-xs">
+      <%= append_text_to_icon(get_dashboard_community_forums_articles_icon_for_key(key), get_dashboard_community_forums_articles_text_for_key(key), media_padding_with_icon: true) %>
+    </div>
+    <div class="col-xs-4 p-l-0 text-right">
+      <div class="col-xs-4 p-l-0 p-r-xxs"><%= data[:current_periods_count] %></div>
+      <%= render partial: "common/report_tile_percentage_change", locals: {percentage: data[:percentage], prev_periods_count: data[:prev_periods_count], tile_text: true, percentage_classes: "col-xs-8 small", is_admin_dashboard: true} if data[:percentage].present? %>
+    </div>
+  </li>
+<% end %>

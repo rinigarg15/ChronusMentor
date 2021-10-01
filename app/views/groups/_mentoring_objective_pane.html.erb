@@ -1,0 +1,13 @@
+<% if requests.present? %>
+  <div id="stu_reqs">
+    <%= ibox "feature.connection.header.Mentoring_Objective_v1".translate(:Mentoring_Connection => _Mentoring_Connection), :content_class => "no-padding" do %>
+      <div class="recent_activities">
+        <% request_count = requests.size %>
+        <% requests.each_with_index do |req, index| %>
+          <%= render :partial => 'groups/request_as_scrap', :locals => {:mentor_request => req, 
+          :last_index => index, :request_counter => request_count} %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

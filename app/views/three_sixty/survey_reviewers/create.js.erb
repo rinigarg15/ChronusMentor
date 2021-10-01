@@ -1,0 +1,17 @@
+<% if @survey_reviewer.valid? %>
+  <% if @survey.published? %>
+    jQuery("#new_three_sixty_survey_reviewer").before('<%= j(render(:partial => "three_sixty/survey_assessees/reviewer", :locals => {:survey => @survey, :survey_assessee => @survey_assessee, :reviewer => @survey_reviewer})) %>');
+    ThreeSixty.hideAndRefreshNewForm('new_three_sixty_survey_reviewer', '<%= j(render(:partial => "three_sixty/survey_assessees/new_reviewer", :locals => {:survey => @survey, :survey_assessee => @survey_assessee, :survey_reviewer_groups => @survey_reviewer_groups, :survey_reviewer => @survey_assessee.reviewers.new, :for_new => true})) %>')
+    jQuery("#three_sixty_survey_notify_reviewers").show();
+  <% else %>
+    jQuery("#three_sixty_survey_assessee_reviewers_<%= @survey_assessee.id %>").append('<%= j(render(:partial => "three_sixty/surveys/reviewer", :locals => {:survey => @survey, :survey_assessee => @survey_assessee, :reviewer => @survey_reviewer})) %>');
+    ThreeSixty.hideAndRefreshNewForm('three_sixty_survey_assessee_add_reviewers_<%= @survey_assessee.id %>', '<%= j(render(:partial => "three_sixty/surveys/new_reviewer", :locals => {:survey => @survey, :survey_assessee => @survey_assessee, :survey_reviewer_groups => @survey_reviewer_groups, :survey_reviewer => @survey_assessee.reviewers.new, :for_new => true})) %>')
+  <% end %>
+  jQueryHighlight("#three_sixty_survey_reviewer_container_<%= @survey_reviewer.id %>", 1000);
+<% else %>
+  <% if @survey.published? %>
+    jQuery("#new_three_sixty_survey_reviewer").find(".cjs_new_three_sixty_object").html('<%= j(render(:partial => "three_sixty/survey_assessees/new_reviewer", :locals => {:survey => @survey, :survey_assessee => @survey_assessee, :survey_reviewer_groups => @survey_reviewer_groups, :survey_reviewer => @survey_reviewer, :for_new => true})) %>');
+  <% else %>
+      jQuery("#three_sixty_add_new_assessee_container_<%= @survey_assessee.id %>").html('<%= j(render(:partial => "three_sixty/surveys/new_reviewer", :locals => {:survey => @survey, :survey_assessee => @survey_assessee, :survey_reviewer_groups => @survey_reviewer_groups, :survey_reviewer => @survey_reviewer, :for_new => true})) %>');
+  <% end %>
+<% end %>

@@ -1,0 +1,69 @@
+<% current_occurrence_date = time_to_calendar_date_format(Meeting.parse_occurrence_time(current_occurrence_time)) %>
+<% popup_title = set_meeting_location ? "feature.meetings.content.set_meeting_location".translate(meeting: _meeting) : set_meeting_time ? "feature.meetings.content.set_meeting_time".translate(:meeting => _meeting) : "feature.meetings.header.edit_meeting_v1".translate(:Meeting => _Meeting) %>
+<% date_id = @meeting.group.nil? ? 'meeting_date_for_mentor' : 'new_meeting_form_date' %>
+<% set_time_only = set_meeting_time %>
+<% modal_v3_popup popup_title do %>
+  <div id="edit_meeting">
+    <div class="form-group form-group-sm <%='hide' if state_not_displayed(@meeting, edit_time_only) %>">
+      <label class="control-label">
+        <%= "feature.meetings.header.state".translate %>
+      </label>
+      <div class="controls">
+        <label class="label label-default">
+          <%= get_meeting_text(@meeting) %>
+        </label>
+      </div>
+    </div>
+    <%= simple_form_for @meeting, url: meeting_path(group_id: @meeting.group.try(:id)), method: :patch, remote: !meeting_area, data: {meeting_id: @meeting.id}, html: {id: "edit_meeting_form", class: "meeting_form clearfix edit cjs_edit_meeting_form"} do |f| %>
+      <%= response_flash "meeting_edit_flash" %>
+      <div id="meeting_edit_form_container">
+        <%= f.hidden_field :current_occurrence_time, value: current_occurrence_time, class: "cjs_current_occurrence_time", data: {beginning_of_day: Meeting.get_millisecond(current_occurrence_time.in_time_zone(wob_member.try(:get_valid_time_zone)).beginning_of_day)} %>
+        <%= f.hidden_field :current_occurrence_date, value: current_occurrence_date %>
+        <%= f.hidden_field :date, value: @meeting.date %>
+        <%= hidden_field_tag 'edit_option', "#{Meeting::EditOption::ALL}" if @meeting.recurrent? %>
+        <%= hidden_field_tag(:outside_group, @outside_group) %>
+        <%= hidden_field_tag(:edit_time_only, edit_time_only) %>
+        <%= hidden_field_tag(:meeting_area, meeting_area) %>
+        <%= hidden_field_tag(:set_meeting_time, set_meeting_time) %>
+        <%= hidden_field_tag(:from_connection_home_page_widget, true) if from_connection_home_page_widget %>
+        <%= hidden_field_tag(:set_meeting_location, set_meeting_location) %>
+        <%= hidden_field_tag(:ei_src, ei_src) %>
+        <% unless (edit_time_only || set_meeting_time) %>
+          <%= f.input :topic, :as => :string, :input_html => {:id => "edit_meeting_topic", :class => "form-control"}, required: true %>
+          <%= f.input :description, :as => :text, :input_html => {:id => "edit_meeting_description", :class => "form-control", :rows => 5} %>
+        <% end %>
+
+        <div class="meeting_date_and_invitees_container <%= 'hide' if set_meeting_location %>">
+          <%= render partial: "meetings/meeting_date_form", :locals => {:from_calendar => @meeting.group.nil?, :direct_meeting_outside_group => @meeting.group.nil?, :meeting => @meeting, :f => f, :form_id => "edit_meeting_form", current_occurrence_date: current_occurrence_date} %>
+          <%= render partial: "meetings/attendees_form", locals: { meeting: @meeting, group: @meeting.group, label: "feature.meetings.form.invitees".translate, checkbox_class: "cjs_meeting_edit_checkbox" } %>
+        </div>
+
+        <% unless edit_time_only %>
+          <%= control_group(class: "clearfix") do %>
+            <%= construct_input_group([ { type: "addon", icon_class: "fa fa-map-marker", class: "gray-bg" } ], []) do %>
+              <%= label_tag("meeting_location", "feature.meetings.form.location".translate, for: "edit_meeting_location", class: "sr-only") %>
+              <%= text_field_tag("meeting[location]", @meeting.location, :class => "form-control", :id => "edit_meeting_location", :placeholder => "feature.meetings.form.location".translate) %>
+            <% end %>
+          <% end %>
+        <% end %>
+        <% confirm_text = "feature.meetings.content.edit_confirmation".translate(:meetings => _meetings) %>
+        <% action_set(class: "pull-right") do %>
+          <% if @meeting.recurrent? %>
+            <% link_to_function "display_string.Save".translate, "Meetings.hideEditPopup('#{confirm_text}', '#{Meeting::EditOption::CURRENT}', '#{set_time_only}')", :class => "btn btn-primary" %>
+          <% else %>
+            <%= f.button :submit, "display_string.Save".translate %>
+          <% end %>
+        <% end %>
+      </div>
+      <%= render(:partial => 'meetings/edit_options', :locals => {meeting: @meeting, current_occurrence_time: current_occurrence_time}) %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= javascript_tag do  %>
+  jQuery(document).ready(function() {
+    initialize.autoResizeTextAreas();
+    initialize.setDatePicker();
+    Meetings.validateEditTopicAndDate('<%= date_id %>', <%= set_meeting_time %>);
+  });
+<% end %>

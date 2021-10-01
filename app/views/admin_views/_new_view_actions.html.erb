@@ -1,0 +1,11 @@
+<% action_set do %>
+  <div class="pull-right m-t-xs">
+    <%= cancel_link(admin_view_all_users_path, caption: (new_view ? "feature.admin_view.action.Discard_View".translate : "display_string.Cancel".translate)) %>
+    <% unless new_view || used_as_filter || !editable_view %>
+      <% delete_action_hash = get_delete_admin_view_action_hash(@admin_view) %>
+      <% delete_action_hash[:class] = "#{delete_action_hash[:class]} btn btn-danger" %>
+      <%= render_action_for_dropdown_button(delete_action_hash) %>
+    <% end %>
+    <%= form_object.button :submit, (new_view ? "feature.admin_view.action.Create_View".translate : "feature.admin_view.action.Update_View".translate), class: "cjs_admin_view_submit" %>
+  </div>
+<% end %>

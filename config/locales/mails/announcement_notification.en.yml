@@ -1,0 +1,21 @@
+en:
+  email_translations:
+    announcement_notification:
+      enabled_html: Send %{email} notifications
+      disabled_html: Send %{email} notifications
+      title_v2: New announcement notification
+      description_v3: This email is sent when posting a new announcement if the %{_admin} wants to notify the participants immediately. Configurable for each announcement.
+      subject: "{{announcement_title}}"
+      content_v1_html: Your {{customized_admin_term}} has posted a new announcement!<br/><br/><b>{{announcement_title}}</b><br/>{{announcement_body}}<br/>{{view_announcement_button}}
+      view_announcement: View Announcement
+      tags:
+        announcement_title:
+          description: Title of the announcement
+          example: Welcome meet for all users at the Cafeteria
+        announcement_body:
+          description: Body of the announcement
+          example_v1: We have organized a grand lunch and networking event next friday at our cafeteria between noon and 2.00pm. This will be a great platform to extend your professional network.
+        url_announcement:
+          description: Url of the announcement
+        view_announcement_button:
+          description: View announcement button

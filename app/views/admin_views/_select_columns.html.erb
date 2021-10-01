@@ -1,0 +1,27 @@
+<div class="admin_view_column_multiselect">
+  <%= render :partial => 'layouts/translations/multiselect' %>
+  <label class="sr-only" for="cjs_admin_view_multiselect"><%= "feature.admin_view.header.Select_Fields".translate %></label>
+  <select id="cjs_admin_view_multiselect" class="cui_admin_view_multiselect" multiple="multiple" name="admin_view[admin_view_columns][]">
+    <optgroup label="<%= @current_organization.sections.default_section.first.title %>">
+      <%= populate_basic_info_columns(@admin_view_columns, @admin_view, AdminViewColumn::ColumnsGroup::BASIC_INFO) %>
+    </optgroup>
+
+    <optgroup label="<%= "feature.admin_view.multiselect.profile".translate %>">
+      <%= populate_profile_question_columns(@profile_questions, @admin_view_columns, @admin_view, AdminViewColumn::ColumnsGroup::PROFILE) %>
+    </optgroup>
+
+    <% if @admin_view.is_program_view? %>
+      <optgroup label="<%= "feature.admin_view.multiselect.matching_and_engagement".translate %>">
+        <%= populate_matching_and_engagement_status_columns(@admin_view_columns, @admin_view, AdminViewColumn::ColumnsGroup::MATCHING_AND_ENGAGEMENT) %>
+      </optgroup>
+
+      <optgroup label="<%= "feature.admin_view.multiselect.timeline".translate %>">
+        <%= populate_timeline_columns(@admin_view_columns, @admin_view, AdminViewColumn::ColumnsGroup::TIMELINE, program.ongoing_mentoring_enabled?) %>
+      </optgroup>
+    <% elsif admin_view.program.ongoing_enabled_programs_present? %>
+      <optgroup label="<%= "feature.admin_view.multiselect.Engagements".translate %>">
+        <%= populate_engagement_columns(admin_view_columns, AdminViewColumn::ColumnsGroup::ORG_LEVEL_ENGAGEMENT) %>
+      </optgroup>
+    <% end %>
+  </select>
+</div>

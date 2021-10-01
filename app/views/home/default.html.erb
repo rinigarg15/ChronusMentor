@@ -1,0 +1,92 @@
+<%= response_flash "new_program_flash" %>
+<div id='app_landing' class='clearfix'>
+  <%= response_flash "new_program_flash" %>
+  <%= render partial: "select_region" if can_render_select_region? %>
+  <%= simple_form_for @program, :html => {:class => 'form-horizontal new_program clearfix', multipart: true}, :url => new_admin_registrations_path do |f| %>
+    <%= f.simple_fields_for @organization do |org_f| %>
+      <% @title = get_icon_content("fa fa-cogs") + content_tag(:span, "Setup your mentor program") + render_selected_region_alert %>
+
+      <%= wizard_wrapper(get_new_organization_wizard_view_headers, OrganizationsHelper::Headers::PROGRAM_DETAILS, :content_ibox_content_class => "p-xl p-t-m p-b-m") do %>
+
+          <h3 class="row"><%= get_icon_content("fa fa-sitemap") %>Organization Settings</h3>
+          <hr class="m-t-xs m-b-md" />
+          <%= org_f.input :account_name, :wrapper => :horizontal_input, :as => :string, :label => 'Account Name', :hint => "Same as Salesforce account name (e.g, Stanford, LSI)", :input_html => {:class => "form-control"} %>
+
+          <%= org_f.simple_fields_for @program_domain do |pd_f| %>
+            <%= pd_f.input :subdomain, :wrapper => :horizontal_input, :as => :string, :label => "Web address", :hint => "e.g, stanford, nwen", :input_html => {:class => "form-control"} %>
+            <%= pd_f.input(:domain, :wrapper => :horizontal_input, :as => :string, :label => "Domain Name", :hint => "Specify a domain if you don't want the domain to be chronus.com. Give a domain name without preceding '.' Eg. tws.org, microsoft.com", :input_html => {:class => "form-control"}) %>
+          <% end %>
+
+          <%= org_f.input :subscription_type, :wrapper => :horizontal_input, :collection => [["Basic", Organization::SubscriptionType::BASIC], ["Premium", Organization::SubscriptionType::PREMIUM], ["Enterprise", Organization::SubscriptionType::ENTERPRISE]], :include_blank => false, :hint => "Choose the subscription type of this program", :label => "Subscription plan", :input_html => {:class => "form-control"} %>
+
+          <h3 class="row"><%= get_icon_content("fa fa-th-large") %>Program Settings</h3>
+          <hr class="m-t-xs m-b-md" />
+
+          <%= f.input :name, :wrapper => :horizontal_input, :as => :string, :label => 'Name of your program', :hint => "e.g, Stanford Business School, NW Entrepreneur program", :input_html => {:class => "form-control"} %>
+
+          <%= control_group do %>
+            <% label = "program_settings_strings.label.program_type".translate %>
+            <%= content_tag(:div, label, :class => "control-label col-sm-3 false-label") %>
+            <%= controls(class: "col-sm-9") do %>
+              <%= one_time_setting_radio_button(f, @program, :program_type,
+                ["feature.program.content.program_type.chronus_mentor".translate,
+                  "feature.program.content.program_type.chronus_coach".translate,
+                  "feature.program.content.program_type.chronus_learn".translate],
+                Program::ProgramType.all, label_text: label) %>
+            <% end %>
+          <% end %>
+
+          <%= f.input :number_of_licenses, :wrapper => :horizontal_input, :label => "program_settings_strings.label.number_of_licenses".translate, :hint => "program_settings_strings.content.number_of_licenses_help_text".translate, :input_html => {:class => "form-control"} %>
+
+          <%= control_group do %>
+            <% label =  "feature.program.how_to_configure".translate %>
+            <%= content_tag(:div, label, :class => "control-label col-sm-3 false-label") %>
+            <%= controls(:class => "col-sm-9 cui_creation_way") do %>
+              <%= choices_wrapper(label) do %>
+                <label class="radio">
+                  <%= radio_button_tag :creation_way, Program::CreationWay::SOLUTION_PACK %>
+                  <%= "feature.program.content_pack.use_solution_pack".translate %>
+                </label>
+                <label class="radio">
+                  <%= radio_button_tag :creation_way, Program::CreationWay::MANUAL %>
+                  <%= "feature.program.will_do_myself".translate %>
+                </label>
+              <% end %>
+            <% end %>
+          <% end %>
+
+          <div id="cjs_program_engagement_type">
+            <%= control_group do %>
+              <%= content_tag(:div, "program_settings_strings.label.engagement_type_v1".translate(program: _Program) + "*", :class => "false-label col-sm-3 control-label") %>
+              <%= controls(class: "col-sm-9") do %>
+                <%= one_time_engagement_type_selection(@program) %>
+                <%= javascript_tag %Q[ProgramSettings.showCareerBasedOptions(#{Program::EngagementType::PROJECT_BASED});ProgramSettings.ongoingDetailedSetting();ProgramSettings.showEngagementTypeBasedOnSubscription(#{Organization::SubscriptionType::BASIC});ProgramSettings.subscriptionChange(#{Organization::SubscriptionType::BASIC});] %>
+              <% end %>
+            <% end %>
+          </div>
+
+          <div id="profile_questions_import">
+            <%= org_f.input :profile_questions, :wrapper => :horizontal_input, label: 'Profile Questions CSV', hint: csv_hint_text do %>
+              <%= file_field_tag :profile_questions, :as => :file, :id => "program_organization_profile_questions" %>
+            <% end %>
+          </div>
+
+          <div id="solution_pack_file_path" style="display: none;" class="cui_file_chooser">
+            <%= f.input :solution_pack_file, :wrapper => :horizontal_input, as: :file, label: "feature.program.content_pack.upload_solution_pack".translate %>
+          </div>
+
+          <div id="cjs_custom_term_container_org_setup">
+            <%= f.input :mentor_name, :wrapper => :horizontal_input, :as => :string, :hint => "What would you like to call 'Mentor' in the program?", :input_html => { :class => "form-control", :value => "app_constant.default_name.mentor".translate} %>
+
+            <%= f.input :student_name, :wrapper => :horizontal_input, :as => :string, :hint => "What would you like to call 'Mentee' in the program?", :input_html => { :class => "form-control", :value => "app_constant.default_name.mentee".translate}  %>
+          </div>
+
+          <% action_set(class: "pull-right") do %>
+            <%= f.button :submit, 'Setup Program &raquo;'.html_safe, :class => 'app_button button new_program_submit_button', :onclick => "return newProgram.validateEngagementType('#{Program::EngagementType::CAREER_BASED}', '#{j("common_text.error_msg.required_field_msg".translate)}', '#{j("program_settings_strings.content.select_some_mode".translate(mentoring: "mentoring"))}') && newProgram.validateOrgLevelCreationWay('#{j("common_text.error_msg.required_field_msg".translate)}', '#{Program::CreationWay::SOLUTION_PACK}', '#{Program::CreationWay::MANUAL}');" %>
+          <% end %>
+        <% end %>
+      <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag %Q[OrganizationSetupSettings.orgSetupSolutionPackOptions('#{Program::CreationWay::SOLUTION_PACK}'), OrganizationSetupSettings.orgSetupManualOptions('#{Program::CreationWay::MANUAL}');] %>

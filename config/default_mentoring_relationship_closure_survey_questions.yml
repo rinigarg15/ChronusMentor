@@ -1,0 +1,62 @@
+---
+name: <%= SurveyConstants::CLOSURE_SURVEY_NAME %>
+questions:
+- question_type: <%= CommonQuestion::Type::RATING_SCALE %>
+  question_text: "How would you rate your mentoring relationship experience?"
+  question_choices:
+    - Very good
+    - Good
+    - Satisfactory
+    - Bad
+    - Poor
+  required:  true
+
+- question_type: <%= CommonQuestion::Type::RATING_SCALE %>
+  question_text: "Did you achieve the goals that you and your mentoring partner had set yourselves for the mentoring relationship?"
+  question_choices:
+    - "Yes"
+    - "No"
+  required:  true
+
+- question_type: <%= CommonQuestion::Type::TEXT %>
+  question_text: "If No then what were the stumbling blocks?"
+  required:  false
+
+- question_type: <%= CommonQuestion::Type::RATING_SCALE %>
+  question_text: "Did you get the timely help and resources that you needed during the mentoring period?"
+  question_choices:
+    - "Yes"
+    - "No"
+  required:  true
+
+- question_type: <%= CommonQuestion::Type::TEXT %>
+  question_text: "What are your major take-aways from this mentoring relationship?"
+  required:  true
+
+- question_type: <%= CommonQuestion::Type::RATING_SCALE %>
+  question_text: "How was your relationship with your mentoring partner?"
+  question_choices:
+    - Very good
+    - Good
+    - Satisfactory
+    - Bad
+    - Poor
+  required:  true
+
+- question_type: <%= CommonQuestion::Type::RATING_SCALE %>
+  question_text: "Did you meet your mentoring partner in person?"
+  question_choices:
+    - "Yes"
+    - "No"
+  required:  true
+
+- question_type: <%= CommonQuestion::Type::RATING_SCALE %>
+  question_text: "Will you continue remaining in contact with your mentoring partner?"
+  question_choices:
+    - "Yes"
+    - "No"
+  required:  true
+
+- question_type: <%= CommonQuestion::Type::TEXT %>
+  question_text: "Do you have any additional comments?"
+  required:  false

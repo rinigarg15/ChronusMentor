@@ -1,0 +1,24 @@
+<% email_help_text = @current_organization.email_question_help_text %>
+
+<%= form_tag apply_membership_requests_path, class: "cjs_apply_for_form", remote: true do %>
+  <div class="m-b-lg">
+    <%= "feature.membership_request.content.enter_email_captcha_html".translate + " " + "feature.membership_request.content.send_registration_instructions_v2_html".translate(program: _program) %>
+  </div>
+
+  <%= label_tag("email", "display_string.Email".translate, class: "sr-only") %>
+  <%= text_field_tag "email", nil, placeholder: "display_string.Email".translate, class: "input-sm cjs_signup_email form-control#{' m-b-sm' if email_help_text.blank?}" %>
+  <%= content_tag(:div, email_help_text, class: "help-block text-left small") if email_help_text.present? %>
+  <%= label_tag("captcha", "captcha.placeholder".translate, for: "captcha", class: "sr-only") %>
+  <div class="m-t-xs text-left">
+    <%= display_captcha(nil, placeholder: "captcha.label_v1".translate, input_html: { required: false, class: "input-sm form-control m-b-sm" } ) %>
+  </div>
+  <%= hidden_field_tag "roles", nil, class: "cjs_roles_apply_for" %>
+
+  <% action_set(class: "m-t-lg m-b-sm") do %>
+    <%= button_tag "display_string.Continue".translate, type: "button", class: "btn btn-primary btn-block cjs_submit_btn" %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  MembershipRequest.validateAndSubmitApplyForForm("<%= j('display_string.Continue'.translate) %>", "<%= j('display_string.Please_Wait'.translate) %>");
+<% end %>

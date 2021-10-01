@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  </head>
+  <body style="margin: 0; padding: 0;">
+    <%= render partial: "layouts/emails/email_client_specific_and_style_resets" %>
+    <style type="text/css">
+    a{color: inherit !important;}
+    image{margin: 0 !important;}
+    @media screen and (max-width:700px) {
+      .hide-below700 { display: none; }
+      .center-below700 { text-align: center !important; }
+      .rollup-count-below700 {
+        font-size: 20px !important;
+        line-height: 24px !important;
+      }
+      .rollup-text-below700 {
+        font-size: 0.4em !important;
+        line-height: 8px !important;
+      }
+    }
+    </style>
+
+    <table width="600" align="center" cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td align="center">
+          <table cellpadding="0" cellspacing="0" border="0" style="padding:0px;margin:0px;width:100%;">
+            <tbody>
+              <tr><td colspan="3" style="padding:0px;margin:0px;font-size:20px;height:0px;line-height:0px;" height="0">&nbsp;</td></tr>
+              <tr>
+                <td style="padding:0px;margin:0px;" width="0"></td>
+                <td bgcolor='#FFFFFF' align="center" style="padding:0px;margin:0px; text-align: center;" width="600">
+                  <div style="letter-spacing: 596px; line-height: 0; mso-hide: all">&nbsp;</div>
+                  <%= yield %>
+                  <%= render partial: "layouts/emails/common_footer" %>
+                </td>
+                <td style="padding:0px;margin:0px;" width="0"></td>
+              </tr>
+              <tr><td colspan="3" style="padding:0px;margin:0px;font-size:20px;height:0px;line-height:0px;" height="0">&nbsp;</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+  </body>
+</html>

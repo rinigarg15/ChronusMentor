@@ -1,0 +1,23 @@
+<div class="has-above-2 cui_custom_fields_container">
+  <div class="common_questions">
+    <% ajax_form = !local_assigns[:no_action] && !@is_first_visit %>
+    <% common_form_options = if !local_assigns[:answer_mandatory_qs] %>
+      <% {:url => update_answers_member_path(@profile_member, last_section: local_assigns[:last_section], section_id: section.id, section: MembersController::EditSection::PROFILE), html: {multipart: true, id: "custom_fields_#{section.id}", class: 'form-horizontal', builder: MyFormBuilder }} %>
+    <% else %>
+      <% {:url => update_mandatory_answers_members_path, :html => {:id => "custom_fields_#{section.id}", :class => 'form-horizontal', :builder => MyFormBuilder, remote: true}} %>
+    <% end %>
+    <% common_form_content = lambda do |person| %>
+      <%= hidden_field_tag(:section_id, section.id, id: nil) if ajax_form %>
+      <%= hidden_field_tag("prof_c", @is_profile_completion, id: nil) %>
+      <%= get_section_description(section, class: "m-b-sm") unless local_assigns[:answer_mandatory_qs] %>
+      <%= render :partial => "users/edu_exp_form", :locals => {:profile_user => @profile_user, :section => section} if has_edu_exp_ques %>
+
+      <%= render :partial => "members/edit/profile_question", :locals => {:questions => questions, :person => person, :no_action => local_assigns[:no_action], :ajax_form => ajax_form, answer_mandatory_qs: local_assigns[:answer_mandatory_qs], is_first_visit: @is_first_visit, is_profile_completion: @is_profile_completion, grouped_role_questions: @grouped_role_questions, :profile_user => @profile_user} %>
+    <% end %>
+    <% if ajax_form && !file_present %>
+      <%= form_for @profile_member, common_form_options.merge(:remote => true), &common_form_content  %>
+    <% else %>
+      <%= form_for @profile_member, common_form_options, &common_form_content %>
+    <% end %>
+  </div>
+</div>

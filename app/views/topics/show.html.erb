@@ -1,0 +1,27 @@
+<% content = render partial: "topics/show", locals: { topic: @topic, posts: @posts, show_title: (@forum.is_group_forum? && !@can_show_tabs) } %>
+
+<% if @forum.is_program_forum? %>
+  <% @title = @topic.title %>
+  <% @page_action = [follow_topic_link(@topic)] %>
+
+  <%= content %>
+  <% content_for_sidebar do %>
+    <% if @current_organization.sticky_topics_enabled? && current_user.can_manage_forums? %>
+      <%= ibox 'common_text.side_pane.admin_actions_v1'.translate(Admin: _Admin) do %>
+        <%= render partial: 'topics/mark_topic_featured_link', locals: { topic: @topic } %>
+      <% end %>
+    <% end %>
+    <%= sidepane_assets_pane @recent_topics,
+      pane_header: "feature.forum.title.recent_conversations".translate,
+      see_all_url: forum_path(@forum),
+      sidepane_asset_partial: "topics/recent_topic",
+      show_page: true,
+      empty_pane_message: "feature.forum.content.no_other_conversations".translate,
+      user_method: :user
+    %>
+  <% end %>
+<% else %>
+  <%= render layout: "groups/show_layout", locals: { show_tabs: @can_show_tabs, forum_tab: true, show_page_actions: true } do %>
+    <%= content %>
+  <% end %>
+<% end %>

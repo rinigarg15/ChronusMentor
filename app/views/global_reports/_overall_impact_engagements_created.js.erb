@@ -1,0 +1,17 @@
+<% if @overall_impact_hash[:engagements_created] %>
+  jQuery('.overall_impact_engagements_created_title_tooltip').hide();
+  <% total_current_engagement = get_engagement_stats(@overall_impact_hash[:engagements_created], :current) %>
+  <% content = rollup_body_box(box_icon_class: "fa-heartbeat", text_number: total_current_engagement, text_number_class: "cjs_global_reports_overall_impact_engagements_created_number") %>
+  <% total_previous_engagement = get_engagement_stats(@overall_impact_hash[:engagements_created], :previous) %>
+
+  <% engagement_count_messages = get_engagement_tooltip_content(@overall_impact_hash[:engagements_created]) %>
+  <% if engagement_count_messages.present? %>
+    <% engagements_created_tooltip = "feature.global_reports.overall_impact.content.tooltip_for_engagement_created_v1".translate(programs: _programs, engagement_counts: engagement_count_messages.join(", ")) %>
+
+    changeTooltipText('.overall_impact_engagements_created_title_tooltip', '<%= engagements_created_tooltip %>');
+    jQuery('.overall_impact_engagements_created_title_tooltip').show();
+  <% end %>
+  <% content << get_percentage_difference_rollup({current: total_current_engagement, previous: total_previous_engagement}) %>
+  jQuery(".cjs_global_reports_overall_impact_engagements_created").html("<%= j(content) %>")
+  NumberCounter.initCounter('.cjs_global_reports_overall_impact_engagements_created_number', {format: true});
+<% end %>

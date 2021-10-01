@@ -1,0 +1,100 @@
+<%= include_ckeditor_tag %>
+<% new_record_or_draft = @program_event.new_record? || @program_event.draft? %>
+<% example_email_list = "feature.program_event.content.example_emails".translate %>
+<% st_time = Meeting.valid_start_time_boundaries(slot_time: ProgramEvent::SLOT_TIME_IN_MINUTES, slots_per_day: ProgramEvent::SLOTS_PER_DAY) %>
+<% en_time = Meeting.valid_end_time_boundaries(slot_time: ProgramEvent::SLOT_TIME_IN_MINUTES, slots_per_day: ProgramEvent::SLOTS_PER_DAY) %>
+<% source_info = params.to_unsafe_h.pick(:controller, :action, :id) %>
+
+<%= response_flash "test_send_success" %>
+<% list_admin_views_json = get_admin_views_options(@admin_views, @program_event) %>
+<%= ibox nil do %>
+  <%= simple_form_for @program_event, :html => {:id => 'new_program_event', :class => 'form-horizontal clearfix', :multipart => true} do |f| %>
+    <%= response_flash "program_event_form_flash" %>
+    <%= f.input :admin_view_id, :wrapper => :horizontal_input,
+                :include_blank => "feature.admin_view.content.prompt.select_view".translate,
+                :selected => params[:admin_view_id] || f.object.admin_view_id,
+                :label => "#{ProgramEvent.human_attribute_name(:admin_view)}",
+                :input_html => {:class => "col-xs-12 no-padding strong",
+                                :url => admin_view_path_with_source(:new),
+                                :data => {
+                                  :url => preview_view_details_admin_views_path(source_info: source_info),
+                                  'deleted-admin-view-id' => !f.object.new_record? && f.object.admin_view.nil? && f.object.admin_view_id
+                                }},
+                :required => true %>
+
+    <%= control_group(class: "m-b-0") do %>
+      <%= controls(class: "col-sm-offset-3 col-sm-9") do %>
+        <div class="cjs_admin_view_content"></div>
+      <% end %>
+    <% end %>
+    <% if !f.object.new_record? %>
+      <%= control_group(class: 'cjs-admin-view-alert', 'data-admin_view_id' => f.object.admin_view_id) do %>
+        <%= controls(class: "col-sm-offset-3 col-sm-9") do %>
+          <span id='another_admin_view_was_selected_alert' class='alert alert-warning col-xs-12 no-margins p-sm text-center' style='display:none'>
+            <%= get_icon_content("fa fa-warning") %> <%= "feature.program_event.content.another_admin_view_was_selected_alert_v1".translate %>
+          </span>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= f.input :title, :wrapper => :horizontal_input, :as => :string, :input_html => {:class => "form-control"} %>
+
+    <%= f.input :location, :wrapper => :horizontal_input, :as => :string, :input_html => {:class => "form-control"}  %>
+
+    <%= f.input :date, wrapper: :datepicker_input, label: "feature.program_event.label.Date".translate, as: :string, required: true, input_html: { value: (@program_event.date || ""), class: "form-control cjs_selector_date", id: "new_program_event_form_date", placeholder: "common_text.placeholder.select_date".translate, autocomplete: :off, data: date_picker_options(min_date: Date.current) } %>
+
+    <%= control_group do %>
+      <%= content_tag(:div, set_required_field_label("feature.program_event.label.Time".translate), :class => "false-label control-label col-sm-3") %>
+      <%= controls(class: "col-sm-9") do %>
+        <div class="row">
+          <div class="col-sm-6 p-b-xs">
+            <%= f.label :start_time, "feature.program_event.placeholder.Start_time".translate, :class => "sr-only" %>
+            <%= f.select :start_time, options_for_select([["feature.program_event.placeholder.Start_time".translate, ""]] + st_time, @program_event.start_time_of_the_day || "") , { disabled: "", required: true }, class: "form-control inline cjs_selector_start_time" %>
+          </div>
+          <div class="col-sm-6">
+            <%= f.label :end_time, "feature.program_event.placeholder.End_time".translate, :class => "sr-only" %>
+            <%= f.select :end_time, options_for_select([["feature.program_event.placeholder.End_time".translate, ""]] + en_time, (@program_event.end_time_of_the_day || "")) , { disabled: "" }, class: "form-control inline cjs_selector_end_time" %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+    <%= render partial: "common/timezone_select", locals: get_program_events_timezone_selector_locals_hash(@program_event, new_record_or_draft) %>
+
+    <%= f.input :description, :wrapper => :horizontal_input, :as => :text, :input_html => {:class=> "form-control", :id => 'new_program_event_details'}, :hint => "feature.program_event.content.description_hint".translate %>
+    <% mailer_klass = @program_event.new_record? ? NewProgramEventNotification : ProgramEventUpdateNotification  %>
+    <% email_notification_default_value = current_program.email_template_disabled_for_activity?(mailer_klass) == false %>
+    <%= control_group do %>
+      <%= controls(:class => "col-sm-offset-3 col-sm-9") do %>
+        <label class="checkbox">
+          <%= check_box_tag 'program_event[email_notification]', true, email_notification_default_value, :onclick => "ProgramEventTestmail.toggleDetails();" %>
+          <%= email_notification_consequences_on_action_html(mailer_klass, div_enclose: false, common_text: true) %>
+          <div id="test_email_detail" class="help-block" style="display:none;">
+            <%= "feature.program_event.content.test_email_detail_html".translate %>
+            <%= link_to_function "feature.program_event.content.test_email".translate, "ProgramEventTestmail.beforeShowPopup('#{example_email_list}');",:id => "show_popup_link", "data-toggle" => "modal", "data-target" => "#modal_show_popup_link" -%>
+          </div>
+        </label>
+      <% end %>
+    <% end %>
+    <%= f.input :status, :as => :hidden, :input_html => {:id => 'program_event_status'} %>
+
+    <% action_set(:class => "pull-right") do %>
+      <%= cancel_link program_events_path %>
+      <%= f.submit "display_string.Save_as_draft".translate, class: "btn btn-white", :id => "save_as_draft", :onclick => %Q[programEvent.setStatus(#{ProgramEvent::Status::DRAFT}); return programEvent.validateForm('program_event_form_flash', "#{j('feature.program_event.content.start_time_error'.translate)}", "#{j('feature.program_event.content.required_fields_error'.translate)}");] if new_record_or_draft %>
+      <%= f.submit "display_string.Post".translate, class: "btn btn-primary", id: "publish_and_invite", onclick: %Q[return programEvent.handleUpdation(#{ProgramEvent::Status::PUBLISHED}, #{!new_record_or_draft}, "#{j('feature.program_event.content.start_time_error'.translate)}", "#{j('feature.program_event.content.required_fields_error'.translate)}", "#{j('feature.program_event.content.update_confirmation'.translate)}", "#{j('feature.program_event.content.update_time_and_send_invites'.translate)}");] %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= render :partial => "program_events/test_email_popup", :locals => {:program_event => @program_event, :example_email_list => example_email_list, :src => "form"} %>
+<% create_admin_view = render(:partial => 'admin_views/create_admin_view_link', :locals => { :source_info => source_info }) %>
+<% unless new_record_or_draft %>
+  <%= hidden_field_tag :orginal_date, @program_event.date, class: "cjs_original_date" %>
+  <%= hidden_field_tag :orginal_start_time, @program_event.start_time_of_the_day, class: "cjs_original_start_time" %>
+  <%= hidden_field_tag :orginal_end_time, @program_event.end_time_of_the_day, class: "cjs_original_end_time" %>
+<% end %>
+<%= javascript_tag "ProgramEventTestmail.toggleDetails();" %>
+<%= javascript_tag "programEvent.initalizeActions();" %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    adminViewInitSelect2.initialize(<%= list_admin_views_json %>, "#program_event_admin_view_id", "<%= j(create_admin_view) %>", true);
+  });
+<% end %>

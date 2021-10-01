@@ -1,0 +1,90 @@
+<%= include_ckeditor_tag %>
+
+<% new_record = @resource.new_record? %>
+<% resource_roles = @resource.roles %>
+<% program_ids = @resource.resource_publications.pluck(:program_id) %>
+<% source_info = {
+    "controller" => "resources",
+    "action" => new_record ? "new" : "edit",
+    "id" => @resource.id
+  } %>
+<%= ibox nil do %>
+  <%= simple_form_for @resource, :html => {:id => "resource_form", :class => "form-horizontal"} do |f| %>
+
+    <% if program_view? %>
+      <%= control_group(class: "m-b-xs", id: "resource_accessible_options") do %>
+        <%= label_tag('', "feature.resources.action.accessible_to".translate, for: "resource_accessible_options", class: "col-sm-2 control-label", title: "feature.mentoring_model.js_translations.required_label".translate) %>
+        <%= controls(class: "col-sm-10 cjs_resources_accessible") do %>
+          <%= choices_wrapper("display_string.Roles".translate) do %>
+            <% @current_program.roles_without_admin_role.each do |role| %>
+              <label class="checkbox">
+                <%= hidden_field_tag "resource[program_ids][]", @current_program.id, id: nil %>
+                <%= check_box_tag("resource[role_ids][]", role.id, resource_roles.include?(role) || new_record, id: nil) %>
+                <%= role.customized_term.term %>
+              </label>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= control_group(class: "m-b-xs") do %>
+        <%= label_tag('', "feature.resources.action.pin_to_homepage".translate(resource: _resource), for: "cjs_resources_pinned_options", class: "col-sm-2 control-label", title: "feature.mentoring_model.js_translations.required_label".translate) %>
+        <%= controls(class: "col-sm-10", id:"cjs_resources_pinned_options") do %>
+          <% program_publication = @resource.resource_publications.find_by(program_id: @current_program.id) %>
+          <%= f.simple_fields_for :resource_publications, class: "form-control" do |resource_publication| %>
+            <%= resource_publication.input :show_in_quick_links, collection: [["display_string.None".translate, false], ["feature.resources.label.access_for_all".translate, true]], checked: [new_record ? true : program_publication.show_in_quick_links ], :label_method => :first, :value_method => :last, label: false, :as => :radio_buttons, wrapper_html: {class: "p-l-sm m-b-xxs"} %>
+            <label class="radio p-b-xs">
+              <%= resource_publication.radio_button :show_in_quick_links, "", class: "cjs_pin_resources_to_admin_views", checked: new_record ? false : program_publication.admin_view_id.present? %>
+              <%=  "feature.resources.label.select_user_set".translate %>
+            </label>
+            <div class="admin_view_select2_container <%= 'hide' if  new_record || program_publication.admin_view_id.nil? %>">
+              <%= render :partial => "admin_views/add_admin_view_select2_auto_complete", locals: {ref_obj: @resource, source_info: source_info, resource_publication: resource_publication} %>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+      <% if can_access_resource? @resource %>
+        <%= control_group do %>
+          <div class="false-label control-label col-sm-2"><%= "feature.resources.label.title".translate %></div>
+          <%= controls(class: "col-sm-10 form-control-static") do %>
+            <%= auto_link(@resource.title) %>
+          <% end %>
+        <% end %>
+        <%= control_group do %>
+          <div class="false-label control-label col-sm-2"><%= "feature.resources.label.content".translate %></div>
+          <%= controls(class: "col-sm-10 form-control-static") do %>
+            <%= chronus_sanitize_while_render(@resource.content, :sanitization_version => @current_organization.security_setting.sanitization_version, :sanitization_options => {:attributes => %w[style _cke_saved_href accesskey align allowscriptaccess alt bgcolor border cellpadding cellspacing charset classid codebase colspan data-cke-realelement dir height href hspace id lang longdesc name onclick pluginspage quality rel rowspan scale scope src start summary tabindex target title type value vspace width wmode], :tags => %w[a address blockquote br caption div em embed h1 h2 h3 h4 h5 h6 hr iframe img li object ol p param pre s span strong sub sup table tbody td tfoot th thead tr u ul]}) %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <%= f.input :title, :as => :string, :input_html => {:class => 'form-control'}, :label_html => {:class => "col-sm-2 control-label"}, :input_wrapper_html => {:class => "col-sm-10"} %>  
+        <%= f.input :content, :as => :text, :input_html => {:class => 'form-control', :rows => 5}, :label_html => {:class => "col-sm-2 control-label"}, :input_wrapper_html => {:class => "col-sm-10"}, :hint => "feature.resources.content.content_hint_text".translate %>
+      <% end %>
+    <% else %>
+      <%= f.input :title, :as => :string, :input_html => {:class => 'form-control'}, :label_html => {:class => "col-sm-2 control-label"}, :input_wrapper_html => {:class => "col-sm-10"} %>  
+      <%= f.input :content, :as => :text, :input_html => {:class => 'form-control', :rows => 5}, :label_html => {:class => "col-sm-2 control-label"}, :input_wrapper_html => {:class => "col-sm-10"}, :hint => "feature.resources.content.content_hint_text".translate %>
+      <%= render :partial => "resources/programs_and_roles_checkboxes", :locals => { program_ids: program_ids, new_record: new_record, resource_roles: resource_roles} %>
+    <% end %>
+    <% action_set do %>
+      <div class="pull-right m-t-xs">
+        <%= cancel_link resources_path() %>
+        <%= f.button :submit, (new_record ? "display_string.Publish".translate : "display_string.Save".translate), id: "cjs_submit_resources" %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% admin_view_info = render_admin_view_info(@resource) if program_view? %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    Resources.hideUnhideCheckBox();
+    Resources.validateResourceForm(<%= program_view? %>);
+    <% if program_view? %>
+      AdminViews.initalizeSelect2(false, true);
+      AdminViews.setAdminViewSelect2('<%= admin_view_info[:title] %>', '<%= admin_view_info[:id] %>', Resources.ADMIN_VIEW_SELECTOR);
+      adminViewInitSelect2.initializeCreateAdminViewLink("#"+Resources.ADMIN_VIEW_SELECTOR, "<%= j(render('admin_views/create_admin_view_link', source_info: source_info, program_view: true)) %>");
+      AdminViews.displayDetailAdminView('<%= source_info["action"] %>', '<%= source_info["controller"] %>', '<%= source_info["id"] %>', Resources.ADMIN_VIEW_SELECTOR);
+      Resources.adminViewDisableEnableSelect();
+    <% end %>
+  });
+<% end %>

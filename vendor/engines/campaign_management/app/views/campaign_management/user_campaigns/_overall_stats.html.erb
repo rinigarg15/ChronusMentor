@@ -1,0 +1,32 @@
+<div class="cjs_campaign_block col-sm-4">
+  <h3><%= "feature.campaigns.analytics.analytics_overview_v1".translate%> <%= content_tag(:small, "feature.campaigns.analytics.analytics_overview_tag".translate, class: "text-muted") %>
+  </h3>
+  <ul class="stat-list clearfix m-t-md">
+    <li class="m-b-md">
+      <h3 class="no-margins"> <%= get_icon_content("fa fa-send") + "#{@analytic_stats[:total_sent_count]}" %></h3>
+      <% if invitation %>
+        <%= content_tag(:small, "feature.campaigns.analytics.sent_v2".translate) %>
+      <% else %>
+        <%= content_tag(:small, "feature.campaigns.analytics.sent_v3".translate) %>
+      <% end %>
+      <%= render(:partial => "campaign_management/user_campaigns/overall_stats_progress_bar", :locals => {count: @analytic_stats[:total_sent_count] > 0 ? 100 : 0}) %>
+    </li>
+    <li class="m-b-md">
+      <h3 class="no-margins"> <%= get_icon_content("fa fa-envelope-o") + "#{@overall_analytics[CampaignManagement::EmailEventLog::Type::DELIVERED]}" %></h3>
+      <%= content_tag(:small, "feature.campaigns.analytics.delivered_v1".translate) %>
+      <%= render(:partial => "campaign_management/user_campaigns/overall_stats_progress_bar", :locals => {count: @analytic_stats[:total_sent_count] > 0 ? (@overall_analytics[CampaignManagement::EmailEventLog::Type::DELIVERED]*1.0/@analytic_stats[:total_sent_count]) * 100 : @overall_analytics[CampaignManagement::EmailEventLog::Type::DELIVERED]}) %>
+    </li>
+
+    <li class="m-b-md">
+      <h3 class="no-margins"> <%= get_icon_content("fa fa-folder-open-o") +  "#{@analytic_stats[:open_rate].round(2)}%" %></h3>
+      <%= content_tag(:small, "feature.campaign.fields.open_rate".translate) %>
+      <%= render(:partial => "campaign_management/user_campaigns/overall_stats_progress_bar", :locals => {count: @analytic_stats[:open_rate].round(2)}) %>
+    </li>
+
+    <li class="m-b-md">
+      <h3 class="no-margins"> <%= get_icon_content("fa fa-hand-o-up") + "#{@analytic_stats[:click_rate].round(2)}%" %></h3>
+      <%= content_tag(:small, "feature.campaign.fields.click_rate".translate) %>
+      <%= render(:partial => "campaign_management/user_campaigns/overall_stats_progress_bar", :locals => {count: @analytic_stats[:click_rate].round(2)}) %>
+    </li>
+  </ul>
+</div>

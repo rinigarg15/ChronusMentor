@@ -1,0 +1,18 @@
+<% last_post_time = sidepane_asset.replied_at(current_user) %>
+
+<%= link_to truncate(sidepane_asset.title, length: 40), forum_topic_path(sidepane_asset.forum, sidepane_asset), remote:!show_page, class: "font-bold" %>
+<div class="p-t-xxs small">
+  <% if last_post_time.present? %>
+    <%= get_icon_content("fa fa-clock-o no-margins") %>
+    <span class="font-bold text-muted">
+      <%= "feature.forum.content.last_post".translate %>
+    </span>
+    <span class="text-muted">
+      <%= formatted_time_in_words(last_post_time.getlocal, no_time: true) %>
+      <%= circle_separator %>
+    </span>
+  <% end %>
+  <span class="text-navy">
+    <%= 'feature.forum.content.post'.translate(count: sidepane_asset.get_posts_count(current_user)) %>, <%= 'feature.forum.content.view'.translate(count: sidepane_asset.hits) %>
+  </span>
+</div>

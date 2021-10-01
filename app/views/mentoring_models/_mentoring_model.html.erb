@@ -1,0 +1,54 @@
+<% ongoing_group_count = mentoring_model.active_groups.count %>
+<% draft_group_count =  mentoring_model.groups.drafted.count %>
+<% fixed_date_tasks_available = mentoring_model.mentoring_model_task_templates.select{|task_template| task_template.specific_date.present?}.any? %>
+
+<% header_content = link_to(content_tag(:h5, mentoring_model.title, :class => "font-600"), view_mentoring_model_path(mentoring_model, from_mentoring_models: true)) + (content_tag(:span, "feature.multiple_templates.header.default_marker".translate, :class => "font-600 pull-left text-default m-l-xs cjs_default_model #{'hide' unless mentoring_model.default?}")) + content_tag(:span, render_mentoring_model_duration_info(mentoring_model), :class => "m-l-xs label label-success") %>
+<%= ibox nil, :ibox_class => "m-sm cjs_mentoring_model_content", :header_content => header_content do %>
+  <div id="mentoring_model_<%= mentoring_model.id.to_s %>">
+    <%= render_mentoring_model_description_info(mentoring_model, true) %>
+    <div class="features_list">
+      <%= generate_feature_list(mentoring_model, roles, object_permissions, {fixed_date_tasks_available: fixed_date_tasks_available}) %>
+    </div>
+    <hr/>
+    <div>
+      <span class="connection_count_info">
+        <b><%= "feature.multiple_templates.labels.mentoring_connections".translate(Mentoring_Connections: _Mentoring_Connections) %></b>
+        <span>
+          <%= link_to "#{ongoing_group_count} #{"feature.multiple_templates.labels.active_mentoring_connections_html".translate}".html_safe, groups_path(from_mentoring_models: true, search_filters: {mentoring_models: [mentoring_model.id.to_s]}, tab: Group::Status::ACTIVE) %>
+        </span>
+        <%= circle_separator %>
+        <%#
+          The below selector span.cjs_count, should contain only the count, there are js level dom manipulations done based on this.
+
+          The Scenario, is during the delete of a template which has draft connections
+        %>
+        <span class="cjs_count">
+          <%=
+            link_to "#{draft_group_count} #{"feature.multiple_templates.labels.draft_mentoring_connections_html".translate}".html_safe, groups_path(from_mentoring_models: true, tab: Group::Status::DRAFTED, search_filters: {mentoring_models: [mentoring_model.id.to_s]}), class: "cjs_draft_info_link"
+          %>
+        </span>
+      </span>
+    </div>
+    <hr/>
+    <div class="clearfix cjs_footer_items">
+      <div class="pull-right">
+        <%= link_to("display_string.View".translate, view_mentoring_model_path(mentoring_model, from_mentoring_models: true)) %>
+        <%= circle_separator %>
+        <%= link_to "display_string.Edit".translate, mentoring_model_path(mentoring_model) %>
+        <%= circle_separator %>
+        <%= link_to "feature.multiple_templates.actions.Duplicate".translate, duplicate_new_mentoring_model_path(mentoring_model, format: :js), class: "cjs_duplicate_templates" %>
+        <%= circle_separator %>
+        <%= link_to "display_string.Preview".translate, preview_mentoring_model_path(mentoring_model) %>
+        <%= circle_separator %>
+        <%= link_to(content_tag(:span, "display_string.Delete".translate, :class => "text-danger"), mentoring_model_path(mentoring_model), class: "cjs_mentoring_model_deletes", data: {"active-groups-count" => ongoing_group_count.to_s, "draft-groups-count" => draft_group_count.to_s }) %>
+
+      </div>
+      <%= choices_wrapper("feature.multiple_templates.actions.Make_Default".translate, class: "pull-left") do %>
+        <label class="radio no-margins">
+          <%= radio_button_tag "make_default", mentoring_model.id, mentoring_model.default?, data: {url: make_default_mentoring_model_path(mentoring_model)}, class: "make_default_handler" %>
+          <%= "feature.multiple_templates.actions.Make_Default".translate %>
+        </label>
+      <% end %>
+    </div>
+  </div>
+<% end %>

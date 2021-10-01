@@ -1,0 +1,28 @@
+en:
+  email_translations:
+    content_flagged_admin_notification:
+      title_v2: Notification to %{_admin} of flagged or inappropriate content
+      description_v2: This email is sent to the %{_admin} when a participant flags or marks some content (%{_article}/comment/forum/QA) as inappropriate. It includes the reason entered by the participant.
+      subject: "{{flagger_name}} has flagged content as inappropriate"
+      content_v2_html: "<a href='{{flagger_url}}'>{{flagger_name}}</a> has flagged the following {{content_type}} as inappropriate because:<br/><br/>{{flag_reason}}<br/>{{resolve_button}}"
+      resolve_text_html: Resolve
+      tags:
+        content_type:
+          description: Name of the content type
+          example: Post
+        flagger_url:
+          description: Url to the profile of the user who flagged the content
+        flagger_name:
+          description: Name of the user who flagged the content
+        content_preview:
+          description: Short preview of the flagged content
+          nil_content: Content Deleted - preview unavailable
+        flags_page_url:
+          description: Url to the flags page
+        content_url:
+          description: Url to the content page
+        flag_reason:
+          description: Reason mentioned by the user for flagging the content
+          example: Offensive Content
+        resolve_button:
+          description: Resolve button

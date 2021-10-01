@@ -1,0 +1,16 @@
+<% locals = {filter_params: filter_params, action_params: action_params, mentor_requests: mentor_requests, is_request_manager_view_of_all_requests: is_request_manager_view_of_all_requests, mentor_request_partial: mentor_request_partial, match_results_per_mentor: match_results_per_mentor, from_manage: local_assigns[:from_manage]} %>
+<% if @current_program.matching_by_mentee_and_admin? %>
+  <% locals[:moderated] = true %>
+<% elsif @current_program.matching_by_mentee_alone? %>
+  <% locals[:non_moderated] = true %>
+<% end %>
+
+<%= render :partial => "mentor_requests/mentor_requests_for_program", :locals => locals %>
+
+<% if is_request_manager_view_of_all_requests %>
+  <%= javascript_tag do %>
+    MentorRequestForm.parseUrlParams();
+    MentorRequests.initializeMaxLength(<%= mentor_requests.total_entries %>);
+    MentorRequests.inspectActions("<%= j('feature.mentor_request.content.select_atleast_one_request_v2'.translate) %>");
+  <% end %>
+<% end %>

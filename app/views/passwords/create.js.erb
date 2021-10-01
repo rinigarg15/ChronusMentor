@@ -1,0 +1,4 @@
+<% if @error_message.present? %>
+  ChronusValidator.ErrorManager.ShowPageFlash(false, "<%= j @error_message %>");
+  jQuery(".new_member_email .cjs_submit_btn").val("<%= j 'feature_password.content.send_instructions_v1'.translate %>").attr("disabled", false);
+<% end %>

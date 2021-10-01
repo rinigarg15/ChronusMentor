@@ -1,0 +1,15 @@
+<div class="clearfix m-b-xs" id="<%= "cui-manual-progress-goal-progressbar-container-#{goal.id}" %>" >
+  <div class="pull-right font-bold">
+    <%= "feature.mentoring_model.information.goal_complete_percentage".translate(percent: goal.completion_percentage) %>
+  </div>
+  <div>
+    <% if local_assigns[:from_groups] %>
+      <%= truncate(goal.title, :length => MentoringModel::GoalsHelper::TRUNCATE_GOAL_STRING_LENGTH) %>
+    <% else %>
+      <%= link_to truncate(goal.title, :length => MentoringModel::GoalsHelper::TRUNCATE_GOAL_STRING_LENGTH), group_mentoring_model_goals_path(group, scroll_to: "goal_rich_view_" + goal.id.to_s) %>
+    <% end %>
+  </div>
+  <div class="progress progress-small m-t-sm m-b-xs">
+    <%= manual_progress_goal_progress_bar(group, goal) %>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+.fc-toolbar {
+  .fc-state-default {
+    background-color: #FFFFFF;
+    background-image: none;
+    box-shadow: none;
+    color: $text-color;
+    border: 1px solid $border-color;
+
+    &.fc-corner-left, &.fc-corner-right {
+      border-radius: 0px;
+    }
+  }
+
+  .fc-button {
+    color: $text-color;
+    border: 1px solid $border-color;
+
+    &:focus, &:hover {
+      border: 1px solid #d2d2d2;
+      outline: none;
+    }
+  }
+
+  .fc-state-active {
+    border-color: #d2d2d2;
+  }
+}
+
+.fc-event {
+  background-color: $navy;
+  border-color: $navy;
+  &.meetings {
+    background-color: $blue;
+    border-color: $blue;
+  }
+  &.non_self_meetings {
+    background-color: $yellow;
+    border-color: $yellow;
+  }
+  &.requested_meetings {
+    background-color: $yellow;
+    border-color: $yellow;
+  }
+  &.expired_availability_slots {
+    background-color: $dark-gray;
+    border-color: $dark-gray;
+  }
+}
+
+.fc-month-view .fc-widget-content {
+  cursor: pointer;
+}
+
+@media(max-width: 768px) {
+  .fc-month-view .fc-day-grid-event .fc-content .fc-title {
+    display: none;
+  }
+}
+
+.fc-left, .fc-right {
+  @extend .m-b-sm;
+}
+
+.fc-center h2 {
+  font-size: 16px;
+  font-weight: 400;
+  margin-top: 5px;
+}
+
+@media(max-width: 768px) {
+  .fc-today-button {
+    display: none;
+  }
+}
+
+//https://github.com/fullcalendar/fullcalendar/issues/2852
+.fc-icon:after {
+  margin: 0 0;
+  color: $text-color;
+}

@@ -1,0 +1,239 @@
+var Messages = {
+  showReadMsgThreshold: <%= AbstractMessage::READ_MESSAGE_THRESOLD %>,
+  guidancePopupExperimentAlternative: "",
+  guidancePopupExperimentAlternativeId: "",
+  popularCategoriesExperimentAlternative: "",
+  popularCategoriesExperimentAlternativeId: "",
+
+  showPreview: function(id) {
+    jQuery("#cjs_detailed_section_" + id).hide();
+    jQuery("#cjs_preview_section_" + id).show();
+  },
+  showDetailed: function(id) {
+    // Load the detailed section if it is not present
+    if(jQuery("#cjs_detailed_section_" + id).length == 0) {
+      jQuery.ajax({
+        url: jQuery("#cjs_preview_section_" + id).data("detailed-url")
+      });
+    }
+    else {
+      jQuery("#cjs_preview_section_" + id).hide();
+      jQuery("#cjs_detailed_section_" + id).show();
+    }
+  },
+  showCollapsed: function(loadUrl) {
+    jQuery.ajax({
+      url: loadUrl,
+      beforeSend: function(){
+        jQuery('#collapsed_loading_results').show();
+      },
+      success: function(){
+        jQuery('#collapsed_loading_results').hide();
+      }
+    });
+  },
+  loadDetailed: function(id, content, isRoot) {
+    jQuery("#cjs_detailed_section_empty_" + id).replaceWith(content);
+    jQuery("#cjs_detailed_section_" + id).show();
+    jQuery("#cjs_preview_section_" + id).hide();
+    if(isRoot)
+      // Reposition read message count after loading the root detailed section.
+      Messages.displayReadMessageCount(false);
+  },
+  loadCollapsed: function(content) {
+    // Replace the collapsed content with the loaded content
+    var collapsed_content = jQuery(content).find('.list-group').children();
+    jQuery('.list-group .cjs_mail_section.cjs_collapser:first').replaceWith(collapsed_content);
+    jQuery('.list-group .cjs_mail_section.cjs_collapser').remove();    
+    jQuery(".cjs_compressed_count").hide();
+  },
+  expandMessages: function() {
+    // cjs_unread includes all the messages that should be expanded.
+    jQuery(".cjs_unread").each(function(i, e){
+      Messages.showDetailed(jQuery(e).data('id'));
+    });
+  },
+  assignClickFunctions: function() {
+    jQuery(".cjs_collapser").on('click', function(e) {
+      Messages.showCollapsed(jQuery(".cjs_compressed_count").data('url'));
+    });
+
+    jQuery(".cjs_compressed_count").on('click', function(e) {
+      Messages.showCollapsed(jQuery(this).data('url'));
+    });
+
+    jQuery(document).on("click",".cjs_detailed",function(){
+      var id = jQuery(this).data('id');
+      Messages.showPreview(id);
+    });
+
+    jQuery(document).on("click",".cjs_toggle_thread", function(){
+      var id = jQuery(this).data('id')
+      jQuery("#cjs_thread_" + id).toggle();
+    });
+
+    jQuery(document).on("click",".cjs_preview_active", function(){
+      var id = jQuery(this).data('id');
+      Messages.showDetailed(id);
+    });
+    jQuery(document).on("click", ".cjs_mail_section:first", function(){
+      Messages.displayReadMessageCount(false);
+    });
+  },
+  displayReadMessageCount: function(withEffects){
+    var collapsed_msg_size = jQuery(".cjs_collapse").size();
+    if(collapsed_msg_size > Messages.showReadMsgThreshold) {
+      jQuery(".cjs_compressed_count").html(collapsed_msg_size + ' read messages' + '<i class="fa fa-spinner fa-pulse fa-fw hide" id="collapsed_loading_results"></i>').css({'padding': '1px 5px'});
+      var compressedCountDimensions = realDimensions(jQuery(".cjs_compressed_count"));
+      var left = (jQuery(".cjs_mail_section").first().outerWidth(false) - compressedCountDimensions['width'])/2;
+      var top = jQuery(".cjs_collapser").first().position()['top'];
+
+      jQuery(".cjs_compressed_count").css({position: 'absolute', left: left, top: top}).show();
+      if(withEffects)
+        jQueryHighlight(jQuery(".cjs_compressed_count"))
+    }
+  },
+  totalCollapsedHeight: function(){
+    // Find the height of collapsed messages.
+    var totalHeight = 0;
+    jQuery(".cjs_collapser:visible").each(function(){
+      totalHeight += jQuery(this).outerHeight(false);
+    });
+    return totalHeight;
+  },
+
+  handleCollapser: function(){
+    jQuery('.cjs_collapse').css({height: '0px', overflow: 'hidden'}).parent().css({'min-height': '0px', 'padding-top': '0px', 'padding-bottom': '6px'}).addClass('p-xxs cjs_collapser pointer');
+  },
+
+  hideOverflowCollapser: function() {
+    // We do not show more than 3 empty boxes for the sake of reducing UI clutter. 
+    var collapsed_msg_size = jQuery(".cjs_collapse").size();
+    if(collapsed_msg_size > Messages.showReadMsgThreshold) {
+      jQuery(".cjs_collapser").hide().slice(0, Messages.showReadMsgThreshold).show();
+    }
+  },
+
+  initShow: function(){
+    jQuery(document).ready(function(){
+      Messages.expandMessages();
+      Messages.handleCollapser();
+      Messages.assignClickFunctions();
+      Messages.hideOverflowCollapser();
+    });
+  },
+  replyValidate: function(id, blankErrorMsg) {
+    if(jQuery('#message_content_' + id).val().blank()) {
+      alert(blankErrorMsg);
+      return false;
+    } else {
+      return true;
+    }
+  },
+  validateCkEditor: function(contentId){
+    var ckEditorElement = jQuery('#cke_' + contentId);
+    var contentElement = jQuery('#' + contentId);
+    if(ckEditorElement.length > 0){
+      CKEDITOR.instances[contentId].updateElement();
+    }
+    var isContentEmpty = !ValidateRequiredFields.checkNonMultiInputCase(contentElement);
+    if(isContentEmpty){
+      ValidateRequiredFields.showFieldError(ckEditorElement);
+    }
+    else{
+      ValidateRequiredFields.hideFieldError(ckEditorElement);
+    }
+    return isContentEmpty;
+  },
+
+  validateMessageCreationAndTrackGa: function(subjectId, contentId, flashId, error_message){
+    var subjectElement = jQuery('#' + subjectId);
+    var isSubjectEmpty = !ValidateRequiredFields.checkNonMultiInputCase(subjectElement);
+    var isContentEmpty = Messages.validateCkEditor(contentId);
+
+    if(isSubjectEmpty || isContentEmpty) {
+      ChronusValidator.ErrorManager.ShowResponseFlash(flashId, error_message);
+    } else {
+      ChronusValidator.ErrorManager.ClearResponseFlash(flashId);
+    }
+    if(!isSubjectEmpty && !isContentEmpty){
+      if(Messages.guidancePopupExperimentAlternative){
+        chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.AB_TEST_GUIDANCE_POPUP, chrGoogleAnalytics.action.GA_SENT_MESSAGE, Messages.guidancePopupExperimentAlternative, Messages.guidancePopupExperimentAlternativeId);
+      }
+      if(Messages.popularCategoriesExperimentAlternative){
+        chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.POPULAR_CATEGORIES, chrGoogleAnalytics.action.GA_SENT_MESSAGE, Messages.popularCategoriesExperimentAlternative, Messages.popularCategoriesExperimentAlternativeId);
+      }
+    }
+    return !isSubjectEmpty && !isContentEmpty
+  },
+
+  initNewMessageValidation: function(error_message, flashId) {
+    jQuery('#cjs_popup_send_msg_button').click(function() {
+      return Messages.validateMessageCreationAndTrackGa('message_subject', 'message_content', flashId, error_message);
+    });
+  },
+  initNewAdminMessageValidation: function(error_message, flashId) {
+    jQuery('#cjs_popup_send_msg_button').click(function() {
+      return Messages.validateMessageCreationAndTrackGa('admin_message_subject', 'admin_message_content', flashId, error_message);
+    });
+  },
+
+  validateNewMessage: function(errorMsg, flashId){
+    jQuery(".cjs_send_message_btn").on("click", function(){
+      return Messages.validateMessageCreationAndTrackGa('message_subject', 'message_content', flashId, errorMsg);
+    });
+  },
+
+  submitSystemGeneratedBox: function(checkBoxSelector){
+    jQuery(checkBoxSelector).on("change", function(){
+      var checkBoxObject = jQuery(this);
+      jQuery('#search_filter_form input#include_system_generated').val(checkBoxObject.is(":checked"));
+      MessageSearch.applyFilters();
+    });
+  },
+
+  isBlankOrValid: function(elementId){
+    return (jQuery(elementId).length == 0 || RequiredFields.checkNonMultiInputCase(elementId));
+  },
+
+  validateNewAdminMessage: function(flashId, errorMsg, emailErrorMsg){
+    jQuery(".cjs-contact-admin-form").on("submit", function(){
+      var messageSubject = RequiredFields.checkNonMultiInputCase("#admin_message_subject");
+      var messageContent = !Messages.validateCkEditor("admin_message_content");
+      var messageReceiver = jQuery("#selected_names .btn").length > 0 || RequiredFields.checkNonMultiInputCase("#receiver");
+      var messageSenderName = Messages.isBlankOrValid("#admin_message_sender_name");
+      var messageSenderEmail = Messages.isBlankOrValid(".cjs_admin_message_sender_email");
+      var captcha = Messages.isBlankOrValid("#admin_message_captcha") && Messages.isBlankOrValid("#captcha");
+      var isValid = messageSubject && messageContent && messageSenderName && messageSenderEmail && messageReceiver && captcha;
+
+      if(isValid){
+        var emailField = jQuery(".cjs_admin_message_sender_email");
+        var isEmailValid = emailField.length == 0 || verifyEmailFormat(emailField.val());
+        if(isEmailValid){
+          ChronusValidator.ErrorManager.ClearResponseFlash(flashId);
+        }
+        else{
+          ChronusValidator.ErrorManager.ShowFieldError(emailField);
+          ChronusValidator.ErrorManager.ShowResponseFlash(flashId, emailErrorMsg);
+        }
+        return isValid && isEmailValid;
+      }
+      else{
+        ChronusValidator.ErrorManager.ShowResponseFlash(flashId, errorMsg);
+      }
+      return isValid;
+    });
+  },
+
+  showMoreReceivers: function(load_url, message_id){
+    var moreReceiversElement = jQuery(".cjs_more_receivers_" + message_id);
+    moreReceiversElement.on("click", function(event){
+      event.stopPropagation();
+      moreReceiversElement.find(".cjs-loading-more").show();
+      moreReceiversElement.find(".cjs_more_receivers_link_" + message_id).hide();
+      jQuery.ajax({
+        url: load_url
+      });
+    });
+  }
+}

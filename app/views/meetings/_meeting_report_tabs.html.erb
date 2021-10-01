@@ -1,0 +1,51 @@
+<% tabs = [] %>
+<% tabs << {
+  label: content_tag(:span, "feature.meetings.header.scheduled".translate),
+  url: "javascript:void(0)",
+  active: tab == Meeting::ReportTabs::SCHEDULED,
+  tab_class: "cjs_meeting_calendar_report cjs_meeting_calendar_report_scheduled_tab",
+  link_options: {
+    data: {
+      url: calendar_sessions_path, tab: Meeting::ReportTabs::SCHEDULED
+    }
+  }
+} %>
+
+<% tabs << {
+  label: content_tag(:span, "feature.meetings.header.overdue".translate),
+  url: "javascript:void(0)",
+  active: tab == Meeting::ReportTabs::OVERDUE,
+  tab_class: "cjs_meeting_calendar_report cjs_meeting_calendar_report_overdue_tab",
+  link_options: {
+    data: {
+      url: calendar_sessions_path, tab: Meeting::ReportTabs::OVERDUE
+    }
+  }
+} %>
+
+<% tabs << {
+  label: content_tag(:span, "feature.meetings.header.completed".translate),
+  url: "javascript:void(0)",
+  active: tab == Meeting::ReportTabs::COMPLETED,
+  tab_class: "cjs_meeting_calendar_report cjs_meeting_calendar_report_completed_tab",
+  link_options: {
+    data: {
+      url: calendar_sessions_path, tab: Meeting::ReportTabs::COMPLETED
+    }
+  }
+} %>
+
+<% tabs << {
+  label: content_tag(:span, "feature.meetings.header.canceled".translate),
+  url: "javascript:void(0)",
+  active: tab == Meeting::ReportTabs::CANCELLED,
+  tab_class: "cjs_meeting_calendar_report cjs_meeting_calendar_report_cancelled_tab",
+  link_options: {
+    data: {
+      url: calendar_sessions_path, tab: Meeting::ReportTabs::CANCELLED
+    }
+  }
+} %>
+
+<% tab_options = {} %>
+<%= inner_tabs(tabs, tab_options) %>

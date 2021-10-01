@@ -1,0 +1,13 @@
+<% @title = "feature.connection.header.customize_profile_v1".translate(Mentoring_Connection: _Mentoring_Connection) %>
+<% @page_action = {:label => "feature.connection.action.done_customizing".translate, :url =>  back_url(manage_program_path), :class => 'btn btn-primary'} %>
+<% name_and_picture = content_tag(:b, "feature.connection.content.help_text.name_and_picture".translate) %>
+<% @title_description = "feature.connection.content.help_text.customize_html".translate(Mentoring_Connection: _Mentoring_Connection, name_and_logo: name_and_picture) %>
+
+<%= ibox nil do %>
+  <div id="customizable_profile">
+    <%= render :partial => 'common_questions/index', :locals => {
+      :common_questions => @connection_questions,
+      :new_question_form_url => new_connection_question_path(),
+      :sort_url => sort_connection_questions_path} %>
+  </div>
+<% end %>

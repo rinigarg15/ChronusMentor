@@ -1,0 +1,171 @@
+en:
+  feature:
+    campaign:
+      index:
+        title_v1: Email Campaigns
+        create_new: Create Campaign
+        export_csv: Export
+      tag:
+        emails_v1:
+          zero: no email
+          one: "%{count} email"
+          other: "%{count} emails"
+        drafted: Drafted
+        stopped: Stopped
+      content:
+        add_email_information_text1: The campaign will start reporting on analytics once emails have been added.
+      label:
+        templates_csv: Campaign Template
+      description:
+        upload_csv_confirm: New campaigns will be created based on the uploaded template file. Do you want to proceed?
+        error_notice: 'The following campaigns were not created: '
+        error_notice_tip: 'Tip: Double-check if the admin views for these campaigns exist in the program.'
+        error_file_absent: Please choose the file to upload
+      tabs:
+        active: Active (%{count})
+        inactive: Disabled (%{count})
+        drafted: Drafted (%{count})
+        stopped: Stopped (%{count})
+      fields:
+        title: Campaign Name
+        open_rate: Open Rate
+        click_rate: Click Rate
+        emails_sent: Emails Sent
+        created_on: Created On
+        enabled_on: Started On
+      edit: Edit
+      stop: Stop
+      duplicate: Duplicate
+      delete: Delete
+      delete_campaign: Delete Campaign
+      disable_campaign_v1: Stop Campaign
+      delete_message_html: You are about to delete the campaign %{title}.
+      delete_message_2: Deleting a campaign is an irreversible action leading to loss of analytics.
+      delete_message_recommend_stop: Did you intend to stop the campaign instead?
+      kendo:
+        date_format: MMM dd, yyyy
+        datetime_format: MMM dd, yyyy h:mm:ss tt
+        click_here: Click here
+        empty_message_html: There are no campaigns yet. %{link} to create one
+        no_campaigns_yet_message: No campaigns yet.
+        disable_confirmation_v1: Are you sure you want to stop this campaign?
+      information: Information
+      information_bullet_v3: Campaigns are used to send emails to people who meet the conditions you select. When you 'Start' a campaign, we'll start to look for people and begin sending them emails on the schedule you choose.
+      tour:
+        tip: Click here for a quick tour.
+        help_text:
+          create_campaign_v2: Get started by creating a new campaign or ‘Start’ one of the campaigns in ‘Draft’ state. Do not forget to customize the email content to suit your program needs!
+          details_page_link_v1: Visit the detailed campaign-page to view analytics for the campaign, or make any updates - add more emails before you start, edit or delete a campaign.
+          click_rates_v1: View quick open rates, click rates, and start date of your campaign before you dig deeper by visiting the detailed campaign page.
+          state_tabs_v1: Switch between tabs to view your Drafted, Active and Stopped campaigns.
+        welcome: Welcome to the Campaign Management Dashboard
+        take_tour: Take a tour
+        dismiss: Dismiss
+        welcome_text: Our rich analytics tool helps you gain insights to make your Campaigns more effective. You can use open and click-through rates to fine tune your campaigns, and help you achieve the desired goals of your mentoring program.
+        details_page:
+          help_text:
+            emails_list: View a quick summary of all the emails in your campaign.
+            actions_v1: Edit, delete, stop your campaign, or add new emails to your campaign here.
+            edit_delete_email: Edit the subject, content, change the schedule of the email, or delete the email here.
+            clone: Create a new campaign by cloning this stopped campaign or delete it here.
+            draft_activate_here: Activate your campaign here. On starting, emails will send to users as per your defined schedule. To start a campaign you need at least one email.
+            draft_actions: Make edits to your campaign, delete or add new emails here.
+      campaign_emails:
+        user_campaign_emails: Campaign Emails
+        program_invitation_campaign_emails: Invitation Emails
+    campaign_message:
+      label:
+        Save: Save
+      index:
+        create_new: Add New Email
+        create_new_mail: Add an Email
+      kendo:
+        empty_campaign_message_html: There are no emails created yet. %{link} to create one
+        fields:
+          title: Email
+          schedule: Schedule
+          actions: Actions
+          sent: Sent
+        delete_confirmation: Are you sure you want to delete this Email? This action can't be undone.
+        delete_confirmation_v1: Deleting the email will also delete all the statistics related to this email
+        delete_last_confirmation: On deleting this one and only email of the campaign, the campaign will be stopped.
+        click_here: Click here
+      delete: Delete
+      tour:
+        help_text:
+          from_field: Choose who the email comes from. Select your name from the list of all %{program} %{administrators} to tell your users that the email has come from a trusted source.
+          insert_variable: Personalized emails have a higher chance of being read and acted on. Add custom variables to add that personal touch to your emails.
+          schedule: Decide when you want the emails to go out.
+          test_email: Take a quick peek of the email before sending it out to your users.
+      header:
+        new_invitation_email_title: New Invitation Email
+        edit_invitation_email_title: Edit Invitation Email
+      invalid_duration: Duration must be between %{min} and %{max}.
+      invalid_duration_v2: Duration must be greater than %{min}.
+    campaigns:
+      header:
+        new_campaign: New Campaign
+        new_campaign_title: 'New Campaign: %{title}'
+        edit_campaign: 'Edit Campaign: %{title}'
+        CAMPAIGN_INFORMATION: CAMPAIGN INFORMATION
+        CAMPAIGN_EMAIL: CAMPAIGN EMAIL
+        duplicate_campaign: Duplicate Campaign
+      label:
+        Save: Save
+        Cancel: Cancel
+        To: To
+        From: From
+        Campaign_name: Campaign Name
+        Campaigns_v1: Email Campaigns
+        Schedule: Schedule
+        Message: Message
+        Create_campaign: Create Campaign
+        Insert_variable: Insert Variables
+        invitations: Invitations
+        start_campaign: Start Campaign
+        save_as_draft: Save as Draft
+      content:
+        schedule_text_days_v1:
+          one: Sent after a day
+          other: Sent after %{count} days
+        schedule_text_days_for_survey_reminders:
+          one: 1 day after the survey is overdue
+          other: "%{count} days after the survey is overdue"
+        schedule_text_days_for_meeting_survey_reminders:
+          one: 1 day after the %{meeting} has passed
+          other: "%{count} days after the %{meeting} has passed"
+        schedule_text_same_day: Sent the same day
+        schedule_text_same_day_for_survey_reminder: Sent the same day the survey becomes overdue
+        sent_immediately: Sent Immediately
+        schedule_text_same_day_meeting_survey_reminder_email: Sent the same day the %{meeting} has passed
+        schedule_description_user_campaign_email_v1: day(s), after the start of the campaign or after the user got added to the selected user view - whichever occurs later
+        schedule_description_invitation_email: days after user was invited
+        schedule_description_survey_reminder_email: days after the survey tasks due date
+        schedule_description_meeting_survey_reminder_email: days after the %{meeting} has passed
+        schedule_description_add_email_help_text: Email with schedule as 0 days will be sent in couple of hours from start time of the campaign.
+        test_email_html: "%{Click_here} to send yourself a test email."
+        admin_view_link_html: "%{count} existing user"
+        admin_view_links_html: "%{count} existing users"
+        add_email_tooltip: Please add a new email to start the campaign
+        start_confirmation_text: Do you want to start the campaign now?
+        just_save_email: No, just save the email
+        there_are_no_emails_in_this_campaign: There are no emails in this campaign.
+      errors:
+        sender_invalid_selection: You have to select the option from the dropdown.
+        cannot_delete_admin_view_html:
+          one: The delete operation could not be completed as the campaign %{campaign_links} is dependent on this view.
+          other: The delete operation could not be completed as the campaigns %{campaign_links} are dependent on this view.
+      analytics:
+        sent: Sent
+        sent_v2: Invitation Emails Sent
+        sent_v3: Emails Sent
+        clicked: Clicked
+        delivered: Delivered
+        delivered_v1: Emails Delivered
+        opened: Opened
+        activity: Email Stats
+        activity_tag: for %{starting_month} %{starting_date}, %{starting_year} to %{ending_month} %{ending_date}, %{ending_year}
+        analytics_overview_v1: Overall Email Stats
+        analytics_overview_tag: for all time
+      placeholder:
+        campaign_title: 'Ex: Get Users To Connect'

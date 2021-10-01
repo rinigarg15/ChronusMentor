@@ -1,0 +1,19 @@
+<% reports_view = @report_view_columns.present? %>
+
+<div id="filter_pane_full">
+  <% if reports_view %>
+    <%= render partial: "groups/group_filters", locals: {reports_view: reports_view, find_new_filters: local_assigns[:find_new_filters]} %>
+  <% else %>
+    <%= form_tag url_for(group_params.to_unsafe_h.merge(reset_groups_listing_filter_params).merge(filter: nil, page: 1, src: GroupsHelper::AnalyticsParams::FILTER_GROUPS_LISTING, from: "filters")), remote: true, method: :get, id: "search_filter_form", class: "clearfix" do %>
+      <%= render partial: "groups/group_filters", locals: {reports_view: reports_view, find_new_filters: local_assigns[:find_new_filters]} %>
+    <% end %>
+
+    <%= javascript_tag do %>
+      jQuery(function(){
+        jQuery(document).on('ajax:beforeSend', "#search_filter_form", function(){
+          GroupSearch.showLoading();
+        });
+      });
+    <% end %>
+  <% end %>
+</div>

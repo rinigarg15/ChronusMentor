@@ -1,0 +1,5 @@
+<% if @preloaded.present? %>
+  <% content = render partial: "scraps/scraps_show_sidebar", locals: {scrap: @scrap, scraps_siblings_index: @scraps_siblings_index} %>
+  GroupTabs.showHideContentInSidebar("<%= j content %>");
+  MentoringAreaTracking.gaTrackMessageViewed(<%= @home_page %>);
+<% end %>

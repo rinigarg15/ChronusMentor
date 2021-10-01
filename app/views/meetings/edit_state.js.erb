@@ -1,0 +1,19 @@
+<% edit_meeting_options = {:show_recurring_options => @meeting.recurrent?, :current_occurrence_time => @current_occurrence_time, :edit_time_only => true, :meeting_area => true, ei_src: EngagementIndex::Src::UpdateMeeting::MEETING_AREA} %>
+<% ga_class = j(get_ga_class(@src)) %>
+<% edit_meeting_url = edit_meeting_path(@meeting, edit_meeting_options) %>
+<% modal_v3_popup "feature.meetings.header.update_meeting_status".translate(:Meeting => _Meeting), {additional_close_button_class: "cjs_dismiss_meeting_popup #{ga_class} " } do %>
+  <% text = @attendee.present? ? "feature.meetings.header.meeting_state_popup".translate(:meeting => _meeting, :meeting_topic => @meeting.topic, :attendee => @attendee) : "feature.meetings.header.meeting_state_popup_single_member".translate(:meeting => _meeting, :meeting_topic => @meeting.topic) %>
+  <%= content_tag(:div, text, :class => "well text-center font-bold") %>
+
+  <%= content_tag(:div, "", :class => "clearfix text-center", :id => "meeting_state_options") do %>
+    <%= link_to append_text_to_icon("fa fa-check", "display_string.Yes".translate), "javascript:void(0)", data: {url: update_state_meeting_path(@meeting, format: :js), meeting_state: Meeting::State::COMPLETED, :current_occurrence_time => @current_occurrence_time, :src => @src }, :class => "btn btn-primary btn-outline btn-block-xxs m-b-sm m-r-sm cjs_meeting_status cjs_meeting_completed #{ga_class}", "data-dismiss" => "modal" %>
+
+    <%= link_to append_text_to_icon("fa fa-times", "feature.meetings.header.cancelled_option".translate), "javascript:void(0)", data: {url: update_state_meeting_path(@meeting, format: :js), meeting_state: Meeting::State::CANCELLED, :current_occurrence_time => @current_occurrence_time, :src => @src }, :class => "btn btn-danger btn-outline btn-block-xxs m-b-sm m-r-sm cjs_meeting_status cjs_meeting_cancelled #{ga_class}", "data-dismiss" => "modal" %>
+
+    <%= content_tag(:div, "feature.meetings.header.rescheduled_option_html".translate(:Meeting => _Meeting, :update_time => link_to("feature.meetings.header.update_time".translate,  "javascript:void(0)")), :class => "clearfix text-center font-bold m-t-xs  cjs_meeting_rescheduled #{ga_class}") %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  Meetings.trackMeetingPopupEvents("<%= edit_meeting_url %>");
+<% end %>

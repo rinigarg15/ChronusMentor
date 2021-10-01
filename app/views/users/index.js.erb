@@ -1,0 +1,15 @@
+<% if defined?(@pivot_location) && !@pivot_location%>
+  // Show unknown location error
+  ChronusValidator.ErrorManager.ShowResponseFlash("", '<%= j("feature.user.content.unknown_location".translate) %>');
+<% end %>
+
+jQuery("#results_pane").html("<%= j render(:partial => 'results_pane', :locals => {show_favorite_ignore_links: @show_favorite_ignore_links, favorite_preferences_hash: @favorite_preferences_hash, ignore_preferences_hash: @ignore_preferences_hash, my_filters: @my_filters}) %>");
+jQuery("#loading_results").hide();
+
+<% content = render :partial => 'common/your_filters', :locals => { ei_class: "cjs_track_js_ei_activity", activity: EngagementIndex::Activity::APPLY_MENTOR_LIST_FILTERS, :onclick_function => "MentorSearch.clearFilter", results_count: @users.total_entries,
+  reset_url_options: { js:  "BBQPlugin.applySavedFilters(this, '');" } } %>
+jQuery("#your_filters").replaceWith("<%= j content %>");
+
+jQueryResetPageTop();
+initialize.initializeTooltip();
+PreferenceBasedMentorLists.trackNoMentors('<%= @users.empty? %>');

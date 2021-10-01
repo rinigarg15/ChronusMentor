@@ -1,0 +1,168 @@
+/** CROPPER */
+
+.cropper-modal {
+  background-color: transparent;
+}
+
+.minicolors-theme-bootstrap .minicolors-input {
+  float: none;
+}
+
+.date_field {position: relative; z-index:100;}
+
+.ui-datepicker-trigger {
+  display: none;
+}
+
+.ui-datepicker {
+  z-index: 9999 !important;
+}
+
+.select2-container .select2-choice {
+  min-height: 34px;
+}
+
+.select2-container .select2-choice > .select2-chosen {
+  padding-top: 3px;
+}
+
+.select2-input {
+  @extend .no-margins;
+}
+
+.input-group .select2-container .select2-choice > .select2-chosen {
+  white-space: normal;
+}
+
+.draggable{
+  background-image: image-url("drag.gif");
+  background-repeat: repeat-y;
+  cursor: move;
+}
+
+// Kendo and Tables ////
+
+table thead tr.cui_table_sort th {
+
+  &.sort_both {
+    padding-right: 30px;
+    background: image-url('icons/sort_both.gif') no-repeat scroll right !important;
+  }
+  &.sort_asc {
+    padding-right: 30px;
+    background: image-url('icons/sort_asc.gif') no-repeat scroll right !important;
+  }
+  &.sort_desc {
+    padding-right: 30px;
+    background: image-url('icons/sort_desc.gif') no-repeat scroll right !important;
+  }
+}
+
+table thead tr.cui_table_sort {
+  .sort_desc {
+    background: image-url('icons/sort_desc.gif') no-repeat scroll right !important;
+  }
+  .sort_asc {
+    background: image-url('icons/sort_asc.gif') no-repeat scroll right !important;
+  }
+  .sort_both {
+    background: image-url('icons/sort_both.gif') no-repeat scroll right !important;
+  }
+}
+
+.k-grid-header th.k-header, .k-filter-row th{
+  &.text-center {
+    text-align: center !important;
+  }
+}
+
+.k-loading-image {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  font-size: 2em;
+  -webkit-animation: fa-spin 1s infinite steps(8);
+  animation: fa-spin 1s infinite steps(8);
+  background: none !important;
+  text-align: center;
+  top: 50% !important;
+  left: 50% !important;
+  width: 28px !important;
+  height: 28px !important;
+
+  &:before {
+    content: "\f110";
+  }
+}
+
+.k-grid tr td, .k-grid th {
+  border: none !important;
+}
+
+// Kendo and Tables /////
+
+// UIX Multiselect
+
+.uix-multiselect {
+  .ui-widget-header {
+    @extend .flat-border;
+    background: $gray;
+    border: 1px solid $border-color;
+    color: $text-color;
+    text-transform: none;
+
+    &.ui-priority-secondary {
+      @extend .no-borders;
+      background: $gray;
+    }
+  }
+
+  .ui-widget-content {
+    border: 1px solid $border-color;
+  }
+
+  div.option-element.ui-state-default {
+    @extend .no-borders;
+    min-height: 20px;
+    font-family: $font-stack;
+    background: white;
+  }
+
+  .group-element .label {
+    display: block;
+    line-height: normal;
+    text-align: left;
+    color: $text-color;
+  }
+}
+
+// UIX Multiselect - END
+
+// Bootstrap Tour
+  .tour-backdrop {
+    z-index: 3000;
+  }
+
+  .tour-step-backdrop {
+    z-index: 3150;
+  }
+
+  .tour-step-background {
+    z-index: 3100;
+  }
+
+  .popover[class*="tour-"] {
+    z-index: 3050;
+  }
+// Bootstrap Tour - END
+
+// Ckeditor
+.cke_dialog {
+  z-index: 2100 !important;
+}
+
+.animated {
+  -webkit-animation-fill-mode: none;
+  animation-fill-mode: none;
+}

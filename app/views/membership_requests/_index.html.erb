@@ -1,0 +1,49 @@
+<%= render :partial => 'membership_requests/report_tiles', :locals => {tabs_data: tabs_data} %>
+<%= inner_tabs(get_tabs_for_membership_requests_listing(tab), {}) %>
+<%= ibox nil, content_class: "no-padding" do %>
+  <%= render partial: "membership_requests/pagination_top_bar", locals: { membership_requests: membership_requests, filter_params: filter_params, non_filter_params: non_filter_params, tab: tab, list_type: list_type } %>
+
+  <% if membership_requests.empty? %>
+    <% if current_user.can_approve_membership_request? %>
+      <%= ibox nil, ibox_class: "empty_listing no-margins" do  %>
+        <div class="text-center text-muted">
+          <%= "feature.membership_request.label.no_request_matching_criteria".translate %>
+        </div>
+      <% end %>
+    <% end %>
+  <% else %>
+    <% if list_type == MembershipRequest::ListStyle::DETAILED %>
+      <div id="cjs_requests_listing" class='listing clearfix'>
+        <table class="table white-bg no-margins <%= 'hide' unless membership_requests.total_entries > membership_requests.size %>">
+          <tbody>
+            <%= render partial: "membership_requests/select_all", locals: { membership_requests: membership_requests, filter_params: filter_params, non_filter_params: non_filter_params, tab: tab } %>
+          </tbody>
+        </table>
+        <%= listing_page(membership_requests, partial: "membership_requests/membership_request", collection_key: :membership_request) %>
+      </div>
+    <% elsif list_type == MembershipRequest::ListStyle::LIST %>
+      <%= render partial: "membership_requests/membership_request_results", locals: { membership_requests: membership_requests, filter_params: filter_params, non_filter_params: non_filter_params, tab: tab } %>
+      <%= javascript_tag %Q[handleDoubleScroll("#cjs_mem_req_record", ".cjs_table_enclosure");] %>
+    <% end %>
+    <% per_page_options = {
+      page_url: membership_requests_path,
+      current_number: non_filter_params[:items_per_page],
+      entries_name: "feature.membership_request.content.requests".translate,
+      use_ajax: true,
+      ajax_function: "commonReportFilters.changePerPage"
+    } %>
+    <%= horizontal_line(class: "m-t-0 m-b-0") %>
+    <%= bottom_bar_in_listing( { collection: membership_requests, params: {tab: tab, filters: filters_to_apply[:filters], sort: filters_to_apply[:sort_field], order: filters_to_apply[:sort_order], list_type: list_type, items_per_page: items_per_page}, ajax: true }, per_page_options) %>
+  <% end %>
+
+  <%= javascript_tag do %>
+    MembershipRequest.initializeMaxLength(<%= membership_requests.total_entries %>);
+    MembershipRequest.inspectActions("<%= j('feature.membership_request.content.select_at_least_one_request'.translate) %>");
+  <% end %>
+
+<%= hidden_field_tag(:list_type, list_type, id: 'filter_view_field') %>
+<%= hidden_field_tag(:tab, tab, id: 'filter_tab') %>
+<%= hidden_field_tag(:sort, filters_to_apply[:sort_field], id: 'filter_sort_field') %>
+<%= hidden_field_tag(:order, filters_to_apply[:sort_order], id: 'filter_sort_order') %>
+<%= hidden_field_tag(:items_per_page, items_per_page, id: 'filter_items_per_page') %>
+<% end %>

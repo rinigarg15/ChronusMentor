@@ -1,0 +1,14 @@
+<% source_info = {
+    "controller" => "campaign_management/user_campaigns",
+    "action" => campaign.new_record? ? "new" : "edit",
+    "id" => campaign.new_record? ? nil : campaign.id
+  } %>
+
+<div class="cjs_campaign_form">
+  <%= response_flash "campaign_create_flash", :class => "alert-success" %>
+  <% @title = campaign.new_record? ? "feature.campaigns.header.new_campaign".translate : "feature.campaigns.header.edit_campaign".translate(:title => campaign.title)%>
+  <%= render :partial => "campaign_management/user_campaigns/information"  %>
+  <%= simple_form_for(campaign, :html => {:class => "form-horizontal campaign_management_user_campaign_form"}) do |f| %>
+    <%= render :partial => "campaign_management/user_campaigns/form_details", :locals => {f: f, campaign: campaign, source_info: source_info} %>
+  <% end %>
+</div>

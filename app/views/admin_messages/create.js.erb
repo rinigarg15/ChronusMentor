@@ -1,0 +1,11 @@
+<% if @error_flash %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("cjs_new_admin_message_popup_flash", "<%= j @error_flash %>");
+<% else %>
+  <% if @resource.present? %>
+    <% content = render(:partial => "resources/rate_resource", :locals => {:resource => @resource, have_a_question_url: "javascript:void(0)"}) %>
+    jQuery("#cjs_rate_resource").replaceWith('<%= j content %>');
+  <% else %>
+    closeQtip();
+    ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", '<%= j @success_flash %>', true);
+  <% end %>
+<% end %>

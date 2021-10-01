@@ -1,0 +1,6 @@
+<%= include_ckeditor_tag %>
+<% @page_action = [{label: "display_string.Preview".translate + " " + "feature.mentoring_model.label.engagement_plan_tab".translate, url: preview_mentoring_model_path(@mentoring_model), class: "btn btn-primary"}]  %>
+<% @page_action2 = [{label: "feature.mentoring_model.label.export_from_template_csv_v1".translate, url: export_csv_mentoring_model_path(@mentoring_model), class: "btn btn-white"}]  %>
+<% @title = mentoring_model_pane_title(@mentoring_model) %>
+<% @skip_rounded_white_box_for_content = true %>
+<%= render partial: "mentoring_models/template_data" %>

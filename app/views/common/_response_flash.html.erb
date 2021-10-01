@@ -1,0 +1,4 @@
+<% if options[:message].present? %>
+  <%= javascript_tag(%Q[toastr.clear()]) %>
+  <%= javascript_tag(%Q[toastr.#{options[:class]}('#{j(options[:message])}', '', #{ToastrType::OPTIONS[options[:class]].to_json})]) %>
+<% end %>

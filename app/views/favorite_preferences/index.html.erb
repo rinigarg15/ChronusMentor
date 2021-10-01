@@ -1,0 +1,10 @@
+<% @title = "feature.favorite_preference.header.favorite_users_v1".translate(mentors: _mentors) %>
+<div id="favorite_users_main_content">
+  <%= render partial: "favorite_preferences/index", locals: {favorite_users: @favorite_users, favorite_preferences_hash: @favorite_preferences_hash, src: EngagementIndex::Src::AbstractPreference::FAVORITE_LISTING_PAGE, profile_last_updated_at: @profile_last_updated_at, ignore_preferences_hash: @ignore_preferences_hash} %>
+</div>
+
+<% content_for_sidebar do %>
+  <%= ibox "feature.favorite_preference.header.sidebar_header".translate(a_Mentor: _a_Mentor), {no_collapse: true, content_class: "no-padding"} do %>
+    <%= render partial: "favorite_preferences/guidance_popup", locals: {src: EngagementIndex::Src::AbstractPreference::FAVORITE_LISTING_PAGE, hide_flash: true} %>
+  <% end %>
+<% end %>

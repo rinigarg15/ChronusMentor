@@ -1,0 +1,65 @@
+<%= render partial: "layouts/translations/calendar" %>
+<%= include_ckeditor_tag %>
+
+<% if (!@current_program.mentoring_connections_v2_enabled? && @page_controls_allowed && @current_program.mentoring_connection_meeting_enabled?) %>
+  <% @page_action2 = {label: append_text_to_icon("fa fa-calendar-plus-o", "feature.connection.action.Setup_Meeting_v1".translate(:Meeting => _a_meeting)), url: "javascript:void(0)", class: "btn btn-primary", onclick: %Q[jQueryShowQtip('', 600, '#{setup_meeting_group_path(@group.id, {format: :js, :common_form => true})}','',{modal: true, successCallback: function(){CalendarAvailabilityInfo.initialize()}})]} %>
+<% end %>
+
+<%= response_flash("cjs_groups_flash") %>
+<%= render layout: 'groups/show_layout', locals: {engagement_plan_tab: true, show_tabs: true, src_path: @src_path, show_page_actions: true } do %>
+  <% unless @current_program.mentoring_connections_v2_enabled? %>
+    <% if @page_controls_allowed %>
+      <div id="new_item_container">
+        <div id="new_header">
+          <% # To-do responsive-ui %>
+          <% if @current_program.coaching_goals_enabled? %>
+            <span>
+              <%= link_to_function embed_icon('icon-situations',"feature.connection.action.New_Goal".translate), "localTabs.selectTab('new_goal')",
+                :class => "cjs_header_item #{"dim strong" if @add_new_tab == "goal"}", :id => "new_goal_link" %>
+            </span>
+            <div id="new_goal" class="has-above-1 cjs_tab_items" style="<%= "display:none" unless @add_new_tab == "new_goal" %>">
+              <%= render :partial => 'coaching_goals/goal_form', :locals => {:is_ajax => false} %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    <%= ibox "feature.connection.header.Connection_Activity".translate(Mentoring_Connection: _Mentoring_Connection), :content_class => "p-l-0 p-r-0" do %>
+      <%= render :partial => 'groups/activity_feed', :locals => {:more_url => more_activities_group_path(@group, :offset_id => @new_offset_id, format: :js)} %>
+    <% end %>
+    <% if @student_requests.present? %>
+      <%= render :partial => "groups/mentoring_objective_pane", :locals => {:requests => @student_requests.select(&:show_in_profile?)} %>
+    <% end %>
+  <% else %>
+    <% if manage_mm_milestones_at_admin_level?(@group) || manage_mm_milestones_at_end_user_level? %>
+      <%= render partial: "mentoring_model/milestones/index", locals: {milestones: @mentoring_model_milestones, completed_mentoring_model_milestone_ids_to_hide: @completed_mentoring_model_milestone_ids_to_hide, mentoring_model_milestone_ids_to_expand: @mentoring_model_milestone_ids_to_expand, completed_mentoring_model_milestone_ids: @completed_mentoring_model_milestone_ids, zero_upcoming_tasks: @zero_upcoming_tasks, target_user_id: @target_user.try(:id), target_user_type: @target_user_type } %>
+
+    <% elsif manage_mm_tasks_at_admin_level?(@group) || manage_mm_tasks_at_end_user_level?(@group) %>
+      <%= render partial: "mentoring_model/tasks/index", locals: {group: @group, tasks: @mentoring_model_tasks} %>
+    <% end %>
+    <div class="cjs-target-filter-type-holder hide"></div>
+    <%= javascript_tag("jQuery(function(){MentoringModels.setMemberFilterValues('#{@target_user_type}', '#{@target_user.try(:id)}');})") %>  
+    <%= javascript_tag("jQuery(function(){MentoringModels.startAndTrackTour('#{one_time_flags_path(format: :js, update_original_user: true)}', '#{OneTimeFlag::Flags::TourTags::GROUP_SHOW_V2_TOUR_TAG}');})") if @show_tour_v2 %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[RecentActivities.repeatCheckScroll(500)] %>
+<%= javascript_tag "jQuery(document).ready(function() {GroupsShow.loadEditNotificationPopup();});" if group_params[:notif_settings] %>
+<%= javascript_tag %Q[MentoringModelTask.truncateTaskTitle();] %>
+<%= javascript_tag %Q[MentoringModelTask.expandMentoringModelTask();] %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    TaskComment.toggleNewCommentForm(false);
+    TaskCheckin.toggleNewCheckInForm();
+    Comment.initializeForm("<%= j('common_text.error_msg.please_correct_highlighted_errors'.translate) %>");
+    Meetings.setNewMeetingFormEISrc();
+  });
+<% end %>
+
+<% if @src_path == EngagementIndex::Activity::ACCEPT_MENTOR_REQUEST %>
+  <%= render partial: "groups/accept_connection_msg_popup", locals: { group: @group } %>
+  <%= javascript_tag do %>
+    jQuery("#remoteModal").modal('hide'); 
+    Groups.showAcceptPopup("#modal_mentor_request_accept_popup");
+  <% end %>
+<% end %> 

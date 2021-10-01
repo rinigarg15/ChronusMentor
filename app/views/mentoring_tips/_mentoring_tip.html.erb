@@ -1,0 +1,17 @@
+<tr id="mentoring_tip_<%= mentoring_tip.id %>">
+  <td>
+    <%= fetch_status_icon(mentoring_tip,
+              mentoring_tip_path(mentoring_tip, :mentoring_tip => {:enabled => false}),
+              mentoring_tip_path(mentoring_tip, :mentoring_tip => {:enabled => true}),
+              mentoring_tip.enabled?) %>
+  </td>
+  <td class="col-xs-10">
+    <%=h mentoring_tip.message %>
+  </td>
+  <td>
+    <% actions = [] %>
+    <% actions << link_to(embed_icon('fa fa-pencil m-r-xxs fa-fw', "display_string.Edit".translate), edit_mentoring_tip_path(mentoring_tip), :method => :get, :remote => true, :class => "btn btn-white btn-xs btn-block-xxs m-b-xs") %>
+    <% actions << link_to(embed_icon('fa fa-trash m-r-xxs fa-fw',"display_string.Delete".translate), mentoring_tip, :remote => true, :method => :delete, :class => "btn btn-white btn-xs btn-block-xxs m-b-xs", data: {:confirm => "common_text.confirmation.sure_to_delete_this".translate(title: "feature.mentoring_tips.label.mentoring_tip_v1".translate(mentoring: _mentoring))}) %>
+    <%= render_button_group(actions) if actions.present? %>
+  </td>
+</tr>

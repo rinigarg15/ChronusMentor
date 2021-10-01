@@ -1,0 +1,16 @@
+<% modal_v3_popup "feature.connection.header.bulk_export_connections".translate(Mentoring_Connections: _Mentoring_Connections) do %>
+  <%= form_tag update_bulk_actions_groups_path, :id => "bulk_groups_export" do %>
+    <p><%= append_text_to_icon("fa fa-download", "feature.connection.content.help_text.bulk_export_v2".translate(mentoring_connections: _mentoring_connections, mentoring_connection: _mentoring_connection, count: @group_ids.size)) %></p>
+
+    <%= hidden_field_tag "bulk_actions[action_type]", Group::BulkAction::EXPORT %>
+    <%= hidden_field_tag "bulk_actions[group_ids]", @group_ids %>
+    <%= hidden_field_tag "bulk_actions[tab_number]", @tab_number %>
+
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => "btn btn-white", data: { dismiss: "modal" } %>
+      <%= submit_tag "display_string.Export".translate, :id => 'cjs_groups_bulk_export_submit', :class => 'btn btn-primary', data: {:disable_with => "display_string.Please_Wait".translate} %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[GroupSearch.onClickExport();] %>

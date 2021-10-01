@@ -1,0 +1,189 @@
+var FacilitationTemplateProgressiveForm = {
+  initializeCommonValues: function(formId) {
+    FacilitationTemplateProgressiveForm.formId = formId;
+    FacilitationTemplateProgressiveForm.targetResponseContainer = TaskTemplateProgressiveForm.targetResponseContainer;
+    FacilitationTemplateProgressiveForm.currentForm = jQuery('#cjs_new_mentoring_model_facilitation_template_' + formId);
+    FacilitationTemplateProgressiveForm.descriptionTextArea = FacilitationTemplateProgressiveForm.currentForm.find("#mentoring_model_facilitation_template_message");
+    FacilitationTemplateProgressiveForm.noError = true;
+  },
+
+  initCkeditorOptions: function(selectOptions, label) {
+    editor = CKEDITOR.instances['mentoring_model_facilitation_template_message'];
+    editor.config.strinsert_strings = JSON.parse(selectOptions);
+    editor.config.strinsert_button_label = editor.config.strinsert_button_title = editor.config.strinsert_button_voice = label;
+  },
+
+  assignAndInitializeAddActionContainer: function() {
+    FacilitationTemplateProgressiveForm.addNewActionContainer = FacilitationTemplateProgressiveForm.targetResponseContainer.prevAll(".cjs-add-new-action-container");
+    jQuery(".cjs-add-new-action-container").show();
+    FacilitationTemplateProgressiveForm.addNewActionContainer.hide();
+  },
+
+  initialize: function(formId) {
+    initialize.setDatePicker();
+    FacilitationTemplateProgressiveForm.initializeCommonValues(formId);
+    FacilitationTemplateProgressiveForm.assignAndInitializeAddActionContainer();
+    FacilitationTemplateProgressiveForm.handlePredecessorAndSpecificDateToggle();
+    FacilitationTemplateProgressiveForm.validateForm(formId);
+    FacilitationTemplateProgressiveForm.cancelFacilitationTemplateHandler();
+    FacilitationTemplateProgressiveForm.handleOutsideClickMenuHiders();
+    if(FacilitationTemplateProgressiveForm.ckeditor) {
+      FacilitationTemplateProgressiveForm.ckeditor.destroy(true);
+    }
+    CkeditorConfig.initCkeditor("#"+FacilitationTemplateProgressiveForm.descriptionTextArea.attr('id'), {height: "100px", width: "100%"}, CkeditorConfig.dropdownCkOptions());
+
+    FacilitationTemplateProgressiveForm.ckeditor = CKEDITOR.instances[FacilitationTemplateProgressiveForm.descriptionTextArea.attr('id')];
+    jQuery(".cjs-mentoring-connections-v2-subject-textbox").focus();
+  },
+
+  handleOutsideClickMenuHiders: function() {
+    jQuery(".cjs-hide-on-outside-click, .cjs-invisible-on-outside-click, .cjs-hide-on-outside-click-root, .cjs-invisible-on-outside-click-root").on('click', function(event) {event.stopPropagation();});
+    jQuery('html').on('click', function() {
+      jQuery('.cjs-hide-on-outside-click').hide();
+      jQuery('.cjs-invisible-on-outside-click').addClass('invisible');
+    });
+  },
+
+  handlePredecessorAndSpecificDateToggle: function() {
+    var dateAssigner = FacilitationTemplateProgressiveForm.currentForm.find(".mentoring_model_facilitation_template_date_assigner");
+    var predecessorHandler = FacilitationTemplateProgressiveForm.currentForm.find(".cjs-predecessor-handler");
+    var specificDateHandler = FacilitationTemplateProgressiveForm.currentForm.find(".cjs-specific-date-handler");
+    if(dateAssigner.val() == "specificDate") {
+      specificDateHandler.show();
+    }
+    else{
+      predecessorHandler.show();
+    }
+    dateAssigner.live('change', function() {
+      if(jQuery(this).val() == "specificDate") {
+        predecessorHandler.hide();
+        specificDateHandler.show();
+      }
+      else{
+        predecessorHandler.show();
+        specificDateHandler.hide();
+      }
+    });
+  },
+
+  cancelFacilitationTemplateHandler: function() {
+    jQuery(".cjs-facilitation-template-cancel-btn").on('click', function(){ 
+      FacilitationTemplateProgressiveForm.showMenuInvokerAndCloseForm();
+      return false;
+    });
+  },
+
+  containsOnlyValidTags: function(editor, formId){
+    var allowedTags = [];
+    editor.config.strinsert_strings.map( function(tag) {
+      allowedTags.push(tag.value);
+    });
+    var insertedTags = CkeditorConfig.getCkeditorTags(editor.getData());
+    var invalidTags = jQuery(insertedTags).not(allowedTags).get();
+    if(invalidTags.length) {
+      ChronusValidator.ErrorManager.ShowResponseFlash("facilitation_error" + formId, FacilitationTemplateProgressiveFormTranslations.invalidTags + invalidTags.toString());
+    }
+    return (invalidTags.length == 0);
+  },
+
+  validateForm: function(formId) {
+    jQuery(".cjs-facilitation-template-submit-btn").on("click", function(){
+      var durationContainer = FacilitationTemplateProgressiveForm.currentForm.find("#mentoring_model_facilitation_template_duration");
+      var dateContainer = FacilitationTemplateProgressiveForm.currentForm.find("#mentoring_model_facilitation_template_specific_date");
+      var dueDateAssignerVal = FacilitationTemplateProgressiveForm.currentForm.find(".mentoring_model_facilitation_template_date_assigner").val();
+      var sendToRoles = FacilitationTemplateProgressiveForm.currentForm.find(".cjs_mentoring_model_facilitation_template_role_names");
+      var sendToContainer = FacilitationTemplateProgressiveForm.currentForm.find(".cjs_choices_wrapper");
+      var duration = durationContainer.val();
+      var n = ~~Number(duration);
+      var validPositiveInteger = (String(n) === duration && n > 0);
+      var validDate = dateContainer.val() != ""
+      var invalidDuration = false;
+
+      if(dueDateAssignerVal == 'predecessor') {
+        if(validPositiveInteger) {
+          ChronusValidator.ErrorManager.HideFieldError(durationContainer);
+        }
+        else {
+          ChronusValidator.ErrorManager.ShowFieldError(durationContainer);
+          invalidDuration = true;
+        }
+      }
+      else {
+        durationContainer.val('1');
+      }
+
+      var invalidDate = false;
+      if(dueDateAssignerVal == '<%= MentoringModel::FacilitationTemplate::DueDateType::SPECIFIC_DATE %>') {
+        if(validDate) {
+          ChronusValidator.ErrorManager.HideFieldError(dateContainer);
+        }
+        else {
+          ChronusValidator.ErrorManager.ShowFieldError(dateContainer);
+          invalidDate = true;
+        }
+      }
+
+      var invalidRoles = false;
+      if(!sendToRoles.is(':checked')){
+        ChronusValidator.ErrorManager.ShowFieldError(sendToContainer);
+        invalidRoles = true;
+      }
+      else{
+        ChronusValidator.ErrorManager.HideFieldError(sendToContainer);
+      }
+
+      var retValue = (!invalidRoles && !invalidDuration && !invalidDate);
+
+      var vPageContent = FacilitationTemplateProgressiveForm.ckeditor.getData();
+      var textareaInvalid = vPageContent.replace(/<br \/>\n$/, '').blank();
+      var textareaEngagementSurveyLinks = vPageContent.match(/\{\{engagement_survey_link_\d+\}\}/g);
+      var textareaInvalidEngagementSurveyIds = false;
+      if(textareaEngagementSurveyLinks !== null){
+        for (index = 0; index < textareaEngagementSurveyLinks.length; ++index) {
+          engagementSurveyId = parseInt(textareaEngagementSurveyLinks[index].match(/\d+/).first(), 10);
+          if(FacilitationTemplateProgressiveForm.engagementSurveyIds.indexOf(engagementSurveyId) == -1)
+          {
+            textareaInvalidEngagementSurveyIds = true;
+            break;
+          }
+        }
+      }
+      retValue = FacilitationTemplateProgressiveForm.containsOnlyValidTags(CKEDITOR.instances['mentoring_model_facilitation_template_message'], formId) && retValue;
+      var editorElement = FacilitationTemplateProgressiveForm.currentForm.find(".cke_editor_mentoring_model_facilitation_template_message");
+      if(textareaInvalid || textareaInvalidEngagementSurveyIds) {
+        ChronusValidator.ErrorManager.ShowFieldError(editorElement);
+        if(textareaInvalidEngagementSurveyIds) {
+          ChronusValidator.ErrorManager.ShowResponseFlash("facilitation_error" + formId, FacilitationTemplateProgressiveFormTranslations.invalidSurvey);
+        }
+        else
+          ChronusValidator.ErrorManager.ClearResponseFlash("facilitation_error" + formId, FacilitationTemplateProgressiveFormTranslations.invalidSurvey);
+      } 
+      else {
+        ChronusValidator.ErrorManager.HideFieldError(editorElement);
+        FacilitationTemplateProgressiveForm.descriptionTextArea.val(vPageContent);
+        ChronusValidator.ErrorManager.ClearResponseFlash("facilitation_error" + formId, FacilitationTemplateProgressiveFormTranslations.invalidSurvey);
+      }
+      retValue = (!textareaInvalid && !textareaInvalidEngagementSurveyIds) && retValue;
+      if(retValue) {
+        registerForGeneralSettingsCkeditorValidations(FacilitationTemplateProgressiveForm.ckeditor, function(){
+          FacilitationTemplateProgressiveForm.descriptionTextArea.val(FacilitationTemplateProgressiveForm.ckeditor.getData());
+          FacilitationTemplateProgressiveForm.currentForm.submit();
+          FacilitationTemplateProgressiveForm.showMenuInvokerAndCloseForm();
+          jQuery(".cjs-action-item-response-container, .facilitation-template-edit-form-container").hide();
+        }, {allowTags: true});
+      }
+      return false;
+    });
+  },
+
+  showMenuInvokerAndCloseForm: function() {
+    if(FacilitationTemplateProgressiveForm.ckeditor) { FacilitationTemplateProgressiveForm.ckeditor.destroy(true); }
+    FacilitationTemplateProgressiveForm.addNewActionContainer.show();
+    jQuery(".cjs-add-new-action-container").show();
+    FacilitationTemplateProgressiveForm.targetHeaderContainer = TaskTemplateProgressiveForm.targetHeaderContainer;
+    if(FacilitationTemplateProgressiveForm.targetHeaderContainer) FacilitationTemplateProgressiveForm.targetHeaderContainer.show();
+    FacilitationTemplateProgressiveForm.currentForm.closest(".cjs-task-template-container").removeClass("no-background");
+    FacilitationTemplateProgressiveForm.currentForm.remove();
+    jQuery("#preview_email_"+ FacilitationTemplateProgressiveForm.formId).remove();
+  }
+};

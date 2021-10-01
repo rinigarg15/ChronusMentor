@@ -1,0 +1,48 @@
+<% role, suggested_role, role_name, suggested_role_name, role_plural = get_orientation_based_role_params(@student, @mentor, @orientation_type) %>
+<% is_mentee_to_mentor_view = is_mentee_to_mentor_view?(@orientation_type) %>
+<% modal_v3_popup "feature.bulk_match.header.match_suggested_user_to_user".translate(role_name: role_name, suggested_role_name: suggested_role_name) do %>
+  <div id= "bulk_match_alter_pickable_slots" ng-controller="BulkMatchCtrl">
+    <div ng-init="initializeAlterPickableSlotsPopupParams(<%= @mentor.id %>, <%= @student.id %>);">
+      <div class="m-b-xs">
+        <span ng-show="users_to_alter.length == 1">
+          <%= "feature.#{@bulk_match.type.underscore}.content.user_already_matched_with_other_users_html".translate(role: role, suggested_role_name: suggested_role_name, role_name: role_name, count: 1) %>
+        </span>
+        <span ng-hide="users_to_alter.length == 1">
+          <%= "feature.#{@bulk_match.type.underscore}.content.user_already_matched_with_other_users_html".translate(role_plural: role_plural, suggested_role_name: suggested_role_name, role_name: role_name, count: "") %>
+        </span>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th><%= _Mentee %></th>
+            <th><%= "feature.bulk_match.label.match_score".translate %></th>
+            <th><%= "feature.bulk_match.label.status".translate %></th>
+            <th><%= "feature.bulk_match.label.actions".translate %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="existing_user in users_to_alter">
+            <td>{{existing_user.name}}</td>
+            <td>
+              <span class="label label-success">
+                <% if is_mentee_to_mentor_view %>
+                  {{studentMentorMap[existing_user.id][mentorId].score}} %
+                <% else %>
+                  {{mentorStudentMap[existing_user.id][studentId].score}} %
+                <% end %>
+              </span>
+            </td>
+            <td>{{existing_user.group_status}}</td>
+            <td ng-init="alter_user_label = getAlterUserLabel(existing_user.id);" >
+              <a class="btn btn-primary btn-xs" href="#" ng-hide="existing_user.group_status == published_label" ng-click="alterUser(<%= @mentor.id %>, <%= @student.id %>, existing_user.id);" onclick="return false;">{{alter_user_label}}</a>
+              <span ng-show="existing_user.group_status == published_label">{{alter_user_label}}</span>
+            </td>
+          </tr>
+        </tbody>
+        </tr>
+      </table>
+      <b class='m-r-xs'><%= "display_string.Note_with_colon".translate %></b><%= "feature.#{@bulk_match.type.underscore}.content.maximum_users_for_suggested_user_note".translate(role_plural: role_plural, suggested_role: suggested_role) %>
+    </div>
+  </div>
+<% end %>
+<%= javascript_tag "jQuery(document).ready(function() {angular.bootstrap(jQuery('#bulk_match_alter_pickable_slots'));});" %>

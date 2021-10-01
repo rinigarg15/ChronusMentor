@@ -1,0 +1,8 @@
+<% modal_v3_popup "csv_import.content.records".translate do %>
+  <div class="cui-validation-data">
+    <%= render partial: "csv_imports/validation_data", :locals => {:data => @data, :show_errors => @type == CsvImportsController::DataPopup::Type::ERROR} %>
+  </div>
+  <div class="pull-right m-t-xs">
+    <%= link_to "display_string.Download".translate, records_csv_import_path(@user_csv_import.id, type: @type, format: :csv, :organization_level => @standalone_dormant_import), class: "btn btn-primary" %>
+  </div>
+<% end %>

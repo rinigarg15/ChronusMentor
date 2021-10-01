@@ -1,0 +1,5 @@
+<% content = nil %>
+<% simple_form_for @membership_request do |f| %>
+  <% content = render partial: "membership_requests/display_section_membership_questions", locals: { membership_request: @membership_request, new_request: true, form: f, answer_map: @answer_map } %>
+<% end %>
+jQuery("#membership_sections_list").html("<%= j content %>");

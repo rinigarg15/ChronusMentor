@@ -1,0 +1,380 @@
+var ManagementReport = {
+  sectionSettingsPath: '',
+  availableViewDetails: {},
+  dataUrl: '',
+
+  fixTileHeights: function(){
+    var tiles = jQuery("div.cjs_current_status_tiles");
+    var positionsArray = jQuery.map(tiles, function(element){
+      return jQuery(element).position().top;
+    });
+    positionsArray = positionsArray.uniq();
+    if(positionsArray.length == 1){
+      var tilesIboxContent = tiles.find("div.ibox-content");
+      var heightArray = jQuery.map(tilesIboxContent, function(element){
+        return jQuery(element).height();
+      });
+      var maxHeight = Math.max.apply(null, heightArray);
+      jQuery.each(tilesIboxContent, function(){
+        jQuery(this).height(maxHeight);
+      });
+    }
+  },
+
+  initializeTips: function(){
+    jQuery("#dashboard").on("click", ".cjs_dashboard_tips_button", function(){
+      jQuery(this).hide();
+      jQuery(this).closest(".cjs_dashboard_tips_container").find(".cjs_dashboard_tips").show();
+    });
+  },
+
+  initializeSectionSettings: function(){
+    jQuery("#dashboard").on("click", ".cjs-dashboard-settings", function(){
+      var timeFilterForm = jQuery(this).parent(".cjs-tile-container").find(".cjs_management_report_time_filter_form");
+      ManagementReport.showSectionSettingsPopup(jQuery(this).data('tile'), timeFilterForm);
+    });
+  },
+
+  showSectionSettingsPopup: function(tile, timeFilterForm){
+    var data = {tile: tile};
+    if(timeFilterForm.length > 0){
+        data["date_range"] = timeFilterForm.find(".cjs_daterange_picker_value").val();
+        data["date_range_preset"] = timeFilterForm.find(".cjs_daterange_picker_presets").find("option:selected").val();
+      }
+    jQueryShowQtip('#inner_content', '', ManagementReport.sectionSettingsPath, data, {largeModal: true});
+  },
+
+  initializeLinks: function(){
+    jQuery(document).on('click', '.cjs_management_report_link', function(){
+      ManagementReport.renderPopup(jQuery(this).data("url"));
+    });
+  },
+
+  renderPopup: function(url){
+    jQueryShowQtip('#inner_content', 730, url,'',{modal: true, largeModal: true});
+  },
+
+  validateAlertForm: function(){
+    jQuery("form#cjs-report-alert-form").submit(function(){
+      var targetValid = ValidateRequiredFields.checkNonMultiInputCase(jQuery("form#cjs-report-alert-form #report_alert_target"));
+      var descriptionValid = ValidateRequiredFields.checkNonMultiInputCase(jQuery("form#cjs-report-alert-form #report_alert_description"));
+      var additionFieldsValid = true;
+      jQuery("form#cjs-report-alert-form #alert_additional_filters_container select:visible").each(function(index, element){
+        additionFieldsValid = ValidateRequiredFields.checkNonMultiInputCase(jQuery(this)) && additionFieldsValid;
+      });
+
+      jQuery("form#cjs-report-alert-form #alert_additional_filters_container input:visible").each(function(index, element){
+        additionFieldsValid = ValidateRequiredFields.checkNonMultiInputCase(jQuery(this)) && additionFieldsValid;
+      });
+      jQuery("form#cjs-report-alert-form #alert_additional_filters_container select:hidden").attr("disabled",true);
+      jQuery("form#cjs-report-alert-form #alert_additional_filters_container input:hidden").attr("disabled",true);
+
+      var uniqSelectedOption = ManagementReport.validateUniqSelectedOptions();
+
+      return targetValid && descriptionValid && additionFieldsValid && uniqSelectedOption;
+    });
+  },
+
+  /**
+  * Selected option should be unique. i.e for example We can not have 'Connection status' filter twice in admin views
+  */
+  validateUniqSelectedOptions: function(){
+    var elements = jQuery("form#cjs-report-alert-form .alert-filter-name-select");
+    var values = [];
+    var returnVal = true;
+    elements.each(function(index, element){
+      values.push(jQuery(element).val());
+    });
+    elements.each(function(index, element){
+      var value = jQuery(element).val();
+      var numOccurences = jQuery.grep(values, function (elem) {
+        return elem === value;
+      }).length;
+      if(numOccurences > 1){
+        ChronusValidator.ErrorManager.ShowFieldError(jQuery(element));
+        returnVal = false;
+      }
+      else{
+        ChronusValidator.ErrorManager.HideFieldError(jQuery(element));
+      }
+    });
+    return returnVal;
+  },
+
+  validateMetricForm: function(){
+    jQuery("form#cjs_report_metric_form").submit(function(){
+      var view_valid = ValidateRequiredFields.checkNonMultiInputCase(jQuery("form#cjs_report_metric_form #report_metric_abstract_view_id"));
+      var title_valid = ValidateRequiredFields.checkNonMultiInputCase(jQuery("form#cjs_report_metric_form #report_metric_title"));
+      var desc_valid = true;
+      if (jQuery('#cjs_alert_presence').val() == "true"){
+        desc_valid = ValidateRequiredFields.checkNonMultiInputCase(jQuery("form#cjs_report_metric_form #report_metric_alert_description"));
+      }
+      return view_valid && desc_valid && title_valid
+    });
+  },
+
+  sendDeleteRequest: function(url, confirmation){
+    chronusConfirm(confirmation,
+      function() {
+        jQuery.ajax({
+          url: url,
+          type: 'DELETE'
+        });
+      },
+      function() {
+        return false;
+      }
+    );
+  },
+
+  updateMetricTitleDescription: function(){
+    jQuery(document).on('change', '#report_metric_abstract_view_id', function(){
+      selectedOption = jQuery(this).val();
+      if (selectedOption){
+        jQuery('#report_metric_description').val(ManagementReport.availableViewDetails[selectedOption]['description']);
+        jQuery('#report_metric_title').val(ManagementReport.availableViewDetails[selectedOption]['title']);
+      }
+      else{
+        jQuery('#report_metric_description').val("");
+        jQuery('#report_metric_title').val("");
+      }
+    });
+  },
+
+  showDeleteConfirm: function(){
+    jQuery(document).on('click', "form#cjs-report-alert-form .cjs-report-alert-delete, .cjs_delete_metric_link", function(){
+      var url = jQuery(this).data("url");
+      var confirmation = jQuery(this).data("confirmation");
+      closeQtip();
+      ManagementReport.sendDeleteRequest(url, confirmation);
+    });
+  },
+
+  /**
+  *Get option for a particular filter in ajax, when filter is selected. For example for a date range filter option will be 'Before Last' and 'In Last'
+  **/
+  getOptionsForAlertFilter: function(){
+    jQuery(".alert_filters_container .alert-filter-options select").change(function () {
+     var selected_option = jQuery(this).find(':selected');
+     jQuery.ajax({
+      beforeSend: function(){
+       selected_option.closest(".alert_filters_container").find(".alert-filter-operators-container select").attr("disabled", "disabled");
+      },
+      url: selected_option.data("url"),
+      complete: function(){
+       selected_option.closest(".alert_filters_container").find(".alert-filter-operators-container select").removeAttr("disabled");
+      }
+     });
+    });
+  },
+
+  /**
+  *Add or Remove additional filters for alert
+  **/
+  addRemoveMoreFilter: function(){
+    jQuery("#cjs_add_more_filter_in_alert").on("click", function(){
+      if(jQuery("#alert_additional_filters_container").is(':visible')){
+        var element = jQuery("#alert_additional_filters_container .alert_filters_container:last").clone();
+        var length = jQuery("#alert_additional_filters_container .alert_filters_container").length;
+        var selectElement = jQuery("#alert_additional_filters_container .alert_filters_container:last .alert-filter-options select");
+        var option_length = selectElement.children('option').length;
+        if(option_length > length + 1){
+          element = ManagementReport.processAlertFormElements(element);
+          jQuery("#alert_additional_filters_container .alert_filters_container:last").after(element);
+          ManagementReport.getOptionsForAlertFilter();
+          ManagementReport.removeMoreFilters(jQuery(element.find(".cjs_remove_more_filter_in_alert")));
+        }
+        ManagementReport.clearClonedElement(element);
+      }
+      else{
+        jQuery("#alert_additional_filters_container").show();
+      }
+      jQuery("form#cjs-report-alert-form #alert_additional_filters_container select").attr("disabled",false);
+      jQuery("form#cjs-report-alert-form #alert_additional_filters_container input").attr("disabled",false);
+    });
+    ManagementReport.removeMoreFilters(jQuery(".cjs_remove_more_filter_in_alert"));
+  },
+
+  /**
+  *Clear the cloned filter before adding
+  **/
+  clearClonedElement: function(element){
+    element.find(".alert-filter-value-select option[value!='']").remove();
+    element.find(".alert-filter-operator-select option[value!='']").remove();
+    element.find(".alert-filter-value-input").val(0);
+    element.find(".alert-filter-name-select").val('');
+  },
+
+  /**
+  *Remove additional filters for alert
+  **/
+  removeMoreFilters: function(removeElement){
+    removeElement.on("click", function(){
+      if(jQuery(".alert_filters_container").length > 1){
+        jQuery(this).closest(".alert_filters_container").remove();
+      }
+      else{
+        jQuery("#alert_additional_filters_container").hide();
+      }
+    });
+  },
+
+  /**
+  *Update the element Ids for the newly cloned filter
+  **/
+  processAlertFilterFormIds: function(str, formPrefix){
+    var strAfterPrefix = str.replace(formPrefix, "");
+    var index = parseInt(strAfterPrefix[0]) + 1;
+    var strPostfix = strAfterPrefix.substr(1);
+    str = formPrefix + index.toString() + strPostfix;
+    return str;
+  },
+
+  /**
+  *Process the cloned filter, such that it will have uniqe ids, name and for attributes for elements it contains
+  **/
+  processAlertFormElements: function(element){
+    var formPrefix = "report_alert_filter_params_cjs_alert_filter_params_";
+    var namePrefix = "report_alert[filter_params][cjs_alert_filter_params_";
+    var labels = element.find("label");
+    labels.each(function(index, label){
+      var forAttr = jQuery(label).attr("for");
+      forAttr = ManagementReport.processAlertFilterFormIds(forAttr, formPrefix);
+      jQuery(label).attr("for", forAttr);
+    });
+    var formElements = element.find("select, input");
+    formElements.each(function(index, formElement){
+      var idAttr = jQuery(formElement).attr("id");
+      idAttr = ManagementReport.processAlertFilterFormIds(idAttr, formPrefix);
+      jQuery(formElement).attr("id", idAttr);
+      var nameAttr = jQuery(formElement).attr("name");
+      nameAttr = ManagementReport.processAlertFilterFormIds(nameAttr, namePrefix);
+      jQuery(formElement).attr("name", nameAttr);
+    });
+    var selectElements = element.find(".alert-filter-options select option");
+    selectElements.each(function(index, selectElement){
+      var url = jQuery(selectElement).data("url");
+      url = url.split(/&index=/);
+      var beforeIndex = url[0];
+      var afterIndex = url[1];
+      afterIndex = afterIndex.split("&");
+      var lastChar = (parseInt(afterIndex[0].substr(afterIndex[0].length - 1)) + 1).toString();
+      afterIndex[0] = afterIndex[0].substring(0, afterIndex[0].length - 1);
+      afterIndex[0] = afterIndex[0] + lastChar;
+      afterIndex = afterIndex.join("&");
+      url = beforeIndex+'&index='+afterIndex;
+      jQuery(selectElement).attr("data-url", url);
+      jQuery(selectElement).data("url", url);
+    });
+    return element;
+  },
+
+  timeFilterOnReport: function(){
+    jQuery(document).on('click', '.cjs-management-report-time-filter-submit', function(){
+      var time_filter_form = jQuery(this).closest(".cjs_management_report_time_filter_form");
+      jQuery.ajax({
+        url: ManagementReport.dataUrl,
+        data: {filters: { date_range: time_filter_form.find(".cjs_daterange_picker_value").val(), date_range_preset: time_filter_form.find(".cjs_daterange_picker_presets").find("option:selected").val(), tile: jQuery(this).data("tile")}},
+        type: 'POST',
+        beforeSend: function(){
+          jQuery('#loading_results').show();
+        }
+      });
+    });
+  },
+
+  getEngagementsHealthChart: function(render_to, series_data){
+    new Highcharts.Chart({
+      credits: {
+        enabled: false
+      },
+      chart: {
+        type: 'pie',
+        renderTo: render_to,
+        plotBackgroundColor: null,
+        plotBorderWidth: 0,
+        plotShadow: false,
+        width: "200",
+        height: "110",
+        marginRight: "50"
+      },
+      title: {
+        text: ""
+      },
+      tooltip: {
+        useHTML: true,
+        pointFormat: '<b>{point.y}%</b>'
+      },
+      plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              enabled: false
+            },
+           size: 100    
+        }
+      },
+      series:
+        [{  
+          data: series_data
+        }]   
+    });
+  },
+
+  updateGroupsReportSection: function(tile){
+    jQuery(document).on('click', '.cjs_groups_section_management_report', function(){
+      var filters = {date_range: jQuery("#cjs_engagement_health_date_range").val(), date_range_preset: jQuery("#cjs_engagement_health_date_range_preset").val()};
+      jQuery.ajax({
+        url: jQuery(this).data("url"),
+        data: {dashboard_reports: ManagementReport.getDashboardReportSubSectionsToShow(), positive_outcomes_options_array: outcomesReport.positiveOutcomesConfigData(), tile: tile, filters: filters},
+        type: 'POST',
+        beforeSend: function(){
+          jQuery('#loading_results').show();
+        },
+        complete: function(){
+          jQuery('#loading_results').hide();
+        }
+      });
+    });
+  },
+
+  getDashboardReportSubSectionsToShow: function(){
+    return jQuery.makeArray(jQuery('.cjs_management_report_settings_checkboxes:checkbox:checked').map(function(){
+      return this.value;
+    }));
+  },
+
+  scrollSurveyResponses: function(limit){
+    if (jQuery('#infinite-scrolling').size() > 0){
+      jQuery('.cjs_infinite_scroll').on('scroll', function(){
+        var moreSurveyResponsesUrl = jQuery('a.cjs_infinite_scrolling_link').data("url");
+        if (moreSurveyResponsesUrl && jQuery('.cjs_infinite_scroll').scrollTop() > jQuery('.cjs_infinite_scroll').height() - limit){
+          ManagementReport.callAjaxScrollSurveyResponses(moreSurveyResponsesUrl);
+        }
+      });
+    }
+  },
+
+  callAjaxScrollSurveyResponses: function(more_survey_responses_url){
+    var nextPageIndex = jQuery("#next_page_index").val();
+    ManagementReport.ajaxScrollSurveyResponses(more_survey_responses_url, nextPageIndex);
+  },
+
+  ajaxScrollSurveyResponses: function(url, nextPageIndex){
+    var date_range = jQuery('.cjs_infinite_scroll').closest("#engagements_info").find(".cjs_daterange_picker_value").val();
+    jQuery.ajax({
+      url: url,
+      data: {next_page_index: nextPageIndex, date_range: date_range},
+      type: 'GET',
+      beforeSend: function() {
+        jQuery("#infinite-scrolling").find(".sk-spinner").show();
+        jQuery("#infinite-scrolling").find("a.cjs_infinite_scrolling_link").remove();
+      },
+      complete: function(){
+        var value = parseInt(jQuery('#next_page_index').val()) + 1;
+        jQuery('#next_page_index').val(value);
+      }
+    });
+  }
+}

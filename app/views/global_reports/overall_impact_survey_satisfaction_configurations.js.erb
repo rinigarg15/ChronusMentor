@@ -1,0 +1,12 @@
+<% if params[:for_super_admin_alert].to_s.to_boolean %>
+  <% show_warning = @positive_outcome_surveys_by_program.any? { |program_id, survey_satisfaction_configuration_hash| show_super_admin_configration_missing_warning?(survey_satisfaction_configuration_hash) } %>
+  jQuery('.cjs_survey_satisfaction_warning_for_super_admin').toggleClass('hide', <%= !show_warning %>);
+<% else %>
+  <% modal_v3_popup "feature.global_reports.overall_impact.content.survey_satisfaction_configuration".translate do %>
+    <ul class="list-group">
+      <% @positive_outcome_surveys_by_program.each do |program_id, survey_satisfaction_configuration_hash| %>
+        <%= render partial: "global_reports/survey_satisfaction_configuration", locals: {program_id: program_id, survey_satisfaction_configuration_hash: survey_satisfaction_configuration_hash} %>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>

@@ -1,0 +1,8 @@
+<%= render :partial => 'reports/metric_item', :locals => {
+  :name => "feature.reports.label.engagement".translate, :percent_metric => engagement.cumulative_value,
+  :opts => {
+    :help_text => "feature.reports.content.effectiveness_of_interactions_v1".translate(mentoring_area: _mentoring_connection, mentor: _Mentor,  mentee: _Mentee),
+    :detailed_report_anchor => "engagement_box",
+    :point_scale => true
+  }
+} %>

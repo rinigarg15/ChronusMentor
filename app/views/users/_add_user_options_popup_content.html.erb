@@ -1,0 +1,27 @@
+<div>
+  <div class="list-group-item no-borders">
+    <%= content_tag(:div, link_to("csv_import.content.add_users_manually_link_text".translate, new_user_path), {:class => "h5 m-t-0 m-b-xs"}) %>
+    <%= content_tag(:div, "csv_import.content.add_users_manually_link_description".translate, :class => "text-muted small") %>
+  </div>
+
+  <% if can_import_users_from_csv %>
+    <div class="list-group-item no-borders">
+      <%= content_tag(:div, link_to("csv_import.content.import_user_csv_link_text_v1".translate, new_csv_import_path), {:class => "h5 m-t-0 m-b-xs"}) %>
+      <%= content_tag(:div, "csv_import.content.import_user_csv_link_description_v1".translate(:program => _program), :class => "text-muted small") %>
+    </div>
+
+    <% if can_import_dormant_users %>
+      <div class="list-group-item no-borders">
+        <%= content_tag(:div, link_to("csv_import.content.import_users_in_dormant_state".translate, new_csv_import_path(:organization_level => true)), {:class => "h5 m-t-0 m-b-xs"}) %>
+        <%= content_tag(:div, "csv_import.content.import_users_in_dormant_state_link_description".translate(:org_name => @current_organization.name), :class => "text-muted small") %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% if can_add_existing_user %>
+    <div class="list-group-item no-borders">
+      <%= content_tag(:div, link_to("csv_import.content.add_users_from_other_programs_link_text_v1".translate(:org_name => @current_organization.name), new_from_other_program_users_path), {:class => "h5 m-t-0 m-b-xs"}) %>
+      <%= content_tag(:div, "csv_import.content.add_users_from_other_programs_link_description".translate(:org_name => @current_organization.name, :program => _program), :class => "text-muted small") %>
+    </div>
+  <% end %>
+</div>

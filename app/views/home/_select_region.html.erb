@@ -1,0 +1,20 @@
+<% modal_container nil, :modal_id => "modal_select_region", :no_modal_header => true, modal_class: "cjs_no_keyboard" do %>
+  <div class="text-center">
+    <div class="lead"><%= 'program_settings_strings.header.select_region'.translate %> </div>
+    <%= content_tag :strong, 'program_settings_strings.content.select_region_content'.translate %>
+    <%= content_tag :div, class: "col-xs-offset-2 col-xs-7 p-sm" do %>
+      <%= select_tag 'region', options_for_select(options_for_region) , class: "form-control", prompt:  "common_text.prompt_text.Select".translate, data: {subdomain_mapping: HostingRegions::SUBDOMAIN_MAPPING.to_json, error_message_mapping: error_messages_for_regions, display_message_mapping: display_alert_messages_for_regions} %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    jQuery('#modal_select_region').modal({
+      keyboard: false,
+      show: true,
+      backdrop: 'static'
+    });
+    OrganizationSetupSettings.handleRegionSelection();
+  });
+<% end %>

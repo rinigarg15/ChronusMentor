@@ -1,0 +1,10 @@
+var flashMsg = "<%= 'program_settings_strings.content.set_eligibility_rules_flash_message'.translate %>";
+<% edit_profile_text = "program_settings_strings.content.edit_eligibility_rules".translate %>
+var editAdminViewText = "<%= edit_profile_text %>";
+var role_id = "<%= @role.id %>";
+var editAdminLink = "<%= path_eligibility_rules(@role).html_safe %>";
+onclickAction = "AdminViews.showPopup('" + editAdminLink + "') ";
+jQuery('#eligibility_rules_link_' + role_id).attr('onclick',onclickAction);
+jQuery('#eligibility_rules_link_' + role_id).html(editAdminViewText);
+ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", flashMsg, true);
+closeQtip();

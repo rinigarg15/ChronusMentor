@@ -1,0 +1,26 @@
+<div>
+  <% if @admin_view %>
+    <small class="col-md-12 p-l-0 m-t-sm">
+      <%= get_icon_content("fa fa-share m-r-0") %>
+      <% if program_view? %>
+        <% if @resource_roles[resource.id].present? %>
+          <%= raw "feature.resources.content.shared_with".translate(roles: generate_role_names(@program_role_names, @resource_roles[resource.id])) %>
+        <% else %>
+          <%= "feature.resources.content.shared_with_none".translate %>
+        <% end %>
+      <% else %>
+        <%= get_shared_programs_text(resource) %>
+      <% end %>
+    </small>
+  <% end %>
+  <%= content_tag(:span, append_text_to_icon("fa fa-clock-o", "feature.resources.content.updated_time_ago".translate(time: time_ago_in_words(resource.updated_at))), class: "small text-muted") %>
+  <% if @admin_view %>
+    <% helpful_count = resource.get_helpful_count %>
+    <small class="m-t-sm">
+      <small> <%= get_icon_content("fa fa-circle text-muted m-r-0") %> </small>
+      <%= content_tag(:span, "feature.resources.content.views_stat".translate(count: resource.view_count), class: "text-muted") %>
+      <small> <%= get_icon_content("fa fa-circle text-muted m-r-0") %> </small>
+      <%= content_tag(:span, "feature.resources.content.marked_helpful".translate(count: helpful_count), class: "text-muted") %>
+    </small>
+  <% end %>
+</div>

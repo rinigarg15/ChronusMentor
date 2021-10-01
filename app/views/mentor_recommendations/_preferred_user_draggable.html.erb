@@ -1,0 +1,6 @@
+<div class="reorder_preferred_list list-group-item no-padding" id="preferred_list_<%= mentor_user.id %>">
+  <input type="hidden" name="preferred_mentor_ids[]" value=<%= mentor_user.id %>></input> 
+  <div class="recommended_user p-t-sm p-b-sm b-b p-l-xs p-r-xs">
+    <%= render partial: "mentor_recommendations/mentor_preference", locals: { mentor_user: mentor_user, mentor_score: match_array[mentor_user.id], show_delete: true, note: note, position: position, sortable: true, show_favorite_ignore_links: false, favorite_preferences_hash: {}, ignore_preferences_hash: {}, mentors_score: {}} %>
+  </div>
+</div>

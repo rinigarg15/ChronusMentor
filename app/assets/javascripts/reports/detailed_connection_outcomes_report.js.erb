@@ -1,0 +1,348 @@
+var detailedConnectionOutcomesReportApp = angular.module('detailedConnectionOutcomesReportApp', ['highcharts-ng', 'outcomesReportApp']);
+detailedConnectionOutcomesReportApp.controller('detailedConnectionOutcomesReportCtrl', ['$scope', '$http', function($scope, $http){
+    outcomesReportCommon.call(this, $scope, $http);
+    var PER_PAGE = 10;
+    var SORT_ASC = "sort_asc";
+    var SORT_DESC = "sort_desc";
+    var SORT_BOTH = "sort_both";
+    var ASC = "asc";
+    var DESC = "desc";
+    var USER_TAB = 1;
+
+    var GraphColors = {
+      completed: '#5a7ea9',
+      positive: '#5ebede',
+      total: 'green'
+    }
+
+    $scope.AppliedProfileFilters.containerClass = "cjs-outcomes-report-applied-filters cui-applied-filters";
+
+    var userGraphOngoingConnectionLabel = jQuery('#cjs-share-data').data('user-graph-ongoing-label');
+    var userGraphCompletedConnectionLabel = jQuery('#cjs-share-data').data('user-graph-completed-label');
+    var userGraphPositiveOutcomesLabel = jQuery('#cjs-share-data').data('user-graph-positive-outcomes-label');
+    $scope.userGraphPrefix = preJsTranslations.detailedConnectionOutcomesReport.usersTitle;
+
+    var ongoingConnectionGraphTitle = jQuery('#cjs-share-data').data('connection-graph-ongoing-label');
+    var completedConnectionGraphTitle = jQuery('#cjs-share-data').data('connection-graph-completed-label');
+    var positiveOutcomesConnectionGraphTitle = jQuery('#cjs-share-data').data('connection-graph-positive-outcomes-label');
+
+    $scope.membersPath = outcomesReportRoutes.membersPath;
+    $scope.groupsPath = outcomesReportRoutes.groupsPath;
+
+    $scope.sectionOneData = {};
+    $scope.loadingData = false;
+
+
+
+    $scope.onTabChange = function(showUsers){
+      if ($scope.showUsers != showUsers){
+        $scope.showUsers = showUsers;
+        $scope.refreshAllPageData();
+      }
+    };
+
+    /******************************   Sorting methods start *****************************/
+    $scope.addSortableClass = function(column, tableData){
+      sortable = getDefaultVal(column.sortable, false);
+      if (!sortable) {
+        return "";
+      }
+      if (tableData.sortOnKey == column.field){
+        return tableData.sortType;
+      } else {
+        return SORT_BOTH;
+      }
+    };
+
+    $scope.applySortingToTable = function(column, tableData, callBack) {
+      sortable = getDefaultVal(column.sortable, false);
+      if (!sortable) return false;
+
+      if (tableData.sortOnKey == column.field) {
+        tableData.sortType = $scope.getSortableClass(tableData.sortType);
+      } else {
+        tableData.sortType = SORT_ASC;
+        tableData.sortOnKey = column.field;
+      }
+      callBack();
+    }
+
+    $scope.getSortableClass = function(oldClass){
+      oldClass = getDefaultVal(oldClass, "");
+      if (oldClass == SORT_ASC) return SORT_DESC;
+      return SORT_ASC;
+    }
+
+    $scope.convertSortableClassToSQLSyntax = function(className){
+      if (className == SORT_ASC) return ASC;
+      else if (className == SORT_DESC) return DESC;
+      return "";
+    };
+
+  /******************************   Sorting methods end *****************************/
+
+  $scope.hideAllFilterBox = function(){
+    $scope.showProfileFilterBox = false;
+    $scope.showDateRangeBox = false;
+  };
+
+  $scope.updateDateRangeAndRefreshAllPageData = function(){
+    $scope.updateDateRange();
+    $scope.refreshAllPageData();
+    jQuery(".highcharts-button").click(); //manually triggering Reset Zoom button provided by highcharts
+  };
+
+  $scope.applyFilter = function(forceRefreshCache) {
+    $scope.loadingData = true;
+    forceRefreshCache = getDefaultVal(forceRefreshCache, false);
+    if (forceRefreshCache) {
+      $scope.$apply(function(){
+        $scope.hideAllFilterBox();
+      });
+    } else {
+      $scope.hideAllFilterBox();
+    };
+
+    if(!forceRefreshCache && $scope.ProfileFilterCache.isValid()){
+      $scope.updateDateRangeAndRefreshAllPageData();
+    } else {
+      $scope.applyProfileFilters();
+    }
+  }
+  applyProfileFiltersOnOutcomesReport = $scope.applyFilter;
+
+  $scope.applyProfileFilters = function(){
+    $scope.ProfileFilterCache.dismissCache();
+    $scope.GroupTableCache.dismissCache();
+    $scope.UserTableCache.dismissCache();
+    var profileFiltersData = getProfileFilterFormData();
+    jQuery.ajax({
+      url: outcomesReportRoutes.filterUsersOnProfileQuestionsPath,
+      data: profileFiltersData,
+      success: function(response) {
+        $scope.setErrorMessagesForLocationFilter(response["location"]);
+        if (response["location"]["invalid_location_filter"]) {
+          $scope.ProfileFilterCache.dismissCache();
+          $scope.$apply(function(){
+            $scope.toggleProfileFilterBox();
+            // $scope.Loading.setAllLoadingVariables(false);
+          });
+          return false;
+        }
+        $scope.ProfileFilterCache.setCache(response["cache_key"], response["time_to_live"]);
+        $scope.AppliedProfileFilters.myFilters = response["my_filters"];
+        $scope.updateDateRangeAndRefreshAllPageData();
+      }
+    });
+  }
+
+  $scope.applyRoleFilter = function(role_label) {
+    $scope.userGraphPrefix = role_label;
+    $scope.GroupTableCache.dismissCache();
+    $scope.UserTableCache.dismissCache();
+    $scope.refreshAllPageData();
+  }
+
+  $scope.refreshAllPageData = function() {
+    $scope.refreshSectionOneData();
+    if ($scope.showUsers) {
+      $scope.refreshUsersTabGraphData();
+      $scope.refreshUsersTableData();
+    } else {
+      $scope.refreshConnectionsTabGraphData();
+      $scope.refreshGroupsTableData();
+    }
+    $scope.loadingData = false;
+  };
+
+  // section 1 data
+  $scope.refreshSectionOneData = function() {
+    $http.get(outcomesReportRoutes.detailedConnectionOutcomesReportNonTableDataPath, {params: {date_range: $scope.dateRange,  user_ids_cache_key: $scope.ProfileFilterCache.key, for_role: $scope.roleFilter, section: '<%= ConnectionDetailedReport::Section::ONE %>'}}).success(function(data){
+      $scope.sectionOneData = data.sectioneOneData;
+      $scope.prevWindowValid = data.getOldData;
+      $scope.prevRangeStartDateText = data.prevRangeStartDateText;
+      $scope.prevRangeEndDateText = data.prevRangeEndDateText;
+    });
+  }
+
+  // Connections tab graph data
+  $scope.refreshConnectionsTabGraphData = function() {
+    $http.get(outcomesReportRoutes.detailedConnectionOutcomesReportNonTableDataPath, {params: {date_range: $scope.dateRange, user_ids_cache_key: $scope.ProfileFilterCache.key, section: '<%= ConnectionDetailedReport::Section::TWO %>', tab: '<%= ConnectionDetailedReport::Tab::GROUPS %>'}}).success(function(data){
+      $scope.graphStartDate = data.startDateForGraph;
+      $scope.positiveConnectionsData = data.positiveOutcomesGraphData;
+      $scope.completedConnectionsData = data.completedConnectionGraphData;
+      $scope.ongoingConnectionsData = data.ongoingConnectionsGraphData;
+
+      var graphData = $scope.completedConnectionsData.map(function(obj) {
+        return {
+          'name': completedConnectionGraphTitle,
+          'data': obj.data,
+          'visible': obj.visibility,
+          'color': GraphColors.completed
+          };
+      });
+
+      $scope.positiveConnectionsChartConfig.series = graphData.concat($scope.positiveConnectionsData.map(function(obj) {
+        return {
+          'name': positiveOutcomesConnectionGraphTitle,
+          'data': obj.data,
+          'visible': obj.visibility,
+          'color': GraphColors.positive
+          };
+      }));
+
+      $scope.totalConnectionsChartConfig.series = $scope.ongoingConnectionsData.map(function(obj) {
+        return {
+          'name': ongoingConnectionGraphTitle,
+          'pointInterval': $scope.defaultPointInterval,
+          'pointStart': $scope.graphStartDate,
+          'data': obj.data,
+          'visible': obj.visibility,
+          'color': GraphColors.total
+        };
+      });
+    });
+  };
+
+  // Users tab graph data
+  $scope.refreshUsersTabGraphData = function() {
+    $http.get(outcomesReportRoutes.detailedConnectionOutcomesReportNonTableDataPath, {params: {date_range: $scope.dateRange, user_ids_cache_key: $scope.ProfileFilterCache.key, for_role: $scope.roleFilter, section: '<%= ConnectionDetailedReport::Section::TWO %>', tab: '<%= ConnectionDetailedReport::Tab::USERS %>'}}).success(function(data){
+      $scope.graphStartDate = data.startDateForGraph;
+      $scope.positiveConnectionUsersData = data.positiveOutcomesGraphData;
+      $scope.completedConnectionUsersData = data.completedConnectionGraphData;
+      $scope.ongoingConnectionUsersData = data.ongoingConnectionsGraphData;
+
+      var graphData = $scope.completedConnectionUsersData.map(function(obj) {
+        return {
+          'name': $scope.userGraphPrefix + userGraphCompletedConnectionLabel,
+          'data': obj.data,
+          'visible': true,
+          'color': GraphColors.completed
+          };
+      });
+      $scope.positiveUsersChartConfig.series = graphData.concat($scope.positiveConnectionUsersData.map(function(obj) {
+        return {
+          'name': $scope.userGraphPrefix + userGraphPositiveOutcomesLabel,
+          'data': obj.data,
+          'visible': true,
+          'color': GraphColors.positive
+          };
+      }));
+      $scope.totalUsersChartConfig.series = $scope.ongoingConnectionUsersData.map(function(obj) {
+        return {
+          'name': $scope.userGraphPrefix + userGraphOngoingConnectionLabel,
+          'pointInterval': $scope.defaultPointInterval,
+          'pointStart': $scope.graphStartDate,
+          'data': obj.data,
+          'visible': true,
+          'color': GraphColors.total
+        };
+      });
+    });
+  };
+
+  /*  Group Table Related */
+  $scope.refreshGroupsTableData = function(pageNumber) {
+    pageNumber = getDefaultVal(pageNumber, 1);
+    $http.get(outcomesReportRoutes.detailedConnectionOutcomesReportGroupDataPath, {params: {date_range: $scope.dateRange, page: pageNumber, page_size: PER_PAGE, sort_field: $scope.groupData.sortOnKey, sort_type: $scope.convertSortableClassToSQLSyntax($scope.groupData.sortType), profile_filter_cache_key: $scope.ProfileFilterCache.key, group_table_cache_key: $scope.GroupTableCache.key, status_filter: $scope.statusFilter}}).success(function(data){
+        jQuery('#group_pagination_links').html(data["pagination_html"]);
+        $scope.groupData.tableEntries = data["groups_data"];
+        $scope.groupData.tableHeader = data["groups_table_hash"];
+
+        if (data["group_table_cache_key"] != null){
+          $scope.GroupTableCache.setCache(data["group_table_cache_key"]);
+        }
+        jQuery('#group_pagination_links a').bind('click', function(event){
+          event.preventDefault();
+          var newPageNumber = parseInt(getPageNumberFromURL(jQuery(this).attr('href')));
+          $scope.openPageInGroupTable(newPageNumber);
+        });
+    });
+  }
+
+  $scope.openPageInGroupTable = function(pageNumber){
+    pageNumber = getDefaultVal(pageNumber, 1);
+    var profileFiltersData = getProfileFilterFormData();
+    if (jQuery.isEmptyObject(profileFiltersData)){
+      $scope.ProfileFilterCache.dismissCache();
+    }
+    if (jQuery.isEmptyObject(profileFiltersData) || $scope.ProfileFilterCache.isValid()) {
+      $scope.refreshGroupsTableData(pageNumber);
+    } else {
+      $scope.applyFilter(true);
+    }
+  }
+
+  /*  User Table Related */    
+  $scope.refreshUsersTableData = function(pageNumber) {
+    pageNumber = getDefaultVal(pageNumber, 1);
+    $http.get(outcomesReportRoutes.detailedConnectionOutcomesReportUserDataPath, {params: {date_range: $scope.dateRange, page: pageNumber, page_size: PER_PAGE, sort_field: $scope.userData.sortOnKey, sort_type: $scope.convertSortableClassToSQLSyntax($scope.userData.sortType), profile_filter_cache_key: $scope.ProfileFilterCache.key, user_table_cache_key: $scope.UserTableCache.key, for_role: $scope.roleFilter}}).success(function(data){
+        jQuery('#user_pagination_links').html(data["pagination_html"]);
+        $scope.userData.tableEntries = data["users_data"];
+        $scope.userData.tableHeader = data["users_table_hash"];
+
+        if (data["user_table_cache_key"] != null){
+          $scope.UserTableCache.setCache(data["user_table_cache_key"]);
+        }
+        jQuery('#user_pagination_links a').bind('click', function(event){
+          event.preventDefault();
+          var newPageNumber = parseInt(getPageNumberFromURL(jQuery(this).attr('href')));
+          $scope.openPageInUserTable(newPageNumber);
+        });
+    });
+  }
+
+  $scope.openPageInUserTable = function(pageNumber){
+    pageNumber = getDefaultVal(pageNumber, 1);
+    var profileFiltersData = getProfileFilterFormData();
+    if (jQuery.isEmptyObject(profileFiltersData)){
+      $scope.ProfileFilterCache.dismissCache();
+    }
+    if (jQuery.isEmptyObject(profileFiltersData) || $scope.ProfileFilterCache.isValid()) {
+      $scope.refreshUsersTableData(pageNumber);
+    } else {
+      $scope.applyFilter(true);
+    }
+  }
+
+  // utility function
+  var getPageNumberFromURL = function(url){
+    var parameters = (url.split('?'))[1];
+    var parameterArray = parameters.split('&');
+    for (var i = 0; i < parameterArray.length; i++) 
+    {
+      var parameterName = parameterArray[i].split('=');
+      if(parameterName[0] === "page") 
+      {
+        return parameterName[1];
+      }
+    }
+    return false;
+  }
+
+  $scope.initialize = function() {
+    $scope.groupData = {tableHeader: [], tableEntries: [], sortOnKey: "", sortType: ""};
+    $scope.userData = {tableHeader: [], tableEntries: [], sortOnKey: "", sortType: ""};
+
+    $scope.showUsers = jQuery('#cjs-share-data').data('tab') == USER_TAB ? true : false;
+    $scope.connectionTerm = jQuery('#cjs-share-data').data('connection-term');
+
+    $scope.roleFilter = '<%= OutcomesReportUtils::RoleData::ALL_USERS %>';
+    $scope.statusFilter = null;
+    $scope.showGroupStatusFilter = false;
+
+    $scope.totalConnectionsChartConfig = jQuery.extend({size: {width: jQuery('.cui-charts-container').width()}}, $scope.commonChartOptions);
+    $scope.positiveConnectionsChartConfig = jQuery.extend({size: {width: jQuery('.cui-charts-container').width()}}, $scope.commonBarChartOptions);
+    $scope.totalUsersChartConfig = jQuery.extend({size: {width: jQuery('.cui-charts-container').width()}}, $scope.commonChartOptions);
+    $scope.positiveUsersChartConfig = jQuery.extend({size: {width: jQuery('.cui-charts-container').width()}}, $scope.commonBarChartOptions);
+
+    $scope.updateDateRange();
+    $scope.refreshAllPageData(); // this is graph data refresh
+    $scope.showDateRangeBox = false;
+    $scope.showDateRangeBoxDatepickers = true;
+    $scope.prevWindowValid = false;
+    initialize.initializeTooltip();
+  }
+
+  $scope.initialize();
+}]);

@@ -1,0 +1,24 @@
+<% mentor_user_ids = recommendation_preferences_hash.collect {|x| x[:user].id if x[:user]}.compact %>
+<% footer = render(partial: "mentor_recommendations/banner_footer", locals: {for_admin_recommendation: true, mentor_user_ids: mentor_user_ids}) %>
+<div class="admin_recommendations m-b-xl cjs_quick_connect_box">
+  <%= get_quick_connect_title({recommendations_view: AbstractPreference::Source::ADMIN_RECOMMENDATIONS}).html_safe %>
+  <%= content_tag(:div, class: "gray-bg") do %>
+    <div class="row quick_connect_slick">
+      <% recommendation_preferences_hash.each do |recommendation_preference| %>
+        <% recommended_user = recommendation_preference[:user] %>
+        <%= render partial: "mentor_recommendations/mentor_preference", locals: {mentor_user:recommended_user, mentor_score: mentors_score[recommended_user.id], note: recommendation_preference[:recommendation_preference].note, show_delete: false, from_quick_connect: true, show_favorite_ignore_links: show_favorite_ignore_links, favorite_preferences_hash: favorite_preferences_hash, ignore_preferences_hash: ignore_preferences_hash, mentors_score: mentors_score} %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="clearfix">
+    <%= footer.html_safe %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function() {
+    homePageRecommendation.addCarousel(".admin_recommendations .quick_connect_slick");
+    Meetings.QuickConnect.adjustQuickConnectMatchInfo();
+  });
+</script>

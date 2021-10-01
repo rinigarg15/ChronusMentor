@@ -1,0 +1,10 @@
+<div class="education" id="education_<%=education.id%>">
+  <%= education.degree -%> <%= '<small class="grayed">in</small>'.html_safe if !education.degree.blank? and !education.major.blank? -%> <%= education.major -%>
+  <%= '<small class="grayed">from</small>'.html_safe if !education.degree.blank? or !education.major.blank? -%>
+  <%= education.school_name -%>
+  <%- unless education.graduation_year.blank? -%>
+    <span class="date">
+      (<%= education.graduation_year %>)
+    </span>
+  <%- end -%>
+</div>

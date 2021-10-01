@@ -1,0 +1,17 @@
+id,text,is_other,ref_obj_id,ref_obj_type,created_at,updated_at,position
+1,Male,false,9,ProfileQuestion,2014-11-20 11:59:37 +0530,2014-11-20 11:59:37 +05300,1
+2,Female,false,9,ProfileQuestion,2014-11-20 11:59:37 +0530,2014-11-20 11:59:37 +0530,2
+3,Accounting,false,10,ProfileQuestion,2014-11-20 11:59:37 +0530,2014-11-20 11:59:37 +0530,1
+4,Airlines/Aviation,false,10,ProfileQuestion,2014-11-20 11:59:37 +0530,2014-11-20 11:59:37 +0530,2
+5,Alternative Dispute Resolution,false,10,ProfileQuestion,2014-11-20 11:59:37 +0530,2014-11-20 11:59:37 +0530,3
+6,Wireless,false,10,ProfileQuestion,2014-11-20 11:59:37 +0530,2014-11-20 11:59:37 +0530,4
+7,Writing and Editing,false,10,ProfileQuestion,2014-11-20 11:59:37 +0530,2014-11-20 11:59:37 +0530,5
+8,African American,false,17,ProfileQuestion,2014-08-07 11:11:18 UTC,2014-08-07 11:11:18 UTC,1
+9,American Indian or Alaska Native,false,17,ProfileQuestion,2014-08-07 11:11:18 UTC,2014-08-07 11:11:18 UTC,2
+10,Asian,false,17,ProfileQuestion,2014-08-07 11:11:18 UTC,2014-08-07 11:11:18 UTC,3
+11,Asian Indian,false,17,ProfileQuestion,2014-08-07 11:11:18 UTC,2014-08-07 11:11:18 UTC,4
+12,Caucasian/White,false,17,ProfileQuestion,2014-08-07 11:11:18 UTC,2014-08-07 11:11:18 UTC,5
+13,Hispanic,false,17,ProfileQuestion,2014-08-07 11:11:18 UTC,2014-08-07 11:11:18 UTC,6
+14,Japanese,false,17,ProfileQuestion,2014-08-07 11:11:18 UTC,2014-08-07 11:11:18 UTC,7
+15,Korean,false,17,ProfileQuestion,2014-08-07 11:11:18 UTC,2014-08-07 11:11:18 UTC,8
+16,Other,false,17,ProfileQuestion,2014-08-07 11:11:18 UTC,2014-08-07 11:11:18 UTC,9

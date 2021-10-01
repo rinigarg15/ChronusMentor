@@ -1,0 +1,18 @@
+<%= include_kendo %>
+
+<% @back_link = @used_as_filter ? get_back_link(@source_info) : (@src_path == ReportConst::ManagementReport::SourcePage ? { label: "feature.reports.content.dashboard".translate, link: management_report_path } : nil) %>
+<% @title = @admin_view.title %>
+
+<% if !@source_info.nil? && @source_info["controller"] == "campaign_management/user_campaigns"
+    @page_action = {:label => "feature.admin_view.action.Update_View".translate, :url => edit_admin_view_path, class: "btn btn-primary btn-large"}
+  else
+    @page_action2 = add_users_dropdown if @admin_view.is_program_view?
+    @page_action2_options = {:dropdown_title => "feature.admin_view.action.Add_Users".translate, :large => true}
+    @page_action = admin_view_page_actions(@admin_view) unless hide_for_multi_track_admin?(@admin_view)
+  end
+%>
+<% @title_block = render(:partial => "admin_views/admin_view_title") %>
+<%= response_flash("cjs_admin_view_flash") %>
+<%= ibox nil, :ibox_id => "cjs_show_admin_view_results" do %>
+  <%= render :partial => "admin_views/show", locals: {dynamic_filter_params: @dynamic_filter_params} %>
+<% end %>

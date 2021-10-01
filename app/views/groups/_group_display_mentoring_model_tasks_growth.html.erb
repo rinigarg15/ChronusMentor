@@ -1,0 +1,10 @@
+<div class="row">
+  <% unless survey_answers.nil? %>
+    <div class="col-md-6">
+      <%= render partial: "groups/display_survey_responses", locals: { survey_answers: survey_answers, group: group, tasks: tasks } %>
+    </div>
+  <% end %>
+  <div class="<%= survey_answers.nil? ? 'col-md-12' : 'col-md-6' %>">
+    <%= render partial: "groups/tasks_progress", locals: { group: group, without_goals: true, show_manage_connections_view: show_manage_connections_view } %>
+  </div>
+</div>

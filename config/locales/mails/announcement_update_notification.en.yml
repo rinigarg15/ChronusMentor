@@ -1,0 +1,13 @@
+en:
+  email_translations:
+    announcement_update_notification:
+      enabled_html: Send %{email} notifications
+      disabled_html: Send %{email} notifications
+      title_v1: Announcement update notification
+      description_v3: This email is sent when updating an existing announcement if the %{_admin} wants to notify the participants immediately. Configurable for each update.
+      subject: 'Update: {{announcement_title}}'
+      content_v1_html: Your {{customized_admin_term}} has updated an announcement posted earlier.<br/><br/><b>{{announcement_title}}</b><br/>{{announcement_body}}<br/>{{view_announcement_button}}
+      view_announcement: View Announcement
+      tags:
+        view_announcement_button:
+          description: View announcement button

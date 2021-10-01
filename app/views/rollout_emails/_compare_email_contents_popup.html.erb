@@ -1,0 +1,29 @@
+<% current_content_heading_html = content_tag(:span, "feature.email.content.current_content".translate, class: "cui-rollout-popup-headings") %>
+<% updated_content_heading_html = content_tag(:span, "feature.email.content.updated_content".translate, class: "cui-rollout-popup-headings") %>
+<% unless @edit_page == "true" %>
+  <div class="cui-rollout-popup-header well">
+    <div class="pull-right">
+      <%= rollout_popup_dismiss_link(mailer_template, @edit_page == "true") %>
+    </div>
+    <div class="clearfix">
+      <%= "feature.email.content.rollout_popup_from_sidebar_heading_html".translate(:program => _program) %>
+    </div>
+  </div>
+<% end %>
+
+<div class="cui-rollout-popup-content">
+  <%= rollout_html_for_old_and_new_content(current_content_heading_html, updated_content_heading_html) %>
+  <%= rollout_popup_horizontal_divider %>
+  <%= rollout_html_for_old_and_new_content(old_subject, new_subject) %>
+  <%= rollout_popup_horizontal_divider %>
+  <%= rollout_html_for_old_and_new_content(sanitized_mail_content_for_rollout_popup(old_content), sanitized_mail_content_for_rollout_popup(new_content)) %>
+  <%= rollout_popup_horizontal_divider %>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <%= rollout_popup_keep_current_content_button_link(mailer_template, @edit_page == "true") %>
+  </div>
+  <div class="col-md-6">
+    <%= link_to "feature.email.content.update_content".translate, rollout_switch_to_default_content_rollout_email_path(mailer_template.uid), method: :post, :class => "btn btn-primary", data: {:disable_with => "display_string.Please_Wait".translate} %>
+  </div>
+</div>

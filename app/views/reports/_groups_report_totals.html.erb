@@ -1,0 +1,34 @@
+<% if group_report_activity_enabled?(current_program, Program::Dashboard::GroupsActivityReport::Activities::POSTS_ACTIVITY) %>
+  <span class="col-sm-6 p-l-0 p-r-xs m-t-xs">
+    <i class="fa fa-comment fa-fw" id="posts"></i> <%= groups_report.totals[ReportViewColumn::GroupsReport::Key::POSTS_COUNT] %>
+  </span>
+  <%= tooltip("posts", "feature.reports.groups_report_columns.posts_count".translate, true) %>
+<% end %>
+
+<% if group_report_activity_enabled?(current_program, Program::Dashboard::GroupsActivityReport::Activities::MESSAGES_ACTIVITY) %>
+  <span class="col-sm-6 p-l-0 p-r-xs m-t-xs">
+    <i class="fa fa-envelope fa-fw" id="messages"></i> <%= groups_report.totals[ReportViewColumn::GroupsReport::Key::MESSAGES_COUNT] %>
+  </span>
+  <%= tooltip("messages", "feature.reports.content.messages_exchanged".translate, true) %>
+<% end %>
+
+<% if group_report_activity_enabled?(current_program, Program::Dashboard::GroupsActivityReport::Activities::MEETINGS_ACTIVITY) %>
+  <span class="col-sm-6 p-l-0 p-r-xs m-t-xs">
+    <i class="fa fa-calendar fa-fw" id="meetings"></i> <%= groups_report.totals[ReportViewColumn::GroupsReport::Key::MEETINGS_COUNT] %>
+  </span>
+  <%= tooltip("meetings", "feature.reports.content.meetings_scheduled".translate(Meetings: _Meetings), true) %>
+<% end %>
+
+<% if group_report_activity_enabled?(current_program, Program::Dashboard::GroupsActivityReport::Activities::TASKS_ACTIVITY) %>
+  <span class="col-sm-6 p-l-0 p-r-xs m-t-xs">
+    <i class="fa fa-check-square-o fa-fw" id="tasks"></i> <%= groups_report.totals[ReportViewColumn::GroupsReport::Key::TASKS_COUNT] %>
+  </span>
+  <%= tooltip("tasks", "feature.reports.groups_report_columns.tasks_count".translate, true) %>
+<% end %>
+
+<% if group_report_activity_enabled?(current_program, Program::Dashboard::GroupsActivityReport::Activities::SURVEYS_ACTIVITY) %>
+  <span class="col-sm-6 p-l-0 p-r-xs m-t-xs">
+    <i class="fa fa-comments fa-fw" id="survey_responses"></i> <%= groups_report.totals[ReportViewColumn::GroupsReport::Key::SURVEY_RESPONSES_COUNT] %>
+  </span>
+  <%= tooltip("survey_responses", "feature.survey.label.survey_responses".translate, true) %>
+<% end %>

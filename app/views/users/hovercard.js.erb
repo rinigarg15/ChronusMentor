@@ -1,0 +1,5 @@
+<% locals = {user: @user, user_roles: @user_roles, show_email: @show_email, in_summary_questions: @in_summary_questions, groups: @groups, :viewing_group => @viewing_group, :container_id => params[:container_id]} %>
+<% content = (render partial: "users/hovercard_summary", locals: locals) %>
+
+jQuery("body").append("<%= j content %>");
+initialize.initializeTooltip();

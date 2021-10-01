@@ -1,0 +1,104 @@
+en:
+  feature:
+    article:
+      header:
+        articles_labeled: "%{Articles} labeled '%{label_name}'"
+        article_title: "%{Article} Title"
+        article_content: "%{Article} Content"
+        labels: "%{article} Labels"
+        list_title: List Title
+        list_items: The List Items
+        draft_label: "(draft)"
+        related_articles: Related %{articles}
+        sort_by:
+          recent_first: Recent first
+          most_viewed: Most viewed
+          most_helpful: Most helpful
+          oldest_first: Oldest first
+        title: Title
+        url: URL
+        book: Book
+        website: Website
+        articles: "%{articles}"
+      action:
+        write_new: Write New %{Article}
+        write_first: Write the First %{Article}
+        edit_article: Edit %{Article}
+        delete_article: Delete %{Article}
+        edit_list: Edit List
+        resume_editing: Resume Editing
+        add_book: Add a Book
+        add_site: Add a Website
+        See_more_articles: See more %{articles}
+      content:
+        draft_flash_v1_html: You have %{n_articles} yet to be posted.
+        no_article_message_html: There are no %{articles} yet! %{write_first_url}
+        no_title: "(no title)"
+        Labels_v1: Labels
+        labels: labels
+        last_saved_at: Last saved %{time_ago_in_words} ago
+        posted_ago: Posted %{time_ago_in_words} ago
+        drafted_article_count:
+          one: 1 %{article} draft
+          other: "%{count} %{article} drafts"
+        views_stat:
+          one: View
+          other: Views
+        pick_a_type: Pick %{an_article} type
+        article_type_question: What kind of %{article} do you want to write today?
+        tag_helptext: Enter comma separated labels (e.g. MBA,Core jobs)
+        discard_warning: Are you sure you want to discard this %{article} draft? This cannot be undone.
+        delete_warning: Are you sure you want to delete this %{article}? This cannot be undone.
+        delete_comment_warn: Are you sure you want to delete the comment? This action cannot be undone.
+        embed_helptext: "(e.g. YouTube, Vimeo, CareerTV, Scribd, Docstoc etc.)"
+        upload_helptext: 'Please attach %{an_article} of the following types: pdf, doc, xls, ppt, docx, pptx, xlsx, png, jpg, gif, zip, rar.'
+        by_author_html: By %{author}
+        no_desc: No description provided by the %{article} contributor.
+        list_error: There were problems saving this list. Please fix the errors and try again.
+        new_list_helptext: Build your list by adding a book or a website to the list
+        list: list
+        embedded_media_content_inside: Embedded media content inside.
+        general_article_tips:
+          attention_grabbing_tip: Have an attention grabbing title
+          simple_words_tip: Simplify your words
+          short_sentence_tip: Use short sentences and paragraphs
+          avoid_controversial_tip: Make your %{article} conversational
+          individualized_tip: Infuse your personality into the %{article}
+        media_article_tips:
+          header: 'Tips on posting media:'
+          right_dimensions_tip: Make sure you use the right width and height when you get the embed code
+        upload_article_tips:
+          header: Tips on uploading %{articles}
+        list_article_tips:
+          header: Tips on sharing books/websites
+          Note: 'Note:'
+          relevant_tip: Share books/website that will help members of the program
+          avoid_controversial_tip: Avoid sharing books/websites that are controversial in nature
+          exact_title_tip: For books, cite the exact title of the book - We use the Amazon service to display the Author name and the average customer rating.
+          preview_tip: Preview of the book/website will be shown as part of the %{article} listing
+        common_tips:
+          header: 'Tips on writing a good %{article}:'
+          copyrights_tip: Make sure you're not violating any copyrights
+          avoid_controversy_tip: Do not post controversial or objectionable content
+        types:
+          general: General %{Article}
+          list: Share Books and Websites
+          media: Media Content
+          upload: Upload %{Article}
+          general_label: General Advice
+          list_label: List
+          media_label: Embedded Media
+          upload_label: Uploaded %{Article}
+          general_description: Write free form text
+          list_description_v2: Make a list of websites and books that you found useful in the past that could be helpful to the members of the %{program}.
+          media_description: Saw an interesting video? Found some interesting slideshow on the Internet? Create %{an_article} embedding rich media content and share it with other members.
+          upload_description_v1: Upload %{an_article} from your device.
+          general_new_title: New General %{Article}
+          list_new_title: New Books/Websites List
+          media_new_title: New Media %{Article}
+          upload_new_title: Upload New %{Article}
+        comment_help_text: Please type in your comment here...
+        n_comment:
+          zero: Comment
+          one: Comment
+          other: Comments

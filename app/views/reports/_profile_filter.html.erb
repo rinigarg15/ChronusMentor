@@ -1,0 +1,41 @@
+<%= ibox "", header_content: content_tag(:b, local_assigns[:title] || "feature.reports.label.attendee_profile".translate), content_class: "p-t-0" do %>
+  <% operator_options = questions_container_operator_options %>
+  <% rand_id = SecureRandom.hex(3) %>
+  <div class="form-group cjs_dummy_for_clone hide col-xs-12 p-l-0">
+    <%= construct_input_group([], [], input_group_class: "col-xs-12") do %>
+      <%= label_tag("report_profile_questions_#{rand_id}_field", "feature.reports.content.profile_question".translate, :class => "sr-only cjs_question_selector_label") %>
+      <%= select_tag("report[profile_questions][#{rand_id}][field]", options_for_select_for_questions(profile_questions, false), :class => "form-control cjs_question_selector col-xs-12", :title => "feature.reports.content.profile_question_v1".translate) %>
+    <% end %>
+    <%= construct_input_group([], [], input_group_class: "m-t-sm col-xs-10 pull-left hide") do %>
+      <%= label_tag("report_profile_questions_#{rand_id}_operator", "feature.reports.content.profile_operator".translate, :class => "sr-only cjs_operator_field_label") %>
+      <%= select_tag("report[profile_questions][#{rand_id}][operator]", options_for_select(operator_options, ""), :class => "form-control cjs_operator_field", title: "feature.reports.content.profile_operator_v1".translate) %>
+    <% end %>
+    <%= construct_input_group([], [], input_group_class: "m-t-sm col-xs-10 pull-left hide") do %>
+      <%= label_tag("report_profile_questions_#{rand_id}_value", "feature.reports.content.profile_question_value".translate, :class => "sr-only cjs_input_hidden_label") %>
+      <%= text_field_tag("report[profile_questions][#{rand_id}][value]", "", :class => "cjs_input_hidden form-control hide", title: "feature.reports.content.profile_question_value_v1".translate) %>
+      <%= label_tag("report_profile_questions_#{rand_id}_choice", "feature.reports.content.profile_question_choice".translate, :class => "sr-only cjs_choices_hidden_label") %>
+      <%= hidden_field_tag("report[profile_questions][#{rand_id}][choice]", "", :class => "cjs_choices_hidden no-padding form-control", :data => {:placeholder => "feature.connection.header.survey_response_filter.placeholder.select_choices".translate}, title: "feature.reports.content.profile_question_choice_v1".translate) %>
+    <% end %>
+
+    <%# date range picker %>
+    <div class="m-t-sm col-xs-8 pull-left hide cjs_date_range_picker_container no-padding">
+      <%= construct_daterange_picker("report[profile_questions][#{rand_id}][date_picker_outcomes_report]", {}, presets: DateRangePresets.for_date_profile_field_quick_filter, hidden_field_attrs: {class: "cjs_date_picker_outcomes_report #{ProfileQuestionsHelper::DATE_RANGE_PICKER_FOR_PROFILE_QUESTION}"}) %>
+    </div>
+
+    <span class="col-xs-2 cjs-add-delete-buttons-container">
+      <%= link_to(get_icon_content("fa fa-plus-circle") + "display_string.Add".translate, "javascript:void(0)", {:class => "cjs_add_one_more_filter btn-md btn btn-white m-t-sm border-bottom hide"}) %>
+    </span>
+  </div>
+  <div class="hide cjs_user_profile_prepend_element"></div>
+<% end %>
+
+<% question_choices_ids, question_choices_texts = get_question_choices_for_select2(profile_questions) %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    commonUserProfileFilter.toggleOperatorDropdown("<%= SurveyResponsesDataService::Operators::CONTAINS %>", "<%= SurveyResponsesDataService::Operators::NOT_CONTAINS %>", "<%= "feature.survey.survey_report.filters.operators.not_contains".translate %>", "<%= SurveyResponsesDataService::Operators::FILLED %>", "<%= "feature.survey.survey_report.filters.operators.Contains".translate %>");
+    commonUserProfileFilter.showInputField(<%= question_choices_ids.to_json.html_safe %>, <%= question_choices_texts.to_json.html_safe %>, "<%= ProfileQuestion::SELECT2_SEPARATOR %>");
+    commonUserProfileFilter.removeQuestion();
+    commonUserProfileFilter.addAdditionalCustomUserProfileFilterSelector("<%= j("display_string.And".translate) %>");
+    commonUserProfileFilter.customUserProfileFilterCloner();
+  });
+<% end %>

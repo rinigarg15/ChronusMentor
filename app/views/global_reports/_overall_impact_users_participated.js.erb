@@ -1,0 +1,6 @@
+<% if @overall_impact_hash[:users_participated] %>
+  <% content = rollup_body_box(box_icon_class: "fa-user-circle", text_number: @overall_impact_hash[:users_participated][:current], text_number_class: "cjs_global_reports_overall_impact_users_participated_number") %>
+  <% content << get_percentage_difference_rollup(@overall_impact_hash[:users_participated]) %>
+  jQuery(".cjs_global_reports_overall_impact_users_participated").html("<%= j(content) %>")
+  NumberCounter.initCounter('.cjs_global_reports_overall_impact_users_participated_number', {format: true});
+<% end %>

@@ -1,0 +1,4 @@
+<% category_details = render(:partial => "translations/category_details", :locals => {category_items: @category_detail, category: @category, chosen_category: nil}) %>
+jQuery("#cjs_expanded_<%= @category %>_content").html('<%= j category_details %>');
+Localization.renderTranslations();
+jQuery('#loading_results').hide();

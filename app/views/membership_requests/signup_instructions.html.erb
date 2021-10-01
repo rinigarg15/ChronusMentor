@@ -1,0 +1,25 @@
+<% resend_email_link = link_to("display_string.click_here".translate, resend_signup_mail_membership_requests_path(roles: params[:roles], email: params[:email]), id:  "resend_signup_mail_link", data: { remote: true }) %>
+<%= ibox nil do %>
+  <%= content_tag(:div, :class => "p-sm text-center") do %>
+    <br/>
+
+    <%= content_tag(:div, :class => "lead") do %>
+      <i class="fa fa-check-circle p-r-xxs fa-2x text-navy"></i>
+    <% end %>
+
+    <%= content_tag(:div, :class => "lead") do %>
+      <%= content_tag(:strong,  "feature.membership_request.content.signup_instructions_line1".translate) %>
+    <% end %>
+
+    <%= content_tag(:div, :class => "text-muted") do %>
+      <%= content_tag(:strong, "feature.membership_request.content.signup_instructions_line2_html".translate(email: content_tag(:span, "(#{params[:email]})"))) %>
+    <% end %>
+    <hr/>
+    <%= content_tag(:div, %Q[#{"feature.membership_request.content.signup_instructions_line3_1".translate} #{"feature.membership_request.content.signup_instructions_line3_2_html".translate(url: resend_email_link)}].html_safe) %>
+  <% end %>
+<% end %>
+<%= javascript_tag do %>
+  <% if is_mobile_app? %>
+    MobileAppTracking.gaTrackSignedUp("", "");
+  <% end %>
+<% end %>

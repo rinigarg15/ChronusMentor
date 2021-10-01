@@ -1,0 +1,25 @@
+<% source_info = params.to_unsafe_h.pick(:controller, :action, :id).merge(section: section) %>
+<% modal_v3_popup "feature.match_report.label.top_applied_filters".translate(mentee: _mentee), modal_body_class: "cjs_mentee_actions_popup" do %>
+  <div id="bulk_match_settings_content">
+    <%= form_tag update_section_settings_match_reports_path(section: section), remote: true, method: :patch do %>
+      <div>
+        <% role_names = [RoleConstants::ROLE_DISPLAY_NAME_MAPPING[RoleConstants::STUDENT_NAME]] %>
+        <div class="false-label control-label col-sm-3"><%= "feature.match_report.label.role_user_set".translate(role: _Mentee) %></div>
+        <div class="controls col-sm-9">
+          <%= render :partial => "admin_views/admin_view_details", :locals => {role_names: role_names, preview_view_url: preview_view_details_match_reports_path(source_info: source_info), id_suffix: "mentee_action", form: nil} %>
+        </div>
+      </div>
+      <% action_set(class: "pull-right m-t-md") do %>
+        <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", "data-dismiss" => "modal" %>
+        <%= submit_tag("display_string.Save".translate, class: 'btn btn-primary', data: {disable_with: "display_string.Please_Wait".translate}) %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+<% create_admin_view = render(partial: 'admin_views/create_admin_view_link', locals: { source_info: source_info } ) %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    adminViewInitSelect2.initialize(<%= chr_json_escape get_view_options(@admin_view_role_hash, RoleConstants::STUDENT_NAME).to_json %>, "#mentee_action_mentee_view_id", "<%= j(create_admin_view) %>", true);
+    AdminViews.handleViewChange();
+  });
+<% end %>

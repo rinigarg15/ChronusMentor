@@ -1,0 +1,8 @@
+<% modal_v3_popup("feature.meetings.header.request_meeting_v2".translate(:mentor_name => @member.name(:name_only => true)), {:modal_body_class => "no-padding", additional_close_button_class: "cjs_dismiss_request_meeting_popup"}) do %>
+  <%= get_meetings_mini_popup_header(user) %>
+  
+  <div class="tab-content clearfix">
+    <%= render :partial => "meetings/meeting_details_page", locals: {member: @member, user: user} %>
+    <%= render :partial => "meetings/select_meeting_times", locals: {member: @member, user: user, available_slots: @available_slots, src: @src} %>
+  </div>
+<% end %>

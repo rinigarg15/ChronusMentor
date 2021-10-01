@@ -1,0 +1,36 @@
+<% @skip_rounded_white_box_for_content = true %>
+<% @back_link = {:label => "feature.survey.header.Surveys".translate, :link => surveys_path} %>
+<% @title = @survey.name %>
+<% dropdown_actions, modal_content = render_survey_header_bar(@survey) %>
+<% @page_action = dropdown_actions %>
+<% @page_action_options = {:dropdown_title => "display_string.Manage".translate} %>
+<% if @survey.program_survey? %>
+  <% @page_action2 = {
+    label: "display_string.Share".translate,
+    url: publish_survey_path(@survey),
+    class: "btn btn-primary action action_2"
+    } %>
+<% end %>
+<% @title_description = render(:partial => 'surveys/survey') + modal_content  %>
+
+<div>
+  <%= render :partial => 'surveys/edit' %>
+
+  <%= render :partial => 'surveys/survey_tabs', locals: {reminders_count: @survey.reminders_count, questions_count: @survey_questions.count} %>
+  <%= ibox nil do %>
+    <div id="survey_questions_list">
+      <% unless @survey_questions.empty? %>
+        <%= content_tag(:p, "feature.survey.content.survey_questions_desc".translate, class: "m-t-sm m-b-md") %>
+      <% end %>
+
+      <div id="customizable_profile">
+        <%= render :partial => 'common_questions/index', :locals => {
+          :common_questions => @survey_questions,
+          :new_question_form_url => new_survey_survey_question_path(@survey, :role => params[:role]),
+          :sort_url => sort_survey_survey_questions_path(@survey)} %>
+      </div>
+    </div>
+  <% end %>
+</div>
+<%= javascript_tag "jQuery(document).ready(function(){CustomizeSelect.selectExpandContract();});" %>
+<%= javascript_tag %Q[SurveysGoogleAnalytics.handleExportSurvey();]  %>

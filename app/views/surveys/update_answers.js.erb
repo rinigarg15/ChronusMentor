@@ -1,0 +1,13 @@
+<% if @status == true %>
+  ChronusValidator.ErrorManager.ShowPageFlash(true, "<%= 'flash_message.feedback.response_flash.create_success_v1'.translate %>");
+  jQuery("#connection_inactivity_feedback_form").modal("hide");
+  <% if @survey.edit_mode == Survey::EditMode::MULTIRESPONSE %>
+    <% @group = @feedback_survey_group %>
+    <% @feedback_response = Survey::SurveyResponse.new(@current_program.feedback_survey, user_id: current_user.id, group_id: @group.id) %>
+    jQuery("#feedback_answers").html('<%= j (render partial: "groups/inactivity_feedback_form") %>');
+  <% end %>
+<% else %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("cjs-feedback-form-flash", "<%= 'flash_message.survey_flash.create_failure'.translate %>");
+  jQuery(".cjs-feedback-form-submit-validation").attr("disabled", false);
+  jQuery(".cjs-feedback-form-submit-validation").val("<%= 'display_string.Submit'.translate %>");
+<% end %>

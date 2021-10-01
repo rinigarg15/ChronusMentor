@@ -1,0 +1,17 @@
+<%= javascript_tag do %>
+  var MentoringModelTranslations = {
+    deleteAlert: "<%= j "feature.multiple_templates.js_translations.default_delete_alert".translate %>",
+    activeConnectionsDeleteAlert: "<%= j "feature.multiple_templates.js_translations.active_connections_delete_alert".translate(Mentoring_Connections: _Mentoring_Connections) %>",
+    confirmationAlert: "<%= "feature.multiple_templates.js_translations.confirmationAlert".translate %>",
+    appendDefault: "<%= "feature.multiple_templates.header.default_marker".translate %>",
+    draftGroupsConfirmationAlert: "<%= "feature.multiple_templates.js_translations.draftGroupsConfirmationAlert".translate(mentoring_connections: _mentoring_connections) %>",
+    titleTaken: "<%= "feature.multiple_templates.js_translations.titleTaken_v1".translate(Mentoring_Connection: _Mentoring_Connection) %>",
+    featuresInconsistent: "<%= "feature.multiple_templates.js_translations.features_inconsistent".translate %>",
+    selectedMoreThanOnce: "<%= "feature.multiple_templates.js_translations.selected_more_than_once".translate %>",
+    syncToGroupConfirmation: "<%= "feature.multiple_templates.js_translations.syncToGroupConfirmation".translate(mentoring_connections: _mentoring_connections, mentoring_connection: _mentoring_connection, count: (@ongoing_connections_count || 0)) %>",
+    syncToGroupConfirmationInReordering: "<%= "feature.multiple_templates.js_translations.syncToGroupConfirmation".translate(mentoring_connections: _mentoring_connections, mentoring_connection: _mentoring_connection, count: (@connections_getting_reordered_count || 0)) %>",
+    milestoneOrderDestroyed: "<%= "feature.multiple_templates.js_translations.milestoneOrderDestroyed".translate(mentoring_connections: _mentoring_connections, mentoring_connection: _mentoring_connection, count: (@ongoing_connections_count || 0)) %>",
+    milestoneOrderDestroyedInReordering: "<%= "feature.multiple_templates.js_translations.milestoneOrderDestroyedInReordering".translate(mentoring_connections: _mentoring_connections, mentoring_connection: _mentoring_connection, count: (@connections_getting_reordered_count || 0)) %>",
+    applyConfirmationAlert: "<%= "feature.multiple_templates.js_translations.applyConfirmationAlert".translate(mentoring_connections: _mentoring_connections) %>"
+  };
+<% end %>

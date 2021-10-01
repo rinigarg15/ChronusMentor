@@ -1,0 +1,21 @@
+[class^="profile-icon-"], [class*=" profile-icon-"]
+{ display: inline-block; background: image_url('profile-icons.png') no-repeat; overflow: hidden; text-indent: -9999px; text-align: left; }
+ 
+.profile-icon-date { background-position: -2px -0px; width: 32px; height: 30px; }
+.profile-icon-education { background-position: -2px -32px; width: 32px; height: 30px; }
+.profile-icon-experience { background-position: -2px -64px; width: 32px; height: 30px; }
+.profile-icon-location { background-position: -2px -96px; width: 32px; height: 30px; }
+.profile-icon-manager { background-position: -2px -128px; width: 32px; height: 30px; }
+.profile-icon-multi-line { background-position: -2px -160px; width: 32px; height: 30px; }
+.profile-icon-multiple-choice { background-position: -2px -192px; width: 32px; height: 30px; }
+.profile-icon-ordered-options { background-position: -2px -224px; width: 32px; height: 30px; }
+.profile-icon-paragraph { background-position: -2px -256px; width: 32px; height: 30px; }
+.profile-icon-publication { background-position: -2px -288px; width: 32px; height: 30px; }
+.profile-icon-single-option { background-position: -2px -320px; width: 32px; height: 30px; }
+.profile-icon-skype-id { background-position: -2px -352px; width: 32px; height: 30px; }
+.profile-icon-text-box-multi { background-position: -2px -384px; width: 32px; height: 30px; }
+.profile-icon-text-box { background-position: -2px -416px; width: 32px; height: 30px; }
+.profile-icon-time-zone { background-position: -2px -448px; width: 32px; height: 30px; }
+.profile-icon-upload-file { background-position: -2px -480px; width: 32px; height: 30px; }
+.profile-icon-preview { background-position: -2px -512px; width: 24px; height: 21px; }
+.profile-icon-view-by-program { background-position: -2px -535px; width: 21px; height: 19px; }

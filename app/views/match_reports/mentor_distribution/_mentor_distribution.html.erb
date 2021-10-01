@@ -1,0 +1,23 @@
+<% locals = {mentee_view: mentee_view, mentor_view: mentor_view, mentor_view_users: mentor_view_users, mentee_view_users: mentee_view_users} %>
+<% mobile_view = mobile_browser? || is_mobile_app? %>
+<div class="clearfix">
+  <div>
+    <div class= "ibox m-0">
+      <div class="ibox-content clearfix p-b-xxs">
+        <div class="col-xs-12 <%= "col-sm-6 b-r" if top_match_configs.present? && !mobile_view %> p-r-0 p-l-0 cjs_mentor_mentee_ratio">
+          <%= render(partial: "match_reports/mentor_distribution/mentor_mentee_ratio", locals: locals) %>
+        </div>
+        <% if top_match_configs.present? %>
+          <div class="col-xs-12 col-sm-6 p-r-0 p-l-sm cjs_mentor_recommendations">
+            <%= render(partial: "match_reports/mentor_distribution/mentor_recommendations", locals: locals.merge({top_match_configs: top_match_configs, match_config_question_texts_hash: match_config_question_texts_hash})) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <% if match_config_question_texts_hash.present? %>
+      <div class="col-sm-12 m-t-sm p-r-0 p-l-0 cjs_mentor_offers_mentee_needs">
+        <%= render(partial: "match_reports/mentor_distribution/mentor_offers_mentee_needs", locals: locals.merge({match_config_question_texts_hash: match_config_question_texts_hash})) %>
+      </div>
+    <% end %>
+  </div>
+</div>

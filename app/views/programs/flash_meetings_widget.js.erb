@@ -1,0 +1,6 @@
+<% if @meetings_to_show.size > 0 %>
+  jQuery("#cjs_flash_meetings_widget").html("<%= escape_javascript(render partial: 'programs/flash_meetings_widget_content', locals: {meetings: @meetings_to_show, show_view_all: @show_view_all, upcoming_meetings_count: @total_upcoming_meetings}) %>");
+  GroupTabs.adjustSlickSlideHeight(".meetings-slick", 100);
+<% else %>
+  window.location.reload(); 
+<% end %>

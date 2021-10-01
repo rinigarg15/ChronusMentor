@@ -1,0 +1,23 @@
+<% @title = "feature.three_sixty.settings_tab".translate %>
+<% @page_action2 = {:label => "feature.three_sixty.surveys_tab".translate, :url => dashboard_three_sixty_surveys_path, :class => "btn btn-primary pull-right"} %>
+<% @page_action = {:label => "feature.three_sixty.competencies_tab_v1".translate, :url => three_sixty_competencies_path, :class => "btn btn-primary pull-right"} %>
+
+<%= ibox "feature.three_sixty.settings.reviewer_groups".translate, :ibox_class => "cjs_three_sixty_container cjs_three_sixty_hover_parent", :ibox_id => "three_sixty_reviewer_groups" do %>
+  <ul class="list-group cjs_three_sixty_parent new_three_sixty_object_container">
+
+  <%= render :partial => 'three_sixty/reviewer_groups/reviewer_group', :collection => @reviewer_groups, :locals => { :show_actions => @show_actions } %>
+  <% if @show_actions %>
+    <li class="list-group-item no-borders cjs_new_three_sixty_object" id="three_sixty_add_new_reviewer_group_form_container">
+      <%= render :partial => 'three_sixty/reviewer_groups/new', :locals => {:reviewer_group => ThreeSixty::ReviewerGroup.new} %>
+    </li>
+  <% end %>
+</ul>
+  <div class="p-sm">
+    <%= render :partial => 'organizations/show_text_type_answers_per_reviewer_category' if @show_actions %>
+  </div>
+<% end %>
+
+<%= javascript_tag do  %>
+  ThreeSixty.initializeReviewerGroups();
+  AjaxPostOnChange();
+<% end %>

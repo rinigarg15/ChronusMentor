@@ -1,0 +1,22 @@
+en:
+  email_translations:
+    mentor_offer_rejected_notification_to_mentor:
+      title_v4: "%{_Mentor} offer declined notification to %{_mentee}"
+      description_v3: "%{_Mentors} can directly offer %{_mentoring} to %{_mentees}. This email (including a personal message from the %{_mentee}) is sent to %{_a_mentor} when %{_a_mentee} declines the %{_mentoring} offer."
+      subject_v1: "{{mentee_name}} has declined your {{customized_mentoring_term}} offer"
+      content_v2_html: "<a href='{{mentee_url}}'>{{mentee_name}}</a> has declined your {{customized_mentoring_term}} offer in <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a>.<br/>{{rejection_response}}<br/>We have many other {{customized_mentees_term}} who may benefit from your {{customized_mentoring_term}}.{{view_mentees_button}} <br/> If you have any questions, please reach out to one of the <a href='{{url_contact_admin}}'>{{customized_admin_term_pluralized}}</a> and we'd be happy to help you.<br/>"
+      button_text: View all %{mentees}
+      tags:
+        mentee_name:
+          description: Name of the mentee who was offered mentoring by the mentor
+        url_mentees_list:
+          description: Url of the mentees listing page
+        rejection_response:
+          description: Reason specified by the mentee for rejecting the offer
+          example: Sorry mentor, but I have already been offered mentoring by someone else. Thank you.
+        view_mentees_button:
+          description: View all Mentees Button
+        url_contact_admin:
+          description: Url for the user to contact administrator
+        mentee_url:
+          description: Link to profile of mentee

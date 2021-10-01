@@ -1,0 +1,9 @@
+<%= ibox nil, ibox_id: "qa_questions", content_class: "no-padding" do %>
+  <% if @qa_questions.any? %>
+    <%= listing_page(@qa_questions, partial: "qa_questions/qa_question", collection_key: :qa_question) %>
+  <% else %>
+    <div class="p-sm text-center">
+      <%= "feature.profile.content.no_questions_from_user".translate(user_name: @profile_member.name) %>
+    </div>
+  <% end %>
+<% end %>

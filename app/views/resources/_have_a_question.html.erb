@@ -1,0 +1,17 @@
+<% buttons = [
+    { type: 'btn', class: 'btn btn-primary', icon: "fa fa-paper-plane-o", content: "display_string.Submit".translate }
+  ] %>
+<% comment_options = {
+  object: @admin_message,
+  form_options: { url: admin_messages_path(:root => @current_program.root, :from_inbox => false), remote: true},
+  form_html_options: { id_suffix: "resource_question" },
+  attribute: :content,
+  placeholder: "feature.resources.content.describe_your_question".translate,
+  input_id: "resource_question",
+  hidden_fields: {:resource_mail_subject => {:value => "feature.resources.content.resource_question_mail_subject".translate(:resource => _resource, :resource_title => resource.title), id: nil }},
+  action_buttons: buttons,
+  wrapper_class: "no-padding"
+} %>
+
+<%= render layout: "common/new_comment_wrapper", locals: comment_options do %>
+<% end %>

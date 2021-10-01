@@ -1,0 +1,9 @@
+<div id="admin_actions">
+  <%= ibox side_pane_action_header_text(@current_user.is_only_owner_of?(@group)), :content_class=> "p-xxs", :show_collapse_link => true do %>
+	  <ul class="list-group unstyled" id="group_<%= @group.id %>">
+	    <% group_panel_actions(@group).each do |action| %>
+	      <%= action %>
+	    <% end %>
+	  </ul>
+  <% end %>
+</div>

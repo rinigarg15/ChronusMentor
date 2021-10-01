@@ -1,0 +1,19 @@
+<% if groups.total_entries == 0 %>
+  <%= render partial: "groups/no_groups", locals: { link_url: find_new_groups_path } %>
+<% else %>
+  <%= ibox nil, ibox_class: "no-margins", content_class: "no-padding" do %>
+    <%= top_bar_in_listing( { collection: groups }, { show: true, applied_count: @my_filters.try(:size) } ) %>
+  <% end %>
+  <%= render partial: "groups/group", collection: groups, as: :group, locals: { is_table_view: false, per_page_count: groups.size } %>
+  <% bottom_bar_content = bottom_bar_in_listing( { collection: groups, params: group_params, ajax: true } ) %>
+  <% if bottom_bar_content.present? %>
+    <%= ibox nil, ibox_class: "b-t no-margins", content_class: "no-padding" do %>
+      <%= bottom_bar_content %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  GroupSearch.initializeTruncateActions();
+  ShowAndHideToggle();
+<% end %>

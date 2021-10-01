@@ -1,0 +1,48 @@
+en:
+  email_translations:
+    new_program_event_notification:
+      enabled_or_disabled_common_text_html: Send %{email} notification to all attendees
+      title_v1: New %{_program} event notification
+      description_v2: When %{_a_admin} sets up a program event, this email goes out to all invitees with the event details.
+      subject_v2: 'Invitation: {{program_event_title}} on {{event_time}}'
+      content_v5_html: 'You''ve been invited! <br /><br/> {{program_event_owner_name}} invites you to attend {{program_event_title}}. {{program_event_description}} <div><span style=''color:#00AC77; font-size: 16px''> Event Details </span></div><table style=''border-collapse:separate;border-spacing:10px 10px;'' border=''0'' bgcolor=''#eeeeee''><tr><td style=''vertical-align: top;color: #909090;''>Program Event:</td><td style=''vertical-align: top;''>{{program_event_title}}</td></tr><tr><td style=''vertical-align: top;color: #909090;''>When:</td><td style=''vertical-align: top;''>{{event_time}}</td></tr><tr><td style=''vertical-align: top;color: #909090;''>Where:</td><td style=''vertical-align: top;''>{{program_event_location}}</td></tr></table>{{view_event_details_button}}<br/>Let us know that you''re attending! You can RSVP here: <table class=''responsive-table'' border=''0''><tr><td>{{button_accept_program_event_invite}}</td><td style=''padding-left:15px;''>{{button_reject_program_event_invite}}</td><td style=''padding-left:15px;''>{{button_maybe_program_event_invite}}</td></tr></table><br/>If you have any questions about this event, please contact {{program_event_owner_name}} for more information.<br/>'
+      content_v6_html: 'You''ve been invited! <br /><br/> {{program_event_owner_name}} invites you to attend {{program_event_title}}. {{program_event_description}} <div><span style=''color:#00AC77; font-size: 16px''> Event Details </span></div><table style=''border-collapse:separate;border-spacing:10px 10px;'' border=''0'' bgcolor=''#eeeeee''><tr><td style=''vertical-align: top;color: #909090;''>Program Event:</td><td style=''vertical-align: top;''>{{program_event_title}}</td></tr><tr><td style=''vertical-align: top;color: #909090;''>When:</td><td style=''vertical-align: top;''>{{event_time}}(<a href=''{{url_program_event_request_calendar_attachment}}''>download ICS</a>)</td></tr><tr><td style=''vertical-align: top;color: #909090;''>Where:</td><td style=''vertical-align: top;''>{{program_event_location}}</td></tr></table>{{view_event_details_button}}<br/>Let us know that you''re attending! You can RSVP here: <table class=''responsive-table'' border=''0''><tr><td>{{button_accept_program_event_invite}}</td><td style=''padding-left:15px;''>{{button_reject_program_event_invite}}</td><td style=''padding-left:15px;''>{{button_maybe_program_event_invite}}</td></tr></table><br/>If you have any questions about this event, please contact {{program_event_owner_name}} for more information.<br/>'     
+      tags:
+        program_event_title:
+          description: Title of the program_event
+          example: Welcome meet for all users at the Cafeteria
+        program_event_timings:
+          description: Time of the program_event
+          example: December 24, 2013 11:00 am to 11:30 am UTC
+          event_timings: "(Event Timings)"
+        event_time:
+          description: This indicates the time of the event in the attendee's timezone. If not set, the time is displayed in the event's timezone.
+          example: December 24, 2013 11:00 am to 11:30 am UTC
+        program_event_location:
+          description: Location of the program_event
+          example: University Cafeteria
+        program_event_owner_name:
+          description: Owner of the program_event
+        program_event_description:
+          description: Description of the program_event
+          example_html: "<br/><br/>High tea and introduction of the mentors<br/><br/>"
+        url_program_event:
+          description: Url of the program_event
+        url_accept_program_event_invite:
+          description: Url for accepting the program_event invite
+        url_reject_program_event_invite:
+          description: Url for rejecting the program_event invite
+        url_maybe_program_event_invite:
+          description: Url for maybe attending the program_event invite
+        button_accept_program_event_invite:
+          description: Url for accepting the program event invite
+          yes_will_attend: Yes, I will attend
+        button_reject_program_event_invite:
+          description: Url for rejecting the program event invite
+          no_attend: No, I will not attend
+        button_maybe_program_event_invite:
+          description: Url for maybe attending the program event invite
+          maybe: Maybe, I might attend
+        view_event_details_button:
+          description: View Event Details Button
+          view_event_details: View Event Details

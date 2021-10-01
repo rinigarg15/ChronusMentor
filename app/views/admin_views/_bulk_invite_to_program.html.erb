@@ -1,0 +1,39 @@
+<% option_proc = Proc.new{|program| {"data-follow_link" => invite_users_path(root: program.root)}}%>
+<%= simple_form_for @admin_view, :url => invite_to_program_admin_view_path(@admin_view), :html => {:method => :post, :id => "form_admin_view_bulk_actions"} do |f| %>
+  <%= f.input "members", :as => :hidden, :input_html => {:value => @members.collect(&:id).join(",")} %>
+  <div class="m-b-xs">
+    <p> <%= "feature.admin_view.content.invitation_will_be_sent_to".translate(:members => "feature.admin_view.content.member".translate(:count => @members.size)) %> </p> 
+  </div>
+  <%= render(:partial => "admin_views/selected_users", :locals => {:users_or_members => @members}) %>
+  <%= control_group do %>
+    <%= label_tag 'Program', "#{@_Program} *", :class => "control-label cjs_program_dropdown", :for => "admin_view_program_id" %>
+    <%= controls do %>
+      <%= select_tag 'admin_view[program_id]', get_programs_and_portals_select_box(self, options_proc: option_proc), :id => "admin_view_program_id", :class => "form-control" %>
+    <% end %>
+  <% end %>
+  <%= control_group do %>
+    <%= content_tag(:div, "feature.user.content.select_a_role".translate, :class => "false-label control-label") %>
+    <%= controls(id: "role_btn_group_invite", data: {url: get_invite_to_program_roles_admin_view_path(@admin_view, format: :js)}) do %>
+    <% end %>
+  <% end %>
+  <p> 
+    <% current_program_link = (link_to "click here", "", :target => "_blank", :id => "cjs_invite_to_program_mails_link") %>
+    <%= "feature.admin_view.content.send_invitations_customized_for_selected_program_html".translate(:click_here => current_program_link) %>
+  </p>
+  <%= get_note_for_actions_on_suspended %>
+  <%= horizontal_line(class: "m-b-sm m-t-xs") %>
+  <% action_set(class: "form-group") do %>
+    <div class="pull-right">
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "display_string.Submit".translate, id: "cjs_send_invites", data: { disable_with: "display_string.Please_Wait".translate } %>
+    </div>
+  <% end %>
+<% end %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    ProgramInvitation.initializeProgramChange('#admin_view_program_id', '#cjs_invite_to_program_mails_link', 'invite');
+    ProgramInvitation.handleProgramChange('#admin_view_program_id', '#cjs_invite_to_program_mails_link', 'invite');
+    NestedShowHideRadioToggle('.cjs_nested_show_hide_container', '.cjs_show_hide_sub_selector', '.cjs_toggle_radio', '.cjs_toggle_content');
+    ProgramInvitation.validateInviteWithRecipients();
+  }); 
+<% end %>

@@ -1,0 +1,9 @@
+<% goal_tasks = local_assigns[:goal_tasks] || goal.mentoring_model_tasks %>
+<% connection_and_reports_page = local_assigns[:connection_and_reports_page].present? %>
+<div id="<%= connection_and_reports_page ? "cjs_show_goal_progress_bar_#{goal.id}" : "cjs_show_goal_progress_from_goals_#{goal.id}" %>">
+  <% if goal_tasks.present? %>
+    <div class="<%= 'b-b p-sm' unless connection_and_reports_page %>">
+      <%= display_tasks_progress_bar(goal_tasks, {goal_status: goal_status, connection_and_reports_page: connection_and_reports_page, from_goals: true, reports_page: local_assigns[:show_manage_connections_view]}) %>
+    </div>
+  <% end %>
+</div>

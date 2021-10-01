@@ -1,0 +1,13 @@
+<div id='sub_title_navig' class="clearfix">
+ <div class="pull-left m-xxs hidden-xs">
+   <div class="m-xxs m-t-xs pull-left">
+    <span class="m-t-xxs">
+      <i class="fa arrow fa-fw fa-rotate-180 m-t-xxs <%= "hide" if @hide_sub_title_arrow %>"></i>
+     </span>
+   </div>
+   <%= render :partial => "common/page_sub_title_list" %>
+ </div>
+ <div class="<%= padding_options[:logo_padding_class] %> <%= padding_options[:back_link_padding_class_mobile] %> visible-xs">
+   <%= render :partial => "common/page_sub_title_list" %>
+ </div>
+</div>

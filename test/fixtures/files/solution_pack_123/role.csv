@@ -1,0 +1,4 @@
+id,name,program_id,created_at,updated_at,default,join_directly,membership_request,invitation,join_directly_only_with_sso,administrative,for_mentoring,eligibility_rules
+4,admin,2,2014-08-07 11:11:19 UTC,2014-08-07 11:11:19 UTC,0,,,true,,true,false,false
+5,mentor,2,2014-08-07 11:11:19 UTC,2014-08-07 11:11:19 UTC,1,,true,true,,false,true,false
+6,student,2,2014-08-07 11:11:19 UTC,2014-08-07 11:11:19 UTC,2,,true,false,,false,true,true

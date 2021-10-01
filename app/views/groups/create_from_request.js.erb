@@ -1,0 +1,30 @@
+jQuery('#assign_loading_2_<%= @mentor_request.id %>').hide();
+<%# Case where the admin typed a mentor name and we show the current connections %>
+<%# for him to choose from. %>
+<% if @existing_connections_of_mentor %>
+  <% select_mentor_connection_content = render(:partial => "select_mentor_connection", :locals => {:mentor => @mentor, :mentor_request => @mentor_request, :existing_connections_of_mentor => @existing_connections_of_mentor}) %>
+  jQuery('#select_wrapper_<%= @mentor_request.id %>').html('<%= j(select_mentor_connection_content) %>');
+  jQuery('#assignment_popup_<%= @mentor_request.id %>').hide();
+  jQuery('#select_connection_<%= @mentor_request.id %>').show().addClass("animated fadeIn");
+<% else %>
+  <%# Assigning to a new connection %>
+  <% if @group.nil? %>
+    <%# Student already getting mentoring from mentor case %>
+    ChronusValidator.ErrorManager.ShowResponseFlash("group_duplicate_error_<%= @mentor_request.id %>", "<%= @error_flash %>");
+  <% elsif !@group.errors.empty? %>
+    <%# Group creation error %>
+    jQuery("#group_error_<%= @mentor_request.id %>").html("<%= j(error_messages_for(:group)) %>");
+    jQuery("#group_error_<%= @mentor_request.id %>").show();
+    ChronusValidator.ErrorManager.ClearResponseFlash("group_duplicate_error_<%= @mentor_request.id %>")
+  <% else %>
+    <%# Success. Remove the mentor request from the page. %>
+    <%# Hide the popup %>
+    jQuery("#modal_preferred_mentors_for_<%= @mentor_request.id %>").modal('hide');
+    <% flash_content = "flash_message.group_flash.mentor_assigned_html".translate(:student => content_tag(:b, "#{@mentor_request.student.name}"), :mentoring_connection => _mentoring_connection) %>
+
+    ChronusValidator.ErrorManager.ShowPageFlash(true, "<%= j(flash_content) %>");
+    <% results_pane_content = render(:partial => "mentor_requests/mentor_requests_for_program", :locals => {mentor_requests: @mentor_requests, filter_params: {}, moderated: true, match_results_per_mentor: @match_results_per_mentor, action_params: @action_params, is_request_manager_view_of_all_requests: @is_request_manager_view_of_all_requests, mentor_request_partial: @mentor_request_partial}) %>
+    jQuery("#results_pane").html('<%= j(results_pane_content) %>');
+    jQueryScrollTo('#centered_content');
+  <% end %>
+<% end %>

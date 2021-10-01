@@ -1,0 +1,5 @@
+<% profile_last_updated_at = local_assigns[:profile_last_updated_at] || @current_program.role_questions_last_update_timestamp(role) %>
+<% cache(CacheConstants::Members::PROFILE_SUMMARY_FIELDS.call(user.id, role, @viewer_role, profile_last_updated_at)) do %>
+  <% in_summary_questions = local_assigns[:in_summary_questions] || @in_summary_questions || user.program.in_summary_role_profile_questions_excluding_name_type(role, current_user) %>
+  <%= display_profile_summary(user, in_summary_questions) %>
+<% end %>

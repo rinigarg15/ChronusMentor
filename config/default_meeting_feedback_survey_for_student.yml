@@ -1,0 +1,75 @@
+---
+questions:
+- question_text: "How was your overall %{_meeting} experience?"
+  question_type: <%= CommonQuestion::Type::SINGLE_CHOICE %>
+  question_choices:
+    - Extremely useful
+    - Very useful
+    - Moderately useful
+    - Slightly useful
+    - Not at all useful
+  allow_other_option: <%= false %>
+  required: <%= true %>
+  condition: <%= SurveyQuestion::Condition::COMPLETED %>
+
+- question_text: "What was discussed in your %{_meeting}?"
+  question_type: <%= CommonQuestion::Type::MULTI_CHOICE %>
+  question_choices:
+    - Organizational navigation
+    - Knowledge sharing
+    - Career planning
+    - Role transitions or opportunities
+    - Informational interview
+    - Situational guidance
+  allow_other_option: <%= true %>
+  required: <%= false %>
+  condition: <%= SurveyQuestion::Condition::COMPLETED %>
+
+- question_text: "Why was the %{_meeting} cancelled?"
+  question_type: <%= CommonQuestion::Type::SINGLE_CHOICE %>
+  question_choices:
+    - Attendee no-show
+    - "%{_Meeting} never scheduled"
+    - "%{_Meeting} postponed or rescheduled"
+  allow_other_option: <%= true %>
+  required: <%= true %>
+  condition: <%= SurveyQuestion::Condition::CANCELLED %>
+
+- question_text: "How did you choose this particular person to meet with?"
+  question_type: <%= CommonQuestion::Type::TEXT %>
+  question_info: ""
+  allow_other_option: <%= false %>
+  required: <%= false %>
+  condition: <%= SurveyQuestion::Condition::ALWAYS %>
+
+- question_text: "How well did this person meet your expectations?"
+  question_type: <%= CommonQuestion::Type::RATING_SCALE %>
+  question_choices:
+    - Greatly exceeded expectations
+    - Exceeded expectations
+    - Met expectations
+    - Fell somewhat short of expectations
+    - Failed expectations
+  allow_other_option: <%= false %>
+  required: <%= true %>
+  condition: <%= SurveyQuestion::Condition::COMPLETED %>
+
+- question_text: "How would you rate the experience for the following,"
+  question_type: <%= CommonQuestion::Type::MATRIX_RATING %>
+  row_choices_for_matrix_question: "Ease of finding %{_a_mentor}, Ease of scheduling %{_a_meeting}"
+  question_choices:
+    - Very Easy
+    - Easy
+    - Moderate
+    - Somewhat hard
+    - Very hard
+  allow_other_option: <%= false %>
+  required: <%= true %>
+  condition: <%= SurveyQuestion::Condition::COMPLETED %>
+
+- question_text: "Do you have any other feedback?"
+  question_type: <%= CommonQuestion::Type::TEXT %>
+  help_text: "Please share something that went well or could be better."
+  allow_other_option: ""
+  required: <%= false %>
+  condition: <%= SurveyQuestion::Condition::ALWAYS %>

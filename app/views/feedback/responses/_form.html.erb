@@ -1,0 +1,31 @@
+<% flash_id = "feedback_response_flash" %>
+<%= response_flash(flash_id) %>
+<%= "feature.coach_rating.label.popup_description".translate(:mentor => _mentor, :mentoring_connections => _mentoring_connections, :mentees => _mentees) %>
+<%= content_tag(:div, class: "help-block") do 
+      "feature.coach_rating.label.visibility_information".translate(:program => _program, :admins => _admins)
+    end
+%>
+<%= simple_form_for feedback_response, :remote => true, :html => {id: "cjs_feedback_response_form"}, format: :js do |f| %>
+  
+  <%= f.input :group_id, :as => :hidden %>
+  <%= f.input :recipient_id, :as => :hidden %>
+  <div class="control-group m-b-sm">
+    <label for="mentor_score" class="control-label"><%= "feature.coach_rating.label.rate_mentor".translate(:mentor_name => mentor_name) %></label>
+    <div class="controls" >
+      <div id="mentor_rating" class="rating"></div>
+    </div>
+  </div>
+  
+  <%= render :partial => 'feedback/responses/question', :collection => feedback_questions, :locals => {:answers_map => answers_map} %>
+
+  <% action_set(:fields_required => true, :class => "pull-right") do %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn cancel #{'popup_closebox btn-white'}", "data-dismiss" => "modal" %>
+    <%= f.button :submit, "display_string.Submit".translate, :class => 'cjs-submit-form' %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    CoachFeedback.initializeCoachRating();
+  });
+<% end %>

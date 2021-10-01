@@ -1,0 +1,30 @@
+<% modal_v3_popup "feature.connection.action.Assign_Template_v1".translate(Mentoring_Connection: _Mentoring_Connection), modal_body_class: "cjs_bulk_groups_assign_template_modal" do %>
+  <% url =  @source == "profile" ? update_bulk_actions_groups_path(format: :js, src: @source) : update_bulk_actions_groups_path(format: :js) %>
+  <%= render partial: "groups/groups_alert_container" %>
+  <%= form_tag url, remote: true, id: "bulk_groups_assign_template", class: "cjs-groups-bulk-action-qtip-popup" do %>
+    <p><%= "feature.connection.content.help_text.assign_template_v2_html".translate(count: @group_ids.size, Mentoring_Connections: _Mentoring_Connections, Mentoring_Connection: _Mentoring_Connection,  Mentoring_Connection_Name: @groups.first.name) %></p>
+
+    <%= hidden_field_tag "bulk_actions[action_type]", Group::BulkAction::ASSIGN_TEMPLATE %>
+    <%= hidden_field_tag "bulk_actions[group_ids]", @group_ids %>
+    <%= hidden_field_tag "bulk_actions[tab_number]", @tab_number %>
+    <%= hidden_field_tag GroupsHelper::GROUPS_ALERT_FLAG_NAME %>
+    <%= control_group do %>
+      <label class="control-label" for="assign_mentoring_model">
+        <%= "feature.multiple_templates.header.connection_multiple_templates_title_v1".translate(Mentoring_Connection: _Mentoring_Connection) %>
+      </label>
+      <%= controls do %>
+        <%= select_tag(:mentoring_model, options_for_select([["common_text.prompt_text.Select".translate, ""]] + @mentoring_models.collect{|mentoring_model| [mentoring_model_pane_title(mentoring_model), mentoring_model.id] }, @individual_action ? @groups.first.mentoring_model_id : ""), id: "assign_mentoring_model", class: "form-control required-field") %>
+      <% end %>
+    <% end %>
+
+    <% action_set(:class => "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= submit_tag "display_string.Assign".translate, :class => 'btn btn-primary cjs_groups_assign_template_submit_button', data: {:disable_with => "display_string.Please_Wait".translate} %>
+    <% end %>
+  <% end %>
+
+  <%= javascript_tag do %>
+    GroupSearch.validateBulkActionsPopup();
+    GroupSearch.handleGroupsAlert(".cjs_bulk_groups_assign_template_modal", "form#bulk_groups_assign_template");
+  <% end %>
+<% end %>

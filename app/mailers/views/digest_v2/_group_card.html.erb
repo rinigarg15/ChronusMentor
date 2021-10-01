@@ -1,0 +1,197 @@
+<% group = membership.group %>
+<% user = membership.user %>
+<% user_time_zone = user.member.get_valid_time_zone %>
+<% upcoming_tasks = details[:upcoming_tasks] %>
+<% pending_tasks = details[:pending_tasks] %>
+<% pending_notifications = details[:pending_notifications] %>
+<% suggested_next_steps_url_options = url_options.merge({src1: :suggested_next_steps, show_plan: true}) %>
+<% connection_updates_url_options = url_options.merge({src1: :connection_updates}) %>
+<% tasks_show_count = 2 %>
+<% suggested_next_steps_group_url = group_url(group, suggested_next_steps_url_options) %>
+
+<table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%'>
+  <tbody><tr>
+    <td bgcolor='#DDECEF' width='100%' style='padding: 10px;'>
+
+      <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%'>
+        <tbody>
+
+          <tr>
+            <td width='100%' style='width: 100% !important;'>
+              <span style='font-size: 1.2em; color: #364151;'><%= UnicodeUtils.upcase(group.name.truncate(20)) %></span>
+              <% if group.published? %>
+                <span style='color: #637387; padding: 0 0 0 10px; font-size: 13px;'><%= "email_translations.digest_v2.content.ends_on".translate(date: DateTime.localize(group.expiry_time.in_time_zone(user_time_zone), format: :abbr_short)) %> | <%= (group.expiry_time.in_time_zone(user_time_zone).to_date - Time.now.in_time_zone(user_time_zone).to_date).to_i %> <%= "email_translations.digest_v2.content.days_to_go".translate %></span>
+              <% end %>
+            </td>
+          </tr>
+
+          <% if program.mentoring_connections_v2_enabled? && (upcoming_tasks.present? || pending_tasks.present?) %>
+            <tr>
+              <td valign="top" width='100%' style='width: 100% !important; vertical-align: top;'>
+                <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%'>
+                  <tbody>
+                    <tr>
+
+                      <td valign="top" width='30%' style='width: 30% !important; padding: 10px; vertical-align: top;'>
+                        <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%'>
+                          <tbody>
+                            <tr>
+                              <td width='40' style='width: 40px !important;'>
+                                <%= link_to suggested_next_steps_group_url do %>
+                                  <img src='<%= PublicIcons::DigestV2::TASKS %>' />
+                                <% end %>
+                              </td>
+                              <td>
+                                <span style='font-size: 40px; line-height: 40px; padding: 0 0 0 10px; color: #00566A;' ><%= link_to (upcoming_tasks.try(:size).to_i + pending_tasks.try(:size).to_i), suggested_next_steps_group_url %></span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td colspan=2 width='100%' style='width: 100% !important;'>
+                                <span style="color: #525151; font-size: 0.9em;"><%= "email_translations.digest_v2.content.suggested_next_steps".translate %></span>
+                              </td>
+                            </tr>
+                            <%= render partial: "digest_v2/group_button", locals: { url: suggested_next_steps_group_url } %>
+                          </tbody>
+                        </table>
+                      </td>
+
+                      <td valign="top" width='70%' style='width: 70% !important; padding: 10px; vertical-align: top;'>
+                        <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%'>
+                          <tbody>
+                            <% if upcoming_tasks.present? %>
+                              <tr>
+                                <td valign='top' width='100%' style='width: 100% !important;'>
+                                  <span style="color: #525151; font-size: 12px; line-height: 20px;"><%= "email_translations.digest_v2.content.upcoming".translate %></span>
+                                </td>
+                              </tr>
+                              <% upcoming_tasks.first(tasks_show_count).each do |upcoming_task| %>
+                                <tr>
+                                  <td valign='top' width='100%' style='width: 100% !important;'>
+                                    <img src="<%= PublicIcons::DigestV2::BULLET %>" style="vertical-align: middle;" />
+                                    <span style="font-size: 0.8em; line-height: 18px; color: #4C7581;"><%= link_to upcoming_task.title, suggested_next_steps_group_url %></span>
+                                    <span style="font-size: 0.8em; line-height: 18px; color: #70888D;">| <%= DateTime.localize(upcoming_task.due_date.in_time_zone(user_time_zone), format: :abbr_short) %></span>
+                                  </td>
+                                </tr>
+                              <% end %>
+                              <% if upcoming_tasks.size > tasks_show_count %>
+                                <tr>
+                                  <td valign='top' width='100%' style='width: 100% !important;'>
+                                    <img src="<%= PublicIcons::DigestV2::BULLET %>" style="vertical-align: middle;" />
+                                    <span style="font-size: 0.8em; line-height: 18px; color: #4C7581; font-weight: bold; text-decoration: underline;"><%= link_to "email_translations.digest_v2.content.and_x_more".translate(count: (upcoming_tasks.size - tasks_show_count)), suggested_next_steps_group_url %></span>
+                                  </td>
+                                </tr>
+                              <% end %>
+                            <% end %>
+                            <% if pending_tasks.present? %>
+                              <tr>
+                                <td valign='top' width='100%' style='width: 100% !important; padding: <%= upcoming_tasks.present? ? '5px' : '0'; %> 0 0 0;'>
+                                  <span style="color: #525151; font-size: 12px; line-height: 20px;"><%= "email_translations.digest_v2.content.pending".translate %></span>
+                                </td>
+                              </tr>
+                              <% pending_tasks.first(tasks_show_count).each do |pending_task| %>
+                                <tr>
+                                  <td valign='top' width='100%' style='width: 100% !important;'>
+                                    <img src="<%= PublicIcons::DigestV2::BULLET %>" style="vertical-align: middle;" />
+                                    <span style="font-size: 0.8em; line-height: 18px; color: #4C7581;"><%= link_to pending_task.title, suggested_next_steps_group_url %></span>
+                                    <span style="font-size: 0.8em; line-height: 18px; color: #70888D;">| <%= DateTime.localize(pending_task.due_date.in_time_zone(user_time_zone), format: :abbr_short) %></span>
+                                  </td>
+                                </tr>
+                              <% end %>
+                              <% if pending_tasks.size > tasks_show_count %>
+                                <tr>
+                                  <td valign='top' width='100%' style='width: 100% !important;'>
+                                    <img src="<%= PublicIcons::DigestV2::BULLET %>" style="vertical-align: middle;" />
+                                    <span style="font-size: 0.8em; line-height: 18px; color: #4C7581; font-weight: bold; text-decoration: underline;"><%= link_to "email_translations.digest_v2.content.and_x_more".translate(count: (pending_tasks.size - tasks_show_count)), suggested_next_steps_group_url %></span>
+                                  </td>
+                                </tr>
+                              <% end %>
+                            <% end %>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <% if pending_notifications.present? %>
+              <tr>
+                <td colspan="2" width='100%' height='1' bgcolor='#D2D6D7' style="font-size: 1px; line-height: 1px;">&nbsp;</td>
+              </tr>
+            <% end %>
+          <% end %>
+
+          <% if pending_notifications.present? %>
+            <% connection_update_computed_url = digest_v2_url_for_connection_update(pending_notifications.first, group, connection_updates_url_options) %>
+            <tr>
+              <td width='100%' style='width: 100% !important;'>
+                <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%'>
+                  <tbody>
+                    <tr>
+                      
+                      <td valign="top" width='30%' style='width: 30% !important; padding: 10px; vertical-align: top;'>
+                        <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%'>
+                          <tbody>
+                            <tr>
+                              <td width='40' style='width: 40px !important;'>
+                                <%= link_to connection_update_computed_url do %>
+                                  <img src='<%= PublicIcons::DigestV2::USERS %>' />
+                                <% end %>
+                              </td>
+                              <td>
+                                <span style='font-size: 40px; line-height: 40px; padding: 0 0 0 10px; color: #00566A;' ><%= link_to pending_notifications.try(:size).to_i, connection_update_computed_url %></span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td colspan=2 width='100%' style='width: 100% !important;'>
+                                <span style="color: #525151; font-size: 0.9em;"><%= "email_translations.digest_v2.content.connection_updates".translate(connection: custom_term_hash[:_Mentoring_Connection]) %></span>
+                              </td>
+                            </tr>
+                            <%= render partial: "digest_v2/group_button", locals: { url: connection_update_computed_url } %>
+                          </tbody>
+                        </table>
+                      </td>
+
+
+                      <td valign="top" width='70%' style='width: 70% !important; padding: 10px; vertical-align: top;'>
+                        <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%'>
+                          <tbody>
+                            <% pending_notifications.first(tasks_show_count).each do |pending_notification| %>
+                              <tr>
+                                <td valign='top' width='100%' style='width: 100% !important;'>
+                                  <img src="<%= PublicIcons::DigestV2::BULLET %>" style="vertical-align: middle;" />
+                                  <span style="font-size: 0.8em; line-height: 18px; color: #4C7581;"><%= connection_membership_pending_notification_text(pending_notification, user_time_zone: user_time_zone) %></span>
+                                </td>
+                              </tr>
+                            <% end %>
+                            <% if pending_notifications.size > tasks_show_count %>
+                              <tr>
+                                <td valign='top' width='100%' style='width: 100% !important;'>
+                                  <img src="<%= PublicIcons::DigestV2::BULLET %>" style="vertical-align: middle;" />
+                                  <span style="font-size: 0.8em; line-height: 18px; color: #4C7581; font-weight: bold; text-decoration: underline;"><%= link_to "email_translations.digest_v2.content.and_x_more".translate(count: (pending_notifications.size - tasks_show_count)), connection_update_computed_url %></span>
+                                </td>
+                              </tr>
+                            <% end %>
+                          </tbody>
+                        </table>
+                      </td>
+                    
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          <% end %>
+
+        </tbody>
+      </table>
+    
+    </td>
+  </tr></tbody>
+</table>
+
+<table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed;' width='100%'>
+  <tbody>
+    <tr><td bgcolor='transparent' width='100%' style='padding: 0 0 10px 0;'></td></tr>
+  </tbody>
+</table>

@@ -1,0 +1,11 @@
+<div id="cjs_flash_meetings_widget" class="clearfix m-b-lg">
+  <%= render partial: 'programs/flash_meetings_widget_content', locals: {meetings: meetings_to_show, show_view_all: show_view_all, upcoming_meetings_count: upcoming_meetings_count} %>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    Meetings.handleRsvpChange();
+    Meetings.handleRsvpPopup();
+    GroupTabs.adjustSlickSlideHeight(".meetings-slick", 100);
+  });
+<% end %>

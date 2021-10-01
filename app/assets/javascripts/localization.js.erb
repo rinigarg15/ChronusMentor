@@ -1,0 +1,294 @@
+var Localization = {
+  HEADER_TRIM_LENGTH: 40,
+
+  sendAjaxRequest: function(element, abstractProgramId, locale, category, id){
+    jQuery('#loading_results').show();
+    jQuery.ajax({
+      url: element.data('url'),
+      data: {abstract_program_id: abstractProgramId,
+              locale: locale,
+              category: category,
+              id: id}
+    });
+  },
+
+  change_level: function(){
+    jQuery('#cjs_translations_program_id').on('change', function(){
+      var element = jQuery(this);
+      jQuery("#cjs_abstract_program_id").val(element.val());
+      var locale = jQuery("#cjs_locale").val();
+      Localization.sendAjaxRequest(element, element.val(), locale);
+    });
+    jQuery('.cjs_change_program').on('click', function(){
+      if (!jQuery(this).hasClass( "cjs_selected_program" )){
+        var element = jQuery(this);
+        var locale = jQuery("#cjs_locale").val();
+        jQuery("#cjs_abstract_program_id").val(element.data('id'));
+        Localization.sendAjaxRequest(element, element.data('id'), locale);
+      }
+    });
+  },
+
+  updateLocale: function(){
+    jQuery('.cjs_locale_change').on('click', function(){
+      var element = jQuery(this);
+      var abstractProgramId = jQuery('#cjs_abstract_program_id').val();
+      var category = jQuery("#cjs_category").val();
+      var id = jQuery("#cjs_category_content_id").val();
+      jQuery("#cjs_locale").val(element.data('locale'));
+      Localization.sendAjaxRequest(element, abstractProgramId, element.data('locale'), category, id);
+    });
+  },
+
+  expandCategory: function(){
+    jQuery('.cjs_expand_left_pane_headers').on('click', function(){
+      var element = jQuery(this);
+      var category = element.data('category');
+      var abstractProgramId = jQuery('#cjs_abstract_program_id').val();
+      var locale = jQuery("#cjs_locale").val();
+      var category_items = jQuery("#cjs_expanded_" + category + "_content");
+      if (!category_items.data('items-loaded')) {
+        Localization.sendAjaxRequest(element, abstractProgramId, locale);
+        category_items.data('items-loaded', true);
+      }
+      category_items.toggle();
+      jQuery('.cjs_show_detail_' + category).toggle();
+      jQuery('.cjs_hide_detail_' + category).toggle();
+    });
+  },
+
+  showObjectAttributes: function(){
+    jQuery('.cjs_show_attributes').on('click', function(){
+      var index = jQuery(this).data('index');
+      jQuery('.cjs_attributes_' + index).toggle();
+      jQuery('.cjs_show_detail_' + index).toggle();
+      jQuery('.cjs_hide_detail_' + index).toggle();
+    });
+  },
+
+  renderTranslations: function(){
+    jQuery(document).on('click', '.cjs_show_translatable_details', function(){
+      if (!jQuery(this).hasClass( "cjs_select_content" )){
+        var element = jQuery(this);
+        jQuery("#cjs_category").val(element.data('category'));
+        jQuery("#cjs_category_content_id").val(element.data('id'));
+        jQuery('.cjs_left_pane_list_child_items').removeClass('font-bold light-gray-bg cjs_select_content');
+        jQuery('.cjs_non_expand_header').removeClass('font-bold light-gray-bg cjs_select_content');
+        jQuery('.cjs_expand_left_pane_headers').removeClass('strong');
+        jQuery(this).addClass('font-bold light-gray-bg cjs_select_content');
+        var abstractProgramId = jQuery('#cjs_abstract_program_id').val();
+        var locale = jQuery("#cjs_locale").val();
+        Localization.sendAjaxRequest(element, abstractProgramId, locale, element.data('category'), element.data('id'))
+      }
+    }).removeClass('cjs_show_translatable_details');
+  },
+
+  fetchAllChoices: function(element){
+    otherChoiceElements = jQuery('.' + element.data('choice-elements'));
+    var separator = element.data('separator');
+    return otherChoiceElements.sort(function (a, b) {
+          return +jQuery(a).data("choice-num") - +jQuery(b).data("choice-num");
+        }).map(function() {
+          return jQuery(this).val();
+        }).get().join(separator);
+  },
+
+  countAndUpdateNonBlankChoices: function(element){
+    var isChoiceType = element.data('choices');
+    if (isChoiceType === null) return true;
+    var otherChoiceElements = jQuery('.' + element.data('choice-elements'));
+    var secondLocaleCount = otherChoiceElements.map(function() {
+      return jQuery(this).val();
+    }).get().filter(function(value) {
+      return (value !== undefined) && (value !== null) && value.trim();
+    }).length;
+    var countStoreElement = jQuery("#cjs_num_choices_translated_"+element.data('klass')+"_"+element.data('object-id'));
+    countStoreElement.html("("+ secondLocaleCount +"/"+ countStoreElement.data('english-options-count') +")");
+  },
+
+  updateScores: function(categoryAndItems){
+    var categories = Object.keys(categoryAndItems);
+    for (var i = 0; i < categories.length; i++) {
+      var categoryScore = categoryAndItems[categories[i]]['score'];
+      var categoryPercent = Math.floor(categoryScore[0]*100/categoryScore[1]);
+      jQuery('#cjs_percent_completed_' + categories[i]).html(categoryPercent+"%");
+      subHeadings = categoryAndItems[categories[i]]['sub_heading'];
+      for (var j = 0; j < subHeadings.length; j++) {
+        var score = subHeadings[j]['score'];
+        var percent = Math.floor(score[0]*100/score[1]);
+        jQuery('#cjs_percent_completed_' + categories[i] + '_' + subHeadings[j]['id']).html(percent+"%");
+      }
+    }
+  },
+
+  updateProgramScore: function(){
+    var selectedElement = jQuery('#cjs_program_name_' + jQuery('#cjs_abstract_program_id').val());
+    selectedElement.data('score-numerator', selectedElement.data('score-numerator') + 1);
+    var program_name = selectedElement.data('name');
+    var new_percentage = Math.floor((selectedElement.data('score-numerator') * 100) / selectedElement.data('score-denominator'));
+    selectedElement.text(program_name + " (" + new_percentage + "%)");
+  },
+
+  updateHeaderIfNeeded: function(element){
+    if(element.data('item-index') === 0) {
+      var header_element = jQuery("#cjs_attribute_value_second_locale_"+element.data('klass')+"_"+element.data('object-id'));
+      header_element.text(Localization.trimToLength(element.val(), Localization.HEADER_TRIM_LENGTH));
+    }
+  },
+
+  focusTranslatableArea: function(){
+    jQuery(document).on('click', ".cjs_focus_translatable_area", function(){
+      jQuery(this).parents('.middle_column').siblings(".right_column").find('textarea').focus();
+    })
+  },
+
+  updateTranslationValue: function(){
+    jQuery('.cjs_translation_box').on('focusout', function(){
+      var element = jQuery(this);
+      var value = element.val();
+      if (element.data('choices'))
+      {
+        value = Localization.fetchAllChoices(element);
+      }
+      var locale = jQuery("#cjs_locale").val();
+      var absProgId = jQuery("#cjs_abstract_program_id").val();
+      jQuery.ajax({
+        type: "PATCH",
+        url: element.data('url'),
+        data: {value: value,
+              abstract_program_id: absProgId,
+              locale: locale,
+              hierarchy: element.data('hierarchy'),
+              attribute: element.data('attribute')},
+        success: function(data) {
+          if (data.success){
+            Localization.updateScores(data.category_with_items);
+            Localization.updateProgramScore();
+            Localization.countAndUpdateNonBlankChoices(element);
+            Localization.updateHeaderIfNeeded(element);
+            jQueryHighlight(element.parent().parent());
+            jQueryHighlight(element);
+            jQuery('#loading_results').hide();
+            element.addClass('no-borders');
+          }
+          else{
+            element.val(element.data('choices') ? data.val_in_locale[element.data("choice-num")] : data.val_in_locale)
+            element.removeClass('no-borders');
+          }
+        }
+      });
+    }).removeClass('cjs_translation_box');
+  },
+
+  initializeCkEditor: function(editorType, selectOptions, label){
+    switch(editorType) {
+      case "full":
+        optionType = CkeditorConfig.fullCkOptions();
+        break;
+      case "dropdown":
+        CKEDITOR.config.strinsert_strings = JSON.parse(selectOptions);
+        CKEDITOR.config.strinsert_button_label = CKEDITOR.config.strinsert_button_title = CKEDITOR.config.strinsert_button_voice = label;
+        optionType = CkeditorConfig.dropdownCkOptions();
+        break;
+      case "default":
+        optionType = CkeditorConfig.defaultCkOptions();
+        break;
+      case "minimal":
+        optionType = CkeditorConfig.minimalCkOptions();
+        break;
+      default:
+        optionType = CkeditorConfig.defaultCkOptions();
+    }
+    CkeditorConfig.initCkeditor('#cjs_ckeditor_content', {height : "500px", width : "100%"}, optionType);
+  },
+
+  trimToLength: function(text, length) {
+    return (text.length > length) 
+      ? jQuery.trim(text).substring(0, length).split(" ").slice(0, -1).join(" ") + "..."
+      : text;
+  },
+  initializeLogoBannerForm: function(attachment_type, submit_id, cancel_id) {
+    Localization.disableButton(submit_id);
+    Localization.clearSelectedFile(attachment_type, submit_id, cancel_id);
+    Localization.showLoadingOnSubmit(attachment_type, submit_id);
+    Localization.toggleSubmit(attachment_type, submit_id);
+  },
+  disableButton: function(submit_id) {
+    jQuery(submit_id).addClass('disabled').prop('disabled', true);
+  },
+  enableButton: function(submit_id) {
+    jQuery(submit_id).removeClass('disabled').prop('disabled', false);
+  },
+  clearSelectedFile: function(file_button_id, submit_id, cancel_id) {
+    jQuery(cancel_id).on('click', {file_button_id: file_button_id, submit_id: submit_id}, Localization.clearFileName);
+  },
+  clearFileName: function(event) {
+    file_input = jQuery(event.data.file_button_id);
+    file_input.replaceWith( file_input = file_input.clone( true ) );
+    Localization.disableButton(event.data.submit_id);
+  },
+  showLoadingOnSubmit: function(file_button_id, submit_id) {
+    jQuery(submit_id).on('click', function() {
+      jQuery('#loading_results').show();
+    });
+  },
+  toggleSubmit: function(file_button_id, submit_id) {
+    jQuery(file_button_id).on('change', {submit_id: submit_id}, Localization.toggleSubmitClass);
+  },
+  toggleSubmitClass: function (event) {
+    if(jQuery(this).val().length > 0) {
+      Localization.enableButton(event.data.submit_id);
+    }
+    else {
+      Localization.disableButton(event.data.submit_id);
+    }
+  },
+
+  validateRequiredFields: function (event) {
+    if(event.data.requiresValidation){
+      var ckeditorWrapper = jQuery(this).closest("form").find("#cke_cjs_ckeditor_content");
+      var ckeditor = CKEDITOR.instances[event.data.text_area_id]
+      if(ckeditor.getData().blank()) {
+        ValidateRequiredFields.showFieldError(ckeditorWrapper); 
+        return false;
+      }
+      else {
+        ValidateRequiredFields.hideFieldError(ckeditorWrapper); 
+      }
+    }
+  },
+
+  triggerCheckOnSave: function(button_id, text_area_id, requiresValidation, invalidTagMessage) {
+    jQuery(button_id).on('click', {text_area_id: text_area_id}, Localization.checkAndReplaceInvalidUrls);
+    jQuery(button_id).on('click',{text_area_id: text_area_id, requiresValidation: requiresValidation}, Localization.validateRequiredFields);
+    jQuery(button_id).on('click',{text_area_id: text_area_id, invalidTagMessage: invalidTagMessage}, Localization.containsOnlyValidTags);
+  },
+
+  containsOnlyValidTags: function(event){
+    var allowedTags = [];
+    var editor = CKEDITOR.instances[event.data.text_area_id];
+
+    if(typeof(editor.config.strinsert_strings) == 'undefined')
+      return true;
+
+    editor.config.strinsert_strings.map(function(tag) {
+      allowedTags.push(tag.value);
+    });
+    var insertedTags = CkeditorConfig.getCkeditorTags(editor.getData());
+    var invalidTags = jQuery(insertedTags).not(allowedTags).get();
+    if(invalidTags.length)
+      ChronusValidator.ErrorManager.ShowResponseFlash("cjs_update_rich_content", event.data.invalidTagMessage +invalidTags.toString());
+
+    return (invalidTags.length == 0);
+  },
+
+  checkAndReplaceInvalidUrls: function(event) {
+    var ckeditor = CKEDITOR.instances[event.data.text_area_id]
+    var pattern = /"http.*%7B%7B(.*)%7D%7D"/;
+    var actual_content = ckeditor.getData();
+    while(actual_content.match(pattern) != null){
+      actual_content = actual_content.replace(pattern, "\"{{$1}}\"");
+    }
+    ckeditor.setData(actual_content);
+  }
+}

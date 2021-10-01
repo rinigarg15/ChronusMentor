@@ -1,0 +1,94 @@
+<% role_questions = profile_question.role_questions.group_by(&:role_id) %>
+<% role_ids = role_questions.keys %>
+<% is_conditional_question_set = profile_question.conditional_question_id.present? %>
+<% display_choices = profile_question.choice_based? || profile_question.ordered_options_type? %>
+<% q_id = profile_question.id || 0 %>
+<% new_question = (q_id == 0) %>
+<% program_level = local_assigns[:program_level] %>
+<div id="profile_fields_options" class="m-b-0">
+  <%= f.input_field :id, :as => :hidden, :id => "profile_question_id_#{q_id}", :class => "form-control" %>
+  <div class="p-b-0">
+    <% all_programs_with_roles.each_with_index do |program, program_counter| %>
+      <div class="m-b <%= "b-t p-t-xs" if program_counter != 0 %> cjs-program-role-options cjs-program-role-options-for-<%= program.id %>">
+        <% role_questions_with_match_configs = profile_question.role_questions_with_match_configs(program.id) %>
+        <% mentor_role = program.get_role(RoleConstants::MENTOR_NAME) %>
+        <% mentee_role = program.get_role(RoleConstants::STUDENT_NAME) %>
+        <% if organization_view? %>
+          <div id ="configure_program_name_<%=program.id%>" class="m-b-xs">
+            <b><%= program.name %></b>
+            <%= program_tooltip(program, profile_question) %>
+          </div>
+        <% end %>
+
+        <div id ="program_role_options_<%= program.id %>">
+          <div class="choices_wrapper" role="group" aria-label='<%= "feature.member.label.role".translate %>'>
+            <% program.roles_without_admin_role.each_with_index do |role, index| %>
+              <div class="clearfix <%= "m-t-xxs" if index != 0 %>">
+                <% role_question = role_questions[role.id] %>
+                <% role_question = role_question.present? ?  role_question[0] : profile_question.role_questions.new(:role => role) %>
+                <% show_options = role_question.new_record? ?  "display: none" : "" %>
+                <% has_match_config = role_questions_with_match_configs.map{|role_question| role_question['role_id']}.include?(role.id) %>
+                <div id='program_role_<%= program.id %>_<%= role.name %>'>
+                  <label class="checkbox pull-left m-r-xs">
+                    <%= check_box_tag("programs[#{program.id}][]", role.id, role_ids.include?(role.id), :id => "profile_questions_#{program.id}_#{profile_question.section.id}_#{q_id}_#{role.name}", :class => "cjs_profile_question_role",
+                      :disabled => profile_question.default_type?, 'data-has_match_config' => has_match_config, 'data-role_id': role.id, 'data-original_value': role_ids.include?(role.id)) %>
+                    <span id ="program_role_values_<%= role.id %>"><%= role.customized_term.term %></span>
+                  </label>
+                    <div class="control-label pull-right">
+                      <a class="pointer font-noraml cjs_profile_question_edit_role_settings" id ="program_edit_settings_<%= profile_question.section.id %>_<%= q_id %>_<%= role.id %>" style="<%= show_options %>" data-url="<%= get_role_question_settings_profile_question_path(id: profile_question.id, program_id: program.id, role_id: role.id, program_level: program_level) %>" data-role_id="<%= role.id %>" >
+                        <%= get_icon_content("fa fa-cogs role_question_edit_image") %>
+                        <%= "feature.profile_question.label.Advanced".translate %>
+                      </a>
+                    </div>
+                </div>
+              </div>          
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    var updateConfirmations = {
+      dependencyConfirmation: "<%= j (dependency_confirmation = get_confirm_mesage_if_dependent_questions(profile_questions, profile_question)).present? ? content_tag(:li, dependency_confirmation) : "" %>",
+      matchingConfirmation: "<%= j content_tag(:li, "feature.profile_customization.content.update_delete_confirmation.match_score".translate) %>",
+      choicesUpdatedConfirmation: "<%= j content_tag(:li, "feature.profile_customization.content.update_delete_confirmation.modified_choices".translate) %>"
+    }
+
+    CustomizeSelect.selectExpandContract();
+    var questionChoices = {};
+    <% profile_question.default_choice_records.each do |choice| %>
+      questionChoices[<%= choice.id %>] = '<%= choice.text %>';
+    <% end if display_choices %>
+
+    jQuery(".cjs_profile_question_role").change(function(){
+      jQuery("#loading_results").show();
+      CustomizeProfileQuestions.toggleProgramEditDisplay(this, '<%= q_id %>', '<%= profile_question.section.id %>', jQuery(this).data('role_id'));
+      if (jQuery(this).data('original_value') != jQuery(this).is(':checked')) {
+        CustomizeQuestionChoices.initialQuestionChoices[<%= q_id %>] = questionChoices;
+        CustomizeProfileQuestions.submitForm("<%= q_id %>", "<%= profile_question.section_id %>", updateConfirmations, "edit_profile_question_role_visibility_<%= profile_question.id %>", {skip_ck_editor: true, currentElement: this, programRoleListing: true});
+      }
+      else {
+        jQuery("#loading_results").hide();
+      }
+    });
+
+    jQuery(".cjs_profile_question_edit_role_settings").click(function(){
+      jQuery.ajax({
+        url: jQuery(this).data('url'),
+        type: 'GET',
+        beforeSend: function(){
+          jQuery("#loading_results").show();
+        },
+        success: function(response){
+          CustomizeProfileQuestions.updateOptionsAndIncludeIn(<%= q_id %>, jQuery(this).data('role_id'), <%= profile_question.question_type || "undefined" %>, <%= is_conditional_question_set %>);
+          ProfileConfigUI.adjustUiCommon();
+          jQuery("#loading_results").hide();
+        }
+      });
+    });
+  });
+<% end %>

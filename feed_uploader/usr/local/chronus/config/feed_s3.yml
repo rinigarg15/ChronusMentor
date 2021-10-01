@@ -1,0 +1,37 @@
+common: &common
+  s3_bucket_region: "us-east-1"
+  export_accounts: []
+
+staging:
+  <<: *common
+  bucket: chronus-mentor-customer-feeds-staging
+  uploader_cron_monitor_signal: cd788dd8-7189-438a-9e1b-af74ee159e1d
+  downloader_cron_monitor_signal: 3759dc32-529a-4031-b573-3c56c264076d
+
+production:
+  <<: *common
+  bucket: chronus-mentor-customer-feeds-production
+  uploader_cron_monitor_signal: 3d70dd26-d08a-4ed3-a791-bf683d7bc95b
+  downloader_cron_monitor_signal: ac67ee98-73e4-40c7-9d4e-a147bbc71940
+  export_accounts: ["leeds", "wbg", "sdsuamp"]
+
+productioneu:
+  s3_bucket_region: "eu-central-1"
+  bucket: chronus-mentor-customer-feeds-productioneu
+  uploader_cron_monitor_signal: 7585e4ca-84e7-4c66-a359-c0d270f8c5c7
+  downloader_cron_monitor_signal: fa0b5b97-27da-4fce-a234-5813bec5d744
+
+generalelectric:
+  bucket: chronus-mentor-customer-feeds-generalelectric
+  uploader_cron_monitor_signal: b7a7b8d0-229e-4cdc-9c67-67ec3dde693a
+  downloader_cron_monitor_signal: 2c59d17e-8164-454d-9d41-c8d211a4d0e0
+
+veteransadmin:
+  bucket: chronus-mentor-customer-feeds-veteransadmin
+  uploader_cron_monitor_signal: 577979f8-afb1-4ed4-9a44-2fc788c57d29
+  downloader_cron_monitor_signal: 692c6238-3bb7-41b7-b91c-543d107dfa94
+
+nch:
+  bucket: chronus-mentor-customer-feeds-nch
+  uploader_cron_monitor_signal: 21be4844-cbf5-44bb-924e-1f729de271fb
+  downloader_cron_monitor_signal: 4e368fa2-84dc-49d4-bcc0-1ed75aa915e9

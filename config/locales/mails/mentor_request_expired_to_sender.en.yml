@@ -1,0 +1,31 @@
+en:
+  email_translations:
+    mentor_request_expired_to_sender:
+      enabled_html: An %{email} will be sent to the user when a request gets autoclosed.
+      disabled_html: An %{email} is usually sent to the user when a request is autoclosed, but has been disabled. No email will be sent.
+      title_v2: "%{_Mentor} request expired notification to %{_mentee}"
+      description_v2: When %{_a_mentee} makes a request, it may not be accepted in a site-specified number of days (such as 30). The %{_admin} can set the system up to close all outstanding requests after the number of days they specified has passed. Once that happens, this email goes out to the %{_mentee} telling them that their request has been closed.
+      subject_v1: Your request for {{customized_mentoring_term}} sent to {{recipient_name}} is now closed
+      subject_v3: Request a new {{customized_mentor_term}} - {{recipient_name}} is unavailable at this time
+      content_v1_html: Your request for {{customized_mentoring_term}} sent to <a href='{{mentor_url}}'>{{recipient_name}}</a> in {{subprogram_or_program_name}} has been closed because it was not accepted within {{max_pending_duration}}.<br /><br/>We have many other great {{customized_mentors_term}} available who may align with some of your intended goals and objectives. <br />{{view_mentors_button}}<br />If you are having trouble finding a suitable {{customized_mentor_term}}, please reach out to one of the <a href='{{url_contact_admin}}'>{{customized_admin_term_pluralized}}</a> and we'd be happy to help you.<br/>
+      content_v2_html: Your request for {{customized_mentoring_term}} sent to <a href='{{mentor_url}}'>{{recipient_name}}</a> in {{subprogram_or_program_name}} has been closed because it was not accepted within {{max_pending_duration}}.<br /><br/>That’s ok! There are still plenty of great {{customized_mentors_term}} who are eager to help. Connect now to find a new {{customized_mentor_term}}.<br />{{recommended_mentors}}<br />If you are having trouble finding a suitable {{customized_mentor_term}}, please reach out to one of the <a href='{{url_contact_admin}}'>{{customized_admin_term_pluralized}}</a> and we'd be happy to help you.<br/>
+      content_v3_html: Your request for {{customized_mentoring_term}} sent to <a href='{{mentor_url}}'>{{recipient_name}}</a> in {{subprogram_or_program_name}} has been closed because it was not accepted within {{max_pending_duration}}.<br /><br/>That’s ok! There are still plenty of great {{customized_mentors_term}} who are eager to help. Connect now to find a new {{customized_mentor_term}}.<br />{{recommended_mentors}}<br />If you are having trouble finding a suitable {{customized_mentor_term}}, please reach out to one of the <a href='{{admin_url}}'>{{customized_admin_term_pluralized}}</a> and we'd be happy to help you.<br/>
+      pending_duration:
+        one: 1 day
+        other: "%{count} days"
+      tags:
+        recipient_name:
+          description: Name of the mentor to whom the closed request was sent
+          example: William Brown
+        url_mentors_listing:
+          description: Url to the mentor listing page
+        message:
+          description: Expired time
+        view_mentors_button:
+          description: View Mentors listing page
+          view_mentors: View %{Mentors}
+          view_all_mentors: View all %{Mentors} &rarr;
+          view_all_mentors_v2: View more %{Mentors} &rarr;
+        max_pending_duration:
+          description: Auto-expiration time for a mentor request
+          example: 10 days

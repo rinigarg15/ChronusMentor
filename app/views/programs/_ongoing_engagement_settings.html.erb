@@ -1,0 +1,137 @@
+<% multiple_existing_groups_note_html = multiple_existing_groups_note %>
+<% is_multiple_existing_groups_note_present = multiple_existing_groups_note_html.present? %>
+<div id="cjs_ongoing_engagement_settings" class="has-below-4">
+  <% unless @program.project_based? %>
+    <%= content_tag :h2, "program_settings_strings.label.ongoing_mentoring_settings_v1".translate(Mentoring: _Mentoring) %>
+    <hr class="has-above has-below-1"/>
+  <% end %>
+
+  <%unless current_program.project_based?%>
+    <%= control_group do %>
+      <% label = "program_settings_strings.content.mentoring_style_v1".translate(Mentoring_Connection: _Mentoring_Connection) %>
+      <%= content_tag(:div, label, class: "false-label control-label") %>
+      <%= controls do %>
+        <%= choices_wrapper(label) do %>
+          <label class="radio inline">
+            <%= f.radio_button(:allow_one_to_many_mentoring, false, disabled: is_multiple_existing_groups_note_present, class: "#{'hide' if @current_program.basic_type?}") %>
+            <%= "program_settings_strings.content.one_to_one_style_v2".translate %>
+          </label>
+          <label class="radio inline">
+            <%= f.radio_button(:allow_one_to_many_mentoring, true, disabled: is_multiple_existing_groups_note_present, class: "#{'hide' if @current_program.basic_type?}") %>
+            <%= "program_settings_strings.content.group_mentoring_v2".translate unless @current_program.basic_type? %>
+          </label>
+          <% if is_multiple_existing_groups_note_present %>
+            <div class="help-block">
+              <%= multiple_existing_groups_note_html %>
+            </div>
+          <%end%>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% unless @program.mentoring_connections_v2_enabled? %>
+    <%= control_group do %>
+      <%= content_tag(:div, "program_settings_strings.content.mentoring_period_v1_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS, '', id: 'program_mentoring_period_label'), Mentoring_Connection: _Mentoring_Connection), class: "false-label control-label") %>
+      <%= controls do %>
+        <%= f.label "mentoring_period_value", "program_settings_strings.content.mentoring_period_value_v1".translate(Mentoring_Connection: _Mentoring_Connection), for: "program_mentoring_period_value", class: "sr-only" %>
+        <%= f.text_field "mentoring_period_value", @program.mentoring_period_value, class: "form-control inline", skip_title: true, wrapper: 'none' %>
+        <%= f.label "mentoring_period_unit", "program_settings_strings.content.mentoring_period_unit_v1".translate(Mentoring_Connection: _Mentoring_Connection), for: "program_mentoring_period_unit", class: "sr-only" %>
+        <%= f.select :mentoring_period_unit, mentoring_period_options, class: 'col-md-2 inline', skip_title: true, wrapper: 'none' %>
+      <% end %>
+      <%= tooltip('program_mentoring_period_label', "program_settings_strings.content.mentoring_period_tooltip_v1".translate(mentoring_connection: _mentoring_connection, mentoring_connections: _mentoring_connections)) %>
+    <% end %>
+  <% end %>
+
+  <%= control_group do %>
+    <% label = "program_settings_strings.content.allow_members_leave_connection_v4".translate(mentoring_connection: _mentoring_connection, a_mentoring_connection: _a_mentoring_connection, mentoring: _mentoring) %>
+    <%= content_tag(:div, label, class: "false-label control-label") %>
+    <%= controls do %>
+      <%= choices_wrapper(label) do %>
+        <label class="radio inline">
+          <%= f.radio_button :allow_users_to_leave_connection, true %> <%= "display_string.Yes".translate %>
+        </label>
+        <label class="radio inline">
+          <%= f.radio_button :allow_users_to_leave_connection, false %> <%= "display_string.No".translate %>
+        </label>
+        <p class="dim"><%= "program_settings_strings.content.allow_members_leave_connection_help_text".translate(mentoring_connection: _mentoring_connection) %></p>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= control_group do %>
+    <% label = "program_settings_strings.content.allow_change_expiration_date_v1".translate(a_mentoring_connection: _a_mentoring_connection, mentoring_connection: _mentoring_connection) %>
+    <%= content_tag(:div, label, class: "false-label control-label") %>
+    <%= controls do %>
+      <%= choices_wrapper(label) do %>
+        <label class = "radio inline">
+          <%= f.radio_button(:allow_to_change_connection_expiry_date, true) %>
+          <%= "display_string.Yes".translate %>
+        </label>
+        <label class = "radio inline">
+          <%= f.radio_button(:allow_to_change_connection_expiry_date, false) %>
+          <%= "display_string.No".translate %>
+        </label>
+        <p class="dim"><%= "program_settings_strings.content.allow_change_expiry_date_note".translate(admin: _admin) %></p>
+      <% end %>
+    <% end %>
+  <% end %>
+
+
+  <% roles = @current_program.roles.for_mentoring %>
+  <%= control_group do %>
+    <% label = "program_settings_strings.label.allow_reactivate_connection".translate(mentoring_connection: _mentoring_connection) %>
+    <%= content_tag(:div, label, class: "false-label control-label") %>
+    <%= controls do %>
+      <%= choices_wrapper(label) do %>
+        <% roles.each do |role| %>
+          <%= hidden_field_tag "program[role_permissions][#{role.id}][reactivate_group_permissions]", "" %>
+          <label class="checkbox inline p-r-md">
+            <%= check_box_tag "program[role_permissions][#{role.id}][reactivate_groups]", true, role.has_permission_name?("reactivate_groups") %>
+            <%= "program_settings_strings.label.role".translate(role_name: role.customized_term.term) %>
+          </label>
+        <% end %>
+        <p class="dim"><%= "program_settings_strings.content.reactivate_group_help_text_html".translate(closure_link: email_notification_consequences_on_action_html(GroupTerminationNotification, email_link_text: "program_settings_strings.content.closure_notification".translate, return_email_link_only: true), reactivate_link: email_notification_consequences_on_action_html(GroupReactivationNotification, email_link_text: "program_settings_strings.content.connection_reactivation".translate(connection: _mentoring_connection), return_email_link_only: true)) %></p>
+      <% end %>
+    <% end %>
+  <% end if roles.present? %>
+
+  <fieldset id='activity_tracking' class="has-below-1">
+    <legend><%= "program_settings_strings.content.inactivity_tracking".translate %> <%= link_to_function "(#{"program_settings_strings.content.what_is_this".translate})", "jQuery('#what_is_tracking').show()", class: 'small' %></legend>
+    <p class='has-above-1 help' id='what_is_tracking' style='display: none;'>
+      <%= link_to_function "x", "jQuery('#what_is_tracking').hide()", class: 'close' %>
+      <%= get_inactivity_tracking_description %>
+    </p>
+
+    <%= f.select :inactivity_tracking_period_in_days, get_connection_tracking_period_options, {selected: @current_program.inactivity_tracking_period_in_days}, {title: "program_settings_strings.content.check_inactivity".translate, onChange: 'trackingPeriod(this.value)', help_text: email_notification_consequences_on_action_html(GroupInactivityNotification, div_enclose: false, translation_extras: {connection: _mentoring_connection}) } %>
+    <%= f.select :feedback_survey_id, get_feedback_survey_options, {selected: @current_program.feedback_survey.try(:id), include_blank: "feature.survey.prompt.select_survey".translate}, {title: "program_settings_strings.label.select_feedback".translate, data: {url: new_survey_path}, onChange: "ProgramSettings.selectFeedbackSurvey();"} if @current_program.mentoring_connections_v2_enabled? %>
+
+    <div id ="auto_terminate_id" class="item clearfix" style = "<%= 'display:none' if @current_program.inactivity_tracking_period_in_days.blank? %>" >
+      <%= control_group do %>
+        <%= content_tag(:div, "program_settings_strings.content.auto_terminate_v1_html".translate(mentoring_connections: _mentoring_connections, tooltip: embed_icon(TOOLTIP_IMAGE_CLASS,'', id: 'what_is_auto_terminate')), class: "false-label control-label") -%>
+        <%= controls do %>
+          <% auto_terminate_closure_reason = @current_program.default_closure_reasons.where("is_completed = (?)", false).first %>
+          <label class="checkbox dim">
+            <%= check_box_tag "program[auto_terminate_checkbox]", true, @current_program.auto_terminate_reason_id.present?, class: "checkbox_class cjs_auto_terminate_checkbox" %>
+            <%= "display_string.Yes".translate %>
+          </label>
+          <label class="dim cjs_auto_terminate_selector <%= 'hide' unless @current_program.auto_terminate_reason_id.present? %>">
+            <%= "program_settings_strings.content.auto_terminate_closure_reason".translate(auto_terminate_closure_reason: auto_terminate_closure_reason.reason, Mentoring_Connections: _Mentoring_Connections) %>
+            <%= hidden_field_tag :auto_terminate_reason_id, auto_terminate_closure_reason.id, name: "program[auto_terminate_reason_id]" %>
+          </label>
+        <% end %>
+        <%= tooltip("what_is_auto_terminate", email_notification_consequences_on_action_html(GroupInactivityNotificationWithAutoTerminate, div_enclose: false, translation_extras: {mentoring_connections: _mentoring_connections})) -%>
+      <% end %>
+    </div>
+  </fieldset>
+  <%= control_group do %>
+    <%= controls do %>
+      <%= link_to("javascript:void(0);", class: "cjs_ongoing_advanced_options no-underline") do %>
+        <%= get_icon_content("fa fa-plus-circle") + "manage_strings.common.Advanced_Options".translate %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <div class="hide cjs_ongoing_advanced_options_form">
+    <%= render partial: "programs/ongoing_advanced_options", locals: {f: f} %>
+  </div>
+</div>

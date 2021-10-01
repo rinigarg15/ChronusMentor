@@ -1,0 +1,15 @@
+<% @existing_connections_of_mentor = current_user.mentoring_groups.active %>
+<% modal_v3_popup "feature.profile.content.request_pane_title".translate(:user_name => user.first_name.capitalize, :size => pending_requests.size), {additional_close_button_class: "cjs_dismiss_pending_requests_popup" } do %>
+  <div class="cjs_pending_requests">
+    <% if pending_requests[0].is_a?(MeetingRequest) %>
+      <%= render :partial => "meeting_requests/meeting_request", :locals => {meeting_request: pending_requests[0], filter_field: MeetingRequest::Filter::TO_ME, source: EngagementIndex::Src::AcceptMentorRequest::USER_LISTING_PAGE } %>
+    <% else %>
+      <%= render :partial => "mentor_requests/mentor_request_content", :locals => { :mentor_request => pending_requests[0], :member => pending_requests[0].student, :is_mentor_action => true, :source => EngagementIndex::Src::AcceptMentorRequest::USER_LISTING_PAGE } %>
+      <%= javascript_tag "MentorRequestForm.init_disable('#{j('display_string.Please_Wait'.translate)}');" %>
+    <% end %>
+  </div>
+<% end %>
+<%= javascript_tag do %>
+  MeetingRequest.trackMeetingRequestActions('<%= EngagementIndex::Src::AcceptMentorRequest::USER_LISTING_PAGE %>');
+  UserListing.enableScrollRequestPopup();
+<% end %>

@@ -1,0 +1,24 @@
+<% similar_circles.each do |group| %>
+  <div class="row p-l-xs p-r-xs m-b-xs">
+    <div class="col-sm-1 p-t-xxs col-xs-2 p-r-xxs">
+      <%= link_to(home_page_widget_group_logo(group, {size: "35x35"}), profile_group_url(group, src: EngagementIndex::Src::SIMILAR_CIRCLE_DROPDOWN), target: "_blank") %>
+    </div>
+    <div class="col-sm-9 col-xs-7 p-l-xxs">
+      <div class="p-t-xs whitespace-nowrap truncate-with-ellipsis h6 no-margins"><%= link_to(group.name, profile_group_url(group, src: EngagementIndex::Src::SIMILAR_CIRCLE_DROPDOWN), target: "_blank") %></div>
+      <% label, date = get_circle_start_and_available_info(group, wob_member) %>
+      <%= content_tag(:span, (label + DateTime.localize(date, format: :short)).html_safe, class: "small text-muted font-bold") %>
+    </div>
+    <div class="col-sm-2 col-xs-3 p-l-0 p-t-xs p-r-0">
+      <div class="col-sm-10">
+        <% if !current_user.is_admin? && current_user.can_apply_for_join?(group) %>
+          <%= link_to(append_text_to_icon("fa fa-sign-in", "display_string.Join".translate), profile_group_url(group, src: EngagementIndex::Src::SIMILAR_CIRCLE_DROPDOWN), class: "btn btn-xs btn-primary btn-block p-l-xxs p-r-xxs truncate-with-ellipsis #{hidden_on_mobile}", target: "_blank") %>
+          <%= link_to(get_icon_content("fa fa-sign-in"), profile_group_url(group, src: EngagementIndex::Src::SIMILAR_CIRCLE_DROPDOWN), class: "btn btn-xs btn-primary btn-block p-l-xxs p-r-xxs #{hidden_on_web}", target: "_blank") %>
+        <% else %>
+          <%= link_to(append_text_to_icon("fa fa-group", "display_string.View".translate), profile_group_url(group, src: EngagementIndex::Src::SIMILAR_CIRCLE_DROPDOWN), class: "btn btn-xs btn-default btn-outline btn-block btn-sm p-l-xxs p-r-xxs truncate-with-ellipsis #{hidden_on_mobile}", target: "_blank") %>
+          <%= link_to(get_icon_content("fa fa-sign-in"), profile_group_url(group, src: EngagementIndex::Src::SIMILAR_CIRCLE_DROPDOWN), class: "btn btn-xs btn-default btn-outline btn-block btn-sm p-l-xxs p-r-xxs #{hidden_on_web}", target: "_blank") %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <%= horizontal_line(:class => "no-margins") %>
+<% end %>

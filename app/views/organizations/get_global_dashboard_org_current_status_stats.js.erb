@@ -1,0 +1,27 @@
+<% if @rollup_info %>
+  <% if @rollup_info[:active_licenses] %>
+    <%# path_options = {dynamic_filters: {multi_track_admin: true}} %>
+    <%# active_licenses_path = wob_member.admin_only_at_track_level? ? admin_view_active_licenses_path(path_options) : admin_view_active_licenses_path %>
+    <% org_based_options = (@current_organization.org_profiles_enabled? && wob_member.admin?) ? {link_number: @rollup_info[:active_licenses][:total_count], link_number_path: admin_view_active_licenses_path} : {text_number: @rollup_info[:active_licenses][:total_count]} %>
+    <% content = rollup_body_box({box_icon_class: "fa-user-circle"}.merge(org_based_options)) %>
+    <% data_array = [{title: _Mentors, content: @rollup_info[:active_licenses][:mentors_count]}, {title: _Mentees, content: @rollup_info[:active_licenses][:students_count]}] %>
+    <% content << rollup_body_sub_boxes(data_array) %>
+    jQuery(".cjs-current-status-active-licenses").html("<%= j(content) %>")
+  <% end %>
+
+  <% if @rollup_info[:ongoing_engagements] %>
+    <% content = rollup_body_box(box_icon_class: "fa-share-alt", text_number: @rollup_info[:ongoing_engagements][:total_active_count]) %>
+    <% data_array = [{title: "display_string.Closed".translate, content: @rollup_info[:ongoing_engagements][:total_closed_count]}, {title: "feature.group_checkin.total".translate, content: (@rollup_info[:ongoing_engagements][:total_closed_count] + @rollup_info[:ongoing_engagements][:total_active_count])}] %>
+    <% content << rollup_body_sub_boxes(data_array) %>
+    jQuery(".cjs-current-status-ongoing-connections").html("<%= j(content) %>")
+  <% end %>
+
+  <% if @rollup_info[:connected_members_info] %>
+    <%# disabling link. uncomment it when connected members count is made as link %>
+    <%# org_based_options = (@current_organization.org_profiles_enabled? && wob_member.admin?) ? {link_number: @rollup_info[:connected_members_count], link_number_path: admin_view_active_licenses_path(dynamic_filters: {non_profile_field_filters: [AdminView::MEMBER_WITH_ONGOING_ENGAGEMENTS_FILTER_HSH]})} : {text_number: @rollup_info[:connected_members_count]} %>
+    <% content = rollup_body_box({box_icon_class: "fa-users", text_number: @rollup_info[:connected_members_info][:count]}) %>
+    <% data_array = [{title:  _Mentors, content: @rollup_info[:connected_members_info][:mentors_count]}, {title:  _Mentees, content: @rollup_info[:connected_members_info][:students_count]}] %>
+    <% content << rollup_body_sub_boxes(data_array) %>
+    jQuery(".cjs-current-status-connected-count").html("<%= j(content) %>")
+  <% end %>
+<% end %>

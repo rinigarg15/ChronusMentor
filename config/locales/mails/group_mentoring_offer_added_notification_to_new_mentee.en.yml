@@ -1,0 +1,31 @@
+en:
+  email_translations:
+    group_mentoring_offer_added_notification_to_new_mentee:
+      title_v2: "%{_Mentor} adding %{_mentee} to %{_a_mentoring_connection} notification to the %{_mentee}"
+      description_v1: Sent to %{_a_mentee} when %{_a_mentee} is added to %{_a_mentoring_connection} by %{_a_mentor}.
+      subject_v1: You have a new {{customized_mentor_term}}!
+      content_v3_html: Congratulations!<br/><br /><a href ='{{mentor_url}}'>{{mentor_name}}</a> has added you to a new {{customized_mentoring_connection_term}}, <a href='{{url_mentoring_connection}}'>{{group_name}}</a>.<br/>{{message_content}}<ul><li>Connect with your {{mentor_or_mentors_term}} and other participants today in the {{customized_mentoring_connection_term}} area.</li><li>Start by reviewing initial tasks for both you and your {{mentor_or_mentors_term}}.</li><li>This {{customized_mentoring_connection_term}} will end on {{mentoring_connection_expiry_date}}.</li></ul>{{visit_mentoring_area_button}}<br/>If you have any questions, please contact the {{customized_admin_term_pluralized}} <a href='{{url_contact_admin}}'>here</a>.<br/>
+      button_text: Visit %{mentoring_connection} area
+      tags:
+        mentor_name:
+          description: Name of the mentor
+        url_mentoring_connection:
+          description_v1: Url to the %{_mentoring_connection}
+        message_content:
+          description: Message from mentor
+          example_v1: I am adding you as a mentee in my %{_mentoring_connection} as per your request at the meet.
+        mentoring_connection_expiry_date:
+          description_v2: Expiration date of the %{_mentoring_connection}
+          example: December 24, 2013
+        group_name:
+          description: Name of the mentoring area
+          example: Smith and Doe
+        visit_mentoring_area_button:
+          description: Visit Mentoring Area Button
+        mentor_or_mentors_term:
+          description: Customized mentor or mentors term based on the number of mentors assigned
+          example: mentor
+        url_contact_admin:
+          description: Url for the user to contact administrator
+        mentor_url:
+          description: Url to the profile of the mentor

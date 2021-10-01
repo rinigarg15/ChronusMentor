@@ -1,0 +1,8 @@
+<% if (@current_organization.enrollment_page_enabled?) || (@current_organization.three_sixty_tool_enabled? && wob_member.three_sixty_survey_assessees.accessible.any?) %>
+	<%= ibox "quick_links.header".translate, {:ibox_class => "m-b-sm", :content_class => "p-xxs", :show_collapse_link => true} do %>
+	  <ul id='quick_links' class="list-group">
+	    <%= quick_link("quick_links.organization.all_program".translate(:program => _Programs), enrollment_path, "fa fa-fw fa-globe m-r-xs") if @current_organization.enrollment_page_enabled? %>
+	    <%= quick_link("quick_links.organization.three_sixty_surveys_v1".translate, three_sixty_my_surveys_path, "fa fa-fw fa-pencil m-r-xs") if @current_organization.three_sixty_tool_enabled? && wob_member.three_sixty_survey_assessees.accessible.any? %>
+	  </ul>
+	<% end %>
+<% end %>

@@ -1,0 +1,16 @@
+<% if data.present? %>
+  <div class="col-md-6 p-r-0 p-l-0">
+    <div >
+      <%= content_tag(:h4, ("feature.reports.content.connection_activity_summary".translate(Mentoring_Connection: _Mentoring_Connection) + content_tag(:span, "(#{get_date_range_preset_translated_for_activity_tile(date_range_preset)})", class: "small p-l-xxs")).html_safe, class: "m-t-md m-b-0") %>
+    </div>
+    <div class="m-t-md col-md-6 p-l-0">
+      <h2 class="no-margins"><%= data[:current_period_activity_hash][:groups] %></h2>
+      <small><%= _Mentoring_Connections %></small>
+    </div>
+    <div class="m-t-md col-md-6">
+      <h2 class="no-margins"><%= data[:current_period_activity_hash][:total_activity] %></h2>
+      <small><%= "feature.reports.content.all_activities".translate %></small>
+    </div>
+    <%= render(partial: "reports/management_report/groups_activity/groups_individual_activity_summary", locals: {current_period_activity_hash: data[:current_period_activity_hash], previous_period_activity_hash: data[:previous_period_activity_hash], percentage_hash: data[:percentage_hash]}) %>
+  </div>
+<% end %>

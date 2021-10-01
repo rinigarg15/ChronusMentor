@@ -1,0 +1,7 @@
+ChronusValidator.ErrorManager.ClearPageFlash();
+<% if @campaign_message.valid? %>
+  jQuery(".new_campaign_message").replaceWith('<%= j(render(:partial => "campaign_management/abstract_campaign_messages/form")) %>');
+  ChronusValidator.ErrorManager.ShowResponseFlash('campaign_message_flash', '<%= @campaign_message_success_flash %>', true);
+<% else %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('campaign_message_flash', '<%= @campaign_message_failure_flash %>', false);
+<% end %>

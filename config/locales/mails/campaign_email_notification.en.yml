@@ -1,0 +1,8 @@
+# The subject and content are more like dummy placeholders.
+en:
+  email_translations:
+    campaign_email_notification:
+      title: "Campaign Email Notification"
+      description: "Campaign Email Notification Description"
+      subject: "Campaign-Subject"
+      content_html: "Campaign Content here"

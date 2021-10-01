@@ -1,0 +1,158 @@
+var ProgressiveFormCommonElements = {
+
+  taskTemplateString: 'task-template',
+  facilitationTemplateString: 'facilitation-template',
+
+  buildDurationSelectorDropDown: function(durationList, durationId, callerString) {
+    ProgressiveFormCommonElements.durationListDropdownHead = jQuery("<span/>", {
+      html: ' <i class="icon-mentoring-model-v2-drop-down no-margin"></i>',
+      'class': "cjs-duration-list-dropdown-result-holder pointer has-before has-next cjs-hide-on-outside-click-root cui-progressive-form-drop-down-head",
+      click: function(){
+        ProgressiveFormCommonElements.durationListDropdownOptions.toggle();
+        var offset = ProgressiveFormCommonElements.durationListDropdownHead.offset();
+        var rightEnd = offset.left + ProgressiveFormCommonElements.durationListDropdownHead.outerWidth();
+        offset.left = rightEnd - ProgressiveFormCommonElements.durationListDropdownOptions.outerWidth();
+        offset.top += (ProgressiveFormCommonElements.durationListDropdownHead.outerHeight() - 1);
+        var initialState = ProgressiveFormCommonElements.durationListDropdownOptions.is(":visible");
+        ProgressiveFormCommonElements.durationListDropdownOptions.show().offset(offset);
+        if(!initialState) ProgressiveFormCommonElements.durationListDropdownOptions.hide();
+      }
+    });
+
+    ProgressiveFormCommonElements.durationListDropdownHead.prepend(jQuery("<span/>", {
+      text: durationList[0].durationName,
+      'class': "cjs-duration-list-result-holder cui-progressive-form-duration-drop-down-head-inner-style"
+    }));
+
+    ProgressiveFormCommonElements.durationListDropdownOptions = jQuery("<div/>", {
+      'class': "cjs-duration-list-dropdown-options dim cjs-hide-on-outside-click cui-progressive-form-drop-down-options"
+    });
+    ProgressiveFormCommonElements.durationListDropdownOptions.hide();
+    ProgressiveFormCommonElements.durationIdInput = jQuery("<input/>", {type: "hidden", name: "duration_id_input", value: durationId});
+    ProgressiveFormCommonElements.durationListDropdownHead.append(ProgressiveFormCommonElements.durationIdInput);
+
+    jQuery.each(durationList, function(index, item){
+      var listItem = jQuery("<div/>", {
+        'class': 'pointer cui-progressive-form-duration-drop-down-option',
+        text: item.durationName,
+        data: {
+          'duration-id': item.durationId
+        },
+        click: function() {
+          ProgressiveFormCommonElements.durationListDropdownOptions.hide();
+          ProgressiveFormCommonElements.durationListDropdownHead.find(".cjs-duration-list-result-holder").text(item.durationName).data('duration-id', item.durationId);
+          ProgressiveFormCommonElements.durationIdInput.val(item.durationId);
+          if(callerString == ProgressiveFormCommonElements.facilitationTemplateString) {
+            FacilitationTemplateProgressiveForm.currentForm.find(".cjs-duartion-calendar-head").html(FacilitationTemplateProgressiveForm.getDurationTaskTextToUpdate());
+            FacilitationTemplateProgressiveForm.adjustTitleInputBoxWidth();
+          }
+          else if(callerString == ProgressiveFormCommonElements.taskTemplateString) {
+            TaskTemplateProgressiveForm.currentForm.find(".cjs-duartion-calendar-head").html(TaskTemplateProgressiveForm.getDurationTaskTextToUpdate());
+            TaskTemplateProgressiveForm.adjustTitleInputWidth();
+          }
+        }
+      });
+      ProgressiveFormCommonElements.durationListDropdownOptions.append(listItem);
+      if(durationId == item.durationId) {
+        ProgressiveFormCommonElements.durationListDropdownHead.find(".cjs-duration-list-result-holder").text(item.durationName);
+      }
+    });
+  },
+
+  alignDurationDropdownOptionsContainer: function(show) {
+    show = getDefaultVal(show, false);
+    var initialState = ProgressiveFormCommonElements.durationListDropdownOptions.is(":visible");
+    ProgressiveFormCommonElements.durationListDropdownOptions.show();
+    var offset = ProgressiveFormCommonElements.durationListDropdownHead.offset();
+    var rightEnd = offset.left + ProgressiveFormCommonElements.durationListDropdownHead.outerWidth();
+    offset.left = rightEnd - ProgressiveFormCommonElements.durationListDropdownOptions.outerWidth();
+    offset.top += (ProgressiveFormCommonElements.durationListDropdownHead.outerHeight() - 1);
+    ProgressiveFormCommonElements.durationListDropdownOptions.offset(offset);
+    if(!(initialState || show)) ProgressiveFormCommonElements.durationListDropdownOptions.hide();
+  },
+
+  buildAssignToMilestoneDropdown: function(callerString) {
+    if(ProgressiveFormCommonElements.milestonesToAssociate) {
+      ProgressiveFormCommonElements.assignToMilestoneDropdownContainer = jQuery("<div/>", {
+        'class': "cjs-hide-on-outside-click-root inline-block pointer cui-progressive-form-drop-down-head",
+        html: ' <i class="icon-mentoring-model-v2-drop-down no-margin"></i>',
+        click: function(){
+          ProgressiveFormCommonElements.assignToMilestoneDropdownOptionsContainer.toggle();
+          ProgressiveFormCommonElements.alignDropdownOptionsContainter(ProgressiveFormCommonElements.milestonesToAssociate, ProgressiveFormCommonElements.assignToMilestoneDropdownContainer, ProgressiveFormCommonElements.assignToMilestoneDropdownOptionsContainer);
+        }
+      });
+      ProgressiveFormCommonElements.assignToMilestoneDropdownHead = jQuery("<span/>", {text: ProgressiveFormCommonElements.assignedMilestone.milestoneTemplateName});
+      ProgressiveFormCommonElements.assignToMilestoneDropdownContainer.prepend(ProgressiveFormCommonElements.assignToMilestoneDropdownHead);
+      if(callerString == ProgressiveFormCommonElements.taskTemplateString) {
+        ProgressiveFormCommonElements.assignToMilestoneInput = jQuery("<input/>", {type: 'hidden', value: ProgressiveFormCommonElements.assignedMilestone.milestoneTemplateId, name: "mentoring_model_task_template[milestone_template_id]", id: "milestone-dropdown-head"});
+      } else if(callerString == ProgressiveFormCommonElements.facilitationTemplateString) {
+        ProgressiveFormCommonElements.assignToMilestoneInput = jQuery("<input/>", {type: 'hidden', value: ProgressiveFormCommonElements.assignedMilestone.milestoneTemplateId, name: "mentoring_model_facilitation_template[milestone_template_id]", id: "milestone-dropdown-head"});
+      }
+      ProgressiveFormCommonElements.milestonesLabel = jQuery("<label/>", {'class': 'cui-progressive-form-label-styling', 'for': 'milestone-dropdown-head', text: TaskTemplateProgressiveFormTranslations.applytomilestone});
+      ProgressiveFormCommonElements.assignToMilestoneDropdownContainer.prepend(ProgressiveFormCommonElements.assignToMilestoneInput);
+      ProgressiveFormCommonElements.assignToMilestoneDropdownOptionsContainer = jQuery("<div/>", {
+        'class': "cjs-milestones-list-dropdown-options dim cjs-hide-on-outside-click cui-progressive-form-drop-down-options"
+      });
+      ProgressiveFormCommonElements.assignToMilestoneDropdownContainer.append(ProgressiveFormCommonElements.assignToMilestoneDropdownOptionsContainer);
+      ProgressiveFormCommonElements.assignToMilestoneDropdownOptionsContainer.hide();
+      jQuery.each(ProgressiveFormCommonElements.milestonesToAssociateList, function(index, item) {
+        var listItem = jQuery("<div/>", {
+          'class': 'pointer cui-progressive-form-milestones-drop-down-option',
+          text: item.milestoneTemplateName,
+          click: function() {
+            ProgressiveFormCommonElements.assignToMilestoneDropdownOptionsContainer.hide();
+            ProgressiveFormCommonElements.assignToMilestoneInput.val(item.milestoneTemplateId);
+            ProgressiveFormCommonElements.assignToMilestoneDropdownHead.text(item.milestoneTemplateName);
+          }
+        });
+        ProgressiveFormCommonElements.assignToMilestoneDropdownOptionsContainer.append(listItem);
+      });
+    }
+  },
+
+  buildChooseActionItemDropdown: function(callerString){
+    ProgressiveFormCommonElements.chooseActionItemDropdownContainer = jQuery("<div/>", {
+      'class': "cjs-hide-on-outside-click-root inline-block pointer cui-progressive-form-drop-down-head",
+      html: ' <i class="icon-mentoring-model-v2-drop-down no-margin"></i>',
+      click: function(){
+        ProgressiveFormCommonElements.chooseActionItemDropdownOptionsContainer.toggle();
+        ProgressiveFormCommonElements.alignDropdownOptionsContainter(ProgressiveFormCommonElements.actionItemsToChoose, ProgressiveFormCommonElements.chooseActionItemDropdownContainer, ProgressiveFormCommonElements.chooseActionItemDropdownOptionsContainer);
+      }
+    });
+    ProgressiveFormCommonElements.chooseActionItemDropdownHead = jQuery("<span/>", {text: ProgressiveFormCommonElements.chosenActionItem.actionItemName});
+    ProgressiveFormCommonElements.chooseActionItemDropdownContainer.prepend(ProgressiveFormCommonElements.chooseActionItemDropdownHead);
+    if(callerString == ProgressiveFormCommonElements.taskTemplateString) {
+      ProgressiveFormCommonElements.chooseActionItemInput = jQuery("<input/>", {type: 'hidden', value: ProgressiveFormCommonElements.chosenActionItem.actionItemId, name: "mentoring_model_task_template[action_item_id]", id: "action-item-dropdown-head"});
+    } else if(callerString == ProgressiveFormCommonElements.facilitationTemplateString) {
+      ProgressiveFormCommonElements.chooseActionItemInput = jQuery("<input/>", {type: 'hidden', value: ProgressiveFormCommonElements.chosenActionItem.actionItemId, name: "mentoring_model_facilitation_template[action_item_id]", id: "action-item-dropdown-head"});
+    }
+    ProgressiveFormCommonElements.chooseActionItemDropdownContainer.prepend(ProgressiveFormCommonElements.chooseActionItemInput);
+    ProgressiveFormCommonElements.chooseActionItemDropdownOptionsContainer = jQuery("<div/>", {
+      'class': "cjs-action-item-list-dropdown-options dim cjs-hide-on-outside-click cui-progressive-form-drop-down-options"
+    });
+    ProgressiveFormCommonElements.chooseActionItemDropdownContainer.append(ProgressiveFormCommonElements.chooseActionItemDropdownOptionsContainer);
+    ProgressiveFormCommonElements.chooseActionItemDropdownOptionsContainer.hide();
+    jQuery.each(ProgressiveFormCommonElements.actionItemToChooseList, function(index, item) {
+      var listItem = jQuery("<div/>", {
+        'class': 'pointer cui-progressive-form-action-items-drop-down-option',
+        text: item.actionItemName,
+        click: function() {
+          ProgressiveFormCommonElements.chooseActionItemDropdownOptionsContainer.hide();
+          ProgressiveFormCommonElements.chooseActionItemInput.val(item.actionItemId);
+          ProgressiveFormCommonElements.chooseActionItemDropdownHead.text(item.actionItemName);
+        }
+      });
+      ProgressiveFormCommonElements.chooseActionItemDropdownOptionsContainer.append(listItem);
+    });
+  },
+
+  alignDropdownOptionsContainter: function(condition, dropdownContainer, dropdownOptionsContainer) {
+    if(condition) {
+      var offset = dropdownContainer.offset();
+      offset.top += (dropdownContainer.outerHeight() - 1);
+      var initialState = dropdownOptionsContainer.is(":visible");
+      dropdownOptionsContainer.show().offset(offset);
+      if(!initialState) dropdownOptionsContainer.hide();
+    }
+  }
+}

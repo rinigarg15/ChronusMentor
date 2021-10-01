@@ -1,0 +1,70 @@
+en:
+  push_notification:
+    message:
+      alert: "%{sender_name} has sent you a message."
+    mentor_request:
+      create:
+        alert: "New request for %{mentoring} from %{mentee_name}."
+        alert_v1: "%{mentee_name} has sent you a request for %{mentoring}."
+      accept:
+        alert: "%{mentor_name} has accepted your request for %{mentoring}."
+      reject:
+        alert: "%{rejector_name} has declined your request for %{mentoring}."
+        alert_v1: "%{rejector_name} did not accept your request for %{mentoring}."
+      withdraw:
+        alert: "%{mentee_name} has withdrawn the request for %{mentoring}."
+      reminder:
+        alert: "%{mentee_name}'s %{mentoring} request is waiting for your response."
+    announcement:
+      new:
+        alert: "Announcement: %{title}"
+        alert_v1: "You have a new announcement."
+      update:
+        alert: "Announcement: %{title}"
+        alert_v1: "You have an updated announcement."
+    mentor_recommendation:
+      publish: "You have new %{mentor} recommendations. Connect with your %{mentor} now."
+    meeting_request:
+      created: "%{requester_name} has sent you a request for %{customized_meeting_term_articleized}."
+      accepted: "%{mentor_name} has accepted your request for %{customized_meeting_term_articleized}."
+      accepted_v1: "%{mentor_name} has accepted your request for %{customized_meeting_term_articleized}. %{contextual_message}"
+      rejected: "%{mentor_name} did not accept your request for %{customized_meeting_term_articleized}."
+      reminder: "%{mentee_name}'s %{meeting_term} request is waiting for your response."
+      contextual_message:
+        non_calendar: "However %{name} did not confirm the %{meeting} time and has a message for you."
+        calendar: "%{name} also updated the %{meeting} with a new time that works."
+    meeting:
+      created: "%{meeting_owner_name} invited you for %{customized_meeting_term_articleized}."
+      updated: "%{meeting_owner_name} updated %{customized_meeting_term_articleized}."
+      reminder: "Your %{meeting_term} is starting at %{meeting_start_time}."
+    program_event:
+      created: "%{program_event_owner_name} invites you to attend an event in %{program_or_subprogram_name}."
+      reminder_with_location: "%{program_event_title} is starting tomorrow at %{event_location}."
+      reminder: "%{program_event_title} is starting tomorrow."
+    qa_answer:
+      created: "%{answerer_name} posted an answer to the question, %{question_title}."
+    topic:
+      created: "%{user_name} started a conversation '%{topic_name}'"
+    post:
+      created: "%{posted_member_name} has posted in %{forum_name}"
+      created_v1: "%{posted_member_name} posted in the conversation '%{topic_name}'"
+    article_comment:
+      created: "%{article_commenter_name} commented on an %{customized_article_term}, %{article_title}"
+    meeting_feedback_request: "%{meeting_topic} just ended. Please provide your feedback."
+    meeting_feedback_request_v1:
+      request_with_topic: "%{meeting_topic} just ended. Please provide your feedback."
+      request: "Your %{meeting_term} just ended. Please provide your feedback."
+    group:
+      member_added: "You have been added as %{role_name_articleized} in %{group_name}."
+      member_inactive: "We've missed hearing from you! Get back to catch up on any pending tasks."
+    project_based_engagement:
+      proposal_accept: Your proposed %{customized_mentoring_connection_term} has been accepted. View %{project_name}’s profile.
+      proposal_reject: Your request to create %{project_name} has not been approved. Propose a new %{customized_mentoring_connection_term} or join available %{customized_mentoring_connections_term}.
+      published: Your %{customized_mentoring_connection_term} '%{project_name}' has started. You can start participating.
+    project_request:
+      accepted: Your request to join %{project_name} has been accepted. View %{project_name}’s profile.
+      rejected: Your request to join %{customized_mentoring_connection_term} has not been accepted. However, there are other %{customized_mentoring_connections_term} that you may find more suitable.
+    mentor_offer:
+      offered: "%{mentor_name} has offered to be your %{customized_mentor_term} in %{subprogram_or_program_name}."
+      accepted: "%{mentee_name} has accepted to be your %{customized_mentee_term} in %{subprogram_or_program_name}"
+      rejected: "%{mentee_name} did not accept your %{customized_mentoring_term} offer in %{subprogram_or_program_name}. We have other %{customized_mentees_term} who may benefit from your %{customized_mentoring_term}."

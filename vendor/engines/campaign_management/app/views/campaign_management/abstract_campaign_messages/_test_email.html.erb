@@ -1,0 +1,10 @@
+<%= control_group do %>
+  <%= controls(class: "col-sm-offset-3 col-sm-9") do %>
+    <div class="help_text cjs_preview_email">
+      <% test_email_url = send_test_email_campaign_management_user_campaign_abstract_campaign_messages_path(@campaign, format: :js) %>
+      <% preview_mail_link = link_to(get_icon_content("fa fa-envelope") + "display_string.Click_here".translate, test_email_url, :id => "cjs_preview_email_link", data: {track_ga: @campaign.is_survey_campaign?, type: get_campaign_survey_type(@campaign)})%>
+      <%= "feature.campaigns.content.test_email_html".translate(Click_here: preview_mail_link) %>
+      <%= loc_loading %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,14 @@
+<%= simple_form_for form_obj, :remote => true, :html => {:style => 'display:none', :id => "edit_common_question_#{common_question.id}", :class => "form-horizontal animated"} do |f| %>
+  <%= response_flash "flash_#{common_question.id}" %>
+  <%= hidden_field_tag "common_question_original_type_#{common_question.id}", common_question.question_type %>
+  <%= hidden_field_tag "common_question_original_text_#{common_question.id}", common_question.question_text %>
+  <%= hidden_field_tag "help_text_orginal_#{common_question.id}", common_question.help_text %>
+  <%= hidden_field_tag "condition_orginal_#{common_question.id}", common_question.condition %>
+
+  <%= render :partial => "common_questions/question_form", :locals => {common_question: common_question, f: f} %>
+<% end %>
+
+<%= javascript_tag do %>
+  initialize.initializeTooltip();
+<% end %>
+

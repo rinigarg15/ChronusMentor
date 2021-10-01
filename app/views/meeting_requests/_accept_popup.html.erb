@@ -1,0 +1,16 @@
+<%
+  status = AbstractRequest::Status::ACCEPTED
+  popup_title = 'feature.mentor_request.content.accept_popup.title'.translate
+  message = get_meeting_request_acceptance_help_text(meeting_request)
+  secret_key = meeting_request.mentor.member.calendar_api_key
+%>
+<%- modal_container "#{popup_title}", :modal_id => get_meeting_request_action_popup_id(meeting_request, status) do -%>
+  <%= simple_form_for meeting_request, :url => update_status_meeting_request_path(meeting_request, program: meeting_request.program_id, secret: secret_key, status: status, filter: @filter_field), :method => :post do |f| %>
+      <%= f.input :acceptance_message, :as => :text, :input_html => {:rows => "5", :placeholder => "#{message}", :id => "meeting_request_acceptance_message_#{meeting_request.id}", :class => "form-control"}, :label_html => {:class => 'sr-only'} %>
+      <%= hidden_field_tag "page", @page, id: nil %>
+      <% action_set(class: "pull-right") do %>
+        <%= link_to 'display_string.Cancel'.translate, "javascript:void(0);", :class => 'popup_closebox btn btn-white', "data-dismiss" => "modal" %>
+        <%= f.button :submit, 'display_string.Accept'.translate, :class => "btn btn-primary"  %>
+      <% end %>
+  <% end %>
+<% end %>

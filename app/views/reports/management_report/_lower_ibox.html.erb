@@ -1,0 +1,43 @@
+<% if local_assigns[:show_date_filter] %>
+  <% start_date = date_range.first %>
+  <% end_date = date_range.last %>
+  <% daterange_presets = [DateRangePresets::LAST_7_DAYS, DateRangePresets::LAST_30_DAYS, DateRangePresets::CUSTOM] %>
+  <% right_addon = {
+    type: "btn",
+    btn_options: {
+      type: "submit",
+      class: "btn btn-primary cjs-management-report-time-filter-submit",
+      data: {tile: tile}
+    },
+    content: "display_string.Go".translate
+  } %>
+<% end %>
+
+<% rand_id = SecureRandom.hex(3) %>
+
+<div class="ibox no-margins">
+  <div class="clearfix small p-xs light-gray-bg">
+    <% if local_assigns[:show_date_filter] %>
+      <div class="dropdown dropdown-with-datepicker keep-open pull-left m-r-sm m-t-3">
+        <%= link_to (content_tag(:span, content_tag(:span, get_date_range_preset_translated(date_range_preset), class: "m-r-xs m-l-xs text-muted") + content_tag(:span, "", :class => "caret text-muted"))), "javascript:void(0)", class: "dropdown-toggle no-waves cjs_management_report_date_range_preset", data: { toggle: "dropdown" }, id: "management_report_date_range_#{rand_id}" %>
+        <div class="dropdown-menu menu-wide animated fadeIn cjs-dropdown-datepicker-menu">
+          <%= form_tag("javascript:void(0)", :class => "cjs_management_report_time_filter_form") do %>
+            <% ibox "", ibox_class: "noshadow no-vertical-margins" do %>
+              <%= construct_daterange_picker("management_reports_filter_date_range_#{rand_id}", { start: start_date, end: end_date }, presets: daterange_presets, right_addon: right_addon, date_range_preset: date_range_preset) %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    <% first_link = true %>
+    <% local_assigns[:object_links].each do |object_link| %>
+      <%= link_to object_link[:name], object_link[:link], class: "#{first_link ? 'no-margins' : 'm-b-0 m-r-xs'} btn btn-xs btn-primary btn-outline pull-right" %>
+      <% first_link = false %>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  initialize.setDatePicker();
+  jQuery('.cjs_daterange_picker_presets').trigger('change');
+<% end %>

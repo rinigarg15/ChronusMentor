@@ -1,0 +1,2 @@
+<% content = render partial: "csv_imports/validation_data.html", :locals => {:data => @data, :show_errors => @type == CsvImportsController::DataPopup::Type::ERROR} %>
+jQuery('.cui-validation-data').html("<%= j(content) %>");

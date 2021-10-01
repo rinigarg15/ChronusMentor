@@ -1,0 +1,31 @@
+en:
+  feature:
+    mentoring_slot:
+      header:
+        Calendar: Calendar
+      content:
+        delete_non_recurrent_slot_confirm: Are you sure you want to delete the availability slot?
+        delete_recurrent_slot_confirm: This is a recurrent availability slot. Deleting will delete all the occurences. Are you sure you want to continue?
+        time_zone_hint: Time zone is set to %{time_zone}
+        availability_start_end_time_error: Enter correct start and end times. End time must be greater than %{allowed_slot_time} minutes from start time.
+        delete_event_confirm: Are you sure you want to delete the event?
+        no_location_text: Not specified
+        slot_repeat_display_text_daily: Repeats daily
+        slot_repeat_display_text_daily_with_end_time: Repeats daily until %{date}
+        slot_repeat_display_text_weekly: Repeats every week on %{repeat_days}
+        slot_repeat_display_text_weekly_with_end_time: Repeats every week on %{repeat_days} until %{date}
+        slot_repeat_display_text_monthly: Repeats every month on %{repeat_day}
+        slot_repeat_display_text_monthly_with_end_time: Repeats every month on %{repeat_day} until %{date}
+      label:
+        When: When
+        Repeats: Repeats
+        Where: Where
+        Message: Message
+        from_to: From %{from} to %{to}
+        till: till
+        Available_Slots:
+          one: "%{count} Available Slots"
+          other: "%{count} Available Slots"
+        calendar: Calendar
+        slot_availability: Slot Availability
+        general_availability: General Availability

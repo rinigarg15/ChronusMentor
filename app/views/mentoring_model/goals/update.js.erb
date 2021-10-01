@@ -1,0 +1,7 @@
+<% goalTitle = display_goal_title(@goal) %>
+<% goalDescription = display_goal_description(@goal) %>
+
+jQuery('#<%= "cjs_goal_description_#{@goal.id}" %>').replaceWith("<%= j(goalDescription) %>");
+jQuery('#<%= "cjs_goal_title_#{@goal.id}" %>').replaceWith("<%= j(goalTitle) %>");
+
+jQuery('#<%= "edit_goal_popup_#{@goal.id}" %>').modal('hide');

@@ -1,0 +1,24 @@
+jQuery(".cjs_messages_tab_home_page_<%= @group.id %>").removeClass("active");
+jQuery(".cjs_meetings_tab_home_page_<%= @group.id %>").removeClass("active");
+jQuery(".cjs_tasks_tab_<%= @group.id %>").addClass("active");
+
+<% if manage_mm_milestones_at_admin_level?(@group) || manage_mm_milestones_at_end_user_level? %>
+  <% if @mentoring_model_milestones.size == 0 %>
+    <% content = render partial: "mentoring_model/tasks/no_results_home_page_widget.html.erb", locals: {group: @group } %>
+  <% else %>
+    <% milestone_view = true %>
+    <% content = render partial: "mentoring_model/milestones/home_page_index", locals: {milestones: @mentoring_model_milestones, current_milestone_ids: @current_mentoring_model_milestones_ids, zero_upcoming_tasks: @zero_upcoming_tasks, target_user_id: @target_user.try(:id), target_user_type: @target_user_type, group: @group, render_past_meeting_modal: @render_past_meeting_modal } %>
+  <% end %>
+<% elsif manage_mm_tasks_at_admin_level?(@group) || manage_mm_tasks_at_end_user_level?(@group) %>
+  <% if @mentoring_model_tasks.size == 0 %>
+    <% content = render partial: "mentoring_model/tasks/no_results_home_page_widget.html.erb", locals: {group: @group } %>
+  <% else %>
+    <% content = render partial: "mentoring_model/tasks/index", locals: {group: @group, tasks: @mentoring_model_tasks, render_past_meeting_modal: @render_past_meeting_modal} %>
+  <% end %>
+<% end %>
+jQuery('#mentoring_area_tabs_content_<%= @group.id %>').html("<%= j content %>");
+jQuery(".cjs_tasks_tab_<%= @group.id %>").addClass("active");
+MentoringModelTask.expandMentoringModelTask();
+TaskComment.toggleNewCommentForm(true);
+TaskCheckin.toggleNewCheckInForm();
+GroupTabs.adjustSlickSlideHeight(".connections-slick", "<%= milestone_view ? 1000 : 100 %>");

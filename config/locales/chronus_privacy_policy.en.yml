@@ -1,0 +1,170 @@
+en:
+  chronus_privacy_policy:
+    chronus_llc:
+      last_updated: Last updated May 25, 2018
+      last_updated_v1: Last updated %{date}
+      intro:
+        content:
+          para_1_html: 'This Privacy Policy sets out how Chronus LLC (“Chronus”) collects and uses information from its customers and other individuals (collectively “you”) who access the Chronus websites (including <a href=''http://chronus.com'' target=''_blank''>Chronus.com</a>), Chronus mobile applications, or any other Chronus products or services that reference this Privacy Policy (collectively “the Services”).'
+          para_1_1_html: "This Privacy Notice sets out how Chronus LLC (“Chronus”) may collect and use information from its customers and other individuals (collectively “you”) who access the Chronus websites (including <a href='https://chronus.com' target='_blank'>Chronus.com</a>), Chronus mobile applications, or any other Chronus products or services that reference this Privacy Notice (collectively “the Services”)."
+      privacy_policy:
+        heading: 1. PRIVACY POLICY
+        content:
+          para_1: This Privacy Policy details how Chronus collects, uses and processes your information. You should read this entire Privacy Policy before submitting information to Chronus or using any Services. If you or your organization has an individual agreement with Chronus, that individual agreement may have distinct privacy terms which shall take precedence over this Privacy Policy.
+          para_1_1: This Privacy Policy details how Chronus collects, uses and processes your information. You should read this entire Privacy Policy before submitting information to Chronus or using any Services. If you or your organization has negotiated an agreement with Chronus, that agreement may have distinct privacy terms which will take precedence over this Privacy Policy.
+          para_2: If this Privacy Policy changes, the revised policy will include a new effective date and will be posted on this website. If Chronus makes any material changes, Chronus may notify you by email (sent to the e-mail address specified in your account) or by means of a policy on this website. Chronus customers (including customer end-users) may receive change notifications directly from their administrators. The effective date of this Privacy Policy is the date first set forth above.
+          para_2_1: If this Privacy Policy changes, the revised policy will be posted on this website. If Chronus makes any material changes to this Privacy Policy, Chronus may notify you by email (sent to the e-mail address specified in your account) or by means of a notice on this website. Chronus customers may receive change notifications directly from their administrators.
+          para_3: The Services may include links or references to non-Chronus websites, services, materials, or entities (collectively “Third-Party Sites”). This Privacy Policy does not apply to Third-Party Sites unless otherwise indicated. Third-Party Sites are subject to their own privacy policies and customers are encouraged to review such policies prior to use of any Third-Party Sites.
+      information:
+        heading: 2. INFORMATION CHRONUS COLLECTS
+        subheading_1: "2.1 Information you provide directly to Chronus when you use the Services, including:"
+        subheading_2: "2.2 Information automatically collected from your use of the Services."
+        subheading_2_1: "2.2 Information automatically collected from your use of the Services, including:"
+        subheading_3: "2.3 Information collected from third party sources."
+        subheading_3_1: "2.3 Information collected from third party sources, including:"
+        content:
+          para_1: "Chronus collects information from you solely as described in this Privacy Policy. Chronus may collect personal data from you both online and offline. We may combine data collected from these disparate sources unless we tell you otherwise. Chronus collects three general categories of information from you:"
+          para_1_1: "Chronus collects information from you solely as described in this Privacy Policy. Chronus may collect information from you both online and offline. We may combine information collected from these disparate sources unless we tell you otherwise. Chronus collects three general categories of information from you:"
+          subheading_1:
+            point_1: "Contact information, including name, title, street address (home, work), postal code, country, telephone numbers (home, work, cell, etc.), email address (home, work), company name, and other similar information;"
+            point_2: "Personal/demographic information (ie gender, level of education, etc.);"
+            point_3: "User content, including information provided when you use online means of communication (such as chat features) and all other user submissions and content you provide; and"
+            point_3_1: "User content (information provided when you use online means of communication (such as chat features) and all other user submissions and content you provide); and"
+            point_4: "Any other information collected directly from you through a transaction or inquiry, or your submission of a form, registration, or communication to Chronus."
+          subheading_2:
+            para_1_html: 'As you use the Services, some information can be “passively” collected using various technologies, such as cookies, web beacons, and navigational data collection (clickstream, log files, server logs, etc.). Your Internet browser automatically transmits some of this information. Such technologies keep track of your interactions with the Services and provide you with a more customized experience. You can find more information about cookies and web beacons, including how to see what cookies have been set on your device and how to manage and delete them at <a href=''http://www.aboutcookies.org'' target=''_blank''>www.aboutcookies.org</a>. Information that Chronus automatically collects using these methods includes:'
+            para_1_1: As you use the Services, some information can be “passively” collected using various technologies, such as cookies, web beacons, and navigational data collection (clickstream, log files, server logs, etc.). Your Internet browser automatically transmits some of this information. Such technologies keep track of your interactions with the Services and provide you with a more customized experience.
+            para_2: "Information that Chronus automatically collects using these methods includes:"
+            point_0: "Your activities while on Chronus-controlled websites;"
+            point_1: "the URL of the website you just visited; and"
+            point_2: "the Internet Protocol (IP) address and browser version currently being used by your computer."
+          subheading_3:
+            para_1: "Chronus may collect information about you, including your name, job title, and contact information from various third-parties. Third-party sources may include opt-in lists, publicly available data, consumer reporting agencies or other companies. At the discretion of its customers, Chronus may also collect information about Chronus customers (and customer end-users) from customer administrators or HR systems."
+            para_1_1: Chronus may collect information about you, including your name, employer, job title, and contact information from various third-parties. Third-party sources may include opt-in lists, publicly available data, consumer reporting agencies, webinar or video hosting services or other companies. If applicable and so requested by your company, Chronus may also collect information about you from your company’s administrators or HR systems.
+            para_2: Chronus respects your privacy and will only collect such information from third-parties in accordance with applicable law.
+      how_uses_information:
+        heading: 3. HOW CHRONUS USES YOUR INFORMATION
+        subheading_1: "3.1 General."
+        subheading_2: "3.2 Use of Information Captured from IP Addresses."
+        subheading_3: "3.3 Cookie and Web Beacon Use."
+        subheading_2_1: "3.2 Cookie and Web Beacon Use"
+        content:
+          subheading_1:
+            para_1: "Chronus uses personal data about customers for a wide range of purposes, including:"
+            para_1_1: "Chronus uses the information we collect about you for a wide range of purposes, including:"
+            point_1: "to respond to your requests (including requests for newsletter subscriptions, materials, support, and so on);"
+            point_1_1: "to communicate with you (including promotional communications) and to respond to your requests (including requests for newsletter subscriptions, materials, support etc.);"
+            point_2: "to provide products or services that you have ordered;"
+            point_2_1: "to process your transactions and to provide and contact you about products or services that you have ordered;"
+            point_3: "to process your order transactions and contact you regarding your order;"
+            point_3_1: "to invite and help you participate in online and offline events;"
+            point_4: "to provide materials you have requested;"
+            point_4_1: "to allow you to use the Services (including allowing you to contact another person or post information and other content online);"
+            point_5: "to invite and help you participate in online and offline events, and/or activities;"
+            point_5_1: "for analytical purposes and to improve products, services, and websites;"
+            point_6_1: "for legal reasons;"
+            point_6: "to allow you to post information and other content online (including in response to other postings);"
+            point_7: "to improve products, services, and websites;"
+            point_8: "to follow up with you after you have communicated with Chronus or submitted information to Chronus;"
+            point_9: "to send promotional communications or offers (unless you have requested that Chronus not send such communications);"
+            point_10: "for marketing and research purposes;"
+            point_11: "for internal and/or external training, quality assurance, and other purposes (including without limitation, call center recordings);"
+            point_12: "to allow you to contact another person;"
+            point_13: "for legal and contractual reasons;"
+            point_14: "to address your interests and concerns;"
+            point_15: "and as otherwise specified in this Privacy Policy and/or at the point of personal data collection."
+            para_2: "Chronus may combine information about you that is collected from disparate sources. As permitted by applicable law, Chronus may make full use of all information that is de-identified or otherwise not in personally identifiable form, including without limitation, user-generated content."
+          subheading_2:
+            para_1: "Chronus’ Services may use your IP address for the purposes identified above, as well as to analyze trends, administer the website, track users’ movements, gather broad demographic information for aggregate use and to confirm that a particular individual affirmed his/her consent to specific legal terms (e.g. a clickwrap license agreement)."
+            para_1_1: Chronus may use the information collected from cookies and related technologies for the purposes identified above, as well as to analyze trends, administer the website, track users’ movements, gather broad demographic information for aggregate use and to confirm that a particular individual affirmed his/her consent to specific legal terms (e.g. a clickwrap license agreement).
+            para_2_html: "For additional information about cookies and related technologies, please go to our Cookie Policy at <a href='https://chronus.com/cookie-policy' target='_blank'>https://chronus.com/cookie-policy</a>."
+          subheading_3:
+            para_1: "Chronus uses both session cookies (which exist only until you close your web browser) and persistent cookies (which exist for a longer, specified period of time) on this website."
+            para_2: "The type of cookies used in the Services can generally be put into three categories: Strictly Necessary, Performance/Analytics and Functionality. Strictly Necessary cookies used in the Services are essential in order to enable you to move around the website and use its features. These cookies don’t gather information about you that could be used for marketing or remembering where you have been on the internet. Performance/Analytics Cookies used in the Services collect information about how visitors use the website. For example, these cookies collect information about which pages visitors go to the most often, and if visitors get error messages from web pages. These cookies don’t collect information that identify a visitor. Information collected by performance/analytics cookies is aggregated and anonymous and only used to improve the Services. Functionality cookies allow the Services to remember choices you make and provide enhanced, more personal features to you."
+            para_3: "The use of cookies by Chronus’ service providers are not covered by this Privacy Policy. Chronus does not have access or control over these cookies."
+            para_4: "Chronus may use web beacons (also known as Internet tags or clear GIFs) on Chronus’ Services to access and set cookies and otherwise help Chronus to better understand how users are utilizing Chronus’ Services. Information provided by the web beacon includes the computer’s IP address, the type of browser being used, and the time that the web beacon was viewed. Chronus may also use web beacons in emails and newsletters so that Chronus knows when such communications have been opened and to otherwise help tailor Chronus’ communications to individual users."
+      eu_data_law:
+        heading: 4. DATA COLLECTION AND PROCESSING UNDER EUROPEAN DATA LAW
+        content:
+          para_1: "When Chronus customers who are subject to European data laws, use Chronus’ Services, we process and store certain information on their behalf as a data processor. In such cases, the customer, as the data controller is responsible for most aspects of the processing of the information."
+          para_2: "Where Chronus acts as a controller under European data law, Chronus’ lawful basis for collecting and using the information described in this Privacy Policy will depend on the information concerned and the specific context in which Chronus collects or uses that information."
+          para_3: "Chronus normally collects or uses information from you only where Chronus has collected your consent to do so, where Chronus needs the information to perform a contract with you, or where the processing is in Chronus’ legitimate interests and not overridden by your data protection interests or fundamental rights and freedoms.  Specifically, when Chronus:"
+          point_1: "uses information to create or manage an account, Chronus needs it in order to provide relevant services;"
+          point_2: "uses contact information for marketing purposes, Chronus does so with your consent (which you can revoke at any time)."
+          point_3: "gathers usage data and analyzes it to improve the Services, Chronus does so based on Chronus’ legitimate interest in safeguarding and improving the Services."
+          para_4: "If you have any questions or concerns about how information is processed, including questions about how to exercise your rights as a data subject, please contact us at the contact information provided in Section 8 of this Privacy Policy."
+      shares_and_discloses_info:
+        heading: 5. WHEN CHRONUS SHARES AND DISCLOSES YOUR INFORMATION
+        heading_v1: 4. WHEN CHRONUS SHARES AND DISCLOSES YOUR INFORMATION
+        subheading_1: "5.1 Disclosure to Affiliates and Third-Parties."
+        subheading_2: "5.2 Compelled Disclosure."
+        subheading_3: "5.3 Disclosure in the Event of a Sale or Assignment."
+        subheading_1_1: "4.1 Disclosure to Affiliates and Third-Parties to Support the Services."
+        subheading_2_1: "4.2 Compelled Disclosure."
+        subheading_3_1: "4.3 Disclosure in the Event of a Sale or Assignment."
+        content:
+          para_1: "Chronus will share your information with third parties only in the ways that are described in this Privacy Policy. Chronus does not sell your information to third parties. Any third parties that Chronus may share your information with are obliged to keep your information securely and in accordance with this Privacy Policy."
+          para_1_1: "Chronus will share your information with third-parties solely as permitted by law and only in the ways that are described in this Privacy Policy or as otherwise set forth in a negotiated agreement between Chronus and you (or your company). Chronus does not sell your information to third parties. Any third-parties that Chronus may share your information with are obliged to keep your information secure and in accordance with this Privacy Policy."
+          subheading_1:
+            para_1: "Chronus may disclose personal data you provide to Chronus’ affiliates and partners and to consultants, service providers, and contractors that Chronus uses to support business and operations (e.g., delivery services, financial institutions, fulfillment services, technical support, advertising, public relations, media and marketing services, legal services, call-in centers, e-commerce and other web-related services such as web hosting and web monitoring services, and event-related services such as online and offline data capture services) who have agreed to keep the information confidential and use it only to provide the applicable service(s)."
+            para_2: "In some cases, Chronus works with other companies who help to gather information from you or help Chronus to communicate with you."
+            para_1_1: "Chronus may disclose information you provide to Chronus’ affiliates and partners and to consultants, service providers, and contractors that Chronus uses to support business and operations (e.g., delivery services, financial institutions, fulfillment services, technical support, advertising, public relations, media and marketing services, legal services, call-in centers, e-commerce and other web-related services such as web hosting and web monitoring services, and event-related services such as online and offline data capture services). In all cases, Chronus will only disclose to such persons who have agreed to keep the information confidential and use it only to provide the applicable service(s)."
+          subheading_2:
+            para_1: "Chronus may also disclose personal data to governmental agencies and other third parties:"
+            para_1_1: "Chronus may also disclose information to governmental agencies and other third parties:"
+            point_1: "If required to do so by law, regulation, or court order;"
+            point_2: "to respond to governmental and/or law enforcement requests;"
+            point_3: "to identify, contact, or bring legal action against someone who may be causing injury to or interfering with Chronus’ (or others’) rights or property;"
+            point_4: "to support any claim, defense, or declaration in a case or before any jurisdictional and/or administrative authority, arbitration, or mediation panel;"
+            point_5: "or in connection with disciplinary actions/investigations."
+          subheading_3:
+            para_1: "Chronus may disclose personal data to third parties in connection with the sale, assignment, or other transfer of Chronus, its business or the website to which such data applies."
+            para_2: "In the event that Chronus goes through a business transition, such as a merger, acquisition by another company or sale of a portion of its assets, your personal information may be part of the assets transferred. You will be notified via prominent notice on the Services prior to a change of ownership or control of their personal information. If, as a result of the business transaction, your personally identifiable information will be used in a manner materially different from that stated at the time of collection, you will be notified consistent with this Privacy Policy."
+            para_1_1: "Chronus may disclose your information to third parties in connection with the sale, assignment, or other transfer of Chronus, its business or the website to which such information applies. In the event that Chronus goes through a business transition, such as a merger, acquisition by another company or sale of a portion of its assets, your information may be part of the assets transferred. You will be notified via prominent notice on the Services prior to a change of ownership or control of your information. If, as a result of the business transaction, your information will be used in a manner materially different from that stated at the time of collection, you will be notified consistent with this Privacy Policy."
+      process_under_eu_law:
+        heading: 5. PROCESSING OF PERSONAL DATA UNDER EUROPEAN DATA LAW
+        content:
+          para_1: "Where Chronus is acting as a data controller under European Data Laws, Chronus processes your personal data only: (i) where Chronus has collected your consent to do so; (ii) where Chronus needs the information to perform a contract with you; or (iii) where the processing is in Chronus’ legitimate interests and not overridden by your data protection interests or fundamental rights and freedoms.  Specifically, when Chronus:"
+          para_2: "For the sake of clarity, where Chronus is processing (including but not limited to collecting or sharing) your information based on the legal basis of consent, Chronus will seek consent from you independently of this Privacy Policy. You can withdraw such consent at any time by contacting Chronus using the contact information provided in the “Contact Chronus” section below."
+          para_3: "Chronus may also process your personal data in its role as a data processor for your company. In such cases, your company is acting as the data controller and Chronus is processing data on its instructions."
+      preferences:
+        heading: 6. PREFERENCES AND DATA SUBJECT RIGHTS
+        content:
+          para_1: "You can unsubscribe from all email marketing messages Chronus sends you by contacting Chronus as specified in the “Contact Chronus” section below, or by following the unsubscribe instructions in various communications that Chronus may send you. Chronus customers (including customer end-users) should contact their administrators for assistance changing their preferences."
+          para_1_1: "You can unsubscribe from all email marketing messages Chronus sends you by contacting Chronus as specified in the “Contact Chronus” section below, or by following the unsubscribe instructions in various communications that Chronus may send you. Chronus customers may contact their administrators for assistance changing their preferences."
+          para_2: "Keep in mind that these preferences regarding promotional contacts do not mean that Chronus might not contact you for other reasons, such as those related to an order you placed, an inquiry you made, a membership you undertook, an event for which you registered, a legally required notice, and so on."
+          para_3: "Based on your location, you may have additional rights under applicable law, such as:"
+          point_1: "the right to access and review information associated with your use of the Services at any time. You also can request the following information: how Chronus collects and uses your information and why; the categories of personal data involved; the categories of recipients of your personal data; how Chronus received your personal data; and how long Chronus uses or stores your personal data or the manner in which Chronus determines relevant retention periods;"
+          point_2: "the right to correct your personal data;"
+          point_3: "the right to request that Chronus erase or stop processing your personal;"
+          point_4: "the right to export your personal data;"
+          point_5: "the right to raise questions or complaints with your local data protection authority at any time."
+          para_4: "If you wish to exercise these rights, please contact us using the email address provided in the “Contact Chronus” section below."
+      security:
+        heading: 7. SECURITY AND DATA RETENTION
+        content:
+          para_1: "Chronus follows generally accepted industry standards to protect information from loss, misuse, and unauthorized access, disclosure, alteration, or destruction, whether in transmission or storage. In particular, information at rest is protected using AES 256 encryption and Chronus employs controlled interfaces (such as proxies, gateways, routers, firewall, and encrypted tunnels) as well as a variety of additional security controls (e.g., intrusion detection systems, data encryption). All communications within the Chronus Mentor Service are secured via a high-grade 256-bit SSL encryption."
+          para_2: "If you have any questions about the security of the Services, you can contact Chronus via the contact information below."
+          para_3: "Where required by applicable law, Chronus will keep your information for no longer than necessary for the purposes for which it is processed. Where there are technical limitations that prevent deletion or anonymization, Chronus will safeguard and limit the use of information as required by applicable law."
+          para_3_1: "Where required by applicable law, Chronus will keep your information for no longer than necessary for the purposes for which it is processed. For information stored in a customer account, Chronus will retain such information for as long as the applicable account is active. After termination of the account, information is generally retained for ninety (90) days. Where there are technical limitations that prevent deletion or anonymization, Chronus will safeguard and limit the use of information as required by applicable law."
+      data_transfer:
+        heading: 8. TRANSFER OF DATA OUTSIDE THE EUROPEAN ECONOMIC AREA (EEA)
+        heading_v1: 8. TRANSFER OF INFORMATION OUTSIDE THE EUROPEAN ECONOMIC AREA (EEA)
+        content:
+          para_1: "Chronus may process your personal data in the U.S. or any other countries in which Chronus has a presence or facilities. By using the Services, you understand and signify your acceptance that Chronus may transfer personal data from the EEA to another country outside the EEA. Chronus will comply with all applicable law relating to the transfer of personal data outside the EEA."
+          para_1_1: Chronus may process your information in the U.S. or any other countries in which Chronus has a presence or data processing facilities. Similarly, Chronus may transfer information from the EEA to the United States or another country outside the EEA.
+          para_2: Chronus will comply with all applicable law relating to the processing and transfer of personal data outside the EEA. Where applicable law requires consent for such international processing or transfer, Chronus will seek consent from you independently of this Privacy Policy.
+          para_3: For the avoidance of doubt, where you (or your company) have entered into separate terms with Chronus regarding the international processing or transfer of personal data, those terms will govern and take precedence over this Privacy Policy.
+      coppa_requirements:
+        heading: 9. COPPA REQUIREMENTS
+        content:
+          para_1: "The Services are not directed to children and Chronus does not knowingly collect any personally identifiable information from children under 13 years of age through the sites."
+          para_1_1: "The Services are not directed to children and Chronus does not knowingly collect any information from children under 13 years of age through the sites."
+      contact_us:
+        heading: 10. CONTACT CHRONUS
+        content:
+          para_1: "If you have questions or concerns related to this Privacy Policy or Chronus information practices, would like to update or correct information you have provided, or would like to opt out of future communications, please contact Chronus as follows:"
+          para_1_html: "If you would like to opt-out of select communications from Chronus, please visit <a href='https://get.chronus.com/preference-center.html' target='_blank'>https://get.chronus.com/preference-center.html</a>"
+          para_2: "If you have questions or concerns related to this Privacy Policy or Chronus’ information practices, or, if you are interested in exercising data subject rights you may have under applicable law, please contact Chronus at:"
+          para_2_html: "<b>Chronus LLC</b><br/>15395 SE 30th Place, Suite 140<br/>Bellevue WA 98007<br/>Or email <a href='mailto:legal@chronus.com'>legal@chronus.com</a>"
+          para_3_html: "<b>Chronus LLC</b><br/>Arun Kumar Arjunan<br/>Data Processing Officer<br/>15395 SE 30th Place, Suite 140<br/>Bellevue WA 98007<br/>Or email <a href='mailto:legal@chronus.com'>legal@chronus.com</a>"

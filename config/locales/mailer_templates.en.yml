@@ -1,0 +1,11 @@
+en:
+  feature:
+    email_customization:
+      preview_title: Sample Email
+      preview_message_v1: This feature should be used to test copy and layout. It will not generate content for placeholders correctly, so expect some missing data. For example, you may see a fake term or blank space in place of {{tag}}. Web hyperlinks also may not work. Rest assured that in real scenarios, placeholders and links will work correctly.
+      Note: 'Note:'
+      rollout:
+        update_all_confirmation: This will update all your emails, and overwrite existing content. Proceed?
+        update_non_coustomized_confirmation: Any emails you have not customized will be updated to the new content. Emails you edited will not be touched. Proceed?
+        update_all_successful: You have successfully updated all your emails to the new content
+        update_non_coustomized_successful: You have successfully updated all the emails you have not previously customized to the new content

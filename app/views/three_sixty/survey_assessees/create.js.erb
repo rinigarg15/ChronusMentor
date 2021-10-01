@@ -1,0 +1,10 @@
+<% if @survey_assessee.valid? %>
+  jQuery("#new_three_sixty_survey_assessee").before('<%= j(render(:partial => "three_sixty/surveys/survey_assessee", :locals => {:survey => @survey, :survey_assessee => @survey_assessee})) %>');
+  jQueryHighlight("#three_sixty_survey_assessee_container_<%= @survey_assessee.id %>", 1000);
+  <% if @survey.only_admin_can_add_reviewers? %>
+  	jQuery("#three_sixty_survey_assessee_container_<%= @survey_assessee.id %> div.collapse").addClass("in");
+  <% end %>
+  ThreeSixty.hideAndRefreshNewForm('new_three_sixty_survey_assessee', '<%= j(render(:partial => "three_sixty/surveys/new_assessee", :locals => {:survey => @survey})) %>')
+<% else %>
+  ThreeSixty.addAssesseeError('<%= j(@survey_assessee.errors[:member_id].first) %>');
+<% end %>

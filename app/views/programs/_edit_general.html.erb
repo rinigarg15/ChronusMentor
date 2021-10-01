@@ -1,0 +1,108 @@
+<%= include_ckeditor_tag %>
+<%= control_group do %>
+  <%= content_tag(:div, Program::Domain.human_attribute_name(:subdomain), :class => 'false-label control-label') %>
+  <% if @current_organization.subdomain %>
+    <% web_address = "#{@current_organization.subdomain}.#{@current_organization.domain}" %>
+  <% else %>
+    <% web_address = "#{@current_organization.domain}" %>
+  <% end %>
+  <% web_address += "/#{SubProgram::PROGRAM_PREFIX}#{@current_program.root}" unless @current_organization.standalone? %>
+  <%= controls do %>
+    <span class="form-control" id="program_subdomain"><%= web_address %></span>
+  <% end %>
+<% end %>
+<%= org_f.text_field :account_name if super_console? && @current_organization.standalone? %>
+<%= f.text_field :name, title: "program_settings_strings.label.program_name".translate(program: _Program), required: true %>
+<%= f.text_area :description, :default_value => default_txt, :class => 'form-control', :rows => 4 %>
+
+<% form_object, program_or_organization = @current_organization.standalone? ? [org_f, @current_organization] : [f, @program] %>
+<% program_asset = program_or_organization.program_asset %>
+<%= form_object.file_field :logo, class: 'cjs-dropzone p-t-xxs', data: get_data_hash_for_banner_logo(program_or_organization, program_asset.try(:logo_file_name), ProgramAsset::Type::LOGO) %>
+<%= form_object.file_field :mobile_logo, class: 'cjs-dropzone p-t-xxs', data: get_data_hash_for_banner_logo(program_or_organization, program_asset.try(:mobile_logo_file_name), ProgramAsset::Type::MOBILE_LOGO) if super_console? && @current_organization.standalone? %>
+
+<% if super_console? %>
+  <%= control_group(class: "no-margin-bottom") do %>
+    <%= content_tag(:label, "program_settings_strings.label.email_primary_color_v1".translate, class: "control-label", for: "program_email_theme_override") %>
+    <%= controls(class: "minicolors minicolors-theme-bootstrap minicolors-position-bottom minicolors-position-left minicolors-focus") do %>
+      <%= text_field_tag "program[email_theme_override]", @current_program.email_theme_override, class: 'colorpicker cui_email_theme_override form-control col-xs-12 col-sm-6 col-md-4' %>
+    <% end %>
+  <% end %>
+  <%= email_theme_overrride_select_default_color(@current_program.email_theme_override) %>
+  <%= javascript_tag %Q[initialize.colorPicker();] %>
+<% end %>
+
+<%= form_object.file_field :banner, class: 'cjs-dropzone p-t-xxs', id: "banner", help_text: "program_settings_strings.content.banner_help_text".translate, data: get_data_hash_for_banner_logo(program_or_organization, program_asset.try(:banner_file_name), ProgramAsset::Type::BANNER) %>
+
+<% if super_console? %>
+  <% teacher_role = @current_program.get_role(RoleConstants::TEACHER_NAME) %>
+  <% @program.third_role_enabled = teacher_role.present? %>
+  <% can_remove_role = @program.third_role_enabled ? teacher_role.can_be_removed? : true %>
+  <%= control_group do %>
+    <%= choices_wrapper("program_settings_strings.content.enable_third_role".translate) do %>
+      <%= content_tag(:div, "program_settings_strings.content.enable_third_role".translate, class: "control-label") %>
+        <%= controls do %>
+          <label class="radio inline">
+            <%= f.radio_button :third_role_enabled, true %><%= "simple_form.yes".translate %>
+          </label>
+          <label class="radio inline">
+            <%= f.radio_button :third_role_enabled, false, disabled: !can_remove_role %><%= "simple_form.no".translate %>
+          </label>
+          <% if @program.third_role_enabled %>
+            <% unless can_remove_role %>
+              <%= content_tag(:span, get_icon_content("fa fa-info-circle"), id: "cjs_role_removal_help_icon") %>
+              <%= tooltip("cjs_role_removal_help_icon", get_role_removal_denial_flash(teacher_role), true, placement: "bottom") %>
+            <% end %>
+            <%= content_tag(:div, get_edit_terminology_link(teacher_role))%>
+          <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= f.text_field :number_of_licenses, :class => "col-md-5" if super_console? %>
+
+<% if !@current_organization.standalone? && !@current_organization.programs_listing_visible_to_none? %>
+  <%= control_group do %>
+    <%= content_tag(:div, "program_settings_strings.content.publish_to_listing_page".translate(programs: _Programs), :class => "false-label control-label") %>
+    <%= controls do %>
+      <%= choices_wrapper("program_settings_strings.content.publish_to_listing_page".translate(programs: _Programs)) do %>
+        <label class="radio inline">
+          <%= f.radio_button(:published, true) %>
+          <%= "simple_form.yes".translate %>
+        </label>
+        <label class="radio inline">
+          <%= f.radio_button(:published, false) %>
+          <%= "simple_form.no".translate %>
+        </label>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @first_visit && !@current_program.created_using_solution_pack? %>
+  <div id="career_based_project_specific_settings" style="<%= 'display: none' if !@program.only_career_based_ongoing_mentoring_enabled? %>">
+    <%= control_group do %>
+      <%= content_tag(:div, "feature.program.label.mentor_assignment".translate(:mentor => _Mentor), :class => "control-label false-label") %>
+      <%= controls do %>
+        <%= mentor_request_style_selection_first_time %>
+        <%= javascript_tag %Q[ProgramSettings.handleMentorRequestStyleFirstTime();] %>
+      <% end %>
+    <% end %>
+
+    <%= control_group(:class => "#{'hide' if @current_program.basic_type? }") do %>
+      <% label = "feature.program.label.mentoring_style_v1".translate(:Mentoring_Connection => _Mentoring_Connection) %>
+      <%= content_tag(:div, label, :class => "control-label false-label") %>
+      <%= controls do %>
+        <%= one_time_setting_radio_button(f,@program, :allow_one_to_many_mentoring, ["feature.program.content.group_mentoring_v1".translate(:mentoring_connection => _mentoring_connection), "feature.program.content.one_on_one_mentoring_v1".translate], [true, false], label_text: label) %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+<% if @current_organization.standalone? %>
+  <% unless @current_organization.basic_type? && !super_console? %>
+    <%= render partial: "organizations/agreement", locals: {f: org_f} %>
+  <% end %>
+  <%= render partial: "organizations/privacy_policy", locals: {f: org_f} %>
+  <%= render partial: "organizations/browser_warning", locals: {f: org_f} %>
+<% end %>
+<%= render partial: "programs/super_console_general_settings", locals: {f: f, org_f: org_f} if super_console? %>

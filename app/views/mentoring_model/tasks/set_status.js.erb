@@ -1,0 +1,17 @@
+<% if @task.required? %>
+  var taskStatus = jQuery(".cjs_status_<%= @task.id %>");
+  <% if @task.overdue? %>
+    if(taskStatus.length > 0){
+      taskStatus.find(".cjs_status").addClass("text-danger");
+    }
+  <% else %>
+    if(taskStatus.length > 0){
+      taskStatus.find(".cjs_status").removeClass("text-danger");
+    }
+  <% end %>  
+  <%= render "update_goal_progress" %>
+<% end %>
+<% if @mentoring_model_milestones.present? %>
+  <%= render partial: "mentoring_model/milestones/refresh_milestones.js.erb", locals: {milestones: @mentoring_model_milestones} %>
+<% end %>
+MentoringModelTask.setButtonColor("#cjs-hover-well-<%= @task.id %>", <%= @task.done? %>);

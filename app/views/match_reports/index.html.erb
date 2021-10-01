@@ -1,0 +1,31 @@
+<%= render partial: "reports/high_charts" %>
+<%= include_kendo %>
+<%= render partial: "reports/d3" %>
+<% @skip_rounded_white_box_for_content = true %>
+<% @back_link = {link: session[:back_url]} %>
+<% @title = "feature.match_report.header.match_report".translate %>
+<% sections_to_load = [] %>
+
+<div id="match_report">
+  <% @match_report.default_sections_data.each do |section| %>
+    <%= render partial: MatchReport::Sections::Partials[section.keys.first], locals: {data: section.values.first} %>
+  <% end %>
+  <% @match_report.non_default_sections.each do |section| %>
+    <% sections_to_load << section %>
+    <%= render(partial: MatchReport::Sections::ContainerPartials[section], locals: {admin_view_id: @admin_view_id}) %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  MatchReport.sectionSettingsPath = '<%= edit_section_settings_match_reports_path %>';
+  MatchReport.discrepancyGraphPath = '<%= show_discrepancy_graph_or_table_match_reports_path %>';
+  MatchReport.refreshMentorRecommendationsPath = '<%= refresh_top_mentor_recommendations_match_reports_path %>';
+  MatchReport.showSectionSettings();
+  <% if @edit_section %>
+    MatchReport.triggerSectionSettingsPopup(<%= @section %>);
+  <% end %>
+  MatchReport.showRemainingMenteeChoices();
+  ReportSection.loadSectionPath = '<%= match_report_async_loading_path %>';
+  ReportSection.loadSections(<%= raw sections_to_load.to_json %>);
+  MatchReport.triggerDiscrepancyGraph();
+<% end %>

@@ -1,0 +1,13 @@
+<div class="cjs_profile_status_box_body">
+  <ul class="list-group">
+    <% sections_green.each do |section_id| %>
+      <% content = content_tag(:div, get_icon_content("fa fa-check-circle-o text-navy fa-lg m-r-sm"), class: "pull-left") + content_tag(:div, get_first_time_profile_section_title(all_profile_section_titles_hash, section_id), class: "media-middle overflow-hidden word_break")%>
+      <%= content_tag(:li, content, :class => "list-group-item no-horizontal-padding clearfix col-xs-12 font-600 big #{section_id}") %>
+    <% end %>
+
+    <% sections_gray.each do |section_id| %>
+      <% content = content_tag(:div, get_icon_content("fa fa-check-circle-o text-gray fa-lg m-r-sm"), class: "pull-left") + content_tag(:div, get_first_time_profile_section_title(all_profile_section_titles_hash, section_id), class: "media-middle overflow-hidden word_break") %>
+      <%= content_tag(:li, content, :class => "list-group-item no-horizontal-padding clearfix col-xs-12 font-600 big #{section_id}") %>
+    <% end %>
+  </ul>
+</div>

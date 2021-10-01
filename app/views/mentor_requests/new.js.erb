@@ -1,0 +1,13 @@
+<% can_send_mentor_request, flash_msg = current_user.can_send_mentor_request_to_mentor_with_error_flash?(@mentor_request.mentor, Mentor: _Mentor, mentoring: _mentoring, meetings: _meetings, mentor: _mentor, mentoring_connection: _mentoring_connection, mentors: _mentors, program: _program, admin: _admin, mentoring_connections: _mentoring_connections) %>
+
+<% if can_send_mentor_request %>
+  <% modal_v3_popup 'feature.mentor_request.header.title_v3'.translate(mentor_name: @mentor_request.mentor.name, mentor: _mentor) do %>
+    <%= render 'mentor_requests/new', locals: { as_popup: true, src: @src } %>
+  <% end %>
+<% else %>
+  <% @no_js = true %>
+  <%= javascript_tag do %>
+    closeQtip();
+    ChronusValidator.ErrorManager.ShowPageFlash(false, "<%= j flash_msg.html_safe %>");
+  <% end %>
+<% end %>

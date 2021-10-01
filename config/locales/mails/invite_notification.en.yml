@@ -1,0 +1,35 @@
+en:
+  email_translations:
+    invite_notification:
+      title_v3: Invite notification from user to another user
+      description_v3: This email is sent when a participant (not %{_a_admin}) invites a user to join the %{_program}.
+      subject_v1: Invitation from {{invitor_name}} to join {{subprogram_or_program_name}} {{as_role_name_articleized}}!
+      content_v2_html: Hello, <br /><br/> Congratulations! <br /> You have been invited by {{invitor_name}} to join {{subprogram_or_program_name}} {{as_role_name_articleized}}. <br /> {{invitation_message}} <br /> {{accept_sign_up_button}} <br /> If you have any questions, please contact the {{customized_admin_term_pluralized}} <a href='{{url_contact_admin}}'>here</a>.<br/>
+      as: as
+      tags:
+        invitor_name:
+          name: Invitor Name
+          description: Name of the user who has invited
+        invited_as:
+          description: Role name
+          example_v1: "%{role}"
+        role_name:
+          name: Role name
+          example: mentor
+          description: Role name
+        as_role_name_articleized:
+          name: As Role Name Articleized
+          example: as a mentor
+          example_v1: as %{role}
+          description: Articleized Role Name
+        url_invitation:
+          name: Url Invitation
+          description: Url of the invitation
+        invitation_message:
+          description: Optional message from the invitor
+          example: please accept the invitation and join the program
+        accept_sign_up_button:
+          description: Accept and Sign-up Button
+          accept_sign_up: Accept and Sign-up
+        url_contact_admin:
+          description: Url for the user to contact administrator

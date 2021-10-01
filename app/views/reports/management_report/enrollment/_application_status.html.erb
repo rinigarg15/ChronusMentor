@@ -1,0 +1,15 @@
+<div class="row">
+  <h4 class="p-l-sm"><%= link_to("feature.reports.content.applications".translate, membership_requests_path, class: "") %></h4>
+  <div class="col-xs-4">
+    <small class="stats-label"><%= "feature.membership_request.content.tiles.headers.received".translate %></small>
+    <h4><%= data[:received] %></h4>
+  </div>
+  <div class="col-xs-4">
+    <small class="stats-label"><%= "feature.membership_request.content.tiles.headers.accepted".translate %></small>
+    <h4><%= data[:accepted] %></h4>
+  </div>
+  <div class="col-xs-4">
+    <small class="stats-label"><%= "feature.membership_request.content.tiles.headers.rejected".translate %></small>
+    <h4><%= data[:rejected] %></h4>
+  </div>
+</div>

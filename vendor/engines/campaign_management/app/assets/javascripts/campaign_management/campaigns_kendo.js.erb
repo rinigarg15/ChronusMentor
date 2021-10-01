@@ -1,0 +1,383 @@
+function dropper(c, options) {
+  jQuery("<input data-bind='value:" + options.field + "/>").appendTo(c).kendoDropDownList({});
+}
+
+var CampaignsKendo = {
+  setupTourOnce: true,
+
+  initializeKendo: function(options) {
+    jQuery(document).ready(function(){
+      CampaignsKendo.initializeGrid(options);
+      CampaignsKendo.initializeHeadersBehavior();
+      CampaignsKendo.registerRowClickCallbacks(options);
+    });
+  },
+
+  initializeGrid: function (options) {
+    var gridDiv = jQuery("#" + options.grid_id)
+    var grid = gridDiv.kendoGrid({
+      dataSource: {
+        type: "json",
+        transport: { read: options.dataSource },
+        schema: {
+          model: { fields: options.fields },
+          data: "data",
+          total: "total"
+        },
+        pageSize: options.pageSize,
+        serverPaging: options.serverPaging,
+        serverFiltering: options.serverFiltering,
+        serverSorting: options.serverSorting,
+        filter: options.filter
+      },
+      sortable: options.sortable,
+      pageable: options.pageable,
+      filterable: options.filterable,
+      filterMenuInit: function (e) {
+        checkbox_fields = this.input_options.checkbox_fields;
+        simple_search_fields = this.input_options.simple_search_fields;
+        date_fields = this.input_options.date_fields;
+        if((checkbox_fields != undefined) &&  (checkbox_fields.indexOf(e.field) != -1)) {
+          KendoRadioHelper.onFilterMenuInit(e);
+        }
+        else if((simple_search_fields != undefined) &&  (simple_search_fields.indexOf(e.field) != -1)) {
+          KendoFilterHelper.onSimpleSearchFilterInit(e);
+        }
+        else if((date_fields != undefined) &&  (date_fields.indexOf(e.field) != -1)) {
+          KendoFilterHelper.onDateFilterInit(e);
+        }
+      },
+      columns: options.columns,
+      height: options.height,
+      dataBound: function () {
+        CampaignsKendo.onDataBound(options);
+      }
+    });
+
+    // Store the input options in the kendo instance
+    var kendo_instance = gridDiv.data('kendoGrid');
+    kendo_instance.input_options = options;
+  },
+
+  onDataBound: function (options) {
+    var gridDiv = jQuery("#" + options.grid_id);
+    var grid = gridDiv.data('kendoGrid');
+    if(grid.dataSource.view().length == 0 && options.grid_id != "cjs_program_invitation_listing_kendogrid") {
+      jQuery(grid.table).parent().html('<div class="empty-grid text-center well no-margins">' + options.messages.emptyMessage + '</div>');
+    }
+
+    initialize.initializeTooltip();
+    CampaignsKendo.initializeAjaxActions();
+    CampaignsKendo.setCampaignTour(options);
+    CommonSelectAll.maintainTriStateCheckbox(true);
+  },
+
+  initializeAjaxActions: function  () {
+    jQuery(".cjs_campaign_stop_actions").on('click', function  (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    });
+    jQuery(".cjs_campaign_message_ajax_action").on('click', function  (event) {
+      element = jQuery(this);
+      confirm_text = element.data('confirm');
+      trackGa = element.data('track-ga');
+      chronusConfirm(confirm_text, function  () {
+        if(trackGa){
+          SurveysGoogleAnalytics.handleRemoveRerminder(element.data('type'));
+        }
+        jQuery.ajax({
+          url: element.data("path"),
+          data: {'_method' : 'DELETE'},
+          type: "POST",
+          beforeSend: function  () {
+            campaignRow = element.closest('tr');
+            editButton = campaignRow.find('.cjs-edit-campaign-link');
+
+            element.addClass('disabled').attr("disabled", true); //disabling delete button
+            editButton.addClass('disabled').attr("disabled", true); //disabling edit button
+
+            element.html(element.html().replace('<%= "feature.campaign_message.delete".translate %>', '<%= "display_string.Please_Wait".translate %>')); // changing text from delete to please wait
+            editButton.html(editButton.html().replace('<%= "display_string.Edit".translate %>', '<%= "display_string.Please_Wait".translate %>')); // changing text from edit to please wait
+
+            campaignRow.addClass("disabled-cursor"); //disabling row from being clicked
+            campaignRow.find(".cjs_campaign_analytics_link").addClass("disabled-cursor").removeAttr("href"); //disabling link in row from being clicked
+          },
+          success: function  () {
+            window.location = element.data('details-path');
+          }
+        });
+      },
+      function () {
+      });
+    });
+  },
+
+  initializeHeadersBehavior: function () {
+    jQuery("#campaigns-result .k-grid-header .k-link").on("click", function () {
+      var nonSorted = jQuery(this).find("span.non-sorted");
+      var nonSortedVisible = nonSorted.is(":visible");
+      var desc_sorted = jQuery(this).find("span.k-i-arrow-s");
+
+      jQuery("#campaigns-result span.k-i-arrow-n").hide();
+      jQuery("#campaigns-result span.k-i-arrow-s").hide();
+      jQuery("#campaigns-result span.non-sorted").show();
+
+      if(nonSortedVisible) {
+        nonSorted.hide();
+      } else if(desc_sorted.length > 0) {
+        nonSorted.show();
+        desc_sorted.hide();
+      } else {
+        nonSorted.hide();
+      }
+    });
+  },
+
+  registerRowClickCallbacks: function(options){
+    if (options.grid_id != "cjs_program_invitation_listing_kendogrid") {
+      jQuery(".campaign-management-kendo-result").on('click', ".k-state-selected", function(){
+        var element = jQuery(this);
+        var campaign_link_element = element.find(".cjs_campaign_analytics_link");
+        if(!jQuery(this).hasClass('disabled-cursor')) {
+          window.location = campaign_link_element.attr("href");
+        }
+      });
+    }
+  },
+
+  setCampaignTour: function(options) {
+    if ((options.grid_id == "cjs_campaigns_kendogrid")) {
+
+      var numberOfTips = 4;
+      var tipContent = [jsCampaignTourTranslation.createCampaignHelptText, jsCampaignTourTranslation.detailsPageLinkHelptText, jsCampaignTourTranslation.clickRatesHelptText, jsCampaignTourTranslation.stateTabsHelptText];
+      var selectors = ["#action_1", ".cjs_campaign_analytics_link:first", ".cjs_analytics_present .k-grid-header", "#cjs_campaigns_state_0"];
+      var highlight = selectors;
+      var direction = ["bottom", "right", "bottom", "right"];
+      var tipAttributes = [tipContent, selectors, highlight, direction];
+      //setting up the trip steps
+      TourFeature.SetupTrip(numberOfTips, tipAttributes, options.lessThanIE9);
+
+      //initializing the onclick events for the pop-up and "take a tour" button
+      CampaignManagement.initializeTour(options.tour_taken, "#campaign-management-tour-modal", options.path, options.message_tag);
+
+    }
+    if ((options.grid_id == "cjs_campaign_messages_kendogrid") && !options.is_featured) {
+      if(options.campaign_state == 0){
+        // Active Campaign
+        var numberOfTips = 3;
+        var tipContent = [jsCampaignDetailTourTranslation.emailsListHelptText, jsCampaignDetailTourTranslation.actionsHelptText, jsCampaignDetailTourTranslation.editDeleteEmail];
+        var selectors = [".campaign_emails_title", "#action_1 .btn-group", ".cjs-cm-message-actions:first"];
+        var highlight = selectors;
+        var direction = ["bottom", "bottom", "bottom"];
+      }
+      else if(options.campaign_state == 1){
+        // Stopped Campaign
+        var numberOfTips = 2;
+        var tipContent = [jsCampaignDetailTourTranslation.cloneEmail, jsCampaignDetailTourTranslation.emailsListHelptText];
+        var selectors = [".cjs_cm_clone_popup", ".campaign_emails_title"];
+        var highlight = selectors;
+        var direction = ["bottom", "bottom"];
+      }
+      else if(options.campaign_state == 2){
+        // Drafted Campaign
+        var numberOfTips = 4;
+        var tipContent = [jsCampaignDetailTourTranslation.draftActivateHere, jsCampaignDetailTourTranslation.draftActions, jsCampaignDetailTourTranslation.emailsListHelptText, jsCampaignDetailTourTranslation.editDeleteEmail];
+        var selectors = ["#action_2", "#action_1 .btn-group", ".campaign_emails_title", ".cjs-cm-message-actions:first"];
+        var highlight = selectors;
+        var direction = ["bottom", "bottom", "bottom", "bottom"];
+      }
+
+      var tipAttributes = [tipContent, selectors, highlight, direction];
+      //setting up the trip steps
+      TourFeature.SetupTrip(numberOfTips, tipAttributes, options.lessThanIE9);
+
+      //initializing the onclick events for the pop-up and "take a tour" button
+      CampaignManagement.initializeTourForCampaignDetailsPage(options.tour_taken, options.path, options.message_tag);
+
+    }
+  }
+};
+
+// This can be used both for checkboxes and radio buttons. As of now it supports only radio buttons but can be easily extend to checkboxes.
+// Picked from  http://docs.telerik.com/kendo-ui/web/grid/how-to/checkbox-filter-menu
+var KendoRadioHelper = {
+  onFilterMenuInit: function  (e) {
+    KendoRadioHelper.initCheckboxFilter.call(e.sender, e);
+  },
+
+  initCheckboxFilter: function (e) {
+    var popup = e.container.data("kendoPopup");
+    var dataSource = this.dataSource;
+    var field = e.field;
+    var colName = field;
+    var input_options = e.sender.input_options;
+    var RadioButtonsDataSource = new kendo.data.DataSource({
+      data: input_options.checkbox_values[field]
+    });
+
+    e.container.find(".k-filter-help-text").hide();
+
+    var helpTextElement = e.container.children(":first").children(":first");
+    helpTextElement.nextUntil(":has(.k-button)").remove();
+    var element = jQuery("<div class='checkbox-ontainer has-padding-right-tiny'></div>").insertAfter(helpTextElement).kendoListView({
+      dataSource: RadioButtonsDataSource,
+      template: "<div><input type='radio' name='" + colName + "' value='#:" + "posted_as" + "#'/>#:" + "displayed_as" + "#</div>"
+    });
+    if(input_options.filter) {
+      value = input_options.filter.filters[0].value;
+      element.children().find('input[name="statuses"][value="'+value+'"]').prop('checked', true);
+    }
+    e.container.find("[type='submit']").click(function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var filter = dataSource.filter() || { logic: "and", filters: [] };
+      var fieldFilters = jQuery.map(element.find(":radio:checked"), function (input) {
+        return {
+          field: field,
+          operator: "eq",
+          value: input.value
+        };
+      });
+      if (fieldFilters.length) {
+        KendoRadioHelper.removeFiltersForField(filter, field);
+        filter.filters.push({
+          logic: "or",
+          filters: fieldFilters
+        });
+        dataSource.filter(filter);
+      }
+      popup.close();
+    });
+  },
+
+  removeFiltersForField: function (expression, field) {
+    if (expression.filters) {
+      expression.filters = jQuery.grep(expression.filters, function (filter) {
+        KendoRadioHelper.removeFiltersForField(filter, field);
+        if (filter.filters) {
+          return filter.filters.length;
+        } else {
+          return filter.field != field;
+        }
+      });
+    }
+  },
+
+  uniqueForField: function (data, field) {
+    var map = {};
+    var result = [];
+    var item;
+    for (var i = 0; i < data.length; i++) {
+      item = data[i];
+      if (!map[item[field]]) {
+        result.push(item.toJSON());
+        map[item[field]] = true;
+      }
+    }
+    return result;
+  }
+}
+
+// Picked the code from http://docs.telerik.com/kendo-ui/api/javascript/ui/grid#events-filterMenuInit
+var KendoFilterHelper = {
+  onSimpleSearchFilterInit: function  (e) {
+    var popup = e.container.data("kendoPopup");
+    var firstValueDropDown = e.container.find("select:eq(0)").data("kendoDropDownList");
+
+    e.container.find(".k-filter-help-text").hide();
+
+    // Change the first dropdown to contains
+    firstValueDropDown.value("contains");
+    firstValueDropDown.trigger("change");
+
+    // Hide all dropdowns
+    e.container.find(".k-dropdown-wrap").hide();
+
+    // Hide the second text box aswell
+    e.container.find(".k-textbox:eq(1)").hide();
+
+    firstFilterEle = e.container.find(".k-textbox:eq(0)");
+
+
+    // Always send contains for the simple search filters
+    e.container.find("[type='submit']").click(function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      var dataSource = e.sender.dataSource
+      var filter = dataSource.filter() || { logic: "and", filters: [] };
+      var newFilter = {
+        field: e.field,
+        operator: "contains",
+        value: firstFilterEle.attr("value")
+      }
+      filters = filter.filters
+      for(var i = filters.length - 1; i >= 0; i--){
+        if(filters[i].field == e.field){
+          filters.splice(i,1);
+        }
+      }
+      filter.filters = filters
+      filter.filters.push(newFilter)
+      dataSource.filter(filter);
+      popup.close();
+    });
+  },
+
+  onDateFilterInit: function  (e) {
+    /*
+      Change the config to Is Greater than or equal to first field and
+      Is less than or equal to second field
+    */
+    var popup = e.container.data("kendoPopup");
+    var container = e.container;
+    var firstValueDropDown = container.find("select:eq(0)").data("kendoDropDownList");
+    firstValueDropDown.value("gte");
+    firstValueDropDown.trigger("change");
+
+
+    var operatorDropdown = container.find("select:eq(1)").data("kendoDropDownList");
+    // Change the first dropdown to contains
+    operatorDropdown.value("and");
+    operatorDropdown.trigger("change");
+
+
+    var secondValueDropdown = container.find("select:eq(2)").data("kendoDropDownList");
+    // Change the first dropdown to contains
+    secondValueDropdown.value("lte");
+    secondValueDropdown.trigger("change");
+
+
+    container.find(".k-dropdown-wrap").hide();
+
+    // // Hide the second text box aswell
+    firstDateFilterElement = container.find("input.k-input:eq(0)");
+    secondDateFilterElement = container.find("input.k-input:eq(1)");
+    firstDateFilterElement.attr('placeholder', e.sender.input_options.fromPlaceholder);
+    secondDateFilterElement.attr('placeholder', e.sender.input_options.toPlaceholder);
+
+    // Always send lte and gte as operators
+    e.container.find("[type='submit']").click(function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      var filter = {
+        logic: "and",
+        filters: [
+          {
+            field: e.field,
+            operator: "gte",
+            value: firstDateFilterElement.attr("value")
+          },
+          {
+            field: e.field,
+            operator: "lte",
+            value: secondDateFilterElement.attr("value")
+          }
+        ]
+      };
+      e.sender.dataSource.filter(filter);
+      popup.close();
+    });
+
+  }
+
+}

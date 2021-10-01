@@ -1,0 +1,6 @@
+<%= control_group do %>
+  <label class="control-label col-sm-3"><%= "feature.campaigns.label.From".translate %></label>
+  <%= controls(class: "col-sm-9") do %>
+    <%= hidden_field_tag "sender_id", "", class: "col-xs-12 no-padding cjs-members-select2 cui-campaign-message-from", "data-url" => auto_complete_for_name_campaign_management_user_campaign_abstract_campaign_messages_path(format: :json) %>
+  <% end %>
+<% end %>

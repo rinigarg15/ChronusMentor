@@ -1,0 +1,12 @@
+<% question_choices_ids, question_choices_texts = get_question_choices_for_select2(profile_questions) %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    ReportFilters.showInputField(<%= question_choices_ids.to_json.html_safe %>, <%= question_choices_texts.to_json.html_safe %>, "<%= ProfileQuestion::SELECT2_SEPARATOR %>");
+    ReportFilters.addOneMore("<%= SurveyResponsesDataService::Operators::CONTAINS %>", "<%= SurveyResponsesDataService::Operators::NOT_CONTAINS %>", "<%= "feature.survey.survey_report.filters.operators.not_contains".translate %>");
+    ReportFilters.removeQuestion();
+    ReportFilters.showHideOperatorDropdown("<%= SurveyResponsesDataService::Operators::CONTAINS %>", "<%= SurveyResponsesDataService::Operators::NOT_CONTAINS %>", "<%= "feature.survey.survey_report.filters.operators.not_contains".translate %>");
+    <% if local_assigns[:initialize_member_profile_filters] %>
+      GroupSearch.initializeMemberProfileFilters('<%= get_safe_member_profile_filters(@member_profile_filters).to_json.html_safe %>');
+    <% end %>
+  });
+<% end %>

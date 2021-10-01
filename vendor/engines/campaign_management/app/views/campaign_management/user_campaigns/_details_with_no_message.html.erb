@@ -1,0 +1,17 @@
+<%= ibox nil do %>
+  <div class="col-xs-12 text-center no-padding">
+    <div class='m-t-xl'>
+      <p class ="lead text-center">
+        <% if @campaign.stopped? %>
+          <%= "feature.campaigns.content.there_are_no_emails_in_this_campaign".translate %>
+        <% else %>
+        	<%= "feature.campaign.content.add_email_information_text1".translate %>
+          <br/><span class="col-xs-12 m-t-xs"><b><%= link_to get_icon_content("fa fa-plus-circle") + content_tag(:span, "feature.campaign_message.index.create_new_mail".translate), new_campaign_management_user_campaign_abstract_campaign_message_path(campaign) %></b></span>
+        <% end %>        
+      </p>
+      <p class ="text-center m-t-xl h1">
+        <%= image_tag("graph_prespective.png", :class => "img-responsive centered_content") %>
+      </p>
+    </div>
+  </div>
+<% end %>

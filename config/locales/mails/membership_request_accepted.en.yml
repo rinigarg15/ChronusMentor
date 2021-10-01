@@ -1,0 +1,29 @@
+en:
+  email_translations:
+    membership_request_accepted:
+      enabled_with_count_html:
+        one: An %{email} invitation with the message will be sent to the user if you complete this action.
+        other: An %{email} invitation with the message will be sent to the selected %{count} users if you complete this action.
+      disabled_with_count_html:
+        one: An %{email} invitation with the message is usually sent to the user as part of completing this action, but has been disabled. No email will be sent.
+        other: An %{email} invitation with the message is usually sent to the selected %{count} users as part of completing this action, but has been disabled. No email will be sent.
+      title_v2: Membership request accepted notification to the applicant
+      description_v3: When the %{_admins} accept a membership request, this email is sent out to the applicant and includes a custom message from the %{_admin}.
+      subject_v1: Your membership request has been accepted!
+      content_v2_html: "{{admin_name}} has accepted your request to join {{subprogram_or_program_name}} as {{member_role}}.<br/>{{message_from_admin}}<br/>Get started by completing your profile.<br/>{{login_button}}<br/>Thank you for your participation!<br/>"
+      login_text: Login
+      tags:
+        member_role:
+          description: Role of the member who is accepted into the program
+          example_v1: "%{role}"
+        url_signup:
+          description: Url to the sign up page
+        accepted_admin_name:
+          description: Name of the Adminstrator who accepted the Membership
+        message_from_admin:
+          description: Welcome message from the administrator
+          example: Welcome to the mentoring program. Please complete your profile as a first step.
+        login_button:
+          description: Login button
+        admin_name:
+          description: Name of administrator

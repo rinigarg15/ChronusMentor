@@ -1,0 +1,5 @@
+<% @title = "feature.membership_request.header.complete_application".translate %>
+<%= render partial: "membership_requests/pending_membership_requests", locals: { pending_membership_requests: @pending_membership_requests } %>
+<% if @can_apply_role_names.present? %>
+  <%= render partial: "membership_requests/membership_request_form", locals: { new_request: true, membership_instruction_content: @membership_instruction_content, membership_request: @membership_request, empty_form: @empty_form, from_enrollment: @from_enrollment, program: @program, password: @password, answer_map: @answer_map, display_terms_and_conditions: @display_terms_and_conditions, organization: @current_organization, is_checkbox: @is_checkbox, invalid_answer_details: @invalid_answer_details, invalid_password: @invalid_password } %>
+<% end %>

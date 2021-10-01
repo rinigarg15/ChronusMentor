@@ -1,0 +1,58 @@
+<% notes = @group.try(:notes) %>
+<% display_notes = (notes.present? && !@action_type.present?) %>
+<% publish_action_type = (@action_type.to_s.try(:downcase) == BulkMatch::UpdateType::PUBLISH) %>
+<% display_request_notes = @bulk_match.request_notes && (@action_type.blank? || @action_type.downcase == BulkMatch::UpdateType::DRAFT) %>
+<% display_request_message = @action_type.present? && publish_action_type %>
+<% action_text = bulk_match_action_text(@bulk_match, @action_type, display_request_message, notes) %>
+<% default_value_for_notes = "feature.bulk_match.content.default_value_for_notes".translate(:mentoring_connection => _mentoring_connection, :admins => _admins) %>
+<% default_value_for_message = "feature.connection.content.placeholder.create_new_message_optional".translate(mentor: _mentor, mentee: _mentee) %>
+
+<% modal_v3_popup "#{action_text}" do %>
+  <%= existing_groups_alert([], [[[@student.id], [@mentor.id]]], (@group.present? ? nil : Group::Status::DRAFTED)) if @action_type.present? %>
+  <%= bulk_match_additional_users_alert([@group.id]) if publish_action_type && @group.present? %>
+
+  <div id="bulk_match_update_notes" ng-controller="BulkMatchCtrl">
+    <% if display_notes %>
+      <div id="cjs_notes_<%= @student.id %>">
+        <%= notes %>
+        <hr/>
+        <%= link_to_function("display_string.edit_raquo_html".translate, "BulkMatch.toggleFormElement(#{@student.id});", :class => "btn btn-primary pull-right") %>
+      </div>
+    <% end %>
+
+    <%= simple_form_for @bulk_match, :remote => true, :url => update_notes_bulk_matches_path, :html => {:method => :post, :class => "m-t-xs #{'hide' if display_notes}", :id => "cjs_bulk_match_notes_popup_#{@student.id}"} do |f| %>
+      <% if display_request_notes %>
+        <%= label_tag :notes, default_value_for_notes, for: "cjs_notes_#{@student.id}", class: "sr-only" %>
+        <%= text_area_tag :notes, notes, id: "cjs_notes_#{@student.id}", placeholder: default_value_for_notes, class: "form-control", rows: 5 %>
+      <% end %>
+      <% if display_request_message %>
+        <%= control_group do %>
+          <%= label_tag :group_name, "feature.connection.name_v1".translate(Mentoring_Connection: _Mentoring_Connection), for: "group_name", class: "control-label" %>
+          <%= controls do %>
+            <%= text_field_tag :group_name, "", class: "form-control" %>
+          <% end %>
+        <% end %>
+        <%= render_mentoring_model_selector(@mentoring_models) %>
+        <%= control_group do %>
+          <%= label_tag :message, default_value_for_message, for: "cjs_message_#{@student.id}", class: "sr-only" %>
+          <%= controls do %>
+            <%= text_area_tag :message, '', id: "cjs_message_#{@student.id}", placeholder: default_value_for_message, class: "form-control", rows: 5 %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= hidden_field_tag :group_id, @group.id if @group.present? %>
+      <% if display_request_notes && @action_type.present? %>
+        <label class="checkbox text-muted m-b-xs">
+          <%= check_box_tag 'bulk_match_request_notes', 'request_notes', @bulk_match.request_notes, :id => 'cjs_request_notes', 'ng-checked' => "!bulk_match_vars.request_notes" %> <%= "feature.bulk_match.label.skip_notes_while_creating".translate(:mentoring_connections => _mentoring_connections) %>
+        </label>
+      <% end %>
+
+      <%= content_tag(:div, group_creation_email_notification_consequences_html, class: "help-block") if publish_action_type %>
+
+      <% action_set do %>
+        <%= render partial: "bulk_matches/bulk_match_notes_popup_action_set", locals: {action_type: @action_type, student: @student, mentor: @mentor, display_request_notes: display_request_notes, display_request_message: display_request_message, notes: notes, bulk_match: @bulk_match, orientation_type: @orientation_type, f: f, action_text: action_text} %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+<%= javascript_tag "jQuery(document).ready(function() {angular.bootstrap(jQuery('#bulk_match_update_notes'));});" %>

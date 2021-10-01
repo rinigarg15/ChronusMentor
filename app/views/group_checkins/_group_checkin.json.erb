@@ -1,0 +1,13 @@
+{
+"id": "<%= group_checkin.id %>",
+"mentor": "<%= get_mentor_name_from_group_checkin(group_checkin) %>",
+"group": "<%= chr_json_escape j get_group_name_from_group_checkin(group_checkin) %>",
+"comment":"<%= chr_json_escape j h(group_checkin.comment) %>",
+"date": "<%= get_group_checkin_date(group_checkin.date) %>",
+"type": "<%= get_group_checkin_type(group_checkin) %>",
+"mentorLink": "<%= member_path(group_checkin.user.member) %>",
+"groupsLink": "<%= group_path(group_checkin.group) %>",
+"duration" : "<%= (group_checkin.duration/60.0).round(2) %>",
+"memberPic" : <%= get_checkin_member_pic(group_checkin).to_json.html_safe %>,
+"title": "<%= chr_json_escape j h(group_checkin.title) %>"
+}

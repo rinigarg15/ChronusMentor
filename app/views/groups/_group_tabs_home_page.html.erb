@@ -1,0 +1,103 @@
+<% tabs_list = [] %>
+<% can_show_both_messages_forums = can_show_messages && can_show_forums %>
+<% hidden_class = can_show_both_messages_forums ? "" : "hidden-xs" %>
+<% if can_show_forums %>
+  <% forums_tab = {
+    label: get_discussions_tab_label("feature.mentoring_model.label.discussion_board".translate, badge_counts[:unread_posts_count], "fa fa-comment-o", {show_in_dropdown: can_show_both_messages_forums, badge_class: "cjs_unread_posts_count", text_class: "m-l-xs m-r-xxs", home_page: true}),
+    url: "javascript:void(0)",
+    tab_class: "cjs_forum_tabs text-xs-center cui_fixed_width_100 cjs_not_loaded cjs_forums_tab_home_page_"+group.id.to_s,
+    link_options: {
+        data: {
+          url: forum_path(group.forum, url_options.merge(group_id: group.id, cjs_skip_mobile_prompt: true, home_page: true))
+        }
+    }
+  }%>
+<% end %>
+
+<% if can_show_messages %>
+  <% messages_badge_text = badge_counts[:unread_message_count] > 0 ? badge_counts[:unread_message_count] : "" %>
+  <% messages_tab = {
+    label: get_discussions_tab_label("feature.mentoring_model.label.message_tab".translate, badge_counts[:unread_message_count], "fa fa-envelope-o", {show_in_dropdown: can_show_both_messages_forums, badge_class: "cjs_unread_scraps_count", text_class: "m-l-xs m-r-xxs", home_page: true}),
+    url: "javascript:void(0)",
+    tab_class: "cjs_message_tabs text-xs-center cui_fixed_width_100 cjs_messages_tab_home_page_"+group.id.to_s,
+    link_options: {
+      data: {
+        url: group_scraps_path(url_options.merge(group_id: group.id, cjs_skip_mobile_prompt: true, home_page: true))
+      }
+    }
+  }%>
+<% end %>
+
+<% if can_show_both_messages_forums %>
+  <% discussions_cummulative_count = badge_counts[:unread_message_count] + badge_counts[:unread_posts_count] %>
+  <% discussions_badge_text = discussions_cummulative_count > 0 ? discussions_cummulative_count : "" %>
+  <% tabs_list << {
+      tab_class: "text-xs-center cui_fixed_width_100 cjs_discussions cjs_dropdown cjs_discussions_tab_home_page_"+group.id.to_s,
+      dropdown: {
+        actions: [forums_tab, messages_tab],
+        options: {
+          title: get_discussions_tab_label("display_string.Discussions".translate, discussions_cummulative_count, "fa fa-comments", {badge_class: "cjs_discussions_badge", text_class: "m-l-xs m-r-xxs", home_page: true})
+        }
+      }
+    } %>
+<% elsif can_show_messages %>
+  <% tabs_list << messages_tab %>
+<% elsif can_show_forums %>
+  <% tabs_list << forums_tab %>
+<% end %>
+
+
+<% if can_show_meetings %>
+  <% tabs_list << {
+    label: get_icon_content("fa fa-calendar") + content_tag(:span , "feature.mentoring_model.header.manage_mm_meetings".translate(Meetings: _Meetings), class: "m-l-xs m-r-xxs hidden-xs") + content_tag(:div, "feature.mentoring_model.header.manage_mm_meetings".translate(Meetings: _Meetings), class: "m-r-xxs visible-xs small m-t-xs font-bold"),
+    url: "javascript:void(0)",
+    tab_class: "cjs_meetings_tab_home_page_#{group.id} cjs_meetings_tab text-xs-center cui_fixed_width_100 cjs_home_page_meetings_tab",
+    link_options: {
+      data: {
+        url: meetings_path(group_id: group.id, from_connection_home_page_widget: true)
+      }
+    }
+  }%>
+<% end %>
+
+<% if show_plan_tab %>
+  <% tasks_badge_text = badge_counts[:tasks_count] > 0 ? badge_counts[:tasks_count] : "" %>
+  <% tabs_list << {
+    label: get_icon_content("fa fa-check-square-o fa-fw m-r-xs") + content_tag(:span , "feature.mentoring_model.label.engagement_plan_tab".translate, class: "m-l-xs m-r-xxs hidden-xs") + content_tag(:div, "feature.group_checkin.tasks".translate, class: "m-r-xxs visible-xs small m-t-xs font-bold") + content_tag(:span, tasks_badge_text, class: "m-l-xs badge badge-danger hide"),
+    url: "javascript:void(0)",
+    tab_class: "cjs_tasks_tab_#{group.id} cjs_tasks_tab text-xs-center cui_fixed_width_100",
+    link_options: {
+      data: {
+        url: group_path(group, show_plan: true, home_page_view: true, cjs_skip_mobile_prompt: true, target_user_id: current_user.id, target_user_type: GroupsController::TargetUserType::INDIVIDUAL)
+      }
+    }
+  } %>
+<% end %>
+
+<div class="row b-t b-b m-t cjs_not_loaded" id="mentoring_area_tabs_<%= group.id %>">
+  <%= inner_tabs(tabs_list) %>
+</div>
+
+<div class="row cjs_tab_content" id="mentoring_area_tabs_content_<%= group.id %>">
+</div>
+<div class="cui_loading_tab p-xl">
+  <div class="sk-spinner sk-spinner-wave">
+    <div class="sk-rect1"></div>
+    <div class="sk-rect2"></div>
+    <div class="sk-rect3"></div>
+    <div class="sk-rect4"></div>
+    <div class="sk-rect5"></div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    NewScrap.initialize("<%= group.id %>");
+    Groups.initializeTab("cjs_messages_tab_home_page_<%= group.id %>");
+    Groups.initializeTab("cjs_forums_tab_home_page_<%= group.id %>");
+    Groups.initializeTab("cjs_tasks_tab_<%= group.id %>");
+    Groups.initializeTab("cjs_meetings_tab_home_page_<%= group.id %>");
+    GroupTabs.clickTabWithBagde("<%= tab_to_open%>", "#mentoring_area_tabs_<%= group.id %>");
+    Comment.initializeForm("<%= j('common_text.error_msg.please_correct_highlighted_errors'.translate) %>");
+  });
+<% end %>

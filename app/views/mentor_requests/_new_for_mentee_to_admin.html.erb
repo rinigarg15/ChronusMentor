@@ -1,0 +1,14 @@
+<% @title =  'feature.preferred_mentoring.header.title_v1'.translate(connection: _Mentoring_Connection) %>
+<% default_txt = 'feature.preferred_mentoring.content.default_message'.translate %>
+<% cancel_link_value = users_path(src: EngagementIndex::Src::BrowseMentors::NEW_MENTOR_REQUEST) %>
+
+<%= simple_form_for @mentor_request, html: { class: "form-horizontal", id: "new_mentor_request_form" }, wrapper: :horizontal_input do |f| %>
+  <% if current_program.matching_by_mentee_and_admin_with_preference? %>
+    <div class="m-b-sm">
+      <%= render(partial: 'mentor_requests/preferences', locals: { mentor_users: mentor_users, notes_hash: notes_hash, match_array: match_array, recommended_users: recommended_users } ) %>
+    </div>
+  <% end %>
+  <%= f.input :message, as: :text, placeholder: default_txt, label: 'display_string.your_message'.translate, input_html: { class: "form-control", rows: 5 } %>
+  <%= render partial: 'mentor_requests/action_set', locals: { f: f, cancel_link_value: cancel_link_value, min_preferred_mentors: @current_program.min_preferred_mentors, as_popup: as_popup } %>
+<% end %>
+<%= javascript_tag %Q[MentorRequests.initializePreferredRequest("#{new_preference_users_url}", #{current_user.can_view_mentors?});] %>

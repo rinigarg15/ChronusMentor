@@ -1,0 +1,28 @@
+<%= include_ckeditor_tag %>
+<% if @section == AuthConfigSetting::Section::DEFAULT %>
+  <% title_attr, description_attr = [:default_section_title, :default_section_description] %>
+  <% unchecked_show_on_top_value = AuthConfigSetting::Section::CUSTOM %>
+<% else %>
+  <% title_attr, description_attr = [:custom_section_title, :custom_section_description] %>
+  <% unchecked_show_on_top_value = AuthConfigSetting::Section::DEFAULT %>
+<% end %>
+
+<% @title = "#{'manage_strings.program.header.Customize'.translate}: #{get_auth_config_section_title(@section)}" %>
+
+<%= ibox nil, ibox_class: "col-md-offset-2 col-md-8" do %>
+  <%= simple_form_for @auth_config_setting do |f| %>
+    <%= f.input title_attr, label: "feature.connection.title".translate, input_html: { class: "form-control" } %>
+    <%= f.input description_attr, as: :text, label: "feature.coaching_goal.header.Description".translate, input_html: { class: "form-control", rows: 3 }, hint: "feature.login_management.content.section_description_help_text".translate, hint_html: { class: "small" } %>
+    <%= hidden_field_tag "section", @section %>
+
+    <% if @is_position_configurable %>
+      <%= f.input :show_on_top, as: :boolean, checked_value: @section, unchecked_value: unchecked_show_on_top_value, label: false, inline_label: "feature.login_management.label.show_on_top".translate %>
+    <% end %>
+
+    <% action_set(class: "pull-right") do %>
+      <%= cancel_link auth_configs_path %>
+      <%= f.button :submit, "display_string.Save".translate %>
+    <% end %>
+    <%= javascript_tag %Q[CkeditorConfig.initCkeditor("#auth_config_setting_#{description_attr}", {height: "100px"}, CkeditorConfig.minimalCkOptions());] %>
+  <% end %>
+<% end %>

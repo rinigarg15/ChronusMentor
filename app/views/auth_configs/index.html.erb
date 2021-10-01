@@ -1,0 +1,16 @@
+<% @title = "feature.login_management.title".translate %>
+<% @page_action = {
+  label: "feature.login_management.action.add_type_login".translate(type: AuthConfig::Type.verbose(AuthConfig::Type::SAML)),
+  url: saml_auth_config_saml_sso_path(tab: SamlAuthConfigController::SamlHeaders::UPLOAD_IDP_METADATA),
+  class: "btn btn-primary"
+} if super_console? && !@current_organization.has_saml_auth? %>
+
+<% if @auth_configs[:custom].present? %>
+  <%= ibox nil, header_content: get_auth_config_section_header(AuthConfigSetting::Section::CUSTOM) do %>
+    <%= render partial: "auth_configs/section", locals: { auth_configs: @auth_configs[:custom] } %>
+  <% end %>
+<% end %>
+
+<%= ibox nil, header_content: get_auth_config_section_header(AuthConfigSetting::Section::DEFAULT) do %>
+  <%= render partial: "auth_configs/section", locals: { auth_configs: @auth_configs[:default] } %>
+<% end %>

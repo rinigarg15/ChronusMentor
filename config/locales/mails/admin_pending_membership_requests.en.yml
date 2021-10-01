@@ -1,0 +1,25 @@
+en:
+  email_translations:
+    admin_pending_membership_requests:
+      title_v1: Pending membership requests notification
+      description_v2: This system-generated email is sent to %{_admins} on a weekly basis when there are pending membership requests that require %{_admin} action.
+      subject_v1: "{{pending_membership_requests_in_subject}} to join are pending your approval"
+      content_v1_html: There are {{pending_membership_requests_text}} pending for approval. <br /> {{view_requests_button}}
+      membership_requests_count_text:
+        one: 1 membership request
+        other: "%{count} membership requests"
+      new_membership_request_text:
+        one: 1 new request
+        other: "%{count} new requests"
+      tags:
+        url_new_membership_request:
+          description: Url to view the list of pending membership requests
+        number_of_pending_membership_requests:
+          description: Number of pending membership requests
+        view_requests_button:
+          description: View Requests button
+          view_requests: View Requests
+        pending_membership_requests_text:
+          description: Number of pending membership request(s) appended with string 'membership request(s)'
+        pending_membership_requests_in_subject:
+          description: Number of new request(s) appended with string 'new request(s)'

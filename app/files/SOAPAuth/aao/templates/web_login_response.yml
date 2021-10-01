@@ -1,0 +1,1 @@
+uid: <%= Psych.to_json(self.multi_dimensional_hash_lookup(params, [:envelope, :body, :web_login_response, :web_login_result])).chomp %>

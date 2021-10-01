@@ -1,0 +1,321 @@
+id,uid,program_name,enabled?,source,subject
+433,InviteNotificationFromAdmin,Professional Mentorship Program for MBAs,yes,"<p>
+ Hello,
+ <br />
+ Welcome and thank you for&nbsp;your interest in&nbsp;the Leeds Professional Mentorship Program (PMP) for MBA students!&nbsp;&nbsp;To complete an application and join the program, please read the directions below and then click on the link at the end of this email to get started.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+<ol>
+ <li>
+ Please create your Username and Password to Sign In. (Remember to save this information so you can access the system in the future!)</li>
+ <li>
+ Save and publish your Mentor Profile &ndash; you are now part of the PMP online community!</li>
+</ol>
+<p>
+ Mentors generally are assigned based on student preferences at the beginning of the Spring Semester (mid-January).&nbsp; If we do not have a student mentee for you at this time, you are still welcome participate in networking and other program events until we find a good match for you.<br />
+ <br />
+ Please&nbsp;<a href=""{{url_invitation}}"">Click here</a>&nbsp;to begin!<br />
+ <br />
+ </p>
+",Welcome to Leeds Professional Mentorship Program for MBAs
+553,InviteExpiryNotification,Leeds Peer2Peer Mentoring Program,yes,"Hello,<br />
+<br />
+Your invitation to join <a href=""{{url_subprogram_or_program}}"">{{subprogram_or_program_name}}</a> as&nbsp;a mentee&nbsp;is going to expire on {{invitation_expiry_date}}.&nbsp; I really hope that you will join the program and take advantage of this fabulous opportunity. &nbsp;Space is limited- so sign up now!<br />
+<br />
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up as a mentee for the {{subprogram_or_program_name}}.<br />
+<br />
+I look forward to working with you!<br />
+<br />
+Sally Forester<br />
+Director, Peer2Peer mentoring program<br />
+<a href=""mailto:sally.forester@colorado.edu"">sally.forester@colorado.edu</a>",Your invitation to join P2P as a mentee is about to expire!
+572,InviteNotificationFromAdmin,Leeds Peer2Peer Mentoring Program,yes,"Hello,<br />
+<br />
+I would like to personally invite you to be a mentee in the Peer2Peer mentoring program.&nbsp; This is a great opportunity to connect with the Leeds Business School, get some helpful tips from current students to ensure your success at Leeds, and connect with faculty and staff.<br />
+<br />
+<br />
+<a href=""{{url_invitation}}"">Click here</a> to sign up for the Peer2Peer program.<br />
+<br />
+Looking forward to working with you!<br />
+<br />
+Sally Forester<br />
+Director, Leeds Peer2Peer mentoring program<br />
+<a href=""mailto:Sally.Forester@colorado.edu"">Sally.Forester@colorado.edu</a>",You are invited to join the Peer2Peer mentoring program!
+670,InviteNotificationFromAdmin,SMU Alumni Mentoring Programme,yes,"<p>
+ Welcome to the {{subprogram_or_program_name}}!<br />
+ <br />
+ Here&#39;s the first step to get you started. Please visit the Mentoring website through the link below and complete your profile to find your best mentoring match.</p>
+<br />
+<a href=""{{url_invitation}}"">Click here</a> to&nbsp;join the {{subprogram_or_program_name}} {{as_role_name_articleized}}.<br />
+<br />
+<br />
+Wishing you a great mentoring journey ahead!<br />
+<br />
+<br />",Invitation: The {{subprogram_or_program_name}} invites you to join {{as_role_name_articleized}}
+853,InviteNotificationWithoutRoles,Hoya Gateway,yes,"Hello,<br />
+<br />
+Greetings from the Hilltop! You have been invited to join <a href=""{{url_subprogram_or_program}}"">{{subprogram_or_program_name}}</a> by {{invitor_name}}. &nbsp;Hoya Gateway is a new and innovative program at Georgetown designed to connect students and alumni for one-on-one, in-person meetings (either an informational interview, mock interview, or resume review), to prepare students to explore and reach their career goals and aspirations. &nbsp;Hoya Gateway provides a significant opportunity for alumni to share with students their industry expertise, knowledge, and career advice.<br />
+<br />
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for <a href=""{{url_subprogram_or_program}}"">{{subprogram_or_program_name}}</a>&nbsp;today!&nbsp;<br />
+<br />
+Please contact Whitney Pezza, Associate Director, Alumni Career Services, with any questions at wcp9@georgetown.edu.&nbsp;<br />
+<br />
+",Invitation: You are invited to join {{subprogram_or_program_name}}
+855,InviteNotificationFromAdmin,Young Alumni Mentors Program,no,"Hello,<br />
+<br />
+We would like to invite you to participate in the&nbsp;{{subprogram_or_program_name}} {{as_role_name_articleized}}.<br />
+<br />
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for the {{subprogram_or_program_name}} {{as_role_name_articleized}}.<br />
+<br />
+We hope you will consider joining us for this exciting mentoring program!<br />
+<br />",Join the Leeds Young Alumni mentoring program
+1040,InviteExpiryNotification,ICT Mentoring,yes,"Hallo,<br />
+<br />
+Deine Einladung f&uuml;r das Mentoring Programm &quot;&nbsp;<a href=""{{url_subprogram_or_program}}"">{{subprogram_or_program_name}}</a>&nbsp;&quot; l&auml;uft am {{invitation_expiry_date}} ab.&nbsp;<br />
+<br />
+<a href=""{{url_invitation}}"">Klicke hier</a>, um die Einladung anzunehmen und dich einzuschreiben.<br />
+<br />
+<br />",Deine Einladung als {{role_name}} läuft demnacht ab.
+1090,InviteNotificationFromAdmin,Family Link Parent-to-Parent Mentoring,yes,"Hello,<br />
+<br />
+Thank you for becoming a Family Link Parent Mentor!<br />
+<br />
+You have been added {{as_role_name_articleized}} to <span class=""cjs-tool-tip"" data-desc=""Relevant program/subprogram name"" data-original-title="""">{{subprogram_or_program_name}}.</span>&nbsp; You will be able to manage your Mentor/Mentee relationship using this system.<br />
+<br />
+To get started, <a href=""{{url_invitation}}"">click here</a> to accept the invitation and sign up for the {{subprogram_or_program_name}} {{as_role_name_articleized}}.<br />
+<br />
+You will be notified when you have been matched.&nbsp; Please reach out and make contact within 2 weeks of your notification.&nbsp;<br />
+<br />
+If you have any questions, please email <a href=""mailto:parentmentor@diabetes.org"">parentmentor@diabetes.org</a><br />
+<br />",Invitation:You are invited to join {{subprogram_or_program_name}}
+1215,InviteNotificationWithoutRoles,Gates Millennium Scholars Mentoring Program,yes,"Greetings,<br />
+<br />
+You have been invited to join <a href=""{{url_subprogram_or_program}}"">{{subprogram_or_program_name}}</a> by {{invitor_name}}.<br />
+<br />
+The goal of the GMS Mentoring program is to:<br />
+<br />
+Encourage the development of caring and supportive relationships amongst Scholars and Alumni which increase leadership in action, increase service to others, academic excellence, the successful management of real-life situations and networking.<br />
+We hope you take full advantage of this opportunity to engage with other GMS Scholars and the associated benefits of having a mentor.<br />
+<br />
+The videos below should help you navigate the platform so that your mentoring experience is successful. If you have additional questions, feel free to message the system administrator.<br />
+&nbsp;<br />
+Helpful Videos:<br />
+&nbsp;<br />
+Learn about the Mentoring Area: http://www.youtube.com/watch?v=cS6Fdmd-iXY&amp;feature=youtu.be&amp;hd=1<br />
+Learn about your Mentoring Profile: http://www.youtube.com/watch?v=cS6Fdmd-iXY&amp;feature=youtu.be&amp;hd=1<br />
+<br />
+Learn about the homepage, features, and navigation: http://youtu.be/TpIRNYzwL38?hd=1<br />
+<br />
+Learn about Mentoring Milestones: https://www.youtube.com/watch?v=wb_PSlfemuQ<br />
+<br />
+We look forward having you as part of our program!<br />
+<br />
+Best,<br />
+Kelvin J. Harris<br />
+Gates Millennium Scholars Program<br />
+Relationship Manager for Mentoring<br />
+Mentoring@gmsp.org<br />
+<br />
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for <a href=""{{url_subprogram_or_program}}"">{{subprogram_or_program_name}}</a><br />
+<br />",Invitation: You are invited to join {{subprogram_or_program_name}}
+1259,InviteNotificationFromAdmin,Gates Millennium Scholars Mentoring Program,yes,"Greetings,<br />
+<br />
+You are invited to join the {{subprogram_or_program_name}} {{as_role_name_articleized}} by {{invitor_name}}.<br />
+<br />
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for {{subprogram_or_program_name}} {{as_role_name_articleized}}.<br />
+<br />
+The goal of the GMS Mentoring program is to:<br />
+<br />
+Encourage the development of caring and supportive relationships amongst Scholars and Alumni which increase leadership in action, increase service to others, academic excellence, the successful management of real-life situations and networking.<br />
+We hope you take full advantage of this opportunity to engage with other GMS Scholars and the associated benefits of having a mentor.<br />
+<br />
+The videos below should help you navigate the platform so that your mentoring experience is successful. If you have additional questions, feel free to message the system administrator.<br />
+&nbsp;<br />
+Helpful Videos:<br />
+&nbsp;<br />
+Learn about your Mentoring Profile: http://www.youtube.com/watch?v=cS6Fdmd-iXY&amp;feature=youtu.be&amp;hd=1<br />
+<br />
+Learn about the homepage, features, and navigation: http://youtu.be/TpIRNYzwL38?hd=1<br />
+<br />
+Learn about Mentoring Milestones: https://www.youtube.com/watch?v=wb_PSlfemuQ<br />
+<br />
+We look forward having you as part of our program!<br />
+<br />
+<br />
+<br />
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for {{subprogram_or_program_name}} {{as_role_name_articleized}}.<br />
+<br />
+<br />
+Best,<br />
+Kelvin J. Harris<br />
+Gates Millennium Scholars Program<br />
+Relationship Manager for Mentoring<br />
+Mentoring@gmsp.org<br />",Invitation: {{invitor_name}} invites you to join {{as_role_name_articleized}}
+2120,InviteNotificationWithoutRoles,ASHM Regional Professional Societies,no,"You have been invited to join the ASHM Leadership, Networking and Mentoring program associated with the AIDS2014 Conference. Recipients of Commonwealth of Australia Department of Foreign Affairs and Trade Australian Fellowship Awards to attend AIDS 2014 are automatically enrolled in a 4 day course on Leadership and the HIV response conducted in Melbourne on July 17th, 18th, 26th and 27th. The purpose of this course is to support current and future leaders from different countries to get the maximum benefit from attending the conference and also learn and share about how their leadership can be used to the maximum possible benefit in their home countries on their return.<br />
+<br />
+Running alongside this course, the Australasian Society of HIV Medicine is hosting a networking and mentoring facility. This is a web-based program that will help keep you connected to the leadership and networking program before, during and after the conference, will help you to communicated with and share information with the programs that have brought you to Australia during the conference.<br />
+<br />
+Your contact for this program is Dr Nick Medland who can be contacted on nick.medland@ashm.org.au<br />
+<br />
+You have been invited to join <a href=""{{url_subprogram_or_program}}"">{{subprogram_or_program_name}}</a> by {{invitor_name}}.<br />
+<br />
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for <a href=""{{url_subprogram_or_program}}"">{{subprogram_or_program_name}}</a><br />
+<br />","ASHM Leadership, Networking and Mentoring Program"
+2399,InviteNotificationFromAdmin,LMG Mentoring,yes,"Hello,&nbsp;
+<div>&nbsp;</div>
+
+<div>Welcome to the&nbsp;East Africa Women&#39;s Mentoring Network! You have been invited to join {{as_role_name_articleized}} by {{invitor_name}}.&nbsp;<br />
+</div>
+
+<div>&nbsp;</div>
+
+<div><a href=""{{url_invitation}}"" style=""color: rgb(17, 85, 204);"" target=""_blank"">Click here</a>&nbsp;to accept the invitation and sign up for the&nbsp;Mentoring Network.&nbsp;For a few tips about completing and publishing your profile,&nbsp;<a href=""https://www.youtube.com/watch?v=uuau0ONegi0&amp;feature=youtu.be"" style=""color: rgb(17, 85, 204);"" target=""_blank"">click here</a>.&nbsp;</div>
+
+<div>&nbsp;</div>
+
+<div>Thanks,&nbsp;</div>
+
+<div>&nbsp;</div>
+
+<div>Your Administrators</div>
+<br />",Invitation: {{invitor_name}} invites you to join {{as_role_name_articleized}}
+2466,InviteNotificationFromAdmin,Comcast Mentoring,yes,"Hello,<br />
+<br />
+You are invited to join the {{subprogram_or_program_name}} {{as_role_name_articleized}} by {{invitor_name}}.<br />
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for {{subprogram_or_program_name}} {{as_role_name_articleized}}.<br />
+<br />
+Thanks,<br />
+Alicia Taylor<br />
+Administrator, Comcast eMentor<br />
+<a href=""mailto:Alicia.Taylor@cable.comcast.com"">Alicia.Taylor@cable.comcast.com</a>",Comcast eMentor Invitation: {{invitor_name}} invites you to join {{as_role_name_articleized}}
+429,InviteNotificationFromAdmin,Professional Mentorship Program for Undergraduates,yes,"Hello,<br /><br />Thank you for your interest in the Professional Mentorship Program (PMP)!<br /><br />The PMP offers a one-on-one mentoring relationship between business professionals and upper classmen in CU&rsquo;s Leeds School of Business! The mentoring partnership is designed to provide mentees a help guide for the last two years of college by providing career advice, assistance with networking skills, expertise on your chosen area of emphasis, and a wide range of connections in your industry of interest.<br /><br /><strong><em>MENTORING MAKES A DIFFERENCE! </em></strong>Students who participated in this program were <strong><em>40% more likely to have a job</em></strong> upon graduation than those who did not.<br /><ul><li>Please <a href=""{{url_invitation}}"">Click here</a> to SIGN UP NOW!</li></ul>Please allow about 10 &ndash; 15 minutes to complete your online Profile. Once you have completed your application, you&#39;ll be a part of the program right away!<br /><br />Mentor/student matches will be made during the summer months and you will be notified of your match in September. If you join the program after the matching period, we may not be able to match you right away; however, we do have other short-term, co-curricular mentoring opportunities that come up throughout the year. These project-based opportunities are a great way to get to know the PMP before being officially matched with one of our students. We also encourage you to attend our events in the meantime!<br /><br />We hope this mentoring partnership facilitates great value for both mentor and mentee! Please do not hesitate to contact us if you have any questions regarding program requirements and expectations, using the mentoring software or the program in general. The best method of contacting the office is by emailing <a href=mailto:leedspmp@colorado.edu"">leedsmentoring@colorado.edu</a>. We hope to welcome you to the program soon!<br /><br />Best"",<br />Katie Connor<br />Director,"" Leeds Mentoring Office<br />",Leeds Professional Mentorship Program
+444,InviteExpiryNotification,Professional Mentorship Program for Undergraduates,yes,"Hello,<br /><br />Thank you for your interest in the <span class=cjs-tool-tip"" data-desc=""Relevant program/subprogram name"" data-original-title="""">{{subprogram_or_program_name}}&nbsp;your support is essential to the success of this program.</span>&nbsp;We wanted to remind you that your invitation to&nbsp;<a href=""{{url_subprogram_or_program}}"">{{subprogram_or_program_name}}</a> {{as_role_name_articleized}} is going to expire on {{invitation_expiry_date}}.<br /><br /><a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for the {{subprogram_or_program_name}} {{as_role_name_articleized}}.""",Your invitation to join {{as_role_name_articleized}} is about to expire
+455,InviteNotificationFromAdmin,Carlson School Mentorship Program,no,"Greetings!<br /><br /><div> Last year you participated in the 2010-2011 Carlson School of Management&nbsp;Undergraduate Mentorship Program. &nbsp;I hope you are again willing to serve&nbsp;as a mentor for the upcoming school year. &nbsp;We continue to focus our&nbsp;efforts on matching Carlson School sophomores, juniors and seniors with&nbsp;members of the professional business community. I look forward to your&nbsp;participation in 2012-2013!<br /> <br /> This year we are using a new mentorship program software and all participants will need to complete a new profile. &nbsp;<a href=""{{url_invitation}}"">Click here</a>&nbsp;to complete your profile. On your profile, please make sure to indicate if you want to be paired with your mentee from last year as well as if you&rsquo;re interested in being paired with students who are part of the Entrepreneurship Club, Supply Chain and Operations Club or students that have a co-major in Public and Non-Profit Management.</div><br />The deadline to complete your profile is Wednesday, October 3rd. The Kick-Off Event will be held on Wednesday, October 24th from 5:00-7:30pm.<br /><br />I realize that other personal and professional commitments may not make it possible for you to participate this year. If that is the case, please let me know. If I do not hear a response back from you, I will assume you are not interested in participating.<br /><br /><div> If you have names and contact information for potential mentors, please send me that&nbsp;information and I will email them information on how to apply.</div><div> &nbsp;</div><div> Thank you for your continued support of the Carlson School and please let me know if you have any questions.<br /> <br /> Warmly,<br /> Sarah Oehler</div>",{{subprogram_or_program_name}} - Call for Returning Mentors
+568,InviteNotificationFromAdmin,MIT Sloan Student & Alumni Mentoring Program,yes,"Welcome!<br /><br />You have been invited to join the {{subprogram_or_program_name}} {{as_role_name_articleized}}.&nbsp;Your next steps include:<br />&nbsp;<ul> <li>Review the <a href=""https://mitsloanmentor.chronus.com/p/main/pages/701?src=tab"">Mentee Expectations</a> in the MIT Sloan Alumni-Student Mentoring Program.&nbsp;</li> <li>Complete your Mentee Profile outlining your education and career history and interests.&nbsp; This profile will be used to generate your compatibility scores with potential mentors.</li></ul><ul> <li>Click &ldquo;Find a Mentor&rdquo; to see the list of Alumni Mentors.&nbsp; The program will suggest compatible Mentors based on your profile; however, you are welcome to reach out to any Mentor and can search the entire database by location, industry, or job function.</li></ul>Please note that all data that is entered into the Mentoring Program will be available to MIT Sloan for its records.<br /><br /><a href=""{{url_invitation}}"" style=""line-height: 20.7999992370605px;"">Click here</a>&nbsp;to accept the invitation and begin to build your profile. &nbsp;<br />Please contact us with any questions or concerns.<br />&nbsp;<br />Sarah Murphy<br />MIT Sloan Office of External Relations<br /><a href=""mailto:spmurphy@mit.edu"">spmurphy@mit.edu</a><br />(617) 324-7338<br /><br /><br />&nbsp;",Invitation to join the MIT Sloan Alumni-Student Mentoring Program {{as_role_name_articleized}}
+856,InviteNotificationFromAdmin,Staples Mentoring,yes,"<strong>Greetings!</strong><br /><br />You are invited to join the <strong>Mentoring Made Easy</strong> program!<br /><br />Once you accept, you will be prompted to create a password and complete your profile. Please be thorough as it will help the matching algorithm find the best possible pairings. (This does not apply to you since you are matched.)<br /><br /><strong><a href=""{{url_invitation}}"">Click here</a></strong> to accept the invitation and sign up {{as_role_name_articleized}}.<br /><br />&nbsp;<br /><strong>Erika Hopkins, SPHR</strong><br /><em>Director, Global Inclusion and Diversity</em><br /><br /><br />&nbsp;<br />",Invitation to join Mentoring Made Easy {{as_role_name_articleized}}
+1055,InviteNotificationWithoutRoles,Staples Mentoring,yes,"<strong>Greetings!</strong><br /><br />You are invited to join the <strong>Mentoring Made Easy&nbsp;</strong>program!<br /><br />Once you accept, you will be prompted to create a password and complete your profile. Please be thorough as it will help the matching algorithm suggest the best available pairings. <strong>Profiles should be completed by Wednesday, May 8th. The matching function will be activated on May 9th.</strong><br /><br />During the sign up process, you will need to <strong>choose your role</strong>: mentor or mentee.<br />At a future date yet to be determined, you will be able to request an additional role, if desired. That way, you can be both mentor and mentee, should you desire.&nbsp;<br /><br />For now, I encourage you to become fully engaged in your role and the program.<br /><br />For those of you comfortable with choosing the <strong>mentor</strong> role now, I ask that you do so in ordet to ensure that our mentees have ample mentors available from which to choose.&nbsp;<br /><br /><strong><a href=""{{url_invitation}}"">Click here</a> </strong>to accept the invitation and sign up for Mentoring Made Easy.<br /><br />Erika Hopkins<br />Director, Global Inclusion &amp; Diversity",Invitation: You are invited to join {{subprogram_or_program_name}}
+1088,InviteNotificationWithoutRoles,C&IB Mentoring Pilot,yes,"Hello,<br /><br />Talent development is critical to our success. Everything we do in the business begins and ends with our employees, and we are only as good as the talent we recruit, develop and retain.<br />&nbsp;<br />Over the last several months, the C&amp;IB Talent Management Council has been working to identify areas where we can improve talent and career development, diversity and inclusion and overall employee engagement. Several action plans have been created and you will hear more about steps we are taking and programs being implemented throughout 2013, the first of which is a focused mentoring program.<br />&nbsp;<br /><strong>Mentoring Program Pilot</strong><br />C&amp;IB is piloting a mentoring program with diverse employees who are at the mid-point of their career or at a management level. You have been selected as an individual that qualifies for this important pilot as either a mentee or mentor or both. &nbsp;The program will last 12 months and is designed to provide a quality, one-on-one mentoring experience and one that will help the mentees develop one of the following PNC Leadership Competencies:<br />&nbsp;<br /><ul> <li> Establishing Clear Vision and Purpose</li> <li> Leading Change</li> <li> Managing Risk</li> <li> Driving Results</li> <li> Growing Capability</li> <li> Building High Performing Teams</li></ul>&nbsp;<br /><strong>Actions</strong><br /><ol> <li> <a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for the C&amp;IB Mentoring Pilot.</li> <li> Mentees and mentors will complete a self assessment of their Leadership Competencies in order to help identify Leadership Competency strengths and areas for further development.</li><li>Chronus system tutorial is available to assist in navigating the technology.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li> <li> Mentee/mentor will complete a profile within Chronus that includes background information (ie resume) and your Leadership Competency relative strengths and weaknesses.</li> <li> Mentees will then search for mentors using the Chronus mentoring technology who can provide counsel on the competencies the mentee is looking to develop. Mentor relationships can be traditional (ie more senior) or peer-to-peer (ie same level, but with different experiences and Leadership Competency strengths). In addition, the mentor need not be restricted to your line of business or geography.</li><li>Mentee will reach out to the selected mentor using Chronus to initiate the&nbsp; initial meeting to discuss the selected Leadership Competencies selected for development. Initial meetings can be done in person, Avistar (web enable video conference) or telephone.</li> <li> Mentee, with the assistance and input of the mentor, will create a development plan that should include action items and time line. It is expected that the mentee and mentor will have a monthly conference call to discuss progress throughout the year.</li></ol>&nbsp;<br />We hope you will consider participating in this pilot and a mentee or mentor. It will further your development, broaden your network, and offer you an unbiased perspective on your strengths and opportunities for improvement in a trusted environment.<br />&nbsp;<br />If you have any questions or are interested in being a mentor, please reach out to program managers <strong>Tina Hwang</strong> or <strong>Nikki Jablonski</strong>.<br />&nbsp;<br />Thank you<br />&nbsp;<br />",Invitation: {{subprogram_or_program_name}}
+1207,InviteNotificationFromAdmin,LRP,yes,"<strong>Greetings!</strong><br /><br />You are invited to join the <strong>LRP Mentoring</strong> program!<br /><br />Once you accept, you will be prompted to create a password and complete your profile. Please be thorough as it&#39;s the beginning of understanding yourself.&nbsp;<br /><br /><strong><a href=""{{url_invitation}}"">Click here</a></strong> to accept the invitation and sign up {{as_role_name_articleized}}.",Invitation to join Mentoring Made Easy {{as_role_name_articleized}}
+1210,InviteNotificationFromAdmin,North America Mentoring Made Easy,yes,"<strong>Greetings!</strong><br /><br />You are invited to join the <strong>Mentoring Made Easy</strong> program!<br /><br />Once you accept, you will be prompted to create a password and complete your profile. Please be thorough as it will help the matching algorithm find the best possible pairings.<br /><br /><strong><a href=""{{url_invitation}}"">Click here</a></strong> to accept the invitation and sign up {{as_role_name_articleized}}.<br /><br />&nbsp;<br /><strong>Erika Hopkins, SPHR</strong><br /><em>Director, Global Inclusion and Diversity</em><br /><br /><br />&nbsp;<br />",Invitation to join Mentoring Made Easy {{as_role_name_articleized}}
+1221,InviteNotificationFromAdmin,Women's Mentoring Program,yes,"<strong>Greetings!</strong><br /><br />You are invited to join the <strong>Mentoring Made Easy</strong> program!<br /><br />Once you accept, you will be prompted to create a password and complete your profile. Please be thorough as it will help the matching algorithm find the best possible pairings.&nbsp;<br /><br /><strong><a href=""{{url_invitation}}"">Click here</a></strong> to accept the invitation and sign up {{as_role_name_articleized}}.<br /><br />&nbsp;<br /><strong>Erika Hopkins, SPHR</strong><br /><em>Director, Global Inclusion and Diversity</em><br /><br /><br />&nbsp;<br />",Invitation to join Mentoring Made Easy {{as_role_name_articleized}}
+1226,InviteNotificationWithoutRoles,LRP,no,"<strong>Greetings!</strong><br /><br />You are invited to join the <strong>Mentoring Made Easy&nbsp;</strong>program!<br /><br />Once you accept, you will be prompted to create a password and complete your profile. Please be thorough as it will help the matching algorithm suggest the best available pairings. <strong>Profiles should be completed by Wednesday, May 8th. The matching function will be activated on May 9th.</strong><br /><br />During the sign up process, you will need to <strong>choose your role</strong>: mentor or mentee.<br />At a future date yet to be determined, you will be able to request an additional role, if desired. That way, you can be both mentor and mentee, should you desire.&nbsp;<br /><br />For now, I encourage you to become fully engaged in your role and the program.<br /><br />For those of you comfortable with choosing the <strong>mentor</strong> role now, I ask that you do so in ordet to ensure that our mentees have ample mentors available from which to choose.&nbsp;<br /><br /><strong><a href=""{{url_invitation}}"">Click here</a> </strong>to accept the invitation and sign up for Mentoring Made Easy.<br /><br />Erika Hopkins<br />Director, Global Inclusion &amp; Diversity",Invitation: You are invited to join {{subprogram_or_program_name}}
+1228,InviteNotificationFromAdmin,URS IE Mentoring Program,yes,"Greetings,<br /><br />You are formally invited to become {{role_name}} of the {{subprogram_or_program_name}}! &nbsp;This is a great opportunity for URS to assist our employees with personal and professional development through mentoring relationships with highly talented and successful colleagues.&nbsp;<br /><br />eMentoring is a mechanism for mentees and mentors to connect locally, across our US offices and even throughout the world! &nbsp;As such, this type of mentoring partnership may not always be face to face. This program provides guidance on how to build a successful mentoring relationship even though it may not be local or in person.<br /><br />You have been nominated to participate in this program and we hope you will accept. &nbsp;URS is offering this pilot program for one year. The continuation of the program depends on the fulfillment of successful mentoring relationships and the feedback we receive from you and other participants.<br /><br /><a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for the {{subprogram_or_program_name}} {{as_role_name_articleized}}. Once enrolled, you will receive a &quot;Welcome Message&quot; with more information and next steps.<br /><br />Thank you so much for your anticipated participation! We hope you find the program beneficial and an effective tool for your future success at URS.",Invitation: URS invites you to join {{as_role_name_articleized}}
+1462,InviteNotificationFromAdmin,GetMentoring.com,yes,"Greetings,<br /><br />You are invited to join BYU&#39;s Mentoring Program {{as_role_name_articleized}} by <span class=""cjs-tool-tip"" data-desc=""Name of the administrator who is sending the invite"" data-original-title="""">{{invitor_name}}</span>.<br /><br />Message from {{invitor_name}}:<br /><br /><i>Thanks for giving of your time and talents to our mentoring program. In order to get you signed up on GetMentoring.com you will need to follow the steps below:<br /><br />1. Create a BYU Net ID at <a href=""https://lambda.byu.edu/ae/prod/person/cgi/createNetId.cgi"">https://lambda.byu.edu/ae/prod/person/cgi/createNetId.cgi</a>.&nbsp; Don&#39;t worry about filling out the SS# field since you are not a BYU student or employee.<br /><br />2. Once your Net ID is created, return to this email and <a href=""{{url_invitation}}"">click here</a> to accept the invitation and sign up for BYU&#39;s Mentoring Program {{as_role_name_articleized}} on GetMentoring.com. (Note: You will be prompted to log in using your newly created BYU Net ID and password.)<br /><br />3. Complete the profile creation process. If you don&#39;t have all of the information, or the time to properly fill out every section you can always edit your profile after the fact inside the site. (Note: The question regarding the &ldquo;maximum number of mentees you wish to mentor&rdquo; does not apply to our program so don&rsquo;t worry about changing it.)<br /><br />4. Once inside the system you can add mentoring availability slots by clicking on the &quot;My Availability&quot; tab. The calendar utilizes an interactive drag interface so just click on a given day and drag downwards to create an availability slot.<br /><br />5. There are two prerequisites found in the I&rsquo;m a Mentor portion of the GetMentoring.com site:&nbsp; read Nail It Then Scale It, and the mentor Code of Conduct. Please review and agree and check the appropriate yes boxes when setting up your profile. (There is a summary of the book on the prerequisite portion of the website.)<br /><br />6. Qualified students can access the mentoring system and self-select the mentor that best fits their current need based in part on the profile you create.<br /><br />If you have any problems or questions during the steps above feel free to contact me, or Jeff Brown, at the information in the signature below.<br /><br />Thanks again!<br /><br />Jeff Howlett<br />Director of Venture Mentoring Services<br />Rollins Center for Entrepreneurship &amp; Technology at BYU<br />venturementoring@gmail.com&nbsp;&nbsp; &nbsp;<br />801.422.7437<br /><br />Jeff Brown<br />GetMentoring.com Admin<br />jeff.brown@byu.edu<br />801-422-2815</i><br />",Invitation: You are invited to join BYU's Mentoring Program {{as_role_name_articleized}}
+1761,InviteNotificationFromAdmin,Mentoring Made Easy,yes,"<strong>Greetings!</strong><br /><br />You are invited to join the <strong>Mentoring Made Easy</strong> program!<br /><br />Once you accept, you will be prompted to create a password and complete your profile. Please be thorough as it will help the matching algorithm find the best possible pairings. (This does not apply to you since you are matched.)<br /><br /><strong><a href=""{{url_invitation}}"">Click here</a></strong> to accept the invitation and sign up {{as_role_name_articleized}}.<br /><br />&nbsp;<br /><strong>Erika Hopkins, SPHR</strong><br /><em>Director, Global Inclusion and Diversity</em><br /><br /><br />&nbsp;<br />",Invitation to join Mentoring Made Easy {{as_role_name_articleized}}
+1977,InviteNotificationFromAdmin,Forte MBALaunch Peer Groups,yes,"Hello Launchers!,<br /><br />The MBALaunch program is designed to provide you with a variety of networking opportunities and coaching styles. We are excited to introduce a resource to help manage the three coaching opportunities you will experience as part of MBA Launch. Please follow these instructions to make the most out of this program.<br /><br />To get started,&nbsp;<strong>please&nbsp;<a href=""{{url_invitation}}"" style=""color: rgb(17, 85, 204);"" target=""_blank"">complete your commitment form and create your profile</a>&nbsp;in our online community</strong>. It is important that you meet this deadline as all launchers need to be in the system before we can match you with your Peer Groups and Advisors.<br /><br />When you create your profile, you will be asked to answer a series of questions. The more detailed information you provide, the better your coaching experience will be. This profile information will help you get to know your Peer Group and will also be the foundation to finding Office Hour Experts and Current MBA Students who share expertise that match your areas of interest.&nbsp; After you create your profile, you may check out the tab &quot;Help Topics&quot; which will provide resources and tips on using the system.<br /><br />We will be matching you with your Peer Groups in January and will provide additional instructions at that time.&nbsp; In the meantime, please introduce yourself on the forums and begin to meet and network with your fellow Launchers!<br /><br />If you have questions about this resource or anything else regarding the MBALaunch program, please reach out to&nbsp;<a href=""mailto:krystal@fortefoundation.org"" style=""color: rgb(17, 85, 204); font-family: arial, sans-serif; line-height: normal;"" target=""_blank"">Krystal Brooks</a>.",Invitation: {{invitor_name}} invites you to join {{as_role_name_articleized}}
+2262,InviteNotificationFromAdmin,Forte MBALaunch Current Student/Alumna Contacts,yes,"<div style=font-family: arial,"" sans-serif; font-size: 12.800002098083496px;""""><span style=""""font-family: Arial"", Verdana,"" sans-serif; font-size: 12px;"""">Hello"",""</span><br style=""""font-family: Arial"", Verdana,"" sans-serif; font-size: 12px;"""" /><br style=""""font-family: Arial"", Verdana,"" sans-serif; font-size: 12px;"""" /><span style=""""font-family: Arial"", Verdana,"" sans-serif; font-size: 12px;"""">The MBALaunch Current MBA Student Contacts program is designed to provide you with the opportunity to connect with a current MBA student based on criteria important to you. We are excited to introduce a new resource to manage this relationship. Please follow these instructions to make the most out of this program.</span><br style=""""font-family: Arial"", Verdana,"" sans-serif; font-size: 12px;"""" /><br style=""""font-family: Arial"", Verdana,"" sans-serif; font-size: 12px;"""" /><span style=""""font-family: Arial"", Verdana,"" sans-serif; font-size: 12px;"""">To get started"",""&nbsp;</span><b style=""""font-family: Arial"", Verdana,"" sans-serif; font-size: 12px;""""><a href=""{{url_invitation}}"">please&nbsp;create your profile</a>. &nbsp;</b><br style=""""font-family: Arial"", Verdana,"" sans-serif; font-size: 12px;"""" /><br style=""""font-family: Arial"", Verdana,"" sans-serif; font-size: 12px;"""" /><span style=""""font-family: Arial"", Verdana,"" sans-serif; font-size: 12px;"""">When you create your profile"", you will be asked to answer a series of questions. The more detailed information you provide,"" the better your coaching experience will be. This profile information will be the foundation to finding Current MBA Students who share expertise that match your areas of interest. &nbsp;</span></div><div style=""""font-family: arial"","" sans-serif; font-size: 12.800002098083496px;"""">&nbsp;</div><div style=""""font-family: arial"","" sans-serif; font-size: 12.800002098083496px;"""">After you create your profile"", you may search the &quot;Current Student Contacts&quot; tab to request connections. &nbsp;You will see filters on the left hand of the screen where you can search based on &quot;Business School,&quot; &quot;MBA Format,""&quot; &quot;Topics of Expertise&quot; among others.</div><div style=""""font-family: arial"","" sans-serif; font-size: 12.800002098083496px;"""">&nbsp;</div><div style=""""font-family: arial"","" sans-serif; font-size: 12.800002098083496px;"""">You will also be able to see other women who are part of the MBALaunch program. &nbsp;If you click the &quot;Launchers&quot; tab"", you can search based on the filter &quot;I am a member of the...&quot; and select &quot;MBALaunch On Demand.&quot; &nbsp;You can use this functionality to send messages and network with your peers.</div><br />If you have questions about this process or anything else regarding the MBALaunch program,"" please reach out to <a href=""mailto:krystal@fortefoundation.org"">Krystal Brooks</a>.",Invitation: {{invitor_name}} invites you to join {{as_role_name_articleized}}
+2342,InviteNotificationFromAdmin,BBVA Compass Mentoring Program,yes,"Greetings,<br /><br />You are invited to join the {{subprogram_or_program_name}} {{as_role_name_articleized}}.&nbsp;<br /><br /><a href=""{{url_invitation}}"">Click here</a>&nbsp;to accept the invitation and launch the&nbsp;{{subprogram_or_program_name}} sign-up page.<br /><br /><strong>Important Information about Signing Up</strong><br />The&nbsp;<strong>{{subprogram_or_program_name}}</strong>&nbsp;<span style=""font-size:13px; line-height:1.6em"">system is set up for Single Sign On (SSO), which only works if you are accessing/signing up from&nbsp;</span><u style=""font-size:13px; line-height:1.6em"">within</u><span style=""font-size:13px; line-height:1.6em"">&nbsp;the BBVA Compass network.</span><ul> <li>Select the&nbsp;<strong>BBVA&nbsp;</strong><strong>Login&nbsp;</strong>option if you are accessing/signing up from within the BBVA Compass network.</li> <li>If you are accessing/signing up from outside of the network, you will need to enter your email address, name and select a password which you will need to use anytime you access the system outside of the network. &nbsp;&nbsp;</li></ul>Once signed up, the system will prompt you to begin completing your online profile. Although we encourage you to complete your profile right away, you may&nbsp;return later to complete it at your convenience.<br /><br />Please check your email inbox for a welcome message with additional instructions and next steps to get you started. You should receive this email shortly.",Invitation to join the {{subprogram_or_program_name}}
+2346,InviteNotificationFromAdmin,Leadership Essentials Mentoring,yes,"Greetings,<br /><br />You are invited to join the <strong>{{subprogram_or_program_name}} Program</strong> {{as_role_name_articleized}}.&nbsp;<br /><br /><a href=""{{url_invitation}}"">Click here</a>&nbsp;to accept the invitation and launch the&nbsp;<strong>{{subprogram_or_program_name}} Program</strong> sign-up page.<br /><br /><strong>Important Information about Signing Up</strong><br />The&nbsp;<strong>{{subprogram_or_program_name}}</strong>&nbsp;<strong>Program </strong>system is set up for Single Sign On (SSO), which only works if you are accessing/signing up from&nbsp;<u>within</u>&nbsp;the BBVA Compass network.<ul> <li>Select the&nbsp;<strong>BBVA&nbsp;</strong><strong>Login&nbsp;</strong>option if you are accessing/signing up from within the BBVA Compass network.</li> <li>If you are accessing/signing up from outside of the network, you will need to enter your email address, name and select a password which you will need to use anytime you access the system outside of the network. &nbsp;&nbsp;</li></ul>Once signed up, the system will prompt you to begin completing your online profile. Although we encourage you to complete your profile right away, you may&nbsp;return later to complete it at your convenience.<br /><br />Please check your email inbox for a welcome message with additional instructions and next steps to get you started. You should receive this email shortly.",Invitation to join the {{subprogram_or_program_name}} Program
+2352,InviteNotificationFromAdmin,Mentoring U Selmon Style,yes,"Hello,<br />&nbsp;<br />I hope this email finds you well. You are receiving this email today because you were recommended to become a {{role_name}} for student-athletes at the University of South Florida (USF) who participate in the {{subprogram_or_program_name}} program.<br />&nbsp;<br />{{subprogram_or_program_name}} aims to utilize compassionate mentoring to develop professionally prepared student-athletes. To accomplish this goal, we are calling upon our USF community leaders to serve as volunteer mentors for the next generation of professionals.<br />&nbsp;<br />Volunteer mentors are paired with student-athletes based on common interests and experiences, and become part of a support system to guide student-athletes as they transition into the next phase of their lives after graduation.&nbsp; We are currently building our mentor database.<br /><br /><a href=""{{url_invitation}}"" target=_blank"""">Click here</a> to accept the invitation"", and to learn more about this opportunity.&nbsp; This information includes mentor expectations, benefits of mentor participation, and read answers to some frequently asked questions.<br />&nbsp;<br />After visiting the website, please take a few minutes to complete the mentor profile to indicate your interest in becoming a volunteer mentor.&nbsp; Additionally, completing this profile ensures we have your most updated contact information, as well as key data points for our mentor/mentee matching process.<br />&nbsp;<br />If you have any questions,"" please do not hesitate to contact {{subprogram_or_program_name}} by emailing <a href=""mailto:MentoringUSelmonStyle@usf.edu"">MentoringUSelmonStyle@usf.edu</a>&nbsp;or calling (813) 974-9749.",Invitation – You are invited to join {{as_role_name_articleized}} in {{subprogram_or_program_name}}
+2401,InviteNotificationWithoutRoles,LMG Mentoring,yes,"<div>Hello,&nbsp;</div><div>&nbsp;</div><div>You have been added as a member to the&nbsp;East Africa Women&#39;s Mentoring Network&nbsp;by {{invitor_name}}.&nbsp;</div><div>&nbsp;</div><div><a href=""{{url_invitation}}"" style=""color: rgb(17, 85, 204);"" target=""_blank"">Click here</a>&nbsp;to accept the invitation and sign up for the&nbsp;Mentoring Network&nbsp;as a member. Please review and publish your profile with the help of&nbsp;<a href=""https://www.youtube.com/watch?v=uuau0ONegi0&amp;feature=youtu.be"" style=""color: rgb(17, 85, 204);"" target=""_blank"">this instructional video.</a>&nbsp;</div><div>&nbsp;</div><div>Thanks,&nbsp;</div><div>&nbsp;</div><div>Your Administrators<br />&nbsp;</div>",Invitation: You are invited to join {{subprogram_or_program_name}}
+2432,InviteNotificationFromAdmin,Leap Mentoring,yes,"Greetings,<br /><br />You are invited to join the&nbsp;<strong>leap Mentoring Program</strong>&nbsp;{{as_role_name_articleized}}.&nbsp;<br /><br /><a href=""{{url_invitation}}"">Click here</a>&nbsp;to accept the invitation and launch the&nbsp;<strong>leap Mentoring Program</strong>&nbsp;sign-up page.<br /><br /><strong>Important Information about Signing Up</strong><br />The&nbsp;<strong>leap Mentoring&nbsp;Program</strong> system is set up for Single Sign On (SSO), which only works if you are accessing/signing up from&nbsp;<u>within</u>&nbsp;the BBVA Compass network.<ul> <li>Select the&nbsp;<strong>BBVA&nbsp;</strong><strong>Login&nbsp;</strong>option if you are accessing/signing up from within the BBVA Compass network.</li> <li>If you are accessing/signing up from outside of the network, you will need to enter your email address, name and select a password which you will need to use anytime you access the system outside of the network. &nbsp;&nbsp;</li></ul>Once signed up, the system will prompt you to begin completing your online profile. Although we encourage you to complete your profile right away, you may&nbsp;return later to complete it at your convenience.<br /><br />Please check your email inbox for a welcome message with additional instructions and next steps to get you started. You should receive this email shortly.",Invitation to join the leap Mentoring Program
+2444,InviteNotificationFromAdmin,RWJF NCIN Doctoral Advancement in Nursing,yes,"Greetings,<br /><br />You are invited to join the {{subprogram_or_program_name}} {{as_role_name_articleized}}.<br /><br />Please&nbsp;<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for {{subprogram_or_program_name}} {{as_role_name_articleized}}.<br /><br />Vernell&nbsp; P Dewitty. PhD, RN<br />Program Deputy Director<br />Robert Wood Johnson Foundation New Careers in Nursing Scholarship Program<br />American Association of Colleges of Nursing<br />One Dupont Circle, Suite 530<br />Washington, DC 20036-1120<br /><em>Office</em>: 202.463-6930, ext 224<br /><em>Fax</em>: 202.785.8320<br /><a href=http://www.newcareersinnursing.org/"">www.newcareersinnursing.org</a><br /><a href=""mailto:vdewitty@aacn.nche.edu""><em>vdewitty@aacn.nche.edu</em></a>""",Congratulations! You've been selected to join the DAN Project {{as_role_name_articleized}}!
+2463,InviteExpiryNotification,Comcast Mentoring,yes,"Hello,<br /><br />Your invitation to join <a href=""{{url_subprogram_or_program}}"">{{subprogram_or_program_name}}</a> {{as_role_name_articleized}} is going to expire on {{invitation_expiry_date}}.<br /><br /><a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for {{subprogram_or_program_name}} {{as_role_name_articleized}}.<br /><br />Thanks,<br />Alicia Taylor<br />Administrator, Comcast eMentor<br /><a href=""mailto:Alicia.Taylor@cable.comcast.com"">Alicia.Taylor@cable.comcast.com</a>",Your Comcast eMentor invitation to join {{as_role_name_articleized}} is about to expire
+3038,InviteNotificationFromAdmin,Kronos Mentoring Program,yes,"Congratulations,<br />
+<br />
+You are invited to join the&nbsp;Kronos Mentor Program {{as_role_name_articleized}} in the{{subprogram_or_program_name}}. If you haven&#39;t already done so, please review&nbsp;additional program infomration <a href=""https://kronosmentoring.chronus.com/ck_attachments/2464"" target=""_blank"">here</a>.&nbsp;&nbsp;Once you&#39;re ready to enroll, <a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for the program. Your invitation will remain open for the next 10 days.<br />
+<br />
+If you have any questions or program feedback, please contact the Program Administrator or your HR Business Partner.<br />
+<br />
+{{widget_signature}}",Kronos Mentor Program Invitation
+3133,InviteExpiryNotification,Kronos Mentoring Program,yes,"We recently sent you an invitation to join the Kronos Mentor Program. We hope that you decide to take advantage of this development opportunity. Your invitation will expire on {{invitation_expiry_date}}. If you are still interested in joining, <a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for the program.<br />
+<br />
+If you have any questions or program feedback, please contact the Program Administrator or you HR Business Partner.<br />
+<br />
+<br />
+{{widget_signature}}",Kronos Mentor Program Invitation Reminder
+3193,InviteNotificationFromAdmin,Sachs Foundation,yes,"Greetings,<br />
+<br />
+You are invited to join the {{subprogram_or_program_name}} {{as_role_name_articleized}} by {{invitor_name}}.<br />
+<br />
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for {{subprogram_or_program_name}} {{as_role_name_articleized}}.<br />
+<br />
+The goal of the GMS Mentoring program is to:<br />
+<br />
+Encourage the development of caring and supportive relationships amongst Scholars and Alumni which increase leadership in action, increase service to others, academic excellence, the successful management of real-life situations and networking.<br />
+We hope you take full advantage of this opportunity to engage with other GMS Scholars and the associated benefits of having a mentor.<br />
+<br />
+The videos below should help you navigate the platform so that your mentoring experience is successful. If you have additional questions, feel free to message the system administrator.<br />
+&nbsp;<br />
+Helpful Videos:<br />
+&nbsp;<br />
+Learn about your Mentoring Profile: http://www.youtube.com/watch?v=cS6Fdmd-iXY&amp;feature=youtu.be&amp;hd=1<br />
+<br />
+Learn about the homepage, features, and navigation: http://youtu.be/TpIRNYzwL38?hd=1<br />
+<br />
+Learn about Mentoring Milestones: https://www.youtube.com/watch?v=wb_PSlfemuQ<br />
+<br />
+We look forward having you as part of our program!<br />
+<br />
+<br />
+<br />
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for {{subprogram_or_program_name}} {{as_role_name_articleized}}.<br />
+<br />
+<br />
+Best,<br />
+Kelvin J. Harris<br />
+Gates Millennium Scholars Program<br />
+Relationship Manager for Mentoring<br />
+Mentoring@gmsp.org<br />",Invitation: {{invitor_name}} invites you to join {{as_role_name_articleized}}
+429,InviteNotificationFromAdmin,Professional Mentorship Program for Undergraduates,yes,"Dear,<br/>
+<br/>
+Thank you for your interest in the Professional Mentorship Program (PMP)!<br/>
+<br/>
+The PMP offers a one-on-one mentoring relationship between business professionals and upper classmen in CUs Leeds School of Business! The mentoring partnership is designed to provide mentees a help guide for the last two years of college by providing career advice, assistance with networking skills, expertise on your chosen area of emphasis, and a wide range of connections in your industry of interest.<br/>
+<br/>
+<strong>
+  <em>MENTORING MAKES A DIFFERENCE! </em>
+</strong>Students who participated in this program were <strong>
+  <em>40% more likely to have a job</em>
+</strong> upon graduation than those who did not.
+
+<ul>
+	<li>Please <a href=""{{url_invitation}}"">Click here</a> to SIGN UP NOW!</li>
+</ul>
+Please allow about 10  15 minutes to complete your online Profile. Once you have completed your application, you'll be a part of the program right away!<br/>
+<br/>
+Mentor/student matches will be made during the summer months and you will be notified of your match in September. If you join the program after the matching period, we may not be able to match you right away; however, we do have other short-term, co-curricular mentoring opportunities that come up throughout the year. These project-based opportunities are a great way to get to know the PMP before being officially matched with one of our students. We also encourage you to attend our events in the meantime!<br/>
+<br/>
+We hope this mentoring partnership facilitates great value for both mentor and mentee! Please do not hesitate to contact us if you have any questions regarding program requirements and expectations, using the mentoring software or the program in general. The best method of contacting the office is by emailing <a href=""mailto:leedspmp@colorado.edu"">leedsmentoring@colorado.edu</a>. We hope to welcome you to the program soon!<br/>
+<br/>
+Best,<br/>
+Katie Connor<br/>
+Director, Leeds Mentoring Office",Leeds Professional Mentorship Program
+572,InviteNotificationFromAdmin,Leeds Peer2Peer Mentoring Program,yes,"Hello,<br/>
+<br/>
+I would like to personally invite you to be a mentee in the Peer2Peer mentoring program. This is a great opportunity to connect with the Leeds Business School, get some helpful tips from current students to ensure your success at Leeds, and connect with faculty and staff.<br/>
+<br/>
+<br/>
+<a href=""{{url_invitation}}"">Click here</a> to sign up for the Peer2Peer program.<br/>
+<br/>
+Looking forward to working with you!<br/>
+<br/>
+Sally Forester<br/>
+Director, Leeds Peer2Peer mentoring program<br/>
+<a href=""mailto:Sally.Forester@colorado.edu"">Sally.Forester@colorado.edu</a>
+",You are invited to join the Peer2Peer mentoring program!
+855,InviteNotificationFromAdmin,Young Alumni Mentors Program,yes,"Hello,<br/>
+<br/>
+We would like to invite you to participate in the {{subprogram_or_program_name}} {{as_role_name_articleized}}.<br/>
+<br/>
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for the {{subprogram_or_program_name}} {{as_role_name_articleized}}.<br/>
+<br/>
+We hope you will consider joining us for this exciting mentoring program!<br/>
+<br/>
+Leeds Mentoring Programs",Join the Leeds Young Alumni mentoring program
+3204,InviteNotificationFromAdmin,W. P. Carey School of Business,yes,"<h2>
+  <em><img alt="""" src=""https://wpcmentors.chronus.com/ck_pictures/4667"" style=""width: 980px; height: 100px;""/><br/>
+Your future is here.</em>
+</h2>
+
+<p>Having a mentor is one of the best things you can do to become successful in your career both now and in the future. To prepare business students like yourself to become great leaders in business and beyond, your W. P. Carey School of Business Career Center is pleased to announce the launch of a brand new initiative:</p>
+
+<h2>
+  <em>The Mentorship Programs at the W. P. Carey School of Business</em>
+</h2>
+
+<p>We invite you to join the inaugural, pilot phase of the Mentorship Programs this spring semester (2015).<br/>
+<br/>
+Mentors in the Mentorship Programs are W. P. Carey alumni and/or other professionals with significant expertise in their fields. Mentors will provide essential career direction, guidance and advice tailored to your academic and career needs.</p>
+
+<h2>
+  <em>To sign up to become a mentee, please click <a href=""https://wpcmentors.chronus.com/about"" target=""_blank"">here</a> to join.You'll be glad you did!</em>
+</h2>",Invitation: NEW: Mentorship Programs at the W. P. Carey School of Business

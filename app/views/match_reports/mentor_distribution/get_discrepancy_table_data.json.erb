@@ -1,0 +1,6 @@
+<% discrepancy_data_list = @discrepancy_data.each_with_index.map{ |discrepancy_data, index| {questionText: discrepancy_data[:student_answer_choice], menteeCount: discrepancy_data[:student_need_count], mentorCount: discrepancy_data[:mentor_offer_count], discrepancy: discrepancy_data[:mentor_offer_count] - discrepancy_data[:student_need_count], index: index, mentor_choices: (discrepancy_data[:mentor_answer_choices].try(:map) do |k,v| "#{k} - #{v}" end.presence || []).join(', ')}.to_json.html_safe } %>
+
+{
+  "data":[<%= safe_join(discrepancy_data_list, ', ') %>],
+  "total":<%= @total_count %>
+}

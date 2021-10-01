@@ -1,0 +1,5 @@
+<% rand_id = SecureRandom.hex(3) %>
+<div class="<%= local_assigns[:percentage_classes].present? ? percentage_classes : "col-md-4 font-bold" %> stat-percent p-r-0 <%="m-t-sm" unless local_assigns[:tile_text].present? %> <%= local_assigns[:is_admin_dashboard].present? ? get_caret_class_for_admin_dashboard(percentage) : get_caret_class(percentage) %>" id="percentage_change_caret_<%=rand_id%>">
+  <%= "#{percentage}% #{get_caret(percentage)}".html_safe %> 
+</div>
+<%= tooltip("percentage_change_caret_#{rand_id}", "feature.reports.label.percentage_change_html_v1".translate(count: prev_periods_count)) %>

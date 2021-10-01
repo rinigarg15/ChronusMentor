@@ -1,0 +1,3 @@
+<% modal_v3_popup @email_hash[:title].call(@mailer_template.program) do %>
+  <%= render 'rollout_emails/compare_email_contents_popup', {old_content: @old_source, new_content: @new_source, old_subject: @old_subject, new_subject: @new_subject, email_hash: @email_hash, mailer_template: @mailer_template, edit_page: @edit_page} %>
+<% end %>

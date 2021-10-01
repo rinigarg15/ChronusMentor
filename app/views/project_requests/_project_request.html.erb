@@ -1,0 +1,23 @@
+<div id = "project_request_#{project_request.id}" class = "clearfix list-group-item p-m">
+  <% if current_user == project_request.sender %>
+    <div class="actions_box pull-right">
+      <%= get_withdraw_project_request_action_button(project_request, ga_src) %>
+    </div>
+  <% end %>
+  <%= profile_field_container_wrapper(_Mentoring_Connection, append_text_to_icon("fa fa-user", render_group_name(project_request.group, current_user), :heading_tag => :h4, :class=>"m-t-xs m-b-xs")) %>
+
+  <%= profile_field_container_wrapper("#{'feature.project_request.label.Request'.translate}", project_request.message, :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+
+  <%= profile_field_container_wrapper("#{'feature.project_request.label.Applied_For'.translate}", RoleConstants.human_role_string([project_request.role.name], :program => project_request.program), :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+
+  <%= profile_field_container_wrapper("#{'feature.project_request.label.Sent'.translate}", get_icon_content("fa fa-clock-o") + formatted_time_in_words(project_request.created_at, :absolute => true), :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+
+  <%= get_reason_for_project_request_non_acceptance(project_request) %>
+
+  <% if project_request.closed? %>
+    <% closed_at = project_request.closed_at %>
+    <% if closed_at.present? %>
+      <%= profile_field_container_wrapper("#{ MentorRequest.human_attribute_name("closed_at")}", formatted_time_in_words(closed_at, :absolute => true), :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+    <% end %>
+  <% end %>
+</div>

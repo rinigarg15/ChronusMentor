@@ -1,0 +1,12 @@
+en:
+  feature:
+    feedback:
+      content:
+        suggestion_blank_error: Please enter your suggestion
+        problem_blank_error: Please enter your problem
+        question_blank_error: Please enter your question
+        compliment_blank_error: Please enter your compliment
+        describe_suggestion: Describe your suggestion
+        describe_problem: Describe your problem
+        describe_question: Describe your question
+        describe_compliment: Describe your compliment

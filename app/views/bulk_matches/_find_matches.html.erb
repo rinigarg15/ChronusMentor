@@ -1,0 +1,10 @@
+<div class="pane_tab_contents clearfix" id ="find_match_content">
+  <%= ibox nil do %>
+    <% if is_mentee_to_mentor_view?(orientation_type) %>
+      <%= render partial: "bulk_matches/mentee_match_details", locals: {request_notes: request_notes, orientation_type: orientation_type, student_mentor_hash: student_mentor_hash} %>
+    <% else %>
+      <%= render partial: "bulk_matches/mentor_match_details", locals: {request_notes: request_notes, orientation_type: orientation_type, mentor_student_hash: mentor_student_hash} %>
+    <% end %>
+  <% end %>
+</div>
+<%= javascript_tag "jQuery(document).ready(function() { BulkMatch.initalizeSticky(); angularElement = jQuery('#bulk_match'); angular.bootstrap(angularElement, ['bulkMatch'])})" %>

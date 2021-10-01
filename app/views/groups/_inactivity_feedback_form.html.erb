@@ -1,0 +1,28 @@
+<%= form_tag update_answers_survey_path(@feedback_response.survey), method: :patch, remote: true do %>
+  <%= hidden_field_tag :feedback_group_id, @group.id %>
+  <% @feedback_response.question_answer_map.each do |question, answer| %>
+    <div>
+      <%= control_group do %>
+        <%= content_tag(:big, common_answer_label(question, :class => "font-noraml")) %>
+        <%= controls do %>
+          <%= edit_common_answer_field(answer, question) %>
+          <% if question.required? %>
+            <% scoped_field_text = question.matrix_question_type? ? "matrix_answers_#{question.id}" : "common_answers_#{question.id}" %>
+            <%= javascript_tag("RequiredFields.addScopedField('feedback_answers','#{scoped_field_text}')") %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+  <% action_set(:class => "pull-right") do %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0);", class: "popup_closebox btn-white cancel btn", data: {dismiss: "modal"} %>
+    <%= submit_tag "display_string.Submit".translate, class: "btn btn-primary cjs-feedback-form-submit-validation", data: {disable_with: "display_string.Please_Wait".translate} %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  Survey.handleMatrixForcedRanking();
+  jQuery(function(){
+    CustomizeSelect.selectExpandContract();
+  });
+<% end %>

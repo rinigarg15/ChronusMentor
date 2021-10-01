@@ -1,0 +1,9 @@
+<% modal_v3_popup "feature.outcomes_report.title.configure_positive_outcomes_popup_title".translate, modal_id: "positive_outcomes_popup" do %>
+  <%= form_tag "javascript:void(0);" do %>  
+    <%= render(partial: "reports/outcomes_report/outcomes_report_survey_questions", locals: {heading_text: "feature.outcomes_report.content.popup_content".translate(mentoring_connection: _mentoring_connection)}) %>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", "data-dismiss" => "modal" %>
+      <%= submit_tag "display_string.Save".translate, class: 'btn btn-primary cjs_update_positive_outcomes_config', data: {disable_with: "display_string.Please_Wait".translate} %>
+    <% end %>
+  <% end %>
+<% end %>

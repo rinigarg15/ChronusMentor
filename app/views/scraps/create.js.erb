@@ -1,0 +1,34 @@
+<% if @scrap.is_meeting_message? && !@error_message.present? %>
+  Meetings.gaTrackMeetingMessages();
+<% end %>
+
+<% if @error_message.present? %>
+  Discussions.showErrorMessage("#cjs_scrap_error_message", "<%= j @error_message %>");
+<% else %>
+  <% @skip_hiding_loader = true %>
+  jQuery("#loading_results").show();
+  <% if @scrap.reply? %>
+    <% if remotipart_submitted? %>
+      <% content = "#{render partial: "scraps/scrap", :collection => [@scrap.root], locals: {home_page: @home_page}}" %>
+    <% else %>
+      <% content = render partial: "scraps/scrap", :collection => [@scrap.root], locals: {home_page: @home_page} %>
+    <% end %>
+    Discussions.reloadScrapThread("<%= j content %>", "<%= @scrap.root_id.to_s %>", "<%= @scrap.id.to_s %>", "<%= scrap_path(@scrap.root, format: :js, home_page: @home_page) %>");
+    MentoringAreaTracking.gaTrackMessageRepliedToMessage(<%= @home_page %>);
+  <% else %>
+    jQuery("#cjs_new_message_modal_<%= @ref_obj.id %>").modal('hide');
+    MentoringAreaTracking.gaTrackSentMessage(<%= @home_page %>);
+    <% if @home_page %>
+      ChronusValidator.ErrorManager.ShowResponseFlash("#cjs_scrap_success_message", '<%= j "flash_message.message.succeeded".translate %>', true)
+      jQueryResetForm('#cjs_new_ajax_message_form_<%= @scrap.ref_obj_id.to_s %>');
+      jQuery('#cjs_new_ajax_message_form_<%= @scrap.ref_obj_id.to_s %> .remove-file').hide();
+      jQuery("#loading_results").hide();
+    <% else %>
+      <% if @scrap.is_group_message? %>
+        window.location.href = '<%= group_scraps_path(:group_id => @group.id) %>';
+      <% else %>
+        window.location.href = '<%= meeting_scraps_path(:meeting_id => @meeting.id, :current_occurrence_time => @meeting.build_recurring_meeting(Meeting.parse_occurrence_time(@current_occurrence_time))[:current_occurrence_time]) %>';
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

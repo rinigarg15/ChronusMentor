@@ -1,0 +1,11 @@
+<%= link_to sidepane_asset.title, article_path(sidepane_asset), class: "font-bold" %>
+<div class="small">
+  <%= get_icon_content("fa fa-clock-o no-margins") %>
+  <span class="text-muted">
+    <%= "feature.article.content.posted_ago".translate(time_ago_in_words: time_ago_in_words(sidepane_asset.created_at)) %>
+  </span>
+</div>
+<div>
+<div class="text-navy small">
+  <%= "#{sidepane_asset.view_count} #{'feature.article.content.views_stat'.translate(count: sidepane_asset.view_count)}" %></span><%= "#{COMMON_SEPARATOR} " %><%= "#{sidepane_asset.helpful_count} #{'feature.question_answers.content.n_like_v1'.translate(count: sidepane_asset.helpful_count)}" %>
+</div>

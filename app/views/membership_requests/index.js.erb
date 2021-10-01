@@ -1,0 +1,19 @@
+// We need this to make filters work
+<% params.delete(:format) %>
+initialize.initializeStopFilterPropogation();
+jQuery('.cjs_reports_time_filter').html('<%= j get_reports_time_filter({start: @filters_to_apply[:filters][:start_date], end: @filters_to_apply[:filters][:end_date]}) %>');
+jQuery('.dropdown-with-datepicker.open').removeClass('open');
+<% filter_params = membership_requests_listing_filter_params(@filters_to_apply) %>
+<% non_filter_params = membership_requests_listing_non_filter_params(@filters_to_apply, @items_per_page) %>
+<% content = render(partial: "membership_requests/index", locals: { membership_requests: @membership_requests, filter_params: filter_params, non_filter_params: non_filter_params, tab: @tab, tabs_data: @tabs_data, list_type: @list_type, filters_to_apply: @filters_to_apply, items_per_page: @items_per_page } ) %>
+
+jQuery("#results_pane").html("<%= j(content) %>");
+
+MembershipRequest.maintainTriStateCheckbox(true);
+initialize.initializeTooltip();
+<% if @filters_count.zero? %>
+  jQuery('.cjs-report-filter-count').hide();
+<% else %>
+  jQuery('.cjs-report-filter-count').show();
+  jQuery('.cjs-report-filter-count').text('<%= @filters_count %>');
+<% end %>

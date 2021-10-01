@@ -1,0 +1,13 @@
+<% completion_percentage = goal.completion_percentage.to_i %>
+<%= control_group(:id => "cjs_slider_enclosure") do %>
+  <label class="control-label p-b-lg" for="progress_slider">
+      <%= "feature.mentoring_model.label.current_progress".translate(progress_percent: display_percentage(completion_percentage)) %>
+  </label>
+  <div id = "manual_slider"></div>
+  <%= text_field_tag "progress_slider", completion_percentage, :class => 'hide' %>
+<% end %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    GoalActivity.initializeProgressBar(<%= completion_percentage %>);
+  });
+<% end %>

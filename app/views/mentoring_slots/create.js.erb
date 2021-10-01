@@ -1,0 +1,15 @@
+<% if @mentoring_slot.valid? %>
+  ChronusValidator.ErrorManager.ShowPageFlash(true,'<%= "flash_message.user_flash.mentoring_slot_creation_success".translate %>');
+  <% if @from_settings_page && @mentoring_slots.count > 0 %>
+    if(jQuery('.cjs_slots_unavailable_add_slot').length > 0){
+      jQuery('.cjs_slots_unavailable_add_slot').hide();
+      jQuery('.cjs_slots_available_add_slot').show();
+    }
+    jQuery("#cjs_mentoring_slots_list").replaceWith('<%= j(render(:partial => "mentoring_slots/list_mentoring_slots", :locals => {:mentoring_slots => @mentoring_slots, :member => @profile_member})) %>');
+  <% end %>
+<% else %>
+  ChronusValidator.ErrorManager.ShowPageFlash(false,'<%= "flash_message.user_flash.mentoring_slot_creation_failure".translate %>');
+  jQueryScrollTo('#flash_container', false, 50);
+<% end %>
+closeQtip();
+jQuery('#calendar').fullCalendar('refetchEvents');

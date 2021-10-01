@@ -1,0 +1,27 @@
+<%= ibox nil, :ibox_class => "m-b-sm",
+              :content_class => "act_tabs tabs-container no-borders no-padding" do %>
+  <ul class="nav nav-tabs h5 no-margins gray-bg">
+    <li class="active">
+      <%= link_to("feature.profile.label.all_activity".translate, "javascript:void(0)") %>
+    </li>
+    <li><%= link_to("feature.profile.label.my_activity".translate, "javascript:void(0)") %></li>
+  </ul>
+
+  <div class="pane_tab_contents">
+    <%= render :partial => "programs/home_page_tab_contents", :locals => {
+      :load_url => all_url,
+      :update_url => nil,
+      :tab_in_store => Program::RA_TABS::ALL_ACTIVITY,
+      :tab_order => Program::RA_TABS::ALL_ACTIVITY,
+      :div_suffix => "all"
+    } %>
+    <%= render :partial => "programs/home_page_tab_contents", :locals => {
+      :load_url => my_url,
+      :update_url => nil,
+      :tab_in_store => Program::RA_TABS::ALL_ACTIVITY,
+      :tab_order => Program::RA_TABS::MY_ACTIVITY,
+      :div_suffix => "my"
+    } %>
+  </div>
+<% end %>
+<%= javascript_tag %Q[RecentActivities.RATabSwitch(false)] %>

@@ -1,0 +1,28 @@
+<% dropdown_options = {
+  btn_class: "pull-right",
+  dropdown_title: "",
+  is_not_primary: true,
+  btn_group_btn_class: "btn-white btn-sm"
+} %>
+
+<div id="<%= qa_answer_html_id(qa_answer) %>">
+  <%= dropdown_buttons_or_button(get_actions_for_qa_answer(qa_answer), dropdown_options) %>
+  <div class="media-left">
+    <%= user_picture qa_answer.user, { :no_name => true, :size => :medium }, { class: "img-circle" } %>
+  </div>
+  <div class="media-body">
+    <h4>
+      <%= link_to_user qa_answer.user, current_user: current_user %>
+      <div class="m-t-xs small">
+        <%= get_icon_content("fa fa-clock-o no-margins") %>
+        <span class="text-muted">
+          <%= "feature.question_answers.content.posted_ago".translate(time_in_words: time_ago_in_words(qa_answer.created_at)) %>
+        </span>
+      </div>
+    </h4>
+  </div>
+  <div class="m-t m-b">
+    <%= chronus_auto_link(qa_answer.content) %>
+  </div>
+  <%= get_like_button_container(qa_answer) %>
+</div>

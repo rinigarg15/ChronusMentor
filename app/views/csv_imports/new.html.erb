@@ -1,0 +1,68 @@
+<% @title = "csv_import.header.add_bulk_users_v1".translate %>
+<% @skip_rounded_white_box_for_content = true %>
+<% form_submit_path = @user_csv_import.present? ? csv_import_path(@user_csv_import, :organization_level => @standalone_dormant_import) : csv_imports_path(:organization_level => @standalone_dormant_import) %>
+<% form_submission_method = @user_csv_import.present? ? :patch : :post %>
+
+<%= wizard_headers(add_bulk_users_wizard, CsvImportsHelper::Headers::IMPORT_DATA) do %>
+  <div class="form-horizontal">
+    <% date_str = Date.new(2000, 1, 1).strftime("%d %b, %Y").sub("Jan", "date.abbr_month_names_array".translate[0]) %>
+    <% info_text = "csv_import.content.import_bulk_users_message_with_date_format_html".translate(icon: get_icon_content("fa fa-info-circle text-default"), date_str: date_str) %>
+    <%= content_tag(:p, info_text) %>
+    <%= simple_form_for :bulk_users_import, url: form_submit_path, html: {class: "form-horizontal clearfix", multipart: true, :method => form_submission_method} do |f| %>
+      <%= control_group do %>
+        <%= content_tag(:label, "csv_import.label.csv_file".translate, :for => "user_import_csv", :class => 'false-label col-sm-3 control-label') %>
+        <%= controls(:id => 'user_csv_upload', :class => "col-sm-9 cjs_user_csv") do %>
+          <%= file_field_tag :user_csv, as: :file, :id => "user_import_csv" %>
+        <% end %>
+        <div class= "cjs_clear_file hide controls clearfix col-sm-9 p-l-md m-t-xs font-600">
+        <%= content_tag(:span, @user_csv_import.try(:attachment_file_name)) %>
+        <%= link_to(append_text_to_icon("fa fa-times text-default", content_tag(:span, "csv_import.label.reset_csv_text".translate, :class => "sr-only")), csv_import_path(@user_csv_import, :organization_level => @standalone_dormant_import), :method => :delete, :class => "cjs_cancel_uploaded_file") if @user_csv_import.present? %>
+      </div>
+      <% end %>
+      
+      <% if @program_level_import %>
+        <%= control_group do %>
+          <%= content_tag(:div, "csv_import.label.role".translate, :class => 'false-label control-label col-sm-3') %>
+          <%= controls :id => 'role_btn_group', :class => "col-sm-9" do %>
+            <%= content_tag(:div, class: "cjs_nested_show_hide_container", id: "cjs_assign_option") do %>
+              <%= content_tag(:div, class: "cjs_show_hide_sub_selector", id: "cjs_select_roles") do %>
+                <%= content_tag(:label, radio_button_tag('role_option', UserCsvImport::RoleOption::SelectRoles, false, class: 'cjs_role_name_radio_btn') + "csv_import.label.select_a_role_v1_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS,'', :id => 'what_is_select_role')), class: "radio cjs_toggle_radio") %>
+                <%= tooltip("what_is_select_role", "csv_import.content.select_a_role_tooltip".translate) %>
+                <%= content_tag(:div, :class => 'cjs_toggle_content p-l-lg hide') do %>
+                  <%= render_user_role_check_boxes(program: @current_program, :roles => @program_roles) %>
+                <% end %>
+              <% end %>
+
+              <%= content_tag(:div, class: "cjs_show_hide_sub_selector", id: "cjs_map_roles") do %>
+                <%= content_tag(:label, radio_button_tag('role_option', UserCsvImport::RoleOption::MapRoles, false, class: 'cjs_map_role_radio_btn') + "csv_import.label.map_column_in_csv_v1_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS,'', :id => 'what_is_map_column_in_csv')) , class: "radio cjs_toggle_radio") %>
+                <%= tooltip("what_is_map_column_in_csv", "csv_import.content.map_column_in_csv_tooltip".translate) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= hidden_field_tag :user_csv_import_id, @user_csv_import.try(:id) %>
+
+      <% action_set(class: "pull-right") do %>
+        <%= f.button :submit, "display_string.Continue".translate, class: 'btn btn-primary' %>
+      <% end %>
+    <% end %>
+  </div>  
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    CsvImport.initializeRoleToggleJs();
+    <% if @user_csv_import.present? %>
+      CsvImport.showCancelFileUploadIcon();
+      <% if @program_level_import.present? %>
+        <% if @selected_roles.present? %>
+          CsvImport.initializeRoles(<%= raw @selected_roles %>);
+        <% else %>
+          CsvImport.initializeMapColumns();
+        <% end %>
+      <% end %>
+    <% end %>
+  });
+<% end %>

@@ -1,0 +1,19 @@
+<div class="<%= "clearfix cui_program_event_member_#{user.member_id}" %>" >
+  <div class="media-left">
+    <%= user_picture(user, { :no_name => true, :size => :medium }, { :class => 'img-circle' } ) %>
+  </div>
+  <div class="media-body">
+    <h4 class="no-margins">
+      <%= link_to_user user, :content_text => user.name(:name_only => true) %>
+    </h4>
+    <%= fetch_user_info(user, @questions, @user_info) %>
+    <% if tab == ProgramEventConstants::ResponseTabs::INVITED %>
+      <div class='<%= hidden_on_mobile %> pull-right'>
+        <%= get_reponse_label_for_invited_list(@program_event, user) %>
+      </div>
+      <div class='m-t-xxs <%= hidden_on_web %>'>
+        <%= get_reponse_label_for_invited_list(@program_event, user) %>
+      </div>
+    <% end %>
+  </div>
+</div>

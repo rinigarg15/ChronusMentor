@@ -1,0 +1,17 @@
+<% reviewer = show_reviewer %>
+<li class="list-group-item cjs_three_sixty_parent" id="three_sixty_survey_reviewer_container_<%= reviewer.id %>" >
+  <div class="clearfix has-above">
+    <div class="col-md-3 no-margin">
+      <%= reviewer.name %>
+    </div>
+    <div class="col-md-3">
+      <%= mail_to reviewer.email %>
+    </div>
+    <div class="col-md-3">
+      <%= reviewer.reviewer_group.name %>
+    </div>
+    <div class="col-md-3">
+      <%= reviewer.answered? ? content_tag(:span, get_icon_content("fa fa-check") + "feature.three_sixty.reviewer.responded".translate, :class => "") : get_icon_content("fa fa-times") + "feature.three_sixty.reviewer.no_response".translate%>
+    </div>
+  </div>
+</li>

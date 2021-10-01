@@ -1,0 +1,36 @@
+<% common_path_options = {root: program.root, src: OrganizationsHelper::SrcTracker::GLOBAL_REPORTS_V2} %>
+<% program_dashboard_path = program_root_path(common_path_options) %>
+<% program_user = wob_member.user_in_program(program) %>
+
+<div class="col-sm-12 col-md-4 m-b-md">
+  <%= ibox nil, ibox_class: "no-vertical-margins", content_class: "no-padding" do %>
+    <% if program.logo_or_banner_url.present? %>
+      <div class="text-center program_logo_or_banner m-t-md">
+        <table class="table-vertical-centered cjs-program-info-box-logo-container">
+          <td>
+            <%= link_to render_logo_or_banner(program), program_dashboard_path %>
+          </td>
+        </table>
+      </div>
+    <% end %>
+    <div class="text-center font-600 h4 m-md m-b-sm truncate-with-ellipsis whitespace-nowrap">
+      <%= link_to program.name, program_dashboard_path %>
+    </div>
+    <div class="text-center text-default m-t-xxs small">
+      <%= link_to "display_string.Manage".translate, manage_program_path(common_path_options), class: "text-default" %>
+      <%= link_to((content_tag(:span, "| ", class: "m-r-xs m-l-xs") + "feature.reports.content.subcategory.program_outcomes".translate(_Program: _Program)), categorized_reports_path(common_path_options.merge(category: Report::Customization::Category::OUTCOME)), class: "text-default") if program.program_outcomes_report_enabled? && program_user&.can_view_reports? %>
+      <%= link_to((content_tag(:span, "| ", class: "m-r-xs m-l-xs") + "manage_strings.program.Administration.General.Surveys".translate), surveys_path(common_path_options), class: "text-default") if program_user&.can_manage_surveys? %>
+    </div>
+    
+    <div class="cjs-program-info-box-numbers-ajax-container cjs-program-id-<%= program.id %>" data-program-id="<%= program.id %>" data-url="<%= get_global_dashboard_program_info_box_stats_path(program_id: program.id) %>">
+      <div class="m-t-md m-b-md">
+        <%= render partial: "common/loading_rectangles" %>
+      </div>
+      <%= javascript_tag %Q[jQuery(function() { OrganizationHomePageDashboard.fillProgramStats(#{program.id}); });] %>
+    </div>
+    
+    <div class="text-center font-bold xx-large m-b-md">
+      <%= link_to "feature.org_home_page.program_tile.view_program_dashboard".translate(program: _Program), program_dashboard_path, class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

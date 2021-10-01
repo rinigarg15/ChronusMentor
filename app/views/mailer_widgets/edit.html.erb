@@ -1,0 +1,56 @@
+<%= include_ckeditor_tag if @enable_update %>
+<% @back_link = {:label => "feature.email.header.emails_v1".translate, :link => mailer_templates_path} %>
+
+<% @title = @widget_hash[:title].call %>
+<% @title_description =  @widget_hash[:description].call(current_program_or_organization) %>
+
+<%= ibox nil, :ibox_id => "edit_email" do %>
+  <% if @enable_update %>
+      <%= simple_form_for @mailer_widget, html: { class: "cjs_ckeditor_dont_register_for_tags_warning" } do |f| %>
+        <div class="cui_ckeditor cjs_ckeditor">
+          <%= f.input :source, :as => :text, :required => true, input_html: { "data-skip-ckeditor" => @widget_hash[:plain_text] } %>
+        </div>
+        <%= f.hidden_field :uid %>
+
+        <% action_set(:class => "pull-right", :fields_required => true) do %>
+          <%= cancel_link mailer_templates_path %>
+          <%= f.button :submit, "display_string.Save".translate %>
+        <% end %>
+      <% end %>
+  <% else %>
+    <%= control_group(:class => "clearfix") do %>
+      <div class="false-label control-label"><%= "feature.email.label.Content".translate %></div>
+      <%= controls(class: "well well-sm clearfix white-bg noshadow m-b-0 m-t-xs") do %>
+        <div class="no-padding col-md-12 cjs_neutralize_ckeditor_links">
+          <%= @mailer_widget.source.html_safe %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+
+<% content_for_sidebar do %>
+  <% if @enable_update %>
+    <% tips = ["feature.email.content.widgets_content".translate,
+      "feature.email.content.copy_paste_tags".translate] %>
+    <%= render_tips_in_sidepane(tips) %>
+  <% end %>
+
+  <%- unless @widget_hash[:hide_tags] -%>
+    <%= ibox "feature.email.header.available_tags".translate, :ibox_id => "email_tags" do %>
+      <ul class="list-group">
+        <% @all_tags.keys.collect(&:to_s).sort.each do |tag| %>
+          <li class="list-group-item"><span class="cjs-tool-tip" data-desc="<%= @all_tags[tag.to_sym][:description].call %>" >{{<%= tag %>}}</span> </li>
+        <% end %>
+      </ul>
+    <% end %>
+  <%- end -%>
+<% end %>
+
+<script>
+  jQuery(document).ready(function(){
+    MailerWidgets.initializeValidations();
+    MailerTemplates.neutralizeCKEditorLinks();
+  });
+</script>

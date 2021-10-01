@@ -1,0 +1,3 @@
+<div class="cjs-milestone-task-container-for-filter" id="cjs_milestone_task_content_container_<%= milestone.id %>">
+  <%= render partial: "mentoring_model/milestones/milestone_content", locals: { milestone: milestone, completed: (local_assigns[:completed] || local_assigns[:completed_mentoring_model_milestone_ids].try(:include?, milestone.id) || false), target_user_id: target_user_id, target_user_type: target_user_type } %>
+</div>

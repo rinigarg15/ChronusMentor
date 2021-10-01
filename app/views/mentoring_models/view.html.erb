@@ -1,0 +1,32 @@
+<% @title = mentoring_model_pane_title(@mentoring_model) %>
+<% @title_badge = content_tag(:div, render_mentoring_model_duration_info(@mentoring_model), :class => "label label-success") %>
+<% @title_description = render_mentoring_model_description_info(@mentoring_model) %>
+<% dropdown_actions = [
+  { 
+    label: append_text_to_icon("fa fa-pencil-square-o", "feature.multiple_templates.actions.Edit_Template".translate),
+    url: mentoring_model_path(@mentoring_model)
+  },
+  {
+    label: append_text_to_icon("fa fa-files-o", "feature.multiple_templates.actions.Duplicate_Template".translate),
+    url: duplicate_new_mentoring_model_path(@mentoring_model, format: :js),
+    class: "cjs_duplicate_templates"
+  },
+  {
+    label: append_text_to_icon("fa fa-trash", "feature.multiple_templates.actions.Delete_Template".translate),
+    url: mentoring_model_path(@mentoring_model, from_view: true, format: :js),
+    class: "cjs_mentoring_model_deletes",
+    data: {"active-groups-count" => @mentoring_model.active_groups.count.to_s, "draft-groups-count" => @mentoring_model.groups.drafted.count.to_s, "default" => @mentoring_model.default?.to_s }
+  },
+  {
+    label: append_text_to_icon("fa fa-download", "feature.mentoring_model.label.export_from_template_csv_v1".translate),
+    url: export_csv_mentoring_model_path(@mentoring_model)
+  }
+] %>
+<% @page_action2 = dropdown_actions %>
+<% @page_action2_options = {:dropdown_title => "display_string.Manage".translate} %>
+<% @page_action = [{label: "display_string.Preview".translate + " " + "feature.mentoring_model.label.engagement_plan_tab".translate, url: preview_mentoring_model_path(@mentoring_model), class: "btn btn-primary pull-right"}]  %>
+<%= render partial: "mentoring_models/template_data" %>
+<% @loading_results_message = "display_string.Please_Wait".translate %>
+<%= javascript_tag do %>
+  MentoringModels.initializeReadOnlyViewHandlers();
+<% end %>

@@ -1,0 +1,18 @@
+en:
+  feature:
+    milestones:
+      label:
+        overdue: Overdue
+        in_progress: In progress
+        not_started: Not started
+        Completed: Completed
+        Milestone:
+          show_completed_milestones:
+            one: View 1 completed milestone
+            other: View first %{count} completed milestones
+        tasks:
+          complete: Completed Tasks
+          overdue: Overdue Tasks
+          upcoming: Upcoming Tasks
+          pending: Other Pending Tasks
+          loading: Loading Tasks...

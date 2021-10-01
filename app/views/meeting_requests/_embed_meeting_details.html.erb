@@ -1,0 +1,24 @@
+<% from_user_profile_or_listing_page = [EngagementIndex::Src::AcceptMentorRequest::USER_PROFILE_PAGE, EngagementIndex::Src::AcceptMentorRequest::USER_LISTING_PAGE ].include?(local_assigns[:source])%>
+<% meeting = meeting_request.get_meeting %>
+<%= profile_field_container_wrapper("#{'feature.meetings.form.topic'.translate}", meeting.topic, :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+<% if meeting.description.present? %>
+  <% description = from_user_profile_or_listing_page ? render_more_less(h(meeting.description), 150) : meeting.description %>
+  <div class="clearfix <%= local_assigns[:source] == EngagementIndex::Src::AcceptMentorRequest::USER_PROFILE_PAGE ? 'p-r-sm scroll-2 scroll-request' : '' %>">
+    <%= profile_field_container_wrapper("#{'feature.meetings.form.description'.translate}", chronus_auto_link(description), :heading_tag => :h4, :class => "m-t-xs m-b-xs", :answer_class => "word_break") %>
+  </div>
+<% end %>
+<%= render partial: "meeting_requests/list_proposed_slots", locals: {meeting_request: meeting_request, is_mentor_action: is_mentor_action, is_calendar_meeting: meeting.calendar_time_available?, filter_field: filter_field, source: local_assigns[:source].to_s } %>
+
+<% if meeting_request.closed? %>
+  <%= profile_field_container_wrapper("#{'feature.meeting_request.content.reason_for_closing'.translate}", (meeting_request.response_text.blank? ? content_tag(:i, 'common_text.Not_Specified'.translate, :answer_class => "text-muted") : meeting_request.response_text), :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+  <%= profile_field_container_wrapper("#{'feature.meeting_request.content.closed_by'.translate}", link_to_user(meeting_request.closed_by), :heading_tag => :h4, :class => "m-t-xs m-b-xs") if meeting_request.closed_by.present? %>
+  <%= profile_field_container_wrapper("#{'feature.meeting_request.content.closed_at'.translate}", formatted_time_in_words(meeting_request.closed_at, absolute: true), :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+<% elsif meeting_request.rejected? %>
+  <% reject_tool_tip = "feature.moderate.content.reason_for_declining".translate %>
+  <%= profile_field_container_wrapper("#{reject_tool_tip}", meeting_request.response_text.present? ? meeting_request.response_text : content_tag(:i, "common_text.Not_specified".translate, :answer_class => "text-muted"), heading_id: "meeting_request_state_change_reason_#{meeting_request.id}", :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+  <%=  tooltip("meeting_request_state_change_reason_#{meeting_request.id}", reject_tool_tip) %>
+<% end %>
+
+<% if is_mentor_action %>
+  <%= render partial: "meeting_requests/reject_popup", locals: { meeting_request: meeting_request, is_mentor_action: true, reject: true, source: local_assigns[:source].to_s} %>
+<% end %>

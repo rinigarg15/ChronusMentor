@@ -1,0 +1,16 @@
+<% reports = get_community_tile_reports_to_display(program) %>
+<% reports.each do |report_type| %>
+  <div class="col-md-4">
+    <div class="ibox no-margins">
+      <div class="ibox-content" id="<%= DashboardReportSubSection::Tile::COMMUNITY_FORUMS_AND_ARTICLES if report_type == DashboardReportSubSection::Type::CommunityForumsArticles::FORUMS_AND_ARTICLES %>">
+        <%= render_community_tile_report(current_program, report_type, {date_range: date_range, date_range_preset: date_range_preset})%>
+      </div>
+      <% ibox_locals = get_lower_ibox_locals(report_type, {date_range: date_range, date_range_preset: date_range_preset, program: current_program}) %>
+      <%= render(partial: "reports/management_report/lower_ibox", locals: ibox_locals) %>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  commonReportFilters.initializeTimeFilter();
+<% end %>

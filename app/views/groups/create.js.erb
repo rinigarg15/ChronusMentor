@@ -1,0 +1,41 @@
+<% if @error_flash && @group.nil? %>
+  <% unless @current_program.allow_one_to_many_mentoring? %>
+    ChronusValidator.ErrorManager.ShowResponseFlash("", '<%= @error_flash %>');
+  <% end %>
+<% elsif @existing_groups_alert.present? %>
+  GroupSearch.displayGroupsAlert("<%= j @existing_groups_alert %>", "#group_new", "form#new_group", "<%= group_params[:draft].present? ? '#save_as_draft' : '#create_and_publish' %>");
+<% elsif @group.errors[:mentors].present? %>
+  <% error_sentence = @group.errors[:mentors] %>
+  <% error_sentence = error_sentence.to_sentence if error_sentence.is_a?(Array) %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("", '<%= "#{_Mentor} #{error_sentence}" %>');
+<% elsif @group.errors[:students].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("", '<%= "#{_Mentees} #{@group.errors[:students].join(', ')}" %>');
+<% elsif @group.errors[:base].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("", '<%= @group.errors.full_messages.to_sentence %>', false);
+<% elsif @can_set_start_date %>
+  <% flash_message = "#{@can_create_group_directly ? 'flash_message.group_flash.group_creation_without_approval_success'.translate(mentoring_connection: _mentoring_connection) : 'flash_message.group_flash.group_proposed_success'.translate(mentoring_connection: _mentoring_connection, admin: _admin)}" %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("", '<%= flash_message %>', true);
+  Groups.showSetStartDatePopup("<%= get_edit_start_date_popup_group_path(id: @group.id, propose_workflow: true) %>");
+<% elsif @group.errors.blank? %>
+  <% per_page_params = (@view == Group::View::DETAILED) ? PER_PAGE : GroupsController::LIST_VIEW_PER_PAGE %>
+  <% paginate_params = {:page => 1, :per_page => per_page_params} %>
+  <% status = @drafted_connections_view ? Group::Status::DRAFTED : [Group::Status::ACTIVE, Group::Status::INACTIVE]%>
+  <% groups = @current_program.groups.with_status(status) %>
+  <% @connection_questions ||= Connection::Question.get_viewable_or_updatable_questions(@current_program, @current_user.is_admin?) %>
+  <% @groups = groups.order("groups.id DESC").paginate(paginate_params) %>
+  <% @my_filters = [] %>
+
+  jQuery("#group_new").modal('hide');
+  <% groups_listing_content = render(:partial => "groups/groups_listing", :locals => {view: @view, dashboard_flash: {}, groups: @groups}) %>
+  jQuery('#cjs_groups_listing').html('<%= j(groups_listing_content) %>');
+
+  <% if @drafted_connections_view %>
+    <% filter_pane_content = render(:partial => "filter_pane") %>
+    jQuery('#filter_pane').replaceWith('<%= j(filter_pane_content) %>');
+  <% end %>
+
+  <% group_record_id = (@view == Group::View::DETAILED) ? "group_#{@group.id}" : "group_pane_#{@group.id}" %>
+  jQueryHighlight("#<%= group_record_id %>");
+  initialize.initializeTooltip();
+  initialize.initializeStopFilterPropogation();
+<% end %>

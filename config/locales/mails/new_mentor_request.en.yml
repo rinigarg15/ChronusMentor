@@ -1,0 +1,19 @@
+en:
+  email_translations:
+    new_mentor_request:
+      title_v2: New %{_mentor} request notification to %{_mentor}
+      description_v2: This email is sent to %{_a_mentor} when %{_a_mentee} sends a request to connect to them.
+      subject_v2: You received a new {{customized_mentoring_term}} request from {{mentee_name}}
+      content_v1_html: "{{mentee_name}} has requested that you be their {{customized_mentor_term}} in <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a>. <br /> {{view_request_button}} <br /> You can also: <br /><ul><li>View <a href='{{mentee_url}}'>{{mentee_name}}</a>'s profile to learn more about them and determine if it is a good fit. </li><li>If you think it is a good fit, please accept their request as soon as possible. </li> <li>If you must decline, please do so in a timely manner and be tactful. </li></ul> Thank you for your participation as a {{customized_mentor_term}} in {{subprogram_or_program_name}}!<br/>"
+      tags:
+        mentee_name:
+          description: Name of the mentee who has sent the mentoring request
+          example_v1: William Brown
+        url_mentor_request_list:
+          description: Url to the mentor request listing page for the mentor
+        view_request_button:
+          description: View Request Button
+          view_request: View Request
+        message_to_recipient:
+          description: Message from sender to recipient
+          example_v1: I think we would be a good match. I would like to get some guidance from you to expand my horizons into Marketing?

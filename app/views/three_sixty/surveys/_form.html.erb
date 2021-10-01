@@ -1,0 +1,43 @@
+<%= simple_form_for survey, :html => {:id => "new_three_sixty_survey_form_#{survey.id}", :class => "cjs_three_sixty_survey_form form-horizontal"} do |f| %>
+  <%= f.input :title, :wrapper => :horizontal_input, :label => "feature.three_sixty.survey.Title".translate, :input_html => {:class => 'form-control'} %>
+  <%= f.input :expiry_date, :as => :string, :wrapper => :datepicker_input, :label => "feature.three_sixty.survey.Expiration_date".translate, input_html: { :value => formatted_time_in_words(survey.expiry_date, :no_time => true), :autocomplete => :off, :class => "form-control", data: date_picker_options } %>
+
+  <% disable_assessee_option = survey.reviewers.except_self.present? && survey.reviewers_addition_type == ThreeSixty::Survey::ReviewersAdditionType::ADMIN_ONLY ? {:disabled => true, :class => 'cjs_assessee_only_adds_reviewers'} : {:class => 'cjs_assessee_only_adds_reviewers'} %>
+  <% disable_assessee_title = survey.reviewers.except_self.present? && survey.reviewers_addition_type == ThreeSixty::Survey::ReviewersAdditionType::ADMIN_ONLY ? "feature.three_sixty.assessee.disable_assessee".translate : ""%>
+  <%= control_group do %>
+    <% label = "feature.three_sixty.survey.reviewers_added_by".translate %>
+    <%= content_tag(:div, label, :class => "false-label control-label col-sm-3") %>
+    <%= controls(class: "col-sm-9") do %>
+      <%= choices_wrapper(label) do %>
+        <label class="radio inline">
+          <%= radio_button_tag "three_sixty_survey[reviewers_addition_type]", ThreeSixty::Survey::ReviewersAdditionType::ADMIN_ONLY, survey.new_record? ? true : survey.only_admin_can_add_reviewers?, :class => 'cjs_admin_only_adds_reviewers' %> <%= _Admins %>
+        </label>
+        <label class="radio inline" title ="<%= disable_assessee_title %>" >
+          <%= radio_button_tag "three_sixty_survey[reviewers_addition_type]", ThreeSixty::Survey::ReviewersAdditionType::ASSESSEE_ONLY, survey.new_record? ? false : survey.only_assessee_can_add_reviewers?, disable_assessee_option %> <%= "feature.three_sixty.survey.assessees".translate %>
+        </label>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= control_group do %>
+    <%= content_tag(:label, "feature.three_sixty.survey.reviewer_groups".translate, :class => "control-label false-label col-sm-3") %>
+    <%= controls(class: "col-sm-9") do %>
+      <%= content_tag(:span, :class => 'input col-xs-12 no-padding') do%>
+        <%= hidden_field_tag("survey_reviewer_groups", reviewer_group_names.join(", "), :class => 'ac-select2 no-padding col-xs-12', :id => "survey_reviewer_group_names")%>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% action_set(:fields_required => true, class: "pull-right") do %>
+    <% if survey.new_record? %>
+      <%= link_to("feature.three_sixty.survey.discard".translate, dashboard_three_sixty_surveys_path, :class => "btn btn-white") %>
+    <% else %>
+      <%= link_to("feature.three_sixty.survey.discard".translate, three_sixty_survey_path(survey), :method => :delete, :class => "btn btn-white", data: {:confirm => "feature.three_sixty.survey.delete_warning".translate}) %>
+    <% end %>
+      <%= f.button :submit, "feature.three_sixty.survey.proceed_to_questions_html".translate, :id => "new_three_sixty_survey_submit", :class => "btn btn-primary" %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do  %>
+  ThreeSixty.initializeSurveyForm(<%= chr_json_escape(reviewer_groups.collect(&:name).to_json) %>, '<%= "feature.three_sixty.survey.select_reviewer_groups".translate %>', '<%= "feature.three_sixty.survey.reviewer_group_error".translate %>')
+<% end %>

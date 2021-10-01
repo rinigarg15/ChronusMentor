@@ -1,0 +1,4 @@
+<%= render partial: "posts/posts_listing", locals: { post: @post, posts: @posts } %>
+ChronusValidator.ErrorManager.ShowPageFlash(true, "<%= j @success_message %>");
+jQuery(".cjs_reply_cancel").click();
+closeQtip(); // needed for destroying from flagged content popup

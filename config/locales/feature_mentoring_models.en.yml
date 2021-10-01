@@ -1,0 +1,403 @@
+en:
+  feature:
+    mentoring_model:
+      header:
+        set_up_mentoring_model: Set Up %{Mentoring_Connection} Template
+        facilitate_mentoring_connections: Facilitate %{Mentoring_Connections}
+        goal_plan: Goal Plan
+        customize_goals: Customize Goals
+        explain_mentoring_model_setup: Select features needed for the mentoring template as well as who has the ability to configure them.
+        manage_mm_milestones: Milestones
+        manage_mm_goals: Goals
+        manage_mm_tasks: Tasks
+        manage_mm_messages: Facilitation Messages
+        manage_mm_meetings: "%{Meetings}"
+        manage_mm_engagement_surveys: Surveys
+        alter_admin_created_tasks: Alter Admin Created Tasks
+        mentoring_plan: "%{Mentoring_Connection} Plan"
+        mentoring_connection_information: "%{Mentoring_Connection} Information"
+        timeline: Timeline
+        customize_milestones: Customize Milestones
+        add_new_task_template: New Task Template
+        edit_new_task_template: Edit Task Template
+        task: Task
+        facilitation_message: Facilitation Message
+        required: Required (yes, no)
+        add_new_task: New Task
+        edit_task: Edit Task
+        edit_goal_plan: Edit Goal Plan
+        milestone_summary: Summary
+        no_goals_yet: No Goals Yet.
+        no_milestones_yet: No Milestones Yet.
+        no_tasks_yet: No Tasks Yet.
+        add_goal_plan: Add New Goals
+        no_goals_defined: Goals not yet defined.
+        no_milestones_defined: Milestones not yet defined.
+        no_tasks_defined: Tasks not yet defined.
+        no_survey_response: No response yet
+        goals_progress: GOALS PROGRESS
+        goals_progress_v1: Goals Progress
+        tasks_progress: TASKS PROGRESS
+        tasks_progress_v1: Tasks Progress
+        milestones_progress: MILESTONES PROGRESS
+        milestones_progress_v1: Milestones Progress
+        current_milestone: 'CURRENT MILESTONE:'
+        survey_responses: SURVEY RESPONSES
+        survey_responses_v1: Survey Responses
+        show_advanced_options: Show Advanced Options
+        hide_advanced_options: Hide Advanced Options
+        tasks: 'Tasks:'
+        show_tasks_for: 'Show Tasks and %{Meetings} for:'
+        show_tasks: Show Tasks
+        and_meetings: " and %{Meetings}"
+        for: For
+        all_members: All Members
+        show_completed_tasks_and_past_meetings: Show Completed Tasks and Past %{Meetings}
+        show_completed_tasks: Show Completed Tasks
+        unassigned_tasks: Unassigned
+        task_label:
+          one: 1 Task
+          other: "%{count} Tasks"
+        Title: Title
+        Description: Description
+        position: Position
+        due_date_label: Due by (X days after start of %{mentoring_connection} or after a specific other task)
+        after: After
+        action_item_header: Action Item (Create %{Meeting}, Setup Goal, Take %{Mentoring_Connection} Survey, none)
+        action_item_id_header: Action Item ID
+        task_goal_header: Goal(Enter specific goal)
+        task_milestone_header: Milestone(enter name of milestone)
+        task_specific_date: Specific Date(enter tasks with specific date)
+        assignee_prn: Assignee (#{details[:prn]})
+        goal_progress_type: Goal Progress Type
+        subject: Subject
+        content: Content
+        send_after_days: Send after (in days)
+        milestone: Milestone
+        specific_date: Specific Date
+        overdue_tasks: Overdue Tasks
+        upcoming_tasks: Upcoming Tasks
+        remaining_tasks: All Tasks
+        edit_name_and_logo: Edit Name and Logo
+        edit_name_and_logo_v1: Edit %{Mentoring_Connection} Name and Picture
+      description:
+        tour_tip1: You can view the tasks of other users in the %{connection} by clicking here. You will always be shown your tasks by default
+        no_goal_templates: There are no goals yet.
+        no_goal: There are no goals
+        no_messages: There are no messages.
+        no_messages_v1: There are no messages exchanged yet.
+        no_task_templates: There are no tasks yet.
+        no_tasks: There are no tasks.
+        no_complete_tasks: There are no complete tasks.
+        no_overdue_tasks: There are no overdue tasks.
+        no_upcoming_tasks: There are no upcoming tasks.
+        no_other_tasks: There are no other tasks.
+        no_other_pending_tasks: There are no other pending tasks.
+        no_milestones: There are no milestones
+        no_milestone_templates: There are no milestones yet.
+        manage_mm_milestones: Help users see their progress by dividing up the process into milestones.
+        manage_mm_goals: Prescribe goals for users to accomplish during their %{mentoring_connection}.
+        manage_mm_tasks: Add milestone and goal-related tasks for users to complete.
+        manage_mm_messages: Schedule preset messages to remind, encourage and monitor your users.
+        manage_mm_meetings: Set up %{meetings} between users.
+        manage_mm_engagement_surveys: Schedule surveys or assessments to capture feedback.
+        alter_admin_created_tasks: End-Users in a connection can alter due-dates of an admin created task.
+        delete_message: Are you sure, you want to delete %{title}. This will remove all associated tasks.
+        delete_template_message: Are you sure, you want to delete %{title}. This will remove all associated tasks. %{should_sync_text}
+        delete_template_message_for_manual_progress_goals: Are you sure, you want to delete %{title}. %{should_sync_text}
+        delete_milestone_template_warning: Are you sure, you want to delete %{title}. This will remove all associated tasks, facilitation messages.
+        days_after: days after
+        after_start_connection: Start of connection
+        n_days_after_task:
+          one: due %{count} day after %{task_name}
+          other: due %{count} days after %{task_name}
+        n_weeks_after_task:
+          one: due %{count} week after %{task_name}
+          other: due %{count} weeks after %{task_name}
+        start_of_connection: start of %{connection}
+        start_of_connection_option: Start of %{connection}
+        is_due: is due
+        optional_task: optional task
+        you_are_attending: You are attending
+        you_are_not_attending: You are not attending
+        you_have_not_responded: You have not responded
+        attending_q: attending?
+        RSVP: RSVP
+        set_task_status: Set task status
+        upload_csv_confirm: The existing %{mentoring_connection} model will be completely destroyed and will be set up freshly based on the uploaded template file. Do you want to proceed?
+        error_in_csv_file_format: processing CSV file
+        error_in_mentoring_model_content: processing model content
+        error_in_milestones_content: processing milestones content
+        error_in_goals_content: processing goals content
+        error_in_tasks_content: processing tasks content
+        error_in_tasks_content_v1: processing tasks content.Please note to check whether the survey ids present are correct
+        error_in_tasks_content_v2: processing tasks content. Also please check whether the survey IDs used are valid.
+        error_in_facilitation_messages_content: processing facilitation messages content
+        error_in_facilitation_messages_content_v1: processing facilitation messages content.Please note to check whether the survey ids present are correct
+        error_in_facilitation_messages_content_v2: processing facilitation messages content. Also please check whether the survey IDs used are valid.
+        error_in_removing_content: cleaning existing content
+        error_in_extracting_content: extracting content from CSV file
+        error_updating_permissions: updating permission based on CSV file content
+        error_file_absent: Please choose the file to upload
+        error_in_roles: processing roles. Please check whether the roles used are valid.
+        processing_import: processing import
+        days_after_start_of_connection: days after start of connection
+        are_you_sure: Are you sure you want to delete the message?
+        schedule_a_meeting: Schedule a Meeting
+        message: Messages
+        due: Due
+        no_completed_tasks: There are no completed tasks.
+        Delete_message: Are you sure you want to delete %{title}. This will remove all associated tasks.
+        allow_messaging: End-Users can send messages to everyone in the %{mentoring_connection}.
+        allow_discussion_board: End-Users can post, follow and discuss topics inside the %{mentoring_connection}.
+      label:
+        csv_export_report_name: "%{title}_Template_%{date}"
+        duration: Duration
+        templates: Templates
+        see_all_count: See all (%{count})
+        default_task_title_v1: Untitled Task
+        default_connection_task_title: Untitled Task
+        default_meeting_title: Set Up Meeting
+        default_goal_title: Create Goal Plan
+        default_facilitation_template_title: "%{Mentoring} Insight"
+        admin_can_configure: Admins can configure
+        users_can_configure: Users can configure
+        Goal: 'Goal: %{title}'
+        edit_goal: Edit Goal
+        title: 'Title:'
+        setup_meeting: Set up %{Meeting}
+        create_goal_plan: Create Goal Plan
+        due_date_reminder_label:
+          one: "(1 reminder email %{tooltip})"
+          other: "(%{count} reminder emails %{tooltip})"
+        due_date_reminder_durations_label_description: 'Reminders are sent %{reminder_durations} to the assignee after the survey task is overdue. '
+        due_date_reminder_label_description: Click here to view and update the reminders.
+        days:
+          one: 1 day
+          other: "%{count} days"
+        take_a_survey: Take the survey
+        goal_title_with_space_and_completion_percent: "%{title} (%{percent}%)"
+        new_facilitation_message: New Facilitation Message
+        not_task_owner: You do not own this task
+        survey_answered: The survey has been answered
+        please_answer_survey_v1: Please complete the survey
+        upload_from_template_csv: Upload %{Mentoring_Connection} Model
+        export_from_template_csv_v1: Export Plan
+        templates_csv_v1: "%{Mentoring_Connection} Plan Template CSV"
+        mark_complete: Mark complete
+        mark_incomplete: Marked complete. Click to mark incomplete
+        mark_incomplete_for_prev_assignee: Marked complete by previous member. Click to mark incomplete
+        add_brackets: " (%{string})"
+        default_milestone: Default Milestone
+        assign_to: Assign To
+        user_groups: User Groups
+        mentoring_connection_members: "%{Mentoring_Connection} Members"
+        all_users_option: All Users (New task for every current user)
+        all_role_option: All %{rolename_captial} (New task for every current %{rolename})
+        completed_label: Completed
+        overdue_label: Overdue
+        pending_label: Pending
+        upcoming_label: Upcoming
+        due_date: Due %{date}
+        due_date_label: 'Due Date:'
+        tasks_label: 'Tasks:'
+        zero_tasks: 0 Tasks
+        Template: Template
+        meetings_attended: "%{meetings} Attended"
+        messages_sent: Messages Sent
+        no_of_logins: Number of Logins
+        to: 'To:'
+        from: 'From:'
+        subject: 'Subject:'
+        v2_tasks_status: Task Status
+        all_mentoring_connections: All %{Mentoring_Connections}
+        overdue_connections: "%{Mentoring_Connections} with overdue tasks"
+        ontrack_connections_v1: "%{Mentoring_Connections} without any overdue tasks"
+        custom_html: Custom (%{help_text})
+        selected_tasks_with_status: Selected tasks with status
+        filter_on_specific_tasks: Filter on specific tasks with specific status
+        n_overdue_tasks:
+          one: 1 task in overdue status
+          other: "%{count} tasks in overdue status"
+        n_completed_tasks:
+          one: 1 task in completed status
+          other: "%{count} tasks in completed status"
+        n_not_completed_tasks:
+          one: 1 task in not completed status
+          other: "%{count} tasks in not completed status"
+        tasks_in_different_statuses: "%{count} tasks in different statuses"
+        n_report_overdue_tasks: " tasks in overdue status"
+        n_report_completed_tasks: " tasks in completed status"
+        n_report_not_completed_tasks: " tasks in not completed status"
+        report_tasks_in_different_statuses: " tasks in different statuses"
+        n_report_one_completed_task: " task in completed status"
+        n_report_one_not_completed_task: " task in not completed status"
+        n_report_one_overdue_task: " task in overdue status"
+        custom: Custom
+        custom_filter: Custom Filter
+        tasks_with_status: Tasks with Status
+        select_a_task: Select a task...
+        select_status: Select status...
+        unassigned: UNASSIGNED
+        unassigned_capitalized: Unassigned
+        child_templates: Base templates
+        current_progress: 'Current Progress: %{progress_percent}'
+        goal_process_updated_by_html: "%{user} updated the progress to %{percent}%"
+        goal_process_updated_by_self_html: You updated the progress to %{percent}%
+        goal_comment_by_html: "%{user} has left a comment"
+        goal_comment_by_self_html: You have left a comment
+        goal_activity_message_placeholder: Leave a comment or feedback
+        no_goal_activity_placeholder: No Activity yet
+        task_progress: Task Based Progress
+        manual_progress: Manual Progress
+        current_milestone: Current Milestone
+        task_name: Task Name
+        tasks_assigned_to: Assigned to %{member}
+        tasks_assigned_to_all: Assigned to all
+        view_tasks: View Tasks
+        goal_progress_updated_by_html: "%{user} updated the progress to"
+        goal_progress_updated_by_self_html: You updated the progress to
+        by_milestones: By Milestones
+        by_due_date: By Due Date
+        add_a_new_action_v2: Add a new action
+        goal_title: Goal Title
+        message_tab: Messages
+        engagement_plan_tab: Plan
+        goals_tab: Goals
+        private_note_tab: Journal
+        upcoming_meetings_tab: Upcoming %{Meetings}
+        past_meetings_tab: Past %{Meetings}
+        discussion_board: Discussion Board
+        as_first_milestone: As first Milestone
+        insert_it_after: Insert it after
+        add_milestone: Add Milestone
+        enable_messaging: Enable Messaging
+        enable_discussion_board: Enable Discussion Board
+        select_role: Select role to preview as
+        filter_tasks: Filter tasks
+      false_label:
+        mentoring_period_unit: Select Months or Days for the %{Mentoring_Connection} Duration
+        mentoring_period_value: Enter the number of Months or Days, the %{Mentoring_Connection} should run for
+      button:
+        add_new_goal: Add New Goal
+        add_new_task: Add New Task
+        new_engagement_survey: Add a Survey
+        set_up_a_meeting: Set up a Meeting
+        create_goal_plan: Create Goal Plan
+        add_custom_milestone: Add Custom Milestone
+        edit_goal: Edit Goal
+        edit_milestone: Edit Milestone
+        new_mm_message: New Message
+        add_new_meeting: Add New %{Meeting}
+        record_past_meeting: Record Past %{Meeting}
+        add_meeting: Add %{Meeting}
+        new_meeting: New %{Meeting}
+        add_milestone_v1: Add Milestone
+      confirmation_text:
+        milestones_checked: All the existing tasks will be grouped under a default milestone. Do you want to proceed?
+        milestones_unchecked: All the milestones and it's associated tasks, facilitation messages will be removed. Do you want to proceed?
+        messages_unchecked: All the existing facilitation messages will be removed. Do you want to proceed?
+        tasks_unchecked: All the tasks will be removed. Do you want to proceed?
+        goals_unchecked: All the goals and it's associated tasks will be removed. Do you want to proceed?
+        meetings_unchecked: All the tasks marked for scheduling meetings will be transformed as normal tasks. Do you want to proceed?
+        engagement_surveys_unchecked: This will remove all tasks containing surveys in the %{_mentoring_connection} plan. Do you want to proceed?
+      js_translations:
+        please_wait: Please Wait...
+        save_task: Save Task
+        save_message: Save Message
+        cancel: Cancel
+        add_task: Add task...
+        add_message_subject: Add message subject...
+        meeting_name: Meeting name...
+        take_engagement_survey: Add task title...
+        create_your_goal_plan: Create your goal plan...
+        new_task: New Task
+        add_description_optional: Add description (optional)...
+        atleast_one_required_v1: At least one attendee is required
+        required: Required
+        due_date: 'Due Date is connected to a:'
+        days: days
+        days_after: days after
+        is_due: is due
+        select: Select...
+        select_survey: Choose a survey
+        default_message: Please enter mandatory details for this message here.
+        default_meeting_topic: Meeting Title
+        body: 'Body:'
+        after_soc: after start of %{connection}
+        subject_label: Subject
+        send_on_label: Send On
+        title_label: Title
+        duration_label: Duration
+        description_label: Description
+        required_label: Required
+        after: after
+        milestone: Milestone
+        goal: Goal (optional)
+        start: Start
+        tasks: Tasks
+        task_select_drop_down: task select drop down
+        predecessor: Predecessor
+        specific_date: Specific Date
+        select_date: 'Select Date:'
+        invalid_survey: The %{connection} surveys used are invalid.
+        apply_to_goal_label: Apply to Goal
+        form_meeting_name: Meeting name
+        required_task: This is a required task
+        due_date_connected_to: Due Date is connected to
+        message_body: Body
+        apply_to_milestone_label: Apply to Milestone
+        facilitation_message:
+          invalid_tags: 'Facilitation Message contains invalid tags: '
+      information:
+        ongoing: "%{count} pending"
+        completed: "%{count} completed"
+        overdue: "%{count} overdue"
+        goal_complete: "%{percent}% Complete"
+        goal_complete_percentage: "%{percent}%"
+        messages_exchanged:
+          one: 1 Message Exchanged
+          other: "%{count} Messages Exchanged"
+        meetings_attended:
+          one: 1 %{Meeting} Attended
+          other: "%{count} %{Meetings} Attended"
+        ongoing_tasks:
+          one: 1 pending task
+          other: "%{count} pending tasks"
+        completed_tasks:
+          one: 1 completed task
+          other: "%{count} completed tasks"
+        overdue_tasks:
+          one: 1 overdue task
+          other: "%{count} overdue tasks"
+        posts_in_conversation:
+          one: "%{posts_count} Post in 1 Conversation"
+          other: "%{posts_count} Posts in 1 Conversation"
+        posts_in_conversations:
+          one: "%{posts_count} Post in %{topics_count} Conversations"
+          other: "%{posts_count} Posts in %{topics_count} Conversations"
+        tasks_pending: "%{count} Pending"
+        tasks_completed: "%{count} Completed"
+        tasks_overdue: "%{count} Overdue"
+        tasks_progress_tooltip: The tasks progress will reflect the progress across all the tasks, which are both aligned and not aligned to the goals.
+        survey_response_tooltip: Responses given by users part of this %{connection} are summarized here.
+        unassigned_task: 'Unassigned Task: Edit to Assign'
+        unassigned_task_in_profile: Unassigned Task
+        assigned_to_role: Assigned to %{role_name}
+        days: days
+        weeks: weeks
+        Discussion_Boards: Discussion Boards
+        discussions: discussions
+        program_goal_html: This goal cannot be edited as it is inherited from goal of program level. Click %{here} if you wish to edit program goal.
+        milestone_reorder_help_text: If you want to change the position of a milestone, just drag and drop that milestone in the position you need.
+        messaging_and_forum_cannot_be_enabled: Messaging and discussion board cannot be enabled together for %{a_mentoring_connection}.
+        ongoing_closed_groups_tooltip: There are ongoing/closed %{mentoring_connections} using this %{mentoring_connection} template.
+        disabled_forum_tooltip: Clone this template to create a new template or remove all the ongoing/closed %{mentoring_connections} to disable discussion boards.
+        disabled_messaging_tooltip: Clone this template to create a new template or remove all the ongoing/closed %{mentoring_connections} to disable messages.
+        preview_connection_plan_information: Below is a preview of how the %{Mentoring_Connection} Plan looks to a matched user. Dates are populated as if the %{mentoring_connection} was published today.
+        preview_link_button_alert: This is just a preview and links/buttons won't behave as expected.
+      content:
+        default_forum_help_text:
+          message_1: Welcome to the discussion board! Ask questions, debate ideas, and share articles.
+          message_2: You can follow conversations you like, expand a conversation to view the posts, or get a new conversation started!
+        discussion_board_message_help_text: Help-text describing the purpose of the discussion board.

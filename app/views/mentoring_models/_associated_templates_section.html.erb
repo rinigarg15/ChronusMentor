@@ -1,0 +1,31 @@
+<% available_templates = mentoring_model.other_templates_to_associate %>
+<% existing_template = mentoring_model.new_record? || mentoring_model.children.blank? ? [available_templates[0]] : mentoring_model.children %>
+
+<%= control_group do %>
+  <%= content_tag(:label, "feature.mentoring_model.label.templates".translate, class: "col-sm-3 false-label control-label") %>
+  <%= controls(:class => "col-sm-9") do %>
+    <div class="cjs-select-container">
+      <div>
+        <%= label_tag "mentoring_model_child_ids_0", "feature.mentoring_model.label.child_templates".translate, class: "sr-only" %>
+        <%= form.select_tag "mentoring_model[child_ids][]", options_for_select(available_templates.map{|template| [template.title, template.id, {:"data-signature" => template.features_signature}]}, existing_template[0].id), class: "cjs-other-template-to-link form-control", include_blank: false, disabled: duration_editing_disabled, id: "mentoring_model_child_ids_0" %>
+      </div>
+      <% remove_addon_options = { type: "addon", class: "no-background", content: link_to(append_text_to_icon("fa fa-times text-default no-margins", set_screen_reader_only_content("display_string.Remove".translate)), "javascript:void(0)", class: "cjs-template-remove") } %>
+      <%= construct_input_group([], [remove_addon_options], :input_group_class => "hide cjs-template-cloner m-t-sm") do %>
+        <%= label_tag "mentoring_model_child_ids_x", "feature.mentoring_model.label.child_templates".translate, class: "sr-only" %>
+        <%= form.select_tag "mentoring_model[child_ids][]", options_for_select(available_templates.map{|template| [template.title, template.id, {:"data-signature" => template.features_signature}]}, existing_template[0].id), class: "cjs-other-template-to-link form-control", include_blank: false, disabled: true, id: "mentoring_model_child_ids_x" %>
+      <% end %>
+      <% existing_template[1..-1].each_with_index do |template, index| %>
+        <% remove_addon_options = duration_editing_disabled ? {} : { type: "addon", class: "no-background", content: link_to(append_text_to_icon("fa fa-times  text-default no-margins", set_screen_reader_only_content("display_string.Remove".translate)), "javascript:void(0)", class: "cjs-template-remove") } %>
+        <%= construct_input_group([], [remove_addon_options], :input_group_class => "cjs-template-holder m-t-sm #{duration_editing_disabled ? 'col-sm-12' : ''}") do %>
+          <%= label_tag "mentoring_model_child_ids_#{index + 1}", "feature.mentoring_model.label.child_templates".translate, class: "sr-only" %>
+          <%= form.select_tag "mentoring_model[child_ids][]", options_for_select(available_templates.map{|template| [template.title, template.id, {:"data-signature" => template.features_signature}]}, template.id), class: "cjs-other-template-to-link form-control", include_blank: false, disabled: duration_editing_disabled, id: "mentoring_model_child_ids_#{index + 1}" %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="">
+      <%= link_to(get_icon_content("fa fa-plus-circle") + "display_string.Add".translate, "javascript:void(0)", class: "cjs-template-add help-block btn btn-white btn-sm m-t") unless duration_editing_disabled %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= javascript_tag "MentoringModels.templateAddRemoveHandlers();" %>

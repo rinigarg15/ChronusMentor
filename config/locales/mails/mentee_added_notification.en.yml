@@ -1,0 +1,17 @@
+en:
+  email_translations:
+    mentee_added_notification:
+      title_v3: Notification to new %{_mentee} added by %{_admin}
+      description_v3: This email is sent when %{_a_admin} adds %{_a_mentee} and then asks them to complete signup.
+      subject_v1: "{{receiver_first_name}}, {{invitor_name}} invites you to join as {{customized_mentee_term_articleized}}!"
+      content_v2_html: Congratulations!<br/><br/>You have been invited by {{invitor_name}} to join {{subprogram_or_program_name}} as {{customized_mentee_term_articleized}}.<br/><br/> It is important that you review and complete your profile. A detailed profile helps find better matches in the {{customized_subprogram_term}}.<br/>{{accept_and_signup_button}}<br/>If you have any questions, please contact the {{customized_admin_term_pluralized}} <a href='{{url_contact_admin}}'>here</a>.<br/>
+      accept_and_signup_text_html: Accept and sign up
+      tags:
+        url_invite:
+          description: Url for the user to click and accept the invitation
+        invitor_name:
+          description: Name of the administrator who added the user
+        accept_and_signup_button:
+          description: Accept and sign up button
+        url_contact_admin:
+          description: Url for the user to contact administrator

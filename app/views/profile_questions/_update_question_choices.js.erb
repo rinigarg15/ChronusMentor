@@ -1,0 +1,8 @@
+<% if @profile_question.choice_or_select_type? %>
+  jQuery('#profile_question_multi_choice_<%= @profile_question.id %>').replaceWith("<%= j(show_profile_question_multi_choice(@profile_question, @disabled_for_editing)) %>")
+  var questionChoices = {};
+  <% @profile_question.default_choice_records.each do |choice| %>
+    questionChoices[<%= choice.id %>] = '<%= choice.text %>';
+  <% end %>
+  CustomizeQuestionChoices.enableChoiceChangedActions(<%= @profile_question.id %>, questionChoices);
+<% end %>

@@ -1,0 +1,21 @@
+<% position ||= nil %>
+<% sortable ||= nil %>
+<% src = show_delete ? MentorRecommendation::Source::NEW_PAGE : "" %>
+<% if local_assigns[:from_quick_connect] %>
+    <% src = MentorRecommendation::Source::ADMIN_QUICK_CONNECT %>
+    <%= render(partial: "programs/quick_connect_item", locals: {member: mentor_user.member, src: src, match_score: mentor_score, options: { delete_button: show_delete, position: position, from_quick_connect: local_assigns[:from_quick_connect], show_favorite_ignore_links: show_favorite_ignore_links, favorite_preferences_hash: favorite_preferences_hash, ignore_preferences_hash: ignore_preferences_hash, recommendations_view: AbstractPreference::Source::ADMIN_RECOMMENDATIONS}, mentors_score: mentors_score}) %>
+<% else %>
+  <div class="<%= 'col-sm-4' unless sortable %> p-l-xs p-r-xs" id="user_<%= mentor_user.id %>">
+    <div class="mentor_preference <%= 'well flat-border' unless sortable %>" id="<%= mentor_user.id %>" >
+      <%= member_details_in_banner(mentor_user.member, src, mentor_score, { delete_button: show_delete, position: position, from_quick_connect: local_assigns[:from_quick_connect] , show_favorite_ignore_links: show_favorite_ignore_links, favorite_preferences_hash: favorite_preferences_hash, ignore_preferences_hash: ignore_preferences_hash, recommendations_view: AbstractPreference::Source::ADMIN_RECOMMENDATIONS} ) %>
+      <% if note.present? %>
+        <div class="text-center m-t-sm">
+          <span class="font-bold">
+            <%= "feature.mentor_recommendation.Message_from_admin".translate(Admin: _admin) %>
+          </span>
+          <span><%= note %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,16 @@
+en:
+  email_translations:
+    mentor_request_withdrawn:
+      title_v3: "%{_Mentor} request withdrawal notification to %{_mentor}"
+      description_v2: "%{_Mentees} can use the system to withdraw %{_a_mentoring} request they sent to %{_a_mentor}. When that happens, this email is sent to the %{_mentor}; it includes a message from the %{_mentee} that usually explains why the request was withdrawn."
+      subject_v2: "{{mentee_name}} has withdrawn their {{customized_mentoring_term}} request"
+      content_v3_html: "{{mentee_name}} has withdrawn their request for {{customized_mentoring_term}} sent to you in <a href='{{url_subprogram}}'>{{subprogram_name}}</a>.<br /> {{message_from_mentee}} <br /> Thank you for being considerate and patient during the matching process. If you have any questions, please contact your {{customized_admin_term_pluralized}} <a href='{{url_contact_admin}}'>here</a>.<br/>"
+      tags:
+        mentee_name:
+          description: Name of the mentee who has withdrawn the mentoring request
+          example: William Brown
+        message_from_mentee:
+          description_v1: Reason for withdrawing the mentor request as quoted by mentee
+          example: Sorry mentor, but I have already been offered mentoring by someone else. Thank you.
+        url_contact_admin:
+          description: Url for the user to contact administrator

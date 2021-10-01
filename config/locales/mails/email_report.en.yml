@@ -1,0 +1,15 @@
+en:
+  email_translations:
+    email_report:
+      title_v2: Survey report sent by %{_admin} to users
+      description_v1: This email is sent when %{_a_admin} shares a survery report with users both internal and external to the %{_program}
+      description_v2: This email is sent when %{_a_admin} shares a survey report with users both internal and external to the %{_program}
+      subject: "{{subject}}"
+      content_html: Hi,<br/><br/>{{body}}<br/>
+      tags:
+        subject:
+          description: Subject of the email
+          example: Progress Report
+        body:
+          description: Email body
+          example: I'd like to share Jonh's Progress Reports for the first milestone. The report is attached to this email.

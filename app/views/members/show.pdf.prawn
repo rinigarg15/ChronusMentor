@@ -1,0 +1,2 @@
+# This calls the reports profile_exporter to generate pdf
+pdf = ProfileExporter.generate_pdf(@current_program, @profile_user, @program_questions_for_user, program_root_url(:subdomain => @current_organization.subdomain, :root => @current_program.root))

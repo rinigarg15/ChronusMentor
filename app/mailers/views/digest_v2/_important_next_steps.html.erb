@@ -1,0 +1,28 @@
+<% number_of_columns = data_hsh.values.select{ |v| v>0 }.size %>
+<% columns_width_percentage = (100.0 / number_of_columns).floor %>
+<% column_index = 0 %>
+<% keys_to_content = {received_requests_count: {text: "email_translations.digest_v2.content.pending_request".translate, call_to_action: received_requests_call_to_action}, unread_inbox_messages_count: {text: "email_translations.digest_v2.content.unread_messages".translate, call_to_action: unread_inbox_messages_call_to_action}, upcoming_not_responded_meetings_count: {text: "email_translations.digest_v2.content.upcoming_meeting".translate, call_to_action: upcoming_not_responded_meetings_call_to_action}} %>
+
+<table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left; width: 100% !important;' width='100%'>
+  <tbody><tr>
+    <td width='100%' style='width: 100% !important; padding: 0 10px 10px 10px;'>
+
+      <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left; width: 100% !important;' width='100%'>
+        <tbody>
+          <tr>
+            <% data_hsh.each do |key, count| %>
+              <% next if count == 0 %>
+              <% column_index += 1 %>
+              <td width='<%= columns_width_percentage %>%' style='padding: 10px; width: <%= columns_width_percentage %>% !important;<%= " border-right: 2px solid #D4D4D4;" if column_index != number_of_columns %>'>
+                <% keys_to_content[key][:call_to_action][-1].merge!(url_options.merge(src1: :important_next_steps)) %>
+                <%= render partial: 'digest_v2/important_next_steps_inner_box', locals: {count: count, content: keys_to_content[key][:text], url: send(*(keys_to_content[key][:call_to_action])) } %>
+              </td>
+            <% end %>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </td>
+  </tr></tbody>
+</table>

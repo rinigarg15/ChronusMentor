@@ -1,0 +1,44 @@
+<div id="your_filters">
+  <% @my_filters += additional_filters if local_assigns[:additional_filters] %>
+  <% (@my_filters ||= []).uniq! %>
+  <% if @my_filters.any? %>
+    <% additional_right_links = if local_assigns[:reset_url_options].present? %>
+      <% content_tag(:span, class: hidden_on_mobile) do %>
+        <% link_to_wrapper(true, reset_url_options) do %>
+          <% append_text_to_icon("fa fa-refresh", "feature.connection.action.reset_all_v1".translate) %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% panel_options = {
+      panel_id: "cur",
+      panel_class: "white-bg no-margins b-b",
+      panel_heading_class: "p-sm no-borders",
+      panel_body_class: "p-t-0 item #{local_assigns[:item_class]}",
+      additional_right_links: additional_right_links
+      } %>
+    <%= panel "common_text.Applied_Filters".translate, panel_options do %>
+      <% labels = [] %>
+      <% @my_filters.each do |filter| %>
+        <% content = content_tag(:span, h(filter[:label].truncate(30)), class: "text") %>
+        <% content += content_tag(:span, "X", class: "pointer p-l-xxs cjs_exec_fn_on_click #{local_assigns[:ei_class]}", "data-click_fn" => "#{onclick_function}","data-click_fn_args" => "#{filter[:reset_suffix]}", data: {activity: local_assigns[:activity]}) if filter[:reset_suffix].present? %>
+        <% labels << {
+          content: content,
+          label_class: "label-default #{local_assigns[:label_class]}",
+          options: { id: "filter_item_#{filter[:reset_suffix]}" }
+        } %>
+      <% end %>
+      <%= labels_container(labels) %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  <% if local_assigns[:results_count].present? %>
+    jQuery("#cjs_see_n_results").html("<%= j append_text_to_icon("fa fa-chevron-left", "display_string.see_n_results".translate(count: results_count), media_padding_with_icon: true) %>");
+  <% end %>
+  <% if @my_filters.try(:any?) %>
+    jQuery("#cjs_reset_all_filters").show();
+  <% else %>
+    jQuery("#cjs_reset_all_filters").hide();
+  <% end %>
+<% end %>

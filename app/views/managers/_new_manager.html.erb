@@ -1,0 +1,29 @@
+<% target_program = @program || @current_program %>
+<% target_roles = get_target_roles(@filter_role, @role, @roles, @profile_user) %>
+<% required = local_assigns[:required].nil? ? target_program && target_roles && question.required_for(target_program, target_roles) : local_assigns[:required] %>
+
+<div class="cjs_add_show inner_rounded_section cjs_inner_rounded_section m-l-sm m-r-sm  manager <%= 'cjs_required' if required %>">
+  <%= fields_for_manager(question, new_manager) do |manager_form| %>
+    <div class="manager cjs_manager_<%= question.id %>" id="<%= (new_manager.new_record?) ? "new_manager" : "manager_#{new_manager.id}" %>">
+      <%= control_group do %>
+        <div class="false-label control-label col-sm-2"><%= "display_string.Name".translate %></div>
+        <%= controls(:class => "col-sm-10 no-padding") do %>
+          <%= controls(class: "col-sm-6") do %>
+            <%= manager_form.label :first_name, Manager.human_attribute_name(:first_name), :class => "sr-only" %>
+            <%= manager_form.text_field :first_name, :class => 'form-control', :placeholder => Manager.human_attribute_name(:first_name) %>
+          <% end %>
+          <%= controls(class: "col-sm-6") do %>
+            <%= manager_form.label :last_name, Manager.human_attribute_name(:last_name), :class => "sr-only" %>
+            <%= manager_form.text_field :last_name, :class => 'form-control', :placeholder => Manager.human_attribute_name(:last_name) %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= control_group do %>
+        <%= manager_form.label :email, Manager.human_attribute_name(:email), :class => "control-label col-sm-2" %>
+        <%= controls(class: "col-sm-10") do %>
+          <%= manager_form.text_field :email, :class => 'email form-control' %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

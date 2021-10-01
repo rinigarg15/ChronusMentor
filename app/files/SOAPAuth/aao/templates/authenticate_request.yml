@@ -1,0 +1,4 @@
+message_tag: "Authenticate"
+message:
+  userName: <%= Psych.to_json(params["base_authorization_username"]).chomp %>
+  password: <%= Psych.to_json(params["base_authorization_password"]).chomp %>

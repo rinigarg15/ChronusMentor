@@ -1,0 +1,17 @@
+en:
+  email_translations:
+    reactivate_account:
+      title_v1: Account Lockout Notification
+      description_v2: For security reasons, %{_admins} can choose to lock participant accounts after an %{_admin}-specified number of unsuccessful login attempts. This email is sent to a member when their account has been locked out after there are too many unsuccessful login attempts.
+      subject_v1: Reactivate Your Account
+      content_v1_html: You have been locked out of our account due to too many invalid login attempts.<br/>{{reactivate_account_button}}<br/>If you are unable to reactivate or access your account, please do not hesitate to contact one of the {{customized_admin_term_pluralized}} <a href='{{url_contact_admin}}'>here</a>, and we'd be happy to help you out.<br/>
+      reactivate_account_button_text: Reactivate Account
+      tags:
+        url_reactivate_account:
+          description: Url to reactivate the account
+        maximum_login_attempts:
+          description: Maximum unsuccessful login attempts allowed by the program
+        reactivate_account_button:
+          description: Reactivate account button
+        url_contact_admin:
+          description: Url for the user to contact administrator

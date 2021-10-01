@@ -1,0 +1,8 @@
+soap_header:
+  "tns:AuthorizationToken":
+    "tns:Token": <%= Psych.to_json(params["authorization_token"]).chomp %>
+message_tag: "WebLogin"
+message:
+  userLoginPlain: <%= Psych.to_json(params["username"]).chomp %>
+  passwordPlain: <%= Psych.to_json(params["password"]).chomp %>
+  keyOverride: <%= Psych.to_json(params["base_keyoverride"]).chomp %>

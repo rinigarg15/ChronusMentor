@@ -1,0 +1,38 @@
+<% first_item, second_item = admin_weekly_two_column_layout %>
+<% zero_count_style = "color: #ffffff; background-color: #dddddd;" %>
+<% non_zero_count_style = "color: #ffffff; background-color: #{email_theme[:primary_color]};" %>
+<tr>
+  <td class="padding-list" valign="top">
+    <!-- LEFT COLUMN -->
+    <table cellpadding="0" cellspacing="0" border="0" width="47%" align="left" class="responsive-table">
+      <tbody><tr>
+        <td style="padding: 10px 0;">
+          <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tbody><tr>
+              <td align="left" style="<%= first_item[:count].zero? ? 'color: #777777;' : '' %>" class="admin_weekly_item">
+                <strong style="<%= first_item[:count].zero? ? zero_count_style : non_zero_count_style %> padding: 5px 0px;margin-right: 5px;">&nbsp;&nbsp; <%= first_item[:count] %> &nbsp;&nbsp;</strong> <%= first_item[:text] %>
+              </td>
+            </tr></tbody>
+          </table>
+        </td>
+      </tr></tbody>
+    </table>
+
+    <!-- RIGHT COLUMN -->
+    <% if second_item.present? %>
+      <table cellpadding="0" cellspacing="0" border="0" width="47%" align="right" class="responsive-table">
+          <tbody><tr>
+              <td style="padding: 10px 0;">
+                  <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tbody><tr>
+                      <td align="left" style="<%= second_item[:count].zero? ? 'color: #777777;' : '' %>"  class="admin_weekly_item">
+                        <strong style="<%= second_item[:count].zero? ? zero_count_style : non_zero_count_style %> padding: 5px 0px;margin-right: 5px;">&nbsp;&nbsp; <%= second_item[:count] %> &nbsp;&nbsp;</strong> <%= second_item[:text] %>
+                      </td>
+                    </tr></tbody>
+                  </table>
+              </td>
+          </tr>
+      </tbody></table>
+    <% end %>
+  </td>
+</tr>

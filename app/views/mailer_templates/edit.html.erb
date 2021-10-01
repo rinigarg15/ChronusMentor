@@ -1,0 +1,104 @@
+<%= include_ckeditor_tag %>
+<% @back_link = {:label => EmailCustomization.get_translated_email_type_name(EmailCustomization::NewCategories::NAMES[@email_hash[:category]]).call(current_program_or_organization), :link => category_mails_mailer_templates_path(:category => @email_hash[:category])} %>
+
+<% @title = @email_hash[:title].call(@mailer_template.program) %>
+<% @title_description =  @email_hash[:description].call(@mailer_template.program) %>
+<% email = ChronusActionMailer::Base.get_descendant(@mailer_template.uid) %>
+
+<%= ibox nil, :ibox_id=> "edit_email" do %>
+  <%= simple_form_for @mailer_template, html: { class: "cjs_ckeditor_dont_register_for_tags_warning" } do |f| %>
+    <%= response_flash "send_test_email_flash", :class => "alert-success" %>
+
+    <div class="m-b-md <%= 'hide' unless @enable_update %>">
+      <%= control_group do %>
+        <%= f.input :enabled, collection: [['feature.email.filter.enabled'.translate,true], ['feature.email.filter.disabled'.translate,false]], as: :radio_buttons,
+              item_wrapper_class: 'inline',
+              label: "feature.email.header.status".translate, label_html: {class: "false-label control-label"}, required: true, input_html: { disabled: disable_status_change?(@mailer_template.uid, @mailer_template.program) }, include_hidden: false %>
+      <% end %>
+
+      <%= f.input :subject, :as => :string, :input_html => {:class => 'form-control m-b-md'}, :required => true %>
+
+      <div class="cjs_ckeditor">
+        <%= f.input :source, :as => :text, :required => true %>
+      </div>
+      <%= f.hidden_field :uid %>
+      <%= hidden_field_tag :has_subject_changed, "false" %>
+      <%= hidden_field_tag :has_source_changed, "false" %>
+    </div>
+
+    <% unless @enable_update %>
+      <%= response_flash "show_mailer_template_status", :class => "alert-success cjs_mailer_template_enabled_#{@mailer_template.enabled}" %>
+      <%= control_group(:class => "cjs_content_well") do %>
+        <%= control_group(class: "clearfix") do %>
+          <div class="false-label control-label"><%= "feature.email.label.Subject".translate %></div>
+          <%= controls(class: "well white-bg well-sm noshadow clearfix m-t-xs") do %>
+            <div class="no-padding col-md-12">
+              <%= @mailer_template.subject %>
+            </div>
+          <% end %>
+        <% end %>
+
+        <%= control_group(class: "clearfix") do %>
+          <div class="false-label control-label"><%= "feature.email.label.Body".translate %></div>
+          <%= controls(class: "well white-bg well-sm noshadow clearfix m-t-xs") do %>
+            <div class="no-padding col-md-12 cjs_neutralize_ckeditor_links">
+              <%= chronus_sanitize_while_render(@mailer_template.source, :sanitization_version => @current_organization.security_setting.sanitization_version, :sanitization_options => {:attributes => %w[style _cke_saved_href accesskey align alt border cellpadding cellspacing charset colspan data-cke-realelement dir href id lang longdesc name onclick rel rowspan scope src start summary tabindex target title type], :tags => %w[a address blockquote br caption div em h1 h2 h3 h4 h5 h6 img li ol p pre span strong table tbody td tfoot th thead tr u ul]}) %>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= render :partial => "mailer_templates/preview_email" %>
+
+    <% if @enable_update %>
+      <% action_set(:fields_required => true, :class => "pull-right") do %>
+        <%= cancel_link mailer_templates_path %>
+        <%= f.button :submit, "display_string.Save".translate %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% content_for_sidebar do %>
+  <% if @enable_update %>
+    <% tips = ["feature.email.content.do_not_use_widget".translate,
+      "feature.email.content.copy_paste_tags".translate] %>
+    <%= render_tips_in_sidepane(tips) %>
+  <% end %>
+
+  <%= ibox "feature.email.header.available_tags".translate, :ibox_id=>"email_tags" do %>
+    <ul class="list-group">
+      <% @all_tags.keys.collect(&:to_s).sort.each do |tag| %>
+        <li class="list-group-item"><span class="cjs-tool-tip" data-desc="<%= @all_tags[tag.to_sym][:description].call(@mailer_template.program) %>" ><%= get_icon_content("fa fa-tag") %> {{<%= tag %>}}</span> </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <%= ibox "feature.email.header.widgets".translate do %>
+    <ul class="list-group">
+      <% @widget_names.keys.sort.each do |name| %>
+        <li class="list-group-item"><span class="cjs-tool-tip" data-desc="<%= @widget_names[name].call(current_program_or_organization) %>"><%= get_icon_content("fa fa-cube")%> {{<%= name %>}}</span></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% if Mailer::Template.content_customized?(@mailer_template.program, email) %>
+    <%= ibox "feature.email.header.switch_to_default_content".translate do %>
+      <span class ="text-muted">
+        <%= "feature.email.content.content_update_sidebar_message_v1".translate %>
+      </span>
+      <%= link_to "feature.email.content.preview_new_content".translate, "javascript:void(0)", {class: "eamil_preview_link cjs_email_rollout_link", data: {url: rollout_popup_rollout_email_path(@mailer_template.uid, format: :js, :edit_page => true)}} %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+jQuery(document).ready(function(){
+  MailerTemplates.initializeIndex();
+  MailerTemplates.initializeValidations();
+  MailerTemplates.neutralizeCKEditorLinks();
+  MailerTemplates.showMailerTemplateStatus("<%= j('feature.email.content.email_disabled_message'.translate(organization: @mailer_template.program.name || @mailer_template.organization.name)) %>");
+  MailerTemplates.hasContentOrSubjectChanged();
+});
+</script>

@@ -1,0 +1,19 @@
+<% header_text, help_text, button_text = get_discard_group_header_help_button_text(@group)%>
+<% modal_v3_popup header_text do %>
+  <% url = get_url_for_group_actions_form(@source, :discard, {id: @group.id}) %>
+  <%= simple_form_for @group, :url => url, :remote => (@source != "profile"), :html => {:id => "bulk_groups_publish_#{@group.id}"} do |f| %>
+    <div class="m-b-sm">
+      <div class="media-left">
+        <%= get_icon_content("fa fa-exclamation-triangle fa-3x text-warning") %>
+      </div>
+      <div class="media-body">
+        <%= help_text %>
+      </div>
+    </div>
+
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white cancel", "data-dismiss" => "modal" %>
+      <%= f.button :submit, button_text %>
+    <% end %>
+  <% end %>
+<% end %>

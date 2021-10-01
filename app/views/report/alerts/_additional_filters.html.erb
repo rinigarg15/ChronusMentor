@@ -1,0 +1,49 @@
+
+  <%= alert_form.simple_fields_for :filter_params do |filter_param| %>
+    <%= filter_param.simple_fields_for index.to_sym do |alert_filter_param| %>
+      <% if filter_params_hash.present? %>
+        <% filter_type = "FilterUtils::#{metric.abstract_view.class.to_s}Filters::FILTERS".constantize[filter_params_hash[:name].to_sym][:type] %>
+        <% date_filter_type = (filter_type == FilterUtils::FILTER_TYPE::DateRange) %>
+        <% input_html_for_value = {class: "#{date_filter_type ? 'form-control numeric alert-filter-value-input' : 'form-control numeric alert-filter-value-input'}", type: "number"} %>
+        <% input_html_for_value.merge!({value: filter_params_hash[:value]}) %>
+      <% else %>
+        <% input_html_for_value = {class: "form-control numeric alert-filter-value-input", type: "number"} %>
+      <% end %>
+      <div class="clearfix alert_filters_container">
+        <%= control_group(class: "col-md-5 p-l-0 alert-filter-options") do %>
+          <%= controls do %>
+            <%= alert_filter_param.label :name, "feature.reports.content.operator".translate, :class => 'sr-only' %>
+            <%= alert_filter_param.select :name, get_alert_filter_for_display(metric, alert, index), {}, class: "form-control has_background alert-filter-name-select" -%>
+          <% end %>
+        <% end %>
+
+        <div class="alert-filter-operators-container">
+          <%= control_group(class: "col-md-2  p-l-0 alert-filter-operators") do %>
+            <%= controls do %>
+              <%= alert_filter_param.label :operator, "feature.reports.content.operator".translate, :class => 'sr-only' %>
+              <%= alert_filter_param.select :operator, get_alert_filter_operator_for_display(metric.abstract_view, filter_params_hash.try(:[], :name), index, filter_params_hash.try(:[], :operator)), {}, class: "form-control has_background alert-filter-operator-select" -%>
+            <% end %>
+          <% end %>
+
+          <%= control_group(class: "col-md-3 p-l-0 alert-filter-value") do %>
+            <%= controls do %>
+              <% if (filter_type == FilterUtils::FILTER_TYPE::Equals) %>
+                <%= alert_filter_param.label :value, "feature.reports.content.operator".translate, :class => 'sr-only' %>
+                <%= alert_filter_param.select :value, options_for_select(FilterUtils::AdminViewFilters.connection_status_filter_translated_options, filter_params_hash.try(:[], :value)), {}, :label_html => {:class => 'sr-only'}, required: true, class: "form-control has_background alert-filter-value-select" -%>
+              <% else  %>
+                <%= alert_filter_param.input :value, :label_html => {:class => 'sr-only'}, required: true, input_html: input_html_for_value -%>
+              <% end %>
+            <% end %>
+          <% end %>
+          <% if date_filter_type %>
+            <div class='days-text'>
+              <%= content_tag(:span, "display_string.days".translate, class: "pull-left m-l-0 m-sm") %>
+            </div>
+          <% end %>
+        </div>
+        <div class="m-b-xs">
+          <%= link_to(content_tag(:span, append_text_to_icon("fa fa-minus-circle text-default", set_screen_reader_only_content("display_string.Remove".translate)), :class => "pull-left m-l-0 m-sm"), "javascript:void(0)", class: "cjs_remove_more_filter_in_alert") %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>

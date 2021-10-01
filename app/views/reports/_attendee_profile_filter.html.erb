@@ -1,0 +1,2 @@
+<% profile_questions = current_program.profile_questions_for(current_program.roles_without_admin_role.pluck(:name), {default: false, skype: false, fetch_all: true}) %>
+<%= render :partial => 'reports/profile_filter', locals: {profile_questions: profile_questions} %>

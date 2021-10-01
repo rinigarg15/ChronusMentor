@@ -1,0 +1,23 @@
+<%= content_tag(:h3, "program_settings_strings.content.slot_config_setting".translate(connection: _Mentoring_Connection)) %>
+<%= choices_wrapper("display_string.Roles".translate) do %>
+  <% for_mentoring_roles.each do |role| %>
+    <%= control_group do %>
+      <%= content_tag(:div, role.customized_term.pluralized_term, class: "control-label false-label") %>
+      <%= controls(class: "cjs_slot_config_container") do %>
+        <label class="checkbox cjs_slot_config_enabled">
+          <%= check_box_tag nil, true, role.slot_config_enabled?, class: "vertical-align-text-bottom", id: "slot_config_enabled_#{role.id}" %>
+          <%= "program_settings_strings.label.allow_proposer_to_set_slot_limit".translate %>
+        </label>
+        <label class="checkbox m-l-md cjs_slot_config_required <%= 'hide' unless role.slot_config_enabled? %>">
+          <%= check_box_tag nil, true, role.slot_config_required?, class: "vertical-align-text-bottom", id: "slot_config_required_#{role.id}" %>
+          <%= "program_settings_strings.label.mark_required".translate %>
+        </label>
+        <%= hidden_field_tag "program[role][#{role.id}][slot_config]", "", class: "cjs_hidden_slot_config" %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= javascript_tag do %>
+  showHideElement.initialize('.cjs_slot_config_enabled', '.cjs_slot_config_required');
+  ProgramSettings.SlotConfigSetting.setAllHiddenFieldValuesOnSubmit();
+<% end %>

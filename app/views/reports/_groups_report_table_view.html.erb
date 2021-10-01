@@ -1,0 +1,13 @@
+<%= ibox nil, ibox_class: "no-margins", content_class: "no-padding" do %>
+  <div id="cjs_groups_report_table_view">
+    <% if report_view_columns.blank? %>
+      <div class="p-sm text-center">
+        <%= "feature.connection.content.no_columns".translate %> <%= "feature.reports.content.click_to_update_view_html".translate(Click_here: link_to("display_string.Click_here".translate, "javascript:void(0);", id: "cjs_edit_columns_link", data: { url: edit_groups_report_view_path } )) %>
+      </div>
+    <% else %>
+      <div id="cjs_groups_report_table_result">
+        <%= render partial: "reports/groups_report_table_result", locals: { groups: groups, report_view_columns: report_view_columns, totals_hash: totals_hash, sub_filter: sub_filter, search_filters: search_filters, member_filters: member_filters, groups_report: groups_report } %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

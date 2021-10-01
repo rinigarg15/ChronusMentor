@@ -1,0 +1,18 @@
+<div id="second_locale_attachment" class="text-center">
+  <%= image_tag(image_paths[1], class: "clearfix img-responsive inline-images col-xs-12 no-padding") if image_paths[1].present? %>
+  <% button_label = image_paths[1].present? ? "feature.translations.label.change_image".translate : "feature.translations.label.choose_image".translate %>
+  <div class="m-t-md inline-images clearfix">
+    <%= form_tag(update_images_translations_path, {remote: true, multipart: true}) do %>
+      <%= content_tag(:div, button_label, for: "#{attachment_type}", class:"control-label text-left") %>
+      <%= content_tag :div, file_field_tag("#{attachment_type}") %>
+      <%= hidden_field_tag "abstract_program_id", @level_obj.id%>
+      <%= hidden_field_tag "locale", @second_locale %>
+      <%= hidden_field_tag "category", @category %>
+      <%= hidden_field_tag "id", attachment_type %>
+      <% action_set(class: "pull-right m-t-sm") do %>
+        <%= button_tag("display_string.Upload".translate, { class: "btn btn-primary", id: "upload-image"}) %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+<%= javascript_tag %Q[Localization.initializeLogoBannerForm("##{attachment_type}", "#upload-image", "#cancel-upload");] %>

@@ -1,0 +1,46 @@
+<% if @settings_flash_error %>
+  jQuery("#flash_settings").html("<%= @settings_flash_error %>")
+    .show();
+<% else %>
+  <% if params[:profile_answers] || params[:user] %>
+    <% if params[:user] %>
+      <% section_id = "#settings_section" %>
+      <% collapse_id = "settings" %>
+      <% section_content = capture {render_settings_section} %>
+      jQuery("<%= section_id %>").replaceWith("<%= j(section_content) %>");
+    <% else %>
+      <% section_id = "#basic_information_section" %>
+      <% collapse_id = "basic_information" %>
+      <% program_questions_for_user = @current_program.profile_questions_for(@profile_user.role_names, {:default => false, :skype => @current_organization.skype_enabled?, user: current_user}) %>
+      <% section = @current_organization.sections.default_section.first %>
+      <% has_edu_exp = has_importable_question?(program_questions_for_user.select{|q| q.section_id == section.id}) %>
+
+      <% if @is_profile_completion || @error_case || has_edu_exp %>
+        <% @all_answers = @profile_member.profile_answers.includes([:profile_question, :location]).group_by(&:profile_question_id) %>
+        <% @grouped_role_questions = @current_program.role_questions_for(@profile_user.role_names, user: current_user).role_profile_questions.group_by(&:profile_question_id) %>
+        <% section_content = capture {render_basic_information(@profile_member, @profile_user, true, program_questions_for_user, grouped_role_questions: @grouped_role_questions)} %>
+        jQuery("<%= section_id %>").replaceWith("<%= j(section_content) %>");
+      <% end %>
+    <% end %>
+
+    <% unless @error_case %>
+      <% unless params[:user] %>
+        ChronusEffect.ToggleIbox("<%= collapse_id %>");
+      <% end %>
+      jQueryScrollTo("<%= section_id %>", true);
+
+      <% if @profile_user && @current_program.profile_completion_alert_enabled? %>
+        <% prof_comp_details = render(:partial => 'members/profile_completion', :locals => {:profile_user => @profile_user}) %>
+        jQuery('#profile_complete_sidebar').replaceWith("<%= j(prof_comp_details) %>");
+        jQueryHighlight('.profile_status_box');
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+<% # To handle member basic section update when basic section contains only name and email %>
+<% if @successfully_updated %>
+  <% profile_summary = render(:partial => "members/profile_summary", locals: {profile_user: @profile_user, profile_member: @profile_member, is_self_view: @is_self_view, is_admin_view: @is_admin_view, is_admin_editing: @is_admin_editing, is_edit: true, can_see_match_score: false, can_see_match_label: false, program_questions_for_user: program_questions_for_user, show_favorite_ignore_links: false}) %>
+  <% success_flash_message = "flash_message.program_flash.updated".translate %>
+  jQuery('#member_profile_summary').replaceWith("<%= j(profile_summary) %>");
+  ChronusValidator.ErrorManager.ShowResponseFlash("", "<%= j(success_flash_message) %>", true);
+<% end %>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en" <%= "id='ng-app' ng-app=#{@angularjs_page[:app]}".html_safe if @angularjs_page %>>
+<head>
+    <meta charset="utf-8">
+    <%= viewport_meta_tag %>
+    <% @page_title ||= strip_tags(@title) %>
+    <title><%= "#{program_context.name} #{@page_title ? ' | ' + @page_title : ''}" %></title>
+
+    <% favicon_href = @current_organization.present? && @current_organization.favicon_link.present? ? @current_organization.favicon_link : Brand::Defaults::FAVICON %>
+    <link class="favicon_chronus"  rel="SHORTCUT ICON" href="<%= favicon_href %>" />
+
+    <%= stylesheet_link_tag 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&lang=en' %>
+    <%= stylesheet_link_tag 'https://fonts.googleapis.com/css?family=Roboto:400,300,500,700' %>
+    <%= split_stylesheet_link_tag 'v3/application_v3', :split_count => 6 %>
+    <% cache(CacheConstants::Programs::THEME_STYLESHEET.call(program_context.id)) do %>
+      <% current_used_theme = (@current_program && @current_program.active_theme) || @current_organization.active_theme %>
+      <% if current_used_theme.css? %>
+        <%= stylesheet_link_tag current_used_theme.css.url + "?v=5" %>
+      <% end %>
+    <% end %>
+
+    <%= render partial: "layouts/translations/pre_js_translations" %>
+    <%= javascript_include_tag 'v3/application_v3' %>
+    <%= render partial: "common/js_airbrake" if is_mobile_app? %>
+    <%= render partial: "layouts/translations/js_translations" %>
+
+    <% if @showing_web_thumbnail %>
+      <%= javascript_include_tag('pagepix.js') %>
+    <% end %>
+
+    <% if @angularjs_page && @_angularjs_element_directives # for IE8 support of element directives %>
+      <!--[if lte IE 8]><%= content_tag(:script, @_angularjs_element_directives.map{|name| "document.createElement('#{name}');" }.join.html_safe) %><![endif]-->
+    <% end %>
+
+    <%= csrf_meta_tags %>
+    <%= raw(render_gtac) %>
+</head>
+  <% is_wob = @current_organization.active? && working_on_behalf? && @current_organization.has_feature?(FeatureName::WORK_ON_BEHALF) %>
+  <body role="main" class="full-height-layout md-skin gray-bg fixed-nav fixed-sidebar <%= fixed_layout? ? 'boxed-layout' : '' %> <%= is_wob ? 'working_on_behalf' : '' %>"  <%= "ng-controller=#{@angularjs_page[:controller]}" if @angularjs_page && @angularjs_page[:controller] %>>
+    <%= cucumber_helper_track_page_load_begin %>
+    <!-- Wrapper-->
+    <div id="non_logged_in" class='home_page_layout'>
+      <div id="wrapper" class="clearfix">
+        <div class="<%= hidden_on_web %>">
+          <%= render :partial => "organizations/tabs" %>
+        </div>
+        <div id="page-wrapper" class="gray-bg <%= "cui_overview_pages" if @no_wrapper_padding  %>">
+          <%= render :partial => "organizations/header" %>
+          <%# TODO - Responsive UI Updating the logo does not change in standby %>
+          <% cache(CacheConstants::Programs::BANNER.call(program_context.id, I18n.locale)) do %>
+            <%= render :partial => "organizations/banner", :locals => {:container_class => "p-l-xs p-r-xs row"} %>
+          <% end %>
+          <%= render :partial => "organizations/tabs_non_logged_in" %>
+
+          <div id="content_wrapper" class="clearfix">
+            <% if !new_user_authenticated_externally? || show_join_now? %>
+              <%= ibox nil, ibox_class: "row #{hidden_on_web} no-vertical-margins", content_class: "p-sm" do %>
+                <% unless new_user_authenticated_externally? %>
+                  <div class="<%= show_join_now? ? "col-xs-6" : "col-xs-12 text-center" %> no-padding">
+                    <%= link_to(login_path(mode: (@login_mode || SessionsController::LoginMode::STRICT)), class: "flat-border btn btn-primary btn-sm btn-outline btn-block no-margins #{@login_active ? "active" : ""}") do %>
+                      <%= append_text_to_icon("fa fa-sign-in", "display_string.Login".translate) %>
+                    <% end %>
+                  </div>
+                <% end %>
+                <% if show_join_now? %>
+                  <div class="<%= !new_user_authenticated_externally? ? "col-xs-6" : "col-xs-12 text-center" %> no-padding">
+                    <%= link_to(join_now_join_url, class: "flat-border btn btn-primary btn-sm btn-outline btn-block no-margins #{@only_login ? "active" : ""}") do %>
+                      <%= append_text_to_icon("fa fa-user-plus", "app_layout.label.join".translate) %>
+                    <% end %>
+                  </div>
+                <% end %>
+              <% end %>
+            <% end %>
+
+            <div class="row row-offcanvas row-offcanvas-right">
+              <div class="wrapper wrapper-content clearfix m-b-xl <%= "no-padding" if @no_wrapper_padding %>">
+                <%= render partial: "common/loading_results", locals: { message: @loading_results_message } %>
+                <% if @sidebar_footer_content.present? %>
+                  <div id="cjs_sidebar_footer" class="cui-affixed-footer white-bg p-sm z-index-10 b-t <%= hidden_on_web %> hide">
+                    <%= @sidebar_footer_content.html_safe %>
+                  </div>
+                <% end %>
+                <%= show_noscript_warning %>
+                <div class="animated fadeInRight">
+                  <!-- Main Content  -->
+                  <div id="mainbar" class="no-margins clearfix <%= @show_side_bar ? 'col-md-8' : 'col-md-12' %>">
+                    <%= render :partial => "common/main_content" %>
+                  </div>
+
+                  <!-- Side Pane Content  -->
+                  <% if @show_side_bar %>
+                    <div id="sidebarRight" class=" clearfix col-md-4 gray-bg sidebar-offcanvas">
+                      <div class="gray-bg p-b-xs">
+                        <div id="SidebarRightContainer">
+                          <%= yield :sidebar %>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+                <% if @show_learn_more %>
+                  <div class="col-xs-12 no-padding text-center" id="program_learn_more">
+                    <p class="m-t-sm text-center">
+                      <%= "app_layout.label.learn_more_about_program_html".translate(learn_more: content_tag(:b, link_to("app_layout.label.learn_more".translate, about_path, target: "_blank")), program: program_context.name) %>
+                    </p>
+                  </div>
+                <% end %>
+              </div>
+              <div class="footer <%= hidden_on_mobile %>">
+                <div class = "m-t-xxs text-center white_label_footer">
+                  <% if @current_organization.present? && !@current_organization.white_label %>
+                    <span>
+                      <%= link_to "footer.powered_by".translate(brand: "display_string.default_brand_label_v1".translate), Brand::Defaults::URL, :target => "_blank" %>
+                    </span>
+                    <%= circle_separator %>
+                  <% end %>
+                  <span>
+                    <%= link_to 'footer.terms_and_conditions'.translate.html_safe, terms_path, :target => "_blank" %>
+                  </span>
+                  <%= circle_separator %>
+                  <span>
+                    <%= link_to 'footer.privacy_policy'.translate, privacy_policy_path(:p => true), :target => "_blank" %>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <%= @current_organization.footer_code.html_safe if @current_organization.footer_code %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%= render :partial => "common/modal" %>
+    <%= yield :global_menus %>
+    <%= cucumber_helper_track_page_load_end %>
+    <%= download_ck_attachment_if_exist %>
+    <script type="text/javascript">
+      Navigation.toggleHeaderIcon();
+      jQuery(window).load(function() {
+        // Animate loader off screen
+        jQuery('#page_loading_results').addClass('hide');
+      });
+      <% if is_mobile_app? %>
+        MobileAppTracking.gaTrackViewedNonLoggedInPage("", "");
+      <% end %>
+    </script>
+    <%= render partial: 'common/cordova', locals: {header_id: '#chronus_header'} if is_mobile_app? %>
+</body>
+</html>

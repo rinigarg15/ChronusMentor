@@ -1,0 +1,17 @@
+<%#
+Locals:
+popup_title - popup name
+%>
+
+<div class='cui-qtip-contentwrapper popup'>
+  <div class="popup_header">
+    <div class="close_image_link">
+      <%= link_to_function "x", "closeQtip();", class: "close" %>
+    </div>
+    <h3><%= popup_title %></h3>
+  </div>
+  <div class="popup_content scroll-6 clearfix">
+    <%= capture(&binding) %>
+  </div>
+  <%= javascript_tag %Q[initialize.autoResizeTextAreas();] %>
+</div>

@@ -1,0 +1,15 @@
+<%= simple_form_for :verify_org, :remote => true, :html => { :class => "cjs_verify_org"} do |f| %>
+  <%= content_tag(:label, "verify_organization_page.label.select_organization".translate, :class => "url required control-label", :for => "verify_org_organization_name") %>
+  <%= construct_input_group([ { type: "addon", content: "http(s)://"} ], [], :input_group_class => "m-b-sm") do %>
+    <%= f.input :organization_name, :label => false, :as => :url, :input_html => { :class => "form-control required-field cjs_verify_org_name"}, :placeholder => "verify_organization_page.content.example_program".translate(:ex_program => "myprogram.chronus.com/p/p1") %>
+  <% end %>
+  <%= f.submit "verify_organization_page.label.get_started".translate, :class => "theme-btn-bg theme-btn-font-color btn btn-primary btn-block", :disable_with => "display_string.Please_Wait".translate %>
+  <%= content_tag(:div, link_to(append_text_to_icon("fa fa-question-circle", "verify_organization_page.content.find_your_program_url".translate), mobile_v2_fakedoor_path, :class => "text-navy cjs_fakedoor_link"), :class => "m-t-md") %>
+<% end %>
+
+<%= javascript_tag do %>
+  <% experiment = chronus_ab_test_get_experiment(ProgramAbTest::Experiment::MOBILE_APP_LOGIN_WORKFLOW, true, true) %>
+  <% eventLabel = Experiments::MobileAppLoginWorkflow::Alternatives::CONTROL %>
+  <% eventLabelId = Experiments::MobileAppLoginWorkflow::Alternatives::GA_EVENT_LABEL_ID_MAPPING[Experiments::MobileAppLoginWorkflow::Alternatives::CONTROL] %>
+  FeatureMobile.verifyOrganization('<%= MobileV2Constants::ORGANIZATION_SETUP_COOKIE.to_s %>', { emptyErrorMessage: '<%= "verify_organization_page.content.empty_org_message".translate %>', invalidErrorMessage: '<%= "verify_organization_page.content.invalid_org_message".translate %>', validatePath: '<%= APP_CONFIG[:cors_resource_path] %>', mobileLoginPath: '<%= MobileV2Constants::LOGIN_PATH_MOBILE %>', port: '<%= request.optional_port %>', cookieExpiry: '<%= MobileV2Constants::COOKIE_EXPIRY %>', verifyOrgTimeOut: '<%= MobileV2Constants::VERIFY_ORG_TIMEOUT %>', eventLabel: '<%= eventLabel %>', eventLabelId: '<%= eventLabelId %>', uniq_token: '<%= @uniq_token %>'});
+<% end %>

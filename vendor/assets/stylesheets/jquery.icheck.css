@@ -1,0 +1,39 @@
+.icheckbox_flat-blue {
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 15px;
+    height: 15px;
+    background: url(checkbox-sprite.png) no-repeat;
+    border: none;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.icheckbox_flat-blue {
+    background-position: -100px -8px;
+}
+
+    .icheckbox_flat-blue.checked {
+        background-position: -400px -8px;
+    }
+
+    .icheckbox_flat-blue.disabled {
+        background-position: 0px -8px;
+        cursor: default;
+    }
+    .icheckbox_flat-blue.checked.disabled {
+        background-position: -600px -8px;
+    }
+
+/* Retina support */
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+       only screen and (-moz-min-device-pixel-ratio: 1.5),
+       only screen and (-o-min-device-pixel-ratio: 3/2),
+       only screen and (min-device-pixel-ratio: 1.5) {
+    .icheckbox_flat-blue {
+        background-image: url(checkbox-sprite@2x.png);
+        -webkit-background-size: 724px 30px;
+        background-size: 724px 30px;
+    }
+}

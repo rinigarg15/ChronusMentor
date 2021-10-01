@@ -1,0 +1,39 @@
+<% if mentor_student_hash.present? %>
+  <div class="cui_bulk_match_top_banner white-bg clearfix">
+    <%= render :partial => "bulk_matches/bulk_match_actions", locals: {orientation_type: orientation_type} %>
+  </div>
+  <div class="table-responsive">
+    <table class="table m-t-sm" id="cjs_bulk_match_result" ng-mouseover="" scroll-position>
+      <thead>
+        <tr class="cui_table_sort b-t">
+          <th>
+            <input type="checkbox" id="master_checkbox" ng-model="master" ng-click="updateMentorToMenteeMasterClass(master);" aria-label="<%= 'feature.bulk_match.label.select_all'.translate(Mentor: _Mentor, Mentee: _Mentee) %>"/>
+          </th>
+          
+          <%= render :partial => "bulk_matches/mentor_name_search", locals: { orientation_type: orientation_type} %>
+          <th class="col-xs-2 pointer text-center" ng-click="getSortOptions('pickable_slots', <%= orientation_type %>)" ng-class="getTableHeaderClass('pickable_slots')">
+            <span><%= "feature.bulk_match.label.available_slots_v1".translate(mentoring: _Mentoring) %></span>
+            <span class="text-muted small p-r-m" ng-class="getSortClass('pickable_slots');"></span>
+          </th>
+          <%= render :partial => "bulk_matches/mentee_name_search", locals: { orientation_type: orientation_type} %>
+
+          <th class="col-xs-1 cjs-td-match pointer text-center" ng-click="getSortOptions('best_mentor_score', <%= orientation_type %>)" ng-class="getTableHeaderClass('best_mentor_score')">
+            <span><%= 'display_string.Match'.translate %></span>
+            <span class="text-muted small p-r-m" ng-class="getSortClass('best_mentor_score');"></span>
+          </th>
+
+          <th class="col-xs-2 cui-td-group-status cjs-td-status pointer text-right" ng-click="getSortOptions('group_status', <%= orientation_type %>);" ng-class="getTableHeaderClass('group_status');">
+            <span class=""><%= "feature.bulk_match.label.status".translate %></span>
+            <span class="text-muted small p-r-m" ng-class="getSortClass('group_status');"></span>
+          </th>
+
+        </tr>
+      </thead>
+      <%= render :partial => "bulk_matches/bulk_match_result", locals: {request_notes: request_notes, orientation_type: orientation_type} %>
+    </table>
+  </div>
+<% else %>
+  <div class="text-muted text-center">
+    <%= "feature.bulk_match.content.no_users_view_error".translate(:mentor => _Mentor, :mentee => _Mentee) %>
+  </div>
+<% end %>

@@ -1,0 +1,3 @@
+<div id="profile_questions_for_section_<%= section.id %>" class="cjs-profile-questions-for-section hide">
+</div>
+<%= javascript_tag %Q[jQuerySortable.makeSortable('profile_questions_for_section_#{section.id}', '#{section.id}', '#{profile_question_url(section)}', 'cjs-profile-question-container', '.disabled_no_drop')] %>

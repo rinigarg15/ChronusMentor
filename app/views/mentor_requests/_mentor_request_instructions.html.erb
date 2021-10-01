@@ -1,0 +1,25 @@
+<% instruction_content = @current_program.mentor_request_instruction.try(:content) %>
+<% if instruction_content.present? %>
+  <%= content_tag(:div, class: "ckeditor_generated") do %>
+    <%= instruction_content.to_s.html_safe %>
+  <% end %>
+<% elsif @current_program.matching_by_mentee_and_admin? %>
+  <ol>
+    <% if @current_program.preferred_mentoring_for_mentee_to_admin? %>
+      <% if @current_program.min_preferred_mentors > 0 %>
+        <li>
+          <%= 'feature.preferred_mentoring.content.instructions.atleast_one_mentor_html'.translate(preferred_mentor: pluralize(@current_program.min_preferred_mentors, 'feature.preferred_mentoring.header.preferred_mentors'.translate(mentors: _mentors))) %>
+          <%= 'feature.preferred_mentoring.content.instructions.browse_mentors_html'.translate(browse_mentors: link_to("#{'display_string.browse'.translate} #{_mentors}".downcase, users_path(src: EngagementIndex::Src::BrowseMentors::NEW_MENTOR_REQUEST))) %>
+        </li>
+      <% end %>
+      <li>
+        <%= 'feature.preferred_mentoring.content.instructions.order_preferences_before_requesting_assignment_v1'.translate(mentor: _mentor, admin: _admin) %>
+      </li>
+    <% end %>
+    <li>
+      <%= 'feature.preferred_mentoring.content.instructions.specify_help_needed_to_admin_v1'.translate(admin: _admin, a_mentor: _a_mentor) %>
+    </li>
+  </ol>
+<% elsif @current_program.matching_by_mentee_alone? %>
+  <%= 'feature.preferred_mentoring.content.instructions.specify_help_needed_to_mentor_v1'.translate(admins: _admins, mentor: _mentor, program: _program) %>
+<% end %>

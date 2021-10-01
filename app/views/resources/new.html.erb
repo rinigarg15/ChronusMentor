@@ -1,0 +1,6 @@
+<% @back_link = {:label => _Resources, :link => resources_path()} %>
+<% @title = "feature.resources.header.new_resource".translate(resource: _Resource) %>
+
+<div id="new_resource">
+  <%= render :partial => "resources/form" %>
+</div>

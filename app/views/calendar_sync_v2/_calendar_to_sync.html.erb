@@ -1,0 +1,8 @@
+<div class="row b-b cursor-pointer cjs-external-calendar-redirect-link" data-url="<%= o_auth_credentials_redirect_url(name: provider.name, callback_params: local_assigns[:callback_params]) %>">
+  <div class="col-xs-12 col-sm-6 p-b-sm p-t-sm p-l-0 p-r-0 text-xs-center text-sm-left">
+    <%= image_tag(provider::Provider::IMAGE_URL, height: "30px") %>
+  </div>
+  <div class="col-sm-6 p-b-sm p-t-sm p-l-0 p-r-0 hidden-xs">
+    <%= button_tag("common_text.Connect".translate, class: "btn btn-primary pull-right", type: "button") %>
+  </div>
+</div>

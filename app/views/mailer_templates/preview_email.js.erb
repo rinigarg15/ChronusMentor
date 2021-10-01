@@ -1,0 +1,5 @@
+<% if @mailer_template.valid? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("send_test_email_flash", '<%= "feature.email.content.email_sent_successfully".translate %>', true);
+<% else %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("send_test_email_flash", "<%= @mailer_template.errors.full_messages.to_sentence %>");
+<% end %>

@@ -1,0 +1,263 @@
+---
+admin_view_columns:
+- column_key
+admin_view_user_caches:
+- user_ids
+admin_views:
+- filter_params
+- description
+announcement_translations:
+- body
+article_contents:
+- body
+- embed_code
+article_list_items:
+- content
+- description
+auth_config_setting_translations:
+- default_section_description
+- custom_section_description
+auth_config_translations:
+- password_message
+- title
+auth_configs:
+- config
+- regex_string
+calendar_sync_error_cases:
+- details
+calendar_sync_rsvp_logs:
+- rsvp_details
+chr_rake_tasks:
+- name
+chronus_docs_app_documents:
+- description
+- title
+chronus_versions:
+- object
+- object_changes
+answer_choice_versions:
+- object
+- object_changes
+cm_campaign_emails:
+- subject
+- source
+cm_campaign_messages:
+- type
+cm_campaigns:
+- trigger_params
+- type
+cm_email_event_logs:
+- params
+- message_type
+coaching_goal_activities:
+- message
+coaching_goals:
+- description
+comments:
+- body
+common_answers:
+- answer_text
+common_question_translations:
+- question_text
+- help_text
+- question_info
+common_questions:
+- positive_outcome_options
+- positive_outcome_options_management_report
+confidentiality_audit_logs:
+- reason
+connection_membership_state_changes:
+- info
+connection_private_notes:
+- text
+contact_admin_setting_translations:
+- content
+contact_admin_settings:
+- contact_url
+delayed_jobs:
+- handler
+- last_error
+feed_exporter_configurations:
+- configuration_options
+feed_import_configurations:
+- configuration_options
+- source_options
+flags:
+- reason
+forums:
+- description
+group_checkins:
+- comment
+group_view_columns:
+- column_key
+groups:
+- termination_reason
+- notes
+instruction_translations:
+- content
+mailer_template_translations:
+- subject
+- source
+mailer_widget_translations:
+- source
+match_configs:
+- matching_details_for_display
+- matching_details_for_matching
+- prefix
+meeting_proposed_slots:
+- location
+meetings:
+- description
+- location
+- schedule
+members:
+- availability_not_set_message
+- linkedin_access_token
+membership_requests:
+- response_text
+mentor_offers:
+- message
+- response
+mentor_requests:
+- message
+- response_text
+- acceptance_message
+mentoring_model_activities:
+- message
+mentoring_model_facilitation_template_translations:
+- message
+mentoring_model_goal_template_translations:
+- description
+mentoring_model_goal_translations:
+- description
+mentoring_model_milestone_template_translations:
+- description
+mentoring_model_milestone_translations:
+- description
+mentoring_model_task_comments:
+- content
+mentoring_model_task_template_translations:
+- description
+mentoring_model_task_translations:
+- description
+mentoring_model_translations:
+- description
+- forum_help_text
+mentoring_slots:
+- location
+mentoring_tips:
+- message
+messages:
+- content
+mobile_devices:
+- device_token
+- mobile_auth_token
+o_auth_credentials:
+- access_token
+- refresh_token
+one_time_flags:
+- message_tag
+page_translations:
+- content
+pending_notifications:
+- message
+posts:
+- body
+profile_answers:
+- answer_text
+profile_question_translations:
+- question_text
+- help_text
+- question_info
+- conditional_match_text
+program_event_translations:
+- description
+program_invitations:
+- message
+program_translations:
+- description
+- allow_mentoring_requests_message
+- zero_match_score_message
+- agreement
+- privacy_policy
+- browser_warning
+programs:
+- analytics_script
+- footer_code
+- favicon_link
+publications:
+- authors
+- description
+push_notifications:
+- notification_params
+qa_answers:
+- content
+qa_questions:
+- summary
+- description
+question_choice_translations:
+- text
+received_mails:
+- stripped_text
+- data
+recent_activities:
+- message
+recommendation_preferences:
+- note
+report_alerts:
+- description
+- filter_params
+report_metrics:
+- description
+report_sections:
+- description
+report_view_columns:
+- column_key
+resource_translations:
+- content
+role_translations:
+- description
+- eligibility_message
+section_translations:
+- description
+security_settings:
+- email_domain
+- allowed_ips
+sessions:
+- data
+themes:
+- vars_list
+three_sixty_competency_translations:
+- description
+three_sixty_question_translations:
+- title
+three_sixty_survey_answers:
+- answer_text
+three_sixty_surveys:
+- description
+topics:
+- body
+translation_imports:
+- info
+user_csv_imports:
+- info
+user_favorites:
+- note
+user_state_changes:
+- info
+- connection_membership_info
+users:
+- admin_notes
+- state_change_reason
+vulnerable_content_logs:
+- original_content
+- sanitized_content
+explicit_user_preferences:
+- preference_string
+progress_statuses:
+- details
+user_search_activities:
+- profile_question_text
+- search_text
+match_config_discrepancy_caches:
+- top_discrepancy

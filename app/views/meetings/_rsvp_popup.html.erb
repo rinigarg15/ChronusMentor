@@ -1,0 +1,11 @@
+<% meeting_selector = get_meeting_html_id({meeting: meeting, current_occurrence_time: current_occurrence_time}) %>
+<% modal_container "feature.meetings.header.rsvp_change_popup".translate, {modal_id: "modal_" + meeting_selector
+} do %>
+    <p>
+      <%= "feature.meetings.content.rsvp_change_meeting_text".translate %>
+    </p>
+    <% action_set class: "text-right" do %>
+      <%= get_decline_meeting_link(meeting, meeting_selector) %>
+      <%= get_reschedule_meeting_link(meeting, wob_member, meeting_selector) %>
+    <% end %>
+<% end %>

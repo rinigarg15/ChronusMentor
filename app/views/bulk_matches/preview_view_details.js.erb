@@ -1,0 +1,1 @@
+jQuery('#bulk_match .cjs_<%= @role %>_view_content').replaceWith("<%= j(render(:partial => 'common/preview_view_details', :locals => {:admin_view => @admin_view, :admin_view_filters => @admin_view_filters, :role => @role, admin_view_users: @admin_view_users})) %>");

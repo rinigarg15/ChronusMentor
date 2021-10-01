@@ -1,0 +1,61 @@
+<% allowed_individual_slot_duration = @current_program.get_calendar_slot_time %>
+<% start_time = Meeting.get_valid_start_times(allowed_individual_slot_duration) %>
+<% end_time = Meeting.get_valid_end_times(allowed_individual_slot_duration) %>
+<% all_time = get_all_time_for_end_time((start_time + end_time)) %>
+<% unlimited_slot = @current_program.calendar_setting.slot_time_in_minutes.zero? %>
+
+<%= response_flash "meeting_create_flash" %>
+
+<% if member.availability_not_set_message.present? && user.is_opted_for_general_availability? %>
+  <div class="mentor_availability_message_container m-b-md">
+    <div class="control-label false-label">
+      <%= "feature.meetings.content.mentor_availability".translate(:name => member.name(name_only: true)) %>
+    </div>
+    <blockquote class="h5 text-muted font-noraml">
+      <%= chronus_auto_link(member.availability_not_set_message) %>
+    </blockquote>
+  </div>
+<% end %>
+
+<div class="propose_slots_form_container m-b-md">
+  <div class="control-label false-label m-b-xs">
+    <%= "feature.meetings.content.propose_times_for_meeting".translate(time_zone: wob_member.short_time_zone) %>
+  </div>
+  <div class="text-muted m-b-md small">
+    <%= "feature.meetings.content.propose_times_for_meeting_instruction_v1".translate(mentor_name: member.name(name_only: true), mentor: _mentor) %>
+  </div>
+  <%= render :partial => "meetings/propose_meeting_slot_form_content", :locals => {:member => member, :slot_index => 0} %>
+
+  <div class="clearfix cjs_proposed_slot_prepend_element">
+    <% action_set(class: "text-center") do %>
+      <%= link_to(get_icon_content("fa fa-plus-circle m-r-xs") + "feature.meetings.content.propose_another_timeslot".translate, "javascript:void(0)", {:class => "btn btn-white btn-sm m-t-xs cjs_propose_another_slot_btn"}) %>
+    <% end %>
+  </div>
+</div>
+
+<div class="mentee_availability_message_container m-b-lg">
+  <div class="control-label false-label m-b-xs">
+    <%= "feature.meetings.content.your_availability".translate %>
+  </div>
+  <span class="text-muted small">
+    <%= "feature.meetings.content.your_availability_instruction".translate(mentor_name: member.name(name_only: true), meeting: _meeting) %>
+  </span>
+  <%= label_tag("mentee_general_availability_message", "feature.meetings.content.your_availability".translate, for: "mentee_general_availability_message", class: "sr-only") %>
+  <%= text_area_tag :mentee_general_availability_message, wob_member.availability_not_set_message, class: "form-control cjs_mentee_availability_message m-t-sm textarea-auto-height font-default noshadow", placeholder: "feature.meetings.content.mentee_availability_placeholder_msg".translate, rows: "1" %>
+</div>
+
+<%= hidden_field_tag "meeting[attendee_ids][]", member.id, class: "cjs_meeting_attendee_ids", id: nil %>
+
+<% action_set(class: "pull-left") do %>
+  <%= link_to "display_string.Back".translate, "javascript:void(0)", class: 'btn btn-white cjs_back_to_select_times' %>
+<% end %>
+
+<% action_set(class: "pull-right") do %>
+  <%= link_to "feature.user.label.request_meeting_v1".translate(Meeting: _Meeting), "javascript:void(0)", class: 'btn btn-primary cjs_request_meeting_with_proposed_slots', data: {url: meetings_path, slotvalidationurl: validate_propose_slot_meetings_path(mentor_id: member.id)} %>
+<% end %>
+
+<%= javascript_tag do  %>
+  jQuery(document).ready(function(){
+    MeetingRequest.initializeProposeMeetingSlotsJs(<%= slots_present %>, "<%= j(all_time.join(',')) %>", "<%= (allowed_individual_slot_duration/Meeting::SLOT_TIME_IN_MINUTES) %>", <%= unlimited_slot %>, "<%= "display_string.Please_Wait".translate %>", "<%= "feature.user.label.request_meeting_v1".translate(Meeting: _Meeting) %>");
+  });
+<% end %>

@@ -1,0 +1,25 @@
+<div id="sections_list">
+  <%= render partial: "membership_requests/section_question", collection: @sections, locals: { form: form, membership_request: membership_request, membership_request_member_id: @member.try(:id), new_request: new_request, answer_map: answer_map } %>
+
+  <% if new_request && !new_user_authenticated_externally? %>
+    <% unless wob_member.present? || (@member.present? && @member.can_signin?) %>
+      <fieldset class="no-border attach-bottom">
+        <%= control_group do %>
+          <%= content_tag(:div, set_required_field_label("display_string.Password".translate), class: "false-label control-label col-sm-2") %>
+          <%= controls(class: "col-sm-10 no-padding") do %>
+            <div class="col-sm-6">
+              <%= label_tag("password", Member.human_attribute_name(:password), for: "membership_request_password", class: "sr-only") %>
+              <%= password_field_tag :password, nil, autocomplete: :off, placeholder: Member.human_attribute_name(:password), id: "membership_request_password", class: "form-control" %>
+            </div>
+            <%= content_tag(:div, "", class: "m-b #{hidden_on_web}") %>
+            <div class="col-sm-6">
+              <%= label_tag("password_confirmation", "feature.profile.label.retype_password".translate, for: "membership_request_password_confirm", class: "sr-only") %>
+              <%= password_field_tag :password_confirmation, nil, autocomplete: :off, placeholder: "feature.profile.label.retype_password".translate, id: "membership_request_password_confirm", class: "form-control" %>
+            </div>
+            <%= content_tag(:div, password_instructions, class: "p-l-sm help-block small") %>
+          <% end %>
+        <% end %>
+      </fieldset>
+    <% end %>
+  <% end %>
+</div>

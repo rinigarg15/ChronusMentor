@@ -1,0 +1,21 @@
+<div class="cjs-program_info-boxes-container m-b-md">
+
+  <h3 class="font-normal">
+    <%= _Programs %> (<%= programs.size %>)
+    <%= content_tag(:span, get_icon_content('fa fa-info-circle text-info m-r-0'), class: "current_status_total_programs_heading_tooltip") + tooltip("current_status_total_programs_heading_tooltip", "feature.org_home_page.roll_up.total_programs_header_tooptip".translate(programs: _programs), false, is_identifier_class: true) %>
+  </h3>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <% programs.in_groups_of(3, false).each do |row_programs| %>
+        <div class="row">
+          <% row_programs.each do |program| %>
+            <%= render partial: 'organizations/home/program_info_box', locals: {program: program} %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag %Q[jQuery(function() { OrganizationHomePageDashboard.initialize(); });] %>

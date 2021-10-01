@@ -1,0 +1,12 @@
+<div class="cjs-mm-task-list-container elements-list cjs-sortable-list b-t" id="cjs_milestone_task_container_<%= milestone.id %>">
+  <% milestone_items = mentoring_model_tasks.nil? ? [] : mentoring_model_tasks[milestone.id] %>
+  <%= render partial: "mentoring_model/tasks/task", collection: milestone_items, locals: {group: @group} if milestone_items.present? %>
+</div>
+<% if @page_controls_allowed && !home_page_view %>
+  <div id="cjs_milestone_add_new_form_<%= milestone.id.to_s %>" class="clearfix list-group-item p-t-sm p-b-sm">
+    <%= render partial: "mentoring_model/tasks/add_action_item", locals: {tasks: milestone_items, group: @group, task_options: {milestone_id: milestone.id}} %>
+  </div>  
+<% elsif milestone_items.empty? %>
+  <%= no_mentoring_model_entities("feature.mentoring_model.description.no_tasks".translate) %>
+<% end %>
+ 

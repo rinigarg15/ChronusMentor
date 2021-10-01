@@ -1,0 +1,14 @@
+<% @title = "feature.profile_customization.header.customize_membership_form_fields".translate %>
+<% @page_action = {label: "feature.profile_customization.header.preview_membership_form".translate, url: preview_profile_questions_path(preview_type: ProfileQuestionsController::PreviewType::MEMBERSHIP_FORM), class: "btn btn-primary btn-large"} if is_membership_form_enabled?(program_context) %>
+<% @page_action2 = get_page_action_for_join_instruction %>
+
+<% unless @membership_profile_questions.empty? %>
+  <% @title_description = "feature.profile_customization.content.membership_customize_description_html".translate(
+      name_and_email: content_tag(:strong, "feature.profile_customization.content.name_and_email".translate) ) %>
+<% end %>
+
+<div id="membership_sections_list">
+  <% @sections.each do |section| %>
+    <%= get_section_membership_questions(section, @membership_profile_questions) %>
+  <% end %>
+</div>

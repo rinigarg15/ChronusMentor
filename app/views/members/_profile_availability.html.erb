@@ -1,0 +1,55 @@
+<div>
+  <% if @is_self_view %>
+    <div id="meetings">
+      <%= render :partial => "/meetings/ics_calendar_options_header" %>
+      <%= render :partial => "/meetings/meeting_listing", locals: {from_meeting_index: false} %>
+    </div>
+  <% end %>
+
+  <% scope = program_view? ? @current_program : @current_organization %>
+  <% if scope.calendar_enabled? && @profile_user.ask_to_set_availability? %>
+    <% title = @is_self_view ? "feature.calendar.action.set_availability".translate : nil %>
+    <%= ibox title, ibox_id: "cjs_calendar_container", show_fullscreen_icon: true do %>
+      <div class="m-b-lg p-b cjs_hide_in_fullscreen">
+        <% if @is_self_view %>
+          <% add_time_slot_link_function = %Q[jQueryShowQtip('#inner_content', 450, '#{new_member_mentoring_slot_path(wob_member)}', '')] %>
+          <div class = "<%= hidden_on_mobile %>">
+            <%= "feature.calendar.content.mark_availability_helptext_v1".translate(:mentoring_connection => _mentoring_connection) %>
+            <ol>
+              <li><%= "feature.calendar.content.select_timeslot_calendar".translate %></li>
+              <li> <%= "feature.calendar.action.click_to_add_timeslot_html".translate(click_here: link_to_function("display_string.Click_here".translate, add_time_slot_link_function)) %></li>
+            </ol>
+          </div>
+          <div class = "<%= hidden_on_web %>">
+            <%= link_to_function("feature.calendar.action.new_timeslot".translate, add_time_slot_link_function, :class => "btn btn-primary btn-block") %>
+          </div>
+        <% else %>
+          <p><%= "feature.calendar.content.meeting_schedule_help_text_v2_html".translate(count: @current_program.get_allowed_advance_slot_booking_time, :meeting => _a_meeting, n_hours: "<b>#{'common_text.hour'.translate(count: @current_program.get_allowed_advance_slot_booking_time)}</b>".html_safe) %></p>
+        <% end %>
+        <div class="help-block m-t-xs">
+          <% append_time_zone_help_text %>
+        </div>
+        <div class="m-t-sm text-right">
+          <i class='fa fa-lightbulb-o m-r-xxs media-middle'></i>
+          <span class="text-muted m-r-xs font-bold small"><%= "feature.calendar.content.tip".translate %></span>
+          <span class="label inline m-r-xxs label-yellow"><%= "feature.calendar.content.busy_slots".translate %></span>
+          <span class="label inline m-r-xxs label-navy"><%= "feature.calendar.content.availability_slots".translate %></span>
+          <span class="label inline m-r-xxs label-blue"><%= "feature.calendar.content.scheduled_meeting_slots".translate(:Meeting => _Meeting) %></span>
+          <span class="label inline m-r-xxs label-dark-gray"><%= "feature.calendar.content.expired_slots".translate %></span>
+        </div>
+      </div>
+
+      <div id="calendar" class="profile_page_calendar" eventsUrl=<%= member_mentoring_slots_url(@profile_member) %> new_member_mentoring_slot_url=<%= new_member_mentoring_slot_url(@profile_member) %> timeZoneOffset=<%= Time.zone.utc_offset %>>
+      </div>
+    <% end %>
+    <%= javascript_tag("setupCalendar(#{@is_self_view}, #{@profile_member.id}, #{@can_current_user_create_meeting});") %>
+  <% end %>
+</div>
+
+<% if %w(upcoming ra).include?(@source) %>
+  <%= javascript_tag %Q[jQueryScrollTo('#meeting_#{@meeting_id}_#{@current_occurrence_time.to_i}', true)] %>
+<% elsif @source == "quick_links" %>
+  <%= javascript_tag %Q[jQueryScrollTo('#calendar', false)] %>
+<% end %>
+
+<%= javascript_tag "MentoringSessions.loadFeedbackPopup('#{@hashed_feedback_selector}')" if @load_feedback_popup %>

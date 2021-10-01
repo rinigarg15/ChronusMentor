@@ -1,0 +1,14 @@
+#right-sidebar {
+  right: -10000px;
+  width: 100% !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.media-body {
+  font-size: inherit;
+}
+
+.momentum-scroll {
+  -webkit-overflow-scrolling: touch;
+}

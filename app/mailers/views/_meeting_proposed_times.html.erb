@@ -1,0 +1,60 @@
+<% program = meeting_request.program %>
+<% meeting = meeting_request.get_meeting %>
+<% objects = meeting.calendar_time_available ? [meeting] : meeting_request.meeting_proposed_slots.to_a %>
+
+<% if objects.present? %>
+  <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%' class='wrapper'>
+    <tbody>
+      <tr><td style='color: #787878; line-height: 20px; text-decoration: underline;'><%= 'feature.email.tags.meeting_request_tags.proposed_times.title'.translate %><%= " (#{TZInfo::Timezone.get(member.get_valid_time_zone).current_period.abbreviation})" if member.time_zone %></td></tr>
+      <tr><td style='color: #787878; font-size: 0.8em; line-height: 16px; padding-bottom: 5px;'><%= 'feature.email.tags.meeting_request_tags.proposed_times.description_v1'.translate(meeting: @_meeting_string) %></td></tr>
+      <tr><td>
+        <table cellspacing='0' cellpadding='0' border='0' width='100%' class='wrapper' style="border-collapse: separate !important; line-height: 18px !important;">
+          <tbody>
+            <% objects.each do |object| %>
+              <tr>
+                <td style="padding: 10px 0 10px 0; line-height: 18px; vertical-align: top;">
+                  <% object_start_time = object.is_a?(Meeting) ? object.occurrences.first.start_time : object.start_time %>
+                  <%= DateTime.localize(object_start_time.in_time_zone(member.time_zone.presence || TimezoneConstants::DEFAULT_TIMEZONE), format: :full_display_with_zone_without_month) %>
+                  (<%= "display_string.minutes".translate(minutes: ((object.end_time - object.start_time)/60).to_i) %>)
+                  <% if object.location.present? %>
+                    <br />
+                    <span style="color: #787878; line-height: 18px;">
+                      <%= image_tag PublicIcons::MAP_MARKER, size: "10x10" %>
+                      <%= object.location %>
+                    </span>
+                  <% end %>
+                  <% if (url = object.get_ics_file_url(user).try(:html_safe)) %>
+                    <br />
+                    <%= link_to("#{'feature.email.tags.meeting_request_tags.download_ics'.translate}", url, style: "line-height: 18px; text-decoration: none;") %>
+                  <% end %>
+                </td>
+                <td style='padding: 10px 0 10px 0; text-align: right; vertical-align: top;' align='right'>
+                  <table cellspacing="0" cellpadding="0" border="0" style="border-collapse: separate !important; display: inline-block; border-color: transparent;"><tbody><tr><td style="color: #129e12; padding: 7px; border: 1px solid #129e12; white-space: nowrap; background-color: #FFFFFF; vertical-align: middle; line-height: 16px;">
+                    <% url_options = {subdomain: program.organization.subdomain, root: program.root, program: program.id, status: AbstractRequest::Status::ACCEPTED, src: EngagementIndex::Src::AccessFlashMeetingArea::EMAIL, additional_info: EngagementIndex::Src::AcceptMeetingRequest::ACCEPT, secret: member.calendar_api_key, move_to_containing_page: true} %>
+                    <% url_options.merge!({slot_id: object.id}) if object.is_a?(MeetingProposedSlot) %>
+                    <%= link_to 'feature.email.tags.meeting_request_tags.accept_this_time'.translate, update_status_meeting_request_url(meeting_request, url_options), style: "color: #129e12; white-space: nowrap; background-color: #FFFFFF; text-decoration: none;" %>
+                  </td></tr></tbody></table>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </td></tr>
+    </tbody>
+  </table>
+<% end %>
+<hr />
+<table cellspacing='0' cellpadding='0' border='0' width='100%' class='wrapper'>
+  <tbody>
+    <tr>
+      <td style='text-align: left; padding-top: 5px;'>
+        <%= link_to 'feature.email.tags.meeting_request_tags.decline_request'.translate, meeting_requests_url(subdomain: program.organization.subdomain, root: program.root, email_meeting_request_id: meeting_request.id, email_action: MeetingRequestsController::EmailAction::DECLINE, src: EngagementIndex::Src::AccessFlashMeetingArea::EMAIL), style: "color: #ef5632; text-decoration: underline;" %>
+      </td>
+      <td style='text-align: right; padding-top: 5px;' align='right'>
+        <table cellspacing="0" cellpadding="0" border="0" style="border-collapse: separate !important; display: inline-block; border-color: transparent;"><tbody><tr><td style="color: #129e12; padding: 7px; border: 1px solid #129e12; white-space: nowrap; background-color: #FFFFFF; vertical-align: middle; line-height: 16px;">
+        <%= link_to 'feature.email.tags.meeting_request_tags.accept_and_propose_time'.translate, meeting_requests_url(subdomain: program.organization.subdomain, root: program.root, email_meeting_request_id: meeting_request.id, email_action: MeetingRequestsController::EmailAction::ACCEPT_AND_PROPOSE, src: EngagementIndex::Src::AccessFlashMeetingArea::EMAIL), style: "color: #129e12; white-space: nowrap; background-color: #FFFFFF; text-decoration: none;" %>
+        </td></tr></tbody></table>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,14 @@
+<div class="col-md-6 p-r-xs p-l-0">
+  <%= content_tag(:h4, "feature.reports.content.activity_summary".translate, class: "m-t-md m-b-0") %>
+  <div class="m-r-sm m-l-sm row">
+    <%= render(partial: "reports/management_report/groups_activity/groups_individual_activity_summary", locals: {large_padding_keys: [Program::Dashboard::GroupsActivityReport::MeetingActivities::SCHEDULED, Program::Dashboard::GroupsActivityReport::MeetingActivities::UNSCHEDULED], current_period_activity_hash: data[:accepted_data][:current_period_activity_hash], previous_period_activity_hash: data[:accepted_data][:previous_period_activity_hash], percentage_hash: data[:accepted_data][:percentage_hash]}) %>
+    <%= render(partial: "reports/management_report/groups_activity/groups_individual_activity_summary", locals: {current_period_activity_hash: data[:activity][:current_period_activity_hash], previous_period_activity_hash: data[:activity][:previous_period_activity_hash], percentage_hash: data[:activity][:percentage_hash]}) %>
+  </div>
+</div>
+
+<div class="col-md-6 p-r-0">
+  <%= content_tag(:h4, "feature.reports.content.meetings_in".translate(Meetings: _Meetings), class: "m-t-md m-b-0") %>
+  <div class="m-r-sm m-l-sm">
+    <%= render(partial: "reports/management_report/groups_activity/groups_individual_activity_summary", locals: {current_period_activity_hash: data[:completed_data][:current_period_activity_hash], previous_period_activity_hash: data[:completed_data][:previous_period_activity_hash], percentage_hash: data[:completed_data][:percentage_hash]}) %>
+  </div>
+</div>

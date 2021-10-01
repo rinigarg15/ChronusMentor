@@ -1,0 +1,36 @@
+<% page_action_options = [Marshal.load(Marshal.dump(@page_action || [])), Marshal.load(Marshal.dump(@page_action2 || [])), Marshal.load(Marshal.dump(@page_action3 || []))].flatten.uniq %>
+<div id="title_actions" class="pull-right">
+  <div class="hidden-xs m-r">
+    <% if @page_action %>
+      <div id='action_1' class="pull-right">
+        <%= render_page_action(@page_action, @page_action_options || {}) %>
+      </div>
+    <% end %>
+
+    <% if @page_action2 %>
+      <div id='action_2' class="pull-right m-r-xs">
+        <%= render_page_action(@page_action2, @page_action2_options || {}) %>
+      </div>
+    <% end %>
+
+    <% if @page_action3 %>
+      <div id='action_3' class="pull-right m-r-xs">
+        <%= render_page_action(@page_action3, @page_action3_options || {}) %>
+      </div>
+    <% end %>
+  </div>
+  <div class="visible-xs dropdown">
+    <%= link_to get_icon_content("fa fa-caret-down m-r-0") + set_screen_reader_only_content("display_string.Actions".translate), "javascript:void(0)", "data-toggle" => "dropdown", class: "dropdown-toggle btn btn-primary btn-sm", "aria-haspopup"=>"true", "aria-expanded"=>"false" %>
+
+    <ul id="page_actions" class="dropdown-menu pull-right">
+      <% page_action_options.each do |action| %>
+        <% label = action.delete(:label) %>
+        <% js_content = action.delete(:js) %>
+        <% linkurl = action.delete(:url) %>
+        <% additional_class = action.delete(:class) %>
+        <% js_class = action.delete(:js_class) %>
+        <li><%= send((js_content.present? ? "link_to_function" : "link_to"), label, js_content || linkurl, {class: "text-default #{js_class}"}.merge(action)) %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

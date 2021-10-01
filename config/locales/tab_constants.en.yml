@@ -1,0 +1,60 @@
+# tabs related translations
+
+en:
+  tab_constants:
+    home: Home
+    manage: Manage
+    forums: Forums
+    invite: Invite
+    app_home: Home
+    program_overview: Program Overview
+    qa: Question & Answers
+    advice: Advice
+    membership_requests: Membership Requests
+    program_status: Program Status
+    my_meetings: My Meetings
+    my_meetings_v1: My %{Meetings}
+    my_availability: My Availability
+    mentoring_calendar: Mentoring Calendar
+    mentoring_calendar_v1: "%{Mentoring} Calendar"
+    mentoring_community: "%{MENTORING} COMMUNITY"
+    community: COMMUNITY
+    help_and_support: "HELP & SUPPORT"
+    meetings: Meetings
+    mentor_requests: Mentor Requests
+    mentor_requests_v1: "%{Mentoring} Requests"
+    my_situations: My Situations
+    add_new_situation: Add New Situation
+    my_mentoring_connections: My %{mentoring_connections}
+    my_mentoring_connections_v1: MY %{mentoring_connections}
+    find_a_mentor: Find %{a_mentor}
+    overview: Overview
+    sign_up: Sign Up
+    notifications: Notifications
+    discover: Discover
+    reports: REPORTS
+    dashboards: DASHBOARDS
+    sub_tabs:
+      my_mentoring_connections: My %{mentoring_connections}
+      all_public_mentoring_connections:
+        zero: All Public %{mentoring_connections}
+        one: All Public %{mentoring_connections} (1)
+        other: All Public %{mentoring_connections} (%{count})
+      browse_mentors: Browse %{mentors}
+      other_forums: Other Forums
+      my_forums: My Forums
+      find_new_project: Find new %{mentoring_connections}
+      discover: "Discover"
+      executive_dashboard: Executive Dashboard
+      open_projects: Open %{mentoring_connections}
+      all_projects: All %{mentoring_connections}
+      my_proposed_groups: My proposed %{mentoring_connections}
+      propose_a_new_group: Propose a new %{mentoring_connection}
+      start_a_new_group: Start a new %{mentoring_connection}
+      new_available_count: "%{count} new"
+      all_resources: View All
+      all_public_mentoring_connections_label: All Public %{mentoring_connections}
+      upcoming_meetings: "Upcoming"
+      past_meetings: "Past"
+      requested_meetings: "Requests"
+      closed: "Closed"

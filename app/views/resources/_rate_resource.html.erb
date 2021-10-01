@@ -1,0 +1,9 @@
+<% mobile_view = mobile_browser? || is_mobile_app? %>
+<%= ibox nil, :ibox_id => "cjs_rate_resource" do %>
+  <%= content_tag(:span, "feature.resources.content.resource_helpful".translate(resource: _resource), class: "bold resource_helpful") %>
+  <%= content_tag(:span, link_to(append_text_to_icon("fa fa-question-circle", mobile_view ? "": "feature.resources.content.have_a_question".translate), have_a_question_url, :class => "btn-white btn btn-sm cjs_resource_question_button"), class: "pull-right cjs_resource_question_button_container") %>
+  <%= content_tag(:div, class: "btn-group btn-group-sm m-l-sm yes_no_button_group #{"m-l-0" if mobile_view}") do %>
+    <%= link_to append_text_to_icon("fa fa-thumbs-up", "display_string.Yes".translate), "javascript:void(0)", :class => "btn btn-sm resource_feedback_button_clicked #{get_button_rating_class(resource, Resource::RatingType::HELPFUL, wob_member)}", data: {url: rate_resource_path(resource, format: :js), rating: Resource::RatingType::HELPFUL} %>
+    <%= link_to append_text_to_icon("fa fa-thumbs-down", "display_string.No".translate), "javascript:void(0)", :class => "btn btn-sm resource_feedback_button_clicked #{get_button_rating_class(resource, Resource::RatingType::UNHELPFUL, wob_member)}" , data: {url: rate_resource_path(resource, format: :js), rating: Resource::RatingType::UNHELPFUL} %>
+  <% end %>  
+<% end %>

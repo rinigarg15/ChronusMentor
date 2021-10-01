@@ -1,0 +1,15 @@
+<% if @sub_title_list %>
+  <div class="pull-left font-noraml pointer dropdown">
+    <%= content_tag(:div, "#{@sub_title} <span class='caret'></span>".html_safe, :class => "m-t-xs h5 dropdown-toggle", :data => {:toggle => "dropdown"}) %>
+    <ul class="dropdown-menu">
+      <% @sub_title_list.each do |hash| %>
+        <li><%= link_to(hash[:label], hash[:url]) %></li>
+      <% end %>
+    </ul>
+  </div>
+<% else %>
+  <div class="pull-left">
+    <h3 class="font-noraml hidden-xs cjs-sub-title-text"><%= @sub_title %></h3>
+    <h4 class="font-noraml visible-xs m-b-0 cjs-sub-title-text"><%= @sub_title %></h4>
+  </div>
+<% end %>

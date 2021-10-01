@@ -1,0 +1,32 @@
+<% modal_v3_popup "feature.messaging.content.request_for_change".translate do %>
+<% flash_id = "send_msg_popup_flash_connection_" + @connection.id.to_s %>
+  <div id="new_admin_message">
+    <%= simple_form_for @admin_message, :html => {:id => "new_message_popup"} do |f| %>
+      <%= response_flash(flash_id) %>
+      <%= control_group do %>
+        <label class="control-label" for="expiry_date_change_receiver"><%= 'feature.messaging.label.to'.translate %> *</label>
+        <%= controls do %>
+          <p > <%= _Admin %> </p>
+        <% end %>
+      <% end %>
+      <%= control_group do %>
+        <% admin_message_subject = 'feature.messaging.label.admin_message_subject_v1'.translate(:connection_name => @connection.name) %>
+        <%= f.input :subject , :as => :hidden , :input_html => { :value => admin_message_subject } %>
+        <div class="false-label control-label m-b-xs"><%= Message.human_attribute_name(:subject) %> *</div>
+        <%= controls do %>
+          <p ><%= admin_message_subject %></p>
+        <% end %>  
+      <% end %>
+      <% remaining_time = distance_of_time_in_words(Time.now, @connection.expiry_time) %>
+      <% expiry_time = formatted_time_in_words(@connection.expiry_time, :no_ago => true, :no_time => true) %>
+      <% groupurl = groups_url(:search_filters => {:mentor_name=> "#{@connection.mentors.first.name}", :mentee_name=> "#{@connection.students.first.name}"}, :src => "req_change_expiry") %>
+      <% admin_message_content = "feature.messaging.content.expiry_message".translate(:mentoring_connection => _mentoring_connection, :connection_name => @connection.name, :remaining_time => remaining_time, :expiry_time => expiry_time) %>
+      <% admin_message_content += " #{'feature.messaging.content.extend_message_v2'.translate(:group_url => groupurl)}" %>
+      <%= f.input :content, :as => :text, :input_html => { :rows => 5, :class => "form-control", :value => admin_message_content} %>  
+      <% action_set(:class => "pull-right",:fields_required => :all) do %>
+        <%= f.button :submit, "display_string.Send".translate, :id => 'cjs_popup_send_msg_button' %>
+      <% end %>
+    <% end %>
+    <%= javascript_tag %Q[Messages.initNewAdminMessageValidation("#{j('feature.messaging.content.subject_and_message_required'.translate)}", "#{flash_id}");] %>
+  </div>
+<% end %>

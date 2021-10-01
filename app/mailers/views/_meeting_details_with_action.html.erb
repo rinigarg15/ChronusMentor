@@ -1,0 +1,41 @@
+<% program = meeting_request.program %>
+<% meeting = meeting_request.get_meeting %>
+<table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%' class='wrapper'>
+  <tbody>
+    <tr><td style='color: #787878; line-height: 18px; text-decoration: underline;'><%= 'feature.email.tags.meeting_request_tags.meeting_details_with_action.meeting_time'.translate(meeting: @_Meeting_string) %></td></tr>
+    <tr>
+      <td style="padding: 5px 0 10px 0; line-height: 18px; vertical-align: top;">
+        <% if meeting.calendar_time_available? %>
+          <%= DateTime.localize(meeting.occurrences.first.start_time.in_time_zone(member.time_zone.presence || TimezoneConstants::DEFAULT_TIMEZONE), format: :full_display_with_zone_without_month) %>
+          (<%= "display_string.minutes".translate(minutes: ((meeting.end_time - meeting.start_time)/60).to_i) %>)
+          <% if meeting.location.present? %>
+            <br />
+            <span style="color: #787878; line-height: 18px;">
+              <%= image_tag PublicIcons::MAP_MARKER, size: "10x10" %>
+              <%= meeting.location %>
+            </span>
+          <% end %>
+          <% if (url = meeting.get_ics_file_url(user).try(:html_safe)) %>
+            <br />
+            <%= link_to("#{'feature.email.tags.meeting_request_tags.download_ics'.translate}", url, style: "line-height: 18px; text-decoration: none;") %>
+          <% end %>
+        <% else %>
+          <%= 'feature.email.tags.meeting_request_tags.meeting_details_with_action.not_set'.translate %>
+          <%= link_to "(#{'feature.email.tags.meeting_request_tags.meeting_details_with_action.set_meeting_time'.translate(meeting: @_Meeting_string)})", meeting_url(meeting, current_occurrence_time: meeting.first_occurrence, subdomain: program.organization.subdomain, root: program.root, setup_meeting_time: true) %>
+        <% end %>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<hr />
+<table cellspacing='0' cellpadding='0' border='0' width='100%' class='wrapper'>
+  <tbody>
+    <tr>
+      <td style='text-align: right; padding-top: 5px;' align='right'>
+        <table cellspacing="0" cellpadding="0" border="0" style="border-collapse: separate !important; display: inline-block; border-color: transparent;"><tbody><tr><td style="color: #129e12; padding: 7px; border: 1px solid #129e12; white-space: nowrap; background-color: #FFFFFF; vertical-align: middle; line-height: 16px;">
+        <%= link_to 'feature.email.tags.meeting_request_tags.meeting_details_with_action.visit_meeting_area'.translate(meeting: @_Meeting_string), meeting_url(meeting, ei_src: EngagementIndex::Src::AccessFlashMeetingArea::EMAIL, subdomain: program.organization.subdomain, root: program.root, current_occurrence_time: meeting.first_occurrence), style: "color: #129e12; white-space: nowrap; background-color: #FFFFFF; text-decoration: none;" %>
+        </td></tr></tbody></table>
+      </td>
+    </tr>
+  </tbody>
+</table>

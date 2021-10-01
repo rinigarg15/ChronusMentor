@@ -1,0 +1,6 @@
+if(jQuery("#profile_section_<%= @section.id %>").find('div').hasClass('cjs_active_section')){
+  jQuery(".cjs-section-click-handle-element").eq(0).click();
+}
+jQuery("#profile_section_<%= @section.id %>").remove();
+ProfileConfigUI.updateAndShowNoOfSections();
+ProfileConfigUI.adjustUiCommon();

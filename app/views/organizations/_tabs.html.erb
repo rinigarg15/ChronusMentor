@@ -1,0 +1,65 @@
+<nav id="sidebarLeft" class="hide navbar-default navbar-static-side white-bg" role="navigation">
+  <div class="sidebar-collapse">
+    <ul class="nav metismenu" id="side-menu">
+      <% if @current_organization.active? %>
+        <% logo_or_banner_content = get_safe_string %>
+        <% logo_or_banner_content += content_tag(:li, :class => "program_logo_or_banner b-b p-md cjs_side_navigation_logo_or_banner pointer", :data => {url: get_program_context_path(program_context, EngagementIndex::Src::SIDEBAR_PROGRAM_LOGO_OR_BANNER)}) do %>
+          <span>
+            <% if program_context.logo_or_banner_url.present? %>
+              <%= render_logo_or_banner(program_context) %>
+            <% else %>
+              <%= get_icon_content("fa fa-4x fa-circle", {content: h(program_context.name[0])}) %>
+            <% end %>
+          </span>
+        <% end %>
+        <%= logo_or_banner_content %>
+      <% end %>
+
+      <%= render(:partial => "layouts/nav_profile", :locals => {:ui_pattern => "nav nav-second-level collapse", :container_class => hidden_on_web, :caret_class => "fa arrow", :iconclass => "fa fa-cog", :parent_label => "app_layout.label.account".translate, :signout_class => hidden_on_mobile}) %>
+      <% self.controller.all_tabs.each_with_index do |tab_info, i| %>
+        <% tab_class = '' %>
+        <% tab_class << ' active' if tab_info.active %>
+        <% tab_class << ' last' if i == self.controller.all_tabs.size - 1 %>
+        <%= render_tab(tab_info, tab_class) %>
+      <% end %>
+
+      <%= render(:partial => 'languages/dropdown', :locals => {:container_class => logged_in_program? ? hidden_above_tab : hidden_on_web, :ui_pattern => "nav nav-second-level collapse", :caret_class => "fa arrow", :iconclass => "fa fa-language"}) %>
+      <%= render(:partial => "common/sign_out", :locals => {:iconclass => "fa fa-sign-out"})  %>
+      <%= render(:partial => "common/super_user_sign_out", :locals => {:iconclass => "fa fa-sign-out"}) %>
+      <%= render(:partial => "common/non_logged_in_links", :locals => {:container_class => hidden_on_web, :join_icon_content => get_icon_content("fa fa-user-plus"), :sign_in_icon_content => get_icon_content("fa fa-sign-in"), :contact_admin_icon_content => get_icon_content("fa fa-life-ring")}) %>
+
+      <li><hr class="m-t-xs m-b-xs" /></li>
+
+      <% if is_mobile_app? && !logged_in_organization? %>
+        <li class="m-t p-md p-t-xs p-b-xs">
+          <%= link_to 'verify_organization_page.label.change_organization_url'.translate, APP_CONFIG[:cors_origin].first + mobile_v2_verify_organization_path(:edit => true), :class => "font-95percent no-padding" %>
+        </li>
+      <% end %>
+
+      <% if ["standby", "staging"].include? Rails.env %>
+        <li class="p-md p-t-xs p-b-xs">
+          <%= link_to 'verify_organization_page.label.install_old_app'.translate, "itms-services://?action=download-manifest&url=#{APP_CONFIG[:cors_origin].first}/mobile/downloads/ChronusMentor-#{Rails.env}-old.plist", :class => "font-95percent no-padding" %>
+        </li>
+        <li class="p-md p-t-xs p-b-xs">
+          <%= link_to 'verify_organization_page.label.install_app'.translate, "itms-services://?action=download-manifest&url=#{APP_CONFIG[:cors_origin].first}/mobile/downloads/ChronusMentor-#{Rails.env}.plist", :class => "font-95percent no-padding" %>
+        </li>
+      <% end %>
+
+      <li class="p-md p-t-xs p-b-xs">
+        <%= link_to 'footer.terms_and_conditions'.translate.html_safe, terms_path, :target => "_blank", :class => "font-95percent no-padding" %>
+      </li>
+
+      <li class=" p-md p-t-xs p-b-xs">
+        <%= link_to 'footer.privacy_policy'.translate, privacy_policy_path(:p => true), :target => "_blank", :class => "font-95percent no-padding" %>
+      </li>
+
+      <%= render :partial => "layouts/powered_by_brand", :locals => {:container_class => "p-md p-t-xs p-b-xs", :link_class => "font-95percent no-padding"} %>
+    </ul>
+  </div>
+</nav>
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+    Navigation.redirectOnLogoAndBannerClick();
+  });
+</script>

@@ -1,0 +1,13 @@
+<% modal_v3_popup "#{"feature.multiple_templates.actions.Duplicate".translate} #{@mentoring_model.title}" do %>
+  <%= simple_form_for @mentoring_model, url: duplicate_create_mentoring_model_path(@mentoring_model), method: :post, html: {class: "cjs_duplicate_mentoring_model"} do |form| %>
+    <%= response_flash("cjs_mentoring_models_flash") %>
+    <%= form.input :title, input_html: {value: "", id: "cjs_title_field", class: "required-field form-control", "data-existing_mentoring_models" => @mentoring_model_titles.join(",")} %>
+    <% action_set(:class => "pull-right") do %>
+      <%= cancel_link(nil, qtip: true) %>
+      <%= form.button :submit, "display_string.Continue".translate, class: "form-submit-validation" %>
+    <% end %>
+  <% end %>
+  <%= javascript_tag do %>
+    MentoringModels.validateTitlesUniqueness();
+  <% end %>
+<% end %>

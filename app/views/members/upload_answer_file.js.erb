@@ -1,0 +1,6 @@
+<%- file_field_id = "file-field-wrapper-#{@file_uploader.type_id}".to_html_id -%>
+<%- if @file_uploader.valid? -%>
+  jQuery('#<%= file_field_id %>').successFileUploading(<%= @file_uploader.file_name.to_json %>, <%= @file_uploader.uniq_code.to_json %>, <%= 'feature.profile_question.file_uploader.success'.translate.to_json %>);
+<%- else -%>
+  jQuery('#<%= file_field_id %>').failedFileUploading(<%= @file_uploader.file_name.to_json %>, <%= @file_uploader.errors.to_json %>);
+<%- end -%>

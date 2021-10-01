@@ -1,0 +1,23 @@
+<% container_options = {
+  render_panel: true,
+  class: "table-bordered m-t",
+  additional_header_class: "gray-bg",
+  collapsible: false
+} %>
+<% local_options = { member: member, container_options: container_options } %>
+
+<div id="org_settings">
+  <% collapsible_content "feature.profile.content.org_prog_settings".translate(org_prog_name: @current_organization.name), [], false, { class: "stacked acc-unstyled" } do %>
+    <%= render partial: "members/change_password_settings", locals: local_options if member.allow_password_update? %>
+    <%= render partial: "members/login_settings", locals: local_options unless @current_organization.standalone_auth? %>
+    <%= render partial: "members/account_activity_settings", locals: local_options %>
+    <%= render partial: "members/timezone_settings", locals: local_options %>
+
+    <% if @current_organization.standalone? %>
+      <%= field_set_tag nil, class: "m-t-xs" do %>
+        <h4><%= "feature.profile.header.activity_settings".translate %></h4>
+        <%= render partial: "members/program_settings", locals: { program: @current_program, member: member } %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

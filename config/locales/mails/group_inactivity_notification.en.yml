@@ -1,0 +1,25 @@
+en:
+  email_translations:
+    group_inactivity_notification:
+      enabled_html: An %{email} will be sent to the users of the %{connection} if there is no activity in the %{connection} for the specified time period.
+      disabled_html: An %{email} is usually sent to the users of the %{connection} when the %{connection} is inactive for the specified time period, but has been disabled. No email will be sent.
+      title_v1: "%{_Mentoring_Connection} Inactivity Notification (without auto-termination message)"
+      description_v2: Sometimes participants have long periods of no noticeable %{_program} activity. If the %{_program} requires a certain amount of activity, %{_a_admin} may wish to let participants know that a greater level of participation is expected. There is a setting in the %{_program} that %{_a_admin} can enable to prompt their users to be more active in their %{_mentoring_connections}. The default trigger is 30 days but the %{_admin} can modify that time period. After those number of inactive days, inactive %{_mentoring_connection} %{_mentors} and/or %{_mentees} get this email. The %{_mentoring_connection} is NOT automatically terminated.
+      subject_v1: 'Inactivity reminder: We''ve missed hearing from you!'
+      content_v2_html: Did you know that you've been inactive for more than {{inactivity_tracking_period}} days in <a href='{{url_connection}}'>{{group_name}}</a>? Your last activity date was {{last_activity_date}}.<br /><br />If your partnership is progressing outside of the software, please make sure to periodically return to the software to check off tasks and that any outstanding surveys have been completed.<br />{{mentoring_area_button}}<br />If you have any questions or concerns about your partnership or this software, please contact me <a href='{{url_contact_admin}}'>here</a>.<br/>
+      visit_your_connection: Visit your %{mentoring_connection} area
+      tags:
+        url_connection:
+          description_v1: Url of the %{_mentoring_connection}
+        group_name:
+          description_v1: Name of the %{_mentoring_connection}
+          example: Smith and Doe
+        inactivity_tracking_period:
+          description_v1: "%{_Mentoring_Connection} inactivity tracking period"
+        last_activity_date:
+          description_v1: "%{_Mentoring_Connection} last activity date"
+          example: June 15, 2012
+        mentoring_area_button:
+          description_v1: "%{_Mentoring_Connection} button"
+        url_contact_admin:
+          description: Url for the user to contact administrators

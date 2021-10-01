@@ -1,0 +1,29 @@
+<div class="ibox m-0 col-sm-12">
+  <div class="ibox-content clearfix p-b-xxs">
+    <h4><%= "feature.match_report.label.mentee_needs".translate(Mentee: _Mentee)+ "feature.match_report.label.vs".translate + "feature.match_report.label.mentor_offers".translate(Mentor: _Mentor) %></h4>
+  </div>
+  <div class="ibox-content col-sm-12 no-padding">
+    <div data-slim-scroll="true" data-slim-scroll-height="">
+      <% match_config_question_texts_hash.each do |match_config_id, mentor_question_text| %>
+        <div class="cjs_needs_discrepancy_match_config_link cjs-profile-question-drop-container clearfix" data-match-config-id="<%= match_config_id %>" id="<%= match_config_id %>">
+          <div class="ibox col-sm-12 no-margins <%= match_config_id == match_config_question_texts_hash.keys.last ? "noshadow no-border-bottom" : "b-b" %>">
+            <div class="cjs_needs_discrepancy_match_config ibox-content clearfix">
+              <div class="row truncate-with-ellipsis whitespace-nowrap">
+                <span class="p-l-sm"><%= mentor_question_text %></span>
+                <span class="p-l-xs cjs_match_configs_chart_and_symbol"><%= "&raquo;".html_safe %></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-sm-9 no-padding cjs_match_config_graph">
+      <div class="ibox col-sm-12 no-margins b-b">
+        <div class="ibox-content clearfix no-padding gray-bg">
+          <div id="match_config_graph" class="col-sm-12">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

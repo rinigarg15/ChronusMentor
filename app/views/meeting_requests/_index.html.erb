@@ -1,0 +1,23 @@
+<% @back_link = {:label => "feature.reports.content.dashboard".translate, :link => management_report_path} if @src_path == ReportConst::ManagementReport::SourcePage %>
+<% @title = set_view_title(@metric, @title) %>
+
+<% if @meeting_request.present? %>
+  <% action_popup, action_popup_id = get_meeting_request_action_popup_and_popup_id(@meeting_requests, @meeting_request, @meeting_request_status) %>
+  <%= render partial: action_popup[:partial], locals: action_popup[:locals] if action_popup.present? %>
+<% end %>
+
+<% if is_manage_view %>
+  <%= render :partial => 'meeting_requests/meeting_request_report_tiles', :locals => {meeting_request_hash: meeting_request_hash, :percentage => percentage, :prev_periods_count => prev_periods_count} %>
+  <%= hidden_field_tag(:cjs_sort_field, params[:sort_field], class: 'cjs-sort-field') %>
+  <%= hidden_field_tag(:cjs_sort_order, params[:sort_order], class: 'cjs-sort-order') %>
+  <%= hidden_field_tag(:list, @status_type, id: 'filter_tab') %>
+  <%= render :partial => 'meeting_requests/meeting_request_main_content', :locals => {action_popup: action_popup, action_popup_id: action_popup_id}%>
+<% else %>
+  <%= render layout: "meeting_requests/siderbar_wrapper" do %>
+    <%= render :partial => 'meeting_requests/meeting_request_main_content', :locals => {action_popup: action_popup, action_popup_id: action_popup_id}%>
+  <% end %>
+<% end %>
+
+<%= javascript_tag(%Q[jQuery(function(){ jQuery(".cjs_propose_meeting_time_#{local_assigns[:email_meeting_request_id].to_i}").click() });]) if local_assigns[:email_action] == MeetingRequestsController::EmailAction::ACCEPT_AND_PROPOSE %>
+<%= javascript_tag(%Q[jQuery(function(){ jQuery(".cjs_meeting_request_reject_link_#{local_assigns[:email_meeting_request_id].to_i}").click() });]) if local_assigns[:email_action] == MeetingRequestsController::EmailAction::DECLINE %>
+<%= javascript_tag(%Q[jQuery(function(){ jQueryHighlight(".meeting_request_#{local_assigns[:email_meeting_request_id].to_i}") });]) if local_assigns[:email_action] == MeetingRequestsController::EmailAction::SHOW %>

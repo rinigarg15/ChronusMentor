@@ -1,0 +1,29 @@
+en:
+  email_translations:
+    coach_rating_notification_to_admin:
+      title_v1: Notification to %{_admin} when %{_a_mentee} rates %{_a_mentor}
+      description_v2: When %{_a_mentee} rates %{_a_mentor}, this email is automatically generated and sent to the %{_admin} to review. It includes the rating and any additional comments provided by the %{_mentee}.
+      subject: "{{mentor_name}} has been rated by {{mentee_name}}"
+      content_v2_html: "<a href='{{url_mentee}}'>{{mentee_name}}</a> has submitted a rating for <a href='{{url_mentor}}'>{{mentor_name}}</a>.<br/><br/>Rating: {{rating}}<br/>Comments: {{comments}}<br/>{{view_rating_button}}"
+      button_text: View Rating
+      tags:
+        mentor_name:
+          description: Name of the mentor
+        mentee_name:
+          description: Name of the mentee
+        url_mentor:
+          description: Link to mentor's profile
+          example: http://www.chronus.com
+        url_mentee:
+          description: Link to mentee's profile
+          example: http://www.chronus.com
+        url_mentor_review:
+          description: Url to the mentee's reviews
+          example: http://www.chronus.com
+        rating:
+          description: Rating given to the mentor
+        comments:
+          description: comments given about the mentor
+          example: He was decent
+        view_rating_button:
+          description: View Rating Button

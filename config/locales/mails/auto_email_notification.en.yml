@@ -1,0 +1,22 @@
+en:
+  email_translations:
+    auto_email_notification:
+      title_v1: Template for System-generated Email Generation
+      description_v1: This is the template for system generated emails (like facilitation messages).
+      subject_v1: "{{message_subject}} - {{mentoring_connection_name}}"
+      content_v4_html: "{{message_content}} <br /> <br /> To contact the {{customized_admin_term}}, reply to this e-mail or click <a href='{{url_contact_admin}}'>here</a>.<br/>"
+      tags:
+        message_content:
+          description: Content of the message
+          example: This message is to help facilitate your relationship.
+        url_reply:
+          description: Link to reply to the message
+        message_subject:
+          description: Subject of the message
+          example: Mentoring Relationship
+        mentoring_connection_name:
+          description_v1: Name of the %{_mentoring_connection}
+          example: Mentor and Mentee
+        text_for_inline_reply:
+          description: For cases where the member can reply from the email client, this instruction text will be appended
+          example_v2: reply to the message or

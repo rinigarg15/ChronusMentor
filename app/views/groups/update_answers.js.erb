@@ -1,0 +1,15 @@
+closeQtip();
+<% if @from_propose_workflow %>
+  window.location.href = "<%= profile_group_path(@group) %>";
+<% elsif @from_profile_flash %>
+  window.location.reload();
+<% else %>
+  jQuery(".cjs_circle_start_date_<%= @group.id %>").html('<%= j(render_start_date_content(@group, current_user)) %>');
+  <% if @group.start_date.present? %>
+    <% if @edit_start_date %>
+      ChronusValidator.ErrorManager.ShowResponseFlash("", "<%= 'flash_message.group_flash.edit_start_date_success'.translate(:mentoring_connection => _mentoring_connection) %>", true);
+    <% else %>
+      ChronusValidator.ErrorManager.ShowResponseFlash("", "<%= 'flash_message.group_flash.set_start_date_success'.translate(:mentoring_connection => _mentoring_connection) %>", true);
+    <% end %>
+  <% end %>
+<% end %>

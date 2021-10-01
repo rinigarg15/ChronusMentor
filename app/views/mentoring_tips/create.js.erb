@@ -1,0 +1,9 @@
+<% if @mentoring_tip.errors.blank? %>
+  jQuery("#edit_mentoring_tip_new").after('<%= escape_javascript(render(:partial => "mentoring_tip", :object => @mentoring_tip)) %>');
+  MentoringTips.cancelEdit("new");
+  jQuery('.cjs_no_content').remove();
+<% else %>
+  jQuery("#edit_mentoring_tip_new").replaceWith("<%= escape_javascript(render(:partial => 'mentoring_tips/mentoring_tip_form', :locals => {:mentoring_tip => @mentoring_tip})) %>");
+  jQuery('#edit_mentoring_tip_new').show();
+<% end %>
+jQuery('#mentoring_tip_new_loader').hide();

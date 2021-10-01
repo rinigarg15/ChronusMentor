@@ -1,0 +1,6 @@
+<%= ibox "quick_links.header".translate, :content_class=> "p-xxs", :show_collapse_link => true do %>
+  <ul id="actions_for_pending_group" class="list-group">
+    <%= quick_link("quick_links.side_pane.manage_notif_setting".translate, account_settings_path, 'fa fa-envelope', nil) %>
+    <%= quick_link(get_leave_connection_popup_head_text(false, "head"), %Q[jQueryShowQtip('#group', 500, '#{leave_connection_group_path(@group)}','',{modal: true})].html_safe, 'fa fa-ban', nil, :id => "leave_connection", :js => true) if @group.program.allow_users_to_leave_connection? && !@is_admin_view %>
+  </ul>
+<% end %>

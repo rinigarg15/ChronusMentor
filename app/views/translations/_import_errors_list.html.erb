@@ -1,0 +1,9 @@
+<% if params[:import_id].present? && @import_errors != nil%>
+  <% import_errors_hash = eval(@import_errors) %>
+  <h4><%= "feature.translations.label.error_lines".translate %></h4>
+  <p><%= import_errors_hash.values().join(", ")%></p>
+  <h4><%= "feature.translations.label.error_category".translate %></h4>
+  <% import_errors_hash.keys().each_with_index do |error_key, index|%>
+    <p><%= ("feature.translations.errors."+TranslationImport::ErrorOption::ErrorStatements[error_key]).translate(index: index+1) %></p> 
+  <% end %>
+<% end %>

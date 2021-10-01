@@ -1,0 +1,24 @@
+<% hide_ibox_class = "hide" if src == OneTimeFlag::Flags::Popups::MENTEE_GUIDANCE_POPUP_TAG %>
+<% connection_text = src == OneTimeFlag::Flags::Popups::MENTEE_GUIDANCE_POPUP_TAG ? "feature.favorite_preference.content.sidebar_tips_content_show_connection".translate(mentors: _mentors, Mentees: _Mentees, mentor: _mentor) : "feature.favorite_preference.content.sidebar_tips_content2".translate(mentors: _mentors) %>
+
+<div class="clearfix p-md p-b-xxs <%= "hide" if hide_flash %>">
+  <div class="panel panel-default col-xs-12 p-xs btn-primary text-center font-600 m-b-0">
+    <%= "feature.favorite_preference.content.guidance_popup_flash_message".translate(:mentor => _mentor) %>
+  </div>
+</div>
+
+<%= render partial: "favorite_preferences/guidance_popup_content", locals: {icon_class: "fa-user-circle text-default", serial_no: "1.", tips_heading: "feature.favorite_preference.header.sidebar_tips1".translate, tips_content: "feature.favorite_preference.content.sidebar_tips_content1_v1".translate(mentors: _mentors), additional_classes: "cjs_first_tip #{hide_ibox_class}"} %>
+
+<%= render partial: "favorite_preferences/guidance_popup_content", locals: {icon_class: "fa-user-plus text-navy", serial_no: "2.", tips_heading: "feature.favorite_preference.header.sidebar_tips2".translate(Mentors: _Mentors), tips_content: connection_text, additional_classes: "cjs_slots_tip #{hide_ibox_class}"} %>
+
+<% if current_user.allowed_to_ignore_and_mark_favorite? %>
+  <%= render partial: "favorite_preferences/guidance_popup_content", locals: {icon_class: "fa-star text-warning", serial_no: "3.", tips_heading: "feature.favorite_preference.header.sidebar_tips3".translate(Mentors: _Mentors), tips_content: "feature.favorite_preference.content.sidebar_tips_content3_v2".translate(mentors: _mentors), additional_classes: "cjs_favorites_tip #{hide_ibox_class}"} %>
+<% end %>
+
+<% if current_user.can_view_mentors? && current_user.can_send_mentor_request? %>
+  <div class="ibox noshadow list-group clearfix  cjs_get_started_and_close_button <%= hide_ibox_class %> ">
+    <div class="ibox-content p-md text-center">
+      <%= link_to(get_guidance_popup_action_label(src), users_path(src: src), class: "btn btn-primary get_started_action_label #{"btn-lg" if src == OneTimeFlag::Flags::Popups::MENTEE_GUIDANCE_POPUP_TAG}" ) %>
+    </div>
+  </div>
+<% end %>

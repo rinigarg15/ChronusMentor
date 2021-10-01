@@ -1,0 +1,63 @@
+#app_header {
+    background-color:#5F4F40;
+    border-bottom:5px solid #826C57;
+    padding:1em;
+}
+
+#app_header h1 {
+    float: left;
+    color: #cc6600;
+    font-size: 3em;
+    line-height: 100%;
+}
+
+#app_header h1 a {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+#app_header h1 a:hover {
+    color: #cc6600;
+    cursor: pointer;
+}
+
+#app_header h4 {
+    clear: both;
+    font-weight: bold;
+    padding-left: 0.5em;
+    margin-bottom: 0.2em;
+    margin-top: 0.8em;
+    color: #DDDDDD;
+}
+
+#app_header img.logo {
+    height: 80px;
+    float: left;
+}
+
+#app_header ul {
+    float: right;
+    list-style: none;
+    font-weight: bold;
+}
+
+#app_header ul li {
+    background: none;
+    border-right: 1px solid #888888;
+    float: left;
+    padding: 0 5px;
+    background-image: none;
+}
+
+#app_header ul li.last {
+    border: none;
+}
+
+#app_header ul li#super_console {
+    color: #FFFFFF;
+}
+
+#app_header ul#actions li,
+#app_header ul#actions li a{
+  color: #FFFFFF;
+}

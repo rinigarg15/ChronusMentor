@@ -1,0 +1,64 @@
+en:
+  feature:
+    profile_question:
+      label:
+        select_question: Select the question
+        matching_response: Matching response to the question
+        other_option: Please specify the other option
+        mark_not_applicable_v1: Mark N/A
+        filter_by_programs: Show by %{program}
+        choices: Choices
+        part_of_match_config: Part of matching algorithm
+        part_of_sftp_feed: Part of SFTP data feed
+        Definition: Definition
+        new_profile_field_definition: New Profile Field - Definition
+        Advanced: Advanced
+        actions: Actions
+        profile_question_importer: Import profile fields
+      title:
+        delete_profile_field: Delete profile field
+      content:
+        search_multi_select: Search among options
+        part_of_roles_for_membership_form: Part of %{roles} membership form
+        roles_can_edit: "%{roles} can edit"
+        mandatory_for_roles: Mandatory for %{roles}
+        not_mandatory_for_roles: Not mandatory for %{roles}
+        will_be_shown_only_if: Will be shown only if
+      help_text:
+        connected_users: users with whom you are connected
+        connected_users_of_a_user: users with whom they are connected
+        visible_to: This field will be visible to %{all_roles}.
+        visible_to_admin: This field will be visible only to the %{program} %{admins}
+        multi_education_tooltip: Users will have option to add multiple education as sub-fields within this field.
+        multi_experience_tooltip: Users will have option to add multiple experiences as sub-fields within this field.
+        multi_publication_tooltip: Users will have an option to add multiple publications in this field.
+        linkedin_tooltip: They can also import from LinkedIn and then add or delete experiences as desired.
+      skype:
+        help_text_html_v2: Including Skype id in your profile would allow your connected members to call you from the mentoring area. If you face trouble receiving Skype calls, please check your privacy settings.
+      js_message:
+        remove_program_confirm_v2: Are you sure you want to remove this question for this %{program}?
+        changing_field_type_from_html: Changing the field type from '
+        to_html: "' to '"
+        will_loss_user_responses_html: "' will result in loss of user responses for this field."
+        changing_field_type_confirm: However users will be prompted to provide information for the field when they login next time. %{new_line} Are you sure you want to save this change?
+        changing_field_type_text: Changing the question type might result in loss of user responses for this question. Do you want to proceed?
+        changing_matrix_row_data_text: Modifying/removing row(s) will result losing user responses for that particular row(s).
+        changing_matrix_column_data_text: Modifying/removing choice(s) will result losing user responses if any user has selected the modified/removed column(s).Do you still want to proceed?
+      file_uploader:
+        success: File was successfully scanned for viruses
+        errors:
+          file_infected: File is infected
+          invalid_stream: Input stream is invalid
+          profile_question_import_failed: Failed to import profile fields
+      choices:
+        add_choices_in_bulk: Add choices in bulk
+        enter_list_of_choices: Please enter the list of choices separated by a comma below
+        label:
+          button_bulk_add_choices: Bulk add
+          question_choice_placeholder: Enter a choice here
+          actions_to_be_performed: Actions to be performed on choices
+          list_of_choices: 'List of choices:'
+          append_choices: Append above list of choices below the current list of choices.
+          replace_choices_v1: Replace current list of choices with the above list of choices. This will result in loss of data if any user has selected one of the current choices.
+          conditional_choices:
+            choice_conditional_question_mismatch: doesn't belong to the conditional question

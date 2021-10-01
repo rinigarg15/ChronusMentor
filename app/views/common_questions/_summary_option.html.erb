@@ -1,0 +1,11 @@
+<% label = "feature.connection_questions.label.display_question_in_summary_html".translate(mentoring_connection: _mentoring_connection) %>
+<%= controls(class: "col-sm-offset-3 col-sm-4 display_question_in_summary_control", role: "group", aria: { label: label }) do %>
+  <label class="checkbox inline">
+    <%= f.check_box :display_question_in_summary, checked: summary_option_checked, disabled: summary_option_disabled, id: "display_question_in_summary_#{q_id}" %>
+    <div class="display_question_in_summary_setting_<%= q_id %>">
+     <span id="display_question_in_summary_setting_already_enabled_tooltip_<%= q_id %>"> <%= "feature.connection_questions.label.display_question_in_summary_html".translate(:mentoring_connection => _mentoring_connection) %> </span>
+    <span> <%= embed_icon(TOOLTIP_IMAGE_CLASS + " cjs-tool-tip", "", data: {desc: "feature.connection_questions.tooltip.option_enabled_only_once".translate(mentoring_connection: _mentoring_connection)}) %> </span>
+    <%= tooltip("display_question_in_summary_setting_already_enabled_tooltip_#{q_id}", "feature.connection_questions.tooltip.option_already_enabled".translate + '"' + summary.connection_question.question_text + '". ' + "feature.connection_questions.tooltip.uncheck_option".translate) if summary_option_disabled && summary.present? %> 
+    </div>
+  </label>
+<% end %>

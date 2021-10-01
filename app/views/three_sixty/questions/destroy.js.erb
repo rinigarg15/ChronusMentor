@@ -1,0 +1,9 @@
+<% if @question.destroyed? %>
+  <% if @question.competency.present? %>
+    jQuery("#competency_question_row_<%= @question.id %>").removeClass('cjs-alt-color-actions').remove();
+    ThreeSixty.alternateColor("#competency_questions_container_<%= @question.competency.id %>");
+  <% else %>
+    jQuery("#open_ended_question_row_<%= @question.id %>").removeClass('cjs-alt-color-actions').remove();
+    ThreeSixty.alternateColor("#open_ended_questions_container");
+  <% end %>
+<% end %>

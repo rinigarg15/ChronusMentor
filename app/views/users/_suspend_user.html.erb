@@ -1,0 +1,18 @@
+<% modal_container "feature.profile.label.suspend_membership_of_user_v1".translate(user_name: profile_user.name), modal_id: "modal_suspend_link_#{profile_user.id}" do %>
+  <%= form_tag change_user_state_user_path(profile_user), method: :post, id: "suspend_user_form" do %>
+    <%= control_group(class: "m-b-sm clearfix") do %>
+      <%= label_tag :state_change_reason, set_required_field_label("display_string.Reason".translate), class: 'control-label' %>
+      <%= controls do %>
+        <%= text_area_tag :state_change_reason, nil, rows: 3, class: "form-control" %>
+      <% end %>
+    <% end %>
+    <%= hidden_field_tag :new_state, User::Status::SUSPENDED %>
+
+    <%= get_note_for_suspension(current_program) %>
+    <%= horizontal_line %>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to_function "display_string.Cancel".translate, "ReasonForReject.clear('state_change_reason')", class: 'btn btn-white', "data-dismiss" => "modal" %>
+      <%= submit_tag "display_string.Deactivate".translate, class: 'btn btn-primary', onclick: "return ReasonForReject.validate('state_change_reason')", data: {:disable_with => "display_string.Please_Wait".translate} %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,6 @@
+<% if @flash_error %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('cjs_project_requests_flash', '<%= @flash_error %>', false);
+<% elsif @flash_notice %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('cjs_project_requests_flash', '<%= @flash_notice %>', true);
+  ProjectRequests.applyFilters();
+<% end %>

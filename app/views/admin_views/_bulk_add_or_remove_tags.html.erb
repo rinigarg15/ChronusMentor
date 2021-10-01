@@ -1,0 +1,24 @@
+<% all_tags_names = @current_program.get_all_tags.join(",") %>
+<% caption_text, help_text = get_caption_and_help_text(local_assigns[:remove_tags]) %>
+<%= simple_form_for @admin_view, :url => add_or_remove_tags_admin_view_path(@admin_view, remove_tags: local_assigns[:remove_tags]), :html => {:method => :post, :class => "no-margin", :id => "form_admin_view_bulk_actions"} do |f| %>
+	<%= f.input "users", :as => :hidden, :input_html => {:value => @users.collect(&:id).join(",")} %>
+  <p class="m-b-0">
+    <%= caption_text.translate(:user => "feature.admin_view.content.user".translate(:count => @users.size)) %>
+  </p>
+  <%= render(:partial => "admin_views/selected_users", :locals => {:users_or_members => @users}) %>
+  <%= control_group(:class =>"m-t-xs") do %>
+  	<label class="control-label" for="admin_view_tag_list"><%= "display_string.Tags".translate %></label>
+    <%= controls(:id => "admin_view_tag_list_container", :class=> "") do %>
+      <%= hidden_field_tag "admin_view[tag_list]", '', :class => "tag_list_input col-xs-12 no-padding", :input_tags => all_tags_names %>
+      <p class ="help-block text-muted m-b-0 m-t-0"><%= help_text.translate %></p>
+    <% end %>
+  <% end %>
+  <%= horizontal_line(class: "m-b-sm m-t-xs") %>
+  <% action_set(class: "form-group") do %>
+    <div class="pull-right">
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "display_string.Submit".translate %>
+    </div>
+  <% end %>
+<% end %>
+<%= javascript_tag %Q[initialize.tagList();AdminViews.validateFields("form_admin_view_bulk_actions", "admin_view_tag_list_container", "tag");] %>

@@ -1,0 +1,5 @@
+<% if @publishable_groups.size > 0 %>
+  jQuery("#cjs_publish_circles_widget").html("<%= escape_javascript(render partial: 'programs/publish_circles_widget_content', locals: {publishable_groups: @publishable_groups}) %>");
+<% else %>
+  window.location.reload();
+<% end %>

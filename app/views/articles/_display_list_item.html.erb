@@ -1,0 +1,23 @@
+<% thumbnail = raw(thumbnail_of(display_list_item)) %>
+<% banner = banner_of(display_list_item) %>
+<% description = get_list_item_description(display_list_item) %>
+
+<div id='list_item_<%= display_list_item.id %>' class="p-t-sm p-b-sm">
+  <div class="hidden-xs">
+    <div class="media-left">
+      <%= thumbnail %>
+    </div>
+    <div class="media-body">
+      <%= banner %>
+      <%= description %>
+    </div>
+  </div>
+
+  <div class="visible-xs">
+    <div><%= thumbnail %></div>
+    <div class="m-t">
+      <%= banner %>
+      <%= description %>
+    </div>
+  </div>
+</div>

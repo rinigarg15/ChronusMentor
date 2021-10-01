@@ -1,0 +1,59 @@
+<% opts = local_assigns[:opts] || {} %>
+<% label_id = "metric_item_#{name.to_html_id}".gsub(/(%|\/|\.)/, "") %>
+<% name_to_html_id = name.to_html_id.gsub(/(%|\/|\.)/, "") %>
+<div class="m-b-xs clearfix <%= 'inverted_metric_row' if percent_metric.inverted %>">
+  <div class='col-sm-4' id='<%= label_id %>'>
+    <div class="false-label">
+      <% if opts[:detailed_report_anchor] %>
+        <%= link_to_function name, "jQueryScrollTo('##{opts[:detailed_report_anchor]}')", {:class => "font-600"} %>
+      <% else %>
+        <%= name %>
+      <% end %>
+
+      <% if opts[:span_text] %>
+        <span class='text-muted small'>(<%= opts[:span_text] %>)</span>
+      <% end %>
+      <% if opts[:help_text] %>
+        <%= get_icon_content('fa fa-question-circle metric_q') %>
+        <%= tooltip(label_id, opts[:help_text]) %>
+      <% end %>
+    </div>    
+  </div>
+  <div class='col-sm-8'>
+    <% if percent_metric.no_data? %>
+      <% unless opts[:no_empty_content] %>
+        <span class='text-muted text-center'><%= "common_text.info.No_data_available".translate %></span>
+      <% end %>
+    <% else %>
+      <% if percent_metric.inverted %>
+        <% if opts[:format] == FORMAT::PDF %>
+          <%= wicked_pdf_image_tag 'reports/marker.png', :style => "height: 12px; margin-left: #{((1 - percent_metric.value) * 98).round }%", :class => 'marker_flag', :id => "marker_tip_#{name_to_html_id}" %>
+        <% else %>
+          <%= image_tag 'reports/marker.png', :style => "margin-left: #{((1 - percent_metric.value) * 98).round }%", :class => 'marker_flag', :id => "marker_tip_#{name_to_html_id}" %>
+        <% end %>
+        <%= tooltip "marker_tip_#{name_to_html_id}", metric_value_string(percent_metric) %>
+      <% end %>
+      <div class='progress m-t-xs m-b-xs'>
+        <% unless percent_metric.inverted %>
+          <div class="progress-bar <%= percent_metric.progress_class %>"style="width: <%= (percent_metric.value * 100).round %>%" class='bar'>
+          </div>
+        <% end %>
+      </div>
+      <div class='inference'>
+      	<%= '>' if percent_metric.inverted && percent_metric.value.zero? %>
+        <span class='cur_val'><%= metric_value_string(percent_metric, opts[:point_scale]) %></span>
+        <% if opts[:history] %>
+          <span id='change_tip_<%= name_to_html_id %>' class='change'><%= "feature.reports.content.percent_change".translate(percent: opts[:history].last_change) %></span>
+          <%= tooltip "change_tip_#{name_to_html_id}", opts[:history_tip] %>
+        <% end %>
+        ,&nbsp;<span class='font-600 <%= percent_metric.text_class %>'><%= percent_metric.inference_display %></span>
+      </div>
+      <% if opts[:inference_tip] %>
+        <div class='inference_tip'>
+          <a href="#" id="inference_tip_link_<%= name_to_html_id %>" onclick="return false;"><%= "feature.reports.content.tips_to_improve_activity_score".translate %></a>
+            <%= tooltip "inference_tip_link_#{name_to_html_id}", opts[:inference_tip] %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

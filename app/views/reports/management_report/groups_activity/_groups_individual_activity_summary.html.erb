@@ -1,0 +1,21 @@
+<div class="m-t-md col-sm-12">
+  <ul class="stat-list">
+    <% percentage_hash.each do |key, percentage_value| %>
+      <% if group_report_activity_enabled?(current_program, key) %>
+        <% is_sub_activity = local_assigns[:large_padding_keys] && local_assigns[:large_padding_keys].include?(key) %>
+        <% padding_klass = is_sub_activity ? "p-l-sm p-r-0" : "p-l-0 p-r-xs" %>
+        <li class="row m-t-sm">
+          <div class='<%= "col-xs-7 #{padding_klass}" %>'>
+            <%= append_text_to_icon("fa #{get_dashboard_groups_activity_icon_for_key(key)}", get_dashboard_groups_activity_name(key), media_padding_with_icon: true) %>
+          </div>
+          <div class="col-xs-5 p-l-0 p-r-0 text-right">
+            <div class="col-xs-4 no-margin p-l-0 p-r-xxs"><%= current_period_activity_hash[key] %></div>
+            <%= render partial: "common/report_tile_percentage_change", locals: {percentage: percentage_value, prev_periods_count: previous_period_activity_hash[key]||0, tile_text: true, percentage_classes: "no-margin col-xs-8 no-padding small", is_admin_dashboard: true} if percentage_value.present? %>
+          </div>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+</div>
+
+  

@@ -1,0 +1,14 @@
+<% left_column = render partial: 'left_list_pane', :locals => {chosen_category: @category, category_with_scores: @category_with_scores, chosen_category_detail: @category_with_items, level_obj: @level_obj, progs: @progs} %>
+jQuery("#list_column").html('<%= j left_column %>');
+jQuery('#abstract_program_id').val("<%= @level_obj.id %>");
+jQuery('#cjs_locale').val("<%= @second_locale %>");
+jQuery('#cjs_category').val("<%= @category %>");
+jQuery('#cjs_category_content_id').val("<%= @base_id %>");
+<%if super_console? %>
+  <% content = link_to(j("feature.translations.label.export".translate),
+    export_csv_translations_path(locale: @second_locale), :class => "btn btn-primary translations_csv_export")%>
+  jQuery(".translations_csv_export").replaceWith("<%= j content %>");
+<% end %>
+<% table_content = render partial: 'translations_table', :locals => {translatable_content: @translatable_content, second_locale: @second_locale, chosen_category: @category, category_with_items: @category_with_items, level_obj: @level_obj, base_id: @base_id, attachment_type: @attachment_type, program_asset: @program_asset} %>
+jQuery("#table_column").html('<%= j table_content %>');
+jQuery('#loading_results').hide();

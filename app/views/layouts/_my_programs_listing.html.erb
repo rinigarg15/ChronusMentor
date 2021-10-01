@@ -1,0 +1,16 @@
+<%- if member_has_many_active_programs -%>
+  <li class="<%= local_assigns[:list_style] %>">
+    <big><%= link_to(get_icon_content("fa fa-sitemap") + h(@current_organization.name), root_organization_path, :class => "#{local_assigns[:list_class]} cui_program_selector_org_name") %></big>
+  </li>
+<%- end -%>
+<%# Load just what is required below to render the link %>
+<%- multiple_programs.each do |program| -%>
+  <li class="<%= local_assigns[:list_style] %>">
+    <big><%= link_to(content_tag(:div, get_icon_content("fa fa-th-large m-l"), :class => "media-left") + content_tag(:div, h(program.name), :class => "media-body"), program_root_path(:root => program.root), :class => local_assigns[:list_class]) %></big>
+  </li>
+<%- end -%>
+<%- if @current_organization.enrollment_page_enabled? && !@current_organization.standalone? -%>
+  <li class="<%= local_assigns[:list_style] %>">
+    <big><%= link_to(get_icon_content("fa fa-list") + "app_layout.label.browse_programs_html".translate(programs: h(_Programs)), enrollment_path, :class => local_assigns[:list_class]) %></big>
+  </li>
+<%- end -%>

@@ -1,0 +1,22 @@
+<% @back_link = @member_meeting.present? ?
+                {:label => "feature.meetings.header.Meetings_v1".translate(:Meetings => _Meetings), :link => member_path(@current_member, meeting_id: @member_meeting.meeting_id, current_occurrence_time: @meeting_timing, :tab => MembersController::ShowTabs::AVAILABILITY)} :
+                ({:label => "feature.survey.header.surveys".translate, :link => surveys_path} if current_user.can_manage_surveys?) %>
+
+<% if @survey.engagement_survey? && (@task.present? || @group.present?) %>
+  <% @title = @group.name %>
+  <% @sub_title = @task.try(:title) %>
+  <% @title_url = group_path(@group) %>
+  <% @title_logo = @group.logo_url %>
+  <%= render :layout => 'groups/show_layout', :locals => {:no_privacy_tooltip => true} do %>
+    <%= render :partial => 'edit_answers', :locals => {:survey_response => @response} %>
+  <% end %>
+<% else %>
+  <% @title = @survey.name %>
+  <% if @survey.meeting_feedback_survey? %>
+    <% meeting = @member_meeting.meeting %>
+    <% @title += "feature.survey.header.meeting_topic".translate(:topic => (meeting.topic || _Meeting)) %>
+    <% with = (meeting.member_meetings - [@member_meeting]).collect(&:member).collect(&:name).join(", ") %>
+    <% @title += "feature.survey.header.meeting_with".translate(:name => with) if with.present? %>
+  <% end %>
+  <%= render :partial => 'edit_answers', :locals => {:survey_response => @response} %>
+<% end %>

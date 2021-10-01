@@ -1,0 +1,21 @@
+closeQtip();
+<% if @owners_changed && @from_index %>
+  <% if @view == Group::View::DETAILED %>
+    <% show_requests_and_slots = (@is_manage_connections_view || current_user.is_owner_of?(@group)) && @group.pending? %>
+    <% group_roles = @current_program.roles.for_mentoring.includes(:permissions, customized_term: :translations) %>
+    <% display_vertically = @is_manage_connections_view && !@group.published? %>
+    <% content = get_group_members_list(@group, group_roles, show_requests_and_slots, display_vertically: display_vertically) %>
+    jQuery('#group_members_container_<%= @group.id %>').html('<%= j(content) %>');
+    jQueryHighlight('#group_<%= @group.id %>');
+    jQuery(document).ready(function() {GroupSearch.inspectSubCheckBox(); GroupSearch.resetTriStateCheckbox();})
+  <% else %>
+    <% columns_to_show = @current_program.group_view.get_group_view_columns(@tab_number) %>
+    <% content = get_group_row_values(@group, columns_to_show, @tab_number) %>
+    jQuery('#group_pane_<%= @group.id %>').replaceWith('<%= j(content) %>');
+    jQueryHighlight('#group_pane_<%= @group.id %>');
+    jQuery(document).ready(function() {GroupSearch.inspectSubCheckBox(); GroupSearch.resetTriStateCheckbox(); initialize.initializeTooltip();})
+  <% end %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("", "<%= j 'feature.connection.content.update_successful'.translate(mentoring_connection: _mentoring_connection) %>", true);
+<% else %>
+  location.reload();
+<% end %>

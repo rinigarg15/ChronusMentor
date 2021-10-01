@@ -1,0 +1,37 @@
+en:
+  feature:
+    login_management:
+      title: Login Management
+      header:
+        default_logins: Default Logins
+        custom_logins: Custom Logins
+        login_type: Login Type
+        linkedin: LinkedIn
+        google: Google
+        edit_password_policy: Edit Password Policy
+        sign_in_with: Sign in with %{title}
+        title:
+          OpenSSLAuth: OpenSSL
+          CASAuth: CAS
+          SAMLAuth: SAML 2.0
+          BBNCAuth: BBNC
+          LDAPAuth: LDAP
+          CookieAuth: Cookie Based
+          SOAPAuth: SOAP
+          OpenAuth: OAuth 2.0
+      label:
+        show_on_top: Show on Top
+        password_pattern: Password Pattern
+        password_message: Password Message
+      action:
+        add_type_login: Add %{type} Login
+        password_policy: Password Policy
+      content:
+        section_description_help_text: Description text shown to the users at the time of login
+        logo_help_text: "Please upload a file of the following content types: jpg, gif, png, bmp (File size limit is 2MB)"
+        regex_string_help_text: Please enter a regular expression that matches the password pattern
+        password_message_help_text: Helptext message shown for the password field.
+        password_message_help_text_2: Typically used to describe password restrictions
+        enable_confirmation: Are you sure you want to enable '%{title}' login?
+        disable_confirmation: Are you sure you want to disable '%{title}' login?
+        delete_confirmation: Users will no longer be able to login using '%{title}'.

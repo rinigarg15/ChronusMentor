@@ -1,0 +1,6 @@
+<div class="btn-group btn-group-sm pull-right m-b-md point_interval_buttons m-r-lg">
+  <%= link_to("display_string.Day".translate, "javascript:void(0)", data: {point_interval: GroupsReport::PointInterval::DAY}, :class => " btn-sm btn btn-white toggle_point_interval #{"active" if point_interval == GroupsReport::PointInterval::DAY}") %>
+  <%= link_to("display_string.Week".translate, "javascript:void(0)", data: {point_interval: GroupsReport::PointInterval::WEEK}, :class => " btn-sm btn btn-white toggle_point_interval #{"active" if point_interval == GroupsReport::PointInterval::WEEK}") %>
+  <%= link_to("display_string.Month".translate, "javascript:void(0)", data: {point_interval: GroupsReport::PointInterval::MONTH}, :class => " btn-sm btn btn-white toggle_point_interval #{"active" if point_interval == GroupsReport::PointInterval::MONTH}") %>
+  <%= hidden_field_tag "point_interval", point_interval %>
+</div>

@@ -1,0 +1,35 @@
+<%= ibox nil do %>
+  <div class="row">
+    <div class = "col-sm-8">
+      <h3 class="pull-left"><%= "feature.reports.label.activity_trends".translate %></h3>
+      <%= render :partial => "reports/groups_report_point_interval_buttons", :locals => {:point_interval => point_interval} %>
+      <div id="cjs_groups_report_chart" class="m-b-xs col-sm-12"></div>
+    </div>
+    <div class="col-sm-4">
+      <%= render :partial => "reports/groups_report_summary_and_pie_chart_view", :locals => {:groups_report => groups_report} %>
+    </div>
+  </div>
+<% end %>
+
+<% group_report_categories = groups_report.messages_by_period.keys.map{ |month| Date::ABBR_MONTHNAMES[ Date.strptime(month, '%Y%m').mon ] } if point_interval == GroupsReport::PointInterval::MONTH %>
+
+<%= javascript_tag do %>
+  jQuery(function() {
+    <%= render :partial => "reports/trend_chart.js", :locals => {
+      render_to: "cjs_groups_report_chart",
+      chart_series_data: get_groups_report_trend_chart_hash(groups_report),
+      start_time: start_date,
+      end_time: end_date,
+      is_groups_report: true,
+      format: FORMAT::HTML,
+      point_interval: point_interval,
+      group_report_categories: group_report_categories,
+      height: 300
+    }
+    %>
+  });
+
+  <% if groups_report.group_ids.any? %>
+    GroupsReport.getConnectionActivityStats("cjs_connections_activity_stats", <%= chr_json_escape(get_groups_report_activity_stats(groups_report).to_json) %>);
+  <% end %>
+<% end %>

@@ -1,0 +1,29 @@
+<% scrap = @scraps_index[scrap.root_id] if !scrap.is_a?(Scrap) %>
+
+<% panel_options = {
+  :collapsible => false,
+  :no_collapse_icon => true,
+  :header_content => get_scrap_header_content(scrap),
+  :panel_class => "no-margins no-border-left white-bg b-b cjs-scrap-item no-border-radius cui-scrap-panel",
+  :link_class => "btn-white no-border",
+  :panel_id => "scrap_item_#{scrap.id}",
+  :panel_heading_class => "pointer cjs-scrap-header no-border-radius",
+  :panel_heading_id => "scrap_header_#{scrap.id}",
+  :panel_body_wrapper_class => "cjs-scrap-siblings collapse b-t",
+  :panel_body_wrapper_id => "child_scraps_#{scrap.id}",
+  :panel_body_class => "cjs-child-scraps panel-body p-t-sm",
+  :no_bold => "true"
+  } %>
+
+  <%= panel nil, panel_options do %>
+    <div class="cjs-child-scraps-holder">
+      <!-- Child scraps will be replaced here onclicking scrap_header -->
+    </div>
+  <% end %>
+
+<%= javascript_tag do %>
+  jQuery("#scrap_header_<%= scrap.id %>").on('click', function(){
+    Discussions.showHideScrapThread('<%= scrap.id %>', '<%= scrap_path(scrap, format: :js, home_page: home_page) %>', <%= home_page %>);
+  });
+  Discussions.scrapCollapse('<%= scrap.id %>');
+<% end %>

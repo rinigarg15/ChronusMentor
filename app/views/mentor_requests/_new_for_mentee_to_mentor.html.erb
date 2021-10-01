@@ -1,0 +1,23 @@
+<% mentor_name = @mentor_request.mentor.name %>
+<% @title =  'feature.mentor_request.header.title_v3'.translate(mentor_name: mentor_name, mentor: _mentor) %>
+<% default_txt = "display_string.Example".translate + 'feature.mentor_request.content.default_message_v4'.translate %>
+<% cancel_link_value = member_path(@mentor_request.mentor.member) %>
+
+<%= simple_form_for @mentor_request, html: { id: "new_mentor_request_form" } do |f| %>
+  <%= f.input :receiver_id, as: :hidden, input_html: { value: @mentor_request.mentor.id } %>
+  <%= f.hidden_field :src, value: src, id: nil %>
+  <%= f.input :message, as: :text, placeholder: default_txt, label: 'feature.mentor_request.label.add_personal_message'.translate, input_html: { class: "form-control", rows: 5 } %>
+
+  <% if @is_dual_request_mode %>
+    <%= control_group do %>
+      <div class="checkbox awesome-bootstrap checkbox-primary">
+        <%= f.check_box :allowed_request_type_change, { checked: true }, AbstractRequest::AllowedRequestTypeChange::MENTOR_REQUEST_TO_MEETING_REQUEST, nil %>
+        <label for="mentor_request_allowed_request_type_change">
+          <%= "feature.mentor_request.content.open_for_meeting_text_v1".translate(meeting: _meeting, mentor_name: mentor_name, meeting_duration: get_x_minute_meeting_text(current_program), mentoring_connection: _mentoring_connection) %>
+        </label>
+      </div>
+    <% end %>
+  <% end %>
+  <%= render partial: 'mentor_requests/action_set', locals: { f: f, cancel_link_value: cancel_link_value, as_popup: as_popup } %>
+<% end %>
+<%= javascript_tag %Q[MentorRequests.trackDisablingDualRequestMode();] if @is_dual_request_mode %>

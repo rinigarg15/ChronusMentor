@@ -1,0 +1,4 @@
+jQuery("#add_new_question_<%= @section.id %>").after('<%= j(render(:partial => "profile_questions/new", :locals => {:profile_question => @profile_question, :section => @profile_question.section})) %>');
+jQuery("#profile_question_<%= @section.id %>_new").slideDown();
+jQuery("#add_new_question_<%= @section.id %>").hide();
+jQuery("#add_new_question_loading_section_<%= @section.id %>").hide();

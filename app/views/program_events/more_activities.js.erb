@@ -1,0 +1,2 @@
+jQuery("#show_more_activities").replaceWith("<%= j render(:partial => 'common/activity_feed', :locals => {:more_url => more_activities_program_event_path(@program_event, :offset_id => @new_offset_id, format: :js), :activities => @program_event_activities}) %>");
+jQuery('#show_more_activities .loading_ra').hide();

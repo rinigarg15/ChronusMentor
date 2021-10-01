@@ -1,0 +1,9 @@
+#Campaign,,,
+Name,AdminView,Enable,
+Campaign 1,All Users,no,
+Campaign 2,All Users,yes,
+,,,
+#Emails,,,
+Subject,Message,Schedule,Campaign
+Subject 1,Message 1,1,Campaign 1
+Subject 2,Message 2,2,Campaign 1

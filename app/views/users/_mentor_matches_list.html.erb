@@ -1,0 +1,32 @@
+<%= display_match_score_unavailable_flash unless @student_document_available %>
+<%= ibox "feature.user.header.recommended_role".translate(:role => _Mentors), content_class: "no-padding" do %>
+  <% if @users.empty? %>
+    <div class="p-sm text-center">
+      <%= "feature.user.content.no_recomended_role".translate(:role => _mentors) %>
+    </div>
+  <% else %>
+    <%= render :partial => 'users/pagination_and_filter_bar', :locals => {
+      :users => @users,
+      :sort_url => matches_for_student_users_path(:format => :js),
+      :match_view => @match_view,
+      :relevance_view => @search_filters_param.present?,
+      :filter_field => @filter_field,
+      :search_query => nil,
+      :role => RoleConstants::MENTOR_NAME,
+      :sort_field => @sort_field,
+      :sort_order => @sort_order,
+      :user_reference_plural => _Mentors
+    } %>
+    <div class="listing clearfix b-b" id="match_results">
+      <%= listing_page(@users, partial: 'users/mentor_match', collection_key: :mentor_match, :locals => { :profile_last_updated_at => @mentor_profile_last_updated_at } ) %>
+    </div>
+    <%= render_user_bottom_pagination(@items_per_page, @users, @users, @filter_field, @user_references_downcase, {}, matches_for_student_users_path) %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  ShowAndHideToggle('.cjs_mentor_container');
+  UserListing.paginationRequest();
+  CoachFeedback.displayRating();
+  CoachFeedback.showRatingPopup();
+<% end %>

@@ -1,0 +1,22 @@
+<div id = "<%= "cjs-goals-activity-container-#{goal.id.to_s}" %>">
+  <% goal_activities = goal.goal_activities.recent.all %>
+  <% content = render(partial: "mentoring_model/activities/goal_activity", collection: goal_activities) if goal_activities.present? %>
+
+  <% if group.active? && group.has_member?(current_user) %>
+    <div class="cjs_goal_activity_new_message clearfix p-sm">
+      <%= simple_form_for goal.goal_activities.new, :url => group_mentoring_model_goal_activities_path(group, goal), :remote => true, :html => {:class => "cjs_new_message_goal_activity_form", id: "new_mentoring_model_activity_#{goal.id}"} do |f| %>
+        <%= f.input :message, :as => :text, :input_html => { :rows => 5, :class => "cjs_manual_progress_goal_activity_message form-control", id: "cjs_goal_activity_message_#{goal.id}"}, :placeholder => "feature.mentoring_model.label.goal_activity_message_placeholder".translate, label: "display_string.your_message".translate, :label_html => {:class => 'sr-only', :for => "cjs_goal_activity_message_#{goal.id}"} %>
+        <% action_set(:class => "pull-right") do %>
+          <%= f.button :submit, "display_string.Save".translate, :class => "cjs_manual_progress_goal_message_form_submit_#{goal.id}", :onclick => "return GoalActivity.validateMessageForm('#{goal.id}');" %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+  <% if goal_activities.present? %>
+    <%= content %>
+  <% else %>
+    <div class="text-center p-sm">
+      <%= "feature.mentoring_model.label.no_goal_activity_placeholder".translate %>
+    </div>
+  <% end %>
+</div>

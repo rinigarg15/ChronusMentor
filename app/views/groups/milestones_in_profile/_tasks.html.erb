@@ -1,0 +1,13 @@
+<% ibox_header_title = "feature.mentoring_model.header.mentoring_plan".translate(Mentoring_Connection: _Mentoring_Connection) if show_title %>
+<%= ibox ibox_header_title, ibox_class: "cjs-display-tasks", collapse_link_class: "hide", content_class: "no-padding" do %>
+  <div class="cjs-mm-task-list-container elements-list cjs-sortable-list cjs-connection-plan-container b-t">
+    <%= render partial: "groups/milestones_in_profile/task", collection: tasks, locals: {task_counter: 0} if tasks.present? %>
+  </div>
+  <% if tasks.empty? %>
+    <%= no_mentoring_model_entities("feature.mentoring_model.description.no_tasks".translate) %>
+  <% end %>
+  <div class="filter_loading_results cjs-sortable-spinner hide">
+    <%= content_tag :span, "common_text.prompt_text.updating".translate %>
+    <i class="fa fa-spinner fa-pulse fa-fw"></i>
+  </div>
+<% end %>

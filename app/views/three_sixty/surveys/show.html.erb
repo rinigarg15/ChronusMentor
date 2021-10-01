@@ -1,0 +1,36 @@
+<% @title = @survey.title %>
+<% @title_description = render(:partial => "three_sixty/surveys/survey_settings") %>
+
+
+<%= ibox "feature.three_sixty.survey.assessees".translate do %>
+  <% @survey_assessees.each do |survey_assessee| %>
+    <div id="three_sixty_survey_notify_reviewers_<%= survey_assessee.id %>">
+      <% collapsible_content three_sixty_survey_assessee_heading_show(@survey, survey_assessee), [], false,
+          :render_panel => true,
+          :class => "m-b-sm table-bordered",
+          :additional_header_class => "clearfix cjs_three_sixty_parent gray-bg b-t b-b b-r b-l",
+          :collapsible => false do %>
+            <%= three_sixty_survey_reviewer_heading(survey_assessee) %>
+            <ul class="list-group" id="three_sixty_survey_assessee_container_<%= survey_assessee.id %>" >
+              <%= render :partial => 'three_sixty/surveys/show_reviewer', :collection => survey_assessee.reviewers, :locals => {:survey => @survey, :survey_assessee => survey_assessee} %>
+            </ul>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= ibox "feature.three_sixty.survey.preview".translate do %>
+  <%= render :partial => "three_sixty/survey/your_details", :locals => {:survey_reviewer => nil, :answers => []} %>
+  <%= three_sixty_survey_rating_instruction(nil, true) %>
+  <%= render :partial => "three_sixty/survey/survey_competency", :collection => @survey_competencies, :locals => {:survey => @survey, :answers => []} %>
+  <% if @survey_oeqs.any? %>
+    <h3 class="has-below-2"><%= "feature.three_sixty.survey.open_ended_questions".translate %></h3>
+    <div class="cjs-alt-color-parent">
+      <%= render :partial => "three_sixty/survey/survey_question", :collection => @survey_oeqs, :locals => {:survey => @survey, :answers => []} %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do  %>
+  ThreeSixty.initializeShowSurvey();
+<% end %>

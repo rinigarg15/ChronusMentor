@@ -1,0 +1,19 @@
+<div class="cjs-groups-report">
+  <% if @groups.present? %>
+    <div id="cjs_groups_report_chart_view">
+      <%= render :partial => "reports/groups_report_chart_view", :locals => {:groups_report => @groups_report, point_interval: point_interval, start_date: start_date, end_date: end_date} %>
+    </div>
+    <%= render :partial => "reports/groups_report_table_view", :locals => {:groups => @groups, :report_view_columns => @report_view_columns, :totals_hash => @groups_report.totals, sub_filter: sub_filter, search_filters: search_filters, member_filters: member_filters, groups_report: groups_report} %>
+
+  <% else %>
+    <%= ibox nil do %>
+      <div class="text-muted text-center">
+        <%= "feature.reports.content.no_active_or_closed_mentoring_connections".translate(:mentoring_connections => _mentoring_connections, :program => _program) %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  GroupsReport.updatePointInterval();
+<% end %>

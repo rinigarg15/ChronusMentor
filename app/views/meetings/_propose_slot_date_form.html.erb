@@ -1,0 +1,24 @@
+<% start_date = Date.current %>
+<% end_date = Date.current %>
+<% no_past = local_assigns[:no_past].nil? ? true : local_assigns[:no_past] %>
+<% no_future = local_assigns[:no_future].nil? ? false : local_assigns[:no_future] %>
+
+<div class="clearfix form-group form-group-sm col-xs-12 no-horizontal-padding cjs-meeting-date-container">
+  <div class="control-label false-label"><%= set_required_field_label("feature.meeting_request.label.available_dates".translate(meeting: _Meeting)) %> </div>
+  <%= render(partial: "meetings/propose_slot_date_form_loader") %>
+  <div class="m-b-sm col-xs-12 no-padding text-muted small"><%= "feature.meeting_request.label.pick_a_date_enhanced_ui_html".translate(previous_button: get_icon_content("fa fa-backward small no-margins"), next_button: get_icon_content("fa fa-forward small no-margins")) %></div>
+  <div class="col-xs-12 no-padding cjs-meeting-strip-container" data-target-input-class="<%= local_assigns[:target_input_class] %>" data-input-field-container-class="<%= local_assigns[:input_field_container_class] %>">
+    <div class="inline table-bordered thick-border">
+      <div class="cui-meeting-strip-box b-l b-t b-b pull-left text-center cjs-get-prev-n-days-container cjs-get-prev-n-days-slots-info <%= "pointer cjs-clickable" unless no_past %> gray-bg" data-url="<%= target_url %>" data-no-past="<%= no_past %>">
+        <div class="small"><br /></div>
+        <div class="p-t-1"><%= get_icon_content("fa fa-backward fa-lg no-margins") %></div>
+        <div class="small p-t-1"><br /></div>
+      </div>
+      <div class="cui-meeting-strip-box b-l b-t b-r b-b pull-left text-center cjs-get-next-n-days-slots-info <%= "pointer cjs-clickable" unless no_future %> gray-bg" data-url="<%= target_url %>" data-no-future="<%= no_future %>" data-max-date="<%= Meeting.get_millisecond(local_assigns[:max_date].beginning_of_day) if local_assigns[:max_date] %>">
+        <div class="small"><br /></div>
+        <div class="p-t-1"><%= get_icon_content("fa fa-forward fa-lg no-margins") %></div>
+        <div class="small p-t-1"><br /></div>
+      </div>
+    </div>
+  </div>
+</div>

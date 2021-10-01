@@ -1,0 +1,11 @@
+<%= response_flash("cjs_user_flash") %>
+<% @title = "feature.user.header.import_users_from_organization".translate(org_name: @current_organization.name) %>
+<% @skip_rounded_white_box_for_content = true %>
+
+<div class="pane" id="cjs_show_user_results">
+  <%= render :partial => "users/new_from_other_program", :locals => {:members => @members} %>
+</div>
+<%= javascript_tag do  %>
+    UserImport.resetAndApply();
+    UserImport.initializeSearch();
+<% end %>

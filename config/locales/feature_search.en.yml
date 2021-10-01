@@ -1,0 +1,5 @@
+en:
+  feature:
+    search:
+      header:
+        query_results_html: Search results for %{query}

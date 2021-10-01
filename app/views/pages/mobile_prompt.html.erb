@@ -1,0 +1,29 @@
+<div class="mobile_prompt text-center middle-box no-vertical-margins no-vertical-padding <%= 'hide' if @mobile_app_login %>">
+  <h3 class="h3 no-vertical-margins"><%= 'mobile_prompt.content.get_app_header'.translate %></h3>
+  <div class="m-t-sm m-b-sm p-l-sm p-r-sm"><%= 'mobile_prompt.content.get_app_text'.translate %></div>
+  <%=  ibox nil, :ibox_class => "middle-box no-vertical-margins clearfix", :content_class => "no-border text-center p-sm p-b-xxs" do %>
+    <div class="pane no-border">
+      <%= link_to(image_tag(get_app_download_icon, class: "prompt_ga_track m-b", size: get_store_icon_size, data: {event: MobileV2Constants::MobilePrompt::DOWNLOAD_GA}), get_app_download_link(@current_organization, CordovaHelper::AndroidAppStoreSource::MOBILE_PROMPT)) %>
+      <div id="program_listing_logo_or_banner" class="centered_content no-padding clearfix">
+        <%= image_tag(get_mobile_prompt_image, class: "m-t-sm") %>
+      </div>
+    </div>
+  <% end %>
+  <div class="m-t-sm"> <%= 'mobile_prompt.content.app_present'.translate %></div>
+  <div class="m-t-sm"><%= link_to('mobile_prompt.content.open_app'.translate, "chronustd://?previous_url=" + @return_to_url.to_s, class: "prompt_ga_track btn btn-primary font-bold open_app", data: {event: MobileV2Constants::MobilePrompt::OPEN_APP_GA}) %></div>
+  <div class="m-t-xs clearfix">
+    <%= horizontal_line(class: "m-b m-t col-xs-5 no-padding") %><span class="col-xs-2 m-t-sm"><%= 'mobile_prompt.content.or'.translate %></span>
+    <%= horizontal_line(class: "m-b m-t col-xs-5 no-padding pull-right") %>
+  </div>
+  <div class="m-t-xs"><%= link_to('mobile_prompt.content.continue_to_site'.translate, @return_to_url, class: "prompt_ga_track mobile_prompt_selection", data: {event: MobileV2Constants::MobilePrompt::CONTINUE_GA}) %></div>
+</div>
+<% event = get_mobile_prompt_event %>
+<%= javascript_tag do %>
+  MobilePrompt.gaTrackMobilePrompt('<%= MobileV2Constants::MobilePrompt::GA_NAME[event]%>', '<%= event %>');
+  <% if @mobile_app_login %>
+    MobileAppTracking.gaTrackClickedLogintoProgramFromEmail('<%= Experiments::MobileAppLoginWorkflow::Alternatives::ALTERNATIVE_B %>', '<%= Experiments::MobileAppLoginWorkflow::Alternatives::GA_EVENT_LABEL_ID_MAPPING[Experiments::MobileAppLoginWorkflow::Alternatives::ALTERNATIVE_B] %>');
+    MobilePrompt.openLinkInApp("<%= raw @return_to_url %>");
+  <% elsif android_browser?  %>
+    MobilePrompt.showAndroidOpenAppFlash('<%= j("mobile_prompt.content.open_app_flash_android".translate(download_link: link_to("mobile_prompt.content.install".translate, get_app_download_link(@current_organization, CordovaHelper::AndroidAppStoreSource::MOBILE_PROMPT))).html_safe) %>');
+  <% end %>
+<% end %>

@@ -1,0 +1,14 @@
+<% role_mapper = {RoleConstants::ROLE_DISPLAY_NAME_MAPPING[RoleConstants::STUDENT_NAME] => RoleConstants::STUDENT_NAME, RoleConstants::MENTOR_NAME => RoleConstants::MENTOR_NAME} %>
+<% role_mapper.keys.each do |role| %>
+  <% admin_view = instance_variable_get("@#{role}_view") %>
+  <% admin_view_filters = instance_variable_get("@#{role}_view_filters") %>
+  <% admin_view_users = instance_variable_get("@#{role}_view_users") %>
+  jQuery('#bulk_match_<%= role %>_view_id').select2('val', <%= admin_view.try(:id) || 'null' %>)
+  jQuery('#bulk_match_<%= role %>_view_hidden_id').val(<%= admin_view.try(:id) || '' %>)
+  <% if admin_view.present? %>
+    <% view_details = render(:partial => "common/preview_view_details", :locals => {:admin_view => admin_view, :admin_view_filters => admin_view_filters, :role => role_mapper[role], admin_view_users: admin_view_users}) %>
+    jQuery('#bulk_match .cjs_<%= role_mapper[role] %>_view_content').replaceWith('<%= j(view_details) %>');
+  <% else %>
+    jQuery('#bulk_match .cjs_<%= role_mapper[role] %>_view_content').replaceWith('<div class="cjs_<%= role_mapper[role] %>_view_content"></div>');
+  <% end %>
+<% end %>

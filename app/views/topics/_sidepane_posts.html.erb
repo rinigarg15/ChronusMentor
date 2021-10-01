@@ -1,0 +1,34 @@
+<% footer_content = capture do %>
+  <%= render partial: "common/sidepane_msg_footer", locals: { footer_content: "feature.connection.content.placeholder.reply_to_conversation".translate, footer_class: "cjs_add_message_sidepane" } %>
+<% end %>
+<% mobile_view = (mobile_app? || mobile_device?) %>
+<% header_content = capture do %>
+  <div class="clearfix p-sm p-b-xs">
+    <%= content_tag(:h5, truncate(topic.title, length: MentoringModel::Task::SIDEPANE_TITLE_TRUNCATE_LENGTH), title: topic.title, class: "font-600 no-padding col-xs-10") %>
+    <%= link_to("javascript:void(0)", {class: "close-link col-xs-2 no-padding", onclick: mobile_view ? %Q[GroupTabs.mobileToggleToMainContent();jQuery('.topic_#{topic.id}').removeClass("gray-bg cjs_selected_topic");jQuery('.cui-mobile-floater-action').show();GroupTabs.adjustSlickSlideHeight(".connections-slick", 0);] : %Q[jQuery('.row-offcanvas-right').toggleClass('active');jQuery('.topic_#{topic.id}').removeClass("gray-bg cjs_selected_topic");]}) do %>
+      <%= get_icon_content("fa fa-times fa-lg no-margins text-muted pull-right")  + set_screen_reader_only_content("display_string.Close".translate) %>
+    <% end %>
+  </div>
+  <%= content_tag(:div, horizontal_line(class: "no-margins")) %>
+<% end %>
+
+<%= ibox nil, no_collapse: true, scroll_required: !mobile_view, scroll_height_class: "", ibox_class: mobile_view ? "noshadow" : "cui-full-height-sidebar gray-bg m-r noshadow", header_content: header_content, title_class: "no-padding white-bg", content_class: "no-padding gray-bg no-borders", footer: footer_content, footer_class: "no-borders no-padding" do %>
+  <div class="white-bg p-sm boxshadow-bottom">
+    <%= content_tag(:div, chronus_sanitize_while_render(render_more_less(topic.body.html_safe, Topic::DESCRIPTION_TRUNCATE_LENGTH), sanitization_version: @current_organization.security_setting.sanitization_version, sanitization_options: { tags: %w[tbody table tr td th a span ul li ol p b i u strike blockquote sub sup em strong] } ), class: "media-body") %>
+  </div>
+  <div class="m-t-md">
+    <%= render partial: "topics/posts_listing", locals: { topic: topic, posts: posts, show_in_sidepane: true } %>
+  </div>
+  <%= ibox nil, ibox_id:"reply_box" , ibox_class: "hidden", content_class: "no-padding" do %>
+    <%= render partial: 'admin_messages/reply', locals: {id: topic.id, reply: [topic.forum, topic, Post.new], from_inbox: false, remote: true, home_page: home_page, from_discussion: true} %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  GroupTabs.setSlimScrollRightSideBar();
+  GroupTabs.affixTabContentSideBar();
+  Discussions.showDiscussReplyForm();
+  <% error_message = "#{'feature.forum.label.Post'.translate} #{'activerecord.errors.models.post.attributes.body.blank'.translate}" %>
+  Comment.initializeForm("<%= error_message %>");
+<% end %>
+

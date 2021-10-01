@@ -1,0 +1,66 @@
+en:
+  feature:
+    question_answers:
+      header:
+        answer_this_question: Answer this question
+        ask_question: Ask a Question
+        question_answers: Question & Answers
+        sort_by:
+          latest: Latest
+          most_viewed: Most viewed
+          most_helpful: Most helpful
+        your_answer: Your Answer
+        recent_answer: "%{member} Recent Answer"
+      label:
+        answer: answer
+      content:
+        answer_count:
+          one: 1 answer
+          other: "%{count} answers"
+        answers: Answers
+        answer: Answer
+        blank_answer_warning: Answer cannot be blank
+        delete_warning: Are you sure you want to delete this question? All answers to this question will also be deleted.
+        no_answers_message: There are no answers for this question yet.
+        no_questions_message: There are no questions yet.
+        no_related_questions_message: There are no related questions currently.
+        question_stats:
+          followers:
+            one: Follower
+            other: Followers
+          views:
+            one: "%{count} View"
+            other: "%{count} Views"
+        posted_ago: Posted %{time_in_words} ago
+        posted_ago_by_html: Posted %{time_in_words} ago by %{user_link}
+        related_questions: Related Questions
+        required_field_error: Please fill all the required fields. Fields marked * are mandatory.
+        tips:
+          header: Tips
+          first_html: Try asking a %{tip_1_strong} kind of question to get more appropriate answers.
+          first_strong: how, why, what, when or where
+          second: Include all relevant details about your question and be concise.
+        top_contributors: Top Contributors
+        user_belongs_to_program_error: doesn't belong to program
+        write_your_answer: Write your answer
+        see_all_answers_raquo_html: See all answers &raquo;
+        n_like:
+          zero: Like
+          one: Like
+          other: Likes
+        n_like_v1:
+          one: Like
+          other: Likes
+        n_followers:
+          one: "%{count} Follower"
+          other: "%{count} Followers"
+        started_following: You have started following this question.
+        stopped_following: You have stopped following this question.
+        add_a_question: Add a Question
+      action:
+        answer_question: Answer Question
+        follow: Follow
+        post_answer: Post Answer
+        post_question: Post Question
+        following: Following
+        ask_new_question: Ask a Question

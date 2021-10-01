@@ -1,0 +1,44 @@
+<% show_find_new_project = show_find_new_project?(current_user, @filter_params) %>
+<% is_manage_view = local_assigns[:is_manage_view] %>
+<% @page_action = {:label => "feature.connection.action.find_new_projects".translate(mentoring_connections: _mentoring_connections), :url =>  find_new_groups_path, class: "btn btn-primary btn-large find_new_project_link #{'hide' unless show_find_new_project}"} if current_user.can_send_project_request? %>
+
+<% status = AbstractRequest::Status::STRING_TO_STATE[filter_params[:status]] || AbstractRequest::Status::NOT_ANSWERED %>
+
+<% if project_requests.total_entries == 0 %>
+  <%= ibox nil, ibox_class: "text-center" do %>
+    <%= 'feature.project_request.content.empty_text'.translate(mentoring_connection: _mentoring_connection) %>
+  <% end %>
+<% else %>
+  <%= ibox nil, content_class: "no-padding" do %>
+    <% if (current_user.can_manage_project_requests? || @owner_view) && status == AbstractRequest::Status::NOT_ANSWERED %>
+      <div class='pagination_box p-xs p-l-sm p-r-sm b-b clearfix'>
+        <%= project_requests_bulk_actions(ga_src, is_manage_view) %>
+      </div>
+      <label for="cjs_primary_checkbox" class="sr-only">
+        <%= "feature.project_request.content.select_all_label".translate(mentoring_connection: _mentoring_connection) %>
+      </label>
+      <div class='pull-left m-t-md m-l-md m-r-lg'>
+        <%= check_box_tag :cjs_primary_checkbox %>
+      </div>
+      <%= top_bar_in_listing({ collection: project_requests, params: { format: :js } }, { show: true }) %>
+      <%= render partial: 'project_requests/select_all', locals: { project_requests: project_requests, filter_params: filter_params } %>
+    <% else %>
+      <%= top_bar_in_listing({ collection: project_requests, params: { format: :js } }, { show: true }) %>
+    <% end %>
+    <div id="cjs_project_requests_listing">
+      <% if current_user.can_manage_project_requests? || @owner_view %>
+        <%= render partial: 'project_requests/project_request_admin', collection: project_requests, locals: { status: status, ga_src: ga_src, is_manage_view: is_manage_view } %>
+      <% else %>
+        <%= render partial: 'project_requests/project_request', collection: project_requests, locals: { ga_src: ga_src } %>
+      <% end %>
+    </div>
+    <% pagination_options = { collection: project_requests, ajax: true } %>
+    <% pagination_options[:params] = @action_params if is_manage_view %>
+    <%= bottom_bar_in_listing(pagination_options) unless project_requests.empty? %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  ProjectRequests.initializeMaxLength(<%= project_requests.total_entries %>);
+  ProjectRequests.inspectActions("<%= j('feature.project_request.content.select_atleast_one_request'.translate(mentoring_connection: _mentoring_connection)) %>");
+<% end %>

@@ -1,0 +1,35 @@
+<div class="panel-body no-padding cjs-task-checkin-container" id="task_checkin_<%= group_checkin.id %>_container">
+  <div class="list-group-item no-border p-l-0" id="task_checkin_<%= group_checkin.id %>_content">
+    <div class="clearfix">
+      <div class="media no-margins p-l-0">
+        <div class="media-left p-t-xxs">
+           <%= member_picture_v3(group_checkin.user.member, {row_fluid: true, size: :medium, no_name: true}, { class: "img-circle", :size => "35x35"}) %>
+        </div>
+        <div class="media-body">
+          <div class="p-xs well <%= 'white-bg' unless current_user.member == group_checkin.user.member %> break-word no-margins ">
+            <% if @can_checkin_access %>
+              <div class="pull-right btn-group">
+                <%= link_to(get_icon_content("fa fa-trash text-default no-margins") + set_screen_reader_only_content("display_string.Delete".translate), group_checkin_path(group_checkin, group_id: group.id, task_id: group_checkin.checkin_ref_obj_id) , data: {confirm: "common_text.confirmation.sure_to_delete".translate} , remote: true, method: :delete, class: "btn btn-white btn-sm") %>
+                <%= link_to(get_icon_content("fa fa-pencil text-default no-margins") + set_screen_reader_only_content("display_string.Edit".translate), edit_group_checkin_path(group_checkin, group_id: group.id, task_id: group_checkin.checkin_ref_obj_id), remote: true, method: :get, class: "btn btn-white btn-sm") %>
+              </div>
+            <% end %>
+            <div class="font-bold small m-b-xs">
+              <% if current_user.member == group_checkin.user.member %>
+                <%= "feature.messaging.content.Me".translate %>
+              <% else %>
+                <%= link_to_user(group_checkin.user, {content_method: [:name, name_only: true], no_hovercard: true}) %>
+              <% end %>
+            </div>
+            <div>
+              <%= chronus_auto_link(group_checkin.comment) %>
+            </div>
+          </div>
+          <div class="small m-t-xs text-muted">
+            <%= append_text_to_icon("fa fa-clock-o no-margins", formatted_time_in_words(group_checkin.created_at)) %>
+            <%= render partial: "group_checkins/group_checkin_duration", locals: {checkin: group_checkin} %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

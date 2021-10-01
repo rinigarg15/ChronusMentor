@@ -1,0 +1,23 @@
+<% engagement_type = current_program.get_engagement_type %>
+<% heading_text = (engagement_type == Program::Dashboard::EngagementsReport::MEETINGS_ENGAGEMENT_TYPE ?  "feature.reports.content.healthy_connection_text".translate(engagements: _meetings) : "feature.reports.content.healthy_connection_text".translate(engagements: _mentoring_connections)) %>
+<%= form_tag "javascript:void(0);" do %>
+  <div>
+    <%= render(partial: "reports/management_report/reports_to_show_in_tile_settings", locals: {tile: tile}) %>
+  </div>
+  <div>
+    <h4 class="m-b-md"><%= "feature.reports.content.configure_connection_health".translate %></h4>
+    <%= render(partial: "reports/outcomes_report/outcomes_report_survey_questions", locals: {heading_text: heading_text}) %>
+  </div>
+
+  <%= hidden_field_tag('filters[date_range]', options[:date_range], id: "cjs_engagement_health_date_range") %>
+  <%= hidden_field_tag('filters[date_range_preset]', options[:date_range_preset], id: "cjs_engagement_health_date_range_preset") %>
+
+  <% action_set(class: "pull-right m-t-md") do %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", "data-dismiss" => "modal" %>
+    <%= submit_tag("display_string.Save".translate, class: 'btn btn-primary cjs_groups_section_management_report', data: {disable_with: "display_string.Please_Wait".translate, url: update_tile_settings_dashboard_report_sub_sections_path}) %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  ManagementReport.updateGroupsReportSection("<%= tile %>");
+<% end %>

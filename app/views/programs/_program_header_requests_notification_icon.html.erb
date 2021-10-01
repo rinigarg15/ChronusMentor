@@ -1,0 +1,43 @@
+<% can_connect_with_a_mentor = current_user.can_connect_with_a_mentor? %>
+<% can_connect_with_a_mentee = current_user.can_connect_with_a_mentee? %>
+
+<% cumulative_requests_count = @past_requests_count.zero? && !((can_connect_with_a_mentor || can_connect_with_a_mentee) && current_user.can_connect_with_mentor_and_has_slots?(can_connect_with_a_mentor)) ? @past_requests_count : @cumulative_requests_notification_count %>
+
+<% count_str = " <span class='label label-danger m-b-md'>#{cumulative_requests_count}</span>".html_safe if cumulative_requests_count > 0 %>
+
+<% send_request_path = can_connect_with_a_mentor ? users_path(src: EngagementIndex::Src::BrowseMentors::HEADER_NAVIGATION) : users_path(:view => RoleConstants::STUDENTS_NAME) %>
+
+<% send_request_text = can_connect_with_a_mentor ? "feature.user.action.connect_with_a_mentor".translate(:Mentor => h(_Mentor)) : "feature.user.action.connect_with_a_mentee".translate(:Mentee => h(_Mentee)) %>
+
+<% send_request_badge_count = get_send_request_badge_count(@past_requests_count, can_connect_with_a_mentor) %>
+
+<li class="dropdown pogram-header-icons cui_requests_notification_dropdown word_break p-r-xs <%= hidden_on_mobile %>">
+  <%= link_to content_tag(:big, get_icon_content("fa fa-user-plus") + count_str) + content_tag(:span, "app_layout.label.requests".translate, :class => "#{hidden_on_mobile}") + content_tag(:span, "", :class => "caret"), "javascript:void(0)", :class => "dropdown-toggle no-waves count-info pending_requests_notification_icon", "data-toggle" => "dropdown" %>
+
+  <ul id="pending_requests_dropdown" class="dropdown-menu pull-right cui_notification_icon_dropdown_in_header animated fadeIn">
+    <%= quick_link("quick_links.program.mentor_requests_v1".translate(Mentoring: h(_Mentoring)), mentor_requests_path({ src: EngagementIndex::Src::BrowseMentors::HEADER_NAVIGATION }.merge(@mentor_requests_url_options)), "fa fa-user-plus fa-fw p-r-md", @new_mentor_requests_count, {notification_icon_view: true, class: "normal-white-space break-word-all"}) if @new_mentor_requests_count && (!@current_program.matching_by_mentee_and_admin? || current_user.is_student?) %>
+
+    <%= quick_link("quick_links.program.meeting_requests_v1".translate(:Meeting => h(_Meeting)), meeting_requests_path(src: EngagementIndex::Src::BrowseMentors::HEADER_NAVIGATION), "fa fa-calendar-plus-o fa-fw p-r-md", @new_meeting_requests_count, {:notification_icon_view => true, :class => "normal-white-space break-word-all"}) if @new_meeting_requests_count %>
+
+    <%= quick_link("quick_links.program.mentoring_offers_v2".translate(:Mentoring => h(_Mentoring)), mentor_offers_path(src: EngagementIndex::Src::BrowseMentors::HEADER_NAVIGATION), "fa fa-user-plus fa-fw p-r-md", @new_mentor_offers_count, {:notification_icon_view => true, :class => "normal-white-space break-word-all"}) if @new_mentor_offers_count %>
+
+    <%= get_project_requests_quick_link(@current_program, @new_project_requests_count) %>
+
+    <% if @new_mentor_offers_count || @new_meeting_requests_count || (@new_mentor_requests_count && (!@current_program.matching_by_mentee_and_admin? || current_user.is_student?)) || @new_project_requests_count %>
+      <li role="separator" class="divider no-margins"></li>
+    <% end %>
+
+    <%= quick_link("quick_links.program.upcoming_meetings".translate(:Meetings => h(_Meetings)), member_path(wob_member, :tab => MembersController::ShowTabs::AVAILABILITY, :src => EngagementIndex::Src::BrowseMentors::HEADER_NAVIGATION), "fa-fw fa fa-calendar", @upcoming_meetings_count, {:notification_icon_view => true, :class => "normal-white-space break-word-all"}) if @upcoming_meetings_count %>
+
+    <%= quick_link("quick_links.program.program_events".translate, program_events_path(src: EngagementIndex::Src::BrowseMentors::HEADER_NAVIGATION), "fa fa-calendar fa-fw", @unanswered_program_events_count, {:notification_icon_view => true, :class => "normal-white-space break-word-all"}) if @current_program.program_events_enabled? %>
+
+    <% if can_connect_with_a_mentor || can_connect_with_a_mentee %>
+      <% if @upcoming_meetings_count %>
+        <li role="separator" class="divider no-margins"></li>
+      <% end %>
+
+      <%= quick_link(send_request_text, send_request_path, "fa fa-user fa-fw p-r-md", send_request_badge_count, {:notification_icon_view => true, :class => "normal-white-space break-word-all"}) %>
+    <% end %>
+  </ul>
+</li>
+

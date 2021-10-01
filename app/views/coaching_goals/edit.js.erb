@@ -1,0 +1,3 @@
+<% content = render(:partial => 'coaching_goals/goal_form', :locals => {:is_ajax => true}) %>
+jQuery(".cjs_goal_content").replaceWith("<%= j content %>");
+initialize.setDatePicker();

@@ -1,0 +1,18 @@
+en:
+  email_translations:
+    reply_to_admin_message_failure_notification:
+      title: Reply to Admin Message Failure Notification
+      description_v1: This email is sent to the participant when the email reply is not properly posted in the system.
+      subject: 'Re: {{subject}}'
+      content_v2_html: We're sorry, but your message could not be posted because the sender email, {{sender_email}}, is not recognized by the {{customized_subprogram_term}}. You may be receiving this message due to replying with a different email address than the one you used to register.<br/><br/>If you have any questions, please contact the {{customized_admin_term}} <a href='{{url_contact_admin}}'>here</a>.<br/><br/><i>Your original message was:<br/><br/>{{content}}</i><br/>
+      tags:
+        sender_email:
+          description: email of the sender
+        subject:
+          description: Subject of the email
+          example: Reviewing my resume
+        content:
+          description: Content of the email
+          example_v1: Hello Mark! Can you please review my resume?
+        url_contact_admin:
+          description: Url for contacting the administrator

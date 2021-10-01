@@ -1,0 +1,25 @@
+<div class="test_mail_popup_dialog">
+  <%- modal_container("feature.announcements.action.test_email".translate, :modal_id => "modal_show_popup_link") do -%>
+  <div><%= "feature.announcements.content.get_test_mail_addresses".translate %></div>
+    <%= simple_fields_for announcement do |f| %>
+      <%= f.input :notification_list_for_test_email, :as => :text, :hint => example_email_list,
+        :label_html => {:class => 'sr-only'}, :input_html => {:class => 'form-control', :rows => 5} -%>
+      <div class="send_test_mail_popup_buttons">
+        <%= form_tag send_test_emails_announcements_path, :remote =>true do%>
+          <%= f.hidden_field :title, :id => "test_email_title", :name => "test_announcement[title]" %>
+          <%= f.hidden_field :body, :id => "test_email_body", :name => "test_announcement[body]" %>
+          <%= hidden_field_tag :id, announcement.id unless announcement.new_record? -%>
+          <%= f.hidden_field :notification_list_for_test_email, :id => "test_email_notification_list_for_test_email",
+            :name => "test_announcement[notification_list_for_test_email]" -%>
+            <% action_set(:class => "pull-right") do %>
+              <%= link_to_function "display_string.Cancel".translate, 'AnnouncementTestmail.clearNotificationList();', :class => "popup_closebox btn-white btn", "data-dismiss" => "modal" -%>
+              <%= f.button :submit, "display_string.Send".translate, :onclick => %Q[
+              if (!AnnouncementTestmail.collectDetailsAndValidateForm('#{j(example_email_list)}')) {return false;};],
+                :id => "send_test_mail_button"
+              -%>
+            <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <%- end -%>
+</div>

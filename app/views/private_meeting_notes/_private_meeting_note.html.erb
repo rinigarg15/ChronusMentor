@@ -1,0 +1,5 @@
+<div id="note_<%= private_meeting_note.id %>" class="private_note list-group-item">
+  <div class="show_box" id="show_note_<%= private_meeting_note.id %>">
+    <%= render :partial => "private_meeting_notes/private_meeting_note_content", locals: {private_meeting_note: private_meeting_note} %>
+  </div>
+</div>

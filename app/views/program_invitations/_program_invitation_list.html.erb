@@ -1,0 +1,32 @@
+<%= include_kendo %>
+
+<%= form_tag(export_csv_program_invitations_path(format: :csv), id: "cjs_program_invitations_export_csv_form", class: "hide") do %>
+  <%= hidden_field_tag("selected_ids", nil, class: "cjs_csv_invitation_ids", id: nil) %>
+<% end %>
+
+<%= ibox "feature.program_invitations.label.invitations_sent".translate, ibox_class: " cjs_select_all_result" do %>
+  <% if program_invitations.any? %>
+    <div class="cjs_program_invitations_bulk_actions clearfix m-b">
+      <%= program_invitation_bulk_actions %>
+    </div>
+    <div id="campaigns-result" class="campaign-management-kendo-result program_invitation-listing-cursor">
+      <div class="cjs_table_enclosure clearfix">
+        <div id="cjs_campaigns_result" class="k-content">
+          <%= render partial: "common/select_all_results", locals: { total_entries: total_count, entries_in_page: @entries_in_page, select_all_ids_path: select_all_ids_program_invitations_path(sent_by_admin: @sent_by_admin), context: "feature.program_invitations.header.invitations".translate } %>
+          <%= content_tag :div, "", id: "cjs_program_invitation_listing_kendogrid" %>
+          <%= initialize_program_invitation_listing_kendo_script(@current_program, total_count, apply_pending_filter) %>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="text-muted text-center">
+      <%= "feature.program_invitations.content.no_invitations_to_show".translate %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function() {
+    ProgramInvitationSelectAll.inspectBulkActions("<%= j('feature.program_invitations.kendo.select_atleast_one'.translate) %>", "<%= j('feature.admin_view.content.loading_export_report'.translate) %>", "<%= j('feature.admin_view.content.proress_bar_alt_text'.translate) %>", "#cjs_program_invitations_export_csv");
+  });
+<% end %>

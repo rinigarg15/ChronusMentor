@@ -1,0 +1,69 @@
+<% updating_features_disabled = !@mentoring_model.can_update_features? %>
+<% @title = mentoring_model_pane_title(@mentoring_model) %>
+<% @page_action = [{label: "feature.mentoring_model.label.upload_from_template_csv".translate(:Mentoring_Connection => _Mentoring_Connection), js: %Q[jQuery(".cjs-import-form-container").slideDown();]}] if @mentoring_model.can_update_features? %>
+<% @skip_rounded_white_box_for_content = true %>
+<% confirmation_messages_hash = {
+  milestonesChecked: "feature.mentoring_model.confirmation_text.milestones_checked".translate,
+  milestonesUnChecked: "feature.mentoring_model.confirmation_text.milestones_unchecked".translate,
+  goals: "feature.mentoring_model.confirmation_text.goals_unchecked".translate,
+  tasks: "feature.mentoring_model.confirmation_text.tasks_unchecked".translate,
+  messages: "feature.mentoring_model.confirmation_text.messages_unchecked".translate,
+  meetings: "feature.mentoring_model.confirmation_text.meetings_unchecked".translate,
+  engagement_surveys: "feature.mentoring_model.confirmation_text.engagement_surveys_unchecked".translate(:_mentoring_connection => _Mentoring_Connection)
+  }
+%>
+
+<%= mentoring_model_wizard_view(super_console?, MentoringModelsHelper::Headers::CONFIGURE_TEMPLATE, @mentoring_model) do %>
+  <div>
+    <div class="cjs-import-form-container <%= "hide" unless @open_upload_form %>">
+      <%= simple_form_for :mentoring_model, url: upload_from_templates_mentoring_model_path(@mentoring_model), html: {class: "form-horizontal clearfix", multipart: true}, :wrapper => :horizontal_input do |f| %>
+        <%= f.input :template, as: :file, label: "feature.mentoring_model.label.templates_csv_v1".translate(:Mentoring_Connection => _Mentoring_Connection), required: true %>
+        <% action_set(:class => "pull-right") do %>
+          <%= link_to_function "display_string.Cancel".translate, %Q[jQuery(".cjs-import-form-container").slideUp();], class: 'btn btn-white' %>
+          <%= f.button :submit, "display_string.Upload".translate, class: 'btn btn-primary cjs-importer-submit', data: { confirm: "feature.mentoring_model.description.upload_csv_confirm".translate(:mentoring_connection => _mentoring_connection)} %>
+        <% end %>
+      <% end %>
+      <hr/>
+    </div>
+    <h3>
+      <%= "feature.multiple_templates.header.Template_Features".translate %>
+    </h3>
+    <div>
+      <%= "feature.mentoring_model.header.explain_mentoring_model_setup".translate %>
+    </div>
+    <hr/>
+    <%= simple_form_for :permissions, :url => create_template_objects_mentoring_model_path(@mentoring_model), html: {class: "form-horizontal"} do |form| %>
+      <div id="enable_features">
+        <% ObjectPermission::MentoringModel::PERMISSIONS.each do |permission| %>
+          <div>
+            <div class="media-left">
+              <%= mentoring_model_v2_icon(permission, :container_class => "fa fa-circle") %>
+            </div>
+            <div class="media-body">
+              <%= content_tag(:div, "feature.mentoring_model.header.#{permission}".translate(:Meetings => _Meetings), :class => "font-600") %>
+              <%= content_tag(:div, "feature.mentoring_model.description.#{permission}".translate(:meetings => _meetings, :mentoring_connection => _mentoring_connection), :class => "small") %>
+              <%= choices_wrapper("feature.mentoring_model.label.user_groups".translate) do %>
+                <%= mentoring_model_permission_checkbox(@admin_hash[permission], form, permission, "admin", @mentoring_model_data_entities, updating_features_disabled) %>
+                <%= render :partial => "mentoring_models/goal_progress_type", :locals => {form: form, disabled: updating_features_disabled, visible: @admin_hash[permission]} if permission == ObjectPermission::MentoringModel::GOAL %>
+                <%= mentoring_model_permission_checkbox(@users_hash[permission], form, permission, "users", @mentoring_model_data_entities, updating_features_disabled) %>
+              <% end %>
+            </div>
+            <hr/>
+          </div>
+        <% end %>
+      </div>
+      <%= render partial: "mentoring_models/settings", locals: { mentoring_model: @mentoring_model } %>
+      <% action_set(class: "pull-right") do %>
+        <%= form.submit "display_string.Save_and_Continue_Later".translate, name: "set_up_and_continue_later", class: "form-submit-validation btn btn-white", disable_with: "display_string.Please_Wait".translate %>
+        <%= form.button :submit, "display_string.Proceed_to_Next_Step_html".translate(label: "feature.multiple_templates.button_labels.add_content".translate) %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    Features.undisableCheckBoxes();
+    MentoringModels.confirmSetUpMentoringModel("<%= j confirmation_messages_hash.to_json.html_safe %>");
+  });
+<% end %>

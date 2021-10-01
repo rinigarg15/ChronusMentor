@@ -1,0 +1,28 @@
+<% close_popup_class = @propose_workflow ? "cjs_close_set_start_date_propose_flow" : "" %>
+<% popup_header_text = @propose_workflow ? "feature.connection.header.set_circle_start_date_popup_propose_workflow_header".translate(mentoring_connection: _mentoring_connection) : "feature.connection.header.set_start_date_popup_header".translate(group_name: @group.name) %>
+<% start_date = DateTime.localize(@group.start_date, format: :short) %>
+
+<% modal_v3_popup popup_header_text, {additional_close_button_class: close_popup_class} do %>
+  <%= simple_form_for @group, :url => update_answers_group_path(@group, set_start_date_popup: true, propose_workflow: @propose_workflow, edit_start_date: start_date.present?, from_profile_flash: @from_profile_flash), :remote => true, :html => {:multipart => true, :id => "set_circle_start_date"} do |f| %>
+    <%= content_tag(:div, @group.proposed? ? "feature.connection.content.set_start_date_propose_flow_notice_text".translate(mentoring_connection: _mentoring_connection) : "feature.connection.content.set_start_date_propose_without_approval_flow_notice_text".translate(mentoring_connection: _mentoring_connection), class: "m-b-sm") if @propose_workflow %>
+    
+    <%= content_tag(:div, "feature.connection.content.start_date_label".translate, class: "control-label false-label m-b-xs") %>
+    <%= content_tag(:label, "feature.meetings.form.date".translate, class: "sr-only", for: "circle_start_date_form") %>
+    <%= construct_input_group([ { type: "addon", icon_class: "fa fa-calendar" } ], [], {:input_group_class => "m-b-xs"}) do %>
+      <%= text_field_tag("[group][start_date]", (start_date || ""), :class => "form-control", :id => "circle_start_date_form", data: date_picker_options({ min_date: Date.current })) %>
+    <% end %>
+    <%= content_tag(:div, "feature.connection.content.set_start_date_circle_start_info".translate(mentoring_connection: _mentoring_connection, mentor: _mentor, mentee: _mentee), class: "m-b-lg text-muted small") %>
+
+    <% action_set(:class=>"pull-right") do %>
+      <%= link_to_function @propose_workflow ? "display_string.Skip".translate : "display_string.Cancel".translate, @propose_workflow ? "closeQtip(); window.location.href = \'#{profile_group_path(@group)}\'" : "closeQtip();", :class => 'btn btn-white' %>
+      <%= f.button :submit, "feature.connection.action.set_start_date".translate, :disable_with => "display_string.Please_Wait".translate %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do  %>
+  jQuery(document).ready(function() {
+    initialize.setDatePicker();
+    Groups.handleCloseStartDatePopupProposeFlow("<%= profile_group_path(@group) %>");
+  });
+<% end %>

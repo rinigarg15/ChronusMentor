@@ -1,0 +1,31 @@
+<% @title = "feature.calendar.title.mentoring_calendar_v1".translate(Mentoring: _Mentoring) %>
+<% @page_action = { label: "feature.calendar.action.view_mentors".translate(Mentors: _Mentors), url: users_path(src: EngagementIndex::Src::BrowseMentors::MENTORING_CALENDAR), class: "btn btn-primary cjs_title_link" } %>
+
+<%= ibox "feature.calendar.title.mentoring_calendar_v1".translate(Mentoring: _Mentoring), content_class: "no-padding", ibox_id: "cjs_mentoring_calendar", show_fullscreen_icon: true do %>
+  <%= top_bar_in_listing({}, { show: true }, {}) %>
+  <div class="p-sm">
+    <div class="m-b-lg p-b">
+      <%= "feature.calendar.content.meeting_schedule_help_text_v2_html".translate(count: @current_program.get_allowed_advance_slot_booking_time, :meeting => _a_meeting, n_hours: "<b>#{'common_text.hour'.translate(count: @current_program.get_allowed_advance_slot_booking_time)}</b>".html_safe) %><br/>
+      <% append_time_zone_help_text %>
+      <div class="m-t-sm text-right">
+        <i class='fa fa-lightbulb-o m-r-xxs media-middle'></i>
+        <span class="text-muted m-r-xs font-bold small"><%= "feature.calendar.content.tip".translate %></span>
+        <span class="label inline m-r-xxs label-yellow"><%= "feature.calendar.content.busy_slots".translate %></span>
+        <span class="label inline m-r-xxs label-navy"><%= "feature.calendar.content.availability_slots".translate %></span>
+        <span class="label inline m-r-xxs label-blue"><%= "feature.calendar.content.accepted_meeting_slots".translate(:Meeting => _Meeting) %></span>
+        <span class="label inline m-r-xxs label-dark-gray"><%= "feature.calendar.content.expired_slots".translate %></span>
+      </div>
+    </div>
+    <div id="mentoring_calendar" eventsUrl=<%= mentoring_calendar_users_url %> timeZoneOffset=<%= Time.zone.utc_offset %>></div>
+  </div>
+<% end %>
+
+<% content_for_sidebar do %>
+  <%= render partial: "users/mentoring_calendar_filter_pane" %>
+<% end %>
+
+<%= javascript_tag do %>
+  setupCalendar(false, "<%= wob_member.id %>", <%= @can_current_user_create_meeting %>);
+  Meetings.handleRsvpChange();
+  Meetings.handleRsvpPopup();
+<% end %>

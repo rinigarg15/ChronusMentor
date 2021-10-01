@@ -1,0 +1,21 @@
+<% current_status = current_program.current_status %>
+<h3 class="font-noraml"><%= "feature.reports.content.current_status".translate %></h3>
+<div class="m-b-lg">
+  <div class="no-padding">
+    <div class="row p-l-sm p-r-sm">
+      <% get_current_status_data(program).each do |data| %>
+        <%= render(partial: "reports/management_report/current_status_tile", locals: data) %>
+      <% end %>
+    </div>
+  </div>
+  <% if current_program.program_outcomes_report_enabled? %>
+    <div>
+      <div class="ibox no-margins">
+        <div class="clearfix p-xs small light-gray-bg">
+          <div class="pull-left m-t-xs"><%= "feature.reports.content.as_of_today".translate(date: DateTime.localize(Time.current, format: :full_display_no_time)) %></div>
+          <%= link_to("feature.reports.content.view_data_over_time_html".translate, outcomes_report_path, class: "btn btn-xs btn-primary btn-outline pull-right no-margins") %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

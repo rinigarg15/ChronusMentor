@@ -1,0 +1,259 @@
+en:
+  feature:
+    survey:
+      header:
+        surveys: surveys
+        Surveys: Surveys
+        Expires: Expires
+        Recipients: Recipients
+        New_Survey: New Survey
+        Edit_Survey: Edit Survey
+        All_Surveys: All Surveys
+        Questions_html: Questions (%{question_count})
+        reminders_html: Reminders (%{count})
+        Responses: Responses (%{response_count})
+        data_trends_v1: Trends
+        publish_through_announcement_v1: Share link via announcement
+        publish_through_email_v1: Share link manually
+        survey_report: "%{Survey_label} Report"
+        No_response: No response
+        response_for_survey: Response for the Survey
+        here_is_response_html: Here is the response to %{survey} by %{user} on %{time}
+        survey_label: "%{Survey_Name} Surveys"
+        label_description:
+          EngagementSurvey: "%{Survey_Name} surveys are sent out to users who are connected to capture insights into %{Survey_Name} or assess their progress"
+          ProgramSurvey: "%{Survey_Name} surveys are sent out to capture feedback and insights into your %{program}, its usage and related activity"
+          MeetingFeedbackSurvey: "%{Survey_Name} survey is sent out to the participants of the %{meeting} after %{meeting} is completed to capture feedback"
+        meeting_topic: " - %{topic}"
+        meeting_with: " with %{name}"
+        survey_pdf_report: "%{survey_name}-Summary"
+      action:
+        New_Survey: New Survey
+        Create_a_New: Create a new survey
+        Share_Survey: Share Survey
+        View_Survey: View Survey
+        Create_survey_announcement_v1: Create an announcement
+        creating_an_announcement: creating an announcement
+        export_to_xls: Export to xls
+        Add_to_engagement_plan_v1: Add to %{Mentoring_Connection} Plan Template
+        create_survey_type_task: Create survey task
+        delete: Delete Survey
+        export_question: Export Survey Questions
+      content:
+        Manage: Manage
+        clone_survey_name: Name the clone survey
+        program_survey: "%{Program} Survey"
+        engagement_survey: "%{Mentoring_Connection} Survey"
+        meeting_feedback_survey: "%{Meeting} Feedback Survey"
+        meeting_feedback_survey_for_mentees: "%{_Meeting} Feedback Survey For %{_Mentees}"
+        meeting_feedback_survey_for_mentors: "%{_Meeting} Feedback Survey For %{_Mentors}"
+        publish_through_announcement_desc_html: "%{Create_survey_announcement} with link to the survey embedded in it."
+        publish_through_announcement_desc_v1_html: "%{Create_announcement} with a link to the survey embedded in it."
+        publish_through_email_desc: If you plan to publish the survey through email, please paste the following link in the body of your email.
+        publish_through_email_desc_v1: If you plan to share the survey through email, please paste the following link in the body of your email.
+        no_survey: 'There are no surveys. '
+        delete_confirm: Are you sure you want to delete the survey? All questions and responses, if any, will be lost.
+        used_in_outcomes_report: You cannot delete this survey question as this is used in the reported positive outcomes section in the %{program} outcomes report.
+        no_question: There are no questions in the survey
+        no_question_v1: There are no questions
+        due_date_placeholder: Click to select a date
+        no_response: No responses yet for the survey
+        Never: Never
+        add_questions: add questions
+        survey_link: survey link
+        survey_questions_desc: Following are the questions that are currently in the survey. You can add new questions or change existing questions.
+        program_survey_help_text: Design a %{Program} survey to capture feedback and insights into your %{Program}, its usage and related activity.
+        engagement_survey_help_text: Design %{a_Mentoring_Connection} survey to capture insights into %{Mentoring_Connections} or assess their progress.
+        select_survey_type: Select type
+        no_program_survey: No %{program} surveys yet
+        meeting_feedback_survey_questions:
+          meeting_quality: How was your %{meeting} with your %{mentoring} partner?
+          meeting_quality_choices:
+            very_good: Very Good
+            good: Good
+            satisfactory: Satisfactory
+            poor: Poor
+          meeting_means: How did you meet your %{mentoring} partner?
+          meeting_means_choices:
+            not_meet: We did not meet
+            in_person: In person
+            video_conf: Video Conference
+            phone: Phone
+          achieve_goal: Did you achieve your goals for the %{meeting}?
+          not_meet_reason: If you did not meet, what was the reason?
+          not_meet_reason_choices:
+            didnot_turn_up: Person did not turn up for the %{meeting}
+            never_scheduled: Never scheduled the %{meeting}
+            meet_in_future: We are yet to meet / We postponed the %{meeting}
+          remain_in_contact: Will you continue remaining in contact with your %{mentoring} partner?
+        feedback_question:
+          additional_comments: Do you have any additional comments?
+        status:
+          expired: 'The due date for this survey has passed. '
+          no_response_expired: There were no responses to the survey.
+          n_response_expired_html: There were %{n_responses} to the survey.
+          no_questions_active_html: This survey does not have any questions yet. Please %{add_questions} to the survey.
+          no_response_active_html: Tell members about this survey by %{creating_an_announcement} providing the %{survey_link}
+          no_response_active_engagement_survey_html: "%{create_survey_type_task} in your %{mentoring_connection} plan to start receiving responses"
+        survey_response:
+          one: 1 response
+          other: "%{count} responses"
+        permission_denied: Only %{recipients} can take part in the survey
+        engagement_survey_without_task: "%{A_Mentoring_Connection} survey can only be answered in the context of a valid task"
+        engagement_survey_without_task_v1: These questions can only be answered in the context of a valid task
+        meeting_survey_without_member_meeting: These questions can only be answered in the context of a valid past %{Meeting}
+        all_responses:
+          one: 1 Response
+          other: All %{count} Responses
+        deletion_warning_html: Before deleting, please ensure that the survey <b>'%{survey_name}'</b> is not an active survey and is not accessible to users through e-mails, facilitation messages or announcements. Any responses to the survey will also be deleted. Do you want to proceed?
+        deletion_warning_for_survey_html: As there are some tasks associated with this survey in <b>%{templates_title}</b>, you can not delete this survey.
+        deletion_warning_for_survey_positive_outcomes: You cannot delete this survey as there are some survey questions used in the reported positive outcomes section in the %{program} outcomes report.
+        deletion_affects_health_report_warning_html: Before deleting, please ensure that the survey <b>'%{survey_name}'</b> is not an active survey and is not accessible to users through e-mails, facilitation messages or announcements. Any responses to the survey will be deleted. Also, deleting this will affect the %{Program} Health report. Do you want to proceed?
+        deletion_warning_content:
+          general_html: Before deleting, please ensure that the survey <b>'%{survey_name}'</b> is not an active survey and is not accessible to users through e-mails, facilitation messages or announcements.
+          removes_responses: Any responses to the survey will be deleted.
+          removes_responses_and_closed_groups_tasks: Any responses to the survey and the tasks associated to the survey in closed %{mentoring_connections} will be deleted.
+          affects_health_report: Also, deleting this will affect the %{Program} Health report.
+          affects_health_report_or_positive_outcomes: Also, deleting this will affect the %{affected_areas}.
+        show_survey_response_html: "%{survey} by %{user} on "
+        submitted_on: Submitted On %{date_time}
+        back_to_individual_responses: Individual Responses
+        email_this_report: Email this report
+        survey_for_group_html: Survey for the %{connection_term} %{group_url}
+        survey_for_group_v1_html: "%{connection_term}: %{group_url}"
+        survey_for_meeting: Survey for the %{meeting_term} %{meeting_name}
+        survey_for_meeting_v1: "%{meeting_term}: %{meeting_name}"
+        survey_to_complete:
+          one: You have a survey to complete!
+          other: You have %{count} surveys to complete!
+        survey_to_complete_v1: Complete Surveys
+        complete_survey: Complete Survey
+        drafted_on: 'Drafted On: %{time}'
+        export_pdf_info: This report summarizes %{response_count} of %{total_responses_count} total responses. The summary has been prepared on %{date}.
+        text_type_question_info: You may browse freeform responses online or download the CSV.
+        back_to_survey_data_report: Back to %{survey_name}
+        survey_popup_description: The %{survey_name} is overdue. Please fill the survey below.
+        survey_popup_description_v1: The %{survey_name} is overdue. Please fill in the survey below.
+        Reminders: Reminders
+        new_reminder_email: New Survey Reminder Email
+        edit_reminder_email: Edit Survey Reminder Email
+        condition:
+          always: Always
+          completed: If %{meeting} is completed
+          cancelled: If %{meeting} is cancelled
+      label:
+        import_survey_questions_csv: Import Survey Questions from CSV
+        optional: "(optional)"
+        advanced_options: Advanced Options
+        survey_responses: Survey Responses
+        survey_responses_v1: Survey responses
+        survey_pdf_name: "%{survey_name}-Summary"
+        export_pdf_v1: Export to PDF
+        forced_ranking_html: Forced Ranking (Allow one response per column) %{tooltip}
+        margin_of_error: What is margin of error?
+        answered_between: Answered between
+        progress_report: "Allow respondent to share the response with other %{mentoring_connection} members"
+        share_progress_report: "Send a copy of my response to others in the %{mentoring_connection}"
+      tooltip:
+        forced_ranking: This asks respondents to compare the row choices to each other and requires the respondents to select only one choice per column.
+        margin_error_text_html: Survey results themselves are only a measure of how the sample of selected individuals that responded felt about the issue; they don't reflect how the entire population may have felt, had they all responded. Results based on a sample may not be exactly the same as what you might have found for the entire population. The margin of error helps you estimate how close you are to the truth about the population based on your sample data. <br> </br> To compute this margin of error, we are using the confidence level as 95%. Confidence level is the probability that your sample accurately reflects the attitudes of your population. The industry standard is 95%. For example, if you have an 85% satisfaction rate and 10% margin of error, we can say with 95% confidence that your overall population has an actual satisfaction rate between 75-95%.
+        users_connections_responses_received: To view these %{mentoring_connections}, visit the %{mentoring_connections} listing page and apply the survey status filter with status as Completed.
+        users_connections_overdue_responses: To view these %{mentoring_connections}, visit the %{mentoring_connections} listing page and apply the survey status filter with status as Overdue.
+      email_report:
+        subject: Copy of %{report_name}
+        message: I'd like to share the results of %{report_name} with you. The report is attached to this email.
+        popup:
+          heading: Email This Report
+          subject: Subject *
+          to: To *
+          message: Message *
+          invalid_email: Please enter a valid email address or select a user from the auto-complete list
+          start_typing: Start typing an email address.
+        success: We have successfully emailed the report.
+      survey_report:
+        Grouped_by_question: Grouped by question
+        Question: Question
+        No_of_responses: No. of responses
+        Details: Details
+        Grouped_by_member: Grouped by member
+        Username_v1: Name
+        Email: Email
+        next_sheet_lookup: Please refer next sheet for more details
+        Group_name: "%{_Mentoring_Connection}"
+        Task_name: Task
+        Timestamp_v1: Date of response
+        Topic: Topic
+        Description: Description
+        Other_people: Other Attendees
+        date_of_response: Date of response
+        filters:
+          header:
+            user_role: User Role
+            user_role_in_engagement: User Role In %{connection_term}
+            user_profile: User Profile
+            survey_responses: Survey Responses
+          operators:
+            Contains: Contains
+            not_contains: Does not contain
+            filled: Filled
+            not_filled: Not Filled
+          label:
+            select_question_label: Select question.
+            select_operator_label: Select operator.
+            select_value_label: Select value based on operator for this answer.
+            select_role_label: Select value for user role filter.
+      prompt:
+        select_survey: Select a survey
+      survey_table:
+        header_label:
+          title: Title
+          total_response: Analyze
+          last_response: Last Response On
+        no_response_text: No response yet
+        responses_in_last_week:
+          one: 1 new response this week
+          other: "%{count} new responses this week"
+      responses:
+        errors:
+          select_atleast_one_response: Select at least one item
+        fields:
+          name: Name
+          date: Date of response
+          actions: Actions
+          responses_received: Responses Received
+          overdue_responses: Overdue Responses
+          pending_responses: Pending Responses
+          response_rate: Response Rate
+          margin_of_error_html: 'Note: There is a %{percent_error}% margin of error %{tooltip}'
+          users_connections_responses_html: From %{users} users in %{connections} %{mentoring_connections} %{tooltip}
+          members_meetings_responses_html: From %{users_count} users in %{meetings_count} %{_meetings}
+        kendo:
+          pageable_message: "{0} - {1} of {2} items"
+          no_responses: There are no responses to display.
+          filters:
+            button_text:
+              filter: Filter
+              clear: Clear
+        action:
+          edit_columns: Edit Columns
+          select_fields: Select Fields to Display
+          survey_question_fields: Survey Question Fields
+          profile_question_fields: Profile Question Fields
+          default_fields: Default Fields
+          update_columns: Update Columns
+          select_at_least_one_field: You need to select at least one field
+      kendo_filter:
+        operators_number:
+          messages:
+            eq: Is equal to
+            neq: Is not equal to
+            gte: Is greater than or equal to
+            gt: Is greater than
+            lte: Is less than or equal to
+            lt: Is less than
+      emails:
+        published_survey: "New %{survey_name}"
+        updated_survey: "Updated %{survey_name}"
+        published_survey_downcase: "new %{survey_name}"
+        updated_survey_downcase: "updated %{survey_name}"
+        content_html: "Hello everyone,\n\nI would like to share my %{survey_name} with you all. Please find the %{survey_name} attached to this message as PDF."

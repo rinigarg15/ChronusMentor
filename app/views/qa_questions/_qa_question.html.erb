@@ -1,0 +1,35 @@
+<% show_stat = !defined?(answer_hash) %>
+
+<% if qa_question.present? %>
+  <div id="qa_question_<%= qa_question.id %>">
+    <div class="media-left">
+      <% options = { :anonymous_view => true } unless qa_question.user.visible_to?(current_user) %>
+      <%= user_picture(qa_question.user, { :no_name => true, :size => :medium }.merge(options || {}), { class: "img-circle" } ) %>
+    </div>
+    <div class="media-body">
+      <h4>
+        <%= link_to h(qa_question.summary), qa_question_path(qa_question, :root => qa_question.program.root) %>
+        <div class="m-t-xs small">
+          <%= get_icon_content("fa fa-clock-o no-margins") %>
+          <span class="text-muted">
+            <%= "feature.question_answers.content.posted_ago".translate(time_in_words: time_ago_in_words(qa_question.created_at)) %>
+          </span>
+        </div>
+      </h4>
+    </div>
+
+    <div class="clearfix">
+      <% if qa_question.description.present? %>
+        <div class="m-t-sm">
+          <%= truncate_html(textilize_without_paragraph(chronus_auto_link(qa_question.description)), :max_length => 200) %>
+        </div>
+      <% end %>
+      <% if show_stat %>
+        <%= render partial: "qa_questions/question_stats", locals: { in_listing: true, question: qa_question } %>
+      <% end %>
+      <% if defined?(answer_hash) %>
+        <%= render partial: "qa_questions/qa_answer", locals: { qa_question: qa_question, qa_answer: answer_hash[qa_question.id], user_name_prefix: user_name_prefix } %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

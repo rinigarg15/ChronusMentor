@@ -1,0 +1,1542 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.patriotsoftware.net/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.patriotsoftware.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.patriotsoftware.net/">
+      <s:element name="GetPersonIDByMemberNumber">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MemberNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceUserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServicePassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPersonIDByMemberNumberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetPersonIDByMemberNumberResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOfficeDefinitions">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceUserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServicePassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOfficeDefinitionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetOfficeDefinitionsResult" type="tns:ArrayOfOfficeDefinition" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfOfficeDefinition">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="OfficeDefinition" nillable="true" type="tns:OfficeDefinition" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OfficeDefinition">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="OfficeID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="OfficeName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Active" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="OfficeType" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetOfficerRecord">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="OfficerID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceUserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServicePassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOfficerRecordResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetOfficerRecordResult" type="tns:OfficerRecord" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="OfficerRecord">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="OfficerID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="PersonID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="OfficeName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="BeginDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="EndDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsActive" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="OfficeType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RegionName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProvinceName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CommitteeName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ChapterID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterTypeCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="OfficeID" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetOfficerRecordsChangedSince">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ChangeDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceUserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServicePassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOfficerRecordsChangedSinceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetOfficerRecordsChangedSinceResult" type="tns:ArrayOfOfficerRecord" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfOfficerRecord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="OfficerRecord" nillable="true" type="tns:OfficerRecord" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetAllOfficesForPerson">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="PersonID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceUserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServicePassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllOfficesForPersonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllOfficesForPersonResult" type="tns:ArrayOfOfficerRecord" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddUpdateMemberCredentials">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="PersonID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceUserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServicePassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddUpdateMemberCredentialsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddUpdateMemberCredentialsResult" type="tns:MemberCredentialsAddUpdateRecord" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="MemberCredentialsAddUpdateRecord">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="PersonID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Success" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddedOrUpdated" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FailureReason" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ValidateMemberByCredentials">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceUserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServicePassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ValidateMemberByCredentialsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ValidateMemberByCredentialsResult" type="tns:MemberValidationRecord" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="MemberValidationRecord">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="PersonID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="InitiateChapterCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PreferredChapterCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OfficeChapterCode" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetOPCalendarEntries">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceUserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServicePassword" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ChangesSince" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOPCalendarEntriesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetOPCalendarEntriesResult" type="tns:ArrayOfOPCalendarEntry" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfOPCalendarEntry">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="OPCalendarEntry" nillable="true" type="tns:OPCalendarEntry" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OPCalendarEntry">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="CalendarEntryID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="EntryTypeID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="EntryType" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ChapterID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterTypeCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SchoolName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="EntryBeginDateTime" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="EntryEndDateTime" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="AllDayEvent" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="EntryDesc" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsAttendanceRequired" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetMemberDetails">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="PersonID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceUserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServicePassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMemberDetailsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMemberDetailsResult" type="tns:PersonRecord" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="PersonRecord">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="PersonID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PrefFirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MiddleName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MaidenName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="BirthDate" nillable="true" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="CellPhoneNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HomePhoneNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OtherPhoneNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PreferredPhoneType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PreferredEmail" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ParentEmail" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CurrentAddressLine1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CurrentAddressLine2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CurrentCity" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CurrentState" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CurrentZip" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CurrentCountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PermanentAddressLine1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PermanentAddressLine2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PermanentCity" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PermanentState" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PermanentZip" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PermanentCountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CurrentHighOfficeHeld" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FacebookUsername" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Majors" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Minors" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="JobTitle" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LastModificationDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Standing" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PreferredChapterCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="InitiateChapterCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OfficeChapterCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterCodeIdentifyerType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HighOfficeHeld" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AllOfficesForPerson" type="tns:ArrayOfOfficerRecord" />
+          <s:element minOccurs="1" maxOccurs="1" name="DeathDate" nillable="true" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="InitDate" nillable="true" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="GiftDate1" nillable="true" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="GiftAmount1" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="GiftFund1" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="GiftDate2" nillable="true" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="GiftAmount2" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="GiftFund2" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="GiftDate3" nillable="true" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="GiftAmount3" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="GiftFund3" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MemberNumber" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="UpdateMemberDetails">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pRecord" type="tns:PersonRecord" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceUserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServicePassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateMemberDetailsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateMemberDetailsResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetChapterZipRanges">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ChapterID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceUserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServicePassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetChapterZipRangesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetChapterZipRangesResult" type="tns:ArrayOfChapterZipRangeRecord" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfChapterZipRangeRecord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ChapterZipRangeRecord" nillable="true" type="tns:ChapterZipRangeRecord" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ChapterZipRangeRecord">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ChapterID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="BeginZip" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EndZip" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetPersonChapterRelationships">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="PersonID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceUserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServicePassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPersonChapterRelationshipsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPersonChapterRelationshipsResult" type="tns:ArrayOfPersonChapterRelationship" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfPersonChapterRelationship">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="PersonChapterRelationship" nillable="true" type="tns:PersonChapterRelationship" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PersonChapterRelationship">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="PersonID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="ChapterID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterTypeCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsPreferred" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="AffiliationType" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetChapterDetails">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ChapterID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceUserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServicePassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetChapterDetailsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetChapterDetailsResult" type="tns:ChapterRecord" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ChapterRecord">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ChapterID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterTypeCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterStatus" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SchoolName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WebSite" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DefaultEmail" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="InstalledDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Phone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Fax" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Zip" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Country" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LastModificationDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="ChapterLocatorTags" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProvinceCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProvinceName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RegionCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RegionName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AllZipRangesForChapter" type="tns:ArrayOfChapterZipRangeRecord" />
+          <s:element minOccurs="0" maxOccurs="1" name="FacebookAddress" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetAllChapterDetails">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceUserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServicePassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllChapterDetailsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllChapterDetailsResult" type="tns:ArrayOfChapterRecord" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfChapterRecord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ChapterRecord" nillable="true" type="tns:ChapterRecord" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetMembersByFilters">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="params" nillable="true" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ServiceUserName" nillable="true" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ServicePassword" nillable="true" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMembersByFiltersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMembersByFiltersResult" type="tns:ArrayOfPersonRecord" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfPersonRecord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="PersonRecord" nillable="true" type="tns:PersonRecord" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="int" type="s:int" />
+      <s:element name="ArrayOfOfficeDefinition" nillable="true" type="tns:ArrayOfOfficeDefinition" />
+      <s:element name="OfficerRecord" nillable="true" type="tns:OfficerRecord" />
+      <s:element name="ArrayOfOfficerRecord" nillable="true" type="tns:ArrayOfOfficerRecord" />
+      <s:element name="MemberCredentialsAddUpdateRecord" nillable="true" type="tns:MemberCredentialsAddUpdateRecord" />
+      <s:element name="MemberValidationRecord" nillable="true" type="tns:MemberValidationRecord" />
+      <s:element name="ArrayOfOPCalendarEntry" nillable="true" type="tns:ArrayOfOPCalendarEntry" />
+      <s:element name="PersonRecord" nillable="true" type="tns:PersonRecord" />
+      <s:element name="ArrayOfChapterZipRangeRecord" nillable="true" type="tns:ArrayOfChapterZipRangeRecord" />
+      <s:element name="ArrayOfPersonChapterRelationship" nillable="true" type="tns:ArrayOfPersonChapterRelationship" />
+      <s:element name="ChapterRecord" nillable="true" type="tns:ChapterRecord" />
+      <s:element name="ArrayOfChapterRecord" nillable="true" type="tns:ArrayOfChapterRecord" />
+      <s:element name="ArrayOfPersonRecord" nillable="true" type="tns:ArrayOfPersonRecord" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetPersonIDByMemberNumberSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPersonIDByMemberNumber" />
+  </wsdl:message>
+  <wsdl:message name="GetPersonIDByMemberNumberSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPersonIDByMemberNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficeDefinitionsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetOfficeDefinitions" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficeDefinitionsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetOfficeDefinitionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficerRecordSoapIn">
+    <wsdl:part name="parameters" element="tns:GetOfficerRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficerRecordSoapOut">
+    <wsdl:part name="parameters" element="tns:GetOfficerRecordResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficerRecordsChangedSinceSoapIn">
+    <wsdl:part name="parameters" element="tns:GetOfficerRecordsChangedSince" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficerRecordsChangedSinceSoapOut">
+    <wsdl:part name="parameters" element="tns:GetOfficerRecordsChangedSinceResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllOfficesForPersonSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllOfficesForPerson" />
+  </wsdl:message>
+  <wsdl:message name="GetAllOfficesForPersonSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllOfficesForPersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddUpdateMemberCredentialsSoapIn">
+    <wsdl:part name="parameters" element="tns:AddUpdateMemberCredentials" />
+  </wsdl:message>
+  <wsdl:message name="AddUpdateMemberCredentialsSoapOut">
+    <wsdl:part name="parameters" element="tns:AddUpdateMemberCredentialsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ValidateMemberByCredentialsSoapIn">
+    <wsdl:part name="parameters" element="tns:ValidateMemberByCredentials" />
+  </wsdl:message>
+  <wsdl:message name="ValidateMemberByCredentialsSoapOut">
+    <wsdl:part name="parameters" element="tns:ValidateMemberByCredentialsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetOPCalendarEntriesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetOPCalendarEntries" />
+  </wsdl:message>
+  <wsdl:message name="GetOPCalendarEntriesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetOPCalendarEntriesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMemberDetailsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetMemberDetails" />
+  </wsdl:message>
+  <wsdl:message name="GetMemberDetailsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetMemberDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateMemberDetailsSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateMemberDetails" />
+  </wsdl:message>
+  <wsdl:message name="UpdateMemberDetailsSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateMemberDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetChapterZipRangesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetChapterZipRanges" />
+  </wsdl:message>
+  <wsdl:message name="GetChapterZipRangesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetChapterZipRangesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPersonChapterRelationshipsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPersonChapterRelationships" />
+  </wsdl:message>
+  <wsdl:message name="GetPersonChapterRelationshipsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPersonChapterRelationshipsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetChapterDetailsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetChapterDetails" />
+  </wsdl:message>
+  <wsdl:message name="GetChapterDetailsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetChapterDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllChapterDetailsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllChapterDetails" />
+  </wsdl:message>
+  <wsdl:message name="GetAllChapterDetailsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllChapterDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMembersByFiltersSoapIn">
+    <wsdl:part name="parameters" element="tns:GetMembersByFilters" />
+  </wsdl:message>
+  <wsdl:message name="GetMembersByFiltersSoapOut">
+    <wsdl:part name="parameters" element="tns:GetMembersByFiltersResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPersonIDByMemberNumberHttpGetIn">
+    <wsdl:part name="MemberNumber" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPersonIDByMemberNumberHttpGetOut">
+    <wsdl:part name="Body" element="tns:int" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficeDefinitionsHttpGetIn">
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficeDefinitionsHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfOfficeDefinition" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficerRecordHttpGetIn">
+    <wsdl:part name="OfficerID" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficerRecordHttpGetOut">
+    <wsdl:part name="Body" element="tns:OfficerRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficerRecordsChangedSinceHttpGetIn">
+    <wsdl:part name="ChangeDate" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficerRecordsChangedSinceHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfOfficerRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetAllOfficesForPersonHttpGetIn">
+    <wsdl:part name="PersonID" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetAllOfficesForPersonHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfOfficerRecord" />
+  </wsdl:message>
+  <wsdl:message name="AddUpdateMemberCredentialsHttpGetIn">
+    <wsdl:part name="PersonID" type="s:string" />
+    <wsdl:part name="UserName" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddUpdateMemberCredentialsHttpGetOut">
+    <wsdl:part name="Body" element="tns:MemberCredentialsAddUpdateRecord" />
+  </wsdl:message>
+  <wsdl:message name="ValidateMemberByCredentialsHttpGetIn">
+    <wsdl:part name="UserName" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ValidateMemberByCredentialsHttpGetOut">
+    <wsdl:part name="Body" element="tns:MemberValidationRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetOPCalendarEntriesHttpGetIn">
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+    <wsdl:part name="ChangesSince" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetOPCalendarEntriesHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfOPCalendarEntry" />
+  </wsdl:message>
+  <wsdl:message name="GetMemberDetailsHttpGetIn">
+    <wsdl:part name="PersonID" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMemberDetailsHttpGetOut">
+    <wsdl:part name="Body" element="tns:PersonRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetChapterZipRangesHttpGetIn">
+    <wsdl:part name="ChapterID" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetChapterZipRangesHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfChapterZipRangeRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetPersonChapterRelationshipsHttpGetIn">
+    <wsdl:part name="PersonID" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPersonChapterRelationshipsHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfPersonChapterRelationship" />
+  </wsdl:message>
+  <wsdl:message name="GetChapterDetailsHttpGetIn">
+    <wsdl:part name="ChapterID" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetChapterDetailsHttpGetOut">
+    <wsdl:part name="Body" element="tns:ChapterRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetAllChapterDetailsHttpGetIn">
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetAllChapterDetailsHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfChapterRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetMembersByFiltersHttpGetIn">
+    <wsdl:part name="params" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMembersByFiltersHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfPersonRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetPersonIDByMemberNumberHttpPostIn">
+    <wsdl:part name="MemberNumber" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPersonIDByMemberNumberHttpPostOut">
+    <wsdl:part name="Body" element="tns:int" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficeDefinitionsHttpPostIn">
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficeDefinitionsHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfOfficeDefinition" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficerRecordHttpPostIn">
+    <wsdl:part name="OfficerID" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficerRecordHttpPostOut">
+    <wsdl:part name="Body" element="tns:OfficerRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficerRecordsChangedSinceHttpPostIn">
+    <wsdl:part name="ChangeDate" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetOfficerRecordsChangedSinceHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfOfficerRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetAllOfficesForPersonHttpPostIn">
+    <wsdl:part name="PersonID" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetAllOfficesForPersonHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfOfficerRecord" />
+  </wsdl:message>
+  <wsdl:message name="AddUpdateMemberCredentialsHttpPostIn">
+    <wsdl:part name="PersonID" type="s:string" />
+    <wsdl:part name="UserName" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddUpdateMemberCredentialsHttpPostOut">
+    <wsdl:part name="Body" element="tns:MemberCredentialsAddUpdateRecord" />
+  </wsdl:message>
+  <wsdl:message name="ValidateMemberByCredentialsHttpPostIn">
+    <wsdl:part name="UserName" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ValidateMemberByCredentialsHttpPostOut">
+    <wsdl:part name="Body" element="tns:MemberValidationRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetOPCalendarEntriesHttpPostIn">
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+    <wsdl:part name="ChangesSince" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetOPCalendarEntriesHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfOPCalendarEntry" />
+  </wsdl:message>
+  <wsdl:message name="GetMemberDetailsHttpPostIn">
+    <wsdl:part name="PersonID" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMemberDetailsHttpPostOut">
+    <wsdl:part name="Body" element="tns:PersonRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetChapterZipRangesHttpPostIn">
+    <wsdl:part name="ChapterID" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetChapterZipRangesHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfChapterZipRangeRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetPersonChapterRelationshipsHttpPostIn">
+    <wsdl:part name="PersonID" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPersonChapterRelationshipsHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfPersonChapterRelationship" />
+  </wsdl:message>
+  <wsdl:message name="GetChapterDetailsHttpPostIn">
+    <wsdl:part name="ChapterID" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetChapterDetailsHttpPostOut">
+    <wsdl:part name="Body" element="tns:ChapterRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetAllChapterDetailsHttpPostIn">
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetAllChapterDetailsHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfChapterRecord" />
+  </wsdl:message>
+  <wsdl:message name="GetMembersByFiltersHttpPostIn">
+    <wsdl:part name="params" type="s:string" />
+    <wsdl:part name="ServiceUserName" type="s:string" />
+    <wsdl:part name="ServicePassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMembersByFiltersHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfPersonRecord" />
+  </wsdl:message>
+  <wsdl:portType name="PatriotV2ForPMWebSoap">
+    <wsdl:operation name="GetPersonIDByMemberNumber">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieve a person ID by passing a hyphenated member number. Returns zero if no match.</wsdl:documentation>
+      <wsdl:input message="tns:GetPersonIDByMemberNumberSoapIn" />
+      <wsdl:output message="tns:GetPersonIDByMemberNumberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficeDefinitions">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieve a list of all office definitions.</wsdl:documentation>
+      <wsdl:input message="tns:GetOfficeDefinitionsSoapIn" />
+      <wsdl:output message="tns:GetOfficeDefinitionsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficerRecord">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply an officer id and get back an officer record for the officer ID provided.</wsdl:documentation>
+      <wsdl:input message="tns:GetOfficerRecordSoapIn" />
+      <wsdl:output message="tns:GetOfficerRecordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficerRecordsChangedSince">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a change since date and get back a collection of officer records changed since that date.</wsdl:documentation>
+      <wsdl:input message="tns:GetOfficerRecordsChangedSinceSoapIn" />
+      <wsdl:output message="tns:GetOfficerRecordsChangedSinceSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllOfficesForPerson">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a person ID and get back a collection of all current and previous offices for that person.</wsdl:documentation>
+      <wsdl:input message="tns:GetAllOfficesForPersonSoapIn" />
+      <wsdl:output message="tns:GetAllOfficesForPersonSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddUpdateMemberCredentials">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply person id an updated credential set and get back results.  This method will return a success flag as well as an add/update indicator if the credentials were 'Updated' or 'Created'.  If the success flag is false, the reason will be provided in the error reason return parameter.</wsdl:documentation>
+      <wsdl:input message="tns:AddUpdateMemberCredentialsSoapIn" />
+      <wsdl:output message="tns:AddUpdateMemberCredentialsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateMemberByCredentials">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a user name and password to this method.  The method will return a zero for no matching records and a greater than zero number representing the person ID of the matching member.</wsdl:documentation>
+      <wsdl:input message="tns:ValidateMemberByCredentialsSoapIn" />
+      <wsdl:output message="tns:ValidateMemberByCredentialsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOPCalendarEntries">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns a collection of OPCalendarEntry records.</wsdl:documentation>
+      <wsdl:input message="tns:GetOPCalendarEntriesSoapIn" />
+      <wsdl:output message="tns:GetOPCalendarEntriesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMemberDetails">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a person id and get back a record of their member details.</wsdl:documentation>
+      <wsdl:input message="tns:GetMemberDetailsSoapIn" />
+      <wsdl:output message="tns:GetMemberDetailsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMemberDetails">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a person record and get back a boolean value indicating success or failure.</wsdl:documentation>
+      <wsdl:input message="tns:UpdateMemberDetailsSoapIn" />
+      <wsdl:output message="tns:UpdateMemberDetailsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetChapterZipRanges">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a chapter id and get back a collection of zip range records.</wsdl:documentation>
+      <wsdl:input message="tns:GetChapterZipRangesSoapIn" />
+      <wsdl:output message="tns:GetChapterZipRangesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonChapterRelationships">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a chapter id and get back a record of the chapter details.</wsdl:documentation>
+      <wsdl:input message="tns:GetPersonChapterRelationshipsSoapIn" />
+      <wsdl:output message="tns:GetPersonChapterRelationshipsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetChapterDetails">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a chapter id and get back a record of the chapter details.</wsdl:documentation>
+      <wsdl:input message="tns:GetChapterDetailsSoapIn" />
+      <wsdl:output message="tns:GetChapterDetailsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllChapterDetails">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a list of all chapters with details.</wsdl:documentation>
+      <wsdl:input message="tns:GetAllChapterDetailsSoapIn" />
+      <wsdl:output message="tns:GetAllChapterDetailsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMembersByFilters">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a list of all members by filter.</wsdl:documentation>
+      <wsdl:input message="tns:GetMembersByFiltersSoapIn" />
+      <wsdl:output message="tns:GetMembersByFiltersSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="PatriotV2ForPMWebHttpGet">
+    <wsdl:operation name="GetPersonIDByMemberNumber">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieve a person ID by passing a hyphenated member number. Returns zero if no match.</wsdl:documentation>
+      <wsdl:input message="tns:GetPersonIDByMemberNumberHttpGetIn" />
+      <wsdl:output message="tns:GetPersonIDByMemberNumberHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficeDefinitions">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieve a list of all office definitions.</wsdl:documentation>
+      <wsdl:input message="tns:GetOfficeDefinitionsHttpGetIn" />
+      <wsdl:output message="tns:GetOfficeDefinitionsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficerRecord">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply an officer id and get back an officer record for the officer ID provided.</wsdl:documentation>
+      <wsdl:input message="tns:GetOfficerRecordHttpGetIn" />
+      <wsdl:output message="tns:GetOfficerRecordHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficerRecordsChangedSince">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a change since date and get back a collection of officer records changed since that date.</wsdl:documentation>
+      <wsdl:input message="tns:GetOfficerRecordsChangedSinceHttpGetIn" />
+      <wsdl:output message="tns:GetOfficerRecordsChangedSinceHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllOfficesForPerson">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a person ID and get back a collection of all current and previous offices for that person.</wsdl:documentation>
+      <wsdl:input message="tns:GetAllOfficesForPersonHttpGetIn" />
+      <wsdl:output message="tns:GetAllOfficesForPersonHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddUpdateMemberCredentials">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply person id an updated credential set and get back results.  This method will return a success flag as well as an add/update indicator if the credentials were 'Updated' or 'Created'.  If the success flag is false, the reason will be provided in the error reason return parameter.</wsdl:documentation>
+      <wsdl:input message="tns:AddUpdateMemberCredentialsHttpGetIn" />
+      <wsdl:output message="tns:AddUpdateMemberCredentialsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateMemberByCredentials">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a user name and password to this method.  The method will return a zero for no matching records and a greater than zero number representing the person ID of the matching member.</wsdl:documentation>
+      <wsdl:input message="tns:ValidateMemberByCredentialsHttpGetIn" />
+      <wsdl:output message="tns:ValidateMemberByCredentialsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOPCalendarEntries">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns a collection of OPCalendarEntry records.</wsdl:documentation>
+      <wsdl:input message="tns:GetOPCalendarEntriesHttpGetIn" />
+      <wsdl:output message="tns:GetOPCalendarEntriesHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMemberDetails">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a person id and get back a record of their member details.</wsdl:documentation>
+      <wsdl:input message="tns:GetMemberDetailsHttpGetIn" />
+      <wsdl:output message="tns:GetMemberDetailsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetChapterZipRanges">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a chapter id and get back a collection of zip range records.</wsdl:documentation>
+      <wsdl:input message="tns:GetChapterZipRangesHttpGetIn" />
+      <wsdl:output message="tns:GetChapterZipRangesHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonChapterRelationships">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a chapter id and get back a record of the chapter details.</wsdl:documentation>
+      <wsdl:input message="tns:GetPersonChapterRelationshipsHttpGetIn" />
+      <wsdl:output message="tns:GetPersonChapterRelationshipsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetChapterDetails">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a chapter id and get back a record of the chapter details.</wsdl:documentation>
+      <wsdl:input message="tns:GetChapterDetailsHttpGetIn" />
+      <wsdl:output message="tns:GetChapterDetailsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllChapterDetails">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a list of all chapters with details.</wsdl:documentation>
+      <wsdl:input message="tns:GetAllChapterDetailsHttpGetIn" />
+      <wsdl:output message="tns:GetAllChapterDetailsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMembersByFilters">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a list of all members by filter.</wsdl:documentation>
+      <wsdl:input message="tns:GetMembersByFiltersHttpGetIn" />
+      <wsdl:output message="tns:GetMembersByFiltersHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="PatriotV2ForPMWebHttpPost">
+    <wsdl:operation name="GetPersonIDByMemberNumber">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieve a person ID by passing a hyphenated member number. Returns zero if no match.</wsdl:documentation>
+      <wsdl:input message="tns:GetPersonIDByMemberNumberHttpPostIn" />
+      <wsdl:output message="tns:GetPersonIDByMemberNumberHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficeDefinitions">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieve a list of all office definitions.</wsdl:documentation>
+      <wsdl:input message="tns:GetOfficeDefinitionsHttpPostIn" />
+      <wsdl:output message="tns:GetOfficeDefinitionsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficerRecord">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply an officer id and get back an officer record for the officer ID provided.</wsdl:documentation>
+      <wsdl:input message="tns:GetOfficerRecordHttpPostIn" />
+      <wsdl:output message="tns:GetOfficerRecordHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficerRecordsChangedSince">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a change since date and get back a collection of officer records changed since that date.</wsdl:documentation>
+      <wsdl:input message="tns:GetOfficerRecordsChangedSinceHttpPostIn" />
+      <wsdl:output message="tns:GetOfficerRecordsChangedSinceHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllOfficesForPerson">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a person ID and get back a collection of all current and previous offices for that person.</wsdl:documentation>
+      <wsdl:input message="tns:GetAllOfficesForPersonHttpPostIn" />
+      <wsdl:output message="tns:GetAllOfficesForPersonHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddUpdateMemberCredentials">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply person id an updated credential set and get back results.  This method will return a success flag as well as an add/update indicator if the credentials were 'Updated' or 'Created'.  If the success flag is false, the reason will be provided in the error reason return parameter.</wsdl:documentation>
+      <wsdl:input message="tns:AddUpdateMemberCredentialsHttpPostIn" />
+      <wsdl:output message="tns:AddUpdateMemberCredentialsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateMemberByCredentials">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a user name and password to this method.  The method will return a zero for no matching records and a greater than zero number representing the person ID of the matching member.</wsdl:documentation>
+      <wsdl:input message="tns:ValidateMemberByCredentialsHttpPostIn" />
+      <wsdl:output message="tns:ValidateMemberByCredentialsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOPCalendarEntries">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns a collection of OPCalendarEntry records.</wsdl:documentation>
+      <wsdl:input message="tns:GetOPCalendarEntriesHttpPostIn" />
+      <wsdl:output message="tns:GetOPCalendarEntriesHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMemberDetails">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a person id and get back a record of their member details.</wsdl:documentation>
+      <wsdl:input message="tns:GetMemberDetailsHttpPostIn" />
+      <wsdl:output message="tns:GetMemberDetailsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetChapterZipRanges">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a chapter id and get back a collection of zip range records.</wsdl:documentation>
+      <wsdl:input message="tns:GetChapterZipRangesHttpPostIn" />
+      <wsdl:output message="tns:GetChapterZipRangesHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonChapterRelationships">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a chapter id and get back a record of the chapter details.</wsdl:documentation>
+      <wsdl:input message="tns:GetPersonChapterRelationshipsHttpPostIn" />
+      <wsdl:output message="tns:GetPersonChapterRelationshipsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetChapterDetails">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Supply a chapter id and get back a record of the chapter details.</wsdl:documentation>
+      <wsdl:input message="tns:GetChapterDetailsHttpPostIn" />
+      <wsdl:output message="tns:GetChapterDetailsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllChapterDetails">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a list of all chapters with details.</wsdl:documentation>
+      <wsdl:input message="tns:GetAllChapterDetailsHttpPostIn" />
+      <wsdl:output message="tns:GetAllChapterDetailsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMembersByFilters">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a list of all members by filter.</wsdl:documentation>
+      <wsdl:input message="tns:GetMembersByFiltersHttpPostIn" />
+      <wsdl:output message="tns:GetMembersByFiltersHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PatriotV2ForPMWebSoap" type="tns:PatriotV2ForPMWebSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetPersonIDByMemberNumber">
+      <soap:operation soapAction="http://www.patriotsoftware.net/GetPersonIDByMemberNumber" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficeDefinitions">
+      <soap:operation soapAction="http://www.patriotsoftware.net/GetOfficeDefinitions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficerRecord">
+      <soap:operation soapAction="http://www.patriotsoftware.net/GetOfficerRecord" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficerRecordsChangedSince">
+      <soap:operation soapAction="http://www.patriotsoftware.net/GetOfficerRecordsChangedSince" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllOfficesForPerson">
+      <soap:operation soapAction="http://www.patriotsoftware.net/GetAllOfficesForPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddUpdateMemberCredentials">
+      <soap:operation soapAction="http://www.patriotsoftware.net/AddUpdateMemberCredentials" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateMemberByCredentials">
+      <soap:operation soapAction="http://www.patriotsoftware.net/ValidateMemberByCredentials" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOPCalendarEntries">
+      <soap:operation soapAction="http://www.patriotsoftware.net/GetOPCalendarEntries" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMemberDetails">
+      <soap:operation soapAction="http://www.patriotsoftware.net/GetMemberDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMemberDetails">
+      <soap:operation soapAction="http://www.patriotsoftware.net/UpdateMemberDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetChapterZipRanges">
+      <soap:operation soapAction="http://www.patriotsoftware.net/GetChapterZipRanges" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonChapterRelationships">
+      <soap:operation soapAction="http://www.patriotsoftware.net/GetPersonChapterRelationships" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetChapterDetails">
+      <soap:operation soapAction="http://www.patriotsoftware.net/GetChapterDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllChapterDetails">
+      <soap:operation soapAction="http://www.patriotsoftware.net/GetAllChapterDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMembersByFilters">
+      <soap:operation soapAction="http://www.patriotsoftware.net/GetMembersByFilters" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PatriotV2ForPMWebSoap12" type="tns:PatriotV2ForPMWebSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetPersonIDByMemberNumber">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/GetPersonIDByMemberNumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficeDefinitions">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/GetOfficeDefinitions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficerRecord">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/GetOfficerRecord" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficerRecordsChangedSince">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/GetOfficerRecordsChangedSince" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllOfficesForPerson">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/GetAllOfficesForPerson" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddUpdateMemberCredentials">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/AddUpdateMemberCredentials" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateMemberByCredentials">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/ValidateMemberByCredentials" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOPCalendarEntries">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/GetOPCalendarEntries" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMemberDetails">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/GetMemberDetails" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMemberDetails">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/UpdateMemberDetails" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetChapterZipRanges">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/GetChapterZipRanges" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonChapterRelationships">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/GetPersonChapterRelationships" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetChapterDetails">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/GetChapterDetails" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllChapterDetails">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/GetAllChapterDetails" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMembersByFilters">
+      <soap12:operation soapAction="http://www.patriotsoftware.net/GetMembersByFilters" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PatriotV2ForPMWebHttpGet" type="tns:PatriotV2ForPMWebHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetPersonIDByMemberNumber">
+      <http:operation location="/GetPersonIDByMemberNumber" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficeDefinitions">
+      <http:operation location="/GetOfficeDefinitions" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficerRecord">
+      <http:operation location="/GetOfficerRecord" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficerRecordsChangedSince">
+      <http:operation location="/GetOfficerRecordsChangedSince" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllOfficesForPerson">
+      <http:operation location="/GetAllOfficesForPerson" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddUpdateMemberCredentials">
+      <http:operation location="/AddUpdateMemberCredentials" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateMemberByCredentials">
+      <http:operation location="/ValidateMemberByCredentials" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOPCalendarEntries">
+      <http:operation location="/GetOPCalendarEntries" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMemberDetails">
+      <http:operation location="/GetMemberDetails" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetChapterZipRanges">
+      <http:operation location="/GetChapterZipRanges" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonChapterRelationships">
+      <http:operation location="/GetPersonChapterRelationships" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetChapterDetails">
+      <http:operation location="/GetChapterDetails" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllChapterDetails">
+      <http:operation location="/GetAllChapterDetails" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMembersByFilters">
+      <http:operation location="/GetMembersByFilters" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PatriotV2ForPMWebHttpPost" type="tns:PatriotV2ForPMWebHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetPersonIDByMemberNumber">
+      <http:operation location="/GetPersonIDByMemberNumber" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficeDefinitions">
+      <http:operation location="/GetOfficeDefinitions" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficerRecord">
+      <http:operation location="/GetOfficerRecord" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOfficerRecordsChangedSince">
+      <http:operation location="/GetOfficerRecordsChangedSince" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllOfficesForPerson">
+      <http:operation location="/GetAllOfficesForPerson" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddUpdateMemberCredentials">
+      <http:operation location="/AddUpdateMemberCredentials" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateMemberByCredentials">
+      <http:operation location="/ValidateMemberByCredentials" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOPCalendarEntries">
+      <http:operation location="/GetOPCalendarEntries" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMemberDetails">
+      <http:operation location="/GetMemberDetails" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetChapterZipRanges">
+      <http:operation location="/GetChapterZipRanges" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonChapterRelationships">
+      <http:operation location="/GetPersonChapterRelationships" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetChapterDetails">
+      <http:operation location="/GetChapterDetails" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllChapterDetails">
+      <http:operation location="/GetAllChapterDetails" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMembersByFilters">
+      <http:operation location="/GetMembersByFilters" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PatriotV2ForPMWeb">
+    <wsdl:port name="PatriotV2ForPMWebSoap" binding="tns:PatriotV2ForPMWebSoap">
+      <soap:address location="https://patriot.phimu.org/webservices/PatriotV2ForPMWeb.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PatriotV2ForPMWebSoap12" binding="tns:PatriotV2ForPMWebSoap12">
+      <soap12:address location="https://patriot.phimu.org/webservices/PatriotV2ForPMWeb.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PatriotV2ForPMWebHttpGet" binding="tns:PatriotV2ForPMWebHttpGet">
+      <http:address location="https://patriot.phimu.org/webservices/PatriotV2ForPMWeb.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PatriotV2ForPMWebHttpPost" binding="tns:PatriotV2ForPMWebHttpPost">
+      <http:address location="https://patriot.phimu.org/webservices/PatriotV2ForPMWeb.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

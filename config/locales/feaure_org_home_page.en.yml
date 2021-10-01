@@ -1,0 +1,46 @@
+en:
+  feature:
+    org_home_page:
+      roll_up:
+        current_status: Current Status
+        active_licenses: Active Licenses
+        active_members: Active Members
+        active_licenses_header_tooptip: Members who are active, published their profile and are ready to be matched in at least one %{program}.
+        ongoing_engagements: Ongoing Engagements
+        ongoing_engagements_header_tooptip: Number of currently ongoing %{connections} across all the %{programs}.
+        ongoing_engagements_flash_header_tooptip: Also includes all the 'flash' %{meetings} scheduled during %{previous_month}, %{current_month} and %{next_month}.
+        ongoing_engagements_flash_header_tooptip_v1: Also includes all the upcoming 'flash' %{meetings} scheduled.
+        connected_members: Connected Members
+        connected_members_header_tooptip: Members participating in ongoing engagements.
+        total_programs: Total %{programs_capitalized}
+        total_programs_header_tooptip: Number of %{programs} you currently oversee.
+      program_tile:
+        view_program_dashboard: View %{program} Dashboard
+        header:
+          active_users: "%{users_count} active users in the %{program}"
+          license_usage: "%{users_count} of %{licenses_count} licenses are in use"
+          mentoring_program: Mentoring %{program}
+          coaching_program: Coaching %{program}
+          learning_program: Learning %{program}
+          manage_this_program: Manage this %{program}
+        admin_content:
+          overdue_html: "%{count} Overdue"
+          on_track_html: "%{count} On Track"
+          program_summary: "%{program} Summary"
+          n_mentoring_connections_html:
+            one: "1 %{mentoring_connection}"
+            other: "%{count} %{mentoring_connections}"
+          mentoring_connections_status_html: "%{mentoring_connections_link} %{overdue_on_track_link}"
+          n_role_users_html:
+            one: "1 %{role_term}"
+            other: "%{count} %{roles_term}"
+          admin_messages: "%{admin} Messages"
+          flagged_content: Flagged Content
+          moderate_content: Moderate Content
+          membership_requests: Membership Requests
+          project_requests: "%{mentoring_connection} Requests"
+          proposed_groups: Proposed %{mentoring_connections}
+      multi_track_admin:
+        content:
+          activities_dashboard: Activities Dashboard
+          global_dashboard: Global Dashboard

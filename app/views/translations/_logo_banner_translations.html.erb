@@ -1,0 +1,17 @@
+<% object.each_with_index do |item, item_index| %>
+  <% if !item[:for_heading] && item[:en].present? && item[:attribute].to_s.match(/#{attachment_type}/) %>
+    <% image_paths = get_urls_for_attachments(program_asset, attachment_type, second_locale) %>
+    <tr class="cjs_attributes_<%= index %>">
+      <td class="left_column">
+        <div class="text-center">
+          <%= image_tag(image_paths[0], class: "inline-images img-responsive col-xs-12 no-padding") if image_paths[0].present? %>
+        </div>
+      </td>
+      <td class="middle_column">
+      </td>
+      <td class="right_column">
+        <%= render(:partial => "second_locale_logo_banner", :locals => {second_locale: second_locale, attachment_type: @attachment_type, program_asset: program_asset, image_paths: image_paths}) %>
+      </td>
+    </tr>
+  <% end %>
+<% end %>

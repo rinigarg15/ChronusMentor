@@ -1,0 +1,10 @@
+<div class="m-t-lg text-left">
+  <% urls = get_tnc_privacy_policy_urls %>
+  <% button_text = (defined?(button_text) && button_text.present?) ? button_text : "display_string.sign_up".translate %>
+  <div class="agreement" id="signup_terms_container">
+    <label class="checkbox">
+      <%= check_box_tag "signup_terms", true, false %>
+      <%= "feature.user.content.read_and_agreed_v4_html".translate(button_text: button_text, terms_url: urls[:terms], privacy_policy_url: urls[:privacy_policy], cookies_url: urls[:cookies]) %>
+    </label>
+  </div>
+</div>

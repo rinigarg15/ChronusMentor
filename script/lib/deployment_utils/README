@@ -1,0 +1,42 @@
+
+USEFUL CAP SHORTCUTS:
+====================
+
+The below commands will open rails and db console respectively in the primary app server
+cap <env> rails:console
+cap <env> rails:dbconsole
+
+The below commands will give you an interactive SSH access to the first app or web server - 
+cap <env> ssh:app
+cap <env> ssh:web
+
+NOTE: If there are multiple app/web servers, only the first/primary server can be accessed using the above cap commands
+
+For tailing logs across multiple <env> web servers, 
+cap <env> chronus:tail_logs
+
+To update .env creds,
+cap <env> chronus:update_app_creds
+
+To stop and start DJ,
+cap <env> chronus:delayed_job:stop
+cap <env> chronus:delayed_job:start
+
+To start and stop cron,
+cap <env> chronus:cron:stop
+cap <env> chronus:cron:start
+
+To setup a maintenance page,
+cap <env> deploy:web:disable
+
+To remove maintenance page,
+cap <env> deploy:web:enable
+
+To take a snapshot and update backup servers,
+cap <env> deploy:perform_recovery_setup
+
+To recover servers,
+cap <env> deploy:recover_collapsed_server
+cap <env> deploy:recover_primary_app_server
+cap <env> deploy:recover_secondary_app_server
+cap <env> deploy:recover_web_server

@@ -1,0 +1,28 @@
+<% modal_container  "feature.campaign.delete".translate(:title => @campaign.title),
+                    :modal_id => "modal_delete_user_campaign_action" do %>
+  <%= simple_form_for @campaign, :html => {:method => :delete, :id => "delete_user_campaign_form"} do |f| %>
+    <div class='popup_content clearfix'>
+      <div id="delete_campaign_prompt">
+        <%= "feature.campaign.delete_message_html".translate(title: content_tag(:b, @campaign.title)) %>
+        <% unless @campaign.drafted? %>
+          <div class="clearfix">
+            <%= "feature.campaign.delete_message_2".translate %>
+            <%= "feature.campaign.delete_message_recommend_stop".translate unless @campaign.stopped? %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <div class="popup_content clearfix">
+    <hr class="m-b m-t-xs"/>
+    <div class= "pull-right">
+      <% action_set do%>
+      <%= button_tag "display_string.Cancel".translate, :type => 'button', :class => "btn popup_closebox btn-white cancel", "data-dismiss" => "modal" %>
+      <%= submit_tag "feature.campaign.delete_campaign".translate, :class => "btn btn-danger cui_delete_campaign", data: {:disable_with => "display_string.Please_Wait".translate} %>
+        <% if @campaign.state == CampaignManagement::AbstractCampaign::STATE::ACTIVE %>
+          <%= button_tag "feature.campaign.disable_campaign_v1".translate, :type => 'button', :onclick => %Q[jQuery(".disable_campaign_action").click();] , :class => "btn btn-primary cui_disable_campaign", "data-dismiss" => "modal" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <% end %>
+<% end %>

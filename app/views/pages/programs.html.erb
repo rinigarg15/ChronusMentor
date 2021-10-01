@@ -1,0 +1,15 @@
+<% @title = "feature.enrollment.title".translate(programs: _Programs) %>
+
+<% wrapper_proc = Proc.new do |programs, options, &block| %>
+  	<% content_tag(:div, content_tag(:h3, options[:title], class: 'p-sm') + content_tag(:div, block.call(programs, options))).html_safe %>
+	<% end %>
+
+<div id="program_list" class="clearfix">
+	<% if logged_in_organization? %>
+	  <div class="p-t-sm <%= hidden_on_web %>"></div>
+	  <div class="p-t-lg <%= hidden_on_mobile %>"></div>
+  	<% end %>
+  <%= ProgramsListingService.list_programs self, wrapper_proc do |programs, opts| %>
+    <% render(:partial => "pages/all_programs", :locals => {:programs => programs})%>
+  <% end %>
+</div>

@@ -1,0 +1,16 @@
+en:
+  email_translations:
+    meeting_rsvp_notification:
+      title_v3: "%{_Meeting} RSVP notification to owner"
+      description_v2: This email is sent to the %{_meeting} owner when an invitee accepts or declines the %{_meeting}.
+      subject_v1: "{{rsvp_action_capitalized}}: {{meeting_topic}}"
+      content_v5_html: "{{invitee_name}} has {{rsvp_action}} the {{customized_meeting_term}} <a href='{{url_meeting}}'>{{meeting_topic}}</a>.<br/><br/><div style='padding-bottom: 10px'><span style='color: #00AC77; font-size: 16px'>{{customized_meeting_term_capitalized}} Details</span> <br /> </div><table style='border-collapse:separate;border-spacing:10px 10px;' border='0' bgcolor='#eeeeee'><tr><td style='vertical-align: top;color: #909090;'>Topic:</td><td style='vertical-align: top;'>{{meeting_topic}}</td></tr><tr><td style='vertical-align: top;color: #909090;'>When:</td><td style='vertical-align: top;'>{{meeting_timings}}</td></tr><tr><td style='vertical-align: top;color: #909090;'>Where:</td><td style='vertical-align: top;'>{{meeting_location}}</td></tr><tr><td style='vertical-align: top;color: #909090;'>Attendees:</td><td style='vertical-align: top;'>{{meeting_details}}</td></tr><tr><td style='vertical-align: top;color: #909090;'>Description:</td><td style='vertical-align: top;'>{{meeting_description}}</td></tr><tr><td style='vertical-align: top;color: #909090;'></td><td style='vertical-align: top;'>{{meeting_reschedule_button}}</td></tr></table><table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: center;' width='100%' class='wrapper'><tbody><tr><td>{{reply_to_button}}</td></tr></tbody></table>To respond to {{invitee_name}} you can just reply to this email or click on the button above.<br/>"
+      tags:
+        invitee_name:
+          description: Name of the person who accepted/declined the meeting invite
+        rsvp_action:
+          description: RSVP action by the invitee
+          example: accepted
+        rsvp_action_capitalized:
+          description: RSVP action by the invitee (capitalized)
+          example: Accepted

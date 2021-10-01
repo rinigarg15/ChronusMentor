@@ -1,0 +1,21 @@
+en:
+  feature:
+    mentoring_tips:
+      header:
+        mentoring_tips_v1: "%{Mentoring} Insights"
+        mentoring_area:
+          for_mentor_v1: Refresh Your %{Mentoring} Skills
+          for_users_v1: "%{Mentoring} Insight for %{users}"
+      content:
+        listing_page_description_v3_html: "%{Mentoring} insights will be provided to users in their %{mentoring_connection} to improve their interaction with their partners. One %{mentoring} insight is chosen randomly and displayed, whenever a user visits their %{mentoring_connection}. Please review the %{mentoring} insights below. You can <strong>enable or disable them</strong> as per your requirements. The %{checkbox_tick_image} indicates that the %{mentoring} insight is enabled and the the %{checkbox_blank_image} indicates that the %{mentoring} insight is disabled. You may click on the individual icons to turn enable/disable %{mentoring} insights."
+        filter_label_v1: Show %{mentoring} insights for
+        empty_text_v1: There are no %{mentoring} insights.
+      label:
+        mentoring_tip_v1: "%{mentoring} insight"
+        mentoring_tips_v1: "%{Mentoring} Insights"
+        Mentoring_Tip_label: "%{Mentoring} Insight"
+        actions: Actions
+      actions:
+        add_new_v1: Add new %{mentoring} insight
+        enable_all: Enable all
+        disable_all: Disable all

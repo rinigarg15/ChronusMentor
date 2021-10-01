@@ -1,0 +1,18 @@
+<% disable_task_status = get_tast_disabled_status(task, @page_controls_allowed) %>
+<% disable_help_text = get_disable_help_text(task, @page_controls_allowed) %>
+<div class="cjs_details_block <%= block_class %>">
+  <% label = "feature.mentoring_model.description.set_task_status".translate %>
+  <%= choices_wrapper(label, class: "cjs_assignee_block") do %>
+    <%= content_tag(:div, class: "awesome-bootstrap checkbox-primary checkbox pull-left cjs-mentoring-model-set-status cjs-mentoring-model-set-status-#{task.id} m-t-n-xs", data: {toggle: "tooltip"}) do %>
+      <% check_box_id = "cjs-mentoring-model-task-#{task.id.to_s + block_class}" %>
+      <%= check_box(:mentoring_model_task, :status, class: "cjs-mentoring-model-task-#{task.id}", id: check_box_id, checked: task.done?, disabled: disable_task_status, data: {disabled_text: disable_help_text}) %>
+      <%= content_tag(:label, for: check_box_id, class: "#{disable_task_status ? 'disabled-cursor' : ''}") do %>
+        <%= content_tag(:span, label, class: "sr-only") %>
+      <% end %>
+    <% end %>
+    <%= display_mentoring_model_user_pic(task) %>
+  <% end %>
+</div>
+<%= javascript_tag do %>
+  MentoringModelTask.initializeTaskStatusCheckbox(".cjs-mentoring-model-task-<%= task.id %>", '<%= set_status_group_mentoring_model_task_path(group, task, format: :js) %>', <%= !!@page_controls_allowed %>, <%= task.connection_membership.nil? && !task.group.members.pluck(:id).include?(task.completed_by) && !task.completed_by.nil? %>);
+<% end %>

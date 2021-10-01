@@ -1,0 +1,12 @@
+<div class="list-group no-margins">
+  <%= mobile_footer_dropup_quick_link("app_layout.label.favorites".translate, favorite_preferences_path({src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION}), "fa fa-star fa-fw", @current_user.valid_favorite_users.count, {class: "normal-white-space break-word-all list-group-item", badge_class: "badge-warning", badge_id: "favorite_in_footer"}) if current_user && current_user.allowed_to_ignore_and_mark_favorite? %>
+  <%= mobile_footer_dropup_quick_link("quick_links.program.mentor_requests_v1".translate(Mentoring: _Mentoring), mentor_requests_path({ src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION}.merge(@mentor_requests_url_options)), "fa fa-user-plus fa-fw", @new_mentor_requests_count, {class: "normal-white-space break-word-all list-group-item"}) if @new_mentor_requests_count && (!@current_program.matching_by_mentee_and_admin? || current_user.is_student?) %>
+
+  <%= mobile_footer_dropup_quick_link("quick_links.program.meeting_requests_v1".translate(:Meeting => _Meeting), meeting_requests_path(src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), "fa fa-calendar-plus-o fa-fw", @new_meeting_requests_count, {class: "normal-white-space break-word-all list-group-item"}) if @new_meeting_requests_count %>
+
+  <%= mobile_footer_dropup_quick_link("quick_links.program.mentoring_offers_v2".translate(:Mentoring => _Mentoring), mentor_offers_path(src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), "fa fa-user-plus fa-fw", @new_mentor_offers_count, {class: "normal-white-space break-word-all list-group-item"}) if @new_mentor_offers_count %>
+
+  <%= mobile_footer_dropup_quick_link("quick_links.program.upcoming_meetings".translate(:Meetings => _Meetings), member_path(wob_member, :tab => MembersController::ShowTabs::AVAILABILITY, :src => EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), "fa-fw fa fa-calendar", @upcoming_meetings_count, {class: "normal-white-space break-word-all list-group-item cjs_footer_upcoming_meetings"}) if @upcoming_meetings_count && !@show_meeting_tab %>
+
+  <%= mobile_footer_dropup_quick_link("quick_links.program.program_events".translate, program_events_path(src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), "fa-fw fa fa-calendar", @unanswered_program_events_count, {class: "normal-white-space break-word-all list-group-item"}) if @unanswered_program_events_count %>
+</div>

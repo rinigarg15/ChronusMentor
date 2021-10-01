@@ -1,0 +1,70 @@
+<%= include_ckeditor_tag if @is_admin_compose %>
+<% @skip_rounded_white_box_for_content = true %>
+
+<%= ibox nil, :ibox_class => "col-sm-8 col-sm-offset-2 p-lg", :ibox_id => "new_admin_message" do %>
+  <%= response_flash ("cjs-contact-admin-flash") %>
+
+  <% if !logged_in_at_current_level? %>
+    <div class="lead text-center"><%= @title %></div>
+  <% end %>
+
+  <% if program_view? && !(current_user && current_user.is_admin?) && @current_program.contact_admin_setting.present? && @current_program.contact_admin_setting.content.present? %>
+    <div id="contact_admin_instruction" class = "text-center p-sm  font-bold">
+      <%= sanitize(auto_link(textilize(@current_program.contact_admin_setting.content))) -%>
+    </div>
+  <% end %>
+
+  <%= simple_form_for @admin_message, :html => {:id => "new_message", :class => "cjs-contact-admin-form form-horizontal"} do |f| %>
+    <% if @is_admin_compose %>
+      <%= f.input :sender, :as => :string, :label => "feature.messaging.label.from".translate, :input_html => { :value => _Admin, :disabled => true, :class => ' form-control' }, :wrapper => :horizontal_input %>
+    <% end %>
+
+    <%= control_group do %>
+      <%= label_tag :receiver, "#{'feature.messaging.label.to'.translate} *", :class => "control-label col-sm-3" %>
+      <%= controls(class: "col-sm-9") do %>
+        <% if @is_admin_compose %>
+          <%= render :partial => "admin_messages/multi_auto_complete", :locals => {:f => f} %>
+        <% elsif @admin_message.user_to_admin? %>
+          <%= text_field_tag :receiver, _Admin, :disabled => true, :class => ' form-control' %>
+        <% else %>
+          <%= text_field_tag :receiver, @receiver_name, :disabled => true, :class => ' form-control' %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if @admin_message.user_to_admin? && !logged_in_organization? %>
+      <%= f.input :sender_name, :as => :string, :label => Message.human_attribute_name(:sender_name), :required => true, :input_html => {:class => ' form-control' }, :wrapper => :horizontal_input %>
+      <%= negative_captcha(@captcha) %>
+      <%= control_group do %>
+        <%= negative_label_tag(@captcha, :email, Message.human_attribute_name(:sender_email) + " *", :class => 'control-label col-sm-3 ') %>
+        <%= controls(class: "col-sm-9") do %>
+          <%= negative_text_field_tag(@captcha, :email, :class => ' form-control cjs_admin_message_sender_email') %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= f.input :group_id, :as => :hidden if @admin_message.group_id %>
+
+    <%= f.input :subject, :label=> Message.human_attribute_name(:subject),:as => :string, :input_html => { :class => 'navigation_checker  form-control' }, :wrapper => :horizontal_input %>
+    <%= f.input :content, as: :text, wrapper: :horizontal_input, label: Message.human_attribute_name(:content), input_html: { class: "navigation_checker form-control#{ ' cjs_admin_message_content' if @is_admin_compose }", rows: 5 } %>
+    <%= f.input :attachment, :as => :file, :wrapper => :horizontal_input, :label => "feature.announcements.label.add_an_attachment".translate unless !logged_in_at_current_level? && @current_organization.security_setting.sanitization_version == ChronusSanitization::HelperMethods::SANITIZATION_VERSION_V2 %>
+
+    <%- if !logged_in_organization? -%>
+      <%= control_group do %>
+        <%= label_tag "captcha", "#{'captcha.label_v1'.translate} *", class: "control-label col-sm-3 " -%>
+        <%= controls(class: "col-sm-9") do %>
+          <%= display_captcha(nil, input_html: { required: false, :class => " form-control m-b-sm" } ) %>
+        <% end %>
+      <% end %>
+    <%- end -%>
+
+
+    <% action_set(:fields_required => true, :class => "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, back_url, :class => 'btn btn-white' %>
+      <%= f.button :submit, "feature.messaging.action.send_message".translate, :onclick => "windowUnloadAlert.clearAlert();"%>
+    <% end %>
+
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[Messages.validateNewAdminMessage("cjs-contact-admin-flash", "#{'common_text.error_msg.required_missing'.translate}", "#{'flash_message.password_flash.invalid_email'.translate}");] %>

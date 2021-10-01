@@ -1,0 +1,35 @@
+<% settings = get_mentoring_model_settings_for_display(mentoring_model) %>
+
+<% settings.each do |setting| %>
+  <% value = mentoring_model.send(setting[:name]) %>
+  <% disabled = setting[:disable_tooltip].present? %>
+
+  <div class="cjs_mm_setting_container">
+    <div class="media-left">
+      <%= get_icon_content(setting[:icon_class], container_class: "fa fa-circle") %>
+    </div>
+    <div class="media-body">
+      <%= content_tag(:div, setting[:heading], class: "font-600") %>
+      <%= content_tag(:div, setting[:description], class: "small") %>
+      <div class="checkbox">
+        <label>
+          <%# This hidden field will handle unchecked check-boxes during form submission %>
+          <%= hidden_field_tag("mentoring_model[#{setting[:name]}]", false) unless disabled %>
+          <%= check_box_tag("mentoring_model[#{setting[:name]}]", true, value, class: "cjs_mm_setting", disabled: disabled, id: "mentoring_model_check_box_#{setting[:name]}") %>
+          <%= setting[:label] %>
+          <%= content_tag(:span, get_icon_content("fa fa-info-circle"), data: { title: setting[:disable_tooltip], toggle: "tooltip" } ) if disabled %>
+        </label>
+      </div>
+
+      <% if setting[:assoc_text_area_field] %>
+        <% field_name = setting[:assoc_text_area_field] %>
+        <%= content_tag(:div, class: "cjs_mm_setting_assoc_field #{'hide' unless value}") do %>
+          <%= content_tag(:label, "feature.mentoring_model.content.discussion_board_message_help_text".translate, for: "mentoring_model_#{field_name}", class: "sr-only") %>
+          <%= text_area_tag("mentoring_model[#{field_name}]", mentoring_model.send(field_name), rows: 5, class: "m-t-sm form-control") %>
+          <%= content_tag(:div, "feature.mentoring_model.content.discussion_board_message_help_text".translate, class: "help-block small") %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <hr/>
+<% end %>

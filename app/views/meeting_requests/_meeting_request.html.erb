@@ -1,0 +1,10 @@
+<% is_all_requests = filter_field == MeetingRequest::Filter::ALL %>
+<% if @is_manage_view || is_all_requests %>
+  <%= render partial: "meeting_requests/manage_meeting_request", locals: { meeting_request: meeting_request } %>
+<% else %>
+  <% is_mentor_action = (filter_field == MeetingRequest::Filter::TO_ME) %>
+  <% user = (is_mentor_action ? meeting_request.student : meeting_request.mentor) %>
+  <%= render layout: "meeting_requests/meeting_request_content_wrapper", locals: { user: user, meeting_request: meeting_request, is_mentor_action: is_mentor_action, filter_field: filter_field, source: source } do %>
+    <%= render partial: "meeting_requests/meeting_request_content", locals: { meeting_request: meeting_request, is_mentor_action: is_mentor_action, user: user, is_all_requests: is_all_requests, filter_field: filter_field, source: source } %>
+  <% end %>
+<% end %>

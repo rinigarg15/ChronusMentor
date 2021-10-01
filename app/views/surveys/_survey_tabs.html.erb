@@ -1,0 +1,29 @@
+<%
+  active_tab = case
+  when params[:controller] == 'survey_responses' && params[:action] == 'index'
+    :responses
+  when params[:controller] == 'surveys' && params[:action] == 'reminders' && @survey.can_have_campaigns?
+    :reminders
+  when params[:controller] == 'survey_questions' && params[:action] == 'index'
+    :questions
+  when params[:controller] == 'surveys' && ['report'].include?(params[:action])
+    :data
+  end
+%>
+
+<ul class="nav nav-tabs h5 no-margins" id="tab-box">
+  <li class="<%= (active_tab == :questions) ? 'ct_active active' : '' %>" id='questions_tab'>
+    <%= link_to get_icon_content("fa fa-comments-o") + "feature.survey.header.Questions_html".translate(question_count: content_tag(:span, questions_count, :id =>'survey_questions_count')), survey_survey_questions_path(@survey) %>
+  </li>
+  <% if @survey.can_have_campaigns? %>
+    <li class="<%= (active_tab == :reminders) ? 'ct_active active' : '' %>" id='reminders_tab'>
+      <%= link_to get_icon_content("fa fa-reply-all") + "feature.survey.header.reminders_html".translate(count: content_tag(:span, reminders_count, :id =>'survey_reminders_count')), reminders_survey_path(@survey) %>
+    </li>
+  <% end %>
+  <li class="<%= (active_tab == :data) ? 'ct_active active' : '' %>" id='data_tab'>
+    <%= link_to get_icon_content("fa fa-line-chart") + "feature.survey.header.data_trends_v1".translate, report_survey_path(@survey) %>
+  </li>
+  <li class="<%= (active_tab == :responses) ? 'ct_active active' : '' %>" id='responses_tab'>
+    <%= link_to get_icon_content("fa fa-reply-all") + "feature.survey.header.Responses".translate(response_count: @survey.total_responses), survey_responses_path(@survey) %>
+  </li>
+</ul>

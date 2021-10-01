@@ -1,0 +1,20 @@
+<% if @error_message.present? %>
+  Discussions.showErrorMessage("#cjs_task_comment_error_message_<%= @comment.mentoring_model_task.id %>", "<%= j @error_message %>");
+<% else %>
+  <% if remotipart_submitted? %>
+    <% content = "#{render partial: "mentoring_model/tasks/common_details_sidepane", locals: {group: @group, task: @task, comment: @new_comment, checkin: @new_checkin, comments_and_checkins: @comments_and_checkins, can_checkin_access: @can_checkin_access}}" %>
+  <% else %>
+    <% content = render partial: "mentoring_model/tasks/common_details_sidepane", locals: {group: @group, task: @task, comment: @new_comment, checkin: @new_checkin, comments_and_checkins: @comments_and_checkins, can_checkin_access: @can_checkin_access} %>
+  <% end %>
+  jQuery("#task_<%= @task.id %>_show_container").remove();
+  jQuery('.mentoring_model_task_sidepane').show();
+  jQuery('.cjs_new_comment_and_checkin_form_container').hide();
+  jQuery('#mentoring_model_task_sidepane_<%= @task.id %>').replaceWith("<%= j(content) %>");
+  jQuery(".task_<%= @task.id %>_edit_icon").removeClass("hide");
+  jQueryHighlight(jQuery("#mentoring_model_task_comment_<%= @comment.id %>_container"));
+  <% if @scrap.present? %>
+    <% content = render :partial => "scraps/scrap", :collection => [@scrap], locals: {home_page: false} %>
+    Discussions.displayNewMessageV2("<%= j content %>", "<%= j @scrap.id.to_s %>");
+  <% end %>
+  MentoringAreaTracking.gaTrackTaskCommentAdded(<%= @home_page_view %>);
+<% end %>

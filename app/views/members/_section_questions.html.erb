@@ -1,0 +1,26 @@
+<% sections.each do |section_info| %>
+  <% if @profile_member && @profile_member.dormant? %>
+    <% answered_questions = (@profile_member.answered_profile_questions + [@current_organization.email_question]).uniq %>
+    <% questions = section_info[:questions] & answered_questions %>
+  <% else %>
+    <% questions = section_info[:questions] %>
+  <% end %>
+
+  <% if questions && questions.any? %>
+    <%= ibox h(section_info[:section_title]), show_collapse_link: true do %>
+      <div class="section-pane">
+        <% questions.each do |question| %>
+          <% next unless question.conditional_text_matches?(@all_answers) %>
+          <div class="m-b-sm">
+            <h4 class="m-t-sm m-b-xs">
+              <%= chronus_auto_link(question.question_text) %>
+            </h4>
+            <div class="subheader">
+              <%= chronus_auto_link(fetch_formatted_profile_answers(@profile_member, question, @all_answers, false)) %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

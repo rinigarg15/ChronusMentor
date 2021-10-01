@@ -1,0 +1,24 @@
+en:
+  email_translations:
+    posting_in_mentoring_area_failure:
+      title_v2: Email reply failure notification for closed %{_mentoring_connection}
+      description_v2: When a former %{_mentoring_connection} participant tries to respond to a %{_mentoring_connection}-generated email (after they have been removed from the %{_mentoring_connection} or the %{_mentoring_connection} is closed), the system rejects the response, this email is generated, and the system sends it to the former %{_mentoring_connection} participant.
+      subject_v1: 'Unable to post message: {{subject}}'
+      content_v3_html: We're sorry, but we could not post your message because your {{customized_mentoring_connection_term}} - <a href='{{url_mentoring_connection}}'>{{mentoring_connection_name}}</a> - has reached its expiration date on {{closed_date}}. You still have access to the {{customized_mentoring_connection_term}}, but cannot use it to communicate with other members.<br/><br/>If you wish to extend or reactivate your {{customized_mentoring_connection_term}}, please contact the <a href='{{url_contact_admin}}'>{{customized_admin_term}}</a><br/>
+      tags:
+        subject:
+          description: Subject of the email
+          example: Reviewing my resume
+        content:
+          description: Content of the email
+          example: Hello mentor!Can you please review my resume?
+        mentoring_connection_name:
+          description_v1: Name of the %{_mentoring_connection} to which the user had sent the mail
+          example: Smith and Doe
+        url_mentoring_connection:
+          description_v1: Url of the %{_mentoring_connection} to which the user had sent the email
+        url_contact_admin:
+          description: Url for contacting the administrator
+        closed_date:
+          description_v1: Date on which the %{_mentoring_connection} is closed/expired/terminated
+          example: December 24, 2011

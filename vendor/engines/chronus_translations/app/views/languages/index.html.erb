@@ -1,0 +1,39 @@
+<div id="languages_page">
+  <div class="p-md p-l-m white-bg h4 no-vertical-margins">
+    <%= get_icon_content('fa fa-language') %> 
+    <%= 'feature.language.manage_page.header.manage_languages'.translate %>
+    <%= link_to('feature.language.manage_page.action.create_new'.translate, new_language_path, :class => 'btn btn-primary pull-right m-t-n-xs') %>
+  </div>
+
+  <%= ibox nil do %>
+    <table class="table table-striped pane" cellpadding="0" cellspacing="0">
+      <thead class="pane-header">
+        <tr>
+          <th colspan="3"><%= Language.human_attribute_name(:title) %></th>
+          <th colspan="3"><%= Language.human_attribute_name(:display_title) %></th>
+          <th colspan="1"><%= Language.human_attribute_name(:language_name) %></th>
+          <th><%= Language.human_attribute_name(:status) %></th>
+          <th><span class="pull-right"><%= 'display_string.Actions'.translate %></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @languages.each do |language| %>
+          <tr>
+            <td colspan="3"><%= language.title %></td>
+            <td colspan="3"><%= language.display_title %></td>
+            <td colspan="1"><%= language.language_name %></td>
+            <td><%= language.enabled? ? 'display_string.Enabled'.translate : 'display_string.Disabled'.translate %></td>
+            <td>
+              <span class="pull-right">
+                <% common_actions = [] %>
+                <% common_actions << (link_to get_icon_content("fa fa-pencil") + 'display_string.Edit'.translate, edit_language_path(language), :class => "btn btn-white btn-xs btn-block-xxs") %>
+                <% common_actions << (link_to get_icon_content("fa fa-trash") + 'display_string.Delete'.translate, language_path(language), :method => :delete, data: {:confirm => 'common_text.confirmation.sure_to_delete'.translate}, :class => "btn btn-white btn-xs btn-block-xxs") %>
+                <%= render_button_group(common_actions) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

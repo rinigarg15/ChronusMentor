@@ -1,0 +1,1 @@
+jQuery('div.common_questions').replaceWith('<%= j(render :partial => "profile_questions/index", :locals => { :profile_questions => @profile_questions, :new_profile_question_form_url => new_profile_question_path}) %>');

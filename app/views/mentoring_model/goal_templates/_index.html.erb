@@ -1,0 +1,21 @@
+<% goal_templates = capture do %>
+  <%= render partial: "mentoring_model/goal_templates/goal_template", collection: all_goal_templates if all_goal_templates.present? %>
+  <div class="cjs_display_new_goal"></div>
+  <%= no_mentoring_model_entities("feature.mentoring_model.description.no_goal_templates".translate, additional_class: "cjs_no_goal_template_msg #{'hide' if all_goal_templates.present?}") %>
+<% end %>
+<% if @read_only %>
+  <%= ibox "feature.mentoring_model.header.manage_mm_goals".translate, :ibox_class => "cjs-goal-template-header", :collapse_link_class => "hide", :content_class => "no-padding" do %>
+    <% goal_templates %>
+  <% end %>
+<% else %>
+  <div class="cjs-goal-template-header m-b-xxs boxshadow-sm p-sm">
+    <div class="clearfix m-b-sm">
+      <div class="pull-right">
+        <%= link_to("feature.mentoring_model.button.add_new_goal".translate, "#", "data-url" => new_mentoring_model_goal_template_path(@mentoring_model), :class => "btn btn-primary cjs_add_new_goal") %>
+      </div>
+      <h3 class="pull-left font-600"><%= "feature.mentoring_model.header.customize_goals".translate %></h3>
+    </div>
+    <%= goal_templates %>
+  </div>
+<% end %>
+<%= javascript_tag %Q[GoalTemplates.initialize();] %>

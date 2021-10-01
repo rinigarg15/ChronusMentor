@@ -1,0 +1,511 @@
+var MatchReport = {
+  sectionSettingsPath: '',
+  discrepancyGraphPath: '',
+  mentorDistributionMentorView: '#mentee_action_mentee_view_id',
+  mentorDistributionMenteeView: '#mentor_distribution_mentor_view_id',
+  menteeActionMenteeView: '#mentor_distribution_mentee_view_id',
+  showLoader: false,
+  
+  initializeCurrentStatus: function(totalData, successData, resultData, isAdminMatchAlone){
+    var graphHelpText = MatchReport.buildgraphHelpText(isAdminMatchAlone);
+    var currentStatusSections = MatchReport.buildSectionsData(totalData, successData, resultData, graphHelpText);
+    var charts = [];
+    var graphContainer = jQuery('.cjs_current_status_graph_container');
+    for (i = 0; i < currentStatusSections.length; i++) {
+      charts.push(MatchReport.getCurrentStatus(currentStatusSections[i].graphContainerId, currentStatusSections[i]));
+    }
+    setTimeout(function() {
+      for (i = 0; i < charts.length; i++) {
+        charts[i].setSize(graphContainer.width(), graphContainer.width()*.55);
+      }
+      jQuery(window).trigger('resize');
+    }, 100);
+  },
+
+  getCurrentStatus: function(render_to, data){
+    var mychart = new Highcharts.Chart({
+      credits: {
+        enabled: false
+      },
+      chart: {
+        renderTo: render_to,
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        margin: [-140, 15, 15, 15],
+        type: 'pie'
+      },
+      title: {
+        text: data.val+'%',
+        align: 'center',
+        verticalAlign: 'middle',
+        y: 55,
+        style: {
+          fontSize: '30px',
+          fontWeight: 300,
+          color: '#676a6c',
+          fill: '#676a6c',
+          fontFamily: '"Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif'
+        }
+      },
+      tooltip: {
+        formatter: function() {
+          if(this.point.tooltipEnabled){
+            return "<div style='width: 50px; white-space:normal;'>"+ data.val + '%' + data.helpText + "</div>";
+          }
+          else{
+            return false;
+          }
+        }
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          slicedOffset: 0,
+          cursor: 'pointer',
+          startAngle: -90,
+          endAngle: 90,
+          innerSize: '65%',
+          center: ['50%', '100%'],
+          dataLabels: {
+            enabled: false
+          }
+        }
+      },
+      series: [{
+        size: '100%',
+        name: '',
+        data: [
+        {
+          name: '',
+          y: data.val,
+          color: '#1ab394',
+          tooltipEnabled: true
+        },
+        {
+          name: '',
+          y: 100-data.val,
+          dataLabels: {
+            enabled: false
+          },
+          color: '#dcdcdc',
+          tooltipEnabled: false
+        }
+        ]
+      }]
+    });
+    return mychart;
+  },
+
+  showSectionSettings: function(){
+    jQuery("#match_report").on("click", ".cjs-match-report-settings", function(){
+      var section = jQuery(this).data('tile');
+      var adminViewId = jQuery(this).data('admin-view-id');
+      var data = {section: section, admin_view_id: adminViewId};
+      jQueryShowQtip('#inner_content', '', MatchReport.sectionSettingsPath, data);
+    });
+  },
+
+  showRemainingMenteeChoices: function(){
+    jQuery(document).on("click", ".cjs_additional_mentee_choices", function(){
+      var matchConfigId = jQuery(this).data('match-config-id');
+      var data = {match_config_id: matchConfigId};
+      jQueryShowQtip('#inner_content', '', MatchReport.discrepancyGraphPath, data);
+    });
+  },
+
+  triggerSectionSettingsPopup: function(section){
+    jQuery(document).ready(function(){
+      jQuery('.cjs-match-report-settings[data-tile=' + section + ']').trigger('click');
+    });
+  },
+
+  getDiscrepancyGraph: function(matchConfigId){
+    jQuery.ajax({
+      url: MatchReport.discrepancyGraphPath,
+      method: "get",
+      dataType: "json",
+      data: {match_config_id: matchConfigId, show_graph: true},
+      success: function(data){
+        jQuery('#loading_results').hide();
+        MatchReport.showDiscrepancyGraph(data);
+        MatchReport.setTitleShowMoreLinks(data);
+        MatchReport.setSlimScroll();
+        MatchReport.refreshMentorRecommendations(data);
+      }
+    });
+  },
+
+  refreshMentorRecommendations: function(data){
+    var firstCategory = data.categories[0];
+    var divs = jQuery('.cjs_mentor_recommendations_label');
+    var labelValues = [];
+    jQuery.each(divs, function(index, element) {
+      labelValues.push(jQuery(element).text());
+    });
+
+    var refreshRecommendations = parseInt(jQuery(".cjs_mentor_recommendations_count").last().text()) < parseInt(data.maximum_discrepancy) && (labelValues.indexOf(firstCategory) === -1);
+    if(refreshRecommendations){
+      jQuery.ajax({
+      url: MatchReport.refreshMentorRecommendationsPath,
+      method: "get",
+      data: {match_config_id: data.match_config_id},
+    });
+    }
+  },
+
+  setTitleShowMoreLinks: function(data){
+    jQuery("a.cjs_additional_mentee_choices").parent().remove();
+    if (data.remaining_categories_size > 0){
+      jQuery("#match_config_graph").after('<strong class="col-sm-12 m-t-md p-r-xl p-b-sm"><a class="pull-right cjs_additional_mentee_choices" data-match-config-id="' + data.match_config_id + '" href="javascript:void(0)">' + "+" + data.remaining_categories_size + " " + calendarTranslations.moreEventsText + ' </a> </strong>');
+    }
+  },
+
+  showDiscrepancyGraph: function(data){
+    new Highcharts.Chart({
+      credits: {
+        enabled: false
+      },
+      chart: {
+        renderTo: "match_config_graph",
+        backgroundColor: '#f3f3f4',
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'column'
+      },
+      title: {
+        text: null
+      },
+      xAxis: {
+        categories: data.categories
+      },
+      yAxis: {
+        title: { text: null },
+        allowDecimals: false,
+        min: 0,
+        stackLabels: {
+          enabled: true,
+          style: {
+            fontWeight: 'bold',
+            color: 'gray'
+          }
+        }
+      },
+      legend: {
+        align: 'right',
+        x: -50,
+        verticalAlign: 'top',
+        y: 5,
+        floating: true,
+        useHTML: true,
+        labelFormatter: function() {
+          return '<b>' + this.options.stack + '</b>';
+        }
+      },
+      tooltip: {
+        formatter: function () {
+          return '<b>' + this.x + '</b><br/>' +
+            this.series.name + ': ' + this.y + '<br/>' +
+            'Total: ' + this.point.stackTotal;
+        }
+      },
+      plotOptions: {
+        column: {
+          stacking: 'normal',
+          borderWidth: 0,
+          groupPadding: 0.3,
+          pointPadding: 0,
+          events: {
+            legendItemClick: function () {
+              return false; 
+            }
+          }
+        },
+        allowPointSelect: false
+      },
+      series: data.series_data,
+      lang: {
+        noData: jsCommonTranslations.noData
+      },
+      noData: {
+        style: {
+          fontWeight: 'bold',
+          fontSize: '15px',
+          color: '#303030'
+        }
+      } 
+    });
+  },
+
+  triggerDiscrepancyGraph: function(){
+    jQuery(document).on("click", ".cjs_needs_discrepancy_match_config_link", function(){
+      jQuery(".cjs_needs_discrepancy_match_config.gray-bg").find(".cjs_match_configs_chart_and_symbol").show();
+      jQuery(".cjs_needs_discrepancy_match_config.gray-bg").removeClass("gray-bg");
+      jQuery(this).find(".cjs_needs_discrepancy_match_config").addClass("gray-bg");
+      jQuery(this).find(".cjs_match_configs_chart_and_symbol").hide();
+      if(MatchReport.showLoader){
+        jQuery('#loading_results').show();
+      }
+      MatchReport.showLoader = true
+      MatchReport.getDiscrepancyGraph(jQuery(this).data('match-config-id'));
+    });
+  },
+
+  buildgraphHelpText: function(isAdminMatchAlone){
+    if(isAdminMatchAlone){
+      var data = {
+        first: jsMatchReportTranslation.matchRate,
+        second: jsMatchReportTranslation.drafted,
+        third: jsMatchReportTranslation.neverConnected
+      }
+      return data;
+    }
+    else{
+      var data = {
+        first: jsMatchReportTranslation.requested,
+        second: jsMatchReportTranslation.accepted,
+        third: jsMatchReportTranslation.result
+      }
+      return data;
+    }
+  },
+
+  buildSectionsData: function(totalData, successData, resultData, graphHelpText){
+    var sectionsData = [];
+    var totalSectionsData = {
+      val: totalData,
+      graphContainerId: 'current_status_total_data',
+      helpText: graphHelpText.first
+    }
+
+    var successSectionsData = {
+      val: successData,
+      graphContainerId: 'current_status_success_data',
+      helpText: graphHelpText.second
+    }
+
+    var resultSectionsData = {
+      val: resultData,
+      graphContainerId: 'current_status_result_data',
+      helpText: graphHelpText.third
+    }
+    sectionsData.push(totalSectionsData, successSectionsData, resultSectionsData);
+    return sectionsData;
+  },
+  
+  showAppliedFiltersPopup: function(){
+    jQuery(document).on("click", "#cjs_applied_filters_more", function(){
+      jQuery("#cjs_applied_filters_modal").modal('show');
+    });
+  },
+
+  initializeKendoGrid: function(id, options){
+    jQuery(id).kendoGrid({
+      dataSource: {
+        type: "json",
+        data: options.filterData,
+        schema: {
+          model: {
+            fields: options.fields
+          }
+        },
+        pageSize: options.perPage
+      },
+      scrollable: options.scrollable,
+      sortable: options.sortable,
+      pageable: options.pageable,
+      columns: options.columns
+    });
+  },
+
+  initializeKendoGridForMenteeNeeds: function(id, options){
+    jQuery(id).kendoGrid({
+      dataSource: {
+        type: "json",
+        transport: {
+          read: {
+            url: options.dataSource
+          },
+          parameterMap: function(data, type) {
+            return data;
+          }
+        },
+        schema: {
+          model: {
+            fields: options.fields
+          },
+          parse: function(response) {
+            data = response.data;
+            data.total = response.total;
+            return data;
+          },
+          total: function (response) {
+            return data.total
+          }
+        },
+        pageSize: options.perPage,
+        serverPaging: true,
+        serverSorting: true
+      },
+      scrollable: options.scrollable,
+      sortable: options.sortable,
+      pageable: options.pageable,
+      columns: [
+      { 
+        field: "questionText", 
+        title: options.column_names.questionText, 
+        width: "40%",
+        encoded: false 
+      }, 
+      { 
+        field: "menteeCount", 
+        title: options.column_names.menteeCount, 
+        width: "20%", 
+        encoded: false,
+        headerAttributes: { class: "text-center" }, 
+        attributes: { class: "text-center" } 
+      }, 
+      { 
+        field: "mentorCount", 
+        title: options.column_names.mentorCount, 
+        width: "20%", 
+        encoded: false,
+        template: function(options) {
+          var id = "mentor_count_" + options.index;
+          var choices = options.mentor_choices;
+          if(choices.length > 0){
+            return '<span title="'+ choices + '"class= "cjs_kendo_mentor_count cjs_kendo_mentor_tooltip" id="' + id + '">' + options.mentorCount + '</span>';
+          }
+          else{
+           return '<span class= "cjs_kendo_mentor_count" id= "' + id + '">' + options.mentorCount + '</span>'; 
+          }
+        }, 
+        headerAttributes: { class: "text-center" }, 
+        attributes: { class: "text-center" } 
+      }, 
+      { 
+        field: "discrepancy", 
+        title: options.column_names.discrepancy, 
+        width: "20%", 
+        encoded: false,
+        template: function(options) {
+          var discrepancy = options.discrepancy;
+          if(discrepancy >= 0){
+            return '<span> - </span>';
+          }
+          else{
+           return '<span>' + discrepancy + '</span>'; 
+          }
+        },
+        headerAttributes: { class: "text-center" }, 
+        attributes: { class: "text-center" } 
+      }
+      ]
+    });
+
+    jQuery(id).kendoTooltip({
+      filter: "span.cjs_kendo_mentor_tooltip"
+    });
+  },
+
+  setSlimScroll: function(){
+    jQuery("[data-slim-scroll=true]").each(function(){
+      var visible = jQuery(this).data("slim-scroll-visible");
+      var height = jQuery(this).height();
+
+      if(height > 400){
+        visible = true;
+        height = 400;
+      }
+      jQuery(this).slimScroll({
+        height: height + 'px',
+        alwaysVisible: visible,
+        railVisible: visible,
+        wrapperClass: "col-sm-3 no-padding slimScrollDiv"
+      });
+    });
+    setTimeout(function(){
+      jQuery(".cjs_needs_discrepancy_match_config_link").closest(".slimScrollDiv").css("width", "25%");
+    },
+    100);
+  },
+
+  searchKeywordsGraph: {
+    showBubbleGraph: function(id, data){
+      width = jQuery(id).width();
+      height = 280;
+      minradiusOffset = data.length > 1 ? width/200 : 0;
+      forceCollide = d3.forceCollide().radius(function(d) { return d.radius + width/100; });
+      centerX = width * 0.5;
+      centerY = height * 0.5;
+      scaleColor = d3.scaleOrdinal(d3.schemeCategory10);
+        svg = d3.select(id)
+          .append('svg')
+          .attr("width", width)
+          .attr("height", height);
+        pack = d3.pack()
+          .size([width, height - 5])
+        var forceStrength = 0.05;
+        simulation = d3.forceSimulation()
+          .force("x", d3.forceX(centerX).strength(forceStrength))
+          .force("y", d3.forceY(centerY).strength(forceStrength))
+          .force("charge", d3.forceManyBody())
+          .force("collide", forceCollide);
+        MatchReport.searchKeywordsGraph.drawBubbleGraph(data);
+    },
+
+    createNodes: function(source) {
+      var root = d3.hierarchy({ children: source })
+          .sum(function(d) { return d.value; });
+      var rootData = pack(root).leaves().map(function(d, i) {
+          var data = d.data;
+          var color = scaleColor(data.name);
+          return {
+              x: centerX + (d.x - centerX) * width/15,
+              y: centerY,
+              id: "bubble" + i,
+              r: d.r,
+              radius: d.r,
+              value: data.value,
+              name: data.name,
+              color: color
+          }
+      });
+      rootData.sort(function(a, b) { return b.value - a.value; });
+      return rootData;
+    },
+    
+    drawBubbleGraph: function(data) {
+      var nodes = MatchReport.searchKeywordsGraph.createNodes(data);
+      bubble = svg.selectAll(".bubble")
+        .data(nodes)
+        .enter().append("g")
+        .attr("class", "bubble");
+      bubble.append("circle")
+        .attr("id", function(d) { return d.id; })
+        .attr("fill", "none")
+        .style("stroke", function(d) { return d.color; });
+      bubble.append("text")
+        .attr("dy", "0.35em")
+        .style("text-anchor", "middle")
+        .text(function (d) {
+          var lengthToShow = d.r/5;
+          if(d.name.length > lengthToShow + 2)
+            return d.name.substring(0,lengthToShow)+'..';
+          else
+            return d.name;                       
+        });
+      bubble.append("title")
+        .text(function(d) { return d.name + ": " + d.value; });  
+      simulation.nodes(nodes).on("tick", MatchReport.searchKeywordsGraph.triggerSimulation);
+    },
+
+    triggerSimulation: function(){
+      bubble.attr("transform", function(d) { return "translate(" + d.x + "," + (d.y) + ")"; })
+        .select("circle")
+        .attr('r', function(d) {
+          return d.r + minradiusOffset;
+        })
+    } 
+  }
+}

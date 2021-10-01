@@ -1,0 +1,20 @@
+en:
+  email_translations:
+    portal_member_with_set_of_roles_added_notification:
+      title: Invitation to a user joining with a new role, or a combination of roles, and a published profile.
+      description: This email is sent when %{_a_admin} adds a user with a single role or multiple roles, publishes their profile and then asks them to join the %{_program}.
+      subject: "{{receiver_first_name}}, {{invitor_name}} invites you to join as {{role_names}}!"
+      content_html: Congratulations!<br/><br/> You have been invited by {{invitor_name}} to join {{subprogram_or_program_name}} as {{role_names}}.<br/><br/>In the process, {{invitor_name}} has filled out a profile for you. It is important that you review and complete your profile. <br/>{{accept_and_sign_up_button}}<br/>If you have any questions, please contact the {{customized_admin_term_pluralized}} <a href='{{url_contact_admin}}'>here</a>.<br/>
+      accept_and_signup_text: Accept and sign-up
+      tags:
+        url_invite:
+          description: Url for the user to click and accept the invitation
+        invitor_name:
+          description: Name of the admin who is adding the user and sending the invite
+        role_names:
+          description: Roles for which user is invited
+          example: "%{role}"
+        accept_and_sign_up_button:
+          description: Accept and sign up button
+        url_contact_admin:
+          description: Url for the user to contact admin

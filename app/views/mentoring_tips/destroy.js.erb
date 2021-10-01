@@ -1,0 +1,8 @@
+jQuery("#mentoring_tip_<%= @mentoring_tip.id %>").hide();
+
+setTimeout(function(){
+  jQuery("#mentoring_tip_<%= @mentoring_tip.id %>").remove();
+  if(jQuery('#mentoring_tips_list tbody tr').not('.mentoring_tip_form').length <= 0) {
+    jQuery('#mentoring_tips_list tbody').append('<%= j(render(:partial => "mentoring_tips/empty_content")) %>');
+  }
+}, 1000);

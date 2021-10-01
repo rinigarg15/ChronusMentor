@@ -1,0 +1,36 @@
+<%= ibox admin_view_section_title(1, "feature.admin_view.header.enter_details".translate, :skip_step_title => !editable_view) do %>
+  <%= form_object.input :title, :as => :string, :input_html => {:class => "title_text_field form-control"}, :label_html => {:class => "col-sm-2 control-label"}, :input_wrapper_html => {:class => "col-sm-10"} %>
+  <%= form_object.input :description, :as => :text, :input_html => {:class => 'form-control', :rows => 3}, :label_html => {:class => "col-sm-2 control-label"}, :input_wrapper_html => {:class => "col-sm-10"} %>
+  <% if new_view %>
+    <% action_set do %>
+      <%= next_section_slider %>
+    <% end %>
+  <% end %>
+<% end %>
+<% if editable_view %>
+  <%= ibox admin_view_section_title(2, "feature.admin_view.header.specify_filter_criteria".translate), {:ibox_class => "#{'cjs_admin_view_step hide' if new_view}"} do %>
+    <div class="cui_admin_view_step_two">
+      <% if @admin_view.is_program_view? %>
+        <%= render :partial => "admin_views/filter_roles_connection_status", :locals => {:new_view => new_view, :used_as_filter => @used_as_filter} %>
+        <%= render :partial => "admin_views/filter_by_profile" %>
+        <%= render :partial => "admin_views/filter_by_survey" %>
+        <%= render :partial => "admin_views/filter_by_timeline" %>
+        <%= render :partial => "admin_views/filter_by_other" %>
+      <% else %>
+        <%= render :partial => "admin_views/filter_program_roles_state", :locals => {admin_view: @admin_view} %>
+        <%= render :partial => "admin_views/filter_member_status", :locals => {admin_view: @admin_view} %>
+        <%= render :partial => "admin_views/filter_by_language" if @admin_view.languages_filter_enabled? %>
+        <%= render :partial => "admin_views/filter_by_profile" %>
+      <% end %>
+      <% if @used_as_filter %>
+        <%= render :partial => "admin_views/new_view_actions", :locals => actions_locals %>
+      <% else %>
+        <%= next_section_slider(:class => "m-t-xs") if new_view %>
+      <% end %>
+    </div>
+  <% end %>
+<% elsif !new_view %>
+  <%= ibox admin_view_section_title(1, "feature.admin_view.header.filters_applied".translate, :skip_step_title => true, :desc => "feature.admin_view.content.filters_applied_tooltip".translate) do %>
+    <%= render :partial => "admin_views/applied_filters", :locals => {:admin_view_filters => @applied_filters} %>
+  <% end %>
+<% end %>

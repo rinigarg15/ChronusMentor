@@ -1,0 +1,79 @@
+<div ng-cloak>
+  <div>
+    <div ng-show="showUsers">
+      <h3>
+        <span ng-show="userData.tableEntries.length == 0"><%= "feature.outcomes_report.detailed_report.table.no_users".translate %></span>
+        <span ng-show="userData.tableEntries.length != 0"><%= "feature.outcomes_report.detailed_report.table.users".translate %></span>
+        <i class="small">(<%= "feature.outcomes_report.detailed_report.table.in_selected_time_range".translate %>)</i>
+      </h3>
+    </div>
+    <div ng-hide="showUsers">
+      <h3>
+        <span ng-show="groupData.tableEntries.length == 0"><%= "feature.outcomes_report.detailed_report.table.no_connections".translate(:Mentoring_Connections => _Mentoring_Connections) %></span>
+        <span ng-show="groupData.tableEntries.length != 0"><%= _Mentoring_Connections %></span>
+        <i class="small">(<%= "feature.outcomes_report.detailed_report.table.in_selected_time_range".translate %>)</i>
+      </h3>
+    </div>
+  </div>
+
+  <div class="table-container table-responsive" ng-hide="(showUsers && userData.tableEntries.length == 0) || (!showUsers && groupData.tableEntries.length == 0)">
+
+    <table class="table table-bordered" ng-show="showUsers">
+      <thead>
+        <tr class="cjs_list_view_header cui_table_sort">
+          <th class="table-column" ng-class='addSortableClass(column, userData)' ng-click="applySortingToTable(column, userData, openPageInUserTable)" ng-repeat="column in userData.tableHeader"> {{ column.title }} </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="data in userData.tableEntries">
+          <td class="table-column" ng-repeat="column in userData.tableHeader">
+            <span ng-hide="column.link_to"> {{data[column.field]}} </span>
+            <span ng-show="column.link_to == 'user'"> 
+              <a ng-href="{{membersPath+'/'+data[column.field][1]}}"> {{data[column.field][0]}} </a>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="table pane attach-bottom no-shadow cui-connection-detailed-report-table" ng-hide="showUsers">
+      <thead>
+        <tr class="pane-header cjs_list_view_header cui_table_sort">
+          <th class="table-column" ng-class='addSortableClass(column, groupData)' ng-click="applySortingToTable(column, groupData, openPageInGroupTable)" ng-repeat="column in groupData.tableHeader"> 
+              {{ column.title }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="data in groupData.tableEntries">
+          <td class="table-column" ng-repeat="column in groupData.tableHeader">
+            <span ng-hide="column.link_to"> {{data[column.field]}} </span>
+            <span ng-show="column.link_to == 'user'"> 
+              <span ng-repeat="object in data[column.field]">
+                <a ng-href="{{membersPath+'/'+object[1]}}"> {{object[0]}} </a>
+                {{ (!$last) && ', ' || ''}}
+              </span>
+            </span>
+            <span ng-show="column.link_to == 'group'"> 
+              <a ng-href="{{groupsPath+'/'+data[column.field][1]}}"> {{data[column.field][0]}} </a>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+  <div class="table-container no-border has-below-2">
+    <div id="user_pagination_links" ng-show="showUsers">
+    </div>
+    <div id="group_pagination_links" ng-show="!showUsers">
+    </div>
+  </div>
+
+</div>
+<script>
+jQuery( document ).ready(function() {
+  var width = jQuery( '#inner_content' ).width();
+  jQuery( '.table-container' ).width(width-30);
+});
+</script>

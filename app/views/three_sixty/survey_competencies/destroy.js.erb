@@ -1,0 +1,4 @@
+<% if @survey_competency.destroyed? %>
+  jQuery("#three_sixty_survey_competency_<%= @survey_competency.id %>").remove();
+  jQuery("#three_sixty_new_survey_competency").html('<%= j render(:partial => "three_sixty/surveys/new_survey_competency", :locals => {:survey => @survey, :available_competencies => @available_competencies}) %>');
+<% end %>

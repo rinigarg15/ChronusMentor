@@ -1,0 +1,15 @@
+<% action_text = @group.notes.present? ? "display_string.Update".translate : "display_string.Add".translate %>
+<% default_value_for_notes = "feature.connection.content.placeholder.create_new_note".translate(mentoring_connection: _mentoring_connection, admins: _admins) %>
+
+<% modal_v3_popup "feature.connection.header.add_or_update_notes_v1".translate(Add_or_Update: action_text, connection_name: @group.name) do %>
+  <%= simple_form_for @group, :url => update_notes_group_path(@group, src: @source), :remote => true, :html => {:id => "update_notes_popup"} do |f| %>
+    <%= f.input :notes, :as => :text, :label_html => {:class => 'sr-only'}, :input_html => {:placeholder => default_value_for_notes, :rows => 5 , :class => "form-control"} %>
+    <%= hidden_field_tag "view", @view %>
+    <%= hidden_field_tag "tab", @tab_number %>
+
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => "btn btn-white", data: { dismiss: "modal" } %>
+      <%= f.button :submit, action_text, :class => "btn btn-primary" %>
+    <% end %>
+  <% end %>
+<% end %>

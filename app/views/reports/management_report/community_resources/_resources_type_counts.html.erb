@@ -1,0 +1,14 @@
+<% if data.empty? %>
+  <div class="dim text-center"><%= "feature.reports.content.no_resources".translate(program: _program, resources: _resources) %></div>
+<% else %>
+  <h4><%= type == :helpful_count ? "feature.reports.content.resources_marked_helpful".translate(Resources: _Resources, count: data.count, Resource: _Resource) : "feature.reports.content.resources_viewed".translate(Resources: _Resources, count: data.count, Resource: _Resource) %></h4>
+  <ul class="stat-list m-t-md">
+    <% data.each do |resources_hash| %>
+      <li class="row">
+        <% resource = resources_hash[:resource] %>
+        <%= link_to resource.title, resource_path(resource), class: "col-xs-9" %>
+        <span class="col-xs-3 small text-right"><%= type == :helpful_count ? "feature.connection.content.users_number".translate(count: resources_hash[type]) : "feature.resources.content.views_stat_v1".translate(count: resources_hash[type]) %></span>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

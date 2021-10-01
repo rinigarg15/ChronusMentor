@@ -1,0 +1,32 @@
+<% klass = @bulk_match.type.underscore %>
+<% drafted_label, published_label = get_drafted_and_published_labels_for_settings(@recommend_mentors, orientation_type) %>
+<% pickable_slots_label, pickable_slots_help_text = get_max_pickable_slots_label_for_settings(@recommend_mentors, orientation_type) %>
+<% modal_v3_popup "feature.bulk_match.label.settings".translate do %>
+  <div id="bulk_match_settings_content" ng-controller="BulkMatchCtrl">
+  <%= simple_form_for @bulk_match, :remote => true, :url => send("update_settings_#{klass.pluralize}_path", {format: :js, orientation_type: orientation_type}), :html => {:method => :get, :id => "bulk_match_settings", :class => "no-margin"} do |f| %>
+    <%= response_flash "cjs_bulk_match_settings_flash" %>
+    <%= f.input :max_pickable_slots, :as => :string, :label => pickable_slots_label, :hint => content_tag(:b, "display_string.Note_with_colon".translate, :class => 'm-r-xxs') + pickable_slots_help_text, :input_html => {:class => "form-control"}, :hint_html => { :class => 'small'} %>
+    <%= f.input 'hidden_max_pickable_slots', :as => :hidden, :input_html => { :value => @bulk_match.max_pickable_slots } %>
+    <% if @recommend_mentors %>
+      <%= f.input :max_suggestion_count, :as => :string, :label => "feature.bulk_recommendation.label.mentors_per_mentee".translate(:mentee => _mentee, :mentors => _mentors), :input_html => {:class => "form-control"}, :hint_html => { :class => 'small'} %>
+      <%= f.input 'hidden_max_suggestion_count', :as => :hidden, :input_html => { :value => @bulk_match.max_suggestion_count } %>
+    <% end %>
+    <hr class="m-t-sm m-b-sm"/>
+    <% radio_options = [["display_string.Yes".translate, true], ["display_string.No".translate, false]] %>
+    <%= f.input :show_drafted, collection: radio_options, as: :radio_buttons, item_wrapper_class: 'radio inline', 'ng-bind' => "bulk_match_vars.show_drafted", label: drafted_label, label_html: {class: "false-label"} %>
+    <%= f.input :show_published, collection: radio_options, as: :radio_buttons, item_wrapper_class: 'radio inline', 'ng-bind' => "bulk_match_vars.show_published", label: published_label, label_html: {class: "false-label"} %>
+    <hr class="m-t-sm m-b-sm"/>
+    <% if !@recommend_mentors %>
+      <%= f.input :request_notes, collection: radio_options, as: :radio_buttons, item_wrapper_class: 'radio inline', label: "feature.bulk_match.label.ask_for_notes".translate(mentoring_connections: _mentoring_connections), label_html: {class: "false-label"}, 'ng-bind' => "bulk_match_vars.request_notes" %>
+      <hr class="m-t-sm m-b-sm"/>
+    <% end %>
+    <% action_set do %>
+      <div class="pull-right m-t-xs">
+        <%= link_to_function "display_string.Cancel".translate, "closeQtip();", :class => 'btn btn-white' %>
+        <%= f.button :submit, "display_string.Apply".translate, :disable_with => "display_string.Please_Wait".translate, :id => "bulk_match_settings_submit", 'ng-click' => "submitSettings();" %>
+      </div>
+    <% end %>
+  <% end %>
+  </div>
+<% end %>
+<%= javascript_tag "jQuery(document).ready(function() {angular.bootstrap(jQuery('#bulk_match_settings_content'));});" %>

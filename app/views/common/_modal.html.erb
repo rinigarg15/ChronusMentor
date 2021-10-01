@@ -1,0 +1,17 @@
+<%# XXX: Any change made in this file should be updated in templates/common/remote_modal.jst.ejs %>
+<%# XXX: Adding html comments with modal will lead to modal overlay issues %>
+<div class="modal fade" id="remoteModal" tabindex="-1" role="dialog" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content animated fadeIn">
+      <div class="modal-header no-padding clearfix <%= hidden_on_web %>">
+        <h4 class="modal-title">
+          <%= content_tag(:span, get_icon_content("fa fa-chevron-left"), :class => "pull-left cjs-mobile-modal-cancel p-sm p-r-0", "data-dismiss" => "modal") %>
+          <span class="sr-only">Cancel</span>
+        </h4>
+      </div>
+      <div class="modal-body">
+        <div class="sk-spinner sk-spinner-pulse"></div>
+      </div>
+    </div>
+  </div>
+</div>

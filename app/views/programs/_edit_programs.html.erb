@@ -1,0 +1,9 @@
+<div class="p-lg p-b-0">
+  <% @title = "program_settings_strings.header.program_settings".translate(Program: _Program) unless @first_visit %>
+  <% vertical_form = [ProgramsController::SettingsTabs::FEATURES, ProgramsController::SettingsTabs::PERMISSIONS].include?(@tab) %>
+  <% if @tab == ProgramsController::SettingsTabs::TERMINOLOGY && (@current_organization.standalone? || super_console?) %>
+    <%= render :partial => "customized_terms/edit", :locals => {:organization => @current_organization } %>
+  <% else %>
+    <%= render :partial => '/programs/program_settings_form', :locals => {:vertical_form => vertical_form} %>
+  <% end %>
+</div>

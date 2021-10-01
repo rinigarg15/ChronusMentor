@@ -1,0 +1,24 @@
+<div id="cjs_select_meeting_details_tab_content" class="tab-pane active no-padding">
+  <%= response_flash "meeting_details_flash" %>
+
+  <div class="m-b-xs h6"><%= "feature.meeting_request.label.topic".translate %></div>
+  <%= label_tag("meeting_title", "feature.meeting_request.label.select_meeting_title".translate(meeting: _meeting), for: "new_meeting_title", class: "sr-only") %>
+  <%= text_field_tag :topic, nil, {:id => "new_meeting_title", class: "form-control cjs_mandatory_meeting_detail", placeholder: "feature.meetings.content.topic_help_text".translate, required: true} %>
+
+  <div class="m-b-xs m-t-md h6"><%= "feature.meeting_request.label.description".translate %></div>
+  <%= label_tag("meeting_description", "feature.meeting_request.label.select_meeting_description".translate(meeting: _meeting), for: "new_meeting_description", class: "sr-only") %>
+  <%= text_area_tag :description, nil, { rows: 5, placeholder: "feature.meetings.content.description_help_text_v4".translate(mentor_name: member.name(:name_only => true), program: _program, administrators: _admins), class: "form-control m-b-md cjs_mandatory_meeting_detail", id: "new_meeting_description" } %>
+
+  <% action_set(class: "pull-right") do %>
+    <%= link_to(user.ask_to_set_availability? ? "feature.meetings.action.proceed_to_select_times".translate : "feature.meetings.action.proceed_to_propose_times".translate, "javascript:void(0)", :class => "btn btn-primary cjs_show_timing_tab") %>
+  <% end %>
+</div>
+
+<%= javascript_tag do  %>
+  jQuery(document).ready(function() {
+    MeetingRequest.saveMeetingDetails();
+    MeetingRequest.handleSelectTimeTabClick();
+    MeetingRequest.handleMeetingDetailsChange();
+    MeetingRequest.gaTrackNewRequestInitiation();
+  });
+<% end %>

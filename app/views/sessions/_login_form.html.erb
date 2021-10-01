@@ -1,0 +1,32 @@
+<%= form_tag session_url, class: "text-center", novalidate: "novalidate", data: { remote: true } do %>
+  <%= render_login_id_field(auth_config, login_id) %>
+  <%= render_password_field(auth_config) %>
+
+  <%= hidden_field_tag(:auth_config_id, auth_config.id, id: "") %>
+  <%= hidden_field_tag(:chronussupport, true) if defined?(chronussupport) && chronussupport %>
+
+  <% action_set(class: "m-t-md") do %>
+    <%= submit_tag "display_string.Login".translate, class: "cjs-login-btn btn btn-primary btn-block", data: { disable_with: false } %>
+
+    <% if auth_config.indigenous? %>
+      <div class="inline m-t">
+        <% if security_setting.can_show_remember_me? %>
+          <%= choices_wrapper("login_page.action.remember_me_v1".translate) do %>
+            <label class="checkbox inline no-margins">
+              <%= check_box_tag "remember_me", "1", true %>
+              <%= "login_page.action.remember_me_v1".translate %>
+            </label>
+          <% end %>
+          <%= vertical_separator %>
+        <% end %>
+
+        <% if defined?(modal_id) && modal_id.present? %>
+          <%= link_to "login_page.action.forgot_password".translate, "javascript:void(0)", class: "cjs-forgot-password-link" %>
+          <%= render partial: "sessions/forgot_password_modal", locals: { login_modal_id: modal_id } %>
+        <% else %>
+          <%= link_to "login_page.action.forgot_password".translate, forgot_password_path %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

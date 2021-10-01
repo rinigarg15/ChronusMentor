@@ -1,0 +1,30 @@
+<% @title = "feature.three_sixty.dashboard.title".translate %>
+<% @page_action3 = {:label => "feature.three_sixty.dashboard.new_survey".translate, :url => new_three_sixty_survey_path, :class => "btn btn-primary pull-right"} %>
+<% @page_action2 = {:label => "feature.three_sixty.competencies_tab_v1".translate, :url => three_sixty_competencies_path, :class => "btn btn-primary pull-right"} %>
+<% @page_action = {:label => "feature.three_sixty.settings_tab".translate, :url => three_sixty_reviewer_groups_path, :class => "btn btn-primary pull-right"} %>
+
+  <%= ibox "feature.three_sixty.dashboard.assessees.Published_Surveys".translate, :ibox_class => "cjs_three_sixty_container b-b" do %>
+    <%= response_flash("cjs_survey_assessee_view_flash") %>
+    <% if @survey_assessees.present? %>
+      <div id="three_sixty_published_survey">
+        <%= render :partial => "three_sixty/surveys/dashboard/published_surveys", :locals => {:objects => @survey_assessees, :published => true }%>
+      </div>
+    <% else %>
+      <span class="has-above"><%= "feature.three_sixty.dashboard.no_published_surveys".translate %></span>
+    <% end %>
+  <% end %>
+
+  <% if @surveys.present? %>
+    <%= ibox "feature.three_sixty.dashboard.assessees.Draft_Surveys".translate do %>
+      <%= response_flash("cjs_survey_view_flash") %>
+      <div id="three_sixty_drafted_survey">
+        <%= render :partial => "three_sixty/surveys/dashboard/drafted_surveys", :locals => {:objects => @surveys, :published => false }%>
+      </div>
+    <% end %>
+  <% end %>
+
+
+
+<%= javascript_tag do  %>
+  ThreeSixty.initializeDashboard();
+<% end %>

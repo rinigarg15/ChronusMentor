@@ -1,0 +1,101 @@
+<%- @title = "feature.profile_customization.header.preview_user_forms".translate %>
+<% cur_program = @preview_program || @profile_preview_programs.first %>
+<% @skip_rounded_white_box_for_content = true %>
+<% @page_action = {label: "feature.profile_customization.action.customize_profile_fields".translate, url: profile_questions_path, class: "btn btn-large btn-primary waves-effect dropdown-toggle"} %>
+
+<%= ibox nil, ibox_class: "form-horizontal" do %>
+
+  <%= control_group(class: "cjs-preview-form-type-container cjs-general-container", data: {hide_bitmask: 0} ) do %>
+    <%= content_tag(:div, "feature.profile_customization.content.preview_type".translate, class: "false-label control-label col-sm-2") %>
+    <%= choices_wrapper("feature.profile_customization.content.select_preview_form_type".translate) do %>
+      <%= controls(class: "col-sm-10") do %>
+        <label class="radio inline">
+          <%= radio_button_tag :preview_type, ProfileQuestionsController::PreviewType::USER_PROFILE, (@preview_type == ProfileQuestionsController::PreviewType::USER_PROFILE), class: 'cjs-preview-form-type cjs-preview-profile', data: {url: preview_profile_questions_url(format: :js)} -%><%= "feature.profile_customization.content.user_profile".translate %>
+        </label>
+        <label class="radio inline">
+          <%= radio_button_tag :preview_type, ProfileQuestionsController::PreviewType::USER_PROFILE_FORM, (@preview_type == ProfileQuestionsController::PreviewType::USER_PROFILE_FORM), class: 'cjs-preview-form-type cjs-preview-profile-form', data: {url: preview_profile_questions_url(format: :js)} -%><%= "feature.profile_customization.content.user_profile_form".translate %>
+        </label>
+        <label class="radio inline cjs-preview-membership-form-radio-container">
+          <%= radio_button_tag :preview_type, ProfileQuestionsController::PreviewType::MEMBERSHIP_FORM, (@can_preview_membership_form && @preview_type == ProfileQuestionsController::PreviewType::MEMBERSHIP_FORM), class: 'cjs-preview-form-type cjs-preview-membership-form', data: {url: preview_membership_questions_url(format: :js)} -%><%= "feature.profile_customization.content.membership_request_form".translate %>
+        </label>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= control_group(class: "cjs-program-select-container cjs-user-profile-preview-program-select-container cjs-general-container", data: {hide_bitmask: ((@current_organization.standalone? || program_view?) ? 1 : 0)}) do %>
+    <%= label_tag :program_select_user_profile, "feature.profile_customization.content.preview_for_program".translate(program: _program), class: "control-label col-sm-2" %>
+    <%= controls(class: "col-sm-4") do %>
+      <%= select_tag :program_select_user_profile, options_for_select(@profile_preview_programs.map{|program| [program.name, program.id]}, selected: cur_program.id), class: "form-control cjs-program-selector", id: :program_select_user_profile %>
+    <% end %>
+  <% end %>
+
+  <%= control_group(class: "cjs-program-select-container cjs-membership-preview-program-select-container cjs-general-container", data: {hide_bitmask: (((!@can_preview_membership_form) || @current_organization.standalone? || program_view?) ? 1 : 0)}) do %>
+    <%= label_tag :program_select_membership_profile, "feature.profile_customization.content.preview_for_program".translate(program: _program), class: "control-label col-sm-2" %>
+    <%= controls(class: "col-sm-4") do %>
+      <%= select_tag :program_select_membership_profile, options_for_select(@membership_preview_programs.map{|program| [program.name, program.id]}, selected: cur_program.id), class: "form-control cjs-program-selector", id: :program_select_membership_profile %>
+    <% end %>
+  <% end %>
+
+  <% @profile_preview_programs.each do |program| %>
+    <%= control_group(class: "cjs-viewer-role-container cjs-general-container", data: {program_id: program.id, hide_bitmask: 0}) do %>
+      <%= content_tag(:div, "feature.profile_customization.content.role_of_the_viewer_v1".translate, class: "false-label control-label col-sm-2") %>
+      <%= choices_wrapper("feature.profile_customization.content.role_of_the_viewer_v1".translate) do %>
+        <%= controls(class: "col-sm-10") do %>
+          <% program.roles_without_admin_role.includes({customized_term: :translations}).each_with_index do |role, index| %>
+            <label class="checkbox inline">
+              <%= check_box_tag :"viewer_role[#{program.id}]", role.id, true, id: "viewer_role_#{program.id}_#{role.id}", class: 'cjs-viewer-role', data: {program_id: program.id} -%><%= role.customized_term.term %>
+            </label>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% @profile_preview_programs.each do |program| %>
+    <%= control_group(class: "cjs-role-container cjs-general-container", data: {program_id: program.id, hide_bitmask: 0}) do %>
+      <%= content_tag(:div, "feature.profile_customization.content.role_of_the_viewed_user_v1".translate, class: "false-label control-label col-sm-2 cjs-role-of-viewed-user-label", data: {form_text: "display_string.Role".translate, profile_text: "feature.profile_customization.content.role_of_the_viewed_user_v1".translate}) %>
+      <%= choices_wrapper("feature.profile_customization.content.role_of_the_viewed_user_v1".translate) do %>
+        <%= controls(class: "col-sm-10") do %>
+          <% program.roles_without_admin_role.includes({customized_term: :translations}).each_with_index do |role, index| %>
+            <label class="checkbox inline">
+              <%= check_box_tag :"role[#{program.id}]", role.id, index.zero?, id: "role_#{program.id}_#{role.id}", class: 'cjs-viewer-role', data: {program_id: program.id} -%><%= role.customized_term.term %>
+            </label>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= control_group(class: "cjs-connected-status-container cjs-general-container", data: {hide_bitmask: 0}) do %>
+    <%= content_tag(:div, "feature.profile_customization.content.are_they_connected".translate, class: "false-label control-label col-sm-2") %>
+    <%= choices_wrapper("feature.profile_customization.content.are_they_connected".translate) do %>
+      <%= controls(class: "col-sm-10") do %>
+        <label class="radio inline">
+          <%= radio_button_tag :are_they_connected, true, false, class: 'cjs-are-they-connected' -%><%= "display_string.Yes".translate %>
+        </label>
+        <label class="radio inline">
+          <%= radio_button_tag :are_they_connected, false, true, class: 'cjs-are-they-connected' -%><%= "display_string.No".translate %>
+        </label>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= link_to "display_string.Preview".translate, "javascript:void(0)", class: 'btn btn-primary col-sm-offset-2 cjs-invoke-preview' %>
+
+<% end %>
+
+<div id="customizable_profile">
+  <div class="pane_tab_contents" id ="profile_questions_filter_pane">
+    <div class="item">
+      <%= render :partial => 'profile_questions/preview_result_pane', :locals => {
+        :profile_questions => @profile_questions, :is_membership_preview => false} %>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+jQuery(function(){
+  ProfileQuestionPreview.canPreviewMembershipForm = <%= @can_preview_membership_form.present? %>;
+  ProfileQuestionPreview.init();
+});
+<% end %>

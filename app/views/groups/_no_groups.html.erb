@@ -1,0 +1,14 @@
+<%= ibox nil do %> 
+  <%= "feature.connection.content.help_text.no_connections".translate(Mentoring_Connections: _Mentoring_Connections) %>
+  <ul class="m-t-sm">
+    <li class="m-b-xs">
+      <%= "feature.connection.content.help_text.clear_filters".translate %>
+      <span class="<%= hidden_on_web %>">
+        <%= "feature.user.content.click_to_modify_filters_html".translate(click_here: link_to("display_string.Click_here".translate, "javascript:void(0)", class: "font-bold", data: { toggle: "offcanvasright" } )) %>
+      </span>
+    </li>
+    <li class="m-b-xs">
+      <%= link_to("feature.connection.action.view_all".translate(Mentoring_Connections: _Mentoring_Connections), local_assigns[:link_url] || groups_path(:show => group_params[:show], :view => view), class: "font-bold") %>
+    </li>
+  </ul>
+<% end %>

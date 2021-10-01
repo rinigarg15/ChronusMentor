@@ -1,0 +1,11 @@
+<% if @survey.published? %>
+    <% path_prefix = "three_sixty/survey_assessees/" %>
+  <% else %>
+    <% path_prefix = "three_sixty/surveys/" %>
+  <% end %>
+<% if @survey_reviewer.valid? %>
+  jQuery("#three_sixty_survey_reviewer_container_<%= @survey_reviewer.id %>").replaceWith('<%= j(render(:partial => path_prefix+"reviewer", :locals => {:survey => @survey, :survey_assessee => @survey_assessee, :reviewer => @survey_reviewer})) %>');
+  jQueryHighlight("#three_sixty_survey_reviewer_container_<%= @survey_reviewer.id %>", 5000);
+<% else %>
+  jQuery("#three_sixty_survey_reviewer_container_<%= @survey_reviewer.id %>").html('<%= j(render(:partial => path_prefix+"new_reviewer", :locals => {:survey => @survey, :survey_assessee => @survey_assessee, :survey_reviewer_groups => @survey_reviewer_groups, :survey_reviewer => @survey_reviewer, :for_new => false})) %>');
+<% end %>

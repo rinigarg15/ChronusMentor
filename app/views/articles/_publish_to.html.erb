@@ -1,0 +1,29 @@
+<input type="hidden" name="article[publish_to]" id="selected_program_ids" value="<%= wob_member.authorable_programs.collect(&:id).join(',') %>" />
+
+<%= control_group do %>
+  <div class="false-label control-label"><%= "feature.article.content.Publish_to".translate %></div>
+  <%= controls do %>
+    <div id="publish_status" class="hide">
+      <% all_my_programs_string = "feature.article.header.all_my_programs".translate(Programs: _Programs) %>
+      <span id="selected_program_names"><%= all_my_programs_string %></span>
+      <%= link_to_function "feature.article.action.change".translate, "Article.toggleList('#{j(all_my_programs_string)}')" %>
+    </div>
+
+    <div id="program_list" class="well square-well bg-highlight">
+      <div class="has-below">
+        <%= link_to_function "display_string.Done".translate, "Article.toggleList('#{j(all_my_programs_string)}')", :class => "pull-right" %>
+        <% list_or_article = @article.article_content.list? ? "list" : _article %>
+        <span> <%= "feature.article.content.publish_helptext".translate(programs: _programs, list_or_article: list_or_article) %> </span>
+      </div>
+      <%= choices_wrapper(_Programs) do %>
+        <% (wob_member.authorable_programs - [@current_program]).insert(0, @current_program).each_with_index  do |p, i|  %>
+          <label class="checkbox">
+            <%= check_box_tag "publish_to[]", p.id, true, :disabled => (i == 0), :onchange => "Article.updatePublishList('#{j(all_my_programs_string)}')" %>
+            <span><%= p.name %></span>
+            <%= link_to("&raquo;".html_safe, program_root_path(:root => p.root), :target => "blank") %>
+          </label>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

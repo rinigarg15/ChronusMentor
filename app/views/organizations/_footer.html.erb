@@ -1,0 +1,40 @@
+<% if logged_in_program? %>
+  <% mobile_tabs = self.controller.mobile_tabs %>
+  <% tab_size = mobile_tabs.size %>
+  <% if tab_size > 0 %>
+    <nav class="navbar navbar-fixed-bottom mobile_footer hidden-lg hidden-md">
+      <div>
+        <div class="col-xs-12 theme-bg theme-dark-bg theme-font-color z-index-10 hidden-lg hidden-md p-t-xxs nav nav-bottom-links navbar-top-links no-padding">
+          <div class="<%= tab_size == MobileV2Constants::MAX_TAB_SIZE ? 'col-xs-10' : 'col-xs-12' %> no-horizontal-padding">
+            <% mobile_tabs.each_with_index do |tab_info, i| %>
+              <% col_class = tab_size < (MobileV2Constants::MAX_TAB_SIZE - 1) ? "col-xs-4" : "col-xs-3" %>
+              <%= render_mobile_tab(tab_info, col_class: col_class) if i < MobileV2Constants::MAX_TAB_SIZE - 1 %>
+            <% end %>
+          </div>
+          <% if tab_size == MobileV2Constants::MAX_TAB_SIZE %>
+            <div class="col-xs-2 no-horizontal-padding">
+              <%= render_mobile_tab(mobile_tabs.last, col_class: "col-xs-12") %>
+            </div>
+          <% end %>
+
+          <% modal_container(append_text_to_icon("fa fa-fw fa-user-plus", "tab_constants.sub_tabs.requested_meetings".translate), {modal_id: "requests_modal", modal_class: "cui-non-full-page-modal", modal_body_class: "no-padding"}) do %>
+              <%= render(partial: 'programs/program_requests_modal_content') %> 
+          <% end %>
+          <% modal_container(append_text_to_icon("fa fa-fw fa-bell-o", "tab_constants.notifications".translate), {modal_id: "notifications_modal", modal_class: "cui-non-full-page-modal", modal_body_class: "no-padding"}) do %>
+              <%= render(partial: 'programs/notifications_modal_content') %> 
+          <% end %>
+          <% modal_container("feature.messaging.title.messages".translate, {modal_id: "messages_modal", modal_class: "cui-non-full-page-modal", modal_body_class: "no-padding"}) do %>
+            <div class="list-group no-margins">
+              <%= mobile_footer_dropup_quick_link("feature.reports.groups_report_columns.messages_count_v1".translate, messages_path(:organization_level => true, src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), "fa fa-fw fa-envelope", @message_count, {class: "normal-white-space break-word-all list-group-item cjs_my_messages"}) %>
+              <%= mobile_footer_dropup_quick_link("feature.org_home_page.program_tile.admin_content.admin_messages".translate(admin: _Admin), admin_messages_path(root: current_program_or_organization.root, src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), "fa fa-fw fa-envelope", @admin_message_count, {class: "normal-white-space break-word-all list-group-item"}) %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+    <%= javascript_tag do  %>
+      Mobile.initializeMobileMenu();
+      MobileFooter.initializeConnectionPopup('.cjs_connections_tab', "<%= index_mobile_groups_path(src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION, cjs_skip_mobile_prompt: true) %>");
+    <% end %>
+  <% end %>
+<% end %>

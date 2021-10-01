@@ -1,0 +1,23 @@
+<% modal_v3_popup "feature.three_sixty.survey_question.add".translate do %>
+  <%= form_tag three_sixty_survey_questions_path(@survey), :remote => true, :method => :post do %>
+    <table class="table table-striped no-border has-below-1">
+      <% @questions.each_with_index do |question, index| %>
+        <% no_border_class = (index == 0) ? "no-border" : "" %>
+          <tr>
+            <td class='<%= no_border_class %>'>
+              <%= choices_wrapper("feature.survey.survey_report.filters.label.select_question_label".translate) do %>
+                <%= check_box_tag("questions[]", question.id, false, :id=>"select_question_#{question.id}") %>
+              <% end %>
+            </td>
+            <td class='col-md-9 <%= no_border_class %>'><%= question.title %></td>
+            <td class='<%= no_border_class %>'><%= ThreeSixty::Question.question_type_as_string(question.question_type) %></td>
+          </tr>
+      <% end %>
+    </table>
+    <%= hidden_field_tag "competency_id", @survey_competency.id %>
+    <% action_set :class => "no_padding pull-right" do %>
+      <a class='popup_closebox btn-white cancel btn' data-dismiss='modal'><%= "display_string.Cancel".translate %></a>
+      <%= submit_tag "display_string.Add".translate, :class => "btn btn-primary", data: {:disable_with => "display_string.Please_Wait".translate} %>
+    <% end %>
+  <% end %>
+<% end %>

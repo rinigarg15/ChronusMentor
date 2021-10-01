@@ -1,0 +1,3 @@
+<%= embed_display_line_item("feature.program_event.label.time_v1".translate, get_icon_content('fa fa-clock-o')  + event_time_for_display(@program_event)) %>
+<%= embed_display_line_item("feature.program_event.label.location_v1".translate, get_icon_content('fa fa-map-marker')  + (@program_event.location.present? ? @program_event.location : content_tag(:span, 'common_text.Not_specified'.translate, :class => "text-muted"))) %>
+<%= embed_display_line_item("feature.program_event.label.invited_v1".translate, get_icon_content('fa fa-users') + users_invited_label(@program_event)) %>

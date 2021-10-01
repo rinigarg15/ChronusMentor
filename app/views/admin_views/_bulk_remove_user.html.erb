@@ -1,0 +1,38 @@
+<%= simple_form_for @admin_view, :url => remove_user_admin_view_path(@admin_view), remote: true, :html => {:method => :post, :class => "no-margin", :id => "form_admin_view_bulk_actions"} do |f| %>
+  <%= f.input "users", :as => :hidden, :input_html => {:value => @users.collect(&:id).join(",")} %>
+  <div class="media no-margins">
+    <div class="media-left">
+      <%= embed_icon("fa fa-exclamation-triangle fa-5x") %>
+    </div>
+    <div class="media-body">
+      <div class="popup_content clearfix col-xs-12">
+        <p>
+          <%= "feature.admin_view.content.following_will_be_removed_v3".translate(:count => @users.size, :user => "feature.admin_view.content.user".translate(:count => @users.size), :program => _program) %>
+          <%= render(:partial => "admin_views/selected_users", :locals => {:users_or_members => @users}) %>
+        </p>
+        <p>
+          <% content_key = @current_program.standalone? ? "removal_is_irreversible_standalone_html" : "removal_is_irreversible_html" %>
+          <%= "feature.profile.content.#{content_key}".translate(articles: _articles, mentoring_connections: _mentoring_connections, program: _program, irreversible: content_tag(:b, "display_string.irreversible_action".translate)) %>
+        </p>
+        <p class="m-b-0">
+          <%= "feature.profile.content.suspending_users_instead_v1".translate(program: _program) %>
+        </p>
+      </div>
+      <div class="popup_content clearfix col-xs-12">
+        <%= horizontal_line(class: "m-b-md m-t-md") %>
+        <% action_set do %>
+          <div class="pull-right">
+            <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+            <%= f.submit "display_string.remove_user".translate(:count => @users.size), :class => "btn btn-danger", :disable_with => "display_string.Please_Wait".translate %>
+            <%= f.submit "display_string.suspend_user_v1".translate(:count => @users.size), :class => "btn btn-primary", :disable_with => "display_string.Please_Wait".translate, :data => {:button_type => "suspend_member"} %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <%= render(partial: "progress_statuses/modal_progress_status", locals: {text: "feature.admin_view.content.removing_user".translate(:count => @users.size), id: "cjs_remove_progress", data_url: on_remove_user_completion_admin_view_path(@admin_view, invalid_user_ids: @user_ids_ignored_for_removal_or_suspension )}) %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  AdminViews.openSuspendMembershipModal("#form_admin_view_bulk_actions", "#cjs_suspend_membership");
+</script>

@@ -1,0 +1,11 @@
+<div class="has-above-1 cjs_add_new_closure_reason">
+  <label class="sr-only cjs_new_group_closure_reason_label"><%= "program_settings_strings.label.specify_group_closure_reason".translate(:mentoring_connection => _mentoring_connection) %> </label>
+  <div class="col-sm-8 no-padding m-r">
+    <input type="text" class="form-control has-next cjs_new_group_closure_reason cjs_group_closure_reason_text" placeholder='<%= "program_settings_strings.label.specify_group_closure_reason".translate(:mentoring_connection => _mentoring_connection) %>'/>
+  </div>
+  <label class="checkbox dim inline">
+    <input class="cjs_new_group_closure_reason_completed" type="checkbox">
+    <%= content_tag :span, "program_settings_strings.label.consider_completed".translate, :class => "has-next-1" %>
+    <%= link_to get_icon_content("fa fa-trash text-default") + set_screen_reader_only_content("display_string.Remove".translate), 'javascript:;', :class => "cjs_remove_new_closure_reason" %>
+  </label>
+</div>

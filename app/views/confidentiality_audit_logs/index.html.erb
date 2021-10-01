@@ -1,0 +1,27 @@
+<% @title = "features_list.confidentiality_audit_logs.title".translate %>
+
+<%= ibox nil, content_class: "no-padding" do %>
+  <% if @audit_logs.empty? %>
+    <%= content_tag(:div, "feature.confidentiality_audit_log.content.no_logs".translate, :class => "p-sm text-center") %>
+  <% else %>
+    <%= top_bar_in_listing( { collection: @audit_logs } ) %>
+    <div class="p-sm">
+      <div id="audit_logs" class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <%= content_tag(:th, "feature.confidentiality_audit_log.header.Visitor".translate, class: "col-xs-2") %>
+              <%= content_tag(:th, _Mentoring_Connection, class: "col-xs-3") %>
+              <%= content_tag(:th, "feature.confidentiality_audit_log.header.When".translate, class: "col-xs-2") %>
+              <%= content_tag(:th, "feature.confidentiality_audit_log.header.Reason".translate, class: "col-xs-5") %>
+            </tr>
+          </thead>
+          <tbody id="groups">
+            <%= render :partial => 'confidentiality_audit_logs/audit_log', :collection => @audit_logs %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <%= bottom_bar_in_listing( { collection: @audit_logs } ) %>
+  <% end %>
+<% end %>

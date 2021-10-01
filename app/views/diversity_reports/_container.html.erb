@@ -1,0 +1,26 @@
+<div class="col-xs-12 col-sm-12 col-md-6 cjs-container-diversity-report cjs-container-diversity-report-<%= diversity_report.id %>" data-id="<%= diversity_report.id %>" data-path="<%= diversity_report_path(diversity_report) %>">
+  <div class="clearfix m-b-xs">
+    <div class="pull-left"><h4 class="m-0"><%= get_display_name(diversity_report) %></h4></div>
+    <div class="pull-right cjs-diversity-report-actions hide"><%= link_to_function get_icon_content('fa fa-cog', class: "fa fa-cog fa-fw"), "jQueryShowQtip('', 600, '#{edit_diversity_report_path(diversity_report)}', '', {modal: true});", 'aria-label' => "display_string.Configure".translate %></div>
+    <div class="pull-right cjs-diversity-report-actions hide"><%= link_to_function get_icon_content('fa fa-trash', class: 'fa fa-trash fa-fw'), "jQuery.ajax({url: '#{diversity_report_path(diversity_report)}', method: 'delete'})", 'aria-label' => "display_string.Delete".translate, data: {confirm: 'feature.diversity_reports.content.remove_confirmation'.translate} %></div>
+  </div>
+  <div class="ibox">
+    <div class="ibox-content clearfix no-padding">
+      <div class="p-t-sm p-l-sm p-r-sm">
+        <div class="cjs-info-diversity-report-<%= diversity_report.id %>">
+          <div class="p-xs p-b-sm"><%= render partial: "common/loading_rectangles" %></div>
+          <%= javascript_tag %Q[jQuery(function() { jQuery.ajax({url: "#{diversity_report_path(diversity_report)}"}); });] %>
+        </div>
+      </div>
+      <div class="gray-bg clearfix b-t">
+        <div class="pull-left p-xs small cjs-diversity-report-time-filter hide">
+          <% from_date_range, to_date_range = [diversity_report.organization.created_at, Time.current] %>
+          <% report_actions = {
+            time_filter: { time: { start: from_date_range, end: to_date_range }, min_date: from_date_range, max_date: to_date_range, date_range_preset: DateRangePresets::PROGRAM_TO_DATE, data_submit_js: "DiversityReports.updateTimeRange()", keep_left: true},
+          } %>
+          <%= render partial: "common/report_actions", locals: {use_html_id_suffix: get_html_id_suffix(diversity_report), use_presets: DateRangePresets.diversity_reports, report_actions: report_actions, force_set_date_picker: true, no_clear_selection: true, additional_header_class: "small" } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

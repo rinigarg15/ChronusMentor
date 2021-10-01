@@ -1,0 +1,30 @@
+<% permitted_closure_reasons = @current_program.permitted_closure_reasons.non_default %>
+<% help_text = "feature.connection.content.help_text.bulk_close_connection_without_goals".translate(mentoring_connections: _mentoring_connections) %>
+
+<% modal_v3_popup "feature.connection.header.bulk_close_connections".translate(Mentoring_Connections: _Mentoring_Connections) do %>
+  <p><%= "feature.connection.content.help_text.bulk_close_v2".translate(mentoring_connections: _mentoring_connections, mentoring_connection: _mentoring_connection, count: @group_ids.size) %></p>
+  <p><%= help_text %></p>
+
+  <%= form_tag update_bulk_actions_groups_path, :remote => true, :id => "bulk_groups_terminate" do %>
+    <%= control_group do %>
+      <%= content_tag(:label, set_required_field_label("feature.connection.content.label.Reason".translate), :class => "control-label", :for => "bulk_actions_closure_reason") %>
+      <%= controls do %>
+        <%= select_tag "bulk_actions[closure_reason]", options_for_select(permitted_closure_reasons.collect { |closure_reason| [closure_reason.reason, closure_reason.id] }), :class => "form-control" %>
+      <% end %>
+    <% end %>
+    <%= control_group do %>
+      <%= content_tag(:label, "feature.connection.content.label.Additional_Details".translate, :class => "control-label", :for => "bulk_actions_termination_reason") %>
+      <%= controls do %>
+        <%= text_area_tag "bulk_actions[termination_reason]", nil, :rows => "5", :class => "form-control" %>
+      <% end %>
+    <% end %>
+    <%= hidden_field_tag "bulk_actions[action_type]", Group::BulkAction::TERMINATE %>
+    <%= hidden_field_tag "bulk_actions[group_ids]", @group_ids %>
+
+    <%= email_notification_consequences_on_action_html(GroupTerminationNotification, div_enclose: true, div_class: "m-b-sm") %>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => 'btn btn-white', data: { dismiss: "modal" } %>
+      <%= submit_tag "feature.connection.action.Close".translate, :class => 'btn btn-primary', data: {:disable_with => "display_string.Please_Wait".translate} %>
+    <% end %>
+  <% end %>
+<% end %>

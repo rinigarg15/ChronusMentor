@@ -1,0 +1,52 @@
+<table id="404_errors">
+  <thead>
+    <tr>
+      <th>IP</th>
+      <th>Path</th>
+      <th>Count</th>
+      <th>When</th>
+      <th> Actions </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @four_oh_fours.each do |error| %>
+      <tr>
+        <td><%= error.ip %></td>
+        <td><%= error.path %></td>
+        <td><%= error.count %></td>
+        <td><%= DateTime.localize(error.updated_at, format: :abbr_short_with_time) %></td>
+        <td><%= link_to_function("More details &raquo;".html_safe, "jQuery('#error_' + #{error.id}).show();") %></td>
+      </tr>
+      <tr id= "error_<%= error.id %>" class="error_details" style="display:none">
+        <td colspan="4">
+          <dl class="clearfix">
+            <dt>IP </dt> <dd>: <%= error.ip %> </dd>
+            <dt>PATH </dt> <dd>: <%= error.path %> </dd>
+            <dt>REFERER </dt> <dd>: <%= error.referer %> </dd>
+            <dt>HOST </dt> <dd>: <%= error.host %> </dd>
+            <dt>USER AGENT </dt> <dd>: <%= error.user_agent %> </dd>
+            <dt>Count </dt> <dd>: <%= error.count %> </dd>
+            <dt>Last Occured </dt> <dd>: <%= DateTime.localize(error.updated_at, format: :abbr_short_with_time) %> </dd>
+            <dt>First Occured </dt> <dd>: <%= DateTime.localize(error.created_at, format: :abbr_short_with_time) %> </dd>
+          </dl>
+
+          <td>
+            <%= link_to_function("Hide details &raquo;".html_safe, "jQuery('#error_' + #{error.id}).hide();") %>
+          </td>
+
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<style>
+  table{
+    width: 100%;
+  }
+
+  table tr.error_details{
+    background-color: #EEE;
+  }
+
+</style>

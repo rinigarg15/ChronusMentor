@@ -1,0 +1,18 @@
+<div class = "col-md-7" id="search_keywords_data">
+  <div class="ibox">
+    <div class="ibox-content clearfix p-b-xxs">
+      <h4 class="m-b-0"> <%= "feature.match_report.content.top_search_keywords".translate %>
+        <span id="search_keywords_info"><%= get_icon_content("fa fa-info-circle") %></span>
+        <%= tooltip("search_keywords_info", "feature.match_report.tooltips.search_keywords".translate(mentees: _mentees, mentor: _mentor)) %>
+      </h4>
+      <% if search_data.count > 0 %>
+        <div id="search_keywords_chart"></div>
+      <% else %>
+        <div class="m-t-xl m-b-xl p-b-xl p-t-xl text-center"><%= "feature.match_report.content.no_search_keywords".translate(mentees: _mentees) %></div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<%= javascript_tag do %>
+  MatchReport.searchKeywordsGraph.showBubbleGraph("#search_keywords_chart", <%= raw get_search_keywords_data(search_data).to_json %>);
+<% end %>

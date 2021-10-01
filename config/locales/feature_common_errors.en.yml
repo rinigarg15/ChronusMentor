@@ -1,0 +1,16 @@
+en:
+  feature:
+    common_errors:
+      header:
+        no_permissions: You do not have permissions to view this.
+        page_not_exist: The page you were looking for doesn't exist.
+        change_rejected: The change you wanted was rejected.
+        something_went_wrong: We're sorry, but something went wrong.
+        linkedin_oauth_error_title: Linkedin Import Error
+      content:
+        login_as_different_user_html: You are logged in as %{user}. To login as different user, %{click_here}
+        go_to_previous_page_html: "%{click_here} to go back to the page you last visited"
+        wrong_address: You may have mistyped the address or the page may have moved.
+        no_access_for_change: Maybe you tried to change something you didn't have access to.
+        notificated_about_issue: We've been notified about this issue and we'll take a look at it shortly.
+        linkedin_oauth_error_message: You are already logged out from %{program_name}. Please login again to make the necessary changes.

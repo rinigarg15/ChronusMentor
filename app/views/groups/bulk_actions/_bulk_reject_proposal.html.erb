@@ -1,0 +1,30 @@
+<% url = get_url_for_group_actions_form(@source, :update_bulk_actions) %>
+<% modal_v3_popup "feature.connection.action.reject".translate(Mentoring_Connection: _Mentoring_Connection) do %>
+  <%= form_tag url, remote: (@source != "profile"), id: "bulk_groups_reject_proposal", class: "cjs-groups-bulk-action-qtip-popup" do %>
+    <% if @group_ids.size > 1 %>
+      <p><%= "feature.connection.content.help_text.reject_proposal_html".translate(count: @group_ids.size, mentoring_connections: _mentoring_connections) %></p>
+    <% end %>
+    <%= hidden_field_tag "bulk_actions[action_type]", Group::BulkAction::REJECT_PROPOSAL %>
+    <%= hidden_field_tag "bulk_actions[group_ids]", @group_ids %>
+    <%= hidden_field_tag "bulk_actions[tab_number]", @tab_number %>
+    <%= control_group do %>
+      <label class="control-label sr-only" for="bulk_actions_message">
+        <%= "feature.connection.content.message".translate %> 
+      </label>  
+      <%= controls do %>
+        <%= text_area_tag("bulk_actions[message]", nil, id: "bulk_actions_message", rows: "5", placeholder: "feature.connection.content.message".translate, class: "required-field form-control") %>
+      <% end %>
+    <% end %>
+
+    <hr class="m-t-xs m-b-sm"/>
+    <%= email_notification_consequences_on_action_html(ProposedProjectRejected, div_enclose: true, div_class: "m-b-xs", with_count: true, count: @group_ids.size) %>
+    <% action_set(:class => "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= submit_tag "feature.connection.action.reject".translate(Mentoring_Connection: _Mentoring_Connection), :class => 'btn btn-primary', data: {:disable_with => "display_string.Please_Wait".translate} %>
+    <% end %>
+  <% end %>
+
+  <%= javascript_tag do %>
+    GroupSearch.validateBulkActionsPopup();
+  <% end %>
+<% end %>

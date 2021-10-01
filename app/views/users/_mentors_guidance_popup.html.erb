@@ -1,0 +1,8 @@
+<% @sub_title = content_tag(:span, get_page_subtitle("cjs_guidance_popup", "feature.favorite_preference.content.popup_screen_reader_text".translate(mentor: _mentor)), class: "cjs-tool-tip", data: {desc: "feature.favorite_preference.content.popup_tooltip_text".translate(mentor: _mentor), placement: 'bottom'}) %>
+<% @hide_sub_title_arrow = true %>
+<%= render :partial => 'programs/show_guidance_popup' %>
+<%= javascript_tag do %>
+  jQuery(document).on("click", ".cjs_guidance_popup", function(){
+    GuidancePopup.showGuidancePopup("<%= one_time_flags_path(format: :js) %>", "<%= OneTimeFlag::Flags::Popups::MENTEE_GUIDANCE_POPUP_TAG %>");
+  });
+<% end %>

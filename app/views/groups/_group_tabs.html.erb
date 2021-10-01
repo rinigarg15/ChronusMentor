@@ -1,0 +1,118 @@
+<% tabs_list = [] %>
+<% url_options = {} %>
+<% url_options[:from_find_new] = @from_find_new if @from_find_new %>
+<% if @show_profile_tab %>
+  <% tabs_list << {
+    label: get_icon_content("fa fa-info-circle fa-lg") + get_device_based_sr_only_content("feature.campaign.information".translate),
+    url: profile_group_path(@group, url_options),
+    active: local_assigns[:profile_tab]
+  } %>
+<% end %>
+
+<% if @show_plan_tab %>
+  <% tabs_list << {
+    label: get_icon_content("fa fa-tasks fa-lg") + get_device_based_sr_only_content("feature.mentoring_model.label.engagement_plan_tab".translate),
+    url: @group.published? ? group_path(@group, url_options.merge(show_plan: true)) : profile_group_path(@group, url_options.merge(show_plan: true)),
+    active: local_assigns[:engagement_plan_tab]
+  } %>
+<% end %>
+
+<% show_messages_and_forum_in_dropdown = @show_messages_tab && @show_forum_tab %>
+<% if @show_messages_tab %>
+  <% unread_scraps_count = wob_member.scrap_inbox_unread_count(@group) %>
+  <% messages_tab_options = {
+    label: get_discussions_tab_label("feature.mentoring_model.label.message_tab".translate, unread_scraps_count, "fa fa-lg fa-envelope", {badge_class: "cjs_unread_scraps_count", show_in_dropdown: show_messages_and_forum_in_dropdown}),
+    url: group_scraps_path(url_options.merge(group_id: @group.id)),
+    active: local_assigns[:messages_tab]
+  } %>
+<% end %>
+
+<% if @show_forum_tab %>
+  <% unread_posts_count = @group.get_cummulative_unviewed_posts_count(current_user) %>
+  <% forum_tab_options = {
+    label: get_discussions_tab_label("feature.mentoring_model.label.discussion_board".translate, unread_posts_count, "fa fa-lg fa-comment", {badge_class: "cjs_unread_posts_count", show_in_dropdown: show_messages_and_forum_in_dropdown}),
+    url: forum_path(@group.forum, url_options),
+    active: local_assigns[:forum_tab]
+  } %>
+<% end %>
+
+<% if show_messages_and_forum_in_dropdown %>
+  <% tabs_list << {
+      active: local_assigns[:messages_tab] || local_assigns[:forum_tab],
+      dropdown: {
+        actions: [forum_tab_options.pick(:label, :url), messages_tab_options.pick(:label, :url)],
+        options: {
+          title: get_discussions_tab_label("display_string.Discussions".translate, unread_scraps_count + unread_posts_count, "fa fa-lg fa-comments", badge_class: "cjs_discussions_badge")
+        }
+      }
+    } %>
+<% elsif @show_messages_tab %>
+  <% tabs_list << messages_tab_options %>
+<% elsif @show_forum_tab %>
+  <% tabs_list << forum_tab_options %>
+<% end %>
+
+<% if @show_meetings_tab %>
+  <% if @group.closed? %>
+    <% tabs_list << {
+      label: get_icon_content("fa fa-calendar fa-lg") + get_device_based_sr_only_content("feature.mentoring_model.header.manage_mm_meetings".translate(Meetings: _Meetings)),
+      url: meetings_path(url_options.merge(group_id: @group.id, show_past_meetings: true)),
+      active: local_assigns[:meetings_tab]
+    } %>
+  <% else %>
+    <% tabs_list << {
+      active: local_assigns[:meetings_tab],
+      dropdown: {
+        actions: [
+          {
+            label: "feature.mentoring_model.label.upcoming_meetings_tab".translate(Meetings: _Meetings),
+            url: local_assigns[:meetings_tab] ? nil : meetings_path(url_options.merge(group_id: @group.id)),
+            js: local_assigns[:meetings_tab] ? "Meetings.showUpcomingMeetings();" : nil
+          },
+          {
+            label: "feature.mentoring_model.label.past_meetings_tab".translate(Meetings: _Meetings),
+            url: local_assigns[:meetings_tab] ? nil : meetings_path(url_options.merge(group_id: @group.id, show_past_meetings: true)),
+            js: local_assigns[:meetings_tab] ? "Meetings.showPastMeetings();" : nil
+          }
+        ],
+        options: {
+          title: get_icon_content("fa fa-calendar fa-lg") + get_non_responding_member_meetings_label(wob_member, @group) + get_device_based_sr_only_content("feature.mentoring_model.header.manage_mm_meetings".translate(Meetings: _Meetings))
+        }
+      }
+    } %>
+  <% end %>
+<% end %>
+
+<% goals_and_journals_in_dropdown = @show_mentoring_model_goals_tab && @show_private_journals_tab %>
+<% if @show_mentoring_model_goals_tab %>
+  <% tabs_list << {
+    label: get_icon_content("fa fa-dot-circle-o fa-lg") + (goals_and_journals_in_dropdown ? content_tag(:span, "feature.mentoring_model.label.goals_tab".translate) : get_device_based_sr_only_content("feature.mentoring_model.label.goals_tab".translate)),
+    url: group_mentoring_model_goals_path(@group, url_options),
+    tab_class: goals_and_journals_in_dropdown ? "hidden-xs" : "",
+    active: local_assigns[:goals_tab]
+  } %>
+<% end %>
+<% if @show_private_journals_tab %>
+  <% tabs_list << {
+    label: get_icon_content("fa fa-file-text-o fa-lg") + (goals_and_journals_in_dropdown ? content_tag(:span, "feature.mentoring_model.label.private_note_tab".translate) : get_device_based_sr_only_content("feature.mentoring_model.label.private_note_tab".translate)),
+    url: group_connection_private_notes_path(@group, url_options),
+    tab_class: goals_and_journals_in_dropdown ? "hidden-xs" : "",
+    active: local_assigns[:journal_tab]
+  } %>
+<% end %>
+<% if goals_and_journals_in_dropdown %>
+  <% tabs_list << {
+    tab_class: "visible-xs",
+    active: local_assigns[:goals_tab] || local_assigns[:journal_tab],
+    dropdown: {
+      actions: [tabs_list[-1].pick(:label, :url), tabs_list[-2].pick(:label, :url)],
+      options: {
+        title: get_icon_content("fa fa-ellipsis-v fa-lg no-margins") + set_screen_reader_only_content("display_string.dropdown".translate)
+      }
+    }
+  } %>
+<% end %>
+
+<div id="mentoring_area_tabs">
+  <%= inner_tabs(tabs_list) %>
+</div>

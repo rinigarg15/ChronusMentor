@@ -1,0 +1,5 @@
+id,campaign_id,sender_id,duration,created_at,updated_at,user_jobs_created,type
+1,1,1,7,2014-12-01 14:50:51 +0530,2014-12-01 14:50:51 +0530,false,CampaignManagement::UserCampaignMessage
+2,2,1,30,2014-12-01 14:50:51 +0530,2014-12-01 14:50:51 +0530,false,CampaignManagement::UserCampaignMessage
+3,3,1,7,2014-12-01 14:50:55 +0530,2014-12-01 14:50:55 +0530,false,CampaignManagement::UserCampaignMessage
+4,4,1,0,2014-12-01 14:50:55 +0530,2014-12-01 14:50:55 +0530,false,CampaignManagement::ProgramInvitationCampaignMessage

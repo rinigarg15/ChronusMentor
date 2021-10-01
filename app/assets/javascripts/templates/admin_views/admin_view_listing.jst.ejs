@@ -1,0 +1,11 @@
+<div id='adminview_<%= data.id %>'>
+  <div class='media-left'>
+    <% if(data.icon) { %>
+      <i class='fa-fw text-warning <%=  data.icon %> '></i></div>
+    <% } %>
+  <div class='media-body'><span class='strong'><%= data.title %></span>
+    <% if(data.description){ %>
+      <div class='text-muted'><%= data.description %></div>
+    <% } %>
+  </div>
+</div>

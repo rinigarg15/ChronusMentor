@@ -1,0 +1,37 @@
+<% title = login_section[:title] %>
+<% description = login_section[:description] %>
+<% auth_configs = login_section[:auth_configs] %>
+<% selector_prefix = auth_configs.first.default? ? 'default' : 'custom' %>
+<% logo_url = local_assigns[:logo_url].presence || nil %>
+
+<div class="m-b-xl" id="fc-<%= selector_prefix %>-login-section">
+  <% if [title, logo_url, description].any?(&:present?) %>
+    <div class="m-b-lg">
+      <% if title.present? %>
+        <h3 id="fc-<%= selector_prefix %>-login-section-title" class="<%= 'm-b' if logo_url.present? || description.present? %>">
+          <%= title %>
+        </h3>
+      <% end %>
+
+      <% if logo_url.present? %>
+        <div class="<%= 'm-b' if description.present? %>">
+          <%= image_tag(logo_url, size: "50x50") %>
+        </div>
+      <% end %>
+
+      <% if description.present? %>
+        <div id="fc-<%= selector_prefix %>-login-section-description">
+          <%= chronus_auto_link(description.to_s.html_safe) %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% unless local_assigns[:skip_auth_configs] %>
+    <%= render partial: "sessions/auth_config", collection: auth_configs, locals: auth_config_locals.merge(total_count: auth_configs.size) %>
+  <% end %>
+</div>
+
+<% if (login_section_counter == 0) && (total_count == 2) %>
+  <%= horizontal_or_separator("m-t-xl m-b-xl") %>
+<% end %>

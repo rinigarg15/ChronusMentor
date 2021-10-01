@@ -1,0 +1,48 @@
+<div class="cjs_current_status">
+  
+  <h3 class="font-noraml">
+    <%= "feature.org_home_page.roll_up.current_status".translate %>
+  </h3>
+  
+  <div class="m-b-md">
+    <div class="no-padding">
+      <div class="row p-l-sm p-r-sm">
+        <% managed_active_programs = managed_programs.select(&:active?) %>
+        <% various_connections_terms = managed_active_programs.map{ |program| program.term_for(CustomizedTerm::TermType::MENTORING_CONNECTION_TERM).pluralized_term_downcase }.uniq.to_sentence %>
+        <% various_meetings_terms = managed_active_programs.map{ |program| program.term_for(CustomizedTerm::TermType::MEETING_TERM).pluralized_term_downcase }.uniq.to_sentence %>
+
+        <!-- Active Licences -->
+        <%= rollup_box_wrapper(title: "feature.org_home_page.roll_up.active_members".translate, title_tooltip: "feature.org_home_page.roll_up.active_licenses_header_tooptip".translate(program: _program), title_tooltip_class: "current_status_active_users_title_tooltip", rollup_box_container_class: "cjs-current-status-active-licenses") do %>
+          <div class="m-b-lg m-t-lg p-b-sm">
+            <%= render partial: "common/loading_rectangles" %>
+          </div>
+        <% end %>
+
+        <!-- Ongoing Engagements -->
+        <% ongoing_engagements_header_tooptip_text = "feature.org_home_page.roll_up.ongoing_engagements_header_tooptip".translate(programs: _programs, connections: various_connections_terms) %>
+        <% ongoing_engagements_header_tooptip_text << " #{"feature.org_home_page.roll_up.ongoing_engagements_flash_header_tooptip_v1".translate(meetings: various_meetings_terms)}" if rollup_info[:ongoing_engagements][:show_meeting_rollup] %>
+        <%= rollup_box_wrapper(title: "feature.org_home_page.roll_up.ongoing_engagements".translate, title_tooltip: ongoing_engagements_header_tooptip_text, title_tooltip_class: "current_status_ongoing_engagements_title_tooltip", rollup_box_container_class: "cjs-current-status-ongoing-connections") do %>
+          <div class="m-b-lg m-t-lg p-b-sm">
+            <%= render partial: "common/loading_rectangles" %>
+          </div>
+        <% end %>
+
+        <!-- Connected Members -->
+        <%= rollup_box_wrapper(title: "feature.org_home_page.roll_up.connected_members".translate, title_tooltip: "feature.org_home_page.roll_up.connected_members_header_tooptip".translate, title_tooltip_class: "current_status_connected_members_title_tooltip", rollup_box_container_class: "cjs-current-status-connected-count") do %>
+          <div class="m-b-lg m-t-lg p-b-sm">
+            <%= render partial: "common/loading_rectangles" %>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+
+  <%= javascript_tag do %>
+    jQuery(function() { 
+      jQuery.ajax({url: "<%= get_global_dashboard_org_current_status_stats_path(active_licenses: true) %>"}); 
+      jQuery.ajax({url: "<%= get_global_dashboard_org_current_status_stats_path(ongoing_engagements: true, connected_members_count: true) %>"}); 
+    });
+  <% end %>
+
+</div>

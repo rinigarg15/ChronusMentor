@@ -1,0 +1,15 @@
+<td>
+  <%= link_to(pro.name, root_url(:domain => org.domain, :subdomain => org.subdomain, :root => pro.root), :target => "_blank") %> 
+  <span class="dim small">on <%= DateTime.localize(pro.created_at, format: :abbr_short) %></span>
+</td>
+<td>
+  <%= pro.program_type %>
+</td>
+<td>
+  <%= pro.number_of_licenses %>
+</td>
+
+<%= csreport_td(@csreport.prog_data[pro.id][:registered]) %>
+<%= csreport_td(@csreport.prog_data[pro.id][:connected]) %>
+<%= csreport_td(@csreport.prog_data[pro.id][:active_connected]) %>
+<%= csreport_td(@csreport.prog_data[pro.id][:online_active]) %>

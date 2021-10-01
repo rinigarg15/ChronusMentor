@@ -1,0 +1,432 @@
+en:
+  feature:
+    admin_view:
+      header:
+        create_new_view: Create New View
+        update_view_html: Update View - %{title}
+        step_title: 'Step %{step_number}: %{header_text}'
+        specify_filter_criteria: Specify Filter Criteria
+        filters_applied: Filters Applied
+        Select_Fields: Select Fields to Display
+        select_view_placeholder: Select View
+        enter_details: Enter Details
+        profile_completeness_value: Value of the pofile completeness score to compare
+        select_profile_question_label: Select the profile question
+        profile_question_operator_label: Select the condition for the profile question
+        profile_question_scope_label: Select the scope for the profile question
+        date_profile_question_number_of_days_label: Enter number of days
+        answer_contains_label: Answer should contain this value
+        timeline_option_label: Select timeline option
+        timeline_operator_label: Select timeline operator
+        timeline_days_label: Select number of days for timeline filter
+        timeline_date_label: Select timeline date
+        timeline_daterange_label: Select timeline date range
+        unmark_favourite_text: Marked favorite. Your favorite views show up on top of the list
+        mark_favourite_text: Click to mark favorite. Your favorite views show up on top of the list
+        advanced_options: Advanced options
+        or: " or "
+      content:
+        prompt:
+          select_view: Select a View...
+        never: Never
+        before: Before
+        older_than: Older than
+        include: Include
+        include_users: Include users
+        exclude: Exclude
+        exclude_users: Exclude users
+        quick_filters: Quick Filters
+        members_active_in_any_program: Members active in any %{program}
+        members_not_active_in_any_program: Members not active in any %{program}
+        select_role_type: Select role type
+        select_connection_status_filter_category: Select %{connection} status filter category
+        select_connection_status_filter_type: Select %{connection} status filter type
+        select_connection_status_filter_operator: Select %{connection} status filter operator
+        connection_status_filter_countvalue: Enter count value
+        after: After
+        date_range: Date Range
+        in_next: In Next
+        not_published_profile_tooltip: Users who have not published their profile yet
+        added_not_signed_up: Users who have not signed up after being added to the %{program}
+        accepted_not_signed_up: Users who have not signed up after being accepted into the %{program}
+        signed_up_users: Users who have signed up
+        mentors_availability_tooltip_v1: "%{mentors} who are available for %{a_mentoring_connection}"
+        filters_applied_tooltip: Only the fields to be displayed can be edited / modified
+        Work_on_Behalf: Work on Behalf
+        all_selected_on_the_page_html: All %{size} %{context} on this page are selected.
+        select_all_in_this_view_html: Select all %{size} %{context} in this view
+        all_selected_in_the_view_html: All %{size} %{context} in this view are selected.
+        no_data_in_current_view: No %{context} were found in the current view. You can try the following.
+        select_at_least_one_user: Please select at least one user
+        add_role_select_role: 'What additional roles would you like to assign to the selected %{user}:'
+        reason_placeholder: Type an optional message for the role change. This message will be sent to the selected %{user}
+        add_tag_to_selected: 'Add tags to the selected %{user}:'
+        remove_tag_from_selected: 'Remove tags from the selected %{user}:'
+        tags_will_be_added_note: These tags will be added to the already existing tags
+        tags_will_be_removed_note: Only the tags selected above will be removed and other tags existing for the user will be retained
+        remove_tags_notice_flash_html: The following tags have been successfully removed from users selected in the current view <br/><ul><li>%{tags}</li></ul>
+        add_tags_notice_flash_html: The following tags have been successfully added to the selected users in the current view <br/><ul><li>%{tags}</li></ul>
+        signup_instruction_will_be_sent: 'Sign up instructions will be sent to the following %{user}:'
+        user_membership_will_be_suspended_v1: 'The membership of the following %{user} will be deactivated from the %{program}:'
+        user_membership_will_be_reactivated: 'The membership of the following %{user} will be reactivated in the %{program}:'
+        user_reactivation_note_v1: Users who are suspended at %{organization_name} cannot be reactivated in %{program_name} alone.
+        following_will_be_removed_v3: You are about to remove %{count} %{user} from the %{program}. Did you intend to deactivate their membership instead?
+        select_at_least_one_field: You need to select at least one field
+        view_title_dup: You already have a view with this title
+        fill_all_profile_answers: Please fill all fields
+        delete_warning: Are you sure you want to delete this view ?
+        delete_warning_with_metrics_v1: This view is pinned to the %{Admin} Dashboard. Deleting this view will update the dashboard.
+        delete_warning_with_match_report: This view is pinned to the %{match_report_link}. Deleting this view will update the match report.
+        bulk_match_warning_v1: The bulk match has been created for this view. This will dis-associate all %{mentoring_connections} created in the bulk match. The %{mentoring_connections} will still remain outside of bulk match.
+        invitation_will_be_sent_to: 'Invitation will be sent to the following %{members}:'
+        following_will_be_added_to_program: 'Following %{members} will be added to the program:'
+        add_members_to_program_emails_note_v1_html: The users are sent emails asking them to complete the signup. To view the emails %{catogory_link}.
+        export_csv_confirm: Are you sure ? This will cancel the generation of the report.
+        member_membership_will_be_suspended: 'The membership of the following %{member} will be suspended from %{organization}:'
+        member_membership_will_be_reactivated: 'The membership of the following %{member} will be reactivated in the %{organization}:'
+        following_members_will_be_removed_v1: You are about to remove %{count} %{members} from %{program}. Did you intend to suspend their membership instead?
+        send_invitations_customized_for_selected_program_html: The users selected would receive the invitation emails customized for the selected program. To view the emails, %{click_here}.
+        bulk_delete_limit_exceeded: Please select %{count} or fewer users to delete at one time.
+        bulk_limit_exceeded: Please select %{count} or fewer users to complete the required action.
+        select_a_circle: Select a %{circle_name}
+        select_a_different_circle: Select a different %{circle_name}
+        select_users_to_add_to_circle: Please select a %{circle_name} to which the selected %{count} users have to be added.
+        user:
+          one: user
+          other: users
+        member:
+          one: member
+          other: members
+        Users: users
+        Members: members
+        all_users: All Users
+        license_count_v1: Users Counting Against License
+        all_role: All %{role}
+        any_status: Any Status
+        status: Status
+        added_not_signed_up_users: Users who have not signed up after being added
+        accepted_not_signed_up_users: Users who have not signed up after being accepted
+        signed_up_users_explain: Signed up users
+        current: current
+        loading_export_report: Your report is getting generated. This may take a few minutes.
+        proress_bar_alt_text: This is a gif progress bar which asks to wait uptil the report is getting generated
+        close_image_alt_text: This is a cross icon used to close this popup. Click on it to close the popup.
+        program_roles_filter_help_text: If no role is selected, members with any role in any %{program} will be shown.
+        mandatory_filter_help_text: All the profile questions included for each role assigned to a user will be considered
+        does_not_apply_for_suspended: This action does not apply for users suspended in %{organization_name}.
+        member_suspension_note_v1: Please note that the %{member} will not be able to participate in any more activities and their membership requests will also be ignored.
+        user_deactivation_note: Please note that the %{user} will not be able to participate in any more activities in this %{program}.
+        suspension_deactivation_email_note_html: Reason will be shared with the %{user_or_member} through the %{notification_link}.
+        suspension_notification: suspension notification
+        deactivation_notification: deactivation notification
+        removing_user:
+          one: Removing User
+          other: Removing Users
+        remove_user_warning: One of the %{admin} initiated the removal of %{count} %{user} in the %{program} and the process is running in the background.
+        update_confirmation:
+          view_is_pinned_to_html: This view is pinned to %{objects_with_links}.
+          updating_this_view_will_affect: Updating this view will update the %{objects}.
+          event_implications: And, you have to update the event guest list in respective event page separately incase you want the same changes on event guest list as well.
+          alternatively_create_new_view_html: Alternatively, you can %{new_view_link}.
+          dashboard: dashboard
+          Dashboard: Dashboard
+          create_new_view: create a new view
+          email_campaign: email campaign
+          campaign_target_audience: campaign target audience
+        engagement_status_tooltip_v1: A member is considered connected if they are in either %{singular_connection_terms} in any of the %{tracks}. Engagements refer to %{pluralized_connection_terms} but not %{meetings}.
+        missing_dynamic_filter_columns_warning_html:
+          one: "%{colunm_names} column is not selected for display. %{click_here} to add it to the view to see the filtered results"
+          other: "%{colunm_names} columns are not selected for display. %{click_here} to add them to the view to see the filtered results"
+        user_view_details: "(%{unconnected_count} unconnected, %{drafted_count} drafted and %{connected_count} connected)"
+        users_in: users in
+        users_in_any_of: users in any of
+        having_any_of: having any of
+        having: having
+        selecting_role_will_include: selecting %{role} will include users with %{customized_roles}
+        select_program_role_state_filter_program: Select %{program_and_roles} filter %{program}
+        select_program_role_state_filter_state: Select %{program_and_roles} filter status
+        select_program_role_state_filter_role: Select %{program_and_roles} filter role
+        select_program_role_state_filter_inclusion: Select %{program_and_roles} filter inclusion
+      label:
+        admins_csv_report_name: admins_%{date}
+        role_&_status: Roles & Status
+        User_Status: User Status
+        member_status: Member Status
+        show: Show
+        survey: Survey
+        select_survey_placeholder: Select survey...
+        select_survey_question_placeholder: Select survey question...
+        users_who_have: Users who have
+        survey_questions: Survey Questions
+        Sign_up_Status: Sign up Status
+        Connection_Status_v1: "%{Mentoring_Connection} Status"
+        Connection_Status_v2: User's %{mentoring_connection} status
+        meeting_connection_status: Users who are
+        draft_connection_status_v1: Draft %{Mentoring_Connection} Status
+        mentoring_connection_status_v1: "%{Mentoring_Connection} status"
+        engagement_and_matching_status: Matching & Engagement status
+        ongoing_mentoring: Ongoing %{mentoring}
+        onetime_mentoring: One-time %{mentoring}
+        mentor_availability: "%{mentor} Availability"
+        meeting_request_status: "%{Meeting} Requests"
+        mentoring_request_status: "%{Mentoring} Requests"
+        mentees_who_have: "%{Mentees} who have"
+        mentors_who_have: "%{Mentors} who have"
+        meeting_request_operator_label: Select %{meeting} request operator
+        Profile: Profile
+        language: Language used
+        language_filter: Language used by user to access the %{program}
+        Profile_Questions: Profile Questions
+        Profile_Completeness_Score: Profile Completeness Score
+        Timeline: Timeline
+        Others: Others
+        Others_html: Others %{tooltip}
+        Have_tags: Have tags
+        Actions: Actions
+        tags: Tags
+        user_signup_status: User Signup Status
+        Users: Users
+        Members: Members
+        mentor_availability_slots: Number of abailability slots for %{mentor}
+        program_and_roles: "%{program} and Roles"
+        last_closed_group_time: Last %{Mentoring_Connection} closed on
+        eligibility_view_title: Eligible %{role_name} for %{program_name}
+        before: Before
+        after: After
+        in_last: In last
+        ever: Ever (Since the beginning of the %{program})
+        engagement_status_html: Engagement Status %{tooltip}
+        if_all_the_following_conditions_match: If all the following conditions match
+        any_of_the_following_conditions_match: any of the following conditions match
+        mentor_recommendations: "%{Mentor} recommendations"
+        mentor_recommendations_v1: "%{Mentor} Recommendations"
+      action:
+        Create_View: Create View
+        Update_View: Update View
+        Delete_View: Delete View
+        Discard_View: Discard View
+        Add_Users: Add Users
+        Invite_Users: Invite Users
+        Invite_to_Program: Invite to Program
+        Add_to_Program: Add to Program
+        send_message: Send Message
+        Add_Role: Add Role
+        Add_Tags: Add Tags
+        Remove_Tags: Remove Tags
+        Export_to_csv: Export to CSV
+        Resend_signup_instructions: Resend Sign up Instructions
+        Suspend_Membership: Suspend Membership
+        Deactivate_Membership: Deactivate Membership
+        Reactivate_Membership: Reactivate Membership
+        Remove_User: Remove User
+        Remove_Member: Remove Member
+        Clear_selection: Clear selection
+        View_all_users: View all users
+        create_a_new_view: Create a new view
+        View_all_members: View all members
+        advanced_options: "(Advanced options)"
+        change_options: "(Change)"
+        in_last: 'In last '
+        days: " days"
+        after: 'After '
+        before: 'Before '
+        add_to_circle: Add to %{circle_name}
+        add_users_to_circle: Add users to %{circle_name}
+      back_link:
+        bulk_match: Bulk Match
+        views: Views
+        program_event_v1: Event
+        campaign_v1: Email Campaign
+      status:
+        active: Active
+        unpublished: Unpublished
+        suspended: Suspended
+        deactivated: Deactivated
+        dormant: Dormant
+        Never_connected: Never connected
+        Currently_connected: Currently connected
+        Currently_not_connected: Currently not connected
+        Currently_connected_for_first_time: Currently connected for first time
+        Connected_currently_or_in_the_past: Connected (currently or in the past)
+        Advanced_filters: Advanced filters
+        Part_of_ongoing_connection: Number of ongoing %{connections}
+        Part_of_closed_connection: Number of past %{connections}
+        Part_of_ongoing_or_closed_connection: Number of ongoing or past %{connections}
+        Part_of_drafted_connection: Number of drafted %{connections}
+        Less_than: Less than
+        Equals_to: Equals to
+        Greater_than: Greater than
+      show:
+        all_members: All Members
+        atleast_one_active_track: Members who are active in at least one %{program}
+        no_active_track: Members who are not active in any %{program}
+      meeting_request:
+        received: Received
+        sent: Sent
+        accepted: Accepted
+        pending: Pending
+        mentee:
+          sent: Sent %{meeting} requests
+          pending_action: Sent %{meeting} requests that are pending action
+          not_sent: Not sent any %{meeting} requests
+        mentor:
+          received: Received %{meeting} requests
+          pending_action: Received %{meeting} requests that are pending action
+          not_received: Not received any %{meeting} requests
+          rejected_action: Received %{meeting} requests and rejected atleast one request
+          closed_action: Received %{meeting} requests and closed atleast one request
+          rejected_action_v2: Received %{meeting} requests and rejected at least one request
+          closed_action_v2: Received %{meeting} requests and closed at least one request
+      mentoring_model_preference:
+        ongoing: Ongoing %{Mentoring}
+        one_time: One-time %{Mentoring}
+        one_time_and_ongoing: Ongoing and One-time %{Mentoring}
+      mentoring_model_preference_label: "%{Mentor}'s %{Mentoring} Mode Preference"
+      meeting_connection_status:
+        not_connected: Not connected (Not part of any %{meeting} request which is accepted)
+        connected: Connected (Part of at least one %{meeting} request which is accepted)
+      mentoring_request:
+        mentee:
+          sent: Sent %{mentoring} requests
+          pending_action: Sent %{mentoring} requests that are pending action
+          not_sent: Not sent any %{mentoring} requests
+        mentor:
+          received: Received %{mentoring} requests
+          pending_action: Received %{mentoring} requests that are pending action
+          not_received: Not received any %{mentoring} requests
+          rejected_action: Received %{mentoring} requests and rejected atleast one request
+          closed_action: Received %{mentoring} requests and closed atleast one request
+          rejected_action_v2: Received %{mentoring} requests and rejected at least one request
+          closed_action_v2: Received %{mentoring} requests and closed at least one request
+      coach_rating:
+        less_than: Less than
+        greater_than: Greater than
+        equal_to: Equal to
+        not_rated: Not Rated yet
+      select_option:
+        connection_slots_less_than: Have connection slots less than
+        connection_slots_less_than_v1: Have %{mentoring_connection} slots less than
+        connection_slots_greater_than: Have connection slots greater than
+        connection_slots_greater_than_v1: Have %{mentoring_connection} slots greater than
+        Contains: Contains
+        Not_Contains: Not Contains
+        City: City
+        State: State
+        Country: Country
+        Answered_v1: Filled
+        Not_Answered_v1: Not Filled
+        Join_date: Join date
+        Last_login_date: Last login date
+        Last_login_date_alert: Last Login on
+        terms_and_conditions: T&C accepted date
+        last_deactivated_at: Last deactivated date
+        Signed_up_on_alert: Signed Up on
+        Less_than: Less than
+        Greater_than: Greater than
+        users_who_have: Users who have
+        answered_all_mandatory_questions: Answered all mandatory questions
+        not_answered_all_mandatory_questions: Not answered all mandatory questions
+        answered_all_questions: Answered all questions
+        not_answered_all_question: Not answered all questions
+        requests_with_value: With value
+        requests_in_range: Between
+        In_v1: Contains Any Of
+        Not_in_v1: Not Contains Any Of
+        Matches: Matches
+      multiselect:
+        Add_all: Add all
+        Remove_all: Remove all
+        items_count: Selected Fields - %{count} fields
+        items_total: "%{count} items total"
+        please_wait: please wait...
+        error_data_format: Cannot add options, unknown data format
+        error_insert_node_html: 'There was a problem trying to add the item: %{item} The operation was aborted.'
+        error_readonly: The option %{option} is readonly
+        error_request: 'Sorry! There seemed to be a problem with the remote call. (Type: %{status})'
+        Available_Fields: Available Fields
+        search_among_options: Search among options
+        profile: Profile
+        matching_and_engagement: Matching & Engagement Status
+        timeline: Timeline
+        Engagements: Engagements
+      program_defaults:
+        title:
+          member_id: Member ID
+          first_name: First Name
+          last_name: Last Name
+          email: Email
+          roles: Roles
+          state: Status
+          groups: Ongoing Connections
+          groups_v1: Ongoing %{Mentoring_Connections}
+          closed_groups: Closed Connections
+          closed_groups_v1: Closed %{Mentoring_Connections}
+          drafted_groups: Drafted Connections
+          drafted_groups_v1: Drafted %{Mentoring_Connections}
+          created_at: Joined On
+          language: Language used
+          last_seen_at: Last Logged In
+          available_slots: Connection slots
+          available_slots_v1: "%{Mentoring_Connection} slots"
+          net_recommended_count: Number of %{mentees} to whom user is currently recommended
+          meeting_requests_received: "%{Meeting} Requests Received"
+          meeting_requests_dropped: Includes %{Meeting} Requests Declined, Withdrawn and Closed
+          meeting_requests_sent: "%{Meeting} Requests Sent"
+          meeting_requests_sent_and_accepted: Accepted Sent %{Meeting} Requests
+          meeting_requests_received_and_accepted: Accepted Received %{Meeting} Requests
+          meeting_requests_sent_and_pending: Pending Sent %{Meeting} Requests
+          meeting_requests_received_and_pending: Pending Received %{Meeting} Requests
+          meeting_requests_received_v1: "%{Meeting} requests received"
+          meeting_requests_sent_v1: "%{Meeting} requests sent"
+          meeting_requests_sent_and_accepted_v1: "%{Meeting} requests sent & accepted"
+          meeting_requests_received_and_accepted_v1: "%{Meeting} requests received & accepted"
+          meeting_requests_sent_and_pending_v1: "%{Meeting} requests sent & pending action"
+          meeting_requests_received_and_pending_v1: "%{Meeting} requests received & pending action"
+          meeting_requests_received_and_rejected: "%{Meeting} requests received & rejected"
+          meeting_requests_received_and_closed: "%{Meeting} requests received & closed"
+          meeting_requests_accepted: "%{Meeting} Requests Accepted"
+          meeting_requests_pending: "%{Meeting} Requests Pending"
+          profile_score: Profile Completeness Score
+          Organization: Organization
+          Programs: Programs
+          Account_Name: Account Name
+          terms_and_conditions_accepted: T&C Accepted On
+          last_closed_group_time: Last %{Mentoring_Connection} Closed On
+          mentoring_mode: "%{Mentoring} Mode"
+          rating: Rating
+          mentoring_requests_sent: "%{Mentoring} Requests Sent"
+          mentoring_requests_received: "%{Mentoring} Requests Received"
+          mentoring_requests_sent_and_pending: Pending Sent %{Mentoring} Requests
+          mentoring_requests_received_and_pending: Pending Received %{Mentoring} Requests
+          mentoring_requests_sent_v1: "%{Mentoring} requests sent"
+          mentoring_requests_received_v1: "%{Mentoring} requests received"
+          mentoring_requests_sent_and_pending_v1: "%{Mentoring} requests sent & pending action"
+          mentoring_requests_received_and_pending_v1: "%{Mentoring} requests received & pending action"
+          mentoring_requests_received_and_rejected: "%{Mentoring} requests received & rejected"
+          mentoring_requests_received_and_closed: "%{Mentoring} requests received & closed"
+          responded: Responded
+          not_responded: Not Responded
+          ongoing_engagements: Ongoing Engagements
+          closed_engagements: Closed Engagements
+          last_deactivated_at: Last Deactivated At
+          last_deactivated_at_v1: Last Deactivated On
+          last_suspended_at: Last Suspended On
+          organization_url: Organization URL
+          last_active_program_url: Last Active Program URL
+      kendo_filter:
+        custom_accessibility_messages:
+          filter_by: Filter by
+      kendo_pagination:
+        messages:
+          itemsPerPage: "%{entry_name} per page"
+          first: Go to the first page
+          previous: Go to the previous page
+          next: Go to the next page
+          last: Go to the last page
+          empty: No %{entry_name} to display
+          display: "{0} - {1} of {2} %{entry_name}"
+      mentor_recommendation:
+        mentee_received_recommendations: "%{Mentees} who have received %{mentor} recommendations"
+        mentee_not_received_recommendations: "%{Mentees} who have not received %{mentor} recommendations"
+        received_recommendations: Received %{mentor} recommendations
+        not_received_recommendations: Not received %{mentor} recommendations

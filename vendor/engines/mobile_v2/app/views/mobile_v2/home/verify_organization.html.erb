@@ -1,0 +1,31 @@
+<% if @redirect_url.nil? %>
+  <%= image_tag("mobile_v2/landing-screen.png", :class => "img-responsive col-xs-12 no-padding m-t-xl") %>
+  <% show_experiment_alternative_b = @redirect_url.blank? && @change_program_url.blank? %>
+  <%= ibox nil, :ibox_class => "middle-box no-vertical-margins clearfix cui-homepage cui-homepage-ibox", :content_class => "no-border text-center p-t-0", :collapse_class => "hide" do %>
+    <%= render partial: "mobile_v2/home/verify_email_address_form" if show_experiment_alternative_b %>
+    <%= render partial: "mobile_v2/home/verify_organization_form" %>
+  <% end %>
+
+<% else %>
+  <%= javascript_tag do %>
+    FeatureMobile.initializeOpenurl('<%= raw @redirect_url %>', '<%= MobileV2Constants::ORGANIZATION_SETUP_COOKIE.to_s %>', { emptyErrorMessage: '<%= "verify_organization_page.content.empty_org_message".translate %>', invalidErrorMessage: '<%= "verify_organization_page.content.invalid_org_message".translate %>', validatePath: '<%= APP_CONFIG[:cors_resource_path] %>', mobileLoginPath: '<%= MobileV2Constants::LOGIN_PATH_MOBILE %>', port: '<%= request.optional_port %>', cookieExpiry: '<%= MobileV2Constants::COOKIE_EXPIRY %>', verifyOrgTimeOut: '<%= MobileV2Constants::VERIFY_ORG_TIMEOUT %>', uniq_token: '<%= @uniq_token %>'});
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+  jQuery(document).ready(function() {
+    FeatureMobile.initializeLanguageDropdown();
+    <% unless @change_program_url || @redirect_url %>
+      MobileAppTracking.gaTrackOpenedApp("", "");
+    <% end %>
+    FeatureMobile.initializeGaForFakedoorAndBackLinkAndProgramForms("", "", "<%= "verify_organization_page.label.select_organization".translate %>");
+    <% if show_experiment_alternative_b %>
+      <% if @show_program_form %>
+        FeatureMobile.setFormAndHeaderForProgramForm("<%= "verify_organization_page.label.select_organization".translate %>");
+      <% else %>
+        jQuery(".cjs_verify_org").hide();
+      <% end %>
+    <% end %>
+
+  });
+</script>

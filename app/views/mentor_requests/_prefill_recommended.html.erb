@@ -1,0 +1,12 @@
+<div id="preferred_list_sortable" class="elements-list list-group">
+  <% if mentor_users.present? %>
+    <% mentor_users.each_with_index do |mentor_user, index| %>
+      <%= render partial: "mentor_recommendations/preferred_user_draggable", locals: { mentor_user: mentor_user, match_array: match_array, note: notes_hash[mentor_user.id], position: index+1 } %>
+    <% end %>
+  <% end %>
+  <%= javascript_tag %Q[jQuery('#preferred_list_sortable').sortable({
+      stop: MentorRequests.updatePosition,
+      handle: ".cjs_sortable_handler",
+      axis: "y"
+    });] %>
+</div>

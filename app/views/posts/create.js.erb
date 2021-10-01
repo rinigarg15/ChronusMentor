@@ -1,0 +1,24 @@
+<% if @error_message.present? %>
+  ChronusValidator.ErrorManager.ShowPageFlash(false, "<%= j @error_message %>");
+<% else %>
+  <% @topic.reload %>
+  <% if @forum.is_program_forum? %>
+    <% follow_topic_content = follow_topic_link(@topic, true) %>
+    <% follow_topic_selector = ".cjs_follow_topic_link_#{@topic.id}" %>
+  <% else %>
+    <% follow_topic_content = display_group_topic_follow_icon(@topic) %>
+    <% follow_topic_selector = ".cjs_group_topic_follow_icon" %>
+  <% end %>
+  <% follow_topic_content = "#{follow_topic_content}" if remotipart_submitted? %>
+  jQuery("<%= follow_topic_selector %>").replaceWith("<%= j follow_topic_content %>");
+
+  <% new_form_content = render(partial: 'posts/new', locals: { topic: @topic } ) %>
+  <% new_form_content = "#{new_form_content}" if remotipart_submitted? %>
+  <%= render partial: "posts/posts_listing", locals: { post: @post, posts: @posts } %>
+  jQuery(".cjs_new_post_form").replaceWith("<%= j new_form_content %>");
+  <% topic_content = render partial: "forums/topic", locals: { topic: @topic, home_page: @home_page, see_more: true, topics_badge_count_hash: {}} %>
+  jQuery(".cjs_selected_topic").html("<%= j topic_content %>");
+  jQuery('<%= "##{post_modal_id}" %>').modal("hide");
+  jQuery(".cjs_reply_cancel").click();
+  ChronusValidator.ErrorManager.ShowPageFlash(true, "<%= j @success_message %>");
+<% end %>

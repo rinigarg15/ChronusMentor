@@ -1,0 +1,33 @@
+en:
+  feature:
+    common_questions:
+      action:
+        add_new_question: Add New Question
+      label:
+        rows: Rows
+        rows_place_holder: Enter a row here
+      content:
+        no_questions_survey: There are no questions in the survey.
+        no_questions_form: There are no questions in the form.
+        delete_confirm: Are you sure you want to delete this question? All user responses for this question, if any, will be lost.
+        delete_confirm_v1:
+          confirmation_message: Removing this question %{impact}. Do you want to still remove this question and historical tracking of %{impacted_areas} based on it?
+          affects_health_report_v1: will impact the way the health of the %{program} is measured as it contributes to it
+          affects_positive_outcomes: will remove it %{positive_outcomes}
+          positive_outcome_reports: from the reported positive outcomes section in the %{Program} outcomes report
+          admin_dashboard: from %{admin} dashboard
+        field_blank_error: Field name cannot be blank
+        choices_blank_error: Choices can't be blank for choice based questions
+        rows_blank_error: Rows can't be blank for matrix rating scale questions
+        invalid_choices_count_error: To enable forced ranking, please make sure to have a greater number of rows than columns.
+        invalid_choices_count_error_v1: To enable forced ranking, please make sure to have a greater number of choices than rows.
+        ordered_choice_label: Select choice with preference as '%{preference}'
+        provide_another_answer: Another answer for the question
+        other_option: Other answer than given options
+    connection_questions:
+        label:
+          display_question_in_summary_html: "Display this profile field answer in %{mentoring_connection} summary"
+        tooltip:
+          option_enabled_only_once: "This option can be enabled for only one %{mentoring_connection} profile field. Recommended to select this option for all but file type field. "
+          option_already_enabled: "This option is already enabled for "
+          uncheck_option: Please uncheck the option to enable it here.

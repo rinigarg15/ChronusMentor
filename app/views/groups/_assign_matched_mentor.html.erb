@@ -1,0 +1,76 @@
+<% show_selections = @mentor_groups.any? && @current_program.allow_one_to_many_mentoring? %>
+
+<% modal_v3_popup "feature.connection.header.Assign_Mentor".translate(Mentor: _Mentor) do %>
+  <%= existing_groups_alert([], [[[@student.id], [@mentor.id]]], Group::Status::DRAFTED) %>
+  <div id="select_connection_<%= @mentor.id %>">
+    <% if show_selections %>
+      <div id="select_wrapper_<%= @mentor.id %>">
+        <div class="font-bold">
+          <%= "feature.mentor_request.content.choose_connection_popup.create_new".translate(mentoring_connection: _mentoring_connection) %>
+        </div>
+        <div class="clearfix m-t-sm">
+          <%= link_to_function "display_string.Create".translate, "AssignMatchedMentor.showGroupCreationForm(#{@mentor.id}, undefined, false);", :class => 'select_group btn btn-primary btn-sm m-l-sm pull-right' %>
+          <div class="m-t-xxs">
+            <%= link_to_user @mentor %> ::
+            <%= link_to_user @student %>
+          </div>
+        </div>
+        <%= horizontal_or_separator("m-t-lg m-b-lg") %>
+        <div class="font-bold">
+          <%= "feature.connection.content.add_to_existing".translate(count: @mentor_groups.size, mentoring_connection: _mentoring_connection, mentoring_connections: _mentoring_connections, mentor: @mentor.name, mentee: @student.name) %>
+        </div>
+
+        <% @mentor_groups.each do |group| %>
+          <div class="clearfix m-t-sm">
+            <div class="pull-right">
+              <%= link_to_function "display_string.Add".translate, "AssignMatchedMentor.showGroupCreationForm(#{@mentor.id}, #{group.id}, true);", :class => 'select_group btn btn-primary btn-sm m-l-sm' %>
+            </div>
+            <div class="member_links m-t-xxs">
+              <%= link_to_user @mentor, :class => 'mentor_link' %> ::
+              <%= safe_join(group.students.collect { |student| link_to_user(student, :class => 'student_link') }, COMMON_SEPARATOR)%>
+            </div>
+          </div>
+        <% end %>
+        <%= horizontal_line(class: "m-t m-b") %>
+        <div class="pull-right">
+          <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", data: { dismiss: "modal" } %>
+        </div>
+      </div>
+    <% end %>
+
+    <div id="create_wrapper_<%= @mentor.id %>" style="display: <%= 'none' if show_selections %>">
+      <%= form_tag assign_from_match_groups_path do %>
+        <% if @current_program.mentoring_connections_v2_enabled? %>
+          <%= control_group(class: "cjs_mentoring_model") do %>
+            <%= content_tag(:label, "feature.multiple_templates.header.connection_multiple_templates_title_v1".translate(Mentoring_Connection: _Mentoring_Connection), class: "control-label", for: "assign_mentoring_model") %>
+            <%= controls do %>
+              <%= select_tag(:mentoring_model, options_for_select(get_mentoring_models_collection, current_program.default_mentoring_model.id), id: "assign_mentoring_model", class: "form-control") %>
+            <% end %>
+          <% end %>
+        <% end %>
+        <%= control_group do %>
+          <%= content_tag(:label, "feature.connection.header.Message".translate, :class => "control-label", :for => "group_message") %>
+          <%= controls do %>
+            <%= text_area_tag :message, "", :rows => "5", :id => "group_message", class: "form-control", placeholder: "feature.connection.content.help_text.message_to_members".translate(mentors: _mentors, mentees: _mentees) %>
+          <% end %>
+        <% end %>
+
+        <%= hidden_field_tag :mentor_id, @mentor.id %>
+        <%= hidden_field_tag :student_id, @student.id %>
+        <%= hidden_field_tag :group_id %>
+
+        <div class="cjs_mentoring_model m-t-sm m-b-sm"><%= group_creation_email_notification_consequences_html %></div>
+
+        <% action_set do %>
+          <% if show_selections %>
+            <%= link_to_function "display_string.Back_and_laquo_html".translate, "AssignMatchedMentor.showGroupSelectionForm(#{@mentor.id});", :class => "pull-left btn btn-white" %>
+          <% end %>
+          <div class="pull-right">
+            <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", data: { dismiss: "modal" } %>
+            <%= submit_tag "feature.connection.action.Assign".translate, :class => 'btn btn-primary', data: {:disable_with => "display_string.Please_Wait".translate} %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

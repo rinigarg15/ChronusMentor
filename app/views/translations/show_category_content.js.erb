@@ -1,0 +1,4 @@
+jQuery("#cjs_translation_table tbody tr").remove();
+<% table = render(:partial => "display_translation_table", :locals => {base_id: @base_id, level_obj: @level_obj, second_locale: @second_locale, elements: @translatable_content, attachment_type: @attachment_type, program_asset: @program_asset}) %>
+jQuery("#table_column").find('tbody').empty().append('<%= j table %>');
+jQuery('#loading_results').hide();

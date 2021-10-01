@@ -1,0 +1,38 @@
+<%= content_tag(:div, "", :class => "pull-left cjs_page_back_link_container") do %>
+ <% if (@back_link || is_mobile_app?) && @title.present? %>
+   <% back_link = @back_link.present? ? @back_link[:link] : "javascript:void(0)" %>
+   <%= link_to(content_tag(:small, get_icon_content("fa fa-arrow-left m-b-0 hidden-lg hidden-md fa-2x m-l-n-xxs m-r-sm #{'m-t-xs' if @title_logo}") + set_screen_reader_only_content("display_string.Back".translate)), back_link, :class => 'back_link text-default cui_off_canvas_hide cjs_page_back_link') %>
+   <%= link_to(content_tag(:small, get_icon_content("fa fa-arrow-left m-b-0 hidden-lg hidden-md fa-2x m-l-n-xxs m-r-sm #{'m-t-xs' if @title_logo}") + set_screen_reader_only_content("display_string.Back".translate)), back_link, class: "hide text-default cui_off_canvas_show", data: { toggle: "offcanvasright"   } ) %>
+   <%= link_to(content_tag(:small, get_icon_content("fa fa-arrow-left lead m-b-0") + set_screen_reader_only_content("display_string.Back".translate)), back_link, :class => 'back_link text-default m-r-xs hidden-xs hidden-sm cjs_page_back_link') %>
+ <% else %>
+   <%= get_safe_string %>
+ <% end %>
+<% end %>
+<% if @title_logo %>
+  <% if @title_logo.is_a?(Hash) %>
+    <div class="pull-left p-r-xs">
+      <%= generate_block_with_initials(@profile_member, :small, {:class => "img-circle pull-left"}) %>
+    </div>
+  <% else %>
+    <div class="pull-left p-r-xs">
+      <%= image_tag @title_logo, :id => 'title_logo', :class => "img-circle pull-left", :size => "32x32"%>
+    </div>
+  <% end %>
+<% end %>
+
+<% title = (@sub_title.present? || @title_badge.present?) ? truncate(@title, :length => 45) : @title %>
+<% if @title_url %>
+  <%= link_to(@title, @title_url, :class => "#{padding_options[:logo_padding_class]} #{padding_options[:back_link_padding_class_mobile] unless is_mobile_app?} cjs_title_text lead m-b-0 visible-xs") %>
+  <% shift_title_class = (@sub_title.present? || @title_badge.present?) ? " pull-left " : "" %>
+  <% right_margin_class = @title_badge.present? ? "m-r-xs" : "" %>
+  <%= link_to title, @title_url, :class => "cjs_title_text lead m-b-0 hidden-xs #{shift_title_class} #{right_margin_class}", :title => @title %>
+<% else %>
+  <%= content_tag(:span, h(@title), :class=> "#{padding_options[:logo_padding_class]} #{padding_options[:back_link_padding_class_mobile] unless is_mobile_app?} cjs_title_text lead m-b-0 visible-xs") %>
+  <% shift_title_class = (@sub_title.present? || @title_badge.present?) ? " pull-left " : "#{padding_options[:back_link_padding_class_web]} #{padding_options[:logo_padding_class]}" %>
+  <% right_margin_class = @title_badge.present? ? "m-r-xs" : "" %>
+  <%= content_tag(:div, h(title), :class=> "cjs_title_text lead m-b-0 hidden-xs #{shift_title_class} #{right_margin_class}", :title => @title) %>
+<% end %>
+
+<% if @title_badge.present? %>
+  <%= render :partial => "common/title_badge", :locals => {:title_badge => @title_badge, :padding_options => padding_options} %>
+<% end %>

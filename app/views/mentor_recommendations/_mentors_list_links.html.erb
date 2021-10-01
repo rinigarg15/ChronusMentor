@@ -1,0 +1,16 @@
+<% mobile_view = mobile_browser? || is_mobile_app? %>
+<% if current_user.can_view_mentors? && (current_user.connection_limit_as_mentee_reached? || !@current_program.matching_by_mentee_and_admin_with_preference?) %>
+  <div class="clearfix m-b-lg m-t-n-md <%= 'hide' if hidden %>" id="cjs_recommendations_you_may_also">
+    <div class="text-center login-separator-container table-bordered m-t-sm m-b-md">
+      <span class="big text-navy p-r-xs p-l-xs login-separator font-bold white-bg <%= "mobile-login-separator" if mobile_view %>"><%= "feature.mentor_recommendation.you_may_also".translate %></span>
+    </div>
+    <div class="text-center clearfix">
+      <%= current_user.can_configure_explicit_preferences? ? link_to(mobile_view ? append_text_to_icon("fa fa-sliders", "feature.explicit_preference.label.personalize".translate) : append_text_to_icon("fa fa-sliders", "feature.explicit_preference.label.personalize_recommendations".translate), "javascript:void(0)", class: "btn btn-white btn-md font-600 m-r-md m-t-sm cjs_show_explicit_preference_popup_recommendations" ) : link_to(mobile_view ? "feature.user.filter.title.filter_mentors".translate(Mentors: _Mentors) : "feature.mentor_recommendation.search_using_filters".translate, users_path(src: EngagementIndex::Src::BrowseMentors::QUICK_CONNECT_BOX, highlight_filters: true), class: "btn btn-white btn-md font-600 m-r-md m-t-sm" ) %>
+      <%= link_to('email_translations.mentor_request_expired_to_sender.tags.view_mentors_button.view_all_mentors_v2'.translate(Mentors: _Mentors).html_safe, users_path(src: EngagementIndex::Src::BrowseMentors::QUICK_CONNECT_BOX), class: "btn btn-primary btn-md font-600 m-t-sm" ) %>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  ExplicitPreference.openPreferencePopup("<%= new_explicit_user_preference_path(src: EngagementIndex::Src::ExplicitPreferences::HOME_PAGE) %>", ".cjs_show_explicit_preference_popup_recommendations");
+<% end %>

@@ -1,0 +1,17 @@
+# will paginate translations
+
+en:
+  will_paginate:
+    previous_label: Previous
+    next_label: Next
+    Entries: Entries
+    bottom_pagination_bar:
+      previous_label: ‹ prev
+      next_label: next ›
+    content:
+      no_entry: No %{entries_name} found
+      shortest_display_html: "%{entries_size} %{entries_name}"
+      short_display_html: "%{entries_name} <b>1 - %{entries_size}</b> of <b>%{entries_size}</b>"
+      long_display_html: Displaying <b>all %{entries_size}</b> %{entries_name}
+      short_display_more_than_2_html: "%{entries_name} <b>%{start_entry} - %{end_entry}</b> of %{total_entry}"
+      long_display_more_than_2_html: Displaying %{entries_name} <b>%{start_entry} - %{end_entry}</b> of %{total_entry} in total

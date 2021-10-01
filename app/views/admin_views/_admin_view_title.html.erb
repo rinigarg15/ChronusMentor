@@ -1,0 +1,49 @@
+<%= content_tag(:div, "", :class => "pull-left") do %>
+ <% if @back_link %>
+   <%= link_to(content_tag(:small, get_icon_content("fa fa-arrow-left m-t-xs m-r-0 m-b-0 hidden-lg hidden-md fa-2x m-l-n-xxs m-r-sm") + set_screen_reader_only_content("display_string.Back".translate)), @back_link[:link], :class => 'back_link text-default cui_off_canvas_hide') %>
+   <%= link_to(content_tag(:small, get_icon_content("fa fa-arrow-left m-t-xs m-r-0 m-b-0 hidden-lg hidden-md fa-2x m-l-n-xxs m-r-sm") + set_screen_reader_only_content("display_string.Back".translate)), "javascript:void(0)", class: "hide text-default cui_off_canvas_show", data: { toggle: "offcanvasright" } ) %>
+
+   <%= link_to(content_tag(:small, get_icon_content("fa fa-arrow-left lead m-t-xs m-r-0 m-b-0 hidden-xs") + set_screen_reader_only_content("display_string.Back".translate)), @back_link[:link], :class => 'back_link text-default') %>
+ <% else %>
+   <%= get_safe_string %>
+ <% end %>
+<% end %>
+
+<%= render :partial => "common/title_actions" %>
+
+<% if !@source_info.nil? and @source_info["controller"] == "campaign_management/user_campaigns" %>
+  <div>
+    <h1 class = "lead inline m-l-xs">
+      <%= h(@admin_view.title) %>
+    </h1>
+  </div>
+  <div class="m-t-xs"><%= chronus_auto_link(@admin_view.description) %></div>
+
+<% else %>
+  <div class="dropdown-title pull-left">
+    <span id="cjs_favourite_image" class="lead pull-left m-t-xs m-r-0 m-l-0 m-b-0 <%= hide_for_multi_track_admin?(@admin_view, get_class: true) %>">
+      <%= render(:partial => "admin_view_fav_image", :locals => { :view => @admin_view }) %>
+    </span>
+    <% admin_view_title_id = customize_value_for_multi_track_admin(@admin_view, "clicked-title-admin-view") %>
+    <h1 class="lead dropdown-toggle inline m-l-xs m-b-xs" id="<%= admin_view_title_id %>">
+      <%= @admin_view.title %><span class='caret caret-large m-l-xs <%= hide_for_multi_track_admin?(@admin_view, get_class: true) %>'></span>
+    </h1>
+    <% admin_view_params = {
+        class: "cjs-members-select2 cui_fixed_width_300 col-xs-12 m-r-xs",
+        id: "admin_views_drop",
+        data:{ url: @admin_view_result }
+      } %>
+    <%= hidden_field_tag "admin_views", "", admin_view_params %>
+    <% create_admin_view = render(:partial => 'create_admin_view_link', :locals => { :source_info => nil }) %>
+  </div>
+  <% if @admin_view.description.present? %>
+    <div class="col-xs-12 p-r-0 p-l-lg m-l-xs">
+      <%= chronus_auto_link(@admin_view.description) %>
+    </div>
+  <% end %>
+  <%= javascript_tag do %>
+    jQuery(document).ready(function(){
+      AdminViews.initializeAdminFav(<%= raw @admin_view_result %>, "#admin_views_drop", "<%= j(create_admin_view) %>");
+    });
+  <% end %>
+<% end %>

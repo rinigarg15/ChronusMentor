@@ -1,0 +1,80 @@
+<% helper_headings = [] %>
+<% elements.each_with_index do |object, index| %>
+  <% next if object.first[:for_heading] && (!object[1..-1].present? || object[1..-1].map{|a| a[:en]}.select(&:present?).empty?) %>
+  <% obj_klass = object.first[:klass].constantize %>
+  <% if LocalizableContent.heading_help.keys.include?(obj_klass) && !helper_headings.include?(LocalizableContent.heading_help[obj_klass]) %>
+    <tr class="font-bold top-border larger text-muted"> <td colspan="3" class="right_column"> <div>
+      <%= "feature.translations.helper_headings.#{LocalizableContent.heading_help[obj_klass]}".translate %>
+    </div></td></tr>
+    <% helper_headings << LocalizableContent.heading_help[obj_klass] %>
+  <% end %>
+  <% examined_object = @examined_object && object.select{|obj| obj[:klass].constantize == @examined_object[:klass] && obj[:id] == @examined_object[:id] && obj[:attribute] == @examined_object[:attribute] }.any? %>
+  <% unless LocalizableContent.is_program_asset?(@category) %>
+    <tr class="top-border font-bold  <%= 'cjs_scroll_to' if examined_object %>">
+      <td class="pointer left_column cjs_show_attributes <%= 'cjs_ele_highlight_on_rich_update_content' if examined_object %>" data-index="<%= index %>">
+        <%= get_icon_content("fa fa-caret-right cjs_show_detail_#{index} " + ("hide" if object.first[:klass] == QuestionChoice.name || examined_object).to_s) %>
+        <%= get_icon_content("fa fa-caret-down cjs_hide_detail_#{index} " + ("hide" if object.first[:klass] != QuestionChoice.name && !examined_object).to_s) %>
+        <%= content_tag(:div, truncate_html(h(object.first[:heading] || object.first[:en])), :class => 'inline') %>
+      </td>
+      <td class="middle_column <%= 'cjs_ele_highlight_on_rich_update_content' if examined_object %>"></td>
+      <td class="cjs_show_attributes right_column <%= 'cjs_ele_highlight_on_rich_update_content' if examined_object %>">
+        <%= content_tag(:div, object.first[:heading].nil? ? truncate_html(h object.first[second_locale]) : "", :class => 'inline', :id => "cjs_attribute_value_second_locale_#{object.first[:klass].to_html_id}_#{object.first[:id].to_s.to_html_id}") %>
+      </td>
+    </tr>
+  <% end %>
+  <% if LocalizableContent.is_program_asset?(@category) %>
+    <%= render(:partial => "logo_banner_translations", :locals => {index: index, examined_object: examined_object, object: object, second_locale: second_locale, base_id: base_id, attachment_type: @attachment_type, program_asset: program_asset}) %>
+  <% else %>
+    <% object.each_with_index do |item, item_index| %>
+      <% if !item[:for_heading] && item[:en].present? %>
+        <% klass = item[:klass].constantize %>
+        <% attribute = item[:attribute].to_sym %>
+
+        <% ckeditor_config = LocalizableContent.ckeditor_type[klass] %>
+        <% ck_editable = ckeditor_config.present? && ckeditor_config[attribute].present? %>
+
+        <% display_text = [[item[:en], item[second_locale]]] %>
+        <% display_text.each_with_index do |text_in_locales, choices_num| %>
+          <% en_version, locale_version = text_in_locales %>
+          <tr class=" light-gray-bg <%= 'hide' if item[:klass] != QuestionChoice.name && !examined_object %> cjs_attributes_<%= index %>">
+            <td class="left_column <%= 'cjs_ele_highlight_on_rich_update_content' if examined_object %>">
+              <div class="m-l-xl">
+                <%= ck_editable ? content_tag(:div, truncate_html(display_ckeditor_content(en_version, LocalizableContent.ckeditor_tags[:preview])), :class => "non-clickable") : content_tag(:div, en_version)  %>
+              </div>
+            </td>
+            <td class="middle_column text-center <%= 'cjs_ele_highlight_on_rich_update_content' if examined_object %>">
+              <% if ck_editable %>
+                <%= link_to(content_tag(:span, get_icon_content("fa fa-file-text-o text-default fa-lg") + set_screen_reader_only_content("feature.translations.label.ckeditor_tooltip".translate), id: "cjs_#{item[:klass].to_html_id}_#{item[:id].to_s.to_html_id}_#{item[:attribute].to_s.to_html_id}"), edit_content_translations_path(id: base_id, locale: second_locale, abstract_program_id: level_obj.id ,category: item[:category], object: item.pick(:id, :attribute, :higher_hierarchy).to_json)) %>
+                <%= tooltip("cjs_#{item[:klass].to_html_id}_#{item[:id].to_s.to_html_id}_#{item[:attribute].to_s.to_html_id}", "feature.translations.label.ckeditor_tooltip".translate) %>
+              <% end %>
+            </td>
+            <td class="right_column <%= 'cjs_ele_highlight_on_rich_update_content' if examined_object %>">
+              <% if ck_editable %>
+                <div class="m-l-xs non-clickable">
+                  <%= truncate_html(display_ckeditor_content(locale_version, LocalizableContent.ckeditor_tags[:preview])) %>
+                </div>
+              <% else %>
+                <div class="m-l-xs has-error">
+                  <% locale_id = "cjs_#{second_locale.to_s.to_html_id}_#{item[:category]}_#{item[:klass].to_html_id}_#{item[:id].to_s.to_html_id}_#{item[:attribute].to_s.to_html_id}" %>
+
+                  <% send_to = translation_path(base_id, format: :js, :method => :patch, category: item[:category], object: item.pick(:id, :attribute, :higher_hierarchy).to_json) %>
+                  <label for ="<%= locale_id %>" class="sr-only"><%= "feature.translations.label.content_in_lang".translate(second_locale: @second_locale) %></label>
+                  <%= text_area_tag(locale_id, locale_version, class: "form-control font-default no-borders noshadow cjs_translation_box textarea-auto-height take-parent-width", rows: "1", data: {url: send_to, "item-index" => item_index, klass: item[:klass].to_html_id, "object-id" => item[:id].to_s.to_html_id}) %>
+                </div>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    Localization.showObjectAttributes();
+    Localization.updateTranslationValue();
+    initialize.autoResizeTextAreas();
+    jQueryScrollTo('.cjs_scroll_to', false, 3000);
+  });
+<% end %>

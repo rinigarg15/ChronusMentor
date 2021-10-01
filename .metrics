@@ -1,0 +1,8 @@
+MetricFu::Configuration.run do |config|
+    config.metrics = [:flog, :flay, :rails_best_practices]
+    config.graphs = [:flog, :flay, :rails_best_practices]
+    config.verbose = true
+    config.template_class = StandardTemplate
+    config.rcov[:rcov_opts] << "-I#{"lib:test"}"
+    config.graph_engine = :gchart
+end

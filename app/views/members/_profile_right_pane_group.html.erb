@@ -1,0 +1,11 @@
+<div class="p-l-xxs">
+  <div class="font-bold h5 no-margins truncate-with-ellipsis whitespace-nowrap"><%= link_to_if sidepane_asset.admin_enter_mentoring_connection?(current_user, super_console?), sidepane_asset.name, group_path(sidepane_asset) %></div>
+  <% if sidepane_asset.last_activity_at %>
+    <div class='inline m-t-xs small text-muted'>
+      <%= get_icon_content("fa fa-clock-o")+ "feature.profile.content.time_since_last_activity".translate(time: time_ago_in_words(sidepane_asset.last_activity_at).capitalize) %>
+    </div>
+  <% end %>
+  <div class="small">
+    <%= link_to_function "display_string.Send_Message".translate, %Q[jQueryShowQtip('.sidepane_asset_group_#{index_id}', 600, '#{new_admin_message_path(:for_groups => true, :recepient_group_id => sidepane_asset.id)}','',{modal: true})] %>
+  </div>
+</div>

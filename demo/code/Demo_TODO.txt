@@ -1,0 +1,3 @@
+Move the photos from svn trunk to a s3 bucket. Whenever a new program is being setup, it should use photos from the bucket rather than from the local filesystem
+Have a gui page to configure demo page options rather than having as rake/cap task params.
+Refactor demo_constants.rb

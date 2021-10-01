@@ -1,0 +1,3 @@
+<% content = render partial: "program_invitations/invite_users_role_options", locals: {user: @user, program: @program, options: {container_class: "well white-bg"}} %>
+
+jQuery("#role_btn_group_invite").html("<%= j(content) %>");

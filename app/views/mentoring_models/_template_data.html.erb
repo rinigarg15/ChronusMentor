@@ -1,0 +1,13 @@
+<%= mentoring_model_wizard_view(super_console?, MentoringModelsHelper::Headers::ADD_TEMPLATE, @mentoring_model, {no_wizard_view: @no_wizard_view, :content_ibox_content_class => "no-padding"}) do %>
+  <% unless @read_only %>
+    <%= response_flash("cjs_mentoring_duration_flash") %>
+    <%= render partial: "mentoring_model/update_duration"  %>
+  <% end %>
+  <%= render partial: "mentoring_model/goal_templates/index", locals: { all_goal_templates: @all_goal_templates } if manage_mm_goals_at_admin_level? %>
+  <% if manage_mm_milestones_at_admin_level? %>
+    <%= render :partial => "mentoring_model/milestone_templates/index" %>
+  <% elsif manage_mm_tasks_at_admin_level? || manage_mm_messages_at_admin_level? %>  
+    <%= render partial: "mentoring_model/task_templates/index", locals: { task_templates: @mentoring_model_task_templates } %>
+  <% end %>
+<% end %>
+  <%= javascript_tag "MentoringModels.should_sync = #{@should_sync_warn.to_s};" %>

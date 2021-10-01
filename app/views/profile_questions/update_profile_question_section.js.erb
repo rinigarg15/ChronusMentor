@@ -1,0 +1,11 @@
+jQuery("#profile_question_<%= @profile_question.id %>").remove();
+jQuery('#profile_questions_for_section_<%= @section.id %>').append("<%= j(render partial: 'profile_questions/profile_question', locals: {profile_question: @profile_question}) %>");
+jQuery("#profile_question_<%= @profile_question.id %>").show();
+ProfileConfigUI.updateAndShowNumberOfProfileQuestions();
+ProfileConfigUI.updateAndShowNumberOfProfileQuestionsUnderSection(<%= @profile_question.section_id %>);
+ProfileConfigUI.updateAndShowNumberOfProfileQuestionsUnderSection();
+jQuery("#profile_section_<%= @section.id %>").find(".cjs-section-click-handle-element").click();
+jQuery(".cjs_profile_question_<%= @profile_question.id %>").click();
+ProfileConfigUI.adjustUiCommon();
+jQuery("#loading_results").hide();
+ChronusValidator.ErrorManager.ShowPageFlash(true, "<%= %Q[feature.profile_customization.content.moved_field_to_another_section].translate(field_name: @profile_question.question_text, section_name: @section.title) %>");

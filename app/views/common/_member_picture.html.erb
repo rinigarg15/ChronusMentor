@@ -1,0 +1,14 @@
+<% if local_assigns[:row_fluid] %>
+    <%= image_content %>
+<% else %>
+  <div class="media <%= local_assigns[:outer_class] %>">
+    <div class=" <%= local_assigns[:media_class] || "media-left" %>">
+      <%= image_content %>
+    </div>
+    <% if text_content.present? %>
+      <div class="media-body <%= 'p-t-xs p-b-xs' unless local_assigns[:no_padding_for_media_body] %>">
+        <%= text_content %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

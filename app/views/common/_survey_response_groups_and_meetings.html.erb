@@ -1,0 +1,15 @@
+<% modal_v3_popup "feature.survey.header.response_for_survey".translate do %>
+  <% survey = questions.first.survey %>
+  <% survey_link = link_to(survey.name, survey_survey_questions_path(survey), target: "_blank") %>
+  <h4 class="m-t-0">
+    <%= "feature.survey.header.here_is_response_html".translate(survey: survey_link, user: link_to_user(user, target: "_blank"), time: DateTime.localize(answers.values.max_by(&:last_answered_at).last_answered_at, format: :short)) %>
+  </h4>
+  <% questions.each do |question| %>
+    <i class="font-bold">
+      <%= question.question_text %>
+    </i>
+    <div class="m-b-xs text-muted">
+      <%= render_user_survey_answer_for_groups_listing_page(question, answers) %>
+    </div>
+  <% end %>
+<% end %>

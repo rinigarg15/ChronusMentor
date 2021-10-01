@@ -1,0 +1,7 @@
+en:
+  email_translations:
+    meeting_edit_notification_to_self:
+      title: Confirmation of %{_meeting} updation to the user.
+      description: This email is sent to the user who updated the %{_meeting}.
+      subject: 'Updated: {{meeting_topic}}'
+      content_v1_html: 'You updated this event.<br/><br/><div style=''padding-bottom: 10px''><span style=''color: #00AC77; font-size: 16px''>{{customized_meeting_term_capitalized}} Details</span> <br /> </div><table style=''border-collapse:separate;border-spacing:10px 10px;'' border=''0'' bgcolor=''#eeeeee''><tr><td style=''vertical-align: top;color: #909090;''>Topic:</td><td style=''vertical-align: top;''>{{meeting_topic}}</td></tr><tr><td style=''vertical-align: top;color: #909090;''>When:</td><td style=''vertical-align: top;''>{{meeting_timings}} (<a href=''{{url_meeting_request_calendar_attachment}}''>download ICS</a>)</td></tr><tr><td style=''vertical-align: top;color: #909090;''>Where:</td><td style=''vertical-align: top;''>{{meeting_location}}</td></tr><tr><td style=''vertical-align: top;color: #909090;''>Attendees:</td><td style=''vertical-align: top;''>{{meeting_details}}</td></tr><tr><td style=''vertical-align: top;color: #909090;''>Description:</td><td style=''vertical-align: top;''>{{meeting_description}}</td></tr><tr><td style=''vertical-align: top;color: #909090;''></td><td style=''vertical-align: top;''>{{meeting_reschedule_button}}</td></tr></table>'

@@ -1,0 +1,2 @@
+<% content = render :partial => 'admin_messages/reply', :locals => {:id => @scrap.id, :reply => @scrap.build_reply(wob_member), :from_inbox => false, :remote => true, home_page: @home_page, from_discussion: false} %>
+Discussions.renderReply("<%= @scrap.id.to_s %>", "<%= j content %>");

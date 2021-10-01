@@ -1,0 +1,23 @@
+<%= response_flash("cjs_project_requests_flash") %>
+<div id='project_requests'>
+  <% content_for_sidebar do %>
+    <div id="project_request_sidebar">
+      <%= render partial: "project_requests/project_request_sidebar", locals: {filter_params: @filter_params} %>
+    </div>
+  <% end %>
+
+  <div id="results_pane" class="clearfix">
+    <%= render partial: "project_requests/index", locals: {project_requests: @project_requests, filter_params: @filter_params, ga_src: @src_path} %>
+  </div>
+</div>
+<%= javascript_tag %Q[ProjectRequests.resetAndApplyFilters();] %>
+
+<% if @track_publish_ga %>
+  <%= javascript_tag do %>
+    <% if @ga_src == EngagementIndex::Src::PUBLISH_CIRCLE_WIDGET %>
+      chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.CIRCLES, chrGoogleAnalytics.action.GA_PUBLISH_CIRCLE, chrGoogleAnalytics.eventLabel.GA_PUBLISH_CIRCLE_WIDGET, chrGoogleAnalytics.eventLabelId.GA_PUBLISH_CIRCLE_WIDGET_LABEL_ID);
+    <% elsif @ga_src == EngagementIndex::Src::GROUP_LISTING %>
+      chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.CIRCLES, chrGoogleAnalytics.action.GA_PUBLISH_CIRCLE, chrGoogleAnalytics.eventLabel.GA_CIRCLES_LISTING, chrGoogleAnalytics.eventLabelId.GA_CIRCLES_LISTING_LABEL_ID);
+    <% end %>
+  <% end %>
+<% end %> 

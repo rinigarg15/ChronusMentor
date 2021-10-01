@@ -1,0 +1,19 @@
+<!-- not handling for multiple questions here -->
+<% modal_v3_popup "feature.coach_rating.label.mentor_ratings".translate(:mentor_name => @user.name({name_only: true})) do %>
+  <div class="mentor-rating-content">
+    <% reviews.each do |review| %>
+      <%= embed_display_line_item(_Mentee, review.rating_giver.present? ? link_to_user(review.rating_giver, :no_hovercard => true) : "feature.coach_rating.label.anonymous_user".translate) %>
+      <%= embed_display_line_item("feature.coach_rating.label.date".translate, DateTime.localize(review.updated_at, format: :abbr_short)) %>
+      <%= embed_display_line_item("feature.coach_rating.label.rating".translate, display_rating(review.rating)) %>
+      <%= embed_display_line_item("feature.coach_rating.label.comments".translate, review.answers.first.present? ? review.answers.first.answer_text : "") %>
+      <hr/>
+    <% end %>
+  </div>
+  <%= link_to "display_string.Close".translate, "javascript:void(0)", :class => "btn btn-white pull-right", "data-dismiss" => "modal" %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    CoachFeedback.displayRating();
+  });
+<% end %>

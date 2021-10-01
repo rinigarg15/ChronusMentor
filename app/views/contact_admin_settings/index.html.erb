@@ -1,0 +1,40 @@
+<% @title = "feature.contact_admin.header.title_v1".translate(Admin: _Admin) %>
+
+<%= ibox nil do %>
+  <%= simple_form_for @contact_admin_setting, :html => {:class => "clearfix form-horizontal"} do |f|%>
+    <%= f.input :label_name, label: "feature.contact_admin.label.contact_admin_label_v1".translate(admin: _admin), input_html: {class: "form-control"}, label_html: {class: "col-sm-3 control-label "}, input_wrapper_html: { class: "col-sm-9" } %>
+      <% hide_contact_admin = !(@current_program.contact_admin_setting.nil?) && ((@contact_admin_setting.content.nil? && @contact_admin_setting.contact_url.nil?) || @contact_admin_setting.content.nil?) %>
+    <%= control_group do %>
+      <%= content_tag(:div, "feature.contact_admin.label.available_options_v1".translate(admin: _admin), class: "control-label false-label col-sm-3") %>
+      <%= controls(class: "col-sm-9") do %>
+          <div class="clearfix">
+            <label class="radio">
+              <%= radio_button_tag 'contact_link', 0, true, :id => 'contact_external_link', :class => 'cjs_toggle_contact_link cjs_toggle_radio_button has-below' %> <%= "feature.contact_admin.label.external_link".translate %>
+            </label>
+            <label class="sr-only" for="contact_admin_setting_contact_url"><%= "feature.contact_admin.placeholder.external_url".translate %></label>
+            <%= f.text_field :contact_url, placeholder: "feature.contact_admin.placeholder.external_url".translate, :class => "cjs_contact_url_form form-control #{"hide" if
+              @contact_admin_setting.contact_url.nil? }" %>
+          </div>
+          <div class="clearfix">
+            <label class="radio has-above">
+              <%= radio_button_tag 'contact_link', 1, !hide_contact_admin, id: 'contact_self_link', class: 'cjs_toggle_content cjs_toggle_radio_button has-below' %> <%= "feature.contact_admin.label.default_form_v1".translate(Admin: _Admin) %>
+            </label>
+            <label class="sr-only" for="contact_admin_setting_content"><%= "feature.contact_admin.placeholder.optional_instructions".translate %></label>
+            <%= f.text_area :content, class: "cjs_content_form m-t form-control #{"hide" if hide_contact_admin}", placeholder: "feature.contact_admin.placeholder.optional_instructions_v1".translate(admin: _admin), :rows => 5 %>
+          </div>
+        <% end %>
+    <% end %>
+
+    <% action_set(class: "pull-right") do %>
+      <%= cancel_link manage_program_path %>
+      <%= f.button :submit, "display_string.Save".translate, :class => "cjs_submit_button" %>
+    <% end %>
+
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(function(){
+    ContactAdminSetting.initializeForm();
+  });
+<% end %>

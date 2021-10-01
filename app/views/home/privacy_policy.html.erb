@@ -1,0 +1,37 @@
+<% @title = "privacy_policy_page.title".translate %>
+
+<%= ibox nil, :content_class => "no-horizontal-padding #{(@program_privacy.present? && !@current_organization.display_custom_terms_only) ? 'p-t-0' : ''}" do %>
+  <% if @current_organization && @current_organization.active? && !logged_in_organization? %>
+    <div class="lead text-center p-t-sm m-b-0">
+      <%= "privacy_policy_page.title".translate %>
+    </div>
+  <% end %>
+
+  <% if @program_privacy.present? && !@current_organization.display_custom_terms_only %>
+    <% tabs = [
+        {:label => "#{'privacy_policy_page.organization_privacy_policy'.translate(:org_name => @current_organization.name)}",
+        :url => privacy_policy_path(:p => true),
+        :active => @is_program_privacy
+        },
+        {:label => "privacy_policy_page.chronus_privacy_policy".translate,
+        :url => privacy_policy_path,
+        :active => !@is_program_privacy
+        }
+      ] %>
+    <%= inner_tabs(tabs) %>
+  <% end %>
+
+  <div class="p-md">
+    <% if @is_program_privacy && !@current_organization.display_custom_terms_only %>
+      <%= content_tag(:div, :class => "ckeditor_generated") do %>
+        <%= auto_link(@program_privacy.to_s.html_safe) %>
+      <% end %>
+    <% elsif @current_organization && @current_organization.display_custom_terms_only && @program_privacy.present? %>
+      <%= content_tag(:div, :class => "terms_and_pp", :id => "custom_privacy_policy") do %>
+        <%= auto_link(@program_privacy.to_s.html_safe) %>
+      <% end %>
+    <% else %>
+      <%= render :partial => 'home/chronus_privacy_policy' %>
+    <% end %>
+  </div>
+<% end %>

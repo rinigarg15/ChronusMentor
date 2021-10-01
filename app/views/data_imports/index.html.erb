@@ -1,0 +1,55 @@
+<% @title = "feature.data_imports.header.data_import_summary".translate %>
+
+<%= ibox nil, content_class: "no-padding" do %>
+  <% if @data_imports.blank? %>
+    <div class="p-sm text-center">
+      <%= "feature.data_imports.content.no_datat_imports".translate %>
+    </div>
+  <% else %>
+    <%= top_bar_in_listing( { collection: @data_imports } ) %>
+    <div class="p-sm">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th class="col-xs-2"><%= "feature.data_imports.label.imported_at".translate %></th>
+              <th class="col-xs-2"><%= "feature.data_imports.label.uploaded_file".translate %></th>
+              <th class="col-xs-2"><%= "feature.data_imports.label.uploaded_at".translate %></th>
+              <th class="col-xs-1"><%= "feature.data_imports.label.status".translate %></th>
+              <th class="col-xs-3"><%= "feature.data_imports.label.additional_information".translate %></th>
+              <th class="col-xs-2"><%= "feature.data_imports.label.log_file".translate %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @data_imports.each do |summary| %>
+              <% source_file_name = summary.source_file_file_name.match(/\d+_(.*)/)[1] %>
+              <% log_file_name = summary.log_file_file_name.match(/[a-fA-F\d]+_(.*)/)[1] if summary.log_file_file_name.present? %>
+              <tr>
+                <td class="col-xs-2">
+                  <%= append_text_to_icon("fa fa-clock-o", formatted_time_in_words(summary.created_at, no_ago: true)) %>
+                </td>
+                <td class="col-xs-2 truncate-with-ellipsis whitespace-nowrap">
+                  <%= append_text_to_icon "fa fa-download", link_to(truncate(source_file_name, max_length: 40), summary.source_file.url, target: "_blank", data: { toggle: "tooltip", title: source_file_name } ) %>
+                </td>
+                <td class="col-xs-2">
+                  <%= append_text_to_icon("fa fa-clock-o", source_file_created_at(summary.source_file_file_name)) %>
+                </td>
+                <td class="col-xs-1">
+                  <%= data_import_status_display_text(summary) %>
+                </td>
+                <% additional_information = additional_information_text(summary) %>
+                <td class="col-xs-3">
+                  <%= additional_information %>
+                </td>
+                <td class="col-xs-2 truncate-with-ellipsis whitespace-nowrap">
+                  <%= summary.log_file_file_name.present? ? append_text_to_icon("fa fa-download", link_to(truncate(log_file_name, max_length: 40), summary.log_file.url, target: "_blank", data: { toggle: "tooltip", title: log_file_name } )) : "feature.data_imports.label.log_file_not_present".translate %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <%= bottom_bar_in_listing( { collection: @data_imports } ) %>
+  <% end %>
+<% end %>

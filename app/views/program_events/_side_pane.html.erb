@@ -1,0 +1,39 @@
+<% if @is_admin_view %>
+  <% confirm_text = "feature.program_event.content.delete_confirmation".translate %>
+  <% confirm_text = safe_join([confirm_text, email_notification_consequences_on_action_html(ProgramEventDeleteNotification, div_enclose: false)], " ") if @program_event.published_upcoming? %>
+  <% example_email_list = "feature.program_event.content.example_emails".translate %>
+  <%= ibox 'common_text.side_pane.admin_actions_v1'.translate(Admin: _Admin), ibox_id: "admin_actions", content_class: "p-xxs", show_collapse_link: true do %>
+    <ul class="list-group no-padding">
+      <% if @program_event.draft? %>
+        <%= content_tag(:li , link_to(get_icon_content("text-default fa fa-check") + "feature.program_event.action.post_event".translate, "#", :id => "publish_program_event", "data-toggle" => "modal", "data-target" => "#modal_publish_program_event"),:class => "list-group-item no-borders admin_panel_action") %>
+        <%= content_tag(:li , link_to_function(get_icon_content("text-default fa fa-envelope") + "feature.program_event.action.send_test_email".translate, "ProgramEventTestmail.beforeShowPopup('#{example_email_list}');",:id => "show_popup_link"),:class => "list-group-item no-borders admin_panel_action", "data-toggle" => "modal", "data-target" => "#modal_show_popup_link") %>
+      <% end %>
+      <%= content_tag(:li , link_to(get_icon_content("text-default fa fa-pencil") + "feature.program_event.action.edit_program_event".translate, edit_program_event_path(@program_event)),:class => "list-group-item no-borders admin_panel_action") %>
+      <%= content_tag(:li , link_to(get_icon_content("text-default fa fa-trash") + "feature.program_event.action.delete_program_event".translate, program_event_path(@program_event), :method => :delete, data: {:confirm => confirm_text}),:class => "list-group-item no-borders admin_panel_action") %>
+      <% if !@program_event.draft? && @response_tab.blank? %>
+        <%= content_tag(:li, link_to(get_icon_content("text-default fa fa-download") + "feature.program_event.action.import_guests_csv".translate, program_event_path(@program_event, format: :csv)),:class => "list-group-item no-borders admin_panel_action") %>
+      <% end %>
+    </ul>
+    <% if @program_event.draft? %>
+      <%= render :partial => "program_events/publish_event_popup" %>
+      <%= render :partial => "program_events/test_email_popup", :locals => {:program_event => @program_event, :example_email_list => example_email_list, :src => "show"} %>
+     <% end %>
+  <% end %>
+
+<% end %>
+<% unless @program_event.draft? %>
+  <% if @program_event.users.count > 0 %>
+    <%= ibox (@response_tab.present? ? nil : "feature.program_event.header.guests".translate), :show_collapse_link => true do %>
+      <% if @response_tab.present? %>
+        
+        <%= render :partial => "program_events/program_event_details" %>
+      <% else %>
+        <%= render :partial => "program_events/users_for_side_pane", :locals => {:users => @responses[:attending][:users_to_diplay], :size => @responses[:attending][:size], :tab => ProgramEventConstants::ResponseTabs::ATTENDING, :status => EventInvite::Status::YES.to_s} %>
+        <%= render :partial => "program_events/users_for_side_pane", :locals => {:users => @responses[:not_attending][:users_to_diplay], :size => @responses[:not_attending][:size], :tab => ProgramEventConstants::ResponseTabs::NOT_ATTENDING, :status => EventInvite::Status::NO.to_s} %>
+        <%= render :partial => "program_events/users_for_side_pane", :locals => {:users => @responses[:may_be_attending][:users_to_diplay], :size => @responses[:may_be_attending][:size], :tab => ProgramEventConstants::ResponseTabs::MAYBE_ATTENDING, :status => EventInvite::Status::MAYBE.to_s} %>
+        <%= render :partial => "program_events/users_for_side_pane", :locals => {:users => @responses[:not_responded][:users_to_diplay], :size => @responses[:not_responded][:size], :tab => ProgramEventConstants::ResponseTabs::NOT_RESPONDED, :status => "not responded"} %>
+        <%= render :partial => "program_events/users_for_side_pane", :locals => {:users => @responses[:invited][:users_to_diplay], :size => @responses[:invited][:size], :tab => ProgramEventConstants::ResponseTabs::INVITED, :status => "invited"} %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

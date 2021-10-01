@@ -1,0 +1,25 @@
+<% if local_assigns[:program].consider_mentoring_mode? %>
+  <%= control_group(:class => 'm-b-xs') do %>
+    <% label = "feature.user.content.choose_mentoring_mode".translate(:Mentoring => _Mentoring) %>
+    <%= content_tag(:div, label, :class => "false-label control-label col-sm-2") %>
+    <%= controls(class: "col-sm-10") do %>
+      <%= choices_wrapper(label, class: "well white-bg col-xs-12") do %>
+        <label class="col-xs-12">
+          <%= form.radio_button :mentoring_mode, User::MentoringMode::ONGOING, :class => "cjs_mentoring_mode_setting_options_#{local_assigns[:program].id} vertical-align-top" %>
+          <%= "feature.user.content.mentoring_mode.ongoing.name".translate(:Mentoring => _Mentoring) %>
+          <p class="text-muted"><%= "feature.user.content.mentoring_mode.ongoing.description_v1".translate %></p>
+        </label>
+        <label class="col-xs-12">
+          <%= form.radio_button :mentoring_mode, User::MentoringMode::ONE_TIME, :class => "cjs_mentoring_mode_setting_options_#{local_assigns[:program].id} vertical-align-top" %>
+          <%= "feature.user.content.mentoring_mode.one_time.name_v1".translate(:Meeting => _Meeting, :Mentoring => _Mentoring) %>
+          <p class="text-muted"><%= "feature.user.content.mentoring_mode.one_time.description_v1".translate(:mentees => _mentees, :meetings => _meetings) %></p>
+        </label>
+        <label class="col-xs-12">
+          <%= form.radio_button :mentoring_mode, User::MentoringMode::ONE_TIME_AND_ONGOING, :class => "cjs_mentoring_mode_setting_options_#{local_assigns[:program].id} vertical-align-top" %>
+          <%= "feature.user.content.mentoring_mode.both.name_v1".translate %>
+        </label>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= javascript_tag(%Q[CustomizeMentoringModeSetting.handleModeChage("#{local_assigns[:program].id}");CustomizeMentoringModeSetting.showAppropriateSetting("#{local_assigns[:program].id}");]).html_safe %>
+<% end %>

@@ -1,0 +1,3 @@
+jQuery(".cjs_tile_<%= @tile %> .cjs_tile_metrics .cjs_metric_<%= @metric.id %>").html('<%= j get_metric_details(@metric) %>');
+var timeFilterForm = jQuery(".cjs_tile_<%= @tile %>").find(".cjs_management_report_time_filter_form");
+ManagementReport.showSectionSettingsPopup("<%= @tile %>", timeFilterForm);

@@ -1,0 +1,8 @@
+<% modal_container truncate_html('feature.meetings.header.feedback_on'.translate(topic: h(meeting.topic)), :max_length => 50), :modal_id => "report_view_feedback_#{meeting_index}_#{member.id}" do %>
+  <div>
+    <% survey_questions.each do |ques| %>
+      <div class="text-muted font-600"><%= ques.question_text %></div>
+      <div class="m-b-xs"><%= render_user_survey_answer_for_groups_listing_page(ques, feedbacks_answers) %></div>
+    <% end %>
+  </div>
+<% end %>

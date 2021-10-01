@@ -1,0 +1,16 @@
+<%= form_for reviewer_group, :remote => true, :format => :js, :html => {:id => "three_sixty_reviewer_group_edit_#{reviewer_group.id}", :class => "form-horizontal no-margin-bottom"} do |f| %>
+<div class="clearfix">
+  <div class="col-md-7">
+    <label for='<%= "three_sixty_reviewer_group_name_#{reviewer_group.id}" %>' class="sr-only"><%= "feature.three_sixty.settings.reviewer_group.title".translate %></label>
+    <%= f.text_field :name, :required => true, :placeholder => "feature.three_sixty.settings.reviewer_group.title".translate, :class => "form-control cjs_three_sixty_input_element", :id => "three_sixty_reviewer_group_name_#{reviewer_group.id}" %>
+  </div>
+  <div class="col-md-2">
+    <label for='<%= "reviewer_group_threshold_#{reviewer_group.id}" %>' class="sr-only"><%= "feature.three_sixty.settings.reviewer_group.threshold".translate %></label>
+    <%= f.text_field :threshold, :placeholder => "feature.three_sixty.settings.reviewer_group.threshold".translate, :class => "cjs_three_sixty_input_element form-control", :id => "reviewer_group_threshold_#{reviewer_group.id}" %>
+    <%= tooltip("reviewer_group_threshold_#{reviewer_group.id}", "feature.three_sixty.settings.reviewer_group.threshold_tooltip_v1".translate) %>
+  </div>
+  <div class="col-md-3 no-padding">
+    <%= f.submit "display_string.Save".translate, :class => "btn btn-primary pull-right" %>
+  </div>
+</div>
+<% end %>

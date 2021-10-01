@@ -1,0 +1,49 @@
+<% if current_user.can_manage_connections? %>
+  <% admin_notes_section = render partial: "groups/side_pane_admin_notes", locals: { group: @group } %>
+<% end %>
+
+<div id="group_side_pane">
+  <% if local_assigns[:forum_tab] %>
+    <%= render partial: "groups/side_pane_forum_help_text", locals: { group: @group } %>
+  <% end %>
+
+  <% if @current_user.can_manage_or_own_group?(@group) && !@group.rejected? && !@group.withdrawn? %>
+    <%= render partial: 'groups/side_pane_admin_actions' %>
+  <% end %>
+
+  <% cache(@summary_pane_cache_key) do %>
+    <%= render partial: 'groups/members_list' %>
+  <% end %>
+
+  <%= admin_notes_section.presence unless @group.published? %>
+
+  <% if @group.published? %>
+    <% if @is_member_view || @current_user.is_admin? %>
+      <% if @show_side_pane_meetings %>
+        <div class="side_pane_meetings_container">
+          <%= render partial: "groups/side_pane_meetings", locals: { upcoming_meetings: @upcoming_meetings, initialize_rsvp_js: true, meetings_tab: local_assigns[:meetings_tab] } %>
+        </div>
+      <% end %>
+      <% if @current_program.contract_management_enabled? %>
+        <%= render partial: "groups/contract_management_coaching_hours", locals: { group: @group } %>
+      <% end %>
+      <% if @show_side_pane_coaching_goals %>
+        <%= render partial: "groups/side_pane_coaching_goals_list" %>
+      <% end %>
+      <% if @show_side_pane_mentoring_model_goals %>
+        <%= render partial: "groups/side_pane_mentoring_model_goals" %>
+      <% end %>
+      <%= admin_notes_section.presence %>
+      <%= render partial: "groups/side_pane_quick_links" %>
+      <%= render partial: "groups/side_pane_summary" %>
+    <% end %>
+  <% elsif @group.pending? && @group.has_member?(@current_user) %>
+    <%= render partial: "groups/actions_for_pending_groups" %>
+  <% elsif @user_edit_view %>
+    <%= render partial: "groups/actions_for_unpublished_groups" %>
+  <% end %>
+</div>
+
+<% if @response_url %>
+  <%= javascript_tag %Q[jQuery(document).ready(function(){CoachFeedback.renderPopup("#{@response_url}");});] %>
+<% end %>

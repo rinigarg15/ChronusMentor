@@ -1,0 +1,4 @@
+<% if @profile_question.errors.blank? %>
+  jQuery("#profile_question_<%= @profile_question.id %>").replaceWith('<%= j preview_and_edit_profile_question_settings(@profile_question) %>');
+<% end %>
+jQuery("#profile_question_loader_<%= @profile_question.id %>").hide();

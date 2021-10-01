@@ -1,0 +1,36 @@
+<div class="clearfix  p-sm">
+  <div class="form_help create_new col-xs-8 no-padding m-b-sm">
+    <%= "feature.connection.content.create_new_connection_html".translate(mentoring_connection: _mentoring_connection, mentor: link_to_user(mentor), mentee: link_to_user(mentor_request.student)) %>
+  </div>
+
+  <%= simple_form_for Group.new, :url => groups_path, :html => {:class => 'select_form'} do |f| %>
+    <%= hidden_field_tag :mentor_request_id, mentor_request.id %>
+    <%= hidden_field_tag 'group[mentor_name]', mentor.name_with_email %>
+    <%= hidden_field_tag :assign_new, true %>
+    <%= hidden_field_tag "page", @page, id: nil %>
+    <%= f.button :submit, "display_string.Create".translate, :class => 'select_group one_on_one button pull-right btn btn-primary btn-sm cjs_assign_mentor_request cjs_assign_mentor_request_submit' %>
+  <% end %>
+</div>
+<%= horizontal_or_separator("m-t-lg m-b-lg") %>
+
+<h4 class="form_help select_prompt m-b-md">
+  <%= "feature.connection.content.add_to_existing".translate(count: existing_connections_of_mentor.size, mentoring_connection: _mentoring_connection, mentoring_connections: _mentoring_connections, mentor: mentor.name, mentee: mentor_request.student.name) %>
+</h4>
+
+<ul class="list-group">
+<% existing_connections_of_mentor.each do |group| %>
+  <li class="list-group-item group_preview clearfix">
+    <div class="member_links col-xs-8 no-padding">
+      <%= group.name %>
+      <%= link_to_user mentor, :class => 'mentor_link' %> ::
+      <%= safe_join(group.students.collect{|student| link_to_user(student, :class => 'student_link')}, ", ") %>
+    </div>
+    <%= simple_form_for  group, :url => group_path(group), :remote => true, :html => {:class => 'select_form col-xs-4'} do |f| %>
+      <%= hidden_field_tag :mentor_request_id, mentor_request.id %>
+      <%= hidden_field_tag "page", @page, id: nil %>
+      <%= f.button :submit, "display_string.Add".translate, :class => 'select_group button pull-right btn btn-primary btn-sm' %>
+    <% end %>
+  </li>
+<% end %>
+</ul>
+<%= javascript_tag %Q[MentorRequests.assignMentor();] %>

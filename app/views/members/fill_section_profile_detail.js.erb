@@ -1,0 +1,1 @@
+jQuery("#collapsible_section_content_<%= @section_for.id %>").html('<%= j(render(partial: "members/edit/profile", locals: {section: @section_for, has_edu_exp_ques: has_importable_question?(@profile_questions), questions: @profile_questions, last_section: @last_section, file_present: @file_present })) %>')

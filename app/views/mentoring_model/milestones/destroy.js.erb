@@ -1,0 +1,5 @@
+closeQtip();
+var currentMilestone = jQuery("#cjs_milestone_task_content_container_<%= @milestone.id %>");
+currentMilestone.slideUp(function(){
+  currentMilestone.remove();
+});

@@ -1,0 +1,17 @@
+<%= ibox "", header_content: content_tag(:b, "feature.survey.survey_report.filters.header.survey_responses".translate), content_class: "p-t-0" do %>
+  <%= render partial: "render_survey_and_profile_questions_filter", locals: {survey: @survey, questions: @survey.get_questions_in_order_for_report_filters(@survey_questions), is_survey_type: true} %>
+<% end %>
+
+<%= ibox "", header_content: content_tag(:b, "feature.survey.survey_report.filters.header.user_profile".translate), content_class: "p-t-0" do %>
+  <%= render partial: "render_survey_and_profile_questions_filter", locals: {survey: @survey, questions: @profile_questions, is_survey_type: false} %>
+<% end %>
+
+<% mobile_footer_actions = { see_n_results: {results_link_text:  "feature.survey.content.back_to_survey_data_report".translate(:survey_name => @survey.name)}} %>
+
+<% unless @survey.meeting_feedback_survey? %>
+  <%= ibox "", header_content: content_tag(:b, role_filter_label(@survey)), content_class: "p-t-0" do %>
+    <%= get_select2_options(@survey, get_role_select2_choices(@roles, @current_program), params[:report]) %>
+  <% end %>
+<% end %>
+
+<%= render partial: "report_filters_common_js", locals: {profile_questions: (@survey.get_questions_in_order_for_report_filters(@survey_questions) + @profile_questions)} %>

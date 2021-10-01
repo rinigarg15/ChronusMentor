@@ -1,0 +1,75 @@
+<%= include_ckeditor_tag %>
+<%= control_group do %>
+  <%= content_tag(:div, Program::Domain.human_attribute_name(:subdomain), :class => "false-label control-label") %>
+  <%= controls do %>
+    <span class="form-control" id="program_subdomain"><%= @current_organization.subdomain %>.chronus.com</span>
+  <% end %>
+<% end %>
+<%= f.text_field :account_name, :class => "col-md-5" if super_console? %>
+<%= f.text_field :name, :class => "col-md-5", required: true %>
+<%= f.text_area :description, :rows => 5, :class => "col-md-5" %>
+<% program_asset = @current_organization.program_asset %>
+<%= f.file_field :logo, class: "cjs-dropzone p-t-xxs", data: get_data_hash_for_banner_logo(@current_organization, program_asset.try(:logo_file_name), ProgramAsset::Type::LOGO) %>
+<% if super_console? %>
+  <%= control_group(class: "no-margin-bottom") do %>
+    <%= content_tag(:label, "program_settings_strings.label.email_primary_color_v1".translate, class: "control-label", for: "organization_email_theme_override") %>
+    <%= controls do %>
+      <%= text_field_tag "organization[email_theme_override]", @current_organization.email_theme_override, class: 'colorpicker cui_email_theme_override form-control' %>
+    <% end %>
+  <% end %>
+  <%= email_theme_overrride_select_default_color(@current_organization.email_theme_override) %>
+  <%= javascript_tag %Q[initialize.colorPicker();] %>
+<% end %>
+
+<%= f.file_field :mobile_logo, class: "cjs-dropzone p-t-xxs", data: get_data_hash_for_banner_logo(@current_organization, program_asset.try(:mobile_logo_file_name), ProgramAsset::Type::MOBILE_LOGO) if super_console? %>
+<%= f.file_field :banner, help_text: "program_settings_strings.content.banner_help_text".translate, class: "cjs-dropzone p-t-xxs", data: get_data_hash_for_banner_logo(@current_organization, program_asset.try(:banner_file_name), ProgramAsset::Type::BANNER) %>
+
+<%= render partial: "organizations/agreement", locals: {f: f} %>
+<%= render partial: "organizations/privacy_policy", locals: {f: f} %>
+<%= render partial: "organizations/browser_warning", locals: {f: f} %>
+
+<% unless @current_organization.standalone? %>
+  <%= control_group do %>
+    <% label = "program_settings_strings.label.programs_listing_visibility".translate(programs: _Programs) %>
+    <%= content_tag(:div, label, :class => "control-label false-label") %>
+    <%= controls do %>
+      <%= choices_wrapper(label) do %>
+        <label class='radio inline'>
+          <%= f.radio_button :programs_listing_visibility, Organization::ProgramsListingVisibility::ALL %><span><%= "program_settings_strings.content.programs_listing_visibility.all".translate %></span>
+        </label>
+        <label class='radio inline'>
+          <%= f.radio_button :programs_listing_visibility, Organization::ProgramsListingVisibility::ONLY_LOGGED_IN_USERS %><span><%= "program_settings_strings.content.programs_listing_visibility.logged_in_users".translate %></span>
+        </label>
+        <label class='radio inline'>
+          <%= f.radio_button :programs_listing_visibility, Organization::ProgramsListingVisibility::NONE %><span><%= "program_settings_strings.content.programs_listing_visibility.none".translate %></span>
+        </label>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if super_console? %>
+  <% feed_exporter = @current_organization.feed_exporter %>
+  <% feed_exporter_options = [
+    ["feature.full_calendar.content.week".translate, FeedExporter::Frequency::WEEKLY],
+    ["display_string.day".translate(count: 1), FeedExporter::Frequency::DAILY]
+  ] %>
+
+  <%= control_group do %>
+    <div class="false-label control-label">
+      <%= "program_settings_strings.label.feed_export".translate %>
+    </div>
+    <%= controls do %>
+      <div class="checkbox clearfix">
+        <label class="pull-left no-margins">
+          <%= check_box_tag "organization[activate_feed_export]", true, feed_exporter.present? %>
+          <%= "program_settings_strings.content.export_feed_every".translate %>
+        </label>
+        <div class="col-sm-2">
+          <%= label_tag "organization[feed_export_frequency]", "program_settings_strings.content.export_feed_every".translate, class: 'sr-only', for: "organization_feed_export_frequency" %>
+          <%= select_tag "organization[feed_export_frequency]", options_for_select(feed_exporter_options, feed_exporter.try(:frequency)), class: "form-control input-sm m-t-n-xs" %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

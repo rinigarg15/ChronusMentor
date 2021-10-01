@@ -1,0 +1,10 @@
+<%= render :partial => "reports/high_charts" %>
+<%= top_bar_in_listing({}, { show: true }, {}) %>
+<%= render :partial => "reports/activity_report_content", :locals => {:format => FORMAT::HTML} %>
+
+<% content_for_sidebar do %>
+  <% mobile_footer_actions = { see_n_results: {results_link_text:  "feature.reports.label.back_to_report".translate}} %>
+  <%= filter_container_wrapper mobile_footer_actions do %>
+    <%= render :partial => "reports/activity_report_filter_pane" %>
+  <% end %>
+<% end %>

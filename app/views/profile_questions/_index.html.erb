@@ -1,0 +1,15 @@
+<div class="common_questions">
+  <%= ibox nil, :ibox_id => "add_new_profile_question", :content_class => "text-center" do %>
+      <strong>
+        <%= link_to append_text_to_icon('fa fa-plus-circle', "feature.profile_customization.action.add_new_section".translate), new_section_url(:role => @role), :remote => true, :onclick => "jQuery('#add_new_loading').show()" %>
+      </strong>
+      <%= content_tag(:i, "", class: "fa fa-spinner fa-spin fa-fw hide", id: "add_new_loading") %>
+  <% end %>
+
+  <div id="sections_list">
+    <% @sections.each do |section| %>
+      <%= get_section_content(section, @profile_questions, !request.xhr?) %>
+    <% end %>
+  </div>
+  <%= javascript_tag %Q[jQuerySortable.makeSortable('sections_list', '', '#{section_url(@sections.first)}', '', '.disabled_no_drop', '.ibox-title'); jQuery('#sections_list').removeClass('ui-sortable');]  %>
+</div>

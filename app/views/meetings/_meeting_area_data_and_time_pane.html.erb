@@ -1,0 +1,46 @@
+<% start_time = append_time_zone(DateTime.localize(current_occurrence_time || meeting.start_time, format: :short_time_small), wob_member) %>
+<% end_time = append_time_zone(DateTime.localize(current_occurrence_time + meeting.schedule.duration, format: :short_time_small), wob_member) %>
+
+<div class="clearfix m-t-sm m-b-sm">
+  <% if meeting.calendar_time_available? %>
+    <div class='m-b-sm'>
+      <strong class = "col-md-2 col-xxs-2 p-l-0">
+        <%= "feature.meetings.form.date".translate %>
+      </strong>
+      <div class = "col-md-offset-2">
+        <%= append_text_to_icon("fa fa-calendar m-r-md", DateTime.localize(current_occurrence_time, format: :full_display_no_time_with_day_short)) %>
+      </div>
+    </div>
+    <div class='m-b-sm'>
+      <strong class = "col-md-2 col-xxs-2 p-l-0">
+  	    <%= "feature.meetings.form.time".translate %>
+      </strong>
+      <div class = "col-md-offset-2">
+        <%= append_text_to_icon("fa fa-clock-o m-r-md", (meeting.recurrent? ? get_icon_content("fa fa-retweet", data: { toggle: "tooltip", title: get_recurrent_meeting_icon_tooltip_text(meeting) } ) : "") + "feature.meetings.content.start_and_time_duration".translate(:start_time => start_time, :duration => meeting_duration(meeting))) %>
+      </div>
+    </div>
+  <% else %>
+    <div class='m-b-sm'>
+      <strong class = "col-md-2 col-xxs-2 p-l-0">
+        <%= "feature.meetings.form.date".translate %>
+      </strong>
+      <div class = "col-md-offset-2">
+        <%= append_text_to_icon("fa fa-clock-o m-r-md", (is_admin_view || meeting.state.present?) ? meeting_time_for_display(meeting) : link_to("feature.meetings.content.set_meeting_time".translate(:meeting => _meeting), "javascript:void(0)", class: "btn #{meeting.archived? ? 'btn-white' : 'btn-primary'} btn-sm cjs_set_meeting_time_#{meeting_id} m-b-sm")) %>
+        <%= javascript_tag("jQuery(function(){ jQuery('.cjs_set_meeting_time_#{meeting_id}').click(); });") if params[:setup_meeting_time] %>
+      </div>
+    </div>
+  <% end %>
+  <div>
+    <strong class = "col-md-2 col-xxs-2 p-l-0">
+	    <%= "feature.meetings.form.location".translate %>
+    </strong>
+    <div class = "col-md-offset-2 word_break cjs_meeting_<%= meeting_id %>_location_detail">
+      <%= render_meeting_location_details(meeting, wob_member, {meeting_area: true, current_occurrence_time: current_occurrence_time}) %>
+    </div>
+  </div>
+</div>
+<%= javascript_tag do  %>
+  jQuery(document).ready(function(){
+    MeetingForm.setMeetingLocationPopup(".cjs_set_meeting_location_<%= meeting_id %>");
+  });
+<% end %>

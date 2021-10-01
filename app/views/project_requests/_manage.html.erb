@@ -1,0 +1,9 @@
+<%= hidden_field_tag(:status, @filter_params[:status], id: 'filter_tab') %>
+<%= hidden_field_tag(:filter_params_to_store, @filter_params_to_store.to_json, class: 'cjs-filter-params-to-store') %>
+
+<%= render partial: 'project_requests/report_tiles', locals: { project_request_hash: @project_request_hash } %>
+<%= inner_tabs(get_tabs_for_project_requests_listing(@filter_params[:status]), {}) %>
+
+<div id="results_pane" class="clearfix">
+  <%= render partial: "project_requests/index", locals: {project_requests: @project_requests, filter_params: @filter_params, ga_src: @src_path, is_manage_view: true} %>
+</div>

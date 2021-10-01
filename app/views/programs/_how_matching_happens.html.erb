@@ -1,0 +1,43 @@
+<% multiple_existing_groups_note_html = multiple_existing_groups_note %>
+<% matching_by_mentee_alone = @program.matching_by_mentee_alone? %>
+<% matching_by_mentee_and_admin = @program.matching_by_mentee_and_admin? %>
+<% pending_mentor_requests_count = @program.mentor_requests.active.size %>
+<% mentor_request_style_disabled = multiple_existing_groups_note_html.present? || ((matching_by_mentee_alone || matching_by_mentee_and_admin) && (pending_mentor_requests_count > 0)) %>
+<% mentor_offer_disabled = multiple_existing_groups_note_html.present? %>
+
+<h2 class="m-b-xs">
+  <%= "program_settings_strings.label.mentoring_mode.ongoing_settings_title".translate(Mentoring: _Mentoring) %>
+</h2>
+<%= horizontal_line(class: "no-margins") %>
+
+<%= control_group(class: "m-b") do %>
+  <%= content_tag(:div, "program_settings_strings.label.matching_settings.how_does_matching_happen".translate, class: "control-label false-label") %>
+  <%= controls do %>
+    <label class="checkbox">
+      <%= check_box_tag "program[mentor_request_style]", Program::MentorRequestStyle::MENTEE_TO_ADMIN, matching_by_mentee_and_admin,  class: "vertical-align-text-bottom has-next-important cjs_mentor_request_check cjs_max_concurrent_mentors_for_mentee cjs_preferred_mentor_check", disabled: mentor_request_style_disabled, id: "program_mentor_request_style_#{Program::MentorRequestStyle::MENTEE_TO_ADMIN}" %>
+      <%= "program_settings_strings.content.allow_mentee_to_send_request_to_admin".translate(Mentees: _Mentees, admin: _admin, mentors: _mentors) %>
+      <%= render_mentor_request_style_change_disabled_alert(mentor_request_style_disabled, multiple_existing_groups_note_html, pending_mentor_requests_count) %>
+    </label>
+
+    <label class="checkbox">
+      <%= check_box_tag("program[mentor_request_style]", Program::MentorRequestStyle::MENTEE_TO_MENTOR, matching_by_mentee_alone, disabled: mentor_request_style_disabled, class: "vertical-align-text-bottom has-next-important cjs_mentor_request_check cjs_max_concurrent_mentors_for_mentee", id: "program_mentor_request_style_#{Program::MentorRequestStyle::MENTEE_TO_MENTOR}") %>
+      <%= "program_settings_strings.content.allow_mentee_to_send_request_v4".translate(Mentees: _Mentees, mentoring: _mentoring, mentors: _mentors) %>
+      <%= render_mentor_request_style_change_disabled_alert(mentor_request_style_disabled, multiple_existing_groups_note_html, pending_mentor_requests_count) %>
+    </label>
+
+    <label class="checkbox">
+      <%= check_box_tag "program[enabled_features][]", FeatureName::OFFER_MENTORING, @program.mentor_offer_enabled?, class: "vertical-align-text-bottom cjs_features_list cjs_max_concurrent_mentors_for_mentee", id: "cjs_offer_mentor_check", disabled: mentor_offer_disabled %>
+      <%= "program_settings_strings.content.mentor_offers_to_mentee_v1".translate(mentees: _mentees, mentoring: _mentoring, Mentors: _Mentors) %>
+      <% if mentor_offer_disabled %>
+        <div class="help-block">
+          <%= multiple_existing_groups_note_html %>
+        </div>
+      <% end %>
+    </label>
+
+    <label class="checkbox">
+      <%= check_box_tag nil, 1, true, id: "admin_assign_connections", class: "vertical-align-text-bottom", disabled: true %>
+      <%= "program_settings_strings.content.admin_assign_connection_v1".translate(mentoring_connections: _mentoring_connections, Admins: _Admins)%>
+    </label>
+  <% end %>
+<% end %>

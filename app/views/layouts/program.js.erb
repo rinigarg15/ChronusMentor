@@ -1,0 +1,20 @@
+<%= yield %>
+
+<% if @no_js %>
+  <script type="text/javascript">
+<% end %>
+  // initialize on JS Requests
+  initialize.initializeCkAttachmentLinksForAndroid();
+  initialize.initializeFileinput();
+  initialize.initializeWaves();
+  initialize.setDatePicker();
+  initialize.autoResizeTextAreas();
+  initialize.initializePlaceholder();
+  initialize.initializeWrapperVisibility();
+  <% unless @skip_hiding_loader %>
+    jQuery("#loading_results").hide();
+    jQuery("#page_loading_results").hide();
+  <% end %>
+<% if @no_js %>
+  </script>
+<% end %>

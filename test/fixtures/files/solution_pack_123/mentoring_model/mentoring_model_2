@@ -1,0 +1,44 @@
+#MentoringTemplate
+Goal Progress Type,Alter Admin Created Tasks,Enable Messaging,Enable Discussion Board,Help-text describing the purpose of the discussion board.
+Auto,Disabled,Disabled,Enabled,"Welcome to the discussion board! Ask questions, debate ideas, and share articles. You can follow conversations you like, expand a conversation to view the posts, or get a new conversation started!"
+
+#Goals
+Title,Description
+Familiarize with organizational culture,"Become a champion of organizational values, understand company's vision and strategic direction."
+Integrate and network,"Become an insider. Get to know your manager, senior leaders, and peers who can help you navigate your role."
+Role clarity,Understand scope & responsibilities of your position and know where to find resources.
+Self-efficacy,New skills needed for your role are honed and you are performing at a high level.
+
+#Milestones
+Title,Description,Position
+Orientation,Get to know your mentor and the organization,
+Getting acquainted: First two weeks,Start to understand your role and responsibilities,
+Settling in: First 90 days,Establish goals and deepen comfort with day-to-day responsibilities,
+Becoming adjusted: First 6 months,"Reflect, maintain, and expand on achievements and become an expert at your role",
+
+#Tasks
+Title,Description,"Required (yes, no)",Due by (X days after start of connection or after a specific other task),After,"Action Item (Create Meeting, Setup Goal, Take Connection Survey, none)",Action Item ID,Assignee (#{details[:prn]}),Goal(Enter specific goal),Milestone(enter name of milestone),Specific Date(enter tasks with specific date)
+Face-to-face introduction and a walking tour,Suggested activity: take your mentee to get coffee,Yes,1,Start,Create Meeting,,Mentor,"",Orientation,""
+Verify that basic orientation has been completed by HR,"Ensure housekeeping complete such as paperwork, ID card, parking, payroll and vacation policies, voicemail & network access set up",Yes,1,Start,none,,Mentor,"",Orientation,""
+Discuss company overview,"Explain structure and history of organization, vision and mission, strategic plan, products and services, key players such as executives",Yes,1,Start,Create Meeting,,Mentor,Familiarize with organizational culture,Orientation,""
+Watch orientation video,Watch recorded video about company culture available at (insert link),Yes,1,Start,none,,Mentee,Familiarize with organizational culture,Orientation,""
+Recap first day,Discuss the first day experience and answer any questions the mentee has,Yes,1,Start,Create Meeting,,Mentor,"",Orientation,""
+"Introductions to other staff, clarification of training",Provide formal introductions to key staff members and another tour. Review important policies. Check that mentee's manager has clarified training procedures and timeline.,Yes,3,Start,Create Meeting,,Mentor,Integrate and network,Orientation,""
+Mentee to share learnings so far,"Mentee, share your understanding of your department’s strategy, structure, processes, roles and responsibilities, projects, and progress. Get your mentor's historical knowledge of how your team operates.",Yes,3,Start,none,,Mentor,Integrate and network,Orientation,""
+Share learnings,"Create list of key contacts and resources you want to meet, work with, and get to know during your first 90 days. Get feedback from mentor on this list. Schedule meetings to speak with each of them.",Yes,4,Start,Create Meeting,,Mentee,Integrate and network,Getting acquainted: First two weeks,""
+Complete training on core products,Familiarize with product suite,Yes,5,Start,none,,Mentee,Familiarize with organizational culture,Getting acquainted: First two weeks,""
+Review product knowledge,Review key points from product training with mentor to verify understanding,Yes,7,Start,Create Meeting,,Mentee,Familiarize with organizational culture,Getting acquainted: First two weeks,""
+Review company website and intranet,"During downtime, review online materials to gather information about the organization, background on senior leaders, etc.",Yes,7,Start,none,,Mentee,Familiarize with organizational culture,Getting acquainted: First two weeks,""
+Industry intel,Review industry information and players,Yes,7,Start,none,,Mentor,Familiarize with organizational culture,Getting acquainted: First two weeks,""
+Recap first week experience and answer questions,Suggested discussion points: How would you rate your first week experience? What have you found to be the most challenging so far? What has excited you the most? Tell me about your team. How comfortable do you feel here? How can I help?,Yes,7,Start,none,,Mentee,Integrate and network,Getting acquainted: First two weeks,""
+Clarify initial work plan & performance expectations,Meet with your manager to review plans for learning and working in your new role. Ask what are most pressing priorities and why. Ask what success would look like in 90 days. Share outcomes of this conversation with your mentor.,Yes,8,Start,Create Meeting,,Mentee,Role clarity,Getting acquainted: First two weeks,""
+Shadow mentor for a day,Mentee should take a break from training to learn about a typical day for the mentor and understand context of mentor's position within the organization.,Yes,10,Start,Create Meeting,,Mentee,Familiarize with organizational culture,Getting acquainted: First two weeks,""
+Set 90-day goals,"Discuss potential stretch goals the mentee has thought about. Talk about what 90-day success means to the mentee. Create a 90-day plan and break it down by month, detailing initiatives, projects and tasks.",Yes,14,Start,Setup Goal,,Mentee,Self-efficacy,Getting acquainted: First two weeks,""
+Recap week 2 and answer questions,"Meet for an on-campus lunch. Recap the mentee's second week experience and answer questions. Suggested topics: How do you rate your first two weeks overall? Are there any other challenges that differ from week one? Are there any questions that you want to ask, but have been too afraid to ask your manager?",Yes,14,Start,Create Meeting,,Mentee,"",Getting acquainted: First two weeks,""
+Recap week 3 and answer questions,Meet for lunch. Recap the third week experience and answer any questions the mentee has. Discuss team dynamics and explain how cross-departmental collaboration functions in the organization.,Yes,21,Start,Create Meeting,,Mentee,"",Settling in: First 90 days,""
+Schedule bi-weekly meeting series for next 3 months,"Remainder of meetings will focus on your assimilation, continued expansion of capabilities, and progress toward goals.",Yes,28,Start,Create Meeting,,Mentee,"",Settling in: First 90 days,""
+60-day progress check,"Revisit and revise your 90-day goals if needed. What can you accomplish in the next 30 days? Take time to confirm lessons learned, but also celebrate what you have achieved. Finally, discuss if there are any training gaps remaining, and plan for how to address them.",Yes,60,Start,Create Meeting,,Mentee,Self-efficacy,Settling in: First 90 days,""
+90-day progress check,Reflect on what you have accomplished in your first 90 days at the organization. What roadblocks and challenges did you encounter? Do you feel supported? Celebrate what you achieved!,Yes,90,Start,Create Meeting,,Mentee,Self-efficacy,Settling in: First 90 days,""
+Set 6-month goals,"Now that you are settled in and on your way to becoming fully integrated into the organization, look ahead and outline your 6-month goals. What do you want to achieve? What gaps can you fill in your team?",Yes,100,Start,Setup Goal,,Mentee,Self-efficacy,Becoming adjusted: First 6 months,""
+Set intentions for 1-year goals,"As your formal mentoring period comes to a close, set honest intentions for what will happen after mentoring. How would you like to continue expanding upon your skills, projects, and responsibilities? What new habits will you strive to maintain, and what tactics will you employ to maintain them?",Yes,180,Start,Setup Goal,,Mentee,Self-efficacy,Becoming adjusted: First 6 months,""
+

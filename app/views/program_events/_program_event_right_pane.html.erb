@@ -1,0 +1,24 @@
+<div class="clearfix p-b-sm">
+  <div class='m-b-xs'>
+    <%= append_text_to_icon('fa fa-calendar', event_date_for_display(program_event), :media_padding_with_icon => true)%>
+  </div>
+  <div class='m-b-xs'>
+    <%= append_text_to_icon('fa fa-clock-o', event_time_for_display(program_event), :media_padding_with_icon => true) %>
+  </div>
+  <div class='m-b-xs'>
+    <%= append_text_to_icon('fa fa-map-marker', program_event.location.present? ? program_event.location : content_tag(:span, 'common_text.Not_specified'.translate, :class => "text-muted"), :media_padding_with_icon => true) %>
+  </div>
+  <div class='m-b-xs'>
+    <%= append_text_to_icon('fa fa-users', users_invited_label(program_event), :media_padding_with_icon => true) %>
+  </div>
+<% if program_event.published? %>
+    <div>
+      <% attending_size = program_event.get_attending_size %>
+      <div class="m-l-md m-t-sm">
+        <span class="text-navy"><%= "#{program_event.program_event_users.count} #{"feature.program_event.label.Invited".translate}" %></span>
+        <%= circle_separator %>
+        <span class="text-navy"><%= "#{attending_size} #{invite_response_label(program_event, EventInvite::Status::YES, attending_size)}" %></span>
+      </div>
+    </div>
+  <% end %>
+</div>

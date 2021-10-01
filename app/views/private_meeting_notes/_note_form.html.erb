@@ -1,0 +1,25 @@
+<% modal_v3_popup "feature.connection.action.New_Note".translate, {additional_close_button_class: "cjs_dismiss_meeting_note_popup cjs_meeting_area"} do %>
+  <%= simple_form_for [meeting, new_private_meeting_note], :remote => true, :html => {:id => "cjs_meeting_note_form", :class => "meeting_new_post clearfix"} do |f| %>
+    <%= f.input :text, :as => :text, :input_html => {:rows => 5, :class => "form-control required-field"}, :placeholder => "feature.connection.content.placeholder.type_your_note".translate, label: "feature.meetings.form.note".translate %>
+    <div id="pn_attach_panel" class="attach_panel">
+      <%= f.input :attachment, :as => :file, label: "display_string.attach_file".translate, wrapper: :bootstrap_with_label_wrapper %>
+    </div>
+    <div class="form-group form-group-sm">
+      <div class="media-left">
+        <%= label_tag(:will_set_availability_slots, "feature.connection.content.notify_attendees".translate(:meeting => _meeting), :class => "sr-only", :for => "notify_attendees") %>
+        <%= check_box_tag "private_meeting_note[notify_attendees]", true, false, :id => "notify_attendees" %>
+      </div>
+      <div class="media-body">
+          <div class="m-b-xxs font-bold"><%= "feature.connection.content.notify_attendees".translate(:meeting => _meeting) %></div>
+          <div class="text-muted small"><%= "feature.connection.content.notify_attendees_helptext".translate %></div>
+      </div>
+    </div>
+
+    <%= f.button :submit, "feature.connection.action.Add_Note".translate, :class=>"pull-right", :id => "new_note_submit" %>
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+  MeetingForm.addMeetingNote();
+  Meetings.trackMeetingActivityAddNotePopupCancelled();
+</script>

@@ -1,0 +1,6 @@
+<div id="new-comment-container-<%= task.id %>">
+  <%= render partial: "mentoring_model/task/comments/new_comment_form", locals: {group: group, task: task, comment: comment} %>
+</div>
+<div id="new-checkin-container-<%= task.id %>" class="hide">
+  <%= render partial: "group_checkins/new_group_checkin_form", locals: {group: group, task: task, checkin: checkin, form_type: "new"} %>
+</div>

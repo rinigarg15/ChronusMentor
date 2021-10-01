@@ -1,0 +1,16 @@
+<% favorite_preference_user_ids = favorite_preferences_hash.keys %>
+<% score = favorite_preference_user_ids.include?(mentor_id) ? 1 : 0 %>
+<% favorite_preference_id = favorite_preferences_hash[mentor_id] if score == 1 %>
+<% src = local_assigns[:src].present? ? src : "" %>
+<% show_loader = (src == EngagementIndex::Src::AbstractPreference::FAVORITE_LISTING_PAGE) %>
+<% mark_favorite = score == 0 ? true : false %>
+<% favorite_preference_url = get_favorite_preference_url(mark_favorite, src, {preference_marked_user_id: mentor_id, favorite_preference_id: favorite_preference_id}) %>
+<% favorite_preference_method_type =  get_preference_method_type(!mark_favorite)%>
+<% favorite_preference_hint = get_hints_for_favorite_symbol(mark_favorite) %>
+<%= hidden_field_tag "favorite_preference_score_#{mentor_id}", score, class: "favorite_preference_score_#{mentor_id}", id: "" %>
+<%= hidden_field_tag "favorite_preference_url_#{mentor_id}", favorite_preference_url, class: "favorite_preference_url_#{mentor_id}", id: "" %>
+<%= hidden_field_tag "favorite_preference_method_type_#{mentor_id}", favorite_preference_method_type, class: "favorite_preference_method_type_#{mentor_id}", id: "" %>
+<%= hidden_field_tag "favorite_preference_hint_#{mentor_id}", favorite_preference_hint, class: "favorite_preference_hint_#{mentor_id}", id: "" %>
+<script type="text/javascript">
+  FavoritePreference.initializeFavoriteRating("<%= mentor_id %>", "<%= show_loader %>");
+</script>

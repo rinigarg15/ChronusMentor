@@ -1,0 +1,43 @@
+<% q_id = profile_question.id %>
+<div id="profile_question_value_<%= q_id %>" class="clearfix">
+  <div class='col-sm-6 p-l-0 profile_question_span'>
+    <div class="col-sm-8 p-l-0 profile_question_span">
+      <%= local_assigns[:draggable_icon] %>
+      <%= profile_question.question_text %>
+      <% unless profile_question.help_text.blank? %>
+        <%= embed_icon(TOOLTIP_IMAGE_CLASS, '', :id => "profile_question_help_icon_#{q_id}") %>
+        <%= tooltip("profile_question_help_icon_#{q_id}", chronus_auto_link(profile_question.help_text.html_safe), true) %>
+      <% end %>
+    </div>
+    <div class="col-sm-4 no-padding">
+      <%= compressed_question_type(profile_question) %>
+    </div>
+  </div>
+  <div class='col-sm-3 p-l-0 profile_question_span'>
+    <% if program_view? %>
+      <%= get_role_listing_program_view(@current_program.id, profile_question) %>
+    <% else %>
+      <% programs_count = profile_question.role_questions.collect(&:program).uniq.count %>
+      <span id = "profile_question_configured_help_icon_<%=  q_id %>">
+        <%= link_to_function("feature.profile_customization.label.n_programs".translate(count: programs_count), "CustomizeProfileQuestions.displayProgramList('#{q_id}');") %>
+      </span>
+      <%= tooltip("profile_question_configured_help_icon_#{q_id}", get_role_listing(@current_organization, profile_question), true, placement: "bottom") %>
+    <% end %>
+  </div>
+  <% if !(profile_question[:no_edit] && profile_question[:no_remove]) %>
+    <% edit_text =  "display_string.Edit".translate %>
+    <div class='col-sm-3 text-center profile_question_span'>
+      <% actions = [] %>
+      <% if !profile_question[:no_edit] %>
+        <% actions << link_to(append_text_to_icon('fa fa-pencil m-r-xxs fa-fw', edit_text), edit_profile_question_path(profile_question), :class => "btn btn-white btn-xs btn-block-xxs m-b-xs", :remote => true, data: {:disable_with => "display_string.Please_Wait".translate}) %>
+      <% end %>
+      <% if !profile_question[:no_remove] && profile_question.non_default_type? %>
+        <% actions << link_to(append_text_to_icon('fa fa-trash m-r-xxs fa-fw', "display_string.Remove".translate), "javascript:void(0)", id: "cjs-delete-question-link-#{profile_question.id}", class: "btn btn-white btn-xs btn-block-xxs m-b-xs", data: { url: profile_question_path(profile_question) } ) %>
+      <% end %>
+      <div class="clearfix clearfix">
+        <%= render_button_group(actions, :btn_group_class => "text-center", :grid_class => " ") if actions.present? %>
+      </div>
+    </div>
+  <% end %>
+  <%= javascript_tag %Q[CustomizeProfileQuestions.deleteQuestion("#{profile_question.id}", "#{j delete_profile_question_confirm_message(all_questions, profile_question)}");] %>
+</div>

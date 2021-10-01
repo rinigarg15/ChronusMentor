@@ -1,0 +1,32 @@
+<%= field_set_wrapper("feature.admin_view.content.status".translate, false, @filter_params.present? && member_status_accordion_collapse?(@filter_params[:member_status])) do %>
+  <%= control_group do %>
+    <% label = "feature.admin_view.label.member_status".translate %>
+    <div class="false-label control-label col-sm-2"><%= label %></div>
+    <%= controls(class: "col-sm-10") do %>
+      <%= choices_wrapper(label) do %>
+        <label class="checkbox inline">
+          <%= render_admin_view_check_box_or_radio_button(@admin_view, "admin_view[member_status][state][#{Member::Status::ACTIVE}]", Member::Status::ACTIVE, "feature.admin_view.status.active".translate, @filter_params, :checkbox => true) %>
+        </label>
+        <label class="checkbox inline">
+          <%= render_admin_view_check_box_or_radio_button(@admin_view, "admin_view[member_status][state][#{Member::Status::SUSPENDED}]", Member::Status::SUSPENDED, "feature.admin_view.status.suspended".translate, @filter_params, :checkbox => true) %>
+        </label>
+        <label class="checkbox inline">
+          <%= render_admin_view_check_box_or_radio_button(@admin_view, "admin_view[member_status][state][#{Member::Status::DORMANT}]", Member::Status::DORMANT, "feature.admin_view.status.dormant".translate, @filter_params, :checkbox => true) %>
+        </label>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if admin_view.program.ongoing_enabled_programs_present? %>
+    <%= control_group(class: "m-t-md") do %>
+      <div class="false-label text-right col-sm-2 control-label">
+        <% singular_connection_terms, pluralized_connection_terms = get_mentoring_connection_customized_terms(admin_view.program) %>
+        <%= "feature.admin_view.label.engagement_status_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS,'', :id => "engagement_status_label")) %>
+        <%= tooltip("engagement_status_label","feature.admin_view.content.engagement_status_tooltip_v1".translate(singular_connection_terms: singular_connection_terms, pluralized_connection_terms: pluralized_connection_terms, tracks: _programs, meetings: _meetings)) %>
+      </div>
+      <%= controls(class: "col-sm-10") do %>
+        <%= render :partial => "admin_views/connection_status_filter_template" , :locals => {filter_params: @filter_params} %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

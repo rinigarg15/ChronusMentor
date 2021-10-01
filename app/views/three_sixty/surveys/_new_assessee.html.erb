@@ -1,0 +1,22 @@
+<%= form_tag three_sixty_survey_assessees_path(survey), :remote => true do %>
+  <label class="sr-only" for="member_name_with_email"><%= "feature.three_sixty.survey.assessee".translate %></label>
+  <% right = { type: "btn",
+    btn_options: {
+      :class => 'btn btn-primary',
+      data: {:disable_with => "display_string.Please_Wait".translate}
+    },
+    content: "display_string.Add".translate
+  } %>
+  <%= construct_input_group({}, right, input_group_class: "m-b-sm") do %>
+    <span id="three_sixty_survey_assessee_text_field_container">
+      <%= text_field_with_auto_complete :member, :name_with_email, {
+          :placeholder => "feature.three_sixty.assessee.add".translate,
+          :class => "form-control pull-left", :autocomplete => "off"},
+        { :min_chars => 1,
+          :url => organization_view? ? auto_complete_for_name_members_path(:format => :json, :for_autocomplete => true) : auto_complete_for_name_users_path(:format => :json, for_autocomplete: true),
+          :highlight => true,
+          :param_name => 'search' }
+      %>
+    </span>
+  <% end %>
+<% end %>

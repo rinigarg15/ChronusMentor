@@ -1,0 +1,28 @@
+<%= simple_form_for @admin_view, url: suspend_member_membership_admin_view_path(@admin_view), html: { method: :post, class: "no-margin", id: "form_admin_view_bulk_actions" } do |f| %>
+  <div><%= "feature.admin_view.content.member_membership_will_be_suspended".translate(member: "feature.admin_view.content.member".translate(count: @members.size), organization: @current_organization.name) %></div>
+  <%= render partial: "admin_views/selected_users", locals: { users_or_members: @members } %>
+
+  <%= f.input "members", as: :hidden, input_html: { value: @members.collect(&:id).join(",") } %>
+  <%= control_group(class: "m-t-md") do %>
+    <label class="control-label" for="admin_view_reason">
+      <%= set_required_field_label("display_string.Reason".translate) %>
+    </label>
+    <%= controls do %>
+      <%= text_area_tag "admin_view[reason]", nil, rows: 3, class: "form-control" %>
+    <% end %>
+  <% end %>
+
+  <%= get_note_for_suspension(@current_organization, @members.size) %>
+  <%= horizontal_line %>
+  <% action_set(class: "pull-right") do %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", "data-dismiss" => "modal" %>
+    <%= f.button :submit, "display_string.Submit".translate %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    AdminViews.validateFields("form_admin_view_bulk_actions", "admin_view_reason");
+    initialize.autoResizeTextAreas();
+  });
+<% end %>

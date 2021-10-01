@@ -1,0 +1,4 @@
+<% messages_list = @campaign_messages.map { |abstract_campaign_message| render(partial: "campaign_management/abstract_campaign_messages/abstract_campaign_message", locals: { abstract_campaign_message: abstract_campaign_message }) } %>
+{
+  "data": [<%= safe_join(messages_list, ',') %>]
+}

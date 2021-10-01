@@ -1,0 +1,32 @@
+<% @title = find_new_projects_title(current_user) %>
+
+<% reset_url = url_for(group_params.to_unsafe_h.merge(:search_filters => {}, :sub_filter => {}, :filter => nil)) %>
+<% mobile_footer_actions = { see_n_results: { results_count: @groups.total_entries }, reset_filters: { url: reset_url, class: "#{'hide' if @my_filters.blank?}" } } %>
+
+<% sidebar_content = capture do %>
+  <%= filter_container_wrapper mobile_footer_actions do %>
+    <%= render partial: "common/your_filters", locals: { :onclick_function => "GroupSearch.clearFilter", reset_url_options: { url: reset_url } } %>
+    <%= render partial: "groups/filter_form", locals: { find_new_filters: current_user.can_send_project_request? } %>
+  <% end %>
+<% end %>
+
+<div class="find_new_projects">
+  <% search_results_wrapper(@search_query, sidebar_content) do %>
+    <div id="find_new_projects_results_pane">
+      <%= render partial: "groups/find_new_index", locals: { groups: @groups } %>
+    </div>
+  <% end %>
+</div>
+
+<% unless search_view? %>
+  <% content_for_sidebar do %>
+    <%= sidebar_content %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  GroupSearch.getSurveyResponse();
+  jQuery(document).ready(function() {
+    Groups.handleSetChangeStartDate();
+  });
+<% end %>

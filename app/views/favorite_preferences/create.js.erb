@@ -1,0 +1,11 @@
+element = jQuery("#favorite_in_header").find("span.label");
+FavoritePreference.reAnimate(element, "slideInDown", 1100);
+<%= render partial: "favorite_preferences/update_favorite_preference", locals: {mentor_id: @mentor_id, favorite_preferences_hash: @favorite_preferences_hash, ignore_preferences_hash: @ignore_preferences_hash, src: @src, profile_last_updated_at: @profile_last_updated_at} %>
+<% if @favorite_preference_created %>
+  <% [ProgramAbTest::Experiment::GUIDANCE_POPUP, ProgramAbTest::Experiment::POPULAR_CATEGORIES].each do |experiment_id| %>
+    <% experiment = chronus_ab_test_get_experiment(experiment_id) %>
+    <% if experiment.running? %>
+      chrGoogleAnalytics.addEvent(PreferenceBasedMentorLists.abTestGetGaCategory('<%= experiment_id %>'), chrGoogleAnalytics.action.GA_MARK_FAVOURITE, '<%= experiment.alternative %>', '<%= experiment.event_label_id_for_ga %>');
+    <% end %>
+  <% end %>
+<% end %>

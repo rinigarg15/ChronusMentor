@@ -1,0 +1,15 @@
+<ul class="nav nav-tabs h5 no-margins gray-bg">
+  <li class="<%= tab_in_store == Program::RA_TABS::ALL_ACTIVITY ? "active":"" %>">
+    <%= link_to("feature.profile.label.all_activity".translate, "javascript:void(0)") %>
+  </li>
+  <li class="<%= tab_in_store == Program::RA_TABS::MY_ACTIVITY ? "active":"" %>">
+    <%= link_to("feature.profile.label.my_activity".translate, "javascript:void(0)") %>
+  </li>
+  <% unless @current_program.mentoring_connections_v2_enabled? %>
+    <% if @my_all_connections_count.present? && @my_all_connections_count > 0 %>
+      <li class="<%= tab_in_store == Program::RA_TABS::CONNECTION_ACTIVITY ? "active":"" %>">
+        <%= link_to("feature.profile.label.my_connections_activity".translate(mentoring_connections: @_Mentoring_Connections), "javascript:void(0)") %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>

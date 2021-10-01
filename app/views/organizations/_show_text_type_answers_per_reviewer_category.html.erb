@@ -1,0 +1,3 @@
+<label class="false-label control-label checkbox"> <%= "feature.three_sixty.settings.show_answers_of_text_type_questons_per_reviewer_group_v1".translate %>
+  <%= check_box_tag 'show_text_type_answers_per_reviewer_category', true, @current_organization.show_text_type_answers_per_reviewer_category?, :data => {:url => update_three_sixty_settings_path}, :class => "cjs_ajax_post" %>
+</label>

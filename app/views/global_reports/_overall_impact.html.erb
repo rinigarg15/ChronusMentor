@@ -1,0 +1,48 @@
+<% container_class = "col-md-3 col-sm-6 col-xs-12 m-b-sm"%>
+<% from_date_range, to_date_range = @overall_impact_date_range.values %>
+
+<% report_actions = {
+    time_filter: { time: {start: from_date_range, end: to_date_range}, label: "feature.global_reports.overall_impact.label.between".translate, date_range_preset: DateRangePresets::PROGRAM_TO_DATE, min_date: from_date_range, max_date: to_date_range, data_submit_js: "OverallImpact.updateTimeRange('#{overall_impact_global_reports_path}');"}
+  } %>
+
+<div class="m-b-md">
+  <div class="row">
+    <div class="col-xs-6">
+      <h3 class="font-noraml p-t-xxs">
+        <%= "feature.global_reports.overall_impact.header.section_title_v1".translate(programs: _programs) %>
+      </h3>
+    </div>
+    <div class="col-xs-6 pull-right cjs_overall_impact_date_range_filter_container">
+      <%= render :partial => "common/report_actions", locals: {report_actions: report_actions, no_clear_selection: true, use_presets: DateRangePresets.for_overall_impact, use_html_id_suffix: "global_reports_overall_impact", additional_header_class: "btn btn-outline btn-sm white-bg btn-default m-r-n-sm no-inherit"} %>
+    </div>
+  </div>
+
+  <div class="row m-t-xs">
+    <%# Users Participated %>
+    <%= rollup_box_wrapper(title: "feature.global_reports.overall_impact.header.users_participated".translate, title_tooltip: "feature.global_reports.overall_impact.content.tooltip_for_user_participation_v1".translate(program: _program), title_tooltip_class: "overall_impact_users_participated_title_tooltip", rollup_box_container_class: "cjs_global_reports_overall_impact_users_participated m-l-n-md m-r-n-md", container_class: container_class, ibox_content_padding_options: "p-b-0") do %>
+      <%= overall_impact_loader %>
+    <% end %>
+
+    <%# Matches Created %>
+    <%= rollup_box_wrapper(title: "feature.global_reports.overall_impact.header.matches_created".translate, title_tooltip: "feature.global_reports.overall_impact.content.tooltip_for_matches_created".translate(programs: _programs), title_tooltip_class: "overall_impact_matches_created_title_tooltip", rollup_box_container_class: "cjs_global_reports_overall_impact_connections_created m-l-n-md m-r-n-md", container_class: container_class, ibox_content_padding_options: "p-b-0") do %>
+      <%= overall_impact_loader %>
+    <% end %>
+
+    <%# Engagement Stats %>
+    <%= rollup_box_wrapper(title: "feature.global_reports.overall_impact.header.engagement_stats".translate, title_tooltip: "", title_tooltip_class: "overall_impact_engagements_created_title_tooltip", rollup_box_container_class: "cjs_global_reports_overall_impact_engagements_created m-l-n-md m-r-n-md", container_class: container_class, ibox_content_padding_options: "p-b-0") do %>
+      <%= overall_impact_loader %>
+    <% end %>
+
+    <%# Satisfied Users %>
+    <%= rollup_box_wrapper(title: "feature.global_reports.overall_impact.header.satisfied_users".translate, title_tooltip: "feature.global_reports.overall_impact.content.tooltip_for_satisfaction_rate_v1".translate(program: _program), title_tooltip_class: "overall_impact_satisfaction_rate_title_tooltip", rollup_box_container_class: "cjs_global_reports_overall_impact_satisfaction_rate m-l-n-md m-r-n-md", container_class: container_class, ibox_content_padding_options: "p-b-0", title_right_addon: get_actions_for_users_satisfaction_configuration) do %>
+      <%= overall_impact_loader %>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(function() { 
+    jQuery.ajax({url: "<%= overall_impact_global_reports_path %>"});
+    jQuery('.overall_impact_engagements_created_title_tooltip').hide();
+  });
+<% end %>

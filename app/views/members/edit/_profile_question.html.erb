@@ -1,0 +1,22 @@
+<%= render :partial => 'programs/question', :collection => questions, :locals => {:profile_user => profile_user, :profile_question => true, :person => person, grouped_role_questions: grouped_role_questions, is_profile_completion:is_profile_completion} %>
+<% is_first_visit = j chronus_sanitize(is_first_visit, sanitization_version: @current_organization.security_setting.sanitization_version) if (is_first_visit && is_first_visit != !!is_first_visit) %>
+
+<%= hidden_field_tag :first_visit, is_first_visit, id: nil %>
+
+<% if !local_assigns[:no_action] %>
+  <% action_set do %>
+    <div class="pull-right">
+      <% submit_label = is_first_visit || local_assigns[:answer_mandatory_qs] ?  "display_string.Save_Proceed_html".translate : "display_string.Save".translate %>
+      <% section_id = questions.first.section_id %>
+      <% unless local_assigns[:answer_mandatory_qs] %>
+        <% if local_assigns[:ajax_form] %>
+          <%= link_to('display_string.Cancel'.translate, "javascript:void(0)", :class => 'cjs-cancel-ibox btn btn-white') %>
+        <% else %>
+          <%= cancel_link unless is_first_visit %>
+        <% end %>
+      <% end %>
+      <%= person.submit submit_label, :class => "btn btn-primary", :onclick => local_assigns[:answer_mandatory_qs] ? (%Q[EditUser.renameEducationExperienceFields();RequiredFields.validateFile('#{section_id}', false, false, jsCommonTranslations.fillAppropriateValues);return EditUser.validationsToExecute('#{@is_admin_view}', '#{is_first_visit}', '#{section_id}', jsCommonTranslations.fillAppropriateValues) && ProfileFields.validateTextOnly('#{section_id}');]) : (%Q[EditUser.renameEducationExperienceFields();return EditUser.validationsToExecute('#{@is_admin_view}', '#{is_first_visit}', '#{section_id}', jsCommonTranslations.fillAppropriateValues) && ProfileFields.validateTextOnly('#{section_id}');]) ,
+        :id => "submit_#{section_id}_profile", data: {:disable_with => "display_string.Please_Wait".translate} %>
+    </div>
+  <% end %>
+<% end %>

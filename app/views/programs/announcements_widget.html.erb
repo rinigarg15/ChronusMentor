@@ -1,0 +1,35 @@
+<% footer_content = capture do %>
+  <% if @announcements.size > 1 %>
+    <div class="announcements_nav_mobile text-center">
+      <%= link_to(get_icon_content("fa fa-chevron-left no-margins") + set_screen_reader_only_content("display_string.previous".translate), "javascript:void(0)", class: "boxshadow-md btn btn-sm btn-primary announcements-slick-prev pull-left") %>
+      <%= link_to(get_icon_content("fa fa-chevron-right no-margins") + set_screen_reader_only_content("display_string.next".translate), "javascript:void(0)", class: "boxshadow-md btn btn-sm btn-primary announcements-slick-next pull-right") %>
+    </div>
+  <% end %>
+<% end %>
+
+<% modal_v3_popup nil, {:modal_body_class => "no-padding", no_header: true, modal_id: "announcements_popup", modal_v3_footer_content: footer_content, footer_container_class: "modal-footer hidden-lg hidden-md hidden-sm"} do %>
+  <div id="announcement" class="cjs_announcements_container">
+    <% if @announcements.size > 1 %>
+      <div class="announcements_nav hidden-xs">
+          <%= link_to(get_icon_content("fa fa-chevron-left no-margins") + set_screen_reader_only_content("display_string.previous".translate), "javascript:void(0)", class: "m-t-lg boxshadow-md btn btn-primary announcements-slick-prev pull-left btn-sm text-default cui_announcements_nav_left") %>
+          <%= link_to(get_icon_content("fa fa-chevron-right no-margins") + set_screen_reader_only_content("display_string.next".translate), "javascript:void(0)", class: "m-t-lg boxshadow-md btn btn-primary announcements-slick-next pull-right btn-sm text-default cui_announcements_nav_right") %>
+      </div>
+    <% end %>
+    <%= render partial: "announcements/announcment_widget_content", locals: {announcements: @announcements} %>
+  </div>
+<% end %>
+
+
+<%= javascript_tag do  %>
+  jQuery(document).ready(function(){
+    setTimeout(function(){
+      carousel.addCarousel('.announcements-slick', {slidesToShow: 1, slidesToScroll: 1, prevArrow: jQuery('.announcements-slick-prev'), nextArrow: jQuery('.announcements-slick-next')});
+      slideSelector = jQuery('.announcements-slick .slick-slide[data-slick-index="0"]');
+      carousel.showAdaptiveHeight(".announcements-slick", slideSelector, 0);
+      carousel.showHiddenAnnouncements(".announcements-slick .slick_box", ".modal-footer", 0);
+    }, 0);
+    Announcements.showAdaptiveHeightAnnouncement();
+    Announcements.announcementMarkVisited();
+  });
+<% end %>
+

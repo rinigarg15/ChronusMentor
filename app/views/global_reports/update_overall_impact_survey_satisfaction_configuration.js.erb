@@ -1,0 +1,7 @@
+<% content = render partial: "global_reports/survey_satisfaction_configuration", locals: {program_id: @survey_satisfaction_program.id, survey_satisfaction_configuration_hash: @survey_satisfaction_configuration_hash} %>
+jQuery('.cjs_survey_satisfaction_configuration_for_program_<%= @survey_satisfaction_program.id %>').replaceWith("<%= j(content) %>");
+jQuery.ajax({
+  url: "<%= overall_impact_global_reports_path(satisfaction_rate: true) %>",
+  data: commonReportFilters.defaultFilterData({dateRangePickerSelector: '#report_time_filter_form_global_reports_overall_impact .cjs_daterange_picker_value'})
+});
+jQuery.ajax({url: "<%= overall_impact_survey_satisfaction_configurations_global_reports_path(for_super_admin_alert: true) %>"});

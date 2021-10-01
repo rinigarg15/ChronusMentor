@@ -1,0 +1,6 @@
+<div>
+  <h4 class="m-t-sm">
+    <% program_view ||= @admin_view.is_program_view? unless @admin_view.nil? %>
+    <%= link_to "feature.admin_view.action.create_a_new_view".translate, new_admin_view_path(source_info: source_info, is_program_view: program_view), class: "cjs_create_admin_view_link" %>
+  </h4>
+</div>

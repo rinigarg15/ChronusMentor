@@ -1,0 +1,5 @@
+<%= ibox "feature.meetings.content.provide_feedback_on_past_meetings".translate(meetings: _Meetings), :show_collapse_link => true do %>
+  <div class="list-group">
+    <%= render partial: "users/home_page_widgets/member_meeting", collection: current_user.member_meetings_with_pending_meeting_feedback %>
+  </div>
+<% end %>

@@ -1,0 +1,9 @@
+<div class="well clearfix flat-border animated fadeInDown noshadows no-margins cjs-alt-color-actions cjs_three_sixty_parent" id="open_ended_question_row_<%= open_ended_question.id %>">
+  <div class="col-md-10"><%= open_ended_question.title %></div>
+  <% if show_actions %>
+    <div class="col-md-2 no-padding">
+      <%= link_to(get_icon_content("fa fa-trash m-r-0") + set_screen_reader_only_content("display_string.Delete".translate), three_sixty_question_path(open_ended_question), :remote => true, :method => :delete, data: {:confirm => "feature.three_sixty.question.delete_warning".translate}, :class => "btn btn-white btn-xs pull-right")%>
+      <%= link_to(get_icon_content("fa fa-pencil m-r-0") + set_screen_reader_only_content("display_string.Edit".translate), edit_three_sixty_question_path(open_ended_question), :remote => true, :class => "btn btn-white btn-xs pull-right", data: {:confirm => "feature.three_sixty.question.edit_warning".translate})%>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,8 @@
+<div class="col-md-6 cjs-tile-container cjs_tile_<%= DashboardReportSubSection::Tile::GROUPS_ACTIVITY %>" id="connections_activity_info_container">
+  <%= render(partial: "reports/management_report/report_tile_settings", locals: {tile: DashboardReportSubSection::Tile::GROUPS_ACTIVITY}) unless current_program.only_one_time_mentoring_enabled? %>
+  <% title = current_program.only_one_time_mentoring_enabled? ? "feature.reports.content.how_much_meeting_activity".translate(meetings: _meetings) : "feature.reports.content.active_connections_in_time_period".translate(mentoring_connections: _mentoring_connections) %>
+  <h3 class="font-noraml"><%= title %></h3>
+  <div class="ibox" id="connections_activity_info">
+    <%= render(partial: "common/tile_placeholder") %>
+  </div>
+</div>

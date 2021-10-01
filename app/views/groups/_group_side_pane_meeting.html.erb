@@ -1,0 +1,20 @@
+<% meeting = sidepane_asset[:meeting] %>
+<% occurence = sidepane_asset[:current_occurrence_time] ? sidepane_asset[:current_occurrence_time] : meeting.first_occurrence %>
+<%= render partial: "meetings/rsvp_popup", locals: { meeting: meeting, current_occurrence_time: occurence } %>
+<div class = "<%= get_meeting_html_id(sidepane_asset) %>" >
+  <div class="topic h5 no-margins font-bold m-b-xxs">
+    <%= link_to meeting.topic, meeting_path(meeting, current_occurrence_time: occurence) %>
+  </div>
+  <span class="inline m-t-xs time">
+    <%= meeting_time_for_display(meeting, occurence) %>
+  </span>
+  <% unless @is_admin_view %>
+    <% if wob_member.is_attending?(meeting, occurence) %>
+      <%= content_tag(:div, content_tag(:span, append_text_to_icon("fa fa-check", "feature.program_event.label.Attending".translate), class: "label navy-bg text-white"), class: "m-t-xs small") %>
+    <% elsif !meeting.archived?(occurence) && (@group.blank? || @group.active?) %>
+    <div class="m-t-xs cjs_response_buttons">
+      <%= render :partial => "meetings/fetch_response_buttons", :locals => { :meeting => meeting, :wob_member => wob_member, :current_occurrence_time => occurence, :group => @group, :show_actions => true, :is_admin_view => @is_admin_view, :src => MemberMeeting::RSVP_SOURCE::GROUP_SIDE_PANE, from_connection_home_page_widget: false } %>
+    </div>
+    <% end %>
+  <% end %>
+</div>

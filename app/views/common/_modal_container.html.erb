@@ -1,0 +1,43 @@
+<%# Move modal to body - Fix Bootstrap backdrop issue with animation.css %>
+<%# http://stackoverflow.com/questions/10636667/bootstrap-modal-appearing-under-background %>
+
+<% content = capture do %>
+  <div class="modal fade <%= options[:modal_class] %>" id="<%= options[:modal_id] %>" tabindex="-1" role="dialog">
+    <div class="modal-dialog <%= options[:modal_dialog_class] %>" role="document">
+      <div class="modal-content <%= options[:modal_content_class] %>">
+        <% unless options[:no_modal_header] %>
+          <div class="modal-header no-padding clearfix">
+            <button type="button" class="close cjs-web-modal-cancel <%= options[:additional_close_button_class] %>" data-dismiss="modal" aria-label="<%= "display_string.Close".translate %>">
+              <span class="p-sm pull-left" aria-hidden="true">&times;</span>
+            </button>
+            <% if header_title.present? %>
+              <h4 class="modal-title" id="<%= options[:modal_title_id] %>">
+                <%= content_tag(:span, get_icon_content("fa fa-chevron-left"), :class => "pull-left cjs-mobile-modal-cancel p-sm p-r-0", "data-dismiss" => "modal") %>
+                <span class="p-sm pull-left col-xs-10 col-sm-11 cjs-modal-title-text-conainer"><%= header_title.html_safe %></span>
+              </h4>
+            <% else %>
+              <%= content_tag(:span, get_icon_content("fa fa-chevron-left"), :class => "pull-left cjs-mobile-modal-cancel p-sm", "data-dismiss" => "modal") %> <%= (options[:header_content] || "").html_safe %>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div class="modal-body clearfix <%= options[:modal_body_class] %>">
+          <%= content_block %>
+        </div>
+        <% if options[:modal_footer_content].present? %>
+          <div class="modal-footer <%= options[:modal_footer_class] %>">
+            <%= options[:modal_footer_content] %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  <% if options[:modal_id].present? %>
+    jQuery(".modal#<%= options[:modal_id] %>").remove();
+  <% end %>
+  jQuery("body").append("<%= j content %>");
+  initialize.autoResizeTextAreas();
+<% end %>

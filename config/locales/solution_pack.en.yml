@@ -1,0 +1,5 @@
+en:
+  solution_pack:
+    error:
+      program_creation_failed: "Program creation using solution pack failed"
+      invalid_attachment_urls: "Please handle the invalid attachment URLs"

@@ -1,0 +1,26 @@
+# Logfile created on 2018-02-07 11:32:06 +0530 by logger.rb/56438
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Starting the New Relic agent in "test" environment.
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : To prevent agent startup add a NEW_RELIC_AGENT_ENABLED=false environment variable or modify the "test" section of your newrelic.yml.
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Reading configuration from /home/durgesh/projects/groups/config/newrelic.yml (/home/durgesh/projects/groups/test/unit)
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] WARN : Agent is configured not to use SSL when communicating with New Relic's servers
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Environment: test
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : No known dispatcher detected.
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Application: Chronus Mentor
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] WARN : No license key found. This often means your newrelic.yml file was not found, or it lacks a section for the running environment, 'test'. You may also want to try linting your newrelic.yml to ensure it is valid YML.
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing DelayedJob instrumentation [part 1/2]
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing ActiveRecord 4+ instrumentation
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing Net instrumentation
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing Mongo instrumentation
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing Sinatra instrumentation
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing middleware-based Excon instrumentation
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing ActiveJob instrumentation
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing HTTPClient instrumentation
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing Rails 3+ middleware instrumentation
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing Redis Instrumentation
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing deferred Rack::Builder instrumentation
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing Rack::Builder middleware instrumentation
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing Memcache instrumentation for dalli gem
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing Rails 4 Error instrumentation
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing Rails 4 Controller instrumentation
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Installing Rails 4 view instrumentation
+[2018-02-07 11:32:06 +0530 CHR-056 (22586)] INFO : Finished instrumentation

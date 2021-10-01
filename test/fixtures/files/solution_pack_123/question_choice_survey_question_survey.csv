@@ -1,0 +1,175 @@
+id,text,is_other,ref_obj_id,ref_obj_type,created_at,updated_at,position
+461,Very Good,false,833,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+462,Good,false,833,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+463,Satisfactory,false,833,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+464,Poor,false,833,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+465,In person,false,834,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+466,Video Conference,false,834,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+467,Phone,false,834,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+468,We did not meet,false,834,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+469,Yes,false,835,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+470,No,false,835,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+471,Person did not turn up for the meeting,false,836,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+472,Never scheduled the meeting,false,836,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+473,We are yet to meet / We postponed the meeting,false,836,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+474,Yes,false,837,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+475,No,false,837,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+476,Mentoring Area,false,50,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+477,Chat/IM,false,50,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+478,Emails,false,50,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+479,Phone,false,50,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+480,Face to face meetings,false,50,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,5
+481,Other,false,50,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,6
+482,Very good,false,51,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+483,Good,false,51,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+484,Satisfactory,false,51,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+485,Poor,false,51,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+486,Very poor,false,51,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,5
+487,Less than 1 Month,false,33,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+488,2-6 Months,false,33,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+489,7-12 Months,false,33,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+490,More than 1 Year,false,33,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+491,Recently joined and still in process of completing user profile,false,34,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+492,Awaiting mentee assignment,false,34,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+493,Not actively participating but plan to in the near future,false,34,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+494,No longer participating in mentoring program,false,34,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+495,3 or more,false,35,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+496,2,false,35,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+497,1,false,35,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+498,0 but currently in a mentoring connection,false,35,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+499,0 and have not started a mentoring connection,false,35,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,5
+500,Very intuitive,false,36,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+501,Somewhat intuitive,false,36,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+502,Not intuitive,false,36,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+503,Very easy to use,false,37,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+504,Somewhat easy to use,false,37,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+505,Not easy to use,false,37,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+506,Very helpful,false,38,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+507,Somewhat helpful,false,38,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+508,Not helpful,false,38,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+509,Did not use online resources,false,38,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+510,Very helpful,false,39,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+511,Somewhat helpful,false,39,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+512,Not helpful,false,39,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+513,Did not use online resources,false,39,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+514,Very easy,false,41,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+515,Somewhat easy,false,41,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+516,Not easy,false,41,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+517,Not applicable,false,41,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+518,Very easy,false,42,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+519,Somewhat easy,false,42,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+520,Not easy,false,42,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+521,Have not selected a mentor,false,42,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+522,Not applicable,false,42,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,5
+523,Highly relevant,false,43,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+524,Mostly relevant,false,43,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+525,Low relevancy,false,43,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+526,Not applicable,false,43,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+527,Very effective,false,44,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+528,Somewhat effective,false,44,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+529,Not effective,false,44,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+530,Have not participated in a mentoring connection,false,44,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+531,One or more times per week,false,45,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+532,At least once a month,false,45,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+533,Less than once a month,false,45,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+534,Never,false,45,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+535,Very easy,false,46,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+536,Somewhat easy,false,46,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+537,Not easy,false,46,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+538,Not applicable,false,46,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+539,Training and resources related to being effective in my role,false,47,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+540,Training and resources for using the software,false,47,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+541,Ability to find the right mentor for my interests,false,47,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+542,Tools and resources provided once in a mentoring connection,false,47,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+543,Community forums and resources,false,47,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,5
+544,Other,false,47,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,6
+545,Very satisfied,false,48,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+546,Mostly satisfied,false,48,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+547,Somewhat satisfied,false,48,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+548,Not satisfied,false,48,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+549,Less than 1 Month,false,18,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+550,2-6 Months,false,18,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+551,7-12 Months,false,18,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+552,More than 1 Year,false,18,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+553,Recently joined and still in process of completing user profile,false,19,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+554,Awaiting mentee assignment,false,19,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+555,Not actively participating but plan to in the near future,false,19,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+556,No longer participating in mentoring program,false,19,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+557,3 or more,false,20,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+558,2,false,20,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+559,1,false,20,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+560,0 but currently in a mentoring connection,false,20,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+561,0 and have not started a mentoring connection,false,20,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,5
+562,Very intuitive,false,21,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+563,Somewhat intuitive,false,21,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+564,Not intuitive,false,21,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+565,Very easy to use,false,22,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+566,Somewhat easy to use,false,22,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+567,Not easy to use,false,22,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+568,Very helpful,false,23,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+569,Somewhat helpful,false,23,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+570,Not helpful,false,23,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+571,Did not use online resources,false,23,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+572,Very helpful,false,24,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+573,Somewhat helpful,false,24,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+574,Not helpful,false,24,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+575,Did not use online resources,false,24,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+576,Very easy,false,26,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+577,Somewhat easy,false,26,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+578,Not easy,false,26,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+579,Not applicable,false,26,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+580,Very effective,false,27,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+581,Somewhat effective,false,27,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+582,Not effective,false,27,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+583,Have not participated in a mentoring connection,false,27,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+584,One or more times per week,false,28,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+585,At least once a month,false,28,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+586,Less than once a month,false,28,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+587,Never,false,28,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+588,Very easy,false,29,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+589,Somewhat easy,false,29,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+590,Not easy,false,29,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+591,Not applicable,false,29,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+592,Training and resources related to being effective in my role,false,30,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+593,Training and resources for using the software,false,30,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+594,Ability to find the right mentor for my interests,false,30,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+595,Tools and resources provided once in a mentoring connection,false,30,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+596,Community forums and resources,false,30,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,5
+597,Other,false,30,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,6
+598,Very satisfied,false,31,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+599,Mostly satisfied,false,31,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+600,Somewhat satisfied,false,31,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+601,Not satisfied,false,31,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+602,Very good,false,9,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+603,Good,false,9,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+604,Satisfactory,false,9,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+605,Bad,false,9,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+606,Poor,false,9,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,5
+607,Yes,false,10,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+608,No,false,10,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+609,Yes,false,12,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+610,No,false,12,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+611,Very good,false,14,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+612,Good,false,14,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+613,Satisfactory,false,14,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+614,Bad,false,14,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+615,Poor,false,14,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,5
+616,Yes,false,15,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+617,No,false,15,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+618,Yes,false,16,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+619,No,false,16,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+620,Good,false,4,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+621,Satisfactory,false,4,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+622,Bad,false,4,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+623,Poor,false,4,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+624,Yes,false,5,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+625,No,false,5,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+626,Good,false,6,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+627,Satisfactory,false,6,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+628,Bad,false,6,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+629,Poor,false,6,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+630,Very good,false,1,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,1
+631,Good,false,1,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,2
+632,Okay,false,1,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,3
+633,Poor,false,1,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,4
+634,Very poor,false,1,CommonQuestion,2017-12-13 16:43:07 +0530,2017-12-13 16:43:07 +0530,5

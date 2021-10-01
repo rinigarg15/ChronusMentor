@@ -1,0 +1,21 @@
+<% unless @program.project_based? %>
+  <div id="cjs_one_time_engagement_settings" class="has-below-4">
+    <%= content_tag :h2, "program_settings_strings.label.one_time_mentoring_settings_v1".translate(Mentoring: _Mentoring) %>
+    <%= horizontal_line(class: "has-above has-below-1") %>
+    <%= control_group do %>
+      <%= content_tag(:div, "program_settings_strings.content.send_feedback_v1".translate(Meeting: _Meeting), :class => "false-label control-label") %>
+      <%= controls do %>
+        <%= fields_for @calendar_setting do |cs| %>
+          <div id="feedback_survey_delay_not_time_bound_container", class="has-above has-below-1 clearfix">
+            <div class="col-sm-2 no-padding">
+              <%= cs.text_field :feedback_survey_delay_not_time_bound, :class => "form-control inline", :name => "calendar_settings[feedback_survey_delay_not_time_bound]" %>
+            </div>
+            <%= cs.label :feedback_survey_delay_not_time_bound, "program_settings_strings.content.days_after_with_no_meeting_details".translate(meeting: _meeting), :class => 'textfield inline font-noraml pull-left p-xxs m-t-xxs' %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+ 

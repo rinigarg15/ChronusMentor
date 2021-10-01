@@ -1,0 +1,17 @@
+<%= simple_form_for @admin_view, :url => resend_signup_instructions_admin_view_path(@admin_view), :html => {:method => :post, :class => "no-margin", :id => "form_admin_view_bulk_actions"} do |f| %>
+  <%= f.input "users", :as => :hidden, :input_html => {:value => @users.collect(&:id).join(",")} %>
+  <p class="m-b-0">
+    <%= "feature.admin_view.content.signup_instruction_will_be_sent".translate(:user => "feature.admin_view.content.user".translate(:count => @users.size)) %>
+  </p>
+  <%= render(:partial => "admin_views/selected_users", :locals => {:users_or_members => @users}) %><br/>
+  <div class="text-muted">
+    <%= email_notification_consequences_on_action_html(ResendSignupInstructions, div_enclose: false, with_count: true, count: 0) %>
+  </div>
+  <%= horizontal_line(class: "m-b-sm m-t-xs") %>
+  <% action_set(class: "form-group") do %>
+    <div class="pull-right">
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "display_string.Submit".translate %>
+    </div>
+  <% end %>
+<% end %>

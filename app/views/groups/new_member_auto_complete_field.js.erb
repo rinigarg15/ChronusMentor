@@ -1,0 +1,9 @@
+<% if group_params[:role] == RoleConstants::MENTOR_NAME %>
+	<% content = render :partial => 'mentor_field' %>
+	jQuery('#other_mentors_new').append("<%= j(content) %>");
+	jQuery('#new_mentor_loading').hide();
+<% else %>
+	<% content = render :partial => 'student_field' %>
+	jQuery('#other_students_new').append("<%= j(content) %>");
+	jQuery('#new_student_loading').hide();
+<% end %>

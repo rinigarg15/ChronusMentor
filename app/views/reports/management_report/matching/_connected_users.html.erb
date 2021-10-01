@@ -1,0 +1,24 @@
+<ul class="stat-list m-t-md">
+  <li class="m-b-lg">
+    <h5 class="no-margins font-noraml"><%= "feature.reports.content.connected_users".translate %>
+      <div class="stat-percent">
+        <span class="p-l-sm"><%= data[:total] %>%</span>
+      </div>
+    </h5>
+    <div class="progress progress-mini">
+      <div style="width: <%= data[:total] %>%;" class="progress-bar"></div>
+    </div>
+  </li>
+  <% current_program.roles.for_mentoring.each do |role| %>
+    <li class="m-b-lg">
+      <h5 class="no-margins font-noraml"><%= "feature.reports.content.connected_role_users".translate(plural_role_name: role.customized_term.pluralized_term) %>
+        <div class="stat-percent">
+          <span class="p-l-sm"><%= data[role.name] %>%</span>
+        </div>
+      </h5>
+      <div class="progress progress-mini">
+        <div style="width: <%= data[role.name] %>%;" class="progress-bar"></div>
+      </div>
+    </li>
+  <% end %>
+</ul>

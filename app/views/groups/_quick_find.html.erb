@@ -1,0 +1,14 @@
+<div class="filter_item p-sm b-b" id="quick_search">
+  <%= label_tag('search_filters[quick_search]', "feature.user.filter.quick_find".translate, :for => "search_filters_quick_search", :class => "sr-only") %>
+  <% right = { type: "btn",
+    btn_options: {
+      onclick: "return GroupSearch.applyFilters();",
+      class:'btn btn-primary',
+    },
+    content: get_icon_content("fa fa-search m-r-0") + set_screen_reader_only_content("display_string.Search".translate)
+  } %>
+  <%= construct_input_group({}, right) do %>
+    <%= text_field_tag('search_filters[quick_search]', @search_query.to_s, :class => "form-control", :placeholder => "feature.user.filter.quick_find".translate) %>
+  <% end %>
+  <%= link_to_function("display_string.reset".translate, "jQuery('#search_filters_quick_search').val('');GroupSearch.applyFilters();", :id => "reset_filter_quick_search", :class => 'hide') %>
+</div>

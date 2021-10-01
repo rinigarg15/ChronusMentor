@@ -1,0 +1,39 @@
+<% if @profile_question.errors.blank? %>
+  ProfileConfigUI.hideIconOnDeselect();
+  jQuery("#profile_question_<%= @profile_question.id %>").replaceWith("<%= j(render partial: 'profile_questions/profile_question', locals: {profile_question: @profile_question, program_level: @program_level, active_element: true}) %>");
+  jQuery(".cjs_no_of_programs").show();
+  if(ProfileConfigUI.isProgramFilterApplied()) {
+    jQuery(".cjs_no_of_programs").hide();
+  }
+  jQuery("#profile_question_<%= @profile_question.id %>").show();
+  ProfileConfigUI.showIconOnSelect();
+  ProfileConfigUI.filterProfileQuestionsByProgram(jQuery('.cjs_active_section').data('section-id'), true);
+  ProfileConfigUI.updateAndShowNumberOfProfileQuestionsUnderSection(jQuery(".cjs_active_section").data('section-id'));
+  <% success_flash = ["flash_message.successfully_saved".translate] %>
+  <% if @program_level %>
+    var showPQDetailsPanelFlag = (jQuery("#profile_question_<%= @profile_question.id %>").is(':visible') && jQuery("#profile_question_<%= @profile_question.id %>").find('.cjs_add_pq_at_program_level_button').is(':hidden'));
+  <% else %>
+    var showPQDetailsPanelFlag = jQuery("#profile_question_<%= @profile_question.id %>").is(':visible');
+  <% end %>
+  ProfileConfigUI.showProfileQuestionDetailsPanel(showPQDetailsPanelFlag);
+  ProfileConfigUI.updateAndShowNumberOfProfileQuestions();
+  <% if params[:skip_other_roles].to_s.to_boolean %>
+    var profileQuestion = jQuery(".cjs_active_profile_question");
+    ProfileConfigUI.loadEditProfileQuestion(profileQuestion, {activeTab: "<%= (@program_level || @current_organization.standalone?) ? %Q[#tab_Roles] : %Q[#tab_#{_Programs}] %>"});
+  <% end %>
+  <% if (params[:skip_role_visibility_options_includein].to_s.to_boolean && !@role_destroy_flag) %>
+    <% success_flash << "feature.profile_customization.content.profile_question_advanced_settings".translate %>
+  <% end %>
+  <% if (@role_options[:skip_role_visibility_options_includein]) %>
+    <% @all_programs_with_roles.each do |program| %>
+      jQuery(".cjs_tooltip_for_<%= @profile_question.id %>_<%= program.id %>").replaceWith("<%= j(program_tooltip(program, @profile_question)) %>");    
+    <% end %>
+  <% end %>
+  ChronusValidator.ErrorManager.ShowPageFlash(true, "<%= success_flash.join(". ") %>");
+  <%= render "profile_questions/update_question_choices", locals: {profile_question: @profile_question, disabled_for_editing: @disabled_for_editing} %>
+<% elsif @profile_question.errors[:question_text].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('<%= "flash_#{@profile_question.id}" %>', '<%= "feature.profile_customization.content.field_name_cant_be_blank".translate %>');
+<% elsif @profile_question.errors[:question_choices].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('<%= "flash_#{@profile_question.id}" %>', '<%= @profile_question.errors[:question_choices].to_sentence %>');
+<% end %>
+jQuery('<%= "#profile_question_loader_#{@profile_question.section.id}_#{@profile_question.id}" %>').hide();

@@ -1,0 +1,5 @@
+<% if !@section_tasks.blank? %>
+  jQuery("<%= @list_id %>").html("<%= escape_javascript(render partial: 'mentoring_model/tasks/task', collection: @section_tasks, locals: {group: @group} ) %>");
+<% else %>
+  jQuery("<%= @empty_list_id %>").removeClass("hide");
+<% end %>

@@ -1,0 +1,86 @@
+@import 'mixins';
+
+div.popup {
+  background: $shadow-color;
+  padding: 0;
+  text-align: left;
+
+  /* The following properties should not be changed */
+  position: absolute;
+
+  .popup_offset_content {
+    border: 1px solid $border-color;
+    position:relative;
+    left:-12px;
+    top:-12px;
+  }
+
+
+  .popup_header {
+    background: image-url("v3/layout/pane_bg.png") repeat-x scroll 0 0 #CCD5E8;
+    background: white !important;
+    border-bottom: 1px solid #eee;
+    min-height: 35px;
+
+    h3 {
+      padding-left: 10px !important;
+      padding-top: 8px !important;
+    }
+    
+    a.popup_closebox btn-white {
+      float:right !important;
+      padding: 5px;
+      text-decoration: none;
+    }
+  }
+
+  .popup_content {
+    background-color: $background-color;
+    color: $font-color;
+    font-weight: normal;
+    padding: 10px;
+    .form-horizontal {
+      .control-label{
+        width: 105px;
+      }
+      .controls{
+        margin-left: 120px;
+      }
+      .form-actions {
+        padding-left: 120px;
+        // add no_padding to Remove the
+        // left padding for submit button
+        &.no_padding {
+          padding-left: 0;
+        }
+      }  
+    }
+  }
+
+  .popup_content_non_header {
+    background-color: $background-color;
+    color: $font-color;
+    font-weight: normal;
+  }
+
+  .action_set {
+    margin-bottom: 0;
+    input.button {
+      margin-bottom: 0;
+    }
+  }
+
+}
+
+#popup_overlay {
+    background-color: whitesmoke;
+}
+
+span.popup_link, a.popup_link {
+    cursor: pointer;
+    border-bottom: 1px dotted;
+}
+
+.popup_draghandle {
+    cursor: move;
+}

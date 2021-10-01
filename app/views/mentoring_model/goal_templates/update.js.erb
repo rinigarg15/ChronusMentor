@@ -1,0 +1,3 @@
+<% content = render :partial => "mentoring_model/goal_templates/goal_template", :locals => {goal_template: @goal_template} %>
+<% goalTitleContent = display_goal_template_title(@goal_template) %>
+GoalTemplates.updateGoalTemplate("<%= @goal_template.id.to_s %>", "<%= j(content) %>", "<%= j(goalTitleContent) %>");

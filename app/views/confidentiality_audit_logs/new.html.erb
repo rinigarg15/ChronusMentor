@@ -1,0 +1,14 @@
+<% @title = "feature.confidentiality_audit_log.header.reason_to_visit".translate %>
+
+<%= ibox nil do %>
+  <div><%= append_text_to_icon("fa fa-lock fa-lg","feature.confidentiality_audit_log.content.help_text_html".translate(confidential_content: content_tag(:b, "feature.confidentiality_audit_log.content.confidential_content".translate))) %></div>
+  <%= content_tag(:p, "feature.confidentiality_audit_log.content.give_reason_html".translate(audit_log: link_to("feature.confidentiality_audit_log.content.audit_log".translate, confidentiality_audit_logs_path)), :class => "m-t text-muted") %>
+
+  <%= simple_form_for @confidentiality_audit_log, :html => {:class => 'new_confidentiality_audit_log'} do |f| %>
+    <%= f.input :reason, :label_html => {:class => 'sr-only'}, :as => :text , :input_html => {:rows => 5 , :class => "form-control"}%>
+    <%= f.input :group_id , :as => :hidden , :input_html => { :id => "group_id",:name => "group_id", :value => "#{@group.id}" } %>
+    <% action_set(class: "pull-right") do %>
+      <%= f.button :submit, "feature.confidentiality_audit_log.action.Proceed_raquo_html".translate %>
+    <% end %>
+  <% end %>
+<% end %>

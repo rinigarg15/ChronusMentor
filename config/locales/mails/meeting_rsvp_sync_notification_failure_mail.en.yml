@@ -1,0 +1,10 @@
+en:  
+  email_translations:
+    meeting_rsvp_sync_notification_failure_mail:
+      title: "%{_Meeting} RSVP sync notification failure mail"
+      description: "Sent to the members of %{_meeting} when %{_meeting} RSVP is updated inside personal calendar and they are not notified about the RSVP change from inside the app."
+      subject: "RSVP notification: {{meeting_topic}}"
+      content_html: "We are sending this email to let you know that multiple RSVPs were recorded for this {{customized_meeting_term}} and we did not want to spam your mailbox with too many emails. You can review the {{customized_meeting_term}} from <a href='{{meetings_listing_url}}'>here</a>.<br/><br/><div style='padding-bottom: 10px'><span style='color: #00AC77; font-size: 16px'>{{customized_meeting_term_capitalized}} Details</span> <br /> </div><table style='border-collapse:separate;border-spacing:10px 10px;' border='0' bgcolor='#eeeeee'><tr><td style='vertical-align: top;color: #909090;'>Topic:</td><td style='vertical-align: top;'>{{meeting_topic}}</td></tr><tr><td style='vertical-align: top;color: #909090;'>When:</td><td style='vertical-align: top;'>{{meeting_timings}}</td></tr><tr><td style='vertical-align: top;color: #909090;'>Where:</td><td style='vertical-align: top;'>{{meeting_location}}</td></tr><tr><td style='vertical-align: top;color: #909090;'>Attendees:</td><td style='vertical-align: top;'>{{meeting_details}}</td></tr><tr><td style='vertical-align: top;color: #909090;'>Description:</td><td style='vertical-align: top;'>{{meeting_description}}</td></tr></table><br/>"
+      tags:
+        meetings_listing_url:
+          description: URL to %{_mentoring_connection} %{_meetings} listing.

@@ -1,0 +1,34 @@
+<h4 class="gray-bg clearfix h5 p-b-sm no-margins">
+  <%=  append_text_to_icon("fa fa-fw fa-users m-r-xs", "#{"feature.profile.subtitle.my_mentoring_connections".translate(Mentoring_Connections: _Mentoring_Connections)} (#{@groups_size})") %>
+</h4>
+<% if !@group.nil? %>
+  <div class="ibox no-margins connections-slick white-bg">
+    <%= render :partial => 'programs/mentoring_connection_content_home', locals: { groups: @groups, group: @group } %>
+    <% if @groups_size > 1 %>
+      <% (@groups_size - 1).times.each do %>
+        <div class="not-loaded">
+          <%#--- Place Holder used for next slick contents ---%>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @groups_size > 1 %>
+  <div class="text-center listing_bottom_bar clearfix p-t-sm">
+    <%= slick_carousel_navigation_buttons(prev_button_class: "connections-slick-prev", next_button_class: "connections-slick-next") %>
+  </div>
+<% end %>
+
+<%= javascript_tag do  %>
+  var disableSwitchTabTracking;
+  jQuery(document).ready(function(){
+    carousel.addCarousel('.connections-slick', {dots: false, slidesToShow: 1, slidesToScroll: 1, prevArrow: jQuery('.connections-slick-prev'), nextArrow: jQuery('.connections-slick-next')});
+    Groups.gaTrackHomepageSwitchTabs();
+    Meetings.handleRsvpChange();
+    Meetings.handleRsvpPopup();
+    ConnectionsWidget.getNextConnectionsWidget(".connections-slick-next", '.mentoring_connections_bottom .next_page');
+    GroupTabs.isInView();
+    Discussions.adjustHeightOnShowmoreShowlessClick();
+  });
+<% end %>

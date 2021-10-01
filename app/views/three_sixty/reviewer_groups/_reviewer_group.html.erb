@@ -1,0 +1,14 @@
+<li class="list-group-item animated fadeInDown cjs_three_sixty_parent cjs_three_sixty_hover" id="three_sixty_reviewer_group_<%= reviewer_group.id %>">
+  <div class="clearfix">
+    <span class="text-center">
+      <%= get_icon_content("fa fa-users") + reviewer_group.name %>
+    </span>
+    <span>(<%= reviewer_group.threshold %>)</span>
+    <% if show_actions %>
+      <span class="pull-right">
+        <%= link_to(get_icon_content("fa fa-pencil m-r-0") + set_screen_reader_only_content("display_string.Edit".translate), edit_three_sixty_reviewer_group_path(reviewer_group), :remote => true, :class => "btn btn-xs btn-white") %>
+        <%= link_to(get_icon_content("fa fa-trash m-r-0") + set_screen_reader_only_content("display_string.Delete".translate), three_sixty_reviewer_group_path(reviewer_group), :remote => true, :method => :delete, :class => "btn btn-xs btn-white", data: {:confirm => "feature.three_sixty.settings.reviewer_group.delete_warning".translate}) %>
+      </span>
+    <% end %>
+  </div>
+</li>

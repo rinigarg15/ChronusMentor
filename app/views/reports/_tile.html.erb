@@ -1,0 +1,17 @@
+<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" id="categery_<%= category[:category] %>">
+  <div class="m-r-md m-b-md word_break">
+    <div class="ibox">
+      <div class="ibox-content">
+        <div class="cjs-same-heignt">
+          <h3 class="m-b-md">
+            <%= link_to append_text_to_icon(category[:icon], category[:name]), categorized_reports_path(category: category[:category]) %>
+          </h3>
+          <hr/>
+          <div>
+            <%= category[:description] %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

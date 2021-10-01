@@ -1,0 +1,12 @@
+<div class="clearfix container-fluid b-b p-b-sm p-t-sm">
+  <div class="pull-right <%= hidden_on_mobile %>">
+    <%= link_to "feature.reports.actions.view_report".translate, path, class: "btn btn-primary" %>
+  </div>
+  <div class="list_content">
+    <div class="p-l-xs p-b-sm">
+      <span class="font-bold"><%= get_icon_content("fa #{icon} fa-fw") %> <%= link_to title, path %></span>
+      <%= content_tag(:div, description, class: "text-muted clearfix m-t-xs") %>
+    </div>
+    <%= link_to "feature.reports.actions.view_report".translate, path, :class => "btn btn-primary btn-block #{hidden_on_web}" %>
+  </div>
+</div>

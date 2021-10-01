@@ -1,0 +1,21 @@
+<% if @objects.present? %>
+  <%= render :layout => "admin_views/admin_view_result_wrapper" do %>
+  <div class="cjs_table_enclosure no-border">
+    <div id="cjs_admin_view_result" class="k-content">
+      <div id="cjs_admin_view_kendogrid">
+        <%= render :partial => "admin_views/select_all_results" %>
+      </div>
+    </div>
+    <%= javascript_tag %Q[AdminViews.initializeKendo("#{j(get_table_headers_json(@admin_view_columns))}", "#{j kendo_options_json(dynamic_filter_params, admin_view: @admin_view)}");] %>
+  </div>
+  <%= form_tag(export_csv_admin_view_path(@admin_view, format: :csv), :method => :post, :id => "cjs_export_csv_form", :class => "hide") do %>
+    <%= hidden_field_tag("admin_view[users]", nil, class: "cjs_admin_view_users_list", id: nil) %>
+  <% end %>
+  <% end %>
+  <%= javascript_tag do  %>
+    AdminViews.initializeMaxLength(<%= @objects.total_entries %>);
+    AdminViews.inspectActions("<%= j('feature.admin_view.content.select_at_least_one_user'.translate) %>", "<%= j('feature.admin_view.content.loading_export_report'.translate) %>", "<%= j('feature.admin_view.content.proress_bar_alt_text'.translate) %>", "<%= j('feature.admin_view.content.close_image_alt_text'.translate) %>", "<%= j('feature.admin_view.content.bulk_limit_exceeded'.translate(:count => AdminView::BULK_LIMIT)) %>", <%= AdminView::BULK_LIMIT %>);
+  <% end %>
+<% else %>
+  <%= render :partial => "admin_views/no_results", :locals => {:admin_view => @admin_view} %>
+<% end %>

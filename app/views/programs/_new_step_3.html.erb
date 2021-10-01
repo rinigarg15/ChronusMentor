@@ -1,0 +1,64 @@
+<div id="step_3" style="display: none;">
+  <%= wizard_wrapper(tab_captions, ProgramsHelper::Headers::PORTAL_DETAILS, :content_ibox_content_class => "p-xl p-t-m p-b-m") do %>
+    <fieldset>
+      <h3>
+        <%= @current_program.name %> <span id="cur_prog_label" class="small"><%= "feature.program.content.existing_program".translate(:program => _program) %></span>
+      </h3>
+      <hr class="m-t-xs m-b-md" />
+      <% if @current_organization.can_update_root? %>
+        <p><%= "feature.program.content.existing_program_will_be_moved_html".translate(
+            :program => _program, :program_name => h(@current_program.name), 
+            :root_path => content_tag(:span, root_organization_path(:organization_level => true) + SubProgram::PROGRAM_PREFIX + "main", :id => 'main_prog_url')) 
+           %>
+        </p>
+      <% end %>
+      <%= control_group do %>
+        <%= label_tag :cur_name, "#{'feature.program.label.name'.translate}*", :class => "control-label col-sm-3", :for => "cur_prog_name" %>
+        <%= controls(class: "col-sm-9") do %>
+          <%= text_field_tag :cur_name, @current_program.name, :name => "current[name]", :id => "cur_prog_name", :class => "form-control" %>
+        <% end %>
+      <% end %>
+
+      <% if @current_organization.can_update_root? %>
+        <%= control_group do %>
+          <%= label_tag :cur_root, "feature.program.label.web_address".translate, :for => "tmp_cur_root", :class => "control-label col-sm-3" %>
+          <%= controls :class => "col-sm-9" do %>
+            <%= render :partial => 'programs/root_editor', :locals => {:prefix => 'cur', :default_value => Program::DEFAULT_ROOT, :attr_name => 'current[root]'} %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </fieldset>
+
+    <fieldset>
+      <h3>
+        <%= "feature.program.label.parent_program".translate(:program => _Program) %>
+      </h3>
+      <hr class="m-t-xs m-b-md" />
+      <p><%= "feature.program.content.common_parent_program_creation_html".translate(:program => _program, :program_name => h(@current_program.name), :programs => _programs) %></p>
+      <%= control_group do %>
+        <%= label_tag :org_name, "#{'feature.program.label.name'.translate}*", :class => "control-label col-sm-3" %>
+        <%= controls :class => "col-sm-9" do %>
+          <%= text_field_tag :org_name, params[:organization] && params[:organization][:name], :name => "organization[name]", :id => 'org_name', :class => "form-control" %>
+        <% end %>
+      <% end %>
+
+      <% if @current_organization.can_update_root? %>
+        <%= control_group do %>
+          <%= content_tag(:div, "feature.program.label.web_address".translate, :class => "false-label control-label col-sm-3") %>
+          <%= controls :class => "col-sm-9" do %>
+            <div id="org_subdomain"><%= root_organization_path(:organization_level => true) %></div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </fieldset>
+
+    <% action_set do %>
+      <%= link_to_function "display_string.Back_and_laquo_html".translate, "newProgram.stepTwo()", :class => 'btn btn-primary' %>
+
+      <div class="pull-right">
+        <%= cancel_link %>
+        <%= f.submit "display_string.Done".translate, :onclick => "return newProgram.validateStepThree();", :class => 'btn btn-primary' %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

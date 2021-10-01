@@ -1,0 +1,28 @@
+en:
+  email_translations:
+    group_published_notification:
+      title_v2: Notification to users when the %{_mentoring_connection} is started
+      description_v2: When %{_a_admin} or the %{_mentoring_connection} owner starts the %{_mentoring_connection}, this mail is sent to all members along with a custom message
+      subject_v1: Your {{customized_mentoring_connection_term}} '{{project_name}}' has started
+      content_v1_html: Your {{administrator_or_owner_name}} has started the {{customized_mentoring_connection_term}} <a href='{{url_mentoring_connection}}'>'{{group_name}}'</a>.<br/>{{message_from_admin_as_quote}}<br/>You can start participating by reviewing the {{customized_mentoring_connection_term}} plan and reaching out to other participants.<br/>{{mentoring_connection_button}}
+      visit_your_connection_text_html: Visit the %{mentoring_connection_term}
+      tags:
+        url_mentoring_connection:
+          description_v1: Url of the %{_mentoring_connection}
+        group_name:
+          description: Name of the mentoring area
+          example: Smith and Doe
+        message_from_admin:
+          description: Optional message sent by the administrator
+          example: Please connect.
+        message_from_admin_as_quote:
+          description: Optional message sent by the administrator
+          example: Please connect.
+        administrator_or_owner_name:
+          description: "'the program administrator'/name of the Owner who started/published the project"
+          content: the %{program} %{administrator}
+        project_name:
+          description: Name of the project
+          example: Smith and Doe
+        mentoring_connection_button:
+          description_v1: "%{_mentoring_connection} button"

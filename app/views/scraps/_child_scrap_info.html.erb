@@ -1,0 +1,35 @@
+<% sent_by_viewing_member = (scrap.sender_id == member.id) %>
+
+<div class="media no-margins p-l-0 <%= 'p-b-xs' unless scrap.parent %>">
+  <div class="media-left p-t-xxs">
+    <%= display_profile_pic(scrap, size: attendee_image_size(true)) %>
+  </div>
+  <div class="media-body">
+    <div class="p-xs well break-word no-margins <%= 'white-bg' unless sent_by_viewing_member %>">
+      <div class="pull-right">
+        <%= get_scrap_reply_delete_buttons(scrap, member, preloaded_options, {home_page: @home_page}) %>
+      </div>
+      <div class="font-bold small m-b-xs">
+        <%= message_from_to_names(scrap, member, skip_to_names: true, no_hovercard: true)[:from] %>
+      </div>
+      <%= message_content_format(scrap) %>
+      <% if scrap.attachment? %>
+        <%= content_tag(:div, link_to(append_text_to_icon("fa fa-paperclip text-default no-margins", truncate(scrap.attachment_file_name, length: GroupsHelper::TRUNCATE_ATTACHMENT_STRING_LENGTH)), scrap.attachment.url, target: "_blank", class: "small cjs_android_download_files", data: { filename: scrap.attachment_file_name, targeturl: scrap.attachment.url } ), class: "m-t-xs") %>
+      <% end %>
+    </div>
+
+    <div class="small m-t-xs text-muted">
+      <%= append_text_to_icon("fa fa-clock-o no-margins", formatted_time_in_words(scrap.created_at, full_display_no_day_short_month: true)) %>
+    </div>
+    <% if scrap.parent %>
+      <div class="p-b-xs m-t-xs">
+        <span class="pointer cjs-toggle-thread" onclick="Discussions.toggleThread('<%= scrap.id %>');">
+          <%= image_tag 'icons/ellipsis.png' %>
+        </span>
+      </div>
+      <div id="scrap_thread_<%= scrap.id %>" class="hide small word_break">
+        <%= render partial: 'admin_messages/threaded_parent', locals: { msg: scrap.parent } %>
+      </div>
+    <% end %>
+  </div>
+</div>

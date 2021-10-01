@@ -1,0 +1,38 @@
+<div class="well white-bg">
+  <% @title = survey.title %>
+  <% reviewers_per_group = three_sixty_report_reviewers_per_group(survey_reviewer_groups, reviewers) %>
+
+  <h2><%= 'feature.three_sixty.report.feedback_report_v1'.translate %>: <%= survey_assessee.name(:name_only => true) %>, <%= DateTime.localize(survey_assessee.updated_at, format: :full_display_no_time) %></h2>
+  <div class="white-bg well m-t-sm no-border">
+    <h3><%= 'feature.three_sixty.report.understanding_report'.translate %></h3>
+    
+    <div class="clearfix m-t-xs">
+      <div class="col-xs-6">
+        <p>
+          <%= 'feature.three_sixty.report.para_1.reviewer_summary'.translate(:other_reviewers_list => three_sixty_report_reviewers_per_group_text(survey_reviewer_groups, reviewers_per_group)) %>
+          <%= 'feature.three_sixty.report.para_1.competency_summary'.translate %>
+          <span class="strong">
+            <%= survey_competencies.collect(&:title).to_sentence(:last_word_connector =>  " #{'display_string.and'.translate} ".downcase) %>
+          </span>
+        </p>
+        <p><%= 'feature.three_sixty.report.para_2_v1'.translate %></p>
+        <p><%= 'feature.three_sixty.report.para_3_v1'.translate %></p>
+      </div>
+      <div class="col-xs-6">
+        <p><%= 'feature.three_sixty.report.para_4_v1'.translate %></p>
+        <p><%= 'feature.three_sixty.report.para_5'.translate %></p>
+        <p><%= 'feature.three_sixty.report.para_6'.translate %></p>
+      </div>
+    </div>
+  </div>
+  <%= render :partial => 'layouts/translations/three_sixty_report' %>
+  <%= render :partial => "three_sixty/survey_assessees/survey_competency", :collection => survey_competencies, :locals => {:reviewers => reviewers, :survey_reviewer_groups => survey_reviewer_groups, :reviewers_per_group => reviewers_per_group, :question_infos => question_infos, :rating_answers_for_self => rating_answers_for_self, :average_reviewer_group_answer_values => average_reviewer_group_answer_values, :average_competency_reviewer_group_answer_values => average_competency_reviewer_group_answer_values, :competency_infos => competency_infos, :competency_percentiles => competency_percentiles, :question_percentiles => question_percentiles, :text_answers_for_self => text_answers_for_self, :reviewer_group_for_self => reviewer_group_for_self, :question_chart_height => three_sixty_question_chart_height(survey_reviewer_groups)} %>
+
+  <% if survey_oeqs.any? %>
+    <hr/>
+    <div class="clearfix well white-bg m-t-xs no-border">
+      <h3><%= 'feature.three_sixty.report.open_ended_questions'.translate %></h3>
+      <%= render :partial => "three_sixty/survey_assessees/survey_oeq", :collection => survey_oeqs, :locals => {:reviewers => reviewers, :survey_reviewer_groups => survey_reviewer_groups, :text_answers_for_self => text_answers_for_self} %>
+    </div>
+  <% end %>
+</div>

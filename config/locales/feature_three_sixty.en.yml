@@ -1,0 +1,168 @@
+en:
+  feature:
+    three_sixty:
+      surveys_tab: Surveys
+      competencies_tab_v1: Library
+      settings_tab: Settings
+      competency:
+        heading:
+          competencies: Competencies
+          open_ended_questions: Open-ended Questions
+        no_competencies: There are no competencies yet.
+        add: New Competency
+        delete_warning: Deleting a competency deletes all questions within the competency and any historical data associated with their answers. We do not recommend this. Are you sure you want to proceed?
+      question:
+        add: Add New Question
+        delete_warning: Deleting a question deletes any historical data associated with their answers. We do not recommend this. Are you sure you want to proceed?
+        edit_warning: Editing question text still associates all historical data to the new question. Are you sure you want to proceed?
+        rating: Rating
+        text: Text
+        title: Title
+      survey:
+        delete_message: The drafted survey has been removed.
+        new_survey_title: Setup a new 360 degree survey
+        edit_survey_title: Edit Survey%{survey}
+        delete_warning: Are you sure you want to discard the survey?
+        reviewer_groups: Reviewer Groups*
+        proceed_to_questions_html: Proceed to Questions &raquo;
+        reviewer_group_error: Please select at least one reviewer group
+        select_reviewer_groups: Select reviewer groups
+        top_bar:
+          survey_settings: SURVEY SETTINGS
+          define_questions: DEFINE QUESTIONS
+          preview: PREVIEW
+          choose_participants_v1: ADD ASSESSEES
+        competencies_and_questions: Competencies & Questions
+        open_ended_questions: Open-ended Questions
+        open_ended_question: Open-ended Question
+        select_a_competency: 'Select a competency to include:'
+        select_an_oeq: 'Select a question to include:'
+        add_to_survey: Add to Survey
+        discard: Discard Survey
+        add_survey_assessees_html: Add Survey Assessees &raquo;
+        yourself: yourself
+        you: you
+        your_details: Your Details
+        your_name: Your name
+        your_email_address: Your email address
+        your_relationship_to_the_person_being_assessed: Your relationship to the person being assessed
+        scale_instruction: Based on the following scale, please assess %{name_or_yourself} on the competencies below. This will help identify and prioritize where %{name_or_you} should seek to develop
+        assessee: Assessee
+        assessees: Assessees
+        preview: Preview
+        preview_html: Preview &raquo;
+        back_to_settings_html: "&laquo; Back to settings"
+        back_to_questions_html: "&laquo; Back to questions"
+        back_to_preview_html: "&laquo; Back to preview"
+        n_answered_reviewers_out_of_total_reviewers:
+          one: 1 out of %{total_count} has answered
+          other: "%{count} out of %{total_count} have answered"
+        dashboard: dashboard
+        Title: Title
+        Expiration_date: Expiration date
+        Reviewer_groups: Reviewer groups
+        reviewers_added_by: Reviewers added by
+      survey_competency:
+        delete_warning: Are you sure you want to detete the competency?
+        delete_warning_v1: Are you sure you want to remove this competency from the survey?
+      survey_question:
+        add: Add Question
+        delete_warning_v1: Are you sure you want to remove this question from the survey?
+      assessee:
+        delete_message: The published survey has been removed.
+        add: Add Assessee
+        adding_reviewers_instruction: In order to provide you with balanced feedback, this survey will gather information from colleagues who know you best. Please enter a list of reviewers below with their email addresses and the relationship you share with them.
+        edit_survey_response: Edit Survey Response
+        disable_assessee: There are existing reviewers added by the admin. Please discard the reviewers before selecting this option.
+        submit_and_add_reviewers: Submit Survey and Add Reviewers
+        delete_warning_v1: Are you sure you want to remove this survey assessee from the survey?
+        delete_published_warning: This 360 Degree Survey has been published to an assessee and multiple reviewers, who will be unable to access the survey once deleted. Deleting the survey will also cause loss of feedback data. Are you sure you want to proceed?
+        reviewer_group_threshold_instruction:
+          one: one %{reviewer_group_name}
+          other: "%{count} %{reviewer_group_name_pluralized}"
+        threshold_instruction_v1: You need to add at least %{reviewer_group_thresholds} before proceeding.
+        adding_reviewers_instruction_for_admin: Please add the reviewers who will evaluate %{assessee_name} for the survey '%{survey_title}'
+      reviewer:
+        placeholder:
+          name: Reviewer's Name
+          email: Reviewer's Email
+        delete_warning: Are you sure you want to remove the reviewer?
+        add: Add Reviewer
+        add_reviewers: Add Reviewers
+        responded: Responded
+        no_response: No Response
+        reviewers: Reviewers
+      rating:
+        very_poor: Rarely
+        poor: Not Often
+        ok: Sometimes
+        good: Often
+        exceptional_v1: Regularly
+      dashboard:
+        no_published_surveys: There are no published surveys.
+        no_drafted_surveys: There are no drafted surveys.
+        assessees:
+          participant: Assessee
+          survey: Survey
+          title: Survey
+          created: Created
+          expires: Expires
+          issued: Issued
+          responses: Responses
+          delete: Delete
+          download: Download Report
+          more_participants: All Assessees
+          Published_Surveys: Published Surveys
+          Draft_Surveys: Draft Surveys
+          and: and
+        surveys:
+          survey: Survey
+          title: Survey
+          participants: Assessees
+          created: Created
+          delete: Delete
+        categories:
+          self: Self
+          all_evaluators: All Evaluators
+          distribution: Distribution
+          no_data: No Data
+        title: 360 Degree Surveys
+        new_survey: New Survey
+      report:
+        pdf_name: 360 degree survey report
+        feedback_report_v1: 360 Degree Survey Report
+        understanding_report: Understanding Your Report
+        para_1:
+          reviewer_summary: This summary brings together feedback given about your performance by yourself, %{other_reviewers_list}.
+          competency_summary: The survey focused on the following competencies -
+        para_2_v1: The bar-charts below summarise your ratings broken down by competency. Each competency categorises your ratings by reviewer category (eg Peers, Managers, etc.) and averages responses for questions within the competency. Each competency is then broken down by questions and represented on bar-charts categorised by reviewer category.
+        para_3_v1: The primary data is ‘normed’. This means that we take your rating (e.g. 4 out of 5) and compare it to all the other ratings we have received for that question.
+        para_4_v1: If, for example, 80% of the ratings we have received are above 4 for that particular measure. then your normed score will be 20%.
+        para_5: 'The results of the survey may help you decide which areas to focus on. We suggest that you take other data into account besides these survey results in framing your intentions, including: direct feedback from your work colleagues, the results of other surveys, and your perception of which behaviours are most important at the moment in helping you achieve your goals in the workplace.'
+        para_6: However, while interpreting your report, please remember that the ratings are based upon perceptions of the people who rated you, at the time they rated you, based on their understanding of the questions, which tend to be more subjective than objective.
+        no_compentency_description: No Description found.
+        hyphen_not_answered: "- Not Answered Yet"
+        Questions: Questions
+        Self: Self
+        open_ended_questions: Open-ended Questions
+        others: Others
+        percentile: Percentile
+        yaxis_title_help_text: The numbers in the bracket represent an average of the raw scores received.
+      settings:
+        reviewer_groups: Reviewer Groups
+        reviewer_group:
+          add: Add Reviewer Group
+          add_error_message: Reviewer Group already exists.
+          threshold_error_message: Threshold must be a number greater than or equal to 0.
+          name_and_threshold_error_message: Reviewer Group already exists and threshold must be a number greater than or equal to 0.
+          title: Reviewer Group Title
+          threshold: Threshold
+          delete_warning: Are you sure you want to delete the reviewer group?
+          threshold_tooltip_v1: This number denotes the minimum number of reviewers the assessee would need to add to the survey. The threshold is not applicable to admin adding reviewers.
+        show_answers_of_text_type_questons_per_reviewer_group_v1: Segregate open-ended comments by reviewer groups
+      my_surveys:
+        title: My Three Sixty Surveys
+        add_reviewers: Add Reviewers
+        expiry_date: Expires On
+        issued_on: Issued On
+        complete: Complete Survey

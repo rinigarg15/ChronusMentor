@@ -1,0 +1,6 @@
+<% connectivity.role_map.keys.each do |role_name| %>
+   <%= render :partial => 'reports/metric_item', :locals => {:name => "feature.reports.content.percentage_users_connected".translate(users: RoleConstants.human_role_string([role_name], program: connectivity.program, pluralize: true)), :percent_metric => connectivity.percent_metrics[role_name]} %>
+<% end %>
+<% unless @current_program.matching_by_admin_alone? %>
+  <%= render :partial => 'reports/metric_item', :locals => {:name => "feature.reports.content.avg_mentor_request_wait_time_v1".translate(:mentoring => _mentoring), :percent_metric => connectivity.mentor_request_wait_time, :opts => {:help_text => "feature.reports.content.avg_mentor_request_wait_time_help_text_v1".translate(:mentoring => _mentoring), :format => format}} %>
+<% end %>

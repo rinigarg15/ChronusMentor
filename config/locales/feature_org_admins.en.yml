@@ -1,0 +1,20 @@
+en:
+  feature:
+    org_admins:
+      header:
+        add_new_admin: Add new %{admin}
+        administrators: Administrators
+        administrators_v1: "%{Admins}"
+      content:
+        existing_user_name: Enter the name of an existing user
+        list_of_admins: List of all %{admins} for %{organization_name}
+        remove_admin_confirmation: Are you sure you want to remove %{admin_name} as %{admin}?
+      action:
+        add_admin: Add %{admin}
+        new_admin: New %{admin}
+        promote_user_as_admin: Existing user as %{admin}
+        remove_admin: Remove Admin
+      label:
+        message: Message
+        member_since: Member since
+        send_message: Send Message

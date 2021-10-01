@@ -1,0 +1,11 @@
+<div class="cjs_groups_alert_container hide">
+  <div class="cjs_groups_alert"/>
+  <div class="cjs_groups_alert_actions">
+    <%= "display_string.do_you_want_to_continue".translate %>
+    <%= horizontal_line(class: "m-b-sm m-t-sm") %>
+    <% action_set class: "pull-right" do %>
+      <%= link_to "display_string.No_Go_Back".translate, "javascript:void(0)", class: "btn btn-white cjs_groups_alert_action cjs_groups_alert_no" %>
+      <%= link_to "display_string.Yes".translate, "javascript:void(0)", class: "btn btn-primary cjs_groups_alert_action cjs_groups_alert_yes" %>
+    <% end %>
+  </div>
+</div>

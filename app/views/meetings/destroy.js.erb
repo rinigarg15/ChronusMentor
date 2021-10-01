@@ -1,0 +1,18 @@
+<% if @from_connection_home_page_widget %>
+  jQuery("#loading_results").hide();
+  <% if current_user.can_be_shown_flash_meetings_widget? %>
+      jQuery("#cjs_flash_meetings_widget").html();
+      ConnectionsWidget.getConnectionsWidgetData("<%= flash_meetings_widget_path(format: :js) %>");
+  <% else %>
+    jQuery(".cjs_meetings_tab_home_page_<%= @group.id %> a").click();
+  <% end %>
+<% else %>
+  jQuery('#archived_meetings').html("<%= j(render(:partial => 'meetings/archived_meetings')) %>");
+  jQuery('#upcoming_meetings').html("<%= j(render(:partial => 'meetings/upcoming_meetings')) %>");
+  <% if @outside_group %>
+    jQuery('#calendar').fullCalendar('refetchEvents');
+    jQuery('#mentoring_calendar').fullCalendar('refetchEvents');
+  <% end %>
+  jQueryScrollTo('#flash_container', false, 50);
+<% end %>
+ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", "<%= 'flash_message.user_flash.meeting_removal_success'.translate(:meeting => _meeting) %>", true);

@@ -1,0 +1,31 @@
+<%= control_group do %>
+  <%= f.label :privacy_policy, "program_settings_strings.label.privacy_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS,'', :id => 'privacy_label')), :class => "control-label", :for => "program_organization_privacy" %>
+  <%= tooltip("privacy_label", "program_settings_strings.content.privacy_tooltip".translate) %>
+  <%= controls do %>
+    <% has_privacy = !@current_organization.privacy_policy.blank? %>
+    <% active_style = has_privacy ? 'display:none' : '' %>
+    <% inactive_style = has_privacy ? '' : 'display:none' %>
+    <div id="no_privacy" class="has-next pull-left" style="<%= active_style %>"><%= "display_string.None".translate %> - </div>
+    <div id="cur_privacy" class="well square-well scroll-1 no-margin <%= 'input-class-disabled' if @current_organization.display_custom_terms_only %>" style="<%= inactive_style %>">
+      <%= @current_organization.privacy_policy.to_s.html_safe %>
+    </div>
+
+    <% unless @current_organization.display_custom_terms_only %>
+      <div id="privacy_actions" class="has-above">
+        <%= link_to_function has_privacy ? 'display_string.Edit'.translate : 'display_string.Add'.translate, "ProgramPrivacy.discardChanges()", :id => 'add_privacy_link', :class => "btn btn-xs btn-white", :onclick => 'CkeditorConfig.privacyTextInitialize();', "data-toggle" => "modal", "data-target" => "#modal_add_privacy_link" %>
+        <%= link_to_function "display_string.Remove".translate, "ProgramPrivacy.remove('#{j("program_settings_strings.content.privacy_delete_confirmation".translate)}', '#{j("display_string.Add".translate)}')", :id => 'remove_privacy_link',
+          :style => "#{inactive_style}", :class => "btn btn-xs btn-danger" %>
+      </div>
+      <%= f.hidden_field :privacy_policy, :id => "program_organization_privacy" %>
+      <%- modal_container "program_settings_strings.header.privacy_policy".translate, :modal_id => "modal_add_privacy_link" do -%>
+        <p><%= "program_settings_strings.content.privacy_desc".translate %></p>
+        <%= label_tag(:privacy_text, "program_settings_strings.header.privacy_policy".translate, :class => "sr-only") %>
+        <%= text_area_tag :privacy_text, "", :class => "form-control" %>
+        <div class="m-t-sm pull-right">
+          <%= link_to_function 'display_string.Cancel'.translate, 'ProgramPrivacy.discardChanges(); ', :class => 'btn cancel btn-white', "data-dismiss" => "modal" %>
+          <%= link_to_function 'display_string.Done'.translate, "ProgramPrivacy.update('#{j("display_string.Edit".translate)}')", :class => 'btn btn-primary' %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

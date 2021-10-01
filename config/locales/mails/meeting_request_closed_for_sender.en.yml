@@ -1,0 +1,19 @@
+en:
+  email_translations:
+    meeting_request_closed_for_sender:
+      title_v2: "%{_Meeting} request closed notification to %{_mentee}"
+      description_v2: This email is sent to %{_a_mentee} when %{_a_admin} closes their %{_meeting} request. It includes a message from the %{_admin}.
+      subject_v2: Your {{customized_meeting_term}} request with {{recipient_name}} is closed
+      content_v3_html: The {{customized_meeting_term}} you requested with {{recipient_name}} has been closed by {{customized_admin_term_articleized}}.<br/>{{message_from_admin_as_quote}}<br/>If you have any questions, please <a href='{{url_contact_admin}}'>contact the {{customized_admin_term}}</a>.<br/>
+      tags:
+        recipient_name:
+          description: Name of the mentor to whom the closed request was sent
+        url_mentors_listing:
+          description: Url to the mentor listing page
+        message_from_admin:
+          description: Reason provided by the admin when closing the {{customized_meeting_term}} request
+          example: Sorry. Your request is invalid.
+        url_contact_admin:
+          description: Url for the user to contact administrator
+        message_from_admin_as_quote:
+          description: Reason for closing the meeting request as quoted by admin

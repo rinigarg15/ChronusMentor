@@ -1,0 +1,21 @@
+<%= render :partial => 'common/your_filters', :locals => { ei_class: local_assigns[:ei_class], activity: local_assigns[:activity], :onclick_function => "MentorSearch.clearFilter", reset_url_options: { js: "BBQPlugin.applySavedFilters(this, '');" } } %>
+
+<% unless search_view? %>
+  <div id="quick_search" class="b-b p-sm filter_item">
+    <%= label_tag('sf[quick_search]', "feature.user.filter.quick_find".translate, :for => "sf_quick_search", :class => "sr-only") %>
+    <% right = { type: "btn",
+      btn_options: {
+        onclick: "return MentorSearch.applyFilters(true);",
+        class: "btn btn-primary #{local_assigns[:ei_class]}",
+        data: {
+          activity: local_assigns[:activity]
+        },
+      },
+      content: get_icon_content("fa fa-search m-r-0") + set_screen_reader_only_content("display_string.Search".translate)
+    } %>
+    <%= construct_input_group({}, right) do %>
+      <%= filter_text_field('sf[quick_search]', "", placeholder: "feature.user.filter.quick_find".translate, class: "form-control") %>
+    <% end %>
+    <%= link_to_function("display_string.reset".translate, "jQuery('#sf_quick_search').val('');MentorSearch.applyFilters();", :id => "reset_filter_quick_search", :class => 'hide') %>
+  </div>
+<% end %>

@@ -1,0 +1,20 @@
+<%= ibox render(partial: "reports/outcomes_report/section_header_content", :locals => {:title => "feature.outcomes_report.header.engagement_v1".translate(groups_or_meetings_term: _Meetings), path: nil}), no_collapse: true do %>
+  <div class="row">
+    <div class="<%= col %>-5">
+      <% total_locals = {total_id: "cjs_flash_total", total_title: get_outcomes_flash_section_total_title, show_total_progress_bar: true, total_progress_bar_id: "cjs_flash_bar", groups_or_meeting_term: groups_or_meeting_term, progress_bar_tooltip_string: "feature.outcomes_report.content.progress_bar_tooltip_connected_html"} %>
+      <% role_locals = {role_id_proc: Proc.new{|role| MeetingOutcomesReport::FlashSectionElementId.for_role(role)}, show_role_progress_bar: true,
+                        role_bar_id_proc: Proc.new{|role| MeetingOutcomesReport::FlashSectionElementId.for_role(role)+"_bar"}} %>
+      <% total_connections_locals = {show_secondary_total: true, total_connections_id: "cjs_flash_total_meetings", total_connections_title: get_outcomes_flash_section_total_connections_title} %>
+      <% local_vars = [total_locals, role_locals, total_connections_locals].reduce(&:merge) %>
+
+      <%= render(partial: "reports/outcomes_report/common_left_section", locals: local_vars.merge(col: col)) %>
+    </div>
+
+    <div class="<%= col %>-1"></div>
+
+    <div class="<%= col %>-6">
+      <div id="total-flash-chart" class="cui-outcomes-dashboard-chart">
+      </div>
+    </div>
+  </div>
+<% end %>

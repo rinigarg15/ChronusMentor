@@ -1,0 +1,22 @@
+<% group = local_assigns[:group] %>
+<% user_role_hash = local_assigns[:user_role_hash] %>
+<% role_terms_hash = RoleConstants.program_roles_mapping(@current_program, pluralize: true) %>
+<% @current_program.roles.for_mentoring.each do |role| %>
+  <% memberships =  group.present? ? render_memberships(group, role, local_assigns[:is_clone]) : user_role_hash[role.id].map{ |h| h[:nameEmail] }.join(",") %>
+  <% initial_values = user_role_hash.present? ? user_role_hash[role.id] : initialize_memberships_for_select2(group, role, local_assigns[:is_clone]) %>
+  <%= control_group(class: "clearfix") do %>
+    <label class="control-label <%= local_assigns[:label_class] %>">
+      <%= role_terms_hash[role.name] %>
+    </label>
+    <% default_role_class = role.default? ? local_assigns[:default_class].to_s : "" %>
+    <%= controls(class: local_assigns[:input_class]) do %>
+      <%= hidden_field_tag "group_members[role_id][#{role.id}]", memberships, class: "col-xs-12 no-padding #{default_role_class} cjs-users-select2 cjs_group_members_hidden_fields", data: { url: auto_complete_for_name_users_path(format: :json, role: role.name, show_all_users: true), initial_values: initial_values } %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    GroupUpdate.initializeSelect2(<%= @current_program.allow_one_to_many_mentoring? %>, "", ".cjs-users-select2");
+  });
+<% end %>

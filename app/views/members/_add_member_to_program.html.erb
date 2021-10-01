@@ -1,0 +1,3 @@
+<% modal_container "feature.profile.content.add_to_program".translate(program: @_Program), modal_id: "modal_add_user_to_program" do %>
+  <%= render partial: "admin_views/bulk_add_to_program", locals: { admin_view: @current_organization.admin_views.first, members: [member], from: AdminViewsController::REFERER::MEMBER_PATH } %>
+<% end %>

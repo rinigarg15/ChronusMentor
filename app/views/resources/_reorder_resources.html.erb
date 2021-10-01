@@ -1,0 +1,24 @@
+<% @title = "feature.resources.action.reorder_resources".translate(resources: _Resources) %>
+<% @skip_rounded_white_box_for_content = false %>
+<% @back_link = {:label => _Resources, :link => resources_path()} %>
+
+<%= ibox nil do %>
+  <p class="m-b-sm">
+    <%= "feature.resources.description.reorder_resources_description_html".translate(resources: _resources) %> 
+  </p>
+
+  <ul id = "resource_list_sortable" class="resource_list list-group cui_border_top_line b-t b-b b-r">
+    <% resources.each do |resource| %>
+      <% resources_div = "resources_list_#{resource.id}" %>
+      <li class="font-600 list-group-item draggable" id="<%= resources_div %>">
+        <div class='pull-right'>
+          <%= link_to("feature.resources.label.view_details_v1_html".translate, resource_path(resource, reorder: :true), :class => "btn btn-white btn-xs") %>
+        </div>
+        <span>
+          <%= resource.title %>
+        </span>
+      </li>
+    <% end %>
+    <%= javascript_tag %Q[jQuerySortable.makeSortable('resource_list_sortable', '', '#{reorder_resources_url}', '', '', '', 'list-group-item')] %>
+  </ul>
+<% end %>

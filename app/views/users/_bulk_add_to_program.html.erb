@@ -1,0 +1,28 @@
+<%= form_tag(create_from_other_program_users_path(:format => :js), :method => :post, :class => "form-horizontal", :id => "form_user_bulk_actions") do %>
+  <%= hidden_field_tag "member_ids", member_ids.join(",") %>
+
+  <div class="m-b">
+    <p> <%= "feature.user.content.will_be_added_to_program".translate(:count => member_ids.size, :program => _program) %> </p>
+  </div>
+  <div class='alert alert-warning hide'>
+    <span><%= get_icon_content("fa fa-exclamation-triangle") %> &nbsp;<%= "feature.user.content.will_be_added_to_program_as_admins".translate(:administrator => @current_program.term_for(CustomizedTerm::TermType::ROLE_TERM, RoleConstants::ADMIN_NAME).term) %></span>
+  </div>
+
+  <%= control_group do %>
+    <%= content_tag(:div, "feature.member.label.role".translate, :class => "false-label control-label col-sm-3") %>
+    <%= controls(:id =>"roles_list", class: "col-sm-9") do %>
+      <%= render_user_role_check_boxes_from_other_program(roles) %>
+    <% end %>
+  <% end %>
+
+  <div class="text-muted m-b-sm">
+    <%= "feature.user.content.add_user_from_other_program_emails_note_v1_html".translate(catogory_link: link_to_admin_adding_users) %>
+  </div>
+
+  <% action_set(:class => "pull-right") do %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => "popup_closebox btn-white cancel btn", "data-dismiss" => "modal" %>
+    <%= submit_tag "display_string.Submit".translate, :class => "btn-primary btn", data: {:disable_with => "display_string.Please_Wait".translate} %>
+  <% end %>
+
+<% end %>
+<%= javascript_tag %Q[UserImport.validateFields("form_user_bulk_actions", "roles_list");] %>

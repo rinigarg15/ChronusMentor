@@ -1,0 +1,60 @@
+en:
+  feature:
+    calendar:
+      title:
+        mentoring_calendar_v1: "%{Mentoring} Calendar"
+        sync_email_clients_v1: Subscribe to Calendar
+      action:
+        set_availability: Set your availability
+        view_mentors: View %{Mentors}
+        click_to_add_timeslot_html: "%{click_here} to add a timeslot."
+        new_timeslot: New Timeslot
+        disabling_calendar_warn_message_html: By disabling one-time %{mentoring},<br />- All the past and scheduled %{meetings} will be deleted permanently<br />- All the %{mentors} will be moved to 'Ongoing %{mentoring_caps}'<br /><br />Are you sure you want to disable one-time %{mentoring}?
+      content:
+        user_busy_v1: Busy - %{user}
+        busy_message: "%{user} has marked this time as busy and will not be available"
+        pending_request_slot_message: This slot is blocked because you have a pending request at this time.
+        user_available_at: "%{user} available at %{loc}"
+        meeting_schedule_help_text_v2_html:
+          zero: To schedule %{meeting}, click on a timeslot marked as available in calendar below.
+          one: To schedule %{meeting}, click on a timeslot marked as available in calendar below. Appointments must be reserved %{n_hours} in advance.
+          other: To schedule %{meeting}, click on a timeslot marked as available in calendar below. Appointments must be reserved %{n_hours} in advance.
+        time_zone_info_html: Your time zone is set to %{time_zone}
+        change_time_zone_html: "%{click_here} to change your time zone"
+        set_time_zone_html: "%{click_here} to set your time zone"
+        default_timezone_text_html: Your time zone is set to %{utc} by default.
+        change_availability_settings: or change your availability settings.
+        mark_availability_helptext_v1: 'Mark the times when you are available for the %{mentoring_connection}. This can be done in the following ways:'
+        select_timeslot_calendar: Select a timeslot from the calendar below.
+        ical_instruction_html: "%{url} to view detailed instructions on syncing your calendar with other popular calendars."
+        end_time_mustbe_greater: Enter correct start and end times. End time must be greater than %{allowed_slot_time} minutes from start time.
+        recurrent_slot_warning: This is a recurrent availability slot. Changing one will change all the ocurrences. Are you sure you want to continue?
+        recurrent_day_change_warning: Cannot change the day for a recurrent event.
+        datestr_parse_error: "::Error, #dp could not parse dateStr  "
+        no_date_for_repeating_slot: Select at least one day of the week for slots repeating weekly.
+        not_adequate_time_for_meeting_v1: This slot is not adequate for a %{meeting}. A %{meeting} slot must be of at least %{slot_time} minutes.
+        enter_future_date: Please enter a date in the future
+        choose_future_availability: The time slot is in the past. Please choose an available slot in the future.
+        advance_reservation: Appointments must be reserved %{n} hours in advance.
+        back_to_calendar: Back to Calendar
+        outlook_ical_subscription_text: To subscribe to your %{meetings} on your ical or outlook calendar, please copy the above calendar feed url and add to your calendar.
+        google_calendar_subscription_text_v1: Open Google Calendar and find 'Other calendars' in the bottom left. Select 'Add by URL' and insert the above address.
+        for_more_details: 'For more details '
+        few_points_to_note_v1: 'Please note:'
+        points_to_note_instruction_1_v1: All past and future %{meetings} will be added to the calendar.
+        points_to_note_instruction_2_v1: The initial sync will happen instantly, but subsequent when you add or update %{meetings} may take up to a day.
+        points_to_note_instruction_3_v1: The subscription is one-way; any updates made in your external calendar will not be reflected back to your calendar here.
+        tip: 'Label:'
+        busy_slots: Busy Slots
+        availability_slots: Availability Slots
+        expired_slots: Expired Slots
+        accepted_meeting_slots: Accepted %{Meeting} Slots
+        scheduled_meeting_slots: Scheduled %{Meeting} Slots
+        requested_meeting_slots: Requested %{Meeting} Slots
+        click_on_empty_slot_message_html: Click on one of the <span class='text-navy'>availability slot</span> to schedule a %{meeting} with available %{mentors}.
+    full_calendar:
+      content:
+        today: today
+        month: month
+        week: week
+        day: day

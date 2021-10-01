@@ -1,0 +1,47 @@
+<div id="mentoring_sessions_and_slots" class="no-padding">
+  <% if format == FORMAT::HTML %>
+    <%= top_bar_in_listing({collection: meetings}, {show: true, applied_count: @my_filters.try(:size)}) %>
+  <% end%>
+  <div class="clearfix m-t-md m-l-sm m-r-sm">
+    <table id="mentoring_sessions_and_slots_table" class="table table-bordered">
+      <thead>
+        <tr>
+          <th></th>
+          <th><%= "feature.reports.label.members".translate %></th>
+          <th><%= "feature.reports.label.start_time".translate %></th>
+          <th><%= "feature.reports.label.duration".translate %></th>
+          <th><%= "feature.reports.label.location".translate %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%  meetings.each_with_index do |meeting, meeting_index|%>
+          <tr>
+            <td class="mentoring_sessions_type text-center">
+              <%= get_icon_content("fa fa-calendar #{(format == FORMAT::PDF)? 'glyphicons-fullpath' : ''}", :title => _Meeting) %>
+            </td>
+            <td>
+              <%= get_members_with_links(meeting[:meeting]) %>
+            </td>
+            <td>
+              <%= append_time_zone((DateTime.localize(meeting[:current_occurrence_time], format: :full_display_no_day_short_month)), wob_member) %>
+            </td>
+            <td>
+              <%= compute_duration_display(meeting[:meeting].duration_in_hours_for_one_occurrences) %>
+            </td>
+            <td>
+              <%= meeting[:meeting].location.blank? ? "-" : meeting[:meeting].location %>
+            </td>
+          </tr>
+        <%end%>
+      </tbody>
+      <tfoot>
+        <tr class="font-600 text-center">
+            <%= content_tag(:td, "feature.reports.label.mentoring_session_time_v1".translate(session_length: compute_duration_display(@total_meeting_time)), :colspan => 5) %>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <% if format == FORMAT::HTML %>
+    <%= bottom_bar_in_listing({collection: meetings, params: {filters: filter_params}, ajax: true }) %>
+  <% end%>
+</div>

@@ -1,0 +1,4 @@
+# Check and process customer feeds once every 30 minutes
+feed:
+  - "*/30 * * * *  root  /usr/local/chronus/bin/feed_s3_uploader.rb -env RAILS_ENV -config_file /usr/local/chronus/config/feed_s3.yml >> /root/feed_s3_uploader.log 2>&1"
+  - "*/30 * * * *  root  /usr/local/chronus/bin/feed_s3_downloader.rb -env RAILS_ENV -config_file /usr/local/chronus/config/feed_s3.yml >> /root/feed_s3_downloader.log 2>&1"

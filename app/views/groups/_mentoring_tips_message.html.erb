@@ -1,0 +1,24 @@
+<% role = @current_connection_membership.role %>
+<% role_term = role.customized_term.term %>
+<% if @is_mentor_in_group %>
+  <% title = "feature.mentoring_tips.header.mentoring_area.for_mentor_v1".translate(:Mentoring => _Mentoring) %>
+<% else %>
+  <% title = "feature.mentoring_tips.header.mentoring_area.for_users_v1".translate(users: role_term, :Mentoring => _Mentoring) %>
+<% end %>
+<%= ibox title, :ibox_id => "mentoring_area_tips", :ibox_class => "tips", :show_close_link => true, :collapse_link_class => "hide", close_url: hide_item_users_path(:item_key => UsersController::SessionHidingKey::MENTORING_TIP), close_html_options: {:remote => true, :id => "mentoring_area_tips_hide_id"} do %>
+  <div class="media">
+    <div class="media-left">
+       <i class="fa fa-lightbulb-o fa-2x"></i>
+    </div>
+    <div class="media-body">
+      <%= chronus_auto_link(h @random_tip.message) %>
+    </div>
+  </div>
+<% end %>
+<%= javascript_tag do %>
+jQuery(function(){
+  jQuery(document).on('click', "#mentoring_area_tips_hide_id", function(){
+    jQueryBlind('#mentoring_area_tips');
+  });
+});
+<% end %>

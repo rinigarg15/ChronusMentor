@@ -1,0 +1,15 @@
+<%= simple_form_for @admin_view, :url => reactivate_member_membership_admin_view_path(@admin_view), :html => {:method => :post, :class => "no-margin", :id => "form_admin_view_bulk_actions"} do |f| %>
+  <%= f.input "members", :as => :hidden, :input_html => {:value => @members.collect(&:id).join(AdminMessagesController::SEPARATOR)} %>
+  <p class="m-b-0">
+    <%= "feature.admin_view.content.member_membership_will_be_reactivated".translate(:member => "feature.admin_view.content.member".translate(:count => @members.size), :organization => @current_organization.name) %>
+  </p>
+  <%= render(:partial => "admin_views/selected_users", :locals => {:users_or_members => @members}) %>
+  <%= email_notification_consequences_on_action_html(MemberActivationNotification, organization_or_program: @current_organization, div_class: "m-t-xs", with_count: true, count: @members.size) %>
+  <%= horizontal_line(class: "m-b-sm m-t-xs") %>
+  <% action_set(class: "form-group") do %>
+    <div class="pull-right">
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "display_string.Submit".translate %>
+    </div>
+  <% end %>
+<% end %>

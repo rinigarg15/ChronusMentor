@@ -1,0 +1,40 @@
+<div class ="table-responsive ">
+  <div class="cui-connection-survey-response-header col-md-12 col-xxs-12  table-bordered no-padding gray-bg <%= 'm-b-md' if response_rate_hash[:percentage_error] == nil %>">
+    <div class='col-md-4 p-sm text-center b-r'>
+      <%= display_stats(response_rate_hash[:responses_count], content_tag(:div, content_tag(:span,"feature.survey.responses.fields.responses_received".translate) + get_icon_content("cjs_collapse_icon_responses fa fa-chevron-down"), class: "text-center h5")) %>
+      <div class ="hide col-md-12 cjs_users_connections_responses small">
+        <%= survey_received_responses_text(survey, response_rate_hash) %>
+        <%= tooltip("users_connections_responses_received_text", "feature.survey.tooltip.users_connections_responses_received".translate(:mentoring_connections => _mentoring_connections)) if survey.engagement_survey? %>
+      </div>
+    </div>
+
+    <div class='col-md-4 p-sm text-center b-r '>
+      <% if response_rate_hash[:overdue_responses_count] == nil %>
+        <%= display_stats("--", content_tag(:div, survey.engagement_survey? ? "feature.survey.responses.fields.overdue_responses".translate : "feature.survey.responses.fields.pending_responses".translate, class: "text-center h5")) %>
+      <% else %>
+        <%= display_stats(response_rate_hash[:overdue_responses_count], content_tag(:div, content_tag(:span, survey.engagement_survey? ? "feature.survey.responses.fields.overdue_responses".translate : "feature.survey.responses.fields.pending_responses".translate) + get_icon_content("cjs_collapse_icon_responses fa fa-chevron-down"), class: "text-center h5")) %>
+      <% end %>
+      <div class ="hide col-md-12 cjs_users_connections_responses small">
+        <%=  survey_overdue_responses_text(survey, response_rate_hash) %>
+        <%= tooltip("users_connections_overdue_responses_text", "feature.survey.tooltip.users_connections_overdue_responses".translate(:mentoring_connections => _mentoring_connections)) if survey.engagement_survey? %>
+      </div>
+    </div>
+
+    <div class='col-md-4 p-sm text-center b-r'>
+      <%= display_stats(response_rate_hash[:response_rate] == nil ? "--": "#{response_rate_hash[:response_rate]}%", "feature.survey.responses.fields.response_rate".translate, :container_class => "h5") %>
+    </div>
+  </div>
+</div>
+
+<% if response_rate_hash[:percentage_error] != nil %>
+  <div class = "col-md-12 p-l-0 m-b-md m-t-xs small pointer">
+    <em id ="margin_of_error_text" class = "pull-right">
+      <%= "feature.survey.responses.fields.margin_of_error_html".translate(percent_error:response_rate_hash[:percentage_error], tooltip: embed_icon("#{TOOLTIP_IMAGE_CLASS} m-l-xs",'')) %>
+      <%= popover("#margin_of_error_text", "feature.survey.label.margin_of_error".translate, "feature.survey.tooltip.margin_error_text_html".translate) %>
+    </em>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  CustomizeQuestions.toggleCollapseIcon();
+</script>

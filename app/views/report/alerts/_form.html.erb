@@ -1,0 +1,22 @@
+<%= simple_form_for [section, metric, alert], url: target_path, html: {id: "cjs-report-alert-form"}, :remote => true , format: :js do |f| %>
+  <% if alert.new_record? %>
+    <div class="text-center add-alert alert alert-warning font-bold">
+      <%= append_text_to_icon("fa fa-info-circle", "feature.reports.content.add_alert".translate) %>
+    </div>
+  <% end %>
+  <%= render partial: "report/alerts/form_details", locals: {alert_form: f, metric: metric, alert: alert, section: section } %>
+  <% action_set(class: "pull-right has-above-3 has-padding-right-1 merge-right has-below-2") do %>
+    <% unless alert.new_record? %>
+      <%= link_to(content_tag(:div, get_icon_content("fa fa-trash") + "feature.reports.content.delete_alert".translate, class: "btn btn-danger delete-alert-link") + content_tag(:i, "", class: "icon-cui-report-delete"), report_section_metric_alert_path(section, metric, alert), method: "delete", :remote => true, data: {confirm: "feature.reports.content.delete_alert_confirm".translate}) %>
+    <% end %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => "btn btn-white cancel", "data-dismiss" => "modal" %>
+    <%= f.button :submit, metric.new_record? ? "display_string.Create".translate : "display_string.Save".translate %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  ManagementReport.validateAlertForm();
+  ManagementReport.showDeleteConfirm();
+  ManagementReport.getOptionsForAlertFilter();
+  ManagementReport.addRemoveMoreFilter();
+<% end %>

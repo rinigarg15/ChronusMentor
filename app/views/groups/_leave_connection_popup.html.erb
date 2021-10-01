@@ -1,0 +1,32 @@
+<% if @group.pending? %>
+  <% modal_v3_popup "feature.connection.content.help_text.leave_mentoring_connection_name".translate(mentoring_connection_name: @group.name) do %>
+    <div id = "new_message_to_group_owner">
+      <% termination_reason_label = "feature.connection.content.help_text.leave_message_to_owner".translate(mentoring_connection: _mentoring_connection) %>
+      <label for="group_termination_reason" class="sr-only"><%= termination_reason_label %></label>
+      <%= simple_form_for @group, url: leave_connection_group_path(@group), method: :get, html: { id: "leave_connection_popup" } do |f| %>
+        <%= response_flash "leave_connection_popup_flash_#{@group.id}" %>
+        <%= f.input :termination_reason, as: :text, input_html: { class: "form-control", rows: 5, value: "" }, label: false, placeholder: termination_reason_label, required: true %>
+        <% action_set do %>
+          <%= f.button :submit, "display_string.Leave".translate, id: 'cjs_popup_leave_connection_button' %>
+          <%= link_to "display_string.Cancel".translate, "javascript:void(0);", class: "btn cancel btn-white", "data-dismiss" => "modal" %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+<% else %>
+  <% is_terminate_action = @group.is_terminate_action_for?(current_user) %>
+  <% modal_v3_popup get_leave_connection_popup_head_text(is_terminate_action, "head") do %>
+    <div id = "new_leave_admin_message">
+      <%= simple_form_for @group, url: leave_connection_group_path(@group), method: :get, html: { id: "leave_connection_popup" } do |f| %>
+        <%= response_flash "leave_connection_popup_flash_#{@group.id}" %>
+        <%= content_tag(:p, "feature.connection.content.help_text.leave_group_reason".translate(leaving_this_group_text: get_leave_connection_popup_head_text(is_terminate_action, "content"))) %>
+        <%= render partial: "groups/closure_reason_form_fields", locals: { program: @group.program, f: f } %>
+        <%= f.input :termination_reason, as: :text, input_html: { class: "form-control", rows: 5, value: "" }, label: "feature.connection.content.label.Additional_Details".translate %>
+        <%= content_tag(:p, content_tag('b', "display_string.Note_with_colon".translate) + "feature.connection.content.help_text.notification_to_members".translate( mentoring_connection: _mentoring_connection), :class => "small") unless current_program.email_template_disabled_for_activity?(GroupTerminationNotification) %>
+        <% action_set(class: "pull-right") do %>
+          <%= f.button :submit, get_leave_connection_popup_head_text(is_terminate_action, "head"), id: 'cjs_popup_leave_connection_button' %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

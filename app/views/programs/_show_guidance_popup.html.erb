@@ -1,0 +1,3 @@
+<% modal_container (get_icon_content("fa fa-handshake-o fa-lg m-r-sm") + "feature.member.content.welcome_terms_v5".translate(member_name: wob_member.name)).html_safe, modal_id: "modal_show_guidance_popup", additional_close_button_class: "cjs_get_started_and_close_button hide", modal_body_class: "no-padding" do %>
+  <%= render partial: "favorite_preferences/guidance_popup", locals: {src: OneTimeFlag::Flags::Popups::MENTEE_GUIDANCE_POPUP_TAG, hide_flash: false} %>
+<% end %>

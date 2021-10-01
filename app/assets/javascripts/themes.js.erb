@@ -1,0 +1,34 @@
+var ThemeValidate = {
+  elementsSelector: ".cjs-theme-build",
+  webSafeColors: "aliceblue antiquewhite aqua aquamarine azure beige bisque black blanchedalmond blue blueviolet brown burlywood cadetblue chartreuse chocolate coral cornflowerblue cornsilk crimson cyan darkblue darkcyan darkgoldenrod darkgray darkgrey darkgreen darkkhaki darkmagenta darkolivegreen darkorange darkorchid darkred darksalmon darkseagreen darkslateblue darkslategray darkslategrey darkturquoise darkviolet deeppink deepskyblue dimgray dimgrey dodgerblue firebrick floralwhite forestgreen fuchsia gainsboro ghostwhite gold goldenrod gray grey green greenyellow honeydew hotpink indianred indigo ivory khaki lavender lavenderblush lawngreen lemonchiffon lightblue lightcoral lightcyan lightgoldenrodyellow lightgray lightgrey lightgreen lightpink lightsalmon lightseagreen lightskyblue lightslategray lightslategrey lightsteelblue lightyellow lime limegreen linen magenta maroon mediumaquamarine mediumblue mediumorchid mediumpurple mediumseagreen mediumslateblue mediumspringgreen mediumturquoise mediumvioletred midnightblue mintcream mistyrose moccasin navajowhite navy oldlace olive olivedrab orange orangered orchid palegoldenrod palegreen paleturquoise palevioletred papayawhip peachpuff peru pink plum powderblue purple red rosybrown royalblue saddlebrown salmon sandybrown seagreen seashell sienna silver skyblue slateblue slategray slategrey snow springgreen steelblue tan teal thistle tomato turquoise violet wheat white whitesmoke yellow yellowgreen",
+
+  initializeForm: function() {
+    jQuery(document).on("click", ".cjs-theme-submit", function(){
+      var elements = jQuery(ThemeValidate.elementsSelector);
+      var invalid = false;
+      elements.each(function(){
+        if(this.value.trim() == "" || !ThemeValidate.validateColor(this.value)){
+          jQuery(this).parent().parent().addClass("has-error");
+          invalid = true;
+        }
+        else {
+          jQuery(this).parent().parent().removeClass("has-error");
+        }
+      });
+
+      if(invalid){
+        ChronusValidator.ErrorManager.ShowPageFlash(false, 'Please fill all the fields with valid colors.');
+        return false;
+      }
+      else
+      {
+        ChronusValidator.ErrorManager.ClearPageFlash();
+      }
+    });
+  },
+
+  validateColor: function(color){
+    var reg = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+    return reg.test(color) || ThemeValidate.webSafeColors.split(" ").includes(color);
+  }
+}

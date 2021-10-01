@@ -1,0 +1,439 @@
+en:
+  display_string:
+    percent: "%{percent}%"
+    ok: ok
+    Ok: Ok
+    'Yes': 'Yes'
+    'No': 'No'
+    Maybe: Maybe
+    or: or
+    Or: Or
+    OR: OR
+    more: more
+    more_raquo_html: more&raquo;
+    more_with_count: "%{count} more"
+    Save: Save
+    Apply: Apply
+    Go: Go
+    Title: Title
+    Hello: Hello %{user_name},
+    Cancel: Cancel
+    cancel: cancel
+    Create: Create
+    Previous_Period: Previous Period
+    Current_Period: Current Period
+    Selected_Period: Selected Period
+    Non_Participants: Non Participants
+    Participants: Participants
+    Target: Target
+    Setup: Setup
+    and: and
+    And: AND
+    if_upcase: IF
+    Any: Any
+    Add: Add
+    added: added
+    available: available
+    removed: removed
+    PDF: PDF
+    CSV: CSV
+    default_brand_label: Chronus Mentor
+    default_brand_label_v1: Chronus
+    Edit: Edit
+    Hide: Hide
+    edit: edit
+    Delete: Delete
+    Publish: Publish
+    Discard: Discard
+    Ignore: Ignore
+    Export: Export
+    Import: Import
+    Decline_Post: Decline Post
+    Deactivate: Deactivate
+    Moderate: Moderate
+    Active: Active
+    Closed: Closed
+    Close: Close
+    Send: Send
+    Post: Post
+    Reply: Reply
+    Change: Change
+    From: From
+    To: To
+    Sent: Sent
+    up: up
+    down: down
+    Not_specified: Not specified
+    Login: Login
+    Email: Email
+    email: email
+    Password: Password
+    email_and_password: Email and Password
+    member: member
+    member_v1:
+      one: member
+      other: members
+    click_here: click here
+    Click_here: Click here
+    Username: Username
+    Please_Wait: Please Wait...
+    Please: Please
+    Submit: Submit
+    Name: Name
+    Name_asterisk: "Name *"
+    Year: Year
+    Day: Day
+    day:
+      one: day
+      other: days
+    slot:
+      one: slot
+      other: slots
+    to: to
+    to_for_dates_only: to #All translations of this key are same as the key "to". Only in German language, instead of to-zu we are using to-bis. 'bis' is used for addressing ranges in date or time.
+    total: total
+    TOTAL: TOTAL
+    about: about
+    and: and
+    present: present
+    Remove: Remove
+    Replace: Replace
+    Replace_v1: Replace
+    Preview: Preview
+    Add_more: Add more
+    other: other
+    selected: selected
+    Select: Select
+    Selected: Selected
+    Other: Other
+    Others: Others
+    Anyone: Anyone
+    Quick_Search: Quick Search
+    Show: Show
+    Back: Back
+    hour: hour
+    hours: hours
+    Hours: Hours
+    minutes: "%{minutes} minutes"
+    All: All
+    Type: Type
+    None: None
+    none: none
+    YESTERDAY: YESTERDAY
+    LAST_WEEK: LAST WEEK
+    Meeting: Meeting
+    Goal: Goal
+    Enable: Enable
+    Disable: Disable
+    enable_feature: Enable %{feature_name}
+    See_all: See all
+    See_Examples: See Examples
+    Draft: Draft
+    see_more_raquo_html: "(see more &raquo;)"
+    see_less_laquo_html: "(&laquo; see less)"
+    see_more_raquo_no_parentheses_html: "see more &raquo;"
+    see_less_laquo_no_parentheses_html: "&laquo; see less"
+    read_more_raquo_html: read more &raquo;
+    show_more_raquo_html: show more &raquo;
+    show_more_down_count_html: show %{count} more %{down_arrow}
+    show_more_down_html: show more %{down_arrow}
+    know_more_raquo_html: know more &raquo;
+    Show_more: Show more
+    Show_less: Show less
+    show_all: show all
+    show_all_v1: Show all
+    Show: Show
+    show_side_bar: Show Side Pane
+    show_menu: Show Navigation Menu
+    show_less_inside_parens_html: (&laquo; show less)
+    laquo_show_less_html: "&laquo; show less"
+    show_less_up_html: show less %{down_arrow}
+    hide_laquo_html: "&laquo; Hide"
+    Download: Download
+    download: download
+    See_all_raquo_html: See all &raquo;
+    Sign_in: Sign in
+    sign_in: sign in
+    sign_out: sign out
+    Sign_out: Sign out
+    Learn_more: Learn More
+    login: login
+    signup: signup
+    sso: SSO
+    attach_file: Attach a file
+    attach_zip_file: Attach a file(.zip)
+    View_All: View All
+    Message: Message
+    your_message: Your message
+    Search: Search
+    search_program: Search %{program}
+    Invite: Invite
+    you: you
+    Your: Your
+    user_s: "%{user}'s"
+    Update: Update
+    Save_Draft: Save Draft
+    Publish: Publish
+    settings: settings
+    Settings: Settings
+    Save_Settings: Save Settings
+    Save_Proceed_html: Save & Proceed &raquo;
+    Proceed: Proceed
+    Proceed_raquo_html: Proceed &raquo;
+    Discard_Draft: Discard Draft
+    Save_as_Draft: Save as Draft
+    Save_as_draft: Save as draft
+    Save_and_View: "Save & View"
+    Done: Done
+    Done_raquo_html: "Done &raquo;"
+    Reason: Reason
+    Reason_asterisk: "Reason *"
+    Actions: Actions
+    expand_collapse: Expand or Collapse
+    Options: Options
+    Choices: Choices
+    See_All: See All
+    Suspend: Suspend
+    users: users
+    selected_users: selected users
+    Suspended: Suspended
+    Deactivate: Deactivate
+    Deactivated: Deactivated
+    remove_user:
+      one: Remove User
+      other: Remove Users
+    remove_member:
+      one: Remove member
+      other: Remove members
+    replace_member:
+      one: Replace member
+    replace_member_v1:
+      one: Replace member
+      other: Replace members
+    suspend_user:
+      one: Suspend User
+      other: Suspend Users
+    suspend_user_v1:
+      one: Deactivate User
+      other: Deactivate Users
+    suspend_member:
+      one: Suspend Member
+      other: Suspend Members
+    keep_suspended: Keep Suspended
+    keep_deactivated: Keep Deactivated
+    irreversible_action: irreversible action
+    Send_Message: Send Message
+    Week: Week
+    Month: Month
+    Quarter: Quarter
+    Year: Year
+    month: month
+    quarter: quarter
+    year: year
+    Manage: Manage
+    time_ago: "%{time} ago"
+    Confirmation: Confirmation
+    Confirm: Confirm
+    View: View
+    Upload: Upload
+    created: created
+    updated: updated
+    deleted: deleted
+    linkedin_public_profile: LinkedIn public profile
+    profile_settings_raquo_html: profile settings&raquo;
+    profile_settings: profile settings
+    basic: basic
+    accept: accept
+    accepted: accepted
+    rejected: rejected
+    withdrawn: withdrawn
+    closed: closed
+    discarded: discarded
+    declined: declined
+    program_administrator: "%{program} administrator"
+    Program: Program
+    Organization: Organization
+    All_Programs: All Programs
+    All_Programs_v1: All %{Programs}
+    Any_Program: Any %{Program}
+    task_checkbox: "Click the checkbox to mark the task complete."
+    Role: Role
+    RoleId: Role Id
+    one_or_many_roles: Role(s)
+    and_publish: "and publish "
+    published: published
+    send_a_request: Send a request
+    view_profile_raquo_html: View profile &raquo;
+    profile: Profile
+    upcase_profile: PROFILE
+    private: private
+    Private: Private
+    public: public
+    Roles: Roles
+    ary_of_roles:
+      one: "%{roles_list} role"
+      other: "%{roles_list} roles"
+    Sort_by: Sort by
+    Hide: Hide
+    Find: Find
+    Clear: Clear
+    Match: Match
+    See_all_with_count: See all (%{object_count})
+    by: by
+    Back_and_laquo_html: "&laquo; Back"
+    in: in
+    Note_with_colon: "Note:"
+    Invalid_user: Invalid user
+    You: You
+    You_are: You are
+    Anonymous: Anonymous
+    is: is
+    Comment: Comment
+    comments: comments
+    view_profile: view profile
+    users_profile: "%{user_name}'s profile"
+    member_profile_picture: "%{member_name}'s profile picture"
+    Accept: Accept
+    Decline: Decline
+    Reject: Reject
+    Accepted: Accepted
+    Rejected: Rejected
+    Declined: Declined
+    Withdrawn: Withdrawn
+    Pending: Pending
+    csv: CSV
+    pdf: PDF
+    is: is
+    are: are
+    NA: NA #Not Applicable
+    me: me
+    Target: Target
+    Time_Zone: Time Zone
+    hide_details: hide details
+    update_details: Update Details
+    per: per
+    Next_raquo_html: "Next &raquo;"
+    Admin: Admin
+    AND: "AND"
+    Add_one_more: "Add one more"
+    Loading_results: "Loading results ..."
+    Loading: Loading...
+    Tags: Tags
+    User: User
+    Users: Users
+    user:
+      one: user
+      other: users
+    User_v1:
+      one: User
+      other: Users
+    hide: hide
+    time_left: "%{time} left"
+    Available: Available
+    ago: ago
+    at: at
+    on_date: on %{date}
+    Select_all: Select all
+    more_choices_raquo_html: "more choices &raquo;"
+    more_choices_v1: "More choices"
+    less_choices_laquo_html: "&laquo; less choices"
+    less_choices_v1: "Less choices"
+    more_filters_raquo_html: "more filters"
+    more_filters_v1: "More filters"
+    less_filters_laquo_html: "less filters"
+    less_filters_v1: "Less filters"
+    fewer_filters: "Fewer filters"
+    less_filters_laquo: "&laquo; less filters"
+    edit_raquo_html: "Edit &raquo;"
+    reset: reset
+    Reset: Reset
+    here: here
+    again: again
+    Enabled: Enabled
+    Disabled: Disabled
+    Unlimited: Unlimited
+    n_a: N/A
+    Skip: Skip
+    within: within
+    invalid_member: Invalid member
+    this_template: this template
+    format_specification: format specification
+    delete: delete
+    as: as
+    Discussions: Discussions
+    days: days
+    Filter: Filter
+    Filter_v1: FILTER
+    Filters: Filters
+    Choose: Choose..
+    Never: Never
+    Due_Date: Due Date
+    After: After
+    grid_view: Grid View
+    list_view: List View
+    discard: discard
+    OR: OR
+    Assign: Assign
+    Continue: Continue
+    Save_and_Continue_Later: "Save and Continue Later"
+    Proceed_to_Next_Step_html: "Save and proceed to %{label} &raquo;"
+    since_date: Since %{date}
+    non_admin_in_brackets: " (Non-administrative)"
+    Clone: Clone
+    Make_a_copy: Make a Copy
+    Copy_of: Copy of %{string}
+    add_brackets_html: " (%{string})"
+    Undo: Undo
+    recent_first: recent first
+    oldest_first: oldest first
+    not_applicable: Not Applicable
+    view: view
+    next: Next
+    previous: Previous
+    learn_more_raquo_html: "Learn More &raquo;"
+    sign_up: Sign up
+    verified_as: Verified as
+    dropdown: Dropdown
+    Date: Date
+    Time: Time
+    Time_with_zone: Time (%{time_zone})
+    Join: Join
+    Leave: Leave
+    Sort: SORT
+    Sort_by_most_recent: Sort by most recent
+    Sort_by_oldest: Sort by oldest
+    Most_recent: Most recent
+    Oldest: Oldest
+    see_n_results:
+        zero: No results found
+        one: See 1 Result
+        other: See %{count} Results
+    Showing: Showing
+    More: More
+    Less: Less
+    'on': 'on'
+    Share: Share
+    write_something: Write Something...
+    pages: Pages
+    Full_Screen: Full Screen
+    browse: Browse
+    Complete: Complete
+    click_to_attach: Click Browse to Attach File
+    do_you_want_to_continue: Do you want to continue?
+    do_you_want_to_proceed: Do you want to proceed?
+    Old: Old
+    ordinal: "%{number}%{ordinal}"
+    ordinals:
+      default: th
+      '1': st
+      '2': nd
+      '3': rd
+      '11': th
+      '12': th
+      '13': th
+    No_Go_Back: No, Go Back
+    Configure: Configure
+    Link: Link
+    Linked: Linked
+    Example: "Example: "
+    view_full_profile: "View Full Profile"

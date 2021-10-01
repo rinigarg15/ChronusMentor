@@ -1,0 +1,14 @@
+jQuery('#loading_results').hide();
+
+<% content = render(:partial => "users/new_from_other_program", :locals => {:members => @members}) %>
+jQuery('#cjs_show_user_results').html("<%= j(content) %>");
+
+<% if @listing_options[:filters][:search].present? %>
+  jQuery(".cancel-search").show();
+<% end %>
+
+initialize.initializeStopFilterPropogation();
+UserImport.maintainTriStateCheckbox(true);
+
+<% content = render(:partial => 'common/your_filters', :locals => {:onclick_function => 'UserImport.clearFilter', :results_count => @members.total_entries}) %>
+jQuery('#your_filters').replaceWith("<%= j(content) %>");

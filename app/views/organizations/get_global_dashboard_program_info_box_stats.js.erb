@@ -1,0 +1,4 @@
+<% if @program %>
+  jQuery(".cjs-program-info-box-numbers-ajax-container.cjs-program-id-" + <%= @program.id %>).html("<%= j(render(partial: 'organizations/home/program_info_box_stats', locals: {program: @program})) %>");
+  OrganizationHomePageDashboard.applyBorders();
+<% end %>

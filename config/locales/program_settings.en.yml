@@ -1,0 +1,368 @@
+en:
+  program_settings_strings:
+    header:
+      program_settings: "%{Program} Settings"
+      tnc: Terms & Conditions
+      privacy_policy: Privacy Policy
+      program_logo: "%{Program} Logo"
+      program_banner: "%{Program} Banner"
+      browser_warning: Browser Warning
+      select_region: Select Region
+    tab:
+      general: General Settings
+      terminology: Terminology
+      membership: Membership
+      connection_v1: "%{Mentoring_Connection} Settings"
+      calendar: Calendar Settings
+      matching: Matching Settings
+      features: Features
+      permissions: Permissions
+      security: Security
+    label:
+      email_primary_color_v1: Primary Color In Emails
+      user_chronus_default_email_colour_v1: Use default green
+      one_time_mentoring_settings_v1: One-time %{Mentoring} Settings
+      ongoing_mentoring_settings_v1: Ongoing %{Mentoring} Settings
+      tnc_html: Terms & Conditions %{tooltip}
+      privacy_html: Privacy Policy %{tooltip}
+      browser_warning_html: Browser Warning %{tooltip}
+      program_details: Program Details
+      create_administrator_account: Create Administrator Account
+      complete_registration: Complete Registration
+      engagement_type_v1: Engagement Type
+      program_type: Program Type
+      number_of_licenses: Number of licenses
+      program_name: "%{program} Name"
+      programs_listing_visibility: "%{programs} listing page visible to"
+      feed_export: Feed Export
+      enable_saml_sso: Enable SAML SSO
+      reconfigure_saml_sso: Reconfigure SAML SSO
+      reconfigure_saml_sso_confirmation: Are you sure you want to reconfigure the SSO?
+      select_feedback: Select survey to be sent to inactive members
+      consider_completed: Consider Completed
+      add_new_reason: Add another reason
+      remove_closure_reason_confirmation: Are you sure you want to delete this item?
+      specify_group_closure_reason: Specify %{mentoring_connection} closure reason
+      closure_msg_on_focus_out:
+        one: "%{count} %{mentoring_connection} has already mentioned this as a closure reason. Are you sure you want to edit this?"
+        other: "%{count} %{mentoring_connections} have already mentioned this as a closure reason. Are you sure you want to edit this?"
+      remove_closure_reason_confirmation_with_count:
+        one: "%{count} %{mentoring_connection} is closed by this reason. Are you sure you want to delete this item?"
+        other: "%{count} %{mentoring_connections} are closed by this reason. Are you sure you want to delete this item?"
+      matching_settings:
+        select_mentoring_mode: Select the %{mentoring} modes for your %{program}
+        how_does_matching_happen: How does matching happen?
+        connection_req_setting: "%{Mentoring_Connection} Request Settings"
+        connection_req_setting_v1: "%{Mentoring} Request Settings"
+        connection_limits: "%{Mentoring_Connection} Limits"
+        meeting_req_settings: "%{Meeting} Request Settings"
+        meeting_limits: "%{Meeting} Limits"
+        Advanced_Options: Advanced Options
+      mentoring_mode:
+        title: "%{Mentoring} Mode"
+        one_time_settings_title_v1: One-time %{Mentoring} Settings
+        ongoing_settings_title: Ongoing %{Mentoring} Settings
+        one_time:
+          title_v1: One-time %{Mentoring}
+          description_v1: In this mode, participants set up single %{meetings}
+        ongoing:
+          title: Ongoing %{Mentoring}
+          description_v1: In this mode, participants will be part of a %{mentoring_connection} for a period of time and will share a %{mentoring} space
+      mentee_requests:
+        heading: "%{Mentee} can request %{mentor}"
+        directly_to_mentor: "%{Mentee} requests %{mentor}"
+        thru_admin: "%{Mentee} requests %{admin}"
+      deactivate_org: Yes, deactivate %{org_name}
+      role_can_view: "%{role_name} can view"
+      other_role_name: Other %{role_name}
+      role_name: "%{role_name}"
+      apply_to_join: Allow users to apply to join (%{admin} or Owner approval needed)
+      added_by_owner: Allow %{connection} Owners to add users
+      allow_proposer_to_set_slot_limit: Allow proposer to set the maximum number of slots
+      mark_required: Mark as Required
+      role_settings: Role Settings
+      add_roles_without_approval: Allow users to add roles without %{admin} approval
+      role: "%{role_name} Role"
+      allow_reactivate_connection: Allow members of a closed %{mentoring_connection} to reactivate the %{mentoring_connection}
+    content:
+      take_action_html: To disable this option, please take action on all %{pending_requests} first
+      pending_requests: pending requests
+      send_feedback_v1: Consider %{Meeting} as 'Elapsed'
+      days_after_with_no_meeting_details: day(s) after the %{meeting} request has been accepted and the %{meeting} details were not decided
+      allow_choose_mentoring_mode: Can %{mentors} choose their %{mentoring} modes?
+      allow_end_users_to_see_match_scores: Allow end users to see match scores
+      auto_terminate_closure_reason: "%{Mentoring_Connections} will be closed by '%{auto_terminate_closure_reason}' as closure reason"
+      default_closure_reason: Default closure reasons can not be removed.
+      allow_meeting_request_reminder_v1: Remind the receiver if %{meeting} requests are pending
+      allow_mentoring_request_reminder_v1: Remind the receiver if requests are pending
+      allow_project_request_reminder: Remind the owner if the %{mentoring_connection} requests are pending
+      allow_circle_start_date: "%{Mentoring_Connection} Start date"
+      allow_proposer_to_set_start_date: "Allow proposer to set the start date of the %{mentoring_connection}"
+      remind_them_after: remind them after
+      ssl_cert_available: SSL Certificate Available
+      enable_https: Enable HTTPS
+      enable_https_help_text: Ensure all links in the organization are https before enabling the setting
+      view_permissions_for_users: Irrespective of the above setting users will be able to view the profiles of other users whom they are already connected to.
+      admin_access_users_connect_outside_mentoring_area_help_text: Unconnected users would be unable to message anyone in the %{program}. We recommend this remain enabled.
+      admin_access_mentoring_area_help_text: If disabled, %{mentor}-%{mentee} communication is considered highly confidential. %{Admins} cannot visit the %{mentoring_connection} and do not have access to messages exchanged between %{mentoring} partners.
+      admin_access_mentoring_area: "%{Admin} access to %{mentoring} area"
+      ensure_work_on_behalf_turned_off_tip: 'Tip: Ensure the Work on Behalf feature is turned off.'
+      open: Open
+      audited_access: Audited access
+      disabled: Disabled
+      enable_group_proposals_help_text: Please note the proposals will be sent to the %{administrators} for approval
+      enable_remember_me_tool_tip_desc_v1: Users who check "Keep me signed in" will stay signed in until they manually sign out, even if browser is closed.
+      enable_remember_me_v1_html: Show "Keep me signed in" checkbox %{icon}
+      general_default_txt: Describe your %{program} in detail
+      banner_help_text: Please upload a banner of size 980px by 100px
+      tnc_tooltip_html: Terms and Conditions will be shown to users while signing up and they will be required to %{accept} these conditions before joining the program.
+      browser_warning_tooltip_html: The following content will be shown to users if they access the %{program} with an unsupported browser or with a browser for which the support will end soon.
+      agreement_delete_confirmation: Are you sure you want to remove? The changes made to agreement content will be lost.
+      tnc_desc_html: The following terms and conditions will be shown to users while signing up and they will be %{line_break}required to %{accept} these conditions before joining the program.
+      privacy_tooltip: Privacy policy will be shown to users so that they understand what they are sharing with us
+      privacy_desc: Privacy policy will be shown to users so that they understand what they are sharing with us
+      privacy_delete_confirmation: Are you sure you want to remove? The changes made to Privacy Policy content will be lost.
+      show_zero_scores_if: Show 0% match-scores if
+      show_zero_scores_for_past_connections: "%{Mentor} and %{mentee} have connected in the past"
+      select_features_to_enable: Select the features that you want to enable for this program.
+      enable_autologout_v1_html: Enable auto-logout %{tooltip}
+      autologout_tooltip_v1: Automatically logs the user out after a specified period of inactivity to secure the user's data.
+      autologout_after: users will be logged out after
+      of_inactivity: " of inactivity."
+      account_lockout_tooltip_v1: Prevents the user from logging in after a specified number of failed login attempts.
+      account_lockout_v1_html: Enable account lockout %{tooltip}
+      account_login_attempt_html: after maximum login attempts of %{times}
+      allow_users_to_propose_groups: Allow users to propose %{mentoring_connection_articleized}
+      allow_multiple_email_domains_placeholder: e.g., gmail.com, mail.google.com
+      allowed_ips_v1_html: Restrict login to specific IP addresses %{tooltip}
+      allowed_ips_tooltip_v2: 'To restrict users from logging in from specific computers or networks, please specify one or more allowed public Internet IP addresses or ranges. To specify an individual IP address, you may leave the "range end" field blank. Example: 192.168.1.1 to 192.168.1.100 OR 50.168.23.195.'
+      allowed_ips_from_text: Specify Individual IP or Range Start
+      allowed_ips_to_text: Specify Range End, if any
+      email_recovery: Send emails to users to reactivate their account automatically once the account is locked
+      automatically_reactivate_v1: Automatically reactivate account after
+      after_x_hours_v1_html: "%{x} Hours"
+      password_settings: Password Settings
+      expire_password: Automatically expire password after
+      days: Day(s)
+      enable_password_history_v1: Prevent user from reusing most recent
+      passwords: " passwords."
+      allow_name_email: Password can contain user's name or email
+      complete_prog_registration: Complete %{program} Registration
+      publish_to_listing_page: Publish to the %{programs} Listing Page?
+      career_based: Career Based
+      ongoing_mentoring: Ongoing %{Mentoring}
+      one_time_mentoring: One Time %{Mentoring}
+      select_some_mode: Please select some mode of %{mentoring} within career based
+      mentoring_style_v1: "%{Mentoring_Connection} style"
+      one_to_one_style_v2: One-on-one
+      group_mentoring_v2: Group
+      sort_users_by: Sort users by
+      full_name: Full name
+      last_name: Last name
+      apply_to_join: Apply to Join
+      eligibility_rule_based_approval: Approval based on eligibility rules of user profile
+      set_eligibility_rules: "(Set eligibility rules)"
+      edit_eligibility_rules: "(Edit eligibility rules)"
+      set_eligibility_rules_flash_message: Eligibility rules successfully created
+      edit_eligibility_rules_flash_message: Eligibility rules successfully updated
+      eligibility_rule_popup_heading: Set Eligibility rules for %{role_name}
+      eligibility_message: Eligibility Message
+      eligibility_message_placeholder: Please set eligibility message for %{role_name}
+      admin_approval_required: "%{Admin} approval required"
+      no_approval_required: "No approval required"
+      no_approval_disabled_tooltip: "There are proposed %{groups} awaiting approval. You must respond to them before you can enable this."
+      edit_description: Edit Description
+      joining_option: Joining Options
+      no_description: No description present -
+      join_directly_v1: No approval required
+      join_directly_with_sso_v1: No approval required if authenticated via SSO
+      invited_by_others: Invited by others
+      allow_role_to_invite: Allow %{role} to invite
+      admins_can_always_invite: "%{admins} will always be able to invite"
+      can_join_in_multiple_roles: Allow user to apply or join for more than one role
+      mentoring_period_v1_html: "%{Mentoring_Connection} period %{tooltip}"
+      mentoring_period_tooltip_v1: This is the default duration of a %{mentoring_connection}. This setting will only be applied for new %{mentoring_connections}. Existing %{mentoring_connections} duration will remain unchanged.
+      default_max_connections_limit_v2_html: Maximum concurrent %{mentees} for a %{mentor} %{tooltip}
+      default_max_connections_limit_help_text:
+        admin_match: Limit includes %{mentees} with whom they are connected as well as drafted
+        self_match: Limit includes %{mentees} with whom they are connected as well as %{mentees} whose request to connect are pending
+      reason_for_closing_mentoring_connections: Reason for closing %{mentoring_connection}
+      connection_limit_popup_content_html: You are about to change the %{mentoring_connection} limit for your %{program}.
+      all_mentors: All %{Mentors}
+      all_mentors_help_text: This resets the %{mentoring_connection} limits of all existing %{mentors} without affecting any ongoing %{mentoring_connections}.
+      new_mentors: New %{Mentors}
+      new_mentors_help_text: This sets a default %{mentoring_connection} limit for new %{mentors}. Please note that the limits of existing %{mentors} would remain unchanged.
+      change_connection_limit: Change %{mentoring_connection} Limit for %{Mentors}
+      can_increase_mentors_connection_limit: Allow %{mentors} to increase their %{mentoring_connection} limits
+      can_decrease_mentors_connection_limit: Allow %{mentors} to decrease their %{mentoring_connection} limits
+      minimum_preferred_mentors: Minimum number of preferred %{mentors}, %{mentee} should choose while sending %{mentoring} request
+      maximum_mentors_for_mentee_v1: Maximum concurrent %{mentors} for a %{mentee}
+      max_pending_request_for_mentee_v1: Maximum pending requests allowable from a %{mentee}
+      allow_mentee_to_send_request_v1: Allow %{mentees} to send requests for %{mentoring}
+      allow_mentee_to_send_request_v3: "%{Mentees} send %{mentoring_connection} requests to %{mentors}"
+      allow_mentee_to_send_request_v4: "%{Mentees} send %{mentoring} requests to %{mentors}"
+      allow_mentee_to_send_request_to_admin: "%{Mentees} request %{admin} to assign %{mentors}"
+      allow_mentee_to_send_meeting_request: "%{Mentees} send %{meeting} requests to %{mentors}"
+      mentor_offers_to_mentee_v1: "%{Mentors} offer %{mentoring} to %{mentees}"
+      admin_assign_connection: "%{Admin} assign %{mentoring_connections}"
+      admin_assign_connection_v1: "%{Admins} assign %{mentoring_connections}"
+      allow_menttes_to_give_preference_in_requests_v1: Allow %{mentees} to give %{mentor} preferences in requests for %{mentoring}
+      reason_html: Reason %{tooltip}
+      reason_tooltip_v1: Reason to be shown to %{mentees} attempting to send requests for %{mentoring}
+      allow_mentte_withdraw_request_v1: Allow %{mentees} to withdraw request for %{mentoring}
+      mentor_request_expiration_days_v2: Close requests if pending more than
+      mentor_request_expiration_days_notice: Leave this blank if you don't want to close requests automatically
+      mentor_request_style_change_disabled_html:
+        one: There is <a href='%{link}' target='_blank'>a pending %{mentoring} request</a> that would be lost on changing this setting. Please close the %{mentoring} request before proceeding.
+        other: There are <a href='%{link}' target='_blank'>%{count} pending %{mentoring} requests</a> that would be lost on changing this setting. Please close the %{mentoring} requests before proceeding.
+      mentor_offer_acceptance_mode_change_disbaled_html:
+        one: There is <a href='%{link}' target='_blank'>a pending %{mentoring} offer</a> that would be lost on changing this setting. Please close the %{mentoring} offer before proceeding.
+        other: There are <a href='%{link}' target='_blank'>%{count} pending %{mentoring} offers</a> that would be lost on changing this setting. Please close the %{mentoring} offers before proceeding.
+      allow_members_leave_connection_v3: Allow members of %{a_mentoring_connection} to leave it without %{mentoring_connection} ending; recommended only for group %{mentoring}
+      allow_members_leave_connection_v4: Allow members of %{a_mentoring_connection} to leave it without %{mentoring_connection} ending
+      allow_members_leave_connection_help_text: Recommended only for group %{mentoring_connection}
+      allow_members_to_mark_connection_public_html: Allow %{mentoring_connection} to be marked public %{tooltip}
+      allow_members_to_mark_connection_public_tooltip_html: Marking a %{mentoring_connection} public allows all users in the %{program} to view the profile of the %{_mentoring_connection}
+      allow_change_expiration_date: Members of %{a_mentoring_connection} can change the expiration date of the %{mentoring_connection}
+      allow_change_expiration_date_v1: Allow members of %{a_mentoring_connection} to change the expiration date of the %{mentoring_connection}
+      allow_change_expiry_date_note: If 'No', members can send a request to the %{admin} to change the expiration date
+      mentor_offer_mentte_acceptance: "%{mentor} initiated offers need acceptance of %{mentees}"
+      private_jounals_for_connection: Allow private journals for %{mentoring_connection}
+      allow_feedback_for_connection: Allow feedback for %{mentoring_connection}
+      enable_hybrid_template: Enable hybrid templates
+      allow_zero_match_score_connect: Allow %{mentors} and %{mentees} with 0% match-scores to connect
+      prevent_manager_matching_v1: "%{Mentor} is %{mentees} manager."
+      restrict_up_to: Restrict upto
+      levels: levels
+      matching_help_text_html: Recompute match scores in %{link} after updating the above settings. Please allow 10 minutes approx for the system to recompute the scores.
+      match_config: match config page
+      zero_match_score_message_v1: Message when match score is 0%
+      not_a_match_help_text: "'Not a Match' will still appear for users with 0% score. Upon hover, your custom message will display."
+      inactivity_tracking: Inactivity tracking
+      closure_reasons: Closure reasons
+      what_is_this: what is this?
+      inactivity_tracking_desc: Members who are inactive in the %{mentoring_connection} will be asked to fill out a survey about the progress of the %{mentoring_connection} - this provides insight to the %{admins} about active and inactive %{mentoring_connections} in the %{program}.
+      survey_configurable_html: This survey is configurable and can be viewed %{survey_link}.
+      auto_terminate_desc: "%{admins} may also choose to automatically terminate %{mentoring_connections} where all members are inactive even after being notified."
+      check_inactivity: Check with user if inactive for more than
+      auto_terminate_v1_html: Auto-terminate inactive %{mentoring_connections}? %{tooltip}
+      users_connect_outside_mentoring_area: Allow users to message outside their %{mentoring_connection}
+      allow_track_admins_to_access_all_users: Allow %{program} %{admins} to view profiles of, and add global users to this %{program}
+      allow_track_admins_to_access_all_users_help_text: Please note that enabling this would allow %{program} level %{admins} access the profiles of all users in the %{org_name}.
+      allow_mentors_create_meetings_v1: Allow %{mentors} to create %{meetings}
+      max_pending_requests_mentee: Maximum pending requests allowable from a %{mentee}
+      max_meetings_for_mentee: Maximum number of %{meetings} for a %{mentee} in a calendar month
+      request_meeting_prior_to_v3: "%{Mentees} must request %{meetings} at least*"
+      hours_in_advance: Hours in advance
+      meeting_preference_options: "%{meeting} preference options for %{mentors}"
+      allow_mentor_to_configure_availability_slots: Allow %{mentors} to configure availability slots
+      availability_slots_help_text: "%{Mentors} have a consistent schedule or %{mentors} are willing to update their available timeslots from the %{meetings} calendar regularly"
+      allow_mentor_to_describe_meeting_preference_v1: Allow %{mentors} to describe general availability instead of configuring specific slots
+      meeting_preference_help_text: "%{Mentors} have a variable schedule and would like to provide general guidelines on how to reach them"
+      enter_a_valid_value: Please enter a valid positive value.
+      no_permission_to_enable: There are no permissions to enable for this %{program}
+      select_permission_to_enable: Select the permissions that you want to enable for this %{program}.
+      mentees_can_publish_articles: "%{mentees} can publish %{articles}"
+      mentoring_period_value_v1: Value of the period of %{Mentoring_Connection}
+      mentoring_period_unit_v1: Unit of the period of %{Mentoring_Connection}
+      is_admin_only_html: For %{admins} only %{tooltip}
+      is_admin_only_tooltip_html: This field will visible to and editable by %{admins} only
+      zero_match_score_message_placeholder: Not a match
+      default_notification_setting_for_other_activities_v2: Default notification setting for %{program} activities
+      programs_listing_visibility:
+        all: All users
+        logged_in_users: Only logged-in users
+        none: None
+      number_of_licenses_help_text: How many users do you think would be part of the program?
+      meeting_request_expiration_days_v1: Close requests if pending more than
+      meeting_request_expiration_days_notice: Leave this blank if you don't want to close %{meeting} requests automatically
+      export_feed_every: Export data into feed every
+      feed_export_help_text_v1: Minimum frequency should be 1 day. Any updates to the frequency will only reflect after the next scheduled run.
+      org_active_text: "%{org_name} is currently active. Would you like to deactivate it?"
+      org_active_help_text: Deactivating the organization renders it inaccessible to all users and administrators. You need to be careful with this operation - if you're unsure, please contact CS Engineering team
+      deactivate_org: Deactivate Organization
+      linkedin_token: Enter your application's linkedin token here.
+      linkedin_secret: Enter your application's linkedin secret here.
+      join_options: "%{connection} Join Options"
+      slot_config_setting: "%{connection} Slot Limit Options"
+      admin_can_add: "%{admins} can always add"
+      enable_search_engine_indexing: Enable search engine indexing
+      multiple_groups_alert: To enable this setting, please ensure that only one active %{mentoring_connection} exists between all %{mentee} - %{mentor} pairs.
+      view_multiple_groups_html: Please %{click_here} to view the %{mentee} - %{mentor} pairs with multiple %{mentoring_connections}.
+      actively_connected_in_html: "%{student_name} and %{mentor_name} are actively connected in %{group_links}."
+      student_mentor_pair_with_multiple_connections: "%{Mentee} - %{Mentor} pairs with multiple %{Mentoring_Connections}"
+      enable_third_role: Enable third role
+      cannot_remove_role: Role cannot be removed as %{reason}
+      role_tied_to_references: the role has associated %{role_reference_types}
+      role_tied_to_admin_views_v1: the role is tied to the following admin views
+      edit_terminology_html: "%{link_to_edit_terminology} to customize the term for third role."
+      current_term: The current term is '%{current_third_role_term}'.
+      circle_request_expiration_days: Close requests if pending more than
+      circle_request_expiration_days_notice: Leave this blank if you don't want to close requests automatically.
+      auto_role_approval_help_text: Lets users with current role as %{current_role} add %{to_add_role} role without %{admin} approval
+      reactivate_group_help_text_html: Ensure %{closure_link} and %{reactivate_link} system emails are verified.
+      closure_notification: closure notification
+      connection_reactivation: "%{connection} reactivation"
+      select_region_content: Please select the region in which you would like to host the organization.
+      select_region_error_flash_html: "For hosting in %{region} region, please use %{url_link}"
+      select_region_notice_flash: "You are creating organization in %{region_name} region"
+  manage_strings:
+    common:
+      Administration: Administration
+      Program_Settings: "%{Program} Settings"
+      Program_Overview: "%{Program} Overview"
+      Appearance_v1: "%{Program} Branding"
+      Emails_v1: System Emails
+      All_Members: All Members
+      member_views: Member Views
+      Customize: Customize
+      Customize_Profile: Customize Profile
+      New_Program: New %{Program}
+      Data_Import_Summary: Data Import Summary
+      Support: Support
+      Advanced_Options: Advanced Options
+    organization:
+      import_users_from_csv_v1: Add Users from CSV
+      Administration:
+        Language_Settings_v1: Language Support
+        Three_sixty_teedback_tool: 360 Degree Survey Tool
+      header:
+        Common_Settings: Common Settings
+        User_Form_Fields: User Form Fields
+      User_Form_Fields:
+        Preview_Profile_Form: Preview Profile Form
+        Preview_Membership_Form: Preview Membership Form
+    program:
+      header:
+        Manage: Manage
+        General: General
+        Privacy: Privacy
+        Customize: Customize
+      Customize:
+        Analytics: Analytics
+        Forums: Forums
+      Administration:
+        General:
+          user_views: User Views
+          Admin_Messages_v2: "%{Admin} Inbox"
+          Announcements: Announcements
+          Membership_Requests: Membership Requests
+          Surveys: Surveys
+          Flagged_Content: Flagged Content
+          Moderate_Forums: Moderate Content
+          Campaign_Management_v1: Email Campaigns
+          Events: Events
+        Connection:
+          Bulk_Match: Bulk Match
+          Bulk_Match_v1: Bulk Match Users
+          Recommend_Mentors: Recommend %{Mentors}
+          Mentoring_Connection_Templates_v1: "%{Mentoring_Connection} Plan Templates"
+          Customize_Connection_Profile: Customize %{Mentoring_Connections} Profile Fields
+          Mentor_Requests_v1: "%{Mentoring} Requests"
+          Project_Requests: "%{Mentoring_Connection} Requests"
+          Mentor_Offers: "%{Mentoring} Offers"
+          Meeting_Requests_v1: "%{Meeting} Requests"
+          Customize_Mentor_Request_Form_v1: Customize %{Mentoring} Request Form
+          invitations: Invitations
+          invite_users: Invite Users
+          add_user_profiles_v1: Add Users

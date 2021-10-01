@@ -1,0 +1,5 @@
+<% if @is_my %>
+  jQuery('#show_more_my_activities').replaceWith("<%= escape_javascript(render(partial: 'organizations/recent_activities', locals: { more_id: 'show_more_my_activities', more_url: get_organization_ra_path(:offset_id => @new_offset_id, :my => 1)})) %>")
+<% else %>
+  jQuery('#show_more_all_activities').replaceWith("<%= escape_javascript(render(partial: 'organizations/recent_activities', locals: { more_id: 'show_more_all_activities', more_url: get_organization_ra_path(:offset_id => @new_offset_id)})) %>")
+<% end %>

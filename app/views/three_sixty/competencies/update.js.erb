@@ -1,0 +1,6 @@
+<% if @competency.valid? %>
+  closeQtip();
+  jQuery("#competency_heading_for_listing_<%= @competency.id %>").replaceWith('<%= j(three_sixty_competency_heading_for_listing(@competency, true)) %>');
+<% else %>
+ jQuery("#three_sixty_competency_from_<%= @competency.id %>").replaceWith('<%= j(render(:partial => "three_sixty/competencies/form", :locals => {:competency => @competency})) %>');
+<% end %>

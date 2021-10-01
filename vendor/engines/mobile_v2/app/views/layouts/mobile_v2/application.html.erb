@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <%= viewport_meta_tag %>
+    <title><%= "app_layout.header.chronus".translate %><%= " | #{strip_tags(@title)}" unless @title.blank? %></title>
+
+    <% favicon_href = @current_organization.present? && @current_organization.favicon_link.present? ? @current_organization.favicon_link : Brand::Defaults::FAVICON %>
+    <link class="favicon_chronus" rel="SHORTCUT ICON" href="<%= favicon_href %>" type="image/x-icon" />
+    <%= split_stylesheet_link_tag 'v3/application_v3', :split_count => 6 %>
+    <%= render partial: "layouts/translations/pre_js_translations" %>
+    <%= javascript_include_tag 'v3/application_v3' %>
+    <%= render partial: "common/js_airbrake" if is_mobile_app? %>
+    <%= javascript_include_tag 'mobile_v2/feature_mobile' %>
+    <%= render partial: "layouts/translations/js_translations" %>
+    <%= csrf_meta_tag %>
+    <% track_info = AnalyticParams::FAKEDOOR if @fakedoor_gtac_info_string %>
+    <%= raw(render_gtac(track_info)) %>
+  </head>
+  <body class="add_new_program white-bg">
+    <%= cucumber_helper_track_page_load_begin %>
+    <% unless @disable_header %>
+      <div class="clearfix navbar-fixed-top navbar">
+        <div id='statusbar_header' class="clearfix theme-bg">
+          <div class="<%= @page_header ? 'col-xs-12' : 'col-xs-6' %> theme-font-color no-padding cjs_statusbar_header_theme_div ">
+            <ul class="unstyled no-margins font-bold pull-left font-bold col-xs-12">
+              <li class="h5 no-margins font-bold">
+                <div>
+                  <% if @page_header %>
+                    <%= @page_header %>
+                  <% else %>
+                    <div class="p-m p-r-0 p-l-sm cjs_chronus_logo_mobile">
+                      <%= image_tag("chronus_white_small.png", :class => "m-r-sm") %>
+                      <span class ="h4 font-bold"><%= "app_layout.header.chronus".translate %></span>
+                    </div>
+                  <% end %>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <% unless @page_header %>
+            <div id="mobile_header_links" class="pull-right col-xs-6 p-l-0 p-r-xxs">
+              <ul id='header_actions' class="nav navbar-top-links">   
+                <%= render(:partial => 'languages/dropdown', :locals => {:container_class => "pull-right", :iconclass => "fa fa-language", :mobile_org_page => true}) %>
+              </ul>
+            </div>
+          <% end %>  
+        </div>
+      </div>
+    <% end %>
+    <div id="page-wrapper" class="no-margins no-padding">
+      <div id='app_content' class='clearfix p-b-xl'>
+        <%= render :partial => 'common/warning' if @supported_with_warning_browser %>
+        <div id='page_canvas' class='clearfix app_page_canvas <%= "v2_pages" if @v2_page %>'>
+          <%= show_flash %>
+          <%= yield %>
+        </div>
+      </div>
+      <% unless @disable_footer %>
+        <div class="cui-affixed-footer p-sm z-index-10 b-t text-center theme-font-color theme-bg">
+          <span><%= "footer.powered_by".translate(brand: "display_string.default_brand_label_v1".translate) %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <%= cucumber_helper_track_page_load_end %>
+    <%= download_ck_attachment_if_exist %>
+    <%= render partial: 'common/cordova', locals: {header_id: '#statusbar_header'} if is_mobile_app? %>
+  </body>
+</html>

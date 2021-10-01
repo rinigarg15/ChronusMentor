@@ -1,0 +1,6 @@
+<%= render :layout => 'common/report_tiles' do %>
+  <%= render_report_tiles(program_invitations_hash[:all_program_invitations].count, "fa fa-envelope-open-o", "feature.program_invitations.label.invitations_sent".translate, "") %>
+  <%= render_report_tiles(program_invitations_hash[:pending_program_invitations].count, "fa fa-exclamation-triangle ", "feature.meeting_request.label.pending".translate,"") %>
+  <%= render_report_tiles(program_invitations_hash[:accepted_program_invitations].count, "fa fa-check", "feature.meeting_request.label.accepted".translate,"") %>
+  <%= render_report_tiles(program_invitations_hash[:expired_program_invitations].count, "fa fa-close", "feature.announcements.label.Expired".translate,"" ) %>
+<% end %>

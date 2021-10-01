@@ -1,0 +1,22 @@
+<!-- javascript files for multiselect, doublescroll and chart -->
+<%= javascript_include_tag "jquery.tmpl.1.1.1.js" %>
+<%= javascript_include_tag "jquery.blockUI.js" %>
+<%= javascript_include_tag "ui.multiselect" %>
+<%= render :partial => "reports/high_charts" %>
+
+<% @skip_rounded_white_box_for_content = true %>
+<% @title = "feature.reports.header.mentoring_connection_activity_report".translate(:Mentoring_Connection => _Mentoring_Connection) %>
+<% @back_link = back_to_reports_options(@category) %>
+<% formatted_start_date = DateTime.localize(@start_date, format: :full_display_no_time) %>
+<% formatted_end_date = DateTime.localize(@end_date, format: :full_display_no_time) %>
+<% @report_actions = {
+  url: groups_report_path,
+  data_js: %Q[GroupsReport.getConnectionActivityReportFiltersData();],
+  reset_js: %Q[GroupSearch.clearTaskStatusFilter(false);commonReportFilters.resetOtherFilters();Groups.resetSurveyStatusAndResponse();],
+  ga_label: ReportsController::GoogleAnalytics::CONNECTION_ACTIVITY_REPORT_LABEL,
+  time_filter: { time: {start: @start_date, end: @end_date}, label: "#{formatted_start_date} - #{formatted_end_date}" },
+  export: [{label: "feature.mentor_offer.action.export_as_csv".translate, url: groups_report_path(format: :csv)}],
+  other_filters_partial: "groups/filter_form"
+} %>
+
+<%= render partial: "reports/groups_report", locals: { sub_filter: @sub_filter, search_filters: @search_filters, member_filters: @member_filters, point_interval: @point_interval, start_date: @start_date, end_date: @end_date, groups_report: @groups_report} %>

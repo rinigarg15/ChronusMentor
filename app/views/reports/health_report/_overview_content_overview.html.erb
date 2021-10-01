@@ -1,0 +1,8 @@
+<%= render :partial => 'reports/metric_item', :locals => {
+  :name => "feature.reports.label.content".translate, :percent_metric => content_overview.cumulative_value,
+  :opts => {
+    :help_text => "feature.reports.content.content_help_text".translate(artilces: _Articles),
+    :detailed_report_anchor => "content_overview_box",
+    :point_scale => true
+  }
+} %>

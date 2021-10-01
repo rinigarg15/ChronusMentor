@@ -1,0 +1,30 @@
+var MentoringModelFacilitationTemplates = {
+  formSelector: ".cjs-facilitation-template-form",
+  descriptionEditor: "cjs-mentoring-model-facilitation-template-messsage",
+
+  initializeForm: function() {
+    var form = jQuery(MentoringModelFacilitationTemplates.formSelector);
+    var editor = CKEDITOR.instances[MentoringModelFacilitationTemplates.descriptionEditor];
+    if (editor) { editor.destroy(true); }
+    CkeditorConfig.initCkeditor("#"+MentoringModelFacilitationTemplates.descriptionEditor, {height: "100px", width: "640px"}, CkeditorConfig.defaultCkOptions());
+    MentoringModelFacilitationTemplates.formValidate(form);
+  },
+
+  formValidate: function(form) {
+    form.find("input[type=submit]").on('click', function(){
+      MentoringModels.updateCKEditorInputs(jQuery("#" + MentoringModelFacilitationTemplates.descriptionEditor), MentoringModelFacilitationTemplates.descriptionEditor);
+      var retValue = ValidateRequiredFields.checkNonMultiInputCase(form.find("#mentoring_model_facilitation_template_subject"));
+      var textareaInvalid = CKEDITOR.instances["cjs-mentoring-model-facilitation-template-messsage"].getData().replace(/<br \/>\n$/, '').blank();
+      var editorElement = form.find(".cke_editor_cjs-mentoring-model-facilitation-template-messsage");
+      if(textareaInvalid) {
+        ValidateRequiredFields.showFieldError(editorElement);
+      } else {
+        ValidateRequiredFields.hideFieldError(editorElement);
+      }
+      retValue = (!textareaInvalid) && retValue;
+      retValue = ValidateRequiredFields.checkForPositiveIntegerInTextBox(form.find("#mentoring_model_facilitation_template_send_on")) && retValue;
+      return retValue;
+    });
+  }
+
+}

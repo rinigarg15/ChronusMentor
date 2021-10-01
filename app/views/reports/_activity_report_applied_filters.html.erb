@@ -1,0 +1,8 @@
+<% profile_filter_wrapper "common_text.Applied_Filters".translate, false, false, true, id: "activity_report_selected_filters" do %>
+  <span class = "label label-highlight m-r-xs">
+    <%= @role_filters.map{|role_name| role_term_hash[role_name] }.join(" " + "feature.reports.label.or".translate + " ").truncate(28) %>
+  </span>
+  <span class = "label label-highlight">
+    <%= activity_report_daterange_display_name(@start_time, @end_time) %>
+  </span>
+<% end %>

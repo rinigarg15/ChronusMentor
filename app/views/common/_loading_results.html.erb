@@ -1,0 +1,82 @@
+<% message ||= "display_string.Loading".translate %>
+<% loading_result_id = local_assigns[:loading_result_id] || "loading_results" %>
+<% page_loading_result_id = local_assigns[:page_loading_result_id] || "page_loading_results" %>
+<div id="<%= loading_result_id %>" class='hide'>
+  <div class="<%= hidden_on_mobile %>">
+    <div class="filter-loading-results white-bg"></div>
+    <div class="filter-alert">
+      <h4 class="font-bold text-center">
+        <%= message %>
+      </h4>
+      <div class="sk-spinner sk-spinner-wave">
+        <div class="sk-rect1"></div>
+        <div class="sk-rect2"></div>
+        <div class="sk-rect3"></div>
+        <div class="sk-rect4"></div>
+        <div class="sk-rect5"></div>
+      </div>
+    </div>
+  </div>
+  <% if !(is_mobile_app?) %>
+    <div class="<%= hidden_on_web %>">
+      <div class="overlay filter-loading-results spinner_container"></div>
+      <div class="filter-alert cui-spinner">
+        <div class="spinner-background p-b-m p-t-m">
+          <div class="spinner">
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div id="<%= page_loading_result_id %>" class="<%= hidden_on_mobile %> hide">
+  <div class="filter-loading-results white-bg"></div>
+  <div class="filter-alert">
+    <div class="sk-spinner sk-spinner-double-bounce">
+      <div class="sk-double-bounce1"></div>
+      <div class="sk-double-bounce2"></div>
+    </div>
+  </div>
+</div>
+<script type='text/javascript'>
+  jQuery("#<%= page_loading_result_id %>").removeClass("hide");
+</script>
+<% if is_mobile_app? %>
+  <script type='text/javascript'>
+
+    (function ($) {
+      $.each(['show', 'hide'], function (i, ev) {
+        var el = $.fn[ev];
+        $.fn[ev] = function () {
+          this.trigger(ev);
+          return el.apply(this, arguments);
+        };
+      });
+    })(jQuery);
+
+    jQuery("#<%= loading_result_id %>").on('show', function() {
+      document.addEventListener("deviceready", function(){
+        var options = { dimBackground: false };
+        SpinnerPlugin.activityStart('', options);
+      });
+    });
+    jQuery("#<%= loading_result_id %>").on('hide', function() {
+      document.addEventListener("deviceready", function(){
+        SpinnerPlugin.activityStop();
+      });
+    });
+  </script>
+<% end %>

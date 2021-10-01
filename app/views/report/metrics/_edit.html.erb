@@ -1,0 +1,10 @@
+<% modal_v3_popup "feature.reports.content.edit_report_metric".translate, {modern_qtip: true, width: 730, container_class: "report-popup"} do %>
+  <div id="edit_report_metric" class="has-above-2">
+    <%= render partial: "report/metrics/form", locals: {
+      sections: @sections,
+      metric: @metric,
+      target_path: report_section_metric_path(@section, @metric, format: :js),
+      subview_optgroups: @subview_optgroups
+    } %>
+  </div>
+<% end %>

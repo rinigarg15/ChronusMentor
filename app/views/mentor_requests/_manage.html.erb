@@ -1,0 +1,24 @@
+<%= render partial: 'mentor_requests/report_tiles', locals: {tiles_data: tiles_data} %>
+
+<div class="tabs-container inner_tabs">
+  <div>
+    <ul class="nav nav-tabs h5 no-margins">
+      <%= collect_inner_tabs(get_tabs_for_mentor_requests_listing(list_field)) %>
+      <% if @current_program.matching_by_mentee_and_admin? && current_user.can_manage_mentor_requests? && (list_field.to_sym == AbstractRequest::Status::STATUS_TO_SCOPE[AbstractRequest::Status::STRING_TO_STATE[MentorRequest::Filter::ACTIVE]]) %>
+        <li class="pull-right">
+          <div class="pull-right m-t-xs m-r-xs btn btn-primary btn-large>
+            <%= link_to('feature.mentor_request.action.batch_assignment_v1_html'.translate(mentors: _mentors), groups_path(show_new: true)) %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+
+<%= hidden_field_tag(:sort, action_params[:sort_field], id: 'filter_sort_field') %>
+<%= hidden_field_tag(:order, action_params[:sort_order], id: 'filter_sort_order') %>
+<%= hidden_field_tag(:list_field, list_field, id: 'filter_tab') %>
+
+<div id="results_pane">
+  <%= render partial: "mentor_requests/index", locals: {filter_params: filter_params, action_params: action_params, is_request_manager_view_of_all_requests: true, mentor_requests: mentor_requests, mentor_request_partial: 'mentor_requests/mentor_request_for_admin', match_results_per_mentor: match_results_per_mentor, from_manage: true} %>
+</div>

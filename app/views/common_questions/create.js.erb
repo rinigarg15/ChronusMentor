@@ -1,0 +1,26 @@
+<% if @common_question.errors[:question_info].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("flash_new", '<%= "feature.common_questions.content.choices_blank_error".translate %>')
+<% elsif @common_question.errors[:rating_questions].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("flash_new", '<%= "feature.common_questions.content.rows_blank_error".translate %>')
+<% elsif @common_question.errors[:matrix_setting].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("flash_new", '<%= "feature.common_questions.content.invalid_choices_count_error_v1".translate %>')
+<% elsif @common_question.errors.blank? %>
+  <% content = preview_and_edit_common_question(@common_question) %>
+  jQuery("#common_question_new").replaceWith("<%= j content %>")
+  jQueryHighlight("common_question_<%= @common_question.id %>", 3000)
+
+  // If survey related, update survey questions count
+  <% if @survey %>
+    jQuery("#survey_questions_count").html("<%= @survey.survey_questions.count %>")
+  <% end %>
+
+  jQuery('#add_new_common_question').show()
+  if (jQuery('#no_questions').length > 0) {
+    jQuery('#no_questions').remove();
+  }
+  <%= render partial: "connection/questions/handle_connection_summary_questions", locals: {common_question: @common_question} %>
+<% elsif @common_question.errors[:question_text].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("flash_new", '<%= "feature.common_questions.content.field_blank_error".translate %>')
+<% elsif @common_question.errors[:question_choices].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('<%= "flash_new" %>', '<%= @common_question.errors[:question_choices].to_sentence %>');
+<% end %>

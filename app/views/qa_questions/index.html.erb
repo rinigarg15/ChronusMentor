@@ -1,0 +1,30 @@
+<% @title = "feature.question_answers.header.question_answers".translate %>
+
+<% if !search_view? && @new_qa_question.present? %>
+  <% @page_action = { label: append_text_to_icon("fa fa-plus-circle", "feature.question_answers.action.ask_new_question".translate), url: "javascript:void(0)", class: "btn btn-primary cjs_ask_question_button", data: { toggle: "modal", target: "#cjs_new_qa_question_modal" } } %>
+  <% modal_container "feature.question_answers.header.ask_question".translate, { modal_id: "cjs_new_qa_question_modal" } do %>
+    <%= render partial: "new_qa_question" %>
+  <% end %>
+<% end %>
+
+<%= render :partial => "all_qa_questions" %>
+
+<% if !search_view? %>
+  <% content_for_sidebar do %>
+    <% tips = ["feature.question_answers.content.tips.first_html".translate(tip_1_strong: content_tag(:b, "feature.question_answers.content.tips.first_strong".translate)),
+      "feature.question_answers.content.tips.second".translate] %>
+    <%= render_tips_in_sidepane(tips) %>
+    <% if @top_contributors.present? %>
+      <%= sidepane_assets_pane @top_contributors,
+        pane_header: "feature.question_answers.content.top_contributors".translate,
+        sidepane_asset_partial: "qa_answers/top_qa_answerers",
+        user_method: :self %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  <% if @add_new_question %>
+    QaAnswer.openAddNewQuestionPopup();
+  <% end %>
+<% end %>

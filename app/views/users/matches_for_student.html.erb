@@ -1,0 +1,73 @@
+<% @title = "feature.user.label.find_mentor".translate(:a_mentor => _a_Mentor) %>
+<% @skip_rounded_white_box_for_content = true %>
+
+<% choose_another_mentee_content = capture do %>
+  <div class="m-b">
+    <%= "feature.user.content.find_a_mentor_instruction".translate(:mentee => _mentee, :mentor => _mentor, :mentors_upcase => _Mentors, :mentors => _mentors)%>
+  </div>
+  <%= form_tag matches_for_student_users_path, method: :get do %>
+    <%= control_group do %>
+      <label class="control-label" for="group_students_new">
+        <%= "feature.user.label.mentee_name".translate(:mentee => _Mentee) %>
+      </label>
+      <%= controls do %>
+        <%= text_field_with_auto_complete(:group, "students_new", { :class => 'form-control', :value => @student_name_with_email, :name => "student_name", :autocomplete => "off" }, { :min_chars => 3, :url => auto_complete_for_name_users_path(format: :json, role: RoleConstants::STUDENT_NAME, show_all_users: true, for_autocomplete: true), :param_name => 'search', :highlight => true } ) %>
+      <% end %>
+    <% end %>
+    <% action_set(class: "pull-right") do %>
+      <%= submit_tag "feature.user.label.find_mentors".translate(:mentors => _Mentors), class: 'btn btn-primary' %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @student %>
+  <% actions = [ { label: append_text_to_icon("fa fa-pencil", "feature.user.content.choose_another_mentee".translate(:Mentee => _Mentee)), js: "javascript:void(0)", data: { toggle: "modal", target: "#cjs_choose_another_mentee_modal" } } ] %>
+  <% additional_right_links = dropdown_buttons_or_button(actions, dropdown_title: "", btn_class: "pull-right", btn_group_btn_class: "btn-sm btn-white", is_not_primary: true) %>
+  <% modal_container "feature.user.content.choose_another_mentee".translate(:Mentee => _Mentee), modal_id: "cjs_choose_another_mentee_modal" do %>
+    <%= choose_another_mentee_content %>
+  <% end %>
+  <%= ibox "feature.user.header.selected_role".translate(:role => _Mentee), additional_right_links: additional_right_links, collapse_link_class: "hide" do %>
+    <div class="media-left">
+      <%= user_picture(@student, { :no_name => true, :size => :large }, { class: "img-circle" } ) %>
+    </div>
+    <div class="media-body">
+      <h3 class="m-b-0">
+        <%= link_to_user @student, :no_hovercard => true %>
+      </h3>
+      <%= status_indicator(@student, {:student_required_questions => @student_required_questions, consider_user_as_student: true, wrapper_options: { class: "m-t-xs" } } ) %>
+    </div>
+    <div class="m-t">
+      <%= profile_field_container(_Mentors, @student_mentors.empty? ? content_tag(:span, 'display_string.None'.translate, class: 'text-muted') : safe_join(@student_mentors.collect { |mentor| link_to_user(mentor) }, ", "), { class: "m-t-sm m-b-xs" } ) %>
+      <div class="cjs_show_and_hide_toggle_container m-t">
+        <%= link_to "feature.user.content.view_profile_summary_html".translate, "javascript:void(0)", :class => "font-bold cjs_show_and_hide_toggle_sub_selector cjs_show_and_hide_toggle_show" %>
+        <div class='cjs_show_and_hide_toggle_sub_selector cjs_show_and_hide_toggle_content hide'>
+          <div class="section-pane">
+            <%= render :partial => "users/show_profile_summary_fields", :locals => { :user => @student, :role => RoleConstants::STUDENT_NAME, :profile_last_updated_at => @student_profile_last_updated_at, in_summary_questions: @student_in_summary_questions } %>
+            <% show_last_logged_in(@student) do |last_logged_in| %>
+              <%= profile_field_container("feature.user.label.Last_Login".translate, last_logged_in, { class: "m-t-sm m-b-xs" } ) %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div id="results_pane">
+    <%= render :partial => "users/mentor_matches_list" %>
+  </div>
+  <% content_for_sidebar do %>
+    <div id="mentors_filters">
+      <%= render(:partial => "users/filter_pane", locals: {role: @role}) %>
+    </div>
+  <% end %>
+<% else %>
+  <%= ibox nil do %>
+    <%= choose_another_mentee_content %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  AssignMatchedMentor.generate_form();
+  ShowAndHideToggle();
+<% end %>
+<%= javascript_tag "jQuery(document).ready(function(){ #{@initialize_filter_fields_js.join(";\n")}; })" if @initialize_filter_fields_js %>

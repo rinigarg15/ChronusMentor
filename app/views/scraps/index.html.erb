@@ -1,0 +1,42 @@
+<% if @group.present? %>
+  <%= render :layout => 'groups/show_layout', :locals => { show_tabs: @can_show_tabs, messages_tab: true, show_page_actions: true } do %>
+    <% ibox_title = "feature.mentoring_model.label.message_tab".translate if !@can_show_tabs %>
+    <%= ibox ibox_title, :content_class => "no-padding p-t-xs", :collapse_link_class => "hide" do %>
+      <div class="clearfix cjs_tab_items discussion-list">
+        <%= render :partial => 'groups/display_discussion_list', :locals => {:scraps_ids => @scraps_ids} %>
+      </div>
+    <% end %>
+  <% end %>
+<% else %>
+  <%= render :layout => 'meetings/meeting_area_common_content', :locals => {meeting: @meeting.build_recurring_meeting(Meeting.parse_occurrence_time(@current_occurrence_time)), :tab => Meeting::Tabs::MESSAGES, is_admin_view: @is_admin_view} do %>
+    <div class="clearfix cjs_tab_items discussion-list">
+      <%= render :partial => 'groups/new_ajax_scrap_form' if @page_controls_allowed %>
+      <%= render :partial => 'groups/display_discussion_list', :locals => {:scraps_ids => @scraps_ids} %>
+    </div>
+  <% end %>
+<% end %>
+
+<% if @group.present? && (@src_path == EngagementIndex::Activity::ACCEPT_MENTOR_REQUEST)%>
+  <%= render partial: "groups/accept_connection_msg_popup", locals: { group: @group } %>
+  <%= javascript_tag do %>
+    Groups.showAcceptPopup("#modal_mentor_request_accept_popup");
+  <% end %>
+<% end %> 
+
+<%= javascript_tag do %>
+  jQuery(document).on("ready", function(){
+    Comment.initializeForm("<%= j('common_text.error_msg.please_correct_highlighted_errors'.translate) %>");
+    <% unless @group.present? %>
+      NewScrap.initialize("<%= @ref_obj.id %>");
+    <% end %>
+
+    <% if params[:new_scrap] && params[:new_scrap] == "true" && @page_controls_allowed %>
+      <% @hide_group_overdue_survey_popup = true %>
+      <% if @group.present? %>
+        jQuery("#cjs_new_message_modal").modal("show");
+      <% else %>
+        jQuery(".cjs-new-scrap-link-<%= @ref_obj.id %>").click();
+      <% end %>
+    <% end %>
+  });
+<% end %>

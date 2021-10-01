@@ -1,0 +1,14 @@
+var ReportSection = {
+  loadSectionPath: '',
+
+  loadSections: function(sectionsToLoad){
+    jQuery.each(sectionsToLoad, function(index, section){ ReportSection.loadSection(section); })
+  },
+
+  loadSection: function(section){
+    jQuery.ajax({
+      url: ReportSection.loadSectionPath,
+      data: {section: section}
+    });
+  }
+};

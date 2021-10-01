@@ -1,0 +1,55 @@
+<div id="<%= popup_id %>"></div>
+<% content = content_tag :div, :class => 'cui-qtip-contentwrapper popup old_popup_styles row_fluid' do %>
+  <div class='popup_header'>
+    <div class='close_image_link'>
+      <%= link_to_function "x", 'hideQtip();', class: "close" %>
+    </div>
+    <h3><%= popup_title %></h3>
+  </div>
+
+  <div class="row-fluid">
+    <div class="popup_content scroll-6 clearfix pull-left has-above-9 col-md-2">
+      <div class="image">
+        <img src="/assets/exclamation.png" alt="Alert">
+      </div> 
+    </div>
+      <%= capture(&block) %>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+jQuery(function(){
+    jQuery('#<%= action_item_id %>').qtip({
+        content: {
+            text: "<%= (j(content)) %>",
+            title: ""
+        },
+        position: {
+            my: '<%= my %>',
+            at: '<%= at %>',
+            target: <%= target.html_safe %>,
+            container: jQuery('div#<%= popup_id %>')
+        },
+        show: {
+            event: 'click',
+            solo: true,
+            modal: <%= modal %>
+        },
+        events :{
+            render: function(event, api) {
+                initialize.setDatePicker();
+                <%= # Need to wait until browser finish render
+                  is_ie_less_than?(9) ?
+                    "setTimeout(initialize.autoResizeTextAreas, 1);" :
+                    "initialize.autoResizeTextAreas();" %>
+                <%= render_init %>;
+            }
+        },
+        hide: false,
+        style: {
+            width: '<%= is_ie_less_than?(8) ? 600 : width %>',
+            classes: 'cjs-qtip cui-qtip ui-tooltip-pos-c ui-tooltip-focus '+'<%= klass %>'
+        }
+    });
+});
+<% end %>

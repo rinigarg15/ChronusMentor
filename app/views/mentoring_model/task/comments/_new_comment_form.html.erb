@@ -1,0 +1,35 @@
+<% buttons = [
+  { type: 'btn', class: 'btn btn-primary', icon: "fa fa-comment no-margins", content: "display_string.Submit".translate },
+  { type: 'link', url: "javascript:void(0)", class: "btn btn-white cjs_comment_cancel", icon:"fa fa-times no-margins text-default", content: "display_string.Cancel".translate, link_class: "text-default" },
+  { type: 'file', id: "cjs-task-comment-attachment-#{task.id}",name: "mentoring_model_task_comment[attachment]", data: {'remove-button-class': "cjs_remove_comment_attachment"}, class: "quick_file", wrapper_html: { class: "col-xs-3 col-sm-6  cjs-attachment no-margins no-padding cui_no_browse_text" } }
+] %>
+<% comment_options = {
+  wrapper_id: "new_comments_for_task_#{task.id}_container",
+  wrapper_class: "p-t-xs p-b-sm clearfix",
+  object: comment,
+  form_options: { url: mentoring_model_task_comments_path(group_id: group.id, task_id: task.id, home_page_view: @home_page_view), :remote => true },
+  form_html_options: { id_suffix: task.id, class: "form-horizontal"},
+  attribute: :content,
+  input_class: "mentoring_model_task_comment_content",
+  input_id: "mentoring_model_task_comment_content_#{task.id}",
+  placeholder: "feature.connection.content.placeholder.add_new_comment".translate,
+  action_buttons: buttons
+} %>
+<% if group.scraps_enabled? %>
+  <% comment_options.merge!(
+    checkbox_object: @current_organization.audit_user_communication? ? false : :notify,
+    checkbox_status: @notify_checked,
+    checkbox_label: "feature.mentoring_model_task_comment.action.send_message".translate(mentoring_connection: _mentoring_connection)
+  ) %>
+<% end %>
+
+<%= render layout: "common/new_comment_wrapper", locals: comment_options do %>
+  <%= response_flash("cjs_task_comment_error_message_#{task.id}") %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    TaskComment.inspectAttachFile();
+    Comment.initializeForm();
+  });
+<% end %>

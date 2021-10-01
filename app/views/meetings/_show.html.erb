@@ -1,0 +1,12 @@
+<% modal_v3_popup _Meeting, modal_body_class: "meeting_modal", additional_close_button_class: "meeting_modal_close_link" do %>
+  <%= render partial: "meetings/meeting", locals: {
+    meeting: meeting,
+    group_admin_view: group_admin_view,
+    from_popup: true,
+    survey_src: Survey::SurveySource::MENTORING_CALENDAR,
+    ei_src: EngagementIndex::Src::UpdateMeeting::MENTORING_SLOT,
+    src: MeetingsController::SourceParams::FLASH_CALENDAR,
+    rsvp_src: MemberMeeting::RSVP_SOURCE::FLASH_MENTORING_CALENDAR,
+    from_connection_home_page_widget: false
+  }, layout: false %>
+<% end %>

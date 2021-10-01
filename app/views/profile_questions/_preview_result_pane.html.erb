@@ -1,0 +1,14 @@
+<div class="common_questions">
+  <div id="preview_profile_fields">
+    <div id="sections_list">
+      <% if @preview_type == ProfileQuestionsController::PreviewType::USER_PROFILE %>
+        <%= preview_description_box(filter_role: @filter_role, type: (is_membership_preview ? :membership_question_preview : :profile_question_preview),  filter_role_ids: @filter_role_ids, viewer_role_ids: @viewer_roles, should_be_connected: @should_be_connected) %>
+        <%= render partial: "members/section_questions", locals: {sections: get_simple_section_questions(@profile_questions.values.flatten)} %>
+      <% else %>
+        <% @sections.each_with_index do |section, index| %>
+          <%= get_preview_section_content(section, profile_questions, profile_filter_xhr: false, is_membership_preview: is_membership_preview, first: index.zero?, last: (index + 1 == @sections.count)) %>
+        <% end %>
+      <% end %>
+    </div>    
+  </div>
+</div>

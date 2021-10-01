@@ -1,0 +1,9 @@
+<span id='mark_featured'>
+  <% if topic.sticky? %>
+    <%= link_to append_text_to_icon("fa fa-tag text-default", "feature.forum.action.remove_featured".translate), set_sticky_position_forum_topic_path(topic.forum, topic, sticky_position: 0), remote: true, method: :post, id: 'featured_topic_link'%>
+    <%= tooltip('featured_topic_link', 'feature.forum.content.remove_featured_help_text'.translate) %>
+  <% else %>
+    <%= link_to append_text_to_icon("fa fa-tag text-default", "feature.forum.action.mark_featured".translate), set_sticky_position_forum_topic_path(topic.forum, topic, sticky_position: 1), remote: true, method: :post, id: 'featured_topic_link' %>
+    <%= tooltip('featured_topic_link', 'feature.forum.content.mark_featured_help_text'.translate) %>
+  <% end %>
+</span>

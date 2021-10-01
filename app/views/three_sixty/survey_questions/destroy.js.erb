@@ -1,0 +1,20 @@
+<% if @survey_question.destroyed? %>
+  <% if @survey_competency.present? %>
+    <% if @survey_question.survey_competency.destroyed? %>
+      jQueryHighlight("#three_sixty_survey_competency_<%= @survey_competency.id %>", 500);
+      jQuery("#three_sixty_survey_competency_<%= @survey_competency.id %>").remove();
+      jQuery("#three_sixty_new_survey_competency").html('<%= j render(:partial => "three_sixty/surveys/new_survey_competency", :locals => {:survey => @survey, :available_competencies => @available_competencies}) %>');
+    <% else %>
+      // removing cjs-alt-color-actions class so that rows will have alternate colors even after this row is hidden
+      jQuery("#cjs_three_sixty_survey_question_<%= @survey_question.id %>").removeClass('cjs-alt-color-actions');
+      jQueryHighlight("#cjs_three_sixty_survey_question_<%= @survey_question.id %>", 500);
+      jQuery("#cjs_three_sixty_survey_question_<%= @survey_question.id %>").remove();
+      ThreeSixty.alternateColor("#three_sixty_survey_competency_<%= @survey_competency.id %>");
+      jQuery("#three_sixty_survey_add_questions_<%= @survey_competency.id %>").show();
+    <% end %>
+  <% else %>
+    jQuery("#cjs_three_sixty_survey_oeq_<%= @survey_question.id %>").removeClass('cjs-alt-color-actions').remove();
+    ThreeSixty.alternateColor("#three_sixty_survey_oeqs");
+    jQuery("#three_sixty_new_survey_oeq").html('<%= j render(:partial => "three_sixty/surveys/new_survey_oeq", :locals => {:survey => @survey, :available_oeqs => @available_oeqs, :show_actions => true}) %>');
+  <% end %>
+<% end %>

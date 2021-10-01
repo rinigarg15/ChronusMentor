@@ -1,0 +1,18 @@
+<% m_id = mentoring_tip.new_record? ? "new" : mentoring_tip.id %>
+<tr id="edit_mentoring_tip_<%= m_id %>" class="mentoring_tip_form" style="display: <%= 'none' if mentoring_tip.new_record? %>">
+  <td colspan="3">
+    <%= simple_form_for mentoring_tip, html: { id: "edit_mentoring_tip_form_#{m_id}" }, remote: true do |f| %>
+      <%= f.input :message, :as => :text, :label => "feature.mentoring_tips.label.Mentoring_Tip_label".translate(:Mentoring => _Mentoring), :input_html => {:id => "mentoring_tip_message_#{m_id}", :class => "form-control", :rows => 5}, :wrapper_html => {:class => "col-xs-12"}, :hint => "350", :hint_html => {:class => "pull-right strong m-b-0", :id => "character_limit_#{m_id}"} %>
+      <%= f.hidden_field :role_names_str, id: nil %>
+
+      <% action_set(class: "col-xs-12") do %>
+        <div class="pull-right">
+          <%= loc_loading(class: "m-t-sm", :id => "mentoring_tip_#{m_id}_loader" ) %>
+          <%= link_to_function "display_string.Cancel".translate, "MentoringTips.cancelEdit('#{m_id}')", :class => "btn btn-white" %>
+          <%= f.button :submit, "display_string.Save".translate, :onclick => "jQuery('#mentoring_tip_#{m_id}_loader').show()", :disable_with => "display_string.Please_Wait".translate %>
+        </div>
+      <% end %>
+    <%  end %>
+  </td>
+</tr>
+<%= javascript_tag("MentoringTips.messageObserver('#{m_id}');") %>

@@ -1,0 +1,52 @@
+<% @title = @article.title %>
+<% @back_link = { label: "feature.article.action.See_more_articles".translate(articles: _articles), link: articles_path } if current_user.can_view_articles? && @back_link.blank? %>
+<% is_author_visible = check_visibility?(@article.author) %>
+<% author_or_admin_actions = get_article_actions_for_author_or_admin(@article) %>
+<% if author_or_admin_actions.present? %>
+  <% @page_action = author_or_admin_actions %>
+  <% @page_action_options = { dropdown_title: "" } %>
+<% end %>
+
+<%= ibox nil, ibox_id: "view_article", content_class: "no-padding" do %>
+  <div class="p-sm">
+    <% if is_author_visible %>
+      <div class="media-left">
+        <%= member_picture_v3(@article.author, { :no_name => true, :size => :medium, outer_class: "pull-left no-margins" }, { class: "img-circle" } ) %>
+      </div>
+      <div class="media-body">
+        <h4 class="m-t-xs m-b-0">
+          <%= link_to_member(@article.author, true) %>
+        </h4>
+        <div class="small text-muted">
+          <%= append_text_to_icon("fa fa-clock-o m-r-0", "feature.article.content.posted_ago".translate(time_ago_in_words: time_ago_in_words(@article.created_at))) %>
+        </div>
+      </div>
+    <% end %>
+    <div id="show_article_content" class="m-t-md <%= "ckeditor_generated" if @article.type == ArticleContent::Type::TEXT %>">
+      <%= render :partial => "article_#{@article.type}" %>
+    </div>
+    <% unless @article.label_list.empty? %>
+      <div id="article_labels" class="m-t-sm m-b-sm">
+        <%= article_label_links(@article) %>
+      </div>
+    <% end %>
+    <%= get_common_article_actions(@article, @comments_count) %>
+  </div>
+  <%= article_comments_container(@article_publication) %>
+<% end %>
+
+<% if @related_articles.size > 0 %>
+  <% content_for_sidebar do %>
+    <% if @related_articles.size > 0 %>
+      <%= sidepane_assets_pane @related_articles,
+        pane_header: "feature.article.header.related_articles".translate(articles: _Articles),
+        sidepane_asset_partial: "articles/related_article",
+        asset_icon_class: "fa fa-file-text" %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  Comment.initializeCommentButton();
+  Comment.initializeForm("<%= j('common_text.error_msg.please_correct_highlighted_errors'.translate) %>");
+<% end %>

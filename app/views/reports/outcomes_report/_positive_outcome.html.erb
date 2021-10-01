@@ -1,0 +1,37 @@
+<% groups_or_meeting_term_for_title = show_flash_mentoring_sections ? _Meetings : _Mentoring_Connections %>
+<%= ibox render(partial: "reports/outcomes_report/section_header_content", :locals => {:title => "feature.outcomes_report.header.positive_outcome".translate(:Mentoring_Connections => groups_or_meeting_term_for_title), path: nil}), additional_right_links: link_to(get_icon_content("fa fa-cog fa-lg") + set_screen_reader_only_content("display_string.Settings".translate), "javascript:void(0);", class: "cjs_positive_outcomes_popup dark-color"), no_collapse: true do %>  
+  <% if !positive_outcome_surveys.present? %>
+    <% if format == FORMAT::HTML %>
+      <div class="<%= col %>-12 text-muted h5 text-center">
+        <%= "feature.outcomes_report.content.configure_positive_outcomes_html".translate(click_here: link_to("display_string.Click_here".translate, "javascript:void(0)", class: "cjs_positive_outcomes_popup")) %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="p-b-xs small">
+      <%= "feature.outcomes_report.content.metrics_based_on_surveys_list_v1_html".translate(surveys_list: to_sentence_sanitize(positive_outcome_surveys.map{|survey| link_to(survey.name, survey_survey_questions_path(survey))}, last_word_connector: " #{"display_string.and".translate} ") ) %>
+      <%= "feature.outcomes_report.content.response_rate_html".translate(percent_html: content_tag(:span, "", class: "cjs_response_rate"), margin_of_error_html: link_to("feature.outcomes_report.content.margin_of_error".translate, "javascript:void(0);", class: "cjs_margin_of_error_text"), error_percentage_html: content_tag(:span, "", class: "cjs_margin_of_error"), groups_or_meeting_term: groups_or_meeting_term, count: positive_outcome_surveys.size) %>
+      <%= popover(".cjs_margin_of_error_text", "feature.survey.label.margin_of_error".translate, "feature.survey.tooltip.margin_error_text_html".translate) %>
+    </div>
+    <div class="hide cjs-extrapolated-tooltip-text" data-tooltip-text='<%= "feature.outcomes_report.content.positive_outcomes_extrpolation_tooltip".translate %>'></div>
+    <div class="row">
+      <div class="<%= col %>-5">
+        <% total_title = show_flash_mentoring_sections ? get_outcomes_positive_results_for_flash_section_total_title : get_outcomes_positive_results_for_groups_section_total_title %>
+        <% total_locals = {total_id: "cjs_positive_total", total_title: total_title, show_total_progress_bar: true, total_progress_bar_id: "cjs_positive_results_bar", groups_or_meeting_term: groups_or_meeting_term, progress_bar_tooltip_string: "feature.outcomes_report.content.progress_bar_tooltip_completed_html", progress_bar_tooltip_string_engagements: "feature.outcomes_report.content.progress_bar_tooltip_completed_engagements_html"} %>
+        <% role_locals = {role_id_proc: Proc.new{|role| ConnectionOutcomesReport::PositiveOutcomesSectionElementId.for_role(role)}, show_role_progress_bar: true,
+                          role_bar_id_proc: Proc.new{|role| ConnectionOutcomesReport::PositiveOutcomesSectionElementId.for_role(role)+"_bar"}} %>
+        <% total_connections_title = show_flash_mentoring_sections ? get_outcomes_positive_results_for_flash_section_total_connections_title : get_outcomes_positive_results_for_groups_section_total_connections_title %>
+        <% total_connections_locals = {show_secondary_total: true, total_connections_id: "cjs_positive_results_total_connections", total_connections_title: total_connections_title, show_total_connections_progress_bar: true, total_connections_progress_bar_id: "cjs_positive_results_total_connections_bar"} %>
+        <% local_vars = [total_locals, role_locals, total_connections_locals].reduce(&:merge) %>
+
+        <%= render(partial: "reports/outcomes_report/common_left_section", locals: local_vars.merge(col: col)) %>
+      </div>
+
+      <div class="<%= col %>-1"></div>
+
+      <div class="<%= col %>-6">
+        <div id="total-positive-outcomes-chart" class="cui-outcomes-dashboard-chart">
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

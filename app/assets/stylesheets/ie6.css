@@ -1,0 +1,241 @@
+ul li, ol li {
+  background-position: 0 3px;
+}
+
+#app_landing .new_program input.button {
+  margin-right: 55px;
+}
+
+#program_home #get_started ul#admin_get_started li { 
+  width: 20%;
+}
+
+#new_membership #errorExplanation {
+    margin:0 0 25px 85px;
+}
+
+#login FORM INPUT#login_button {
+  line-height: 15px;
+}
+
+.calendar_container {
+  left: -200px;
+  top: 23px;
+}
+.calendar_layout {
+  position: absolute;
+}
+
+.question .choices_wrapper,
+#customizable_profile #questions .field_view div.choices_wrapper {
+  height: expression( this.scrollHeight > 199 ? "200px" : "auto" ); /* sets max-height for IE */
+}
+
+#subtabs_advice {
+  left: -10px;
+	top: 32px;
+}
+
+.three_column .pane_two {
+  width: 50%;
+}
+
+.three_column .pane_three {
+  width: 21%;
+}
+
+#program_edit #program_form .m_period div,
+#program_edit #program_form .m_connections div {
+  left: 5px;
+}
+
+#program_home #groups_summary .group_preview {
+  border: none;
+}
+
+fieldset.admin_panel .popup {
+    width: 400px;
+}
+
+fieldset.admin_panel .popup .popup_header {
+    width: 407px;
+}
+
+fieldset.admin_panel .listing {
+    width: 380px;
+}
+
+fieldset.admin_panel .popup .rejection_help_text {
+    margin-left: 35px;
+    width: 60%;
+}
+
+#profile #left_pane .admin_panel .popup .popup_header {
+    width: 423px;
+}
+
+#profile_side_bar .right_pane .popup .edit_user .tip_and_action {
+    margin-left: 35px;
+}
+
+/* IE6 max/min width hack: http://www.cameronmoll.com/archives/000892.html */
+.help_tip {
+  width: expression(document.body.clientWidth < 150? "150px" : document.body.clientWidth > 400? "400px" : "auto");
+  border:2px solid #BBBB99;
+}
+
+div.popup {
+  width: auto;
+}
+
+#membership_requests div.popup_header {
+  width: 444px;
+}
+
+#membership_requests div.popup_content {
+  width: 420px;
+}
+
+#program_home #get_started UL#student_get_started LI {
+  width: 20.5%;
+}
+
+#group #right_pane #group_info .pane_content {
+  width: 93%;
+}
+
+#group #right_pane #group_info .pane_content .summary_item {
+  width: 101%;
+}
+
+#group #right_pane #group_info UL A.action {
+  margin-left: 160px;
+}
+
+ #attach_panel {
+  width: 340px;
+}
+
+#group #blog form#new_message_form #attach_panel span {
+  width: auto;
+}
+
+.popup .popup_header h3 {
+  font-size: 14px;
+}
+
+
+#app_landing .new_program .help {
+  margin-left: 250px;
+}
+
+#mentors_index .popup .error_message {
+  display: none;
+}
+
+#mentors_index .popup_header {
+  width: 459px;
+}
+
+#mentors_index .popup_content {
+  width: 435px;
+}
+
+#mentors_index .popup label {
+  width: 300px;
+}
+
+#mentors_index .popup textarea {
+  float: left;
+  width: 400px;
+}
+
+#mentor_requests .popup .error_message {
+  display: none;
+}
+
+#mentor_requests .popup_header {
+  width: 476px;
+}
+
+#mentor_requests .popup_content {
+  width: 452px;
+}
+
+#mentor_requests .popup_content h4 {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+#mentor_requests .popup textarea {
+  float: left;
+  width: 400px;
+}
+
+#mentor_requests .popup .list_action {
+    margin-left: 35px;
+}
+
+#program_edit #program_form #errorExplanation {
+  width: auto;
+}
+
+#program_edit .popup_header {
+  width: 695px;
+  font-size: 1.2em;
+}
+
+#program_edit .popup_content {
+  width: 611px;
+}
+
+#mentor_requests .pagination_box {
+  font-size: 0.9em;
+}
+
+#mentor_requests .popup TEXTAREA {
+  width: 325px;
+}
+
+#mentor_requests .rejection_help_text {
+  margin-left: 35px;
+}
+
+#mentors_index .pagination_box .pagination {
+  margin-left: 0px;
+}
+
+#program_invitations .popup .popup_header{
+  width: 544px;
+}
+
+.article_list_item .item_desc .has-error {
+  display: block;
+} 
+
+#signup #signup_container form div.field_info {
+  margin-left: 80px;
+}
+
+.filter_loading_results {
+    position: absolute;
+    top: expression((250 + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop)) + 'px');
+    right: expression((500 + (ignoreMe2 = document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft)) + 'px');
+}
+
+#group #blog form#new_message_form #needs_attention input#reply_needed {
+	margin: 1px 1px 0 0;
+}
+
+#program_edit #program_form .item #mentor_request_style_radio_first_visit .radio_box{
+  width: 340px;
+}
+
+#program_edit #program_form .item #mentor_request_style_radio_first_visit span.radio_label{
+  width: 300px;
+  clear: none;
+}
+
+#program_edit #program_form div.action_set {
+  padding-top: 10px;
+}

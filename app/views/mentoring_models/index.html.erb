@@ -1,0 +1,17 @@
+<% @title = "feature.multiple_templates.header.multiple_templates_title_v1".translate(Mentoring_Connection: _Mentoring_Connection) %>
+<% if super_console? %>
+  <% drop_down_array = [{label: "feature.multiple_templates.actions.create_new_template_button".translate, url: new_mentoring_model_path}] %>
+  <% drop_down_array << [{label: "feature.multiple_templates.actions.create_new_hybrid_template_button".translate, url: new_mentoring_model_path(hybrid: true)}] if current_program.hybrid_templates_enabled? %>
+  <% @page_action = drop_down_array%>
+<% end %>
+
+<%= render_multi_column_variable_height_blocks(2, :additional_class => "no-padding") do |renderable_items| %>
+  <% @mentoring_models.each_with_index do |mentoring_model, index| %>
+    <% renderable_items[index % 2] <<  render(partial: "mentoring_models/mentoring_model", locals: { mentoring_model: mentoring_model, roles: @default_roles.group_by(&:name), object_permissions: @object_permissions.group_by(&:name)}) %>
+  <% end %>
+<% end %>
+
+<% @loading_results_message = "display_string.Please_Wait".translate %>
+<%= javascript_tag do %>
+  MentoringModels.initialize();
+<% end %>

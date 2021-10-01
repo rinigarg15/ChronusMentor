@@ -1,0 +1,59 @@
+<% draft_id = article.draft? ? "draft_#{article.id}" : "" %>
+<% is_author_visible = check_visibility?(article.author) %>
+
+<div id='<%= draft_id %>' class="clearfix">
+  <%= link_to "feature.article.action.resume_editing".translate, edit_article_path(article), class: "btn btn-primary hidden-xs pull-right" if article.draft? %>
+  <div class="media-left pull-left">
+    <% options = { :no_name => true, :size => :medium } %>
+    <% options.merge!(:anonymous_view => true) if !is_author_visible %>
+    <%= member_picture_v3(article.author, options, { class: "img-circle" } ) %>
+  </div>
+
+  <div class="media-middle overflow-hidden">
+    <h4>
+      <% url_to_article = article.draft? ? edit_article_path(article) :  article_path(article) %>
+      <%= link_to article.title.empty? ? "feature.article.content.no_title".translate : article.title, url_to_article %>
+      <small class="text-muted">
+        <%= "( #{type_of(article)} )" %>
+      </small>
+      <% if article.draft? %>
+        <span class="label label-warning">
+          <%= "display_string.Draft".translate %>
+        </span>
+      <% end %>
+      <div class="m-t-xs small">
+        <%= get_icon_content("fa fa-clock-o no-margins") %>
+        <span class="text-muted">
+          <% if article.draft? %>
+            <%= "feature.article.content.last_saved_at".translate(time_ago_in_words: time_ago_in_words(article.article_content.updated_at)) %>
+          <% else %>
+            <%= "feature.article.content.posted_ago".translate(time_ago_in_words: time_ago_in_words(article.created_at)) %>
+          <% end %>
+        </span>
+      </div>
+    </h4>
+  </div>
+
+  <% article_excerpt = excerpt(article).html_safe %>
+  <% if article_excerpt.present? %>
+    <div class="m-t-sm">
+      <%= article_excerpt %>
+    </div>
+  <% end %>
+  <% if article.uploaded_content? %>
+    <div class="m-t-sm">
+      <%= display_uploaded_article_content(article) %>
+    </div>
+  <% end %>
+
+  <% unless article.labels.empty? %>
+    <div class="m-t-md">
+      <%= article_label_links(article) %>
+    </div>
+  <% end %>
+  <% if article.published? %>
+    <% comments_count = @comments_count_hash[article.id].to_i unless local_assigns[:no_comments_info] %>
+    <%= get_common_article_actions(article, comments_count, listing: true, no_comments_info: local_assigns[:no_comments_info]) %>
+  <% end %>
+  <%= link_to("feature.article.action.resume_editing".translate, edit_article_path(article), class: "btn btn-primary m-t-sm visible-xs btn-block") if article.draft? %>
+</div>

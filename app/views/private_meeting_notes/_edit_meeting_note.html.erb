@@ -1,0 +1,30 @@
+<% modal_v3_popup "feature.connection.action.Edit_Note".translate, { modal_id: "edit_note_#{private_meeting_note.id}" } do %>
+  <%= simple_form_for [@meeting, private_meeting_note], :remote => true, :html => { :id => "cjs_edit_meeting_note_form_#{private_meeting_note.id}", :class => "edit_note group_new_post"} do |f| %>
+    <%= f.input :text, :as => :text, :input_html => {:class => "form-control required-field", :rows => 5, :id => "meeting_private_meeting_note_text_#{private_meeting_note.id}"}, label: "feature.meetings.form.note".translate %>
+    <div class='controls clearfix'>
+      <% if private_meeting_note.attachment? %>
+        <div class='form-group' id="remove_attachment_box_<%= private_meeting_note.id %>">
+          <label class="checkbox">
+            <%= check_box_tag "remove_attachment", "1", false,
+              :id => "remove_attachment_#{private_meeting_note.id}",
+              :onchange => "GroupsShow.PrivateNote.toggleEditAttachment('#{private_meeting_note.id}')" %>
+            <%= "feature.connection.content.remove_attachment_html".translate(file_name: content_tag(:b, private_meeting_note.attachment_file_name)) %>
+          </label>
+        </div>
+      <% end %>
+      <div id="new_attachment_<%= private_meeting_note.id %>" class="<%= 'hide' if (private_meeting_note.attachment?) %>">
+        <div class="attach_panel" id="attach_panel_<%= private_meeting_note.id %>">
+          <%= f.input :attachment, :as => :file, label: "display_string.attach_file".translate, wrapper: :bootstrap_with_label_wrapper, input_html: {:id => "meeting_private_meeting_note_attachment#{private_meeting_note.id}" } %>
+        </div>
+      </div>
+    </div>
+    <div class="pull-right">
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "display_string.Update".translate, :id => "submit_meeting_note_update_#{private_meeting_note.id}" %>
+    </div>
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+  MeetingForm.editMeetingNote("<%= private_meeting_note.id %>");
+</script>

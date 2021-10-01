@@ -1,0 +1,7 @@
+<% modal_container "feature.program.content_pack.export_pack".translate, :modal_id => "modal_export_solution_pack_popup_form" do %>
+  <%= simple_form_for :solution_pack, :url => export_solution_pack_path, :html => {} do |f| %>
+    <%= f.input :created_by, :as => :string, :placeholder => "feature.program.content_pack.creation_help_text".translate, :label => "feature.program.content_pack.creation_label".translate, required: true, :input_html => {:class => "form-control"} %>
+    <%= f.input :description, :as => :string, :placeholder => "feature.program.content_pack.description_help_text".translate, :label => "feature.program.content_pack.description_label".translate, required: true, :input_html => {:class => "form-control"} %>
+    <%= f.submit "display_string.Submit".translate, :class => 'pull-right btn btn-primary controls', :id => "solution_pack_submit", :onclick => "return exportPopup.validateTextInput();" %>
+  <% end %>
+<% end %>

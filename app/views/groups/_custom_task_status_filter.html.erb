@@ -1,0 +1,25 @@
+<% modal_v3_popup "feature.mentoring_model.label.custom_filter".translate, {additional_close_button_class: "cjs_cancel_custom_task_filter_popup"} do %>
+  <div class="m-b">
+    <%= "feature.mentoring_model.label.filter_on_specific_tasks".translate %>
+  </div>
+  <%= control_group(class: "no-margins no-padding") do %>
+    <%= label_tag("custom_filter_template", "feature.mentoring_model.header.mentoring_plan".translate(:Mentoring_Connection => _Mentoring_Connection), :class => "control-label col-sm-12 no-padding") %>
+    <%= controls(class: "m-b-sm col-sm-11 no-padding") do %>
+      <%= select_tag :custom_filter_template, options_for_select(@templates.collect{|t| [mentoring_model_pane_title(t), t.id]}, @selected_template.id), :id => "custom_filter_template", class: "form-control", data: { url: reset_task_options_for_custom_task_status_filter_groups_path } %>
+    <% end %>
+    <%= content_tag(:span, get_icon_content("fa fa-spinner fa-spin fa-fw m-t-sm"), id: 'custom_filter_template_loading', :style => 'display:none') %>
+  <% end %>
+  
+  <div class="cjs_task_options_container">
+    <%= render(partial: "groups/custom_task_status_filter_cloner", locals: {selected_template: @selected_template}) %>
+  </div>
+
+  <% action_set(class: "pull-right m-t-sm") do %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn cancel btn-white cjs_cancel_custom_task_filter", "data-dismiss" => "modal" %>
+    <%= link_to "display_string.Apply".translate, "javascript:void(0)", :class => "btn btn-primary cjs_apply_custom_task_filter" %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  GroupSearch.customTaskFilterpopulatePopupFromHiddenFields();
+<% end %>

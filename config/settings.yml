@@ -1,0 +1,282 @@
+common: &common
+  google_analytics_id:
+  super_console_pass_phrase: <%= ENV['SUPER_CONSOLE_PASS_PHRASE'] %>
+  default_program_logo: <%= "https://#{CHRONUS_MENTOR_ASSETS_BUCKET}.#{GLOBAL_ASSETS_DOMAIN_URL}/global-assets/images/program_default.gif" %>
+  session_expiry_warning_time: 300
+  should_trigger_cron_monitor_notification: true
+  zendesk_shared_secret: <%= ENV['ZENDESK_SHARED_SECRET'] %>
+  zendesk_jwt_url: https://chronusmentorsupport1334089901.zendesk.com/access/jwt/
+  mailgun_api_key: <%= ENV['MAILGUN_API_KEY'] %>
+  check_missing_html_suffix: false
+  airbrake_api_key: <%= ENV['AIRBRAKE_API_KEY'] %>
+  airbrake_project_key: <%= ENV['AIRBRAKE_PROJECT_KEY'] %>
+  airbrake_project_id: <%= ENV['AIRBRAKE_PROJECT_ID'] %>
+  global_member_search_api_key: <%= ENV['GLOBAL_MEMBER_SEARCH_API_KEY'] %>
+  global_member_search_encrypted_api_key: <%= ENV['GLOBAL_MEMBER_SEARCH_ENCRYPTED_API_KEY'] %>
+  apn_key: <%= ENV['APN_KEY'] %>
+  gcm_server_key: <%= ENV['GCM_SERVER_KEY'] %>
+  push_enabled: true
+  native_version_path: "public/mobile/downloads/native.version"
+  html_version_path: "public/mobile/downloads/html.version"
+  app_version_path: "public/mobile/downloads/app.version"
+  android_version_path: "public/mobile/android/downloads/android_app.version"
+  powered_by_chronus: <%= "https://#{CHRONUS_MENTOR_ASSETS_BUCKET}.#{GLOBAL_ASSETS_DOMAIN_URL}/global-assets/images/Powered_By_Chronus.png" %>
+  negative_captcha_secret: <%= ENV['NEGATIVE_CAPTCHA_SECRET'] %>
+  notify_active_admins_to_cs: false
+  cors_resource_path: "/mobile_v2/home/validate_organization"
+  android_app_google_play_icon: <%= "https://#{CHRONUS_MENTOR_ASSETS_BUCKET}.#{GLOBAL_ASSETS_DOMAIN_URL}/global-assets/mobile/google_play_download_icon.png" %>
+  ios_app_store_icon: <%= "https://#{CHRONUS_MENTOR_ASSETS_BUCKET}.#{GLOBAL_ASSETS_DOMAIN_URL}/global-assets/mobile/app_store_download_icon.png" %>
+  ios_chronus_app_store_link: "https://itunes.apple.com/in/app/chronus-mobile/id920354077?mt=8"
+  google_maps_api_key: <%= ENV['GOOGLE_MAPS_API_KEY'] %>
+  pendo_api_key: <%= ENV['PENDO_API_KEY'] %>
+  pendo_integration_key: <%= ENV['PENDO_INTEGRATION_KEY'] %>
+  calendar_api_enabled: true
+  scheduling_assistant_email: ['apolloservices@chronus.com']
+  scheduling_assistant_display_name: 'Apollo Services'
+  google_oauth_client_id: <%= ENV['GOOGLE_OAUTH_CLIENT_ID'] %>
+  google_oauth_client_secret: <%= ENV['GOOGLE_OAUTH_CLIENT_SECRET'] %>
+  google_oauth_calendar_sync_v2_client_id: <%= Psych.to_json(ENV['GOOGLE_OAUTH_CALENDAR_SYNC_V2_CLIENT_ID'].to_s).chomp %>
+  google_oauth_calendar_sync_v2_client_secret: <%= Psych.to_json(ENV['GOOGLE_OAUTH_CALENDAR_SYNC_V2_CLIENT_SECRET'].to_s).chomp %>
+  microsoft_oauth_calendar_sync_v2_client_id: <%= Psych.to_json(ENV['MICROSOFT_OAUTH_CLIENT_ID'].to_s).chomp %>
+  microsoft_oauth_calendar_sync_v2_client_secret: <%= Psych.to_json(ENV['MICROSOFT_OAUTH_CLIENT_SECRET'].to_s).chomp %>
+  parallel_processing_batch_size: 1000
+  mobile_app_origin_server: false
+  cron_timezone: 'Etc/GMT+5'
+  monit_mailing_list: 'monitor@chronus.com'
+  linkedin_token: <%= ENV['LINKEDIN_TOKEN'] %>
+  linkedin_secret: <%= ENV['LINKEDIN_SECRET'] %>
+
+production_settings: &production_settings
+  cors_origin: ["https://mentor.chronus.com"]
+  app_store_link: "itms-apps://itunes.apple.com/app/id920354077"
+  gcm_id: "520722035901"
+  scheduling_assistant_email: ['scheduling-assistant@chronus.com']
+  scheduling_assistant_display_name: 'Scheduling Assistant'
+  global_member_search_hosts: ["https://newdemo.chronus.com", "https://mentorva.chronus.com", "https://mentoreu.chronus.com", "https://mentornch.chronus.com"]
+
+staging_settings: &staging_settings
+  cors_origin: ["https://mentor.realizegoal.com"]
+  gcm_id: "728846565890"
+  global_member_search_hosts: ["https://releasestaging1.realizegoal.com"]
+
+development: &non_production_settings
+  <<: *common
+  reply_to_email_username: reply-dev
+  reply_to_calendar_notification: calendar-assistant-dev
+  reply_to_program_event_calendar_notification: event-calendar-assistant-dev
+  reply_to_migrated_environments: ["reply-test"]
+  default_program_logo: /assets/icons/program_default.gif
+  should_trigger_cron_monitor_notification: false
+  mailgun_api_key: somevalue
+  chronus_mentor_common_bucket: chronus-mentor-development-common
+  chronus_mentor_log_group: chronus-mentor-development-logs
+  push_enabled: false
+  app_version_path: "vendor/engines/mobile_v2/test/fixtures/files/native.version"
+  android_version_path: "test/fixtures/files/android_app.version"
+  native_version_path: "vendor/engines/chronus_mentor_api/test/fixtures/files/native.version"
+  html_version_path: "vendor/engines/chronus_mentor_api/test/fixtures/files/html.version"
+  negative_captcha_secret: "0b212b7de8e71cfc6f576ad38bc22f8ff8d5a5498b1cc36fd28c0fd3c3e78f2091bbf9c0d136644016636ce9e46b6b69cde2d48b1876f550b586e0d813fbe3c4"
+  cors_origin: ["http://mentor.localhost.com:<%= Rails::Server.new.options[:Port] if defined?(Rails::Server) %>"]
+  gcm_id: "126511936083"  # TODO update it with proper gcm id
+  calendar_api_enabled: false
+  global_member_search_api_key: somevalue
+  global_member_search_encrypted_api_key: 359249010a1d7f1f47ac8e5cbaaff40fb1a34070 #this is a dummy key
+  global_member_search_hosts: []
+  notify_active_admins_to_cs: true
+  mobile_app_origin_server: true
+  cron_timezone: 'UTC'
+
+test: &test
+  <<: *non_production_settings
+  google_analytics_id: UA-AAABBB-CC
+  super_console_pass_phrase: somevalue
+  zendesk_shared_secret: somevalue
+  chronus_mentor_common_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'chronus-mentor-staging-common-backup' : 'chronus-mentor-staging-common' %>
+  chronus_mentor_log_group: chronus-mentor-test-logs
+  negative_captcha_secret: ""
+  cors_origin: ["http://mentor.test.host<%= (defined?(Capybara) && Capybara.server_port) ? ":#{Capybara.server_port}" : "" %>"]
+  gcm_id: "12345"
+  calendar_api_enabled: true
+  calendar_api_client_secret_path: <%= File.join(Rails.root, '/test/fixtures/files/calendar_sync/calendar_api_client_secret.json') %>
+  calendar_api_credentials_path: <%= File.join(Rails.root, '/test/fixtures/files/calendar_sync/calendar_api_credentials.yaml') %>
+  google_oauth_calendar_sync_v2_client_id: somevalue
+  google_oauth_calendar_sync_v2_client_secret: somevalue
+  microsoft_oauth_calendar_sync_v2_client_id: somevalue
+  microsoft_oauth_calendar_sync_v2_client_secret: somevalue
+  global_member_search_hosts: ["http://mentor.test.host"]
+  global_member_search_api_key: somevalue
+  global_member_search_encrypted_api_key: 359249010a1d7f1f47ac8e5cbaaff40fb1a34070
+  mobile_app_origin_server: true
+
+cucumber:
+  <<: *test
+
+staging:
+  <<: *common
+  <<: *staging_settings
+  reply_to_email_username: reply-stage
+  reply_to_calendar_notification: calendar-assistant-stage
+  reply_to_program_event_calendar_notification: event-calendar-assistant-stage
+  chronus_mentor_common_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'chronus-mentor-staging-common-backup' : 'chronus-mentor-staging-common' %>
+  chronus_mentor_log_group: chronus-mentor-staging-logs
+  phrase_backup_project_id: <%= ENV['PHRASEAPP_PROJECT_ID_CONTENT_DEVELOP'] %>
+  notify_active_admins_to_cs: true
+  google_analytics_id: UA-2174244-31
+  geocode_api_key: <%= ENV['GEOCODE_API_KEY'] %>
+  parallel_processing_batch_size: 500
+  mobile_app_origin_server: true
+  monit_mailing_list: 'monitor+sendmail@chronus.com'
+
+standby:
+  <<: *common
+  <<: *staging_settings
+  reply_to_email_username: reply-standby
+  reply_to_calendar_notification: calendar-assistant-standby
+  reply_to_program_event_calendar_notification: event-calendar-assistant-standby
+  chronus_mentor_common_bucket: chronus-mentor-standby-common
+  chronus_mentor_log_group: chronus-mentor-standby-logs
+  cors_origin: ["https://standby.realizegoal.com"]
+  gcm_id: "865620181253"
+  mobile_app_origin_server: true
+
+performance:
+  <<: *common
+  <<: *staging_settings
+  reply_to_email_username: reply-performance
+  reply_to_calendar_notification: calendar-assistant-performance
+  reply_to_program_event_calendar_notification: event-calendar-assistant-performance
+  chronus_mentor_common_bucket: chronus-mentor-performance-common
+  chronus_mentor_log_group: chronus-mentor-performance-logs
+  push_enabled: false
+
+production:
+  <<: *common
+  <<: *production_settings
+  google_analytics_id: UA-2174244-18
+  reply_to_email_username: reply
+  reply_to_calendar_notification: calendar-assistant
+  reply_to_program_event_calendar_notification: event-calendar-assistant
+  reply_to_migrated_environments: ["reply-academywomen"]
+  zendesk_jwt_url: https://chronusmentorsupport.zendesk.com/access/jwt/
+  mailgun_api_key: <%= ENV['MAILGUN_API_KEY'] %>
+  chronus_mentor_common_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'chronus-mentor-production-common-backup' : 'chronus-mentor-production-common' %>
+  chronus_mentor_log_group: chronus-mentor-production-logs
+  phrase_backup_project_id: <%= ENV['PHRASEAPP_PROJECT_ID_PRODUCTION'] %>
+  notify_active_admins_to_cs: true
+  geocode_api_key: <%= ENV['GEOCODE_API_KEY'] %>
+  mobile_app_origin_server: true
+
+productioneu:
+  <<: *common
+  <<: *production_settings
+  google_analytics_id: UA-2174244-18
+  reply_to_email_username: reply-mentoreu
+  reply_to_calendar_notification: calendar-assistant-mentoreu
+  reply_to_program_event_calendar_notification: event-calendar-assistant-mentoreu
+  zendesk_jwt_url: https://chronusmentorsupport.zendesk.com/access/jwt/
+  chronus_mentor_common_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'chronus-mentor-productioneu-common-backup' : 'chronus-mentor-productioneu-common' %>
+  chronus_mentor_log_group: chronus-mentor-productioneu-logs
+  geocode_api_key: <%= ENV['GEOCODE_API_KEY'] %>
+  cron_timezone: 'Etc/GMT-2'
+
+generalelectric:
+  <<: *common
+  <<: *production_settings
+  google_analytics_id: UA-2174244-18
+  reply_to_email_username: reply-mentorge
+  reply_to_calendar_notification: calendar-assistant-mentorge
+  reply_to_program_event_calendar_notification: event-calendar-assistant-mentorge
+  zendesk_jwt_url: https://chronusmentorsupport.zendesk.com/access/jwt/
+  chronus_mentor_common_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'chronus-mentor-generalelectric-common-backup' : 'chronus-mentor-generalelectric-common' %>
+  chronus_mentor_log_group: chronus-mentor-generalelectric-logs
+  notify_active_admins_to_cs: true
+  geocode_api_key: <%= ENV['GEOCODE_API_KEY'] %>
+
+veteransadmin:
+  <<: *common
+  <<: *production_settings
+  google_analytics_id: UA-2174244-18
+  reply_to_email_username: reply-mentorva
+  reply_to_calendar_notification: calendar-assistant-mentorva
+  reply_to_program_event_calendar_notification: event-calendar-assistant-mentorva
+  zendesk_jwt_url: https://chronusmentorsupport.zendesk.com/access/jwt/
+  chronus_mentor_common_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'chronus-mentor-veteransadmin-common-backup' : 'chronus-mentor-veteransadmin-common' %>
+  chronus_mentor_log_group: chronus-mentor-veteransadmin-logs
+  notify_active_admins_to_cs: true
+  geocode_api_key: <%= ENV['GEOCODE_API_KEY'] %>
+
+nch:
+  <<: *common
+  <<: *production_settings
+  google_analytics_id: UA-2174244-18
+  reply_to_email_username: reply-nch
+  reply_to_calendar_notification: calendar-assistant-nch
+  reply_to_program_event_calendar_notification: event-calendar-assistant-nch
+  zendesk_jwt_url: https://chronusmentorsupport.zendesk.com/access/jwt/
+  chronus_mentor_common_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'chronus-mentor-nch-common-backup' : 'chronus-mentor-nch-common' %>
+  chronus_mentor_log_group: chronus-mentor-nch-logs
+  notify_active_admins_to_cs: true
+  geocode_api_key: <%= ENV['GEOCODE_API_KEY'] %>
+
+demo:
+  <<: *common
+  <<: *production_settings
+  google_analytics_id: UA-2174244-17
+  reply_to_email_username: reply-demo
+  reply_to_calendar_notification: calendar-assistant-demo
+  reply_to_program_event_calendar_notification: event-calendar-assistant-demo
+  zendesk_jwt_url: https://chronusmentorsupport.zendesk.com/access/jwt/
+  chronus_mentor_common_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'chronus-mentor-demo-common-backup' : 'chronus-mentor-demo-common' %>
+  chronus_mentor_log_group: chronus-mentor-demo-logs
+  geocode_api_key: <%= ENV['GEOCODE_API_KEY'] %>
+
+opstesting:
+  <<: *common
+  <<: *staging_settings
+  reply_to_email_username: reply-opstesting
+  reply_to_calendar_notification: calendar-assistant-opstesting
+  reply_to_program_event_calendar_notification: event-calendar-assistant-opstesting
+  chronus_mentor_common_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"]=="true" ? 'chronus-mentor-opstesting-common-backup' : 'chronus-mentor-opstesting-common' %>
+  chronus_mentor_log_group: chronus-mentor-opstesting-logs
+  push_enabled: false
+
+scanner:
+  <<: *common
+  <<: *staging_settings
+  reply_to_email_username: reply-scanner
+  reply_to_calendar_notification: calendar-assistant-scanner
+  reply_to_program_event_calendar_notification: event-calendar-assistant-scanner
+  chronus_mentor_common_bucket: chronus-mentor-scanner-common
+  chronus_mentor_log_group: chronus-mentor-scanner-logs
+  push_enabled: false
+
+training:
+  <<: *common
+  <<: *staging_settings
+  reply_to_email_username: reply-training
+  reply_to_calendar_notification: calendar-assistant-training
+  reply_to_program_event_calendar_notification: event-calendar-assistant-training
+  chronus_mentor_common_bucket: chronus-mentor-training-common
+  chronus_mentor_log_group: chronus-mentor-training-logs
+  push_enabled: false
+
+releasestaging1:
+  <<: *common
+  <<: *staging_settings
+  reply_to_email_username: reply-releasestaging1
+  reply_to_calendar_notification: calendar-assistant-releasestaging1
+  reply_to_program_event_calendar_notification: event-calendar-assistant-releasestaging1
+  chronus_mentor_common_bucket: chronus-mentor-releasestaging1-common
+  chronus_mentor_log_group: chronus-mentor-releasestaging1-logs
+  push_enabled: false
+  monit_mailing_list: 'monitor+sendmail@chronus.com'
+
+releasestaging2:
+  <<: *common
+  <<: *staging_settings
+  reply_to_email_username: reply-releasestaging2
+  reply_to_calendar_notification: calendar-assistant-releasestaging2
+  reply_to_program_event_calendar_notification: event-calendar-assistant-releasestaging2
+  chronus_mentor_common_bucket: chronus-mentor-releasestaging2-common
+  chronus_mentor_log_group: chronus-mentor-releasestaging2-logs
+  push_enabled: false

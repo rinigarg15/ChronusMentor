@@ -1,0 +1,27 @@
+<%= include_ckeditor_tag %>
+<%if !@first_visit %>
+  <% @title =  "program_settings_strings.header.program_settings".translate(Program: _Program) %>
+  <% @pane_tabs = true %>
+<%else%>
+<%= response_flash "new_program_flash" %>
+  <div class="p-md p-l-m white-bg h4 no-vertical-margins"><%= get_icon_content("fa fa-cogs") %> <%= "program_settings_strings.content.complete_prog_registration".translate(program: _Program) %></div>
+<%end%>
+<% if @redirected_from_update && @calendar_setting && !@calendar_setting.valid? %>
+  <% flash.now[:error] = @calendar_setting.errors.full_messages.to_sentence %>
+<% end %>
+<% flash.now[:error] = get_error_message_while_disabling_calendar(@program) if @error_disabling_calendar %>
+
+<div id='program_edit' class='clearfix <%= "new_program" if @first_visit %>'>
+  <div class="<%= "new_program_form" if @first_visit %> clearfix" id="program_form">
+    <% if @first_visit %>
+      <%= wizard_wrapper(get_new_organization_wizard_view_headers, OrganizationsHelper::Headers::COMPLETE_REGISTRATION, :content_ibox_content_class => "p-xl p-t-m p-b-m") do %>
+        <%= render :partial => "programs/edit_programs" %>
+      <% end %>
+    <% else %>
+      <%= ibox nil, :content_class => "no-padding" do %>
+        <%= program_settings_tabs(@tab, Mentoring_Connection: _Mentoring_Connection) %>
+        <%= render :partial => "programs/edit_programs" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

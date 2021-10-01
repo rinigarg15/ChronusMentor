@@ -1,0 +1,14 @@
+<% surveys = Survey.by_type(program).values.flatten %>
+<% filter_params = find_filter_params_for_survey_user_status(filter_params) %>
+<% user_options = options_for_user_response_status() %>
+<% survey_value = filter_params.present? ? filter_params[:survey_id] : "" %>
+<% user_value = filter_params.present? && survey_value.present? && Survey.exists?(survey_value.to_i) ? filter_params[:users_status] : "" %>
+
+<%= label_tag("admin_view[survey][user][users_status]", "feature.admin_view.label.users_who_have".translate, :for => "new_view_filter_user_response_status", :class => "sr-only") %>
+  <%= controls(class: "col-sm-2") do %>
+    <%= select_tag("admin_view[survey][user][users_status]", options_for_select(user_options, user_value), :class => "form-control", :id => "new_view_filter_user_response_status", :value => user_value) %>
+  <% end %>
+  <%= label_tag("admin_view[survey][user][survey_id]", "feature.admin_view.header.profile_question_operator_label".translate, :for => "new_view_filter_surveys", :class => "sr-only") %>
+  <%= controls(class: "col-sm-3") do %>
+    <%= select_tag("admin_view[survey][user][survey_id]", options_for_select(surveys.collect{|s| [s.name, s.id]}, filter_params[:survey_id]), :class => "form-control ", :id => "new_view_filter_surveys", :prompt => "feature.admin_view.label.select_survey_placeholder".translate, :value => survey_value)%>
+  <% end %>

@@ -1,0 +1,41 @@
+<% if user.present? %>
+  <% if @with_bulk_actions %>
+    <div class="pull-left">
+      <label for="ct_meeting_request_checkbox_<%=meeting_request.id%>" class="sr-only"><%= "feature.meeting_request.content.select_this_label_v1".translate %></label>
+      <%= check_box_tag nil, meeting_request.id, false,
+                        :class               => "cjs_meeting_request_record",
+                        :id                  => "ct_meeting_request_checkbox_#{meeting_request.id}",
+                        :'data-sender-id'    => meeting_request.student.id,
+                        :'data-recipient-id' => meeting_request.mentor.try(:id) %>
+    </div>
+  <% end %>
+  <div class="pull-right">
+    <%= get_meeting_request_action(meeting_request, is_mentor_action, filter_field, :dropdown_menu_class => "pull-right", skip_expiry_check: true) unless is_mentor_action %>
+  </div>
+  <div class="no-margins">
+    <div class="clearfix">
+      <div class="media-left">
+        <% if [EngagementIndex::Src::AcceptMentorRequest::USER_LISTING_PAGE, EngagementIndex::Src::AcceptMentorRequest::USER_PROFILE_PAGE].include?(source) %>
+          <%= get_icon_content("fa fa-fw fa-calendar", :container_class => "fa-circle") %>
+        <% else %>
+          <%= user_picture user, {:size => :medium, :no_name => true, :outer_class => "pull-left"}, {:class => "img-circle"} %>
+        <% end %>
+      </div>
+      <div class="media-body">
+        <h4>
+          <% if [EngagementIndex::Src::AcceptMentorRequest::USER_LISTING_PAGE, EngagementIndex::Src::AcceptMentorRequest::USER_PROFILE_PAGE].include?(source) %>
+            <%= content_tag(:span, "feature.meeting_request.header.request_title".translate(:Meeting => _Meeting), class: "text-success") %>
+          <% else %>
+            <%= link_to_user user %>
+          <% end %>
+          <div class="small m-t-xs">
+            <%= get_icon_content("fa fa-clock-o no-margins") + content_tag(:span, formatted_time_in_words(meeting_request.created_at, absolute: true)) %>
+          </div>
+        </h4>
+      </div>
+    </div>
+    <%= yield %>
+  </div>
+<% else %>
+  <%= yield %>
+<% end %>

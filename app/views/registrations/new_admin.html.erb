@@ -1,0 +1,49 @@
+<div id='signup' class='clearfix'>
+  <div class="p-md p-l-m white-bg h4 no-vertical-margins">
+    <%= append_text_to_icon("fa fa-user-secret", "registration_page.title.fill_the_form".translate) %>
+  </div>
+
+  <%= wizard_wrapper(get_new_organization_wizard_view_headers, OrganizationsHelper::Headers::ADMIN_ACCOUNT, content_ibox_content_class: "p-xl p-t-m p-b-m") do %>
+    <div id='signup_container' class="new_program_signup_container">
+      <%= simple_form_for @member, url: create_admin_registrations_url, html: { method: :post, class: 'form-horizontal clearfix' } do |f| %>
+
+        <%= display_error_flash(@member, "flash_message.user_flash.creation_failed_v1".translate)  %>
+
+        <%= f.simple_fields_for @program do |prog_f| %>
+          <%= prog_f.hidden_field :name %>
+          <%= prog_f.hidden_field :engagement_type %>
+          <%= prog_f.hidden_field :mentor_name %>
+          <%= prog_f.hidden_field :student_name %>
+          <%= prog_f.hidden_field :creation_way %>
+          <%= prog_f.hidden_field :program_type %>
+          <%= prog_f.hidden_field :number_of_licenses %>
+          <%= prog_f.hidden_field :solution_pack_file %>
+          <%= prog_f.simple_fields_for @program.organization do |org_f| %>
+            <%= org_f.simple_fields_for @program_domain do |pd_f| %>
+              <%= pd_f.hidden_field :subdomain %>
+              <%= pd_f.hidden_field :domain %>
+            <% end %>
+            <%= org_f.hidden_field :account_name %>
+            <%= org_f.hidden_field :subscription_type %>
+          <% end %>
+        <% end %>
+
+        <%= f.hidden_field "program[enabled_features]", value: @enabled_features %>
+        <%= f.hidden_field :time_zone, class: "cjs_time_zone" %>
+        <%= f.input :email, wrapper: :horizontal_input, label: Member.human_attribute_name(:email), as: :string, hint: "registration_page.content.login_id_help_text".translate, hint_html: { class: 'small text-muted' }, input_html: { class: "form-control" } %>
+        <%= render_user_name_with_label(f, false, horizontal_input_label_class: "col-sm-3", horizontal_input_class: "col-sm-9") %>
+        <%= f.input :password, wrapper: :horizontal_input,label: Member.human_attribute_name(:password), as: :password, hint: "common_text.help_text.password_requirement".translate(n: 6), input_html: { autocomplete: :off, class: "form-control" }, hint_html: { class: "small text-muted" } %>
+        <%= f.input :password_confirmation, wrapper: :horizontal_input, label: "feature.profile.label.retype_password".translate, as: :password, input_html: { class: "form-control", autocomplete: :off } %>
+
+        <%= control_group do %>
+          <%= controls(class: "col-sm-9 col-sm-offset-3") do %>
+            <%= render partial: 'users/signup_terms' %>
+          <% end %>
+        <% end %>
+        <% action_set(loader: 'loading_image', fields_required: :all, class: "pull-right action_set") do %>
+          <%= f.button :submit, 'registration_page.action.sign_up_next_html'.translate, class: 'button', onclick: "return NewAdminSignUp.validate() && computeTimeZone(#{TimezoneConstants::VALID_TIMEZONE_IDENTIFIERS.to_json}, #{TimezoneConstants::OBSOLETE_TIMEZONES_HASH.to_json}, '#{notify_new_timezone_path}')", id: "signup_btn" %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,3 @@
+<% if @competency.destroyed? %>
+  jQuery("#three_sixty_competency_<%= @competency.id %>").remove();
+<% end %>

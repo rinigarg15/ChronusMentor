@@ -1,0 +1,31 @@
+<% params_to_h = params.to_unsafe_h %>
+<% partial_options = params_to_h[:partial_options].present? ? params_to_h[:partial_options].with_indifferent_access : {} %>
+<% content = (render partial: "meetings/propose_slot_time_form", locals: {start_time: @localized_free_slots[:start_times_array], end_time: @localized_free_slots[:end_times_array], disable_start_end_times: false, no_slots_available: @no_slots_available, shortlist_slots: @shortlist_slots}.with_indifferent_access.reverse_merge(partial_options)) %>
+<% slot_index = params_to_h[:slotIndex].to_i %>
+MeetingRequest.setCalendarSyncV2TimeDetails("<%= @localized_free_slots[:start_times_array].join(',') %>", "<%= @localized_free_slots[:end_times_array].join(',') %>", "<%= @indices.join(',') %>", <%= @current_program.calendar_setting.slot_time_in_minutes.zero? || @selected_group.present? %>, <%= slot_index %>);
+<% if params_to_h[:propose_slots].to_s.to_boolean %>
+  var proposedSlotContainer = jQuery("#cjs_proposed_slot_" + <%= slot_index %> + "_container");
+  proposedSlotContainer.addClass("cjs_calendar_sync_v2_proposed_slot_container");
+  proposedSlotContainer.find(".cjs_propose_slot_time_form").html("<%= j content %>");
+  proposedSlotContainer.find(".cjs_slot_start_time").attr("id", "cjs_slot_" + <%= slot_index %> + "_start_time");
+  proposedSlotContainer.find(".cjs_slot_end_time").attr("id", "cjs_slot_" + <%= slot_index %> + "_end_time");
+  MeetingRequest.makeAdaChanges(proposedSlotContainer.find(".cjs_calendar_sync_v2"), <%= slot_index %>);
+  MeetingRequest.handleStartTimeChangeForV2();
+  proposedSlotContainer.find(".cjs_slot_start_time").trigger('change');
+  <% if @no_slots_available %>
+    proposedSlotContainer.find(".cjs_calendar_sync_v2_date").val("");
+  <% end %>
+<% else %>
+  jQuery(".meeting_slot_time_form").html("<%= j content %>");
+  MeetingRequest.handleStartTimeChangeForV2({startTimeElement: ".<%= partial_options[:start_time_attributes][:class] %>", endTimeElement: ".<%= partial_options[:end_time_attributes][:class] %>", meetingDateContainerClass: ".<%= partial_options[:meeting_date_container_class] %>", findStartAndEndTimeElements: true});
+    <% unless @trigger_no_change %>
+      jQuery(".<%= partial_options[:start_time_attributes][:class] %>").trigger('change');
+    <% end %>
+    <% if @no_slots_available %>
+      jQuery(".cjs_calendar_sync_v2_date").val("");
+  <% end %>
+<% end %>
+<% if @no_slots_available && @selected_date.present? %>
+  <% error = get_error_flash_for_calendar_sync_v2(@non_time_related_errors, @selected_date) %>
+  ChronusValidator.ErrorManager.ShowPageFlash(false, "<%= error %>");
+<% end %>

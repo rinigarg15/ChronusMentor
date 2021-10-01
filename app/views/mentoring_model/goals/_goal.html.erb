@@ -1,0 +1,55 @@
+<div class="cjs_goal_container-<%= goal.id.to_s %>">
+  <% goal_status = goal.completion_percentage(required_tasks) %>
+  <% is_manual_progress_goals = goal.manual_progress_goal? %>
+  <% allow_goal_edit_action = @page_controls_allowed && !goal.from_template? && manage_mm_goals_at_end_user_level?%>
+  <% if allow_goal_edit_action %>
+    <% modal_container "feature.mentoring_model.button.edit_goal".translate, :modal_id => "edit_goal_popup_#{goal.id}" do %>
+      <%= render :partial => "mentoring_model/goals/goal_form", :locals => {goal: goal, method: :patch, show_option: "", text_size: "form-control", show_remove_link: true, fields_required: false, url: group_mentoring_model_goal_path(@group, goal, :format => :js)} %>
+    <% end %>
+  <% end %>
+  <% header_content = content_tag(:div) do 
+     content_tag(:div, display_goal_title(goal), :class => "font-600 word_break h5 m-t-0 m-b-xs") + display_goal_description(goal)
+  end %>
+  <% ibox_options = {
+    :header_content => header_content,
+    :content_class => "word_break cjs_display_goal_data_content no-padding",
+    :show_collapse_link => true,
+    :collapse_link_class => "cjs_handle_goal_list no-margins",
+    :show_delete_link => allow_goal_edit_action,
+    :delete_url => group_mentoring_model_goal_path(@group, goal, :format => :js),
+    :delete_html_options => {:data => {:method => :delete, :remote => true, :confirm => "feature.mentoring_model.description.Delete_message".translate(title: h(goal.title))}},
+    :delete_link_class => "cjs_show_on_collapse_goal delete_goal no-margins",
+    :show_edit_link => allow_goal_edit_action,
+    :edit_link_class => "cjs_show_on_collapse_goal edit_goal no-margins",
+    :edit_html_options => {:data => {:toggle => "modal", :target => "#edit_goal_popup_#{goal.id}"}},
+    :ibox_class => "cjs_display_goal_and_task_block_#{goal.id} cjs_display_goal_data word_break no-margins noshadow table-bordered",
+    :title_class => "gray-bg",
+    :collapse_html_options => {:data => {:remote => true, :goal_id => goal.id}}
+    } %>
+  <%= ibox nil, ibox_options do %>
+    <%= render :partial => (is_manual_progress_goals ? "mentoring_model/goals/display_manual_progress_goal_progress" : "mentoring_model/goals/display_goal_progress"), locals: {goal: goal, goal_status: goal_status, group: @group } %>
+    <div id="<%= "cjs-goals-task-action-container-#{goal.id.to_s}" %>">
+      <% if is_manual_progress_goals %>
+        <%= render partial: "mentoring_model/goals/activities/goal_activity_feed", locals: {group: @group, goal: goal} %>
+      <% else %>
+        <% if update_task %>
+          <% tasks = mentoring_model_tasks_list(goal, @cached_tasks) %>
+          <div class="<%= "elements-list cjs-goals-task-container-#{goal.id.to_s}" %>">
+            <%= render partial: "mentoring_model/tasks/task", collection: tasks, locals: {group: @group, goal_id: goal.id, from_goal: "true"} if tasks.present? %>
+          </div>
+        <% end %>
+
+        <% if manage_mm_tasks_at_end_user_level?(@group) && (manage_mm_goals_at_admin_level?(@group) || manage_mm_goals_at_end_user_level?(@group)) && @page_controls_allowed %>
+          <div class="p-sm b-t clearfix cjs-form-and-menu-link-container">
+            <div class="cjs-add-task-form-link cjs-menu-link-holder pull-right cjs-add-task-form-link-<%= goal.id %>">
+              <%= link_to(get_icon_content("fa fa-check-square-o") + "feature.mentoring_model.button.add_new_task".translate, new_group_mentoring_model_task_path(@group, goal_id: goal.id), :remote => true, :class => "btn btn-white btn-block-xs btn-sm" ) %>
+            </div>
+            <div class="cjs-action-item-response-container"></div>
+          </div>
+          <% elsif tasks.empty? %>
+            <%= no_mentoring_model_entities("feature.mentoring_model.description.no_tasks".translate) %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

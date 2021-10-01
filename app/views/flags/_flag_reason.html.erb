@@ -1,0 +1,6 @@
+<div>
+  <div><%= flag.reason %></div>
+  <div class='small dim'>
+  	<%= "feature.flag.content.flagged_by_info_html".translate(flagged_by: link_to_user(flag.user), time_ago_in_words: formatted_time_in_words(flag.created_at, no_time: true, on_str: true)) %>
+  </div>
+<div>

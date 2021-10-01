@@ -1,0 +1,5 @@
+<% content = 
+  render :partial => "mentoring_model/goal_templates/goal_template", 
+  :locals => {goal_template: @new_goal_template} 
+%>
+GoalTemplates.createNewGoalTemplate("<%= j(content) %>");

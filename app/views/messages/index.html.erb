@@ -1,0 +1,36 @@
+<% @title = "feature.messaging.title.messages".translate %>
+<% @skip_rounded_white_box_for_content = true %>
+
+<% content_for_sidebar do %>
+  <% mobile_footer_actions = { see_n_results: {results_count: @messages_presenter.tabs_data[@messages_presenter.active_tab].total_messages_count, "data-#{MessageConstants::Tabs::INBOX}-tab-count" => "display_string.see_n_results".translate(count: @messages_presenter.tabs_data[MessageConstants::Tabs::INBOX].total_messages_count), "data-#{MessageConstants::Tabs::SENT}-tab-count" => "display_string.see_n_results".translate(count: @messages_presenter.tabs_data[MessageConstants::Tabs::SENT].total_messages_count), "data-icon-class" => "fa fa-chevron-left"} } %>
+  <%= filter_container_wrapper(mobile_footer_actions) do %>
+    <%= render partial: "messages/filter_pane", locals: { from_messages: true } %>
+  <% end %>
+<% end %>
+
+<div>
+  <div class="tabs-container">
+    <ul class="nav nav-tabs h5 no-margins" id="cjs_messages_tabs">
+      <li class="active" id="cjs_<%= MessageConstants::Tabs::INBOX %>_messages_tab" data-tab="<%= MessageConstants::Tabs::INBOX %>">
+        <%= link_to messages_tab_title(@messages_presenter.tabs_data[MessageConstants::Tabs::INBOX].total_messages_count, MessageConstants::Tabs::INBOX), "javascript:void(0)", :data => {:toggle => "tab"} %>
+      </li>
+      <li id="cjs_<%= MessageConstants::Tabs::SENT %>_messages_tab" data-tab="<%= MessageConstants::Tabs::SENT %>">
+        <%= link_to messages_tab_title(@messages_presenter.tabs_data[MessageConstants::Tabs::SENT].total_messages_count, MessageConstants::Tabs::SENT), "javascript:void(0)", :data => {:toggle => "tab"} %>
+      </li>
+    </ul>
+  </div>
+
+
+  <div id="cjs_messages_listing">
+    <%= render "messages/messages_listing", {:messages_presenter => @messages_presenter} %>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(function(){
+    jQuery(document).on('ajax:beforeSend', "#cjs_messages_listing", function(){
+      MessageSearch.showLoading();
+    });
+    MessageSearch.initializeTabs("<%= @messages_presenter.active_tab %>");
+  });
+<% end %>

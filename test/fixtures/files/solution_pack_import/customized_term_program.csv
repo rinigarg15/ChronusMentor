@@ -1,0 +1,6 @@
+id,ref_obj_id,ref_obj_type,term_type,term,term_downcase,pluralized_term,pluralized_term_downcase,articleized_term,articleized_term_downcase,created_at,updated_at
+6146,2,AbstractProgram,Mentoring_Connection,Connection,mentoring connection,Mentoring Connections,mentoring connections,a Mentoring Connection,a mentoring connection,2014-12-22 16:29:56 +0530,2014-12-22 16:29:56 +0530
+6147,2,AbstractProgram,Meeting,Session,session,Sessions,sessions,a Session,a session,2014-12-22 16:29:56 +0530,2014-12-22 16:29:56 +0530
+6148,2,AbstractProgram,Resource,Archive,resource,Resources,resources,a Resource,a resource,2014-12-22 16:29:56 +0530,2014-12-22 16:29:56 +0530
+6149,2,AbstractProgram,Article,Helpdesk,article,Articles,articles,an Article,an article,2014-12-22 16:29:56 +0530,2014-12-22 16:29:56 +0530
+6150,2,AbstractProgram,Mentoring,Connecting,mentoring,Mentorings,mentorings,a Mentoring,a mentoring,2014-12-22 16:29:56 +0530,2014-12-22 16:29:56 +0530

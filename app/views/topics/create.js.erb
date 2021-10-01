@@ -1,0 +1,10 @@
+<% if @error_message.present? %>
+	ChronusValidator.ErrorManager.ShowResponseFlash("#cjs_topic_error_message", '<%= j @error_message %>', false)
+<% else %>
+	jQuery("#cjs_new_topic_modal_<%= @group_id %>").modal('hide');
+  ChronusValidator.ErrorManager.ShowResponseFlash("#cjs_topic_success_message", '<%= j "flash_message.forum_flash.conversation_created".translate %>', true)
+  jQueryResetForm('#cjs_new_topic_modal_<%= @group_id %> .cjs_new_topic_form_<%= @group_id %>');
+  CKEDITOR.instances["new_topic_body_<%= @group_id %>"].setData("");
+  jQuery("#loading_results").hide();
+<% end %>
+

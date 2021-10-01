@@ -1,0 +1,26 @@
+id,data_file_name,data_content_type,data_file_size,assetable_id,assetable_type,type,guid,locale,program_id,created_at,updated_at,login_required
+1,5109379-minimal-wallpaper.png,image/png,60710,1,Member,Ckeditor::Picture,,0,1,2017-06-23 11:22:27 +0530,2017-06-23 11:22:27 +0530,false
+2,banner.png,image/png,27245,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:56:49 UTC,2014-12-15 14:56:49 UTC,TRUE
+3,profile.pdf,application/pdf,22209,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:57:08 UTC,2014-12-15 14:57:08 UTC,FALSE
+4,black_background_1920x1200_hq_wallpaper_192.jpg,image/jpeg,503860,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:57:08 UTC,2014-12-15 14:57:08 UTC,TRUE
+5,360_degree_survey_report_1.pdf,application/pdf,66642,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:57:08 UTC,2014-12-15 14:57:08 UTC,TRUE
+6,chronus.png,image/png,9188,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:57:08 UTC,2014-12-15 14:57:08 UTC,TRUE
+7,test,text/plain,3,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:57:10 UTC,2014-12-15 14:57:10 UTC,TRUE
+8,guide_to_timely_and_efficient_goal_setting.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document,20533,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:57:15 UTC,2014-12-15 14:57:15 UTC,TRUE
+9,360_degree_survey_report.pdf,application/pdf,101998,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:57:15 UTC,2014-12-15 14:57:15 UTC,TRUE
+10,temp.txt,text/plain,4,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:57:15 UTC,2014-12-15 14:57:15 UTC,FALSE
+11,milestones_content_csv.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,29246,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:57:15 UTC,2014-12-15 14:57:15 UTC,TRUE
+12,content.jpg,image/jpeg,45426,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:57:15 UTC,2014-12-15 14:57:15 UTC,TRUE
+13,tasks_milestones.csv,text/csv,7482,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:57:15 UTC,2014-12-15 14:57:15 UTC,TRUE
+14,banner.png,image/png,27245,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:59:20 UTC,2014-12-15 14:59:20 UTC,TRUE
+15,profile.pdf,application/pdf,22209,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:59:38 UTC,2014-12-15 14:59:38 UTC,FALSE
+16,black_background_1920x1200_hq_wallpaper_192.jpg,image/jpeg,503860,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:59:38 UTC,2014-12-15 14:59:38 UTC,TRUE
+17,360_degree_survey_report_1.pdf,application/pdf,66642,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:59:39 UTC,2014-12-15 14:59:39 UTC,TRUE
+18,chronus.png,image/png,9188,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:59:39 UTC,2014-12-15 14:59:39 UTC,TRUE
+19,test,text/plain,3,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:59:41 UTC,2014-12-15 14:59:41 UTC,TRUE
+20,guide_to_timely_and_efficient_goal_setting.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document,20533,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:59:46 UTC,2014-12-15 14:59:46 UTC,TRUE
+21,360_degree_survey_report.pdf,application/pdf,101998,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:59:46 UTC,2014-12-15 14:59:46 UTC,TRUE
+22,temp.txt,text/plain,4,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:59:46 UTC,2014-12-15 14:59:46 UTC,FALSE
+23,milestones_content_csv.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,29246,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:59:46 UTC,2014-12-15 14:59:46 UTC,TRUE
+24,content.jpg,image/jpeg,45426,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:59:46 UTC,2014-12-15 14:59:46 UTC,TRUE
+25,tasks_milestones.csv,text/csv,7482,,,Ckeditor::AttachmentFile,,0,1,2014-12-15 14:59:46 UTC,2014-12-15 14:59:46 UTC,TRUE

@@ -1,0 +1,4 @@
+<% unless @working_on_behalf %>
+  <% badge_text = @unviewed_announcements_count > 0 ? "#{@unviewed_announcements_count}" : "" %>
+  jQuery('.cui_announcements_badge').html("<%= j badge_text %>");
+<% end %>

@@ -1,0 +1,32 @@
+<% modal_v3_popup "feature.connection.action.Set_Expiration_Date".translate do %>  
+  <p><%= "feature.connection.content.help_text.bulk_set_expiration".translate(mentoring_connections: _mentoring_connections, mentoring_connection: _mentoring_connection, count: @group_ids.size) %></p>
+
+  <%= form_tag update_bulk_actions_groups_path, :remote => true, :id => "bulk_groups_set_expiry_date" do %>
+    <%= control_group do %>
+      <%= content_tag(:label, set_required_field_label("feature.connection.header.new_expiration".translate), :class => "control-label", :for => "bulk_actions_mentoring_period") %>
+      <%= controls :class => "expiry_date_select calendar" do %>
+        <%= construct_input_group( { type: "addon", icon_class: "fa fa-calendar" } ) do %>
+          <%= text_field_tag "bulk_actions[mentoring_period]", nil, :class => "form-control", autocomplete: :off, data: date_picker_options(min_date: Date.current) %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= control_group do %>
+      <%= content_tag(:label, set_required_field_label(Group.human_attribute_name(:revoking_reason)), :class => "control-label", :for => "bulk_actions_reason") %>
+      <%= controls do %>
+        <%= text_area_tag "bulk_actions[reason]", nil, :rows => "5", :class => "form-control" %>
+      <% end %>  
+    <% end %>
+    <%= hidden_field_tag "bulk_actions[action_type]", Group::BulkAction::SET_EXPIRY_DATE %>
+    <%= hidden_field_tag "bulk_actions[group_ids]", @group_ids %>
+    <%= hidden_field_tag "bulk_actions[tab_number]", @tab_number %>
+    <%= hidden_field_tag "view", @view %>
+
+    <%= horizontal_line(class: "m-t-xs m-b-sm") %>
+    <%= email_recipients_note("feature.connection.content.email_recipients_list".translate(mentoring_connection: _mentoring_connections)) %>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => 'btn btn-white', data: { dismiss: "modal" } %>
+      <%= submit_tag "feature.connection.action.Set_Expiration_Date".translate, :class => 'btn btn-primary', data: {:disable_with => "display_string.Please_Wait".translate} %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= javascript_tag %Q[initialize.setDatePicker(); GroupSearch.validateBulkSetExpiryDate();] %>

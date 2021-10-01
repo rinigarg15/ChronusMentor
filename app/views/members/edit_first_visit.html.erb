@@ -1,0 +1,6 @@
+<% @title = get_member_edit_title(@section, @role_str, wob_member) %>
+<%= render :partial => "members/edit_first_visit", locals: {program_questions_for_user: @program_questions_for_user, profile_sections: @profile_sections, section: @section, profile_user: @profile_user, program: @current_program, profile_member: @profile_member, grouped_role_questions: @grouped_role_questions, role_str: @role_str} %>
+
+<% content_for_sidebar do %>
+  <%= render partial: "members/first_visit_side_bar", locals: {program_questions_for_user:  @program_questions_for_user.group_by { |q| q.section.id }.to_h, profile_user: @profile_user, sections_filled: @sections_filled, all_profile_section_ids: @all_profile_section_ids, all_profile_section_titles_hash: @all_profile_section_titles_hash } %>
+<% end %>

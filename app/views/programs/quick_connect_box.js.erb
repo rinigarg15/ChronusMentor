@@ -1,0 +1,2 @@
+<% recommendations_view = @only_explicit_preference_recommendations ? AbstractPreference::Source::EXPLICIT_PREFERENCES_RECOMMENDATIONS : AbstractPreference::Source::SYSTEM_RECOMMENDATIONS %>
+<%= render partial: "programs/quick_connect_box", locals: { mentors_list: @mentors_list, show_favorite_ignore_links: @show_favorite_ignore_links, favorite_preferences_hash: @favorite_preferences_hash, program: @current_program, show_match_config_matches: @show_match_config_matches, recommendations_view: recommendations_view, mentors_score: @mentors_score } %>

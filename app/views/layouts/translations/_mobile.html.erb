@@ -1,0 +1,12 @@
+<%= javascript_tag do %>
+  var mobileTranslations = {
+    offlineMessage: '<%= j("mobile.network.offline_message_html".translate(Retry: "<a href='javascript:void(0)' class='cjs_check_network'>#{'mobile.network.Retry'.translate}</a>".html_safe)) %>',
+    connectedNow: '<%= j("mobile.network.connected_now".translate)%>',
+    updateHeader: '<%= j("mobile.app_update.header_text".translate)%>',
+    updateContent: '<%= j("mobile.app_update.content".translate)%>',
+    updateConfirmation: '<%= j("mobile.app_update.ok".translate)%>',
+    downloadFailed: '<%= j("mobile.file.download_failed".translate)%>',
+    downloadStarted: '<%= j("mobile.file.download_started".translate)%>',
+    exitApp: '<%= j('mobile.back.exit_app'.translate) %>'
+    };
+<% end %>

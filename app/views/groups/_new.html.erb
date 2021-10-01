@@ -1,0 +1,37 @@
+<% header_label = local_assigns[:is_clone] ? "feature.connection.header.create_duplicate".translate(Mentoring_Connection: _Mentoring_Connection)  : "feature.connection.header.create_a_new_v1".translate(Mentoring_Connection: _Mentoring_Connection) %>
+<% cancel_button = link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "m-t-xs btn btn-white", data: { dismiss: "modal" } %>
+<% modal_container header_label, modal_id: "group_new" do %>
+  <% if local_assigns[:is_clone].present? && local_assigns[:inconsistent_roles].present? %>
+    <%= get_group_cannot_be_duplicated_text(@current_program, local_assigns[:inconsistent_roles]) %>
+    <%= cancel_button %>
+  <% else %>
+    <%= render partial: "groups/groups_alert_container" %>
+
+    <% create_button_text = local_assigns[:is_clone] ? "feature.connection.action.duplicate".translate : "feature.connection.action.create_and_publish".translate %>
+    <%= simple_form_for @group, url: groups_path(view: view), remote: true do |f| %>
+      <%= response_flash "flash_new" %>
+      <%= f.input :name, label: "feature.connection.name_v1".translate(Mentoring_Connection: _Mentoring_Connection), as: :string, input_html: { class: "form-control" }, required: false %>
+      <%= render partial: "groups/add_users_select2_auto_complete", locals: { group: @group, default_class: "required-field", is_clone: local_assigns[:is_clone] } %>
+      <% if @current_program.mentoring_connections_v2_enabled? %>
+        <%= f.input :mentoring_model_id, collection: get_mentoring_models_collection, selected: current_program.default_mentoring_model.id, input_html: { id: "new_assignable_mentoring_model", class: "form-control required-field" }, required: true, label: "feature.multiple_templates.header.connection_multiple_templates_title_v1".translate(Mentoring_Connection: _Mentoring_Connection) %>
+      <% end %>
+      <%= f.input :message, as: :text, input_html: { class: "form-control", rows: 5 }, hint: "feature.group.content.message_help_text".translate(mentoring_connections: _mentoring_connections) %>
+      <%= f.input :notes, :label => group_notes_label(mentoring_connection: _mentoring_connection, admins: _admins), :as => :text, :input_html => { :class => "form-control", :rows => 5 } %>
+      <span class="help-block m-t-0">
+        <%= group_creation_email_notification_consequences_html %>
+      </span>
+      <%= hidden_field_tag GroupsHelper::GROUPS_ALERT_FLAG_NAME %>
+
+      <% action_set class: "pull-right" do %>
+        <%= cancel_button %>
+        <%= (f.submit "display_string.Save_as_draft".translate, :class => "cjs_create_group m-t-xs btn btn-white", :name => "draft", :id => "save_as_draft") %>
+        <%= f.submit create_button_text, :class => "cjs_create_group m-t-xs btn btn-primary", :name => "publish", :id => "create_and_publish" %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= javascript_tag do %>
+    GroupSearch.validateNewGroup();
+    GroupSearch.handleGroupsAlert("#group_new", "form#new_group");
+  <% end %>
+<% end %>

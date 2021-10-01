@@ -1,0 +1,81 @@
+<% @title = get_page_title_for_new_group_creation(@propose_view, @current_user) %>
+<% @back_link = {:label => _Mentoring_Connections, :link => back_url(groups_path)} unless @propose_view %>
+
+<%= wizard_wrapper(get_wizard_view_headers, GroupsHelper::Headers::DESCRIBE_MENTORING_CONNECTION, { disable_unselected: true }, !@propose_view) do %>
+  <div id="group_new">
+    <% url = @propose_view ? groups_path(propose_view: @propose_view) : groups_path %>
+    <% remote_option = @propose_view && @current_program.allow_circle_start_date? ? true : false %>
+    <%= simple_form_for @group, :url => url, :remote =>remote_option, :html => { :class => "form-horizontal" }, wrapper: :horizontal_input do |f| %>
+      <% join_as_roles = @propose_view ? @current_user.roles_for_proposing_groups : @current_user.roles.for_mentoring %>
+
+      <%= control_group do %>
+        <%= content_tag(:div, "feature.connection.name_v2".translate(Mentoring_Connection: _Mentoring_Connection), :class => "control-label col-sm-3") %>
+        <%= controls(class: "col-sm-9") do %>
+          <%= content_tag(:label, "feature.connection.name_v1".translate(Mentoring_Connection: _Mentoring_Connection), class: "sr-only", for: "similar_connection_name") %>
+          <%= content_tag(:div, class: "col-sm-12 col-xs-12 no-padding") do %>
+            <%= text_field_tag("[group][name]", "", :class => "form-control required-field", :id => "similar_connection_name") %>
+            <% if @current_program.project_based? %>
+              <%= content_tag(:div, class: "similar_circles_content hide col-sm-12 col-xs-12 no-padding m-t-xs well m-b-0 no-border-radius", id: "cjs_similar_circles_content") do %>
+                <div class="p-l-xs p-t-xs">
+                  <%= content_tag(:span, @current_user.is_admin? ? "feature.connection.content.similar_circles_content_description_for_admins".translate(mentoring_connections: _mentoring_connections) : "feature.connection.content.similar_circles_content_description".translate(mentoring_connections: _mentoring_connections), class: "m-b-xs small h6 text-muted") %>
+                  <div class="similar_circles_listing scroll-2 overflow-y-auto">
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% if @propose_view %>
+        <%= join_role_select_drop_down_field(@group, @current_user, join_as_roles) %>
+      <% end %>
+      <%= f.input :logo, :label => "feature.connection.Picture".translate, :as => :file %>
+
+      <% if !@propose_view && @current_program.project_based? && @current_program.allow_circle_start_date? %>
+        <%= control_group do %>
+          <%= content_tag(:div, "feature.connection.content.circle_start_date_label".translate(Mentoring_Connection: _Mentoring_Connection), :class => "control-label col-sm-3") %>
+          <%= controls(class: "col-sm-9") do %>
+            <%= content_tag(:label, "feature.meetings.form.date".translate, class: "sr-only", for: "circle_start_date_form") %>
+            <%= construct_input_group([ { type: "addon", icon_class: "fa fa-calendar" } ], [], {:input_group_class => "m-b-xs"}) do %>
+              <%= text_field_tag("[group][start_date]", (@group.start_date.present? ? DateTime.localize(@group.start_date, format: :short) : ""), :class => "form-control", :id => "circle_start_date_form", data: date_picker_options({ min_date: Date.current })) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% @current_program.roles.for_mentoring.each do |role| %>
+        <%= max_number_of_users_in_group_field(@current_program, :role => role, :show_help_text => (role == join_as_roles.first)) %>
+      <% end %>
+      <% if !@propose_view && @current_program.mentoring_connections_v2_enabled? %>
+        <%= f.input :mentoring_model_id, collection: get_mentoring_models_collection, selected: current_program.default_mentoring_model.id, input_html: { id: "new_assignable_mentoring_model", class: "form-control" }, required: true, label: "feature.multiple_templates.header.connection_multiple_templates_title_v1".translate(Mentoring_Connection: _Mentoring_Connection), class: "required-field" %>
+      <% end %>
+      <% if @connection_questions.present? %>
+        <%= render :partial => "groups/edit_connection_questions_answers", :locals => { :connection_questions => @connection_questions, :group => @group } %>
+      <% end %>
+
+      <% if @propose_view %>
+        <% action_set class: "pull-right" do %>
+          <%= link_to "display_string.Cancel".translate, back_url, :class => 'btn btn-white m-t-xs' %>
+          <%= f.submit "display_string.Save".translate, class: "btn btn-primary m-t-xs cjs-form-submit-validation", name: "save_with_propose", disable_with: "display_string.Please_Wait".translate %>
+        <% end %>
+      <% else %>
+        <%= f.input :notes, :label => group_notes_label(mentoring_connection: _mentoring_connection, admins: _admins), :as => :text, :input_html => {:class => "form-control", :rows => 5} %>
+        <% action_set class: "pull-right" do %>
+          <%= f.submit "display_string.Save_and_Continue_Later".translate, class: "btn btn-primary m-t-xs cjs-form-submit-validation", name: "save_and_continue_later", disable_with: "display_string.Please_Wait".translate %>
+          <%= f.button :submit, "display_string.Proceed_to_Next_Step_html".translate(label: "feature.connection.action.Add_Members".translate), :class => "btn btn-primary m-t-xs cjs-form-submit-validation", :name => "proceed_to_add_members", :disable_with => "display_string.Please_Wait".translate %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    GroupSearch.initializeEditGroup();
+    Groups.hideOrShowLimitHelpText();
+    <% if @current_program.project_based? %>
+      SimilarCircles.initialize("<%= get_similar_circles_groups_path %>");
+    <% end %>
+  });
+<% end %>

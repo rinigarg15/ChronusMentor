@@ -1,0 +1,13 @@
+<% profile_sections = get_simple_section_questions(program_questions_for_user, :exclude_basic_section => true) %>
+<% profile_sections.each_with_index do |section, index| %>
+  <% options = {} %>
+  <% options.merge!(:title_class => "cjs_last_section_header") if index == (profile_sections.size-1) %>
+  <% options.merge!(:ibox_class => "collapsed") %>
+  <% cur_section = section[:section] %>
+  <% has_edu_exp_ques = has_importable_question?(section[:questions]) %>
+  <%= ibox section[:section_title], options do %>
+    <%= get_section_description(cur_section, tag: :div, class: "m-b") %>
+    <%= render :partial => "users/edu_exp_form", :locals => {:profile_user => @user, :section => cur_section} if has_edu_exp_ques %>
+    <%= render :partial => 'programs/question', :collection => section[:questions], :locals => {:profile_user => @user, :role => @role, :answers => @answers, grouped_role_questions: @grouped_role_questions, is_profile_completion: @is_profile_completion} %>
+  <% end %>
+<% end %>

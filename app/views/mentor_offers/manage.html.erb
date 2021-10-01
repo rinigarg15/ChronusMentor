@@ -1,0 +1,20 @@
+<%= response_flash("cjs_mentor_offers_flash") %>
+
+<div id="mentor_offers">
+  <%= render partial: "mentor_offers/index", locals: {mentor_offers: @mentor_offers, filter_params: @filter_params, mentor_offer_hash: @mentor_offer_hash, is_manage_view: true} %>
+</div>
+
+<% @report_actions = {
+  url: manage_mentor_offers_path,
+  data_js: %Q[MentorOffers.getMentorOfferReportFilterData();],
+  reset_js: %Q[commonReportFilters.resetOtherFilters();],
+  ga_label: ReportsController::GoogleAnalytics::MENTOR_OFFERS_REPORT_LABEL,
+  export: [{label: "feature.mentor_offer.action.export_as_csv".translate, url: manage_mentor_offers_path(format: :csv)}],
+  pre_filter_js: %Q[MentorOffers.resetMentorOfferSelectedIds();]
+} %>
+<%= hidden_field_tag(:switch_tabs_options, { data_attribute: "status" }.to_json, id: 'switch_tabs_options') %>
+
+<%= javascript_tag do %>
+  commonReportFilters.initializeSwitchTab();
+  MentorOffers.inspectActions("<%= j('feature.mentor_offer.content.select_atleast_one_offer_v1'.translate) %>");
+<% end %>

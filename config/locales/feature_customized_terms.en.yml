@@ -1,0 +1,5 @@
+en:
+  feature:
+    customized_term:
+      label:
+        term_for: Term for %{term_type}

@@ -1,0 +1,9 @@
+<% options = {:class => "btn btn-primary"} %>
+<% if action_type %>
+  <% options.merge!({'ng-click' => "updatePair($event, #{orientation_type == BulkMatch::OrientationType::MENTEE_TO_MENTOR ? @student.id : @mentor.id}, #{@student.id}, '#{action_type}', {updateNotes: #{display_request_notes}, addMessage: #{display_request_message}});"}) %>
+<% end %>
+<div class="pull-right m-t-xs">
+  <%= link_to_function "display_string.Cancel".translate, "closeQtip();", :class => "btn btn-white" %>
+  <%= f.button :submit, action_text, options %>
+  <%= f.button :submit, "feature.bulk_match.action.skip_notes_html".translate(action: get_translated_text(action_type, bulk_match: bulk_match)), class: "btn btn-primary", 'ng-click' => "updatePair($event, #{orientation_type == BulkMatch::OrientationType::MENTEE_TO_MENTOR ? @student.id : @mentor.id}, #{@student.id}, '#{action_type}', { updateNotes: false, addMessage: #{display_request_message}});" if action_type.present? && notes.blank? && !display_request_message %>
+</div>

@@ -1,0 +1,39 @@
+<% if logged_in_at_current_level? && !@single_page_layout %>
+  <div class="pages_submenu clearfix">
+    <div class="tabs-container">
+      <ul id="pages" class="nav nav-tabs h5 no-margins <%= "no-sort" unless @admin_view %> jquery_sortable" data-url="<%= sort_pages_path() %>" data-method="post">
+        <% if @pages.any? %>
+          <% @pages.reject(&:new_record?).each do |page| %>
+            <li id= "page_<%=page.id%>" class="<%= 'active' if @page && page.id == @page.id %> jquery_sort_items">
+              <%= page_link(page, @admin_view) %>
+            </li>
+          <% end %>
+
+          <% if @page && @page.new_record? %>
+            <li class='active' id='new_page'>
+              <%= link_to("app_layout.label.new_page".translate, new_page_path) %>
+            </li>
+          <% end %>
+        <% end %>
+
+        <% programs_listing_tab_heading = get_programs_listing_tab_heading %>
+        <% if programs_listing_tab_heading.present? %>
+          <li id="programs" class='<%= "active" if action_name == 'programs' %>'>
+            <%= link_to(programs_listing_tab_heading, programs_pages_path)  %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <script>
+      jQuery(document).ready(function() {
+        jQuerySortable.simpleSortable();
+      });
+    </script>
+  </div>
+<% else %>
+  <div class="navbar hide clearfix"></div>
+<% end %>
+
+<div class="inner_main_content">
+  <%= yield %>
+</div>

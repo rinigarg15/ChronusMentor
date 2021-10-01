@@ -1,0 +1,16 @@
+<% modal_v3_popup "feature.connection.header.edit_name_and_picture".translate do %>
+  <%= simple_form_for @group, :url => update_answers_group_path(@group), :html => {:multipart => true, :id => "edit_group_title_logo"} do |f| %>
+    <%= response_flash "edit_title_logo_flash" %>
+    <%= f.input :name, :label => "feature.connection.name_v1".translate(Mentoring_Connection: _Mentoring_Connection), :as => :string, :input_html => {:class => "form-control"}, :wrapper_html => {:class => "no-borders"} %>
+
+    <%= f.input :logo, :as => :file, label: "feature.connection.Picture".translate %>
+
+
+    <% action_set(:class=>"pull-right") do %>
+      <%= f.button :submit, "display_string.Save".translate, :disable_with => false %>
+    <% end %>
+
+  <% end %>
+  <% error_message = "common_text.error_msg.required_missing".translate %>
+  <%= javascript_tag "GroupsShow.validateTitleLogoForm('#{error_message}')" %>
+<% end %>

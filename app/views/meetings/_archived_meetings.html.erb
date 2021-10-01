@@ -1,0 +1,13 @@
+<% record_past_meeting = @past_meeting_controls_allowed && !@outside_group ? link_to(get_icon_content("fa fa-calendar-plus-o") + "feature.mentoring_model.button.record_past_meeting".translate(Meeting: _Meeting), "javascript:void(0)", onclick: %Q[jQueryShowQtip('', 600, '#{setup_meeting_group_path(@group.id, {format: :js, :common_form => true, :past_meeting => true })}','',{modal: true, successCallback: function(){CalendarAvailabilityInfo.initialize()}})], :class => "btn btn-primary btn-sm pull-right") : "" %>
+
+<%= content_tag(:div, "feature.meetings.header.past_meetings".translate(Meetings: _Meetings), :class => "h5 p-sm b-b no-margins font-600") unless @outside_group %>
+<% if @archived_meetings.blank? %>
+  <div class="text-center p-sm">
+    <%= content_tag(:div, record_past_meeting, :class => "clearfix p-b-sm") if record_past_meeting.present? %>
+    <%= "feature.meetings.content.no_past_meetings_v1".translate(:meetings => _meetings) %>
+  </div>
+<% else %>
+  <%= top_bar_in_listing( { collection: @archived_meetings }, {}, {}, {:right_most_content => record_past_meeting} ) %>
+  <%= render partial: "meetings/meetings", :locals => { :meetings => @archived_meetings, :group_admin_view => @group.present? && @is_admin_view, :last_meeting_id => false, :ei_src => @ei_src, from_connection_home_page_widget: false } %>
+  <%= bottom_bar_in_listing( { collection: @archived_meetings, ajax: true, :param_name => 'archived_page', :params => { :controller => :meetings, :action => :index, from_my_availability: @from_my_availability, outside_group: @outside_group}.merge(@outside_group.present? ? {} : {:group_id => @group.try(:id)}) }) %>
+<% end %>

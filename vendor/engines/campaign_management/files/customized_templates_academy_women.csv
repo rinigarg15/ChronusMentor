@@ -1,0 +1,34 @@
+id,uid,program_name,enabled?,source,subject,created_at,updated_at
+33,InviteNotificationFromAdmin,CadetMidnWomen eMentor Leadership Program,yes,"Dear,<br />
+<br />
+You are invited to join the {{subprogram_or_program_name}} {{as_role_name_articleized}} by {{invitor_name}}.<br />
+<p style=""font-size: 12px;"">
+	Once you have logged in for the first time and completed your profile, please take a few moments to check out the many ways you can interact with other program members: you can ask a question in the Q&amp;A area (under &quot;Advice&quot; tab), participate in a discussion forum (under &quot;Forums&quot; tab), read and comment on an &quot;article&quot; posted by a member.&nbsp;<span style=""font-size: 12px;"">We hope you have a wonderful mentoring experience.</span><span style=""font-size: 12px;"">&nbsp;</span></p>
+<p style=""font-size: 12px;"">
+	If you need any assistance, please contact me at admin@ementorprogram.org or by sending a message to &quot;Admin&quot; while logged into the system. We are so happy to have you participating in the program!&nbsp;</p>
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for the {{subprogram_or_program_name}} {{as_role_name_articleized}}.",Invitation: {{invitor_name}} invites you to join {{as_role_name_articleized}},2013-05-03 05:22:12 UTC,2013-05-03 05:26:35 UTC
+34,InviteNotificationFromAdmin,OfficerWomen eMentor Leadership Program,yes,"Dear,<br />
+<br />
+You are invited to join the {{subprogram_or_program_name}} {{as_role_name_articleized}} by {{invitor_name}}.<br />
+<br />
+<div>
+	Once you have logged in for the first time and completed your profile, please take a few moments to check out the many ways you can interact with other program members: you can ask a question in the Q&amp;A area (under &quot;Advice&quot; tab), participate in a discussion forum (under &quot;Forums&quot; tab), read and comment on an &quot;article&quot; posted by a member. We hope you have a wonderful mentoring experience.&nbsp;</div>
+<div>
+	&nbsp;</div>
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for the {{subprogram_or_program_name}} {{as_role_name_articleized}}.",Invitation: {{invitor_name}} invites you to join {{as_role_name_articleized}},2013-05-03 05:31:13 UTC,2013-05-03 05:31:13 UTC
+35,InviteNotificationFromAdmin,Military Spouse eMentor Leadership Program,yes,"Dear,<br />
+<br />
+You are invited to join the {{subprogram_or_program_name}} {{as_role_name_articleized}} by {{invitor_name}}.<br />
+<br />
+<span style=""font-size: 12px;"">Once you have logged in for the first time and completed your profile, please take a few moments to check out the many ways you can interact with other program members: you can ask a question in the Q&amp;A area (under &quot;Advice&quot; tab), participate in a discussion forum (under &quot;Forums&quot; tab), read and comment on an &quot;article&quot; posted by a member.&nbsp;</span><span style=""font-size: 12px;"">We hope you have a wonderful mentoring experience.</span><span style=""font-size: 12px;"">&nbsp;</span><br />
+<div>
+	<br />
+	<a href=""{{url_invitation}}"" style=""font-size: 12px;"">Click here</a><span style=""font-size: 12px;""> to accept the invitation and sign up for the {{subprogram_or_program_name}} {{as_role_name_articleized}}.</span></div>",Invitation: {{invitor_name}} invites you to join {{as_role_name_articleized}},2013-05-03 05:32:53 UTC,2013-05-03 05:32:53 UTC
+36,InviteNotificationFromAdmin,Veteran eMentor Leadership Program,yes,"Dear,<br />
+<br />
+You are invited to join the {{subprogram_or_program_name}} {{as_role_name_articleized}} by {{invitor_name}}.<br />
+<p style=""font-size: 12px;"">
+	Once you have logged in for the first time and completed your profile, please take a few moments to check out the many ways you can interact with other program members: you can ask a question in the Q&amp;A area (under &quot;Advice&quot; tab), participate in a discussion forum (under &quot;Forums&quot; tab), read and comment on an &quot;article&quot; posted by a member.&nbsp;<span style=""font-size: 12px;"">We hope you have a wonderful mentoring experience.</span><span style=""font-size: 12px;"">&nbsp;</span></p>
+<div>
+	<a href=""{{url_invitation}}"" style=""font-size: 12px;"">Click here</a><span style=""font-size: 12px;""> to accept the invitation and sign up for the {{subprogram_or_program_name}} {{as_role_name_articleized}}.</span></div>
+",Invitation: {{invitor_name}} invites you to join {{as_role_name_articleized}},2013-05-03 05:34:09 UTC,2013-05-03 05:34:09 UTC

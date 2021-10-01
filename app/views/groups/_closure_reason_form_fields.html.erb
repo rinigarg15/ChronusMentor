@@ -1,0 +1,6 @@
+<%= control_group do %>
+  <%= content_tag(:label, set_required_field_label("feature.connection.content.label.Reason".translate), class: "control-label", for: "group_closure_reason") %>
+  <div>
+    <%= f.select :closure_reason, get_grouped_select_options_for_closure_reasons(program), {}, class: "form-control" %>
+  </div>
+<% end %>

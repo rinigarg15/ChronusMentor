@@ -1,0 +1,35 @@
+<%= ibox section.title do %>
+  <%= get_section_description(section, class: "m-b-sm") %>
+  <table class="table no-border">
+    <thead id="membership_section_header_<%= section.id %>">
+      <tr>
+        <th class="col-sm-4"><%= ProfileQuestion.human_attribute_name(:question_text) %></th>
+        <th class="col-sm-4"><%= ProfileQuestion.human_attribute_name(:question_type) %></th>
+        <%= current_program_or_organization.roles_without_admin_role.collect{|role| content_tag(:th, role.customized_term.term) }.inject(:+) %>
+      </tr>
+    </thead>
+    <tbody>
+      <% section_questions.each do |section_question| %>
+        <% q_id = section_question.id %>
+        <% section_question_role_questions = section_question.role_questions %>
+        <tr id="question_<%= q_id %>" role="group" aria-label="<%= section_question.question_text %>">
+          <td class="font-600 col-sm-4" >
+            <%= section_question.question_text %>
+            <% unless section_question.help_text.blank? %>
+              <%= embed_icon(TOOLTIP_IMAGE_CLASS, '', :id => "membership_question_help_icon_#{q_id}") %>
+              <%= tooltip("membership_question_help_icon_#{q_id}", section_question.help_text.html_safe, true) %>
+            <% end %>
+          </td>
+          <td class="col-sm-4"><%= compressed_question_type(section_question) %></td>
+          <% @current_program.roles_without_admin_role.each do |role| %>
+            <% role_question = section_question_role_questions.find{|rq| rq.role_id == role.id} %>
+            <% is_membership_question = role_question ? role_question.membership_question? : false %>
+            <% is_admin_only_editable = role_question ? !role_question.can_be_membership_question? : false %>
+            <label for="<%= "membership_questions_#{@current_program.id}_#{section.id}_#{q_id}_#{role.id}"%>" class="sr-only"><%= "feature.profile_customization.label.include_this_question_membership".translate(role_name: role.customized_term.term) %></label>
+            <td class="col-sm-2"><%= check_box_tag("", "", is_membership_question, :id => "membership_questions_#{@current_program.id}_#{section.id}_#{q_id}_#{role.id}" , :disabled => section_question.default_type? || is_admin_only_editable, :onclick => "MembershipRequest.handleRoleUpdate('#{update_role_questions_membership_questions_path}', '#{role.name}', '#{role.id}', '#{q_id}')") %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

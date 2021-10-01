@@ -1,0 +1,20 @@
+<% if connections_and_activity_items.present? %>
+  <%= ibox "feature.profile.header.connections_and_activity".translate, :content_class=> "p-b-sm p-t-sm" do %>
+    <div class="col-sm-12 no-padding cjs-connections-and-activity-items">
+      <% connections_and_activity_items.each do |item1| %>
+        <div class="col-lg-4 col-sm-6 m-b-sm m-t-sm no-padding">
+          <h1 class="no-margins">
+            <%= raw(item1[1]) %>
+          </h1>
+          <%= raw(item1[0]) %>
+          <%= item1[2] if item1[2].present? %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+<script type="text/javascript">
+  jQuery(window).load(function(){
+    ViewProfile.setActivityDimensions();
+  });
+</script>

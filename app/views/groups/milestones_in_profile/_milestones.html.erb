@@ -1,0 +1,11 @@
+<%= javascript_tag do %>
+  MentoringModelMilestones.initialize();
+  jQuery(document).ready(function(){
+    MentoringModelMilestones.descriptionHandler();
+    MentoringModelTask.tasksListHandler(<%= MentoringModel::Task::Section::UPCOMING %>, <%=  MentoringModel::Task::Section::REMAINING %>);
+  });
+<% end %>
+<% ibox_header_title = "" %>
+<%= ibox ibox_header_title, :ibox_id => "cjs_connection_milestones_container", :collapse_link_class => "hide", :content_class => "cjs-connection-plan-container" do %>
+  <%= render partial: "groups/milestones_in_profile/milestone_bar", locals: {milestones: milestones} %>
+<% end %>

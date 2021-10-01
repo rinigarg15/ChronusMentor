@@ -1,0 +1,35 @@
+---
+name: <%= SurveyConstants::HEALTH_SURVEY_NAME %>
+questions:
+- question_type: <%= CommonQuestion::Type::RATING_SCALE %>
+  question_text: "How well acquainted are you with your mentoring partner?"
+  question_choices:
+    - Good
+    - Satisfactory
+    - Bad
+    - Poor
+  required:  true
+
+- question_type: <%= CommonQuestion::Type::RATING_SCALE %>
+  question_text: "Have you and your mentoring partner set specific goals for your mentoring relationship?"
+  question_choices:
+    - "Yes"
+    - "No"
+  required:  true
+
+- question_type: <%= CommonQuestion::Type::RATING_SCALE %>
+  question_text: "How effective has your interaction with your mentoring partner been?"
+  question_choices:
+    - Good
+    - Satisfactory
+    - Bad
+    - Poor
+  required:  true
+
+- question_type: <%= CommonQuestion::Type::TEXT %>
+  question_text: "What are the improvements that, you feel, will enhance your mentoring relationship?"
+  required:  false
+
+- question_type: <%= CommonQuestion::Type::TEXT %>
+  question_text: "Are there any other concerns that you would like to raise?"
+  required:  false

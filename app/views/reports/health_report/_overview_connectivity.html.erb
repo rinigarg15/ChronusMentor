@@ -1,0 +1,8 @@
+<%= render :partial => 'reports/metric_item', :locals => {
+  :name => "feature.reports.header.connectivity".translate, :percent_metric => connectivity.cumulative_value,
+  :opts => {
+    :help_text => "feature.reports.content.connectivity_help_text".translate(mentors: _mentors,  mentees: _mentees),
+    :detailed_report_anchor => "connectivity_box",
+    :point_scale => true
+  }
+} %>

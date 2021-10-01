@@ -1,0 +1,8 @@
+<% role_names = RoleConstants.human_role_string(membership_request.roles.collect(&:name), program: membership_request.program) %>
+<% name_as_role_names = "#{membership_request.name} #{"display_string.as".translate} #{role_names}" %>
+<div class="col-md-4 col-sm-12 m-b-xs">
+  <h4 class="<%= hidden_on_web %> m-b-xs"><%= name_as_role_names %></h4>
+  <div class="<%= hidden_on_mobile %>"><%= name_as_role_names %></div>
+</div>
+<div class="col-md-4 col-sm-12 m-b-xs text-md-center text-sm-left"><%= "feature.survey.content.submitted_on".translate(date_time: DateTime.localize(membership_request.created_at, format: :full_display_no_time)) %></div>
+<div class="col-md-4 col-sm-12 m-b-xs text-md-right text-sm-left"><%= link_to("display_string.update_details".translate, edit_membership_request_path(membership_request, root: membership_request.program.root), class: "btn btn-primary btn-outline btn-xs") %></div>

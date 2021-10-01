@@ -1,0 +1,51 @@
+<%= form_tag(update_tile_settings_dashboard_report_sub_sections_path(tile: tile), remote: true) do %>
+  <div class="row">
+    <div class="col-sm-6">
+      <%= render(partial: "reports/management_report/tile_settings_metrics", locals: {metrics: current_program.get_metrics(Report::Section::DefaultSections::CONNECTION), section: current_program.report_sections.find_by(default_section: Report::Section::DefaultSections::CONNECTION), tile: tile}) %>
+    </div>
+    <div class="col-md-5 col-sm-offset-1">
+      <h4 class="m-b-md" id="cjs_reports_to_show"><%= "feature.reports.content.select_reports_to_show".translate %></h4>
+      <% if current_program.only_one_time_mentoring_enabled? %>
+        <%= control_group do %>
+          <%= controls do %>
+            <label class="checkbox m-b-md">
+              <%= check_box_tag('dashboard_reports[]', DashboardReportSubSection::Type::Matching::CONNECTED_FLASH_USERS, current_program.is_report_enabled?(DashboardReportSubSection::Type::Matching::CONNECTED_FLASH_USERS), 'aria-labelledby' => 'cjs_reports_to_show', id: nil) %>
+              <%= get_dashboard_report_name(DashboardReportSubSection::Type::Matching::CONNECTED_FLASH_USERS, current_program) %>
+            </label>
+          <% end %>
+        <% end %>
+      <% else %>
+        <% if current_program.is_report_enabled?(DashboardReportSubSection::Type::Matching::CONNECTED_USERS) %>
+          <%= control_group do %>
+            <%= controls(role: "group", 'aria-label' => DashboardReportSubSection::Type::Matching::CONNECTED_USERS) do %>
+              <% DashboardReportSubSection::Type::Matching::ConnectedUsers::sub_settings.each do |report_sub_setting| %>
+                <label class="radio">
+                  <%= radio_button_tag("report_sub_settings[#{DashboardReportSubSection::Type::Matching::CONNECTED_USERS}]", report_sub_setting, current_program.get_sub_setting(DashboardReportSubSection::Type::Matching::CONNECTED_USERS) == report_sub_setting) %>
+                  <%= get_dashboard_report_sub_setting_name(report_sub_setting) %>
+                </label>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+
+        <%= control_group do %>
+          <%= controls do %>
+            <%= check_box_tag('dashboard_reports[]', DashboardReportSubSection::Type::Matching::CONNECTED_USERS, current_program.is_report_enabled?(DashboardReportSubSection::Type::Matching::CONNECTED_USERS), class: "hide", 'aria-labelledby' => 'cjs_reports_to_show', id: nil) %>
+            <% if current_program.is_report_available?(DashboardReportSubSection::Type::Matching::MENTOR_REQUESTS) %>
+              <hr>
+              <label class="checkbox m-b-md">
+                <%= check_box_tag('dashboard_reports[]', DashboardReportSubSection::Type::Matching::MENTOR_REQUESTS, current_program.is_report_enabled?(DashboardReportSubSection::Type::Matching::MENTOR_REQUESTS), 'aria-labelledby' => 'cjs_reports_to_show', id: nil) %>
+                <%= get_dashboard_report_name(DashboardReportSubSection::Type::Matching::MENTOR_REQUESTS, current_program) %>
+              </label>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <% action_set(class: "pull-right m-t-md") do %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", "data-dismiss" => "modal" %>
+    <%= submit_tag("display_string.Save".translate, class: 'btn btn-primary', data: {disable_with: "display_string.Please_Wait".translate}) %>
+  <% end %>
+<% end %>

@@ -1,0 +1,8 @@
+<% if @error_message.present? %>
+   ChronusValidator.ErrorManager.ShowPageFlash(false, "<%= j @error_message %>");
+<% else %>
+  chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.GA_MEETING_ACTIVITY_CATEGORY, chrGoogleAnalytics.action.GA_MEETING_ACTIVITY_UPDATED_NOTE, chrGoogleAnalytics.eventLabel.GA_MEETING_ACTIVITY_LABEL_MEETING_AREA, chrGoogleAnalytics.eventLabelId.GA_MEETING_ACTIVITY_LABEL_MEETING_AREA_ID);
+  closeQtip();
+  <% content = render(:partial => "private_meeting_notes/private_meeting_note_content", locals: {private_meeting_note: @private_meeting_note}) %>
+  jQuery('<%="#show_note_#{ @private_meeting_note.id }" %>').html('<%= j content %>');
+<% end %>

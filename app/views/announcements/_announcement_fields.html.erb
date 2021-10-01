@@ -1,0 +1,26 @@
+<table class="table table-striped table-fixed m-b-0" cellpadding="0" cellspacing="0">
+  <thead>
+    <tr class="pane-header">
+      <th class="col-sm-4 col-md-5" colspan="4">
+        <%= content_tag(:div, get_icon_content("fa"), :class => "media-left") %> <%= content_tag(:div, "feature.announcements.label.title".translate, :class => "media-body") %>
+      </th>
+      <th class="col-sm-2 text-center" colspan="2">
+        <%= "feature.announcements.label.for".translate %>
+      </th>
+      <% published_or_drafted_label = (status == Announcement::Status::PUBLISHED) ? "feature.announcements.label.published".translate : "feature.announcements.label.last_updated".translate %>
+      <th class="col-sm-2 text-center" colspan="2">
+        <%= published_or_drafted_label %>
+      </th>
+      <th class="col-sm-2 col-md-1 text-center" colspan="2">
+        <%= "feature.announcements.label.expires_on".translate %>
+      </th>
+      <th class="text-center col-sm-2">
+        <%= "display_string.Actions".translate %>
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%= render :partial => 'announcements/announcement', :collection => announcements %>
+  </tbody>
+</table>

@@ -1,0 +1,86 @@
+<div id="availability_slot_form_container" class="tab-pane active no-padding">
+  <% confirmation_message = 'feature.mentoring_slot.content.recurrence_availability_slot_text'.translate %>
+  <% user_time_zone = wob_member.short_time_zone %>
+  <% slot_duration_numbers = (@allowed_individual_slot_duration / Meeting::SLOT_TIME_IN_MINUTES) %>
+  <% start_time_element = 'form#new_mentoring_slot select#mentoring_slot_start_time_of_day' %>
+  <% end_time_element = 'form#new_mentoring_slot select#mentoring_slot_end_time_of_day' %>
+
+  <%= simple_form_for [@profile_member, @mentoring_slot], :html => {:class => "cjs_mentoring_slot_form"}, remote: true do |f| %>
+    <%= response_flash "mentoring_slot_flash" %>
+    <%= f.hidden_field :from_settings_page, :value => true if @from_settings_page %>
+    <%= f.input :date, as: :string, label: "display_string.Date".translate, required: true, wrapper: :vertical_input_group do %>
+      <%= construct_input_group_addon(type: "addon", icon_class: "fa fa-calendar", class: "gray-bg") %>
+      <%= f.label :date, "display_string.Date".translate, for: "mentoring_slot_datepicker", class: "sr-only" %>
+      <%= f.input_field :date, value: @mentoring_slot.date, id: "mentoring_slot_datepicker", class: "cjs_start_date form-control", data: date_picker_options %>
+    <% end %>
+
+    <%= control_group(class: "clearfix") do %>
+      <%= content_tag(:div, set_required_field_label("display_string.Time".translate), class: "control-label false-label m-b-xs") %>
+      <% left = [ { type: "addon", icon_class: "fa fa-clock-o", class: "gray-bg" } ] %>
+      <%= construct_input_group(left, [], input_group_class: "pull-left col-xs-12 col-sm-6 m-b-xs") do %>
+        <%= content_tag(:label, "feature.meetings.form.start_time".translate, class: "sr-only", for: "mentoring_slot_start_time_of_day") %>
+        <%= select_tag("mentoring_slot[start_time_of_day]", options_for_select(Meeting.get_valid_start_times(@allowed_individual_slot_duration), @mentoring_slot.start_time_of_the_day), include_blank: false, class: "form-control", onchange: "calendarSlot.changeEndTime('#{get_all_time_for_end_time((Meeting.get_valid_start_times(@allowed_individual_slot_duration) + Meeting.get_valid_end_times(@allowed_individual_slot_duration))).join(',')}', '#{slot_duration_numbers - 1}', '#{start_time_element}', '#{end_time_element}')") %>
+      <% end %>
+      <% left = [ { type: "addon", content: "display_string.to_for_dates_only".translate, class: "white-bg no-borders" } ] %>
+      <%= construct_input_group(left, []) do %>
+        <%= content_tag(:label, "feature.meetings.form.end_time".translate, class: "sr-only", for: "mentoring_slot_end_time_of_day") %>
+        <%= select_tag("mentoring_slot[end_time_of_day]", options_for_select(Meeting.get_valid_end_times(@allowed_individual_slot_duration), @mentoring_slot.end_time_of_the_day), include_blank: false, class: "form-control") %>
+      <% end %>
+      <span class="help-block">
+        <%= "feature.mentoring_slot.content.time_zone_hint".translate(:time_zone => user_time_zone) %>
+      </span>
+    <% end %>
+
+    <%= control_group(class: "clearfix") do %>
+      <%= content_tag(:div, MentoringSlot.human_attribute_name(:repeats), class: "control-label false-label m-b-xs") %>
+      <% left = [ { type: "addon", icon_class: "fa fa-repeat", class: "gray-bg" } ] %>
+      <%= construct_input_group(left, [], input_group_class: "pull-left col-xs-12 col-sm-6 m-b-xs") do %>
+        <%= content_tag(:label, MentoringSlot.human_attribute_name(:repeats), class: "sr-only", for: "mentoring_slot_repeats_every_option") %>
+        <%= select_tag "mentoring_slot[repeats_every_option]", options_for_select(options_for_avialability, (@mentoring_slot.repeats_every_option || MentoringSlot::Repeats::NONE)), class: "form-control", onchange: mentoring_slot_repeats_warning_js(@mentoring_slot, confirmation_message) %>
+      <% end %>
+      <% left = [] %>
+      <% left << { type: "addon", content: "feature.meetings.content.until_v1".translate, class: "white-bg no-borders" } %>
+      <% left << { type: "addon", icon_class: "fa fa-calendar", class: "gray-bg" } %>
+      <%= construct_input_group(left, [], input_group_class: "repetition_end_date #{'hide' unless @mentoring_slot.repeats_end_date_view}") do %>
+        <%= label_tag "mentoring_slot_end_datepicker", "display_string.Date".translate, class: "sr-only" %>
+        <%= text_field_tag "mentoring_slot[repeats_end_date_view]", @mentoring_slot.repeats_end_date_view, id: "mentoring_slot_end_datepicker", class: "form-control", data: date_picker_options %>
+      <% end %>
+    <% end %>
+
+    <div id="repeats_by_month_date" class="repeats_by_month_date hide">
+      <% radio_options = [["feature.mentoring_slot.form.day_of_month".translate, true], ["feature.mentoring_slot.form.day_of_week".translate, false]] %>
+      <%= f.input :repeats_by_month_date, :collection => radio_options, :as => :radio_buttons, :item_wrapper_class => 'inline', :label => MentoringSlot.human_attribute_name(:repeats_by_month_date) %>
+    </div>
+    <div id="repeats_on_week_day" class="repeats_on_week_day hide">
+      <%= control_group do %>
+        <label class="control-label">
+          <%= MentoringSlot.human_attribute_name(:repeats_on_week) %>
+        </label>
+        <% days_opts = get_day_opts_for_mentoring_slot(@mentoring_slot) %>
+        <%= controls do %>
+          <%= choices_wrapper("program_settings_strings.content.days".translate) do %>
+            <% days_list_first_letter.each_with_index do |day, index| %>
+              <label class="checkbox inline">
+                <%= check_box_tag "mentoring_slot[repeats_on_week][]", index, days_opts.include?((index).to_s), class: "cjs_mentoring_slots_repeateds_on_week day_name", id: nil %>
+                <%= day %>
+              </label>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <%= f.input :location, as: :text, label: MentoringSlot.human_attribute_name(:location), :input_html => { rows: 3, class: "form-control", placeholder: "feature.meetings.content.location_help_text".translate } %>
+
+    <% action_set(class: "pull-right") do %>
+      <%= f.button :submit, "display_string.Save".translate, :id => "save_mentoring_slot", :onclick => %Q[return (validateTimesAndSubmit(#{(Meeting.valid_start_time_boundaries + [Meeting.valid_end_time_boundaries.last]).to_json}, 'mentoring_slot_flash', #{@allowed_individual_slot_duration / Meeting::SLOT_TIME_IN_MINUTES}, "#{j('feature.mentoring_slot.content.availability_start_end_time_error'.translate(:allowed_slot_time => @allowed_individual_slot_duration))}") && MentoringSlotForm.validateDate('mentoring_slot_flash'))] %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  MentoringSlotForm.toggleDayListing("<%= MentoringSlot::OPTIONS_FOR_AVAILABILITY::WEEKLY %>", "#mentoring_slot_repeats_every_option", "form.cjs_mentoring_slot_form");
+  MentoringSlotForm.toggleMonthOptions("<%= MentoringSlot::OPTIONS_FOR_AVAILABILITY::MONTHLY %>", "#mentoring_slot_repeats_every_option", "form.cjs_mentoring_slot_form");
+  initialize.setDatePicker();
+  MentoringSlotForm.weeklyCheckboxModify();
+<% end %>

@@ -1,0 +1,10 @@
+<% content = render :partial => "explicit_user_preferences/edit_preference", locals: {explicit_preference: @explicit_preference, src: @src} %>
+jQuery('.cjs_explicit_preference_<%= @explicit_preference.id %>').replaceWith("<%= j(content) %>");
+ExplicitPreference.configureExistingPreferences();
+ExplicitPreference.closeUpdateExplicitPreferenceHandleOtherElements(jQuery('.cjs_explicit_preference_row.cjs_explicit_preference_<%= @explicit_preference.id %>'));
+ExplicitPreference.handleWcag('.cjs_explicit_preference_<%= @explicit_preference.id %>');
+var eventDetails = ExplicitPreference.getGaEventDetails("<%= @ga_src %>");
+<% if @updated_preference_question_choices %>
+  chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.EXPLICIT_PREFERENCES, chrGoogleAnalytics.action.GA_CHANGED_PREFERENCE, eventDetails[0], eventDetails[1]);
+<% end %>
+ExplicitPreference.preferencesChanged = true;

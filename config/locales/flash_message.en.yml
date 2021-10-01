@@ -1,0 +1,530 @@
+en:
+  flash_message:
+    message:
+      succeeded: Your message has been sent
+      file_attachment_invalid: is restricted
+      file_attachment_too_big: should be within %{file_size} MB
+    general_file_attachment:
+      file_attachment_name_invalid: is invalid
+    profile_answer:
+      file_attachment_invalid: Attachment content type is restricted
+      file_attachment_profile_answer_v1: Your file is too big to upload. Please upload within %{file_size} MB.
+    admin_message:
+      ask_a_question_success_v1: Your question has been sent to %{Administrator}.
+      succeeded_v1: Your message has been sent to %{Administrator}.
+      setting_succeeded: Settings have been saved successfully
+      captcha_fail: Word verification failed. Please try again.
+      select_at_least_one_user: Please select at least one user
+    ck_attachments:
+      login_required: Please login to access the requested page
+    user:
+      role_change_success: The roles have been successfully updated
+      auto_role_approval_success: "%{to_add_role} role has been successfully added"
+      role_change_failure_v1: There were problems updating the role. Please refresh the page and try again.
+      role_change_submit_failure: Please Add/Remove roles before submitting
+    flag:
+      created_successfully: Content has been flagged successfully
+      creation_failed: Content flagging failed
+      ignored: The flag is ignored and the content is allowed
+      all_ignored: All the flags for the content are ignored and the content is allowed
+    article:
+      published: Your %{article_or_list} has been successfully published
+      draft_saved: Your draft has been saved. You can continue editing the %{article_or_list}.
+      deleted: The %{article_or_list} was deleted
+      draft_discarded: Your draft has been discarded
+    language:
+      created: Language created successfully
+      not_created: Cannot create Language
+      edited: Language saved successfully
+      not_edited: Cannot save Language
+      deleted: Language deleted successfully
+    organization_languages:
+      updated: The Language Settings has been successfully updated.
+    program_invitation:
+      click_here_to_view_invitations_html: "%{click_here} to view the invitation(s)."
+      click_here_to_view_invitations_v1_html: "%{click_here} to visit 'Invitations Sent' listing page which will get updated shortly with the list of sent invitation(s) with it's status."
+      note_to_user: " Please note that we won't be able to send emails to the email addresses that are either invalid or who may correspond to existing users"
+    qa_question:
+      posted: Question has been posted successfully
+      not_posted: Sorry, the question was not posted
+      deleted: The question has been deleted
+      question_not_exist: The question you are looking for does not exist.
+    admin_flash:
+      promoted: "%{member} has been added to the list of administrators"
+      promoted_v1: "%{member} has been added to the list of %{admins}"
+    organization_admin_flash:
+      demoted: "%{member} has been removed from the list of administrators"
+      demoted_v1: "%{member} has been removed from the list of %{admins}"
+      promoted: "%{member} has been added to the list of administrators"
+      promoted_v1: "%{member} has been added to the list of %{admins}"
+      not_found: Please choose users from the suggestion list
+      failure: Email %{email_errors}
+    home:
+      program_creation_error: The given name/subdomain already exists or is invalid (the domain name/web address can contain only alphanumeric characters and dashes or dots). Please register a different name and subdomain.
+      mentor_mentee_name_can_not_be_same: Terms for %{mentor} and %{mentee} should not be same.
+      mentor_mentee_name_cannot_be_admin: Terms for %{mentor} or %{mentee} cannot be %{admin}.
+    membership:
+      created_v1: Your request has been sent to the %{program} %{administrators}. You will receive an email once the request is accepted.
+      creation_failed: There are some problems with your request. Please fix the following errors and try again.
+      creation_failed_v1: There are some problems with your request. Please correct the below error(s) highlighted in red.
+      membership_required_to_add_as_favorite: You must be a member of the program to request the %{mentor}.
+      bulk_deleted:
+        one: The request was deleted.
+        other: The requests were deleted.
+      virus_present: Our security system has detected the presence of a virus in your resume.
+      request_pending_roles_v1_html: Your request to join <b>%{program}</b> as <b>%{role_name}</b> is currently under review.
+      to_join_complete_form_v1_html: To join as <b>%{role_names}</b>, complete and submit the form below.
+      to_join_v2_html: To join the %{program}, please %{click_here} to contact the %{administrators}.
+      duplicate_request_when_original_is_pending: You already have a pending request.
+      current_roles_present_html: You are already <b>%{role_name}</b> in <b>%{prog_name}</b>.
+      export_successful: Membership Requests are being exported to %{file_format}. You will receive an email soon with the %{file_format} report
+      no_data_to_export: No membership requests to export!
+      bulk_accepted_html:
+        one: The request has been accepted. %{click_here} to view the member's profile.
+        other: The requests have been accepted.
+      add_role_directly: You are now %{role_name} in %{prog_name}
+      add_role_directly_not_eligible: However you are not allowed to join as %{role_name}.
+      bulk_rejected:
+        one: "%{name} has been notified that the membership request was not accepted."
+        other: Users have been notified that the membership request was not accepted.
+      resend_email_with_instructions: Email with instructions to join the %{program} has been resent.
+      please_login_to_join: Please login to join the %{program}.
+      please_login_to_join_html: Please %{login_link} to join the %{program}.
+      please_login_to_complete_signup_process: Please login to complete the signup process.
+      login_failed_for_spe_v1: We're sorry, but access to this page is limited to SPE members only. If you believe you received this page in error, please contact Customer Service at 1.972.952.9393 or service@spe.org. If you are not a member, please use the Back button on your browser to continue your session on SPE.org.
+      invalid_signup_code: The signup code is invalid.
+      existing_user_different_uid: You are already part of the %{program}. Please login using the credentials used during signup.
+      existing_user_different_uid_html: The user associated with email %{email} is already part of the %{program}. Please %{login_link} using appropriate credentials.
+      apply_for_only_one: Sorry, you can apply for only one role at a time.
+      suspended_user_v1_html: Your profile in %{program} is currently not active.
+    mentor_request_flash:
+      created_v1: Your request for a %{mentoring_connection} has been successfully sent to %{mentor_name}. You will be notified once the %{mentor} accepts your request.
+      created_to_admin_v1: Your request has been sent to %{administrator} and you will be notified once a %{mentor} is assigned.
+      request_rejected_or_withdrawn: Your response has been recorded and %{user} has been notified about your response
+      limit_reached: "%{mentor_name} is not accepting any requests currently! Please browse through other %{mentors} listed."
+      prompt_a_request_v1_html: You have %{count_with_name}. %{send_req} to %{administrator} for %{mentor} assignment or continue adding %{mentors}.
+      prompt_a_request_remaining: You have %{count_with_name}. You should have at least %{n} more %{mentors} to send the request
+      duplicate_request_to_mentor: You have already sent a request to this %{mentor}.
+      limit_for_mentee_reached: You cannot send any more requests as you have reached the %{mentoring_connection} limit
+      request_limit_for_mentee_reached: You cannot send any more requests as you have reached the pending requests limit
+      request_limit_for_mentee_reached_html: You cannot send any more requests as you have reached the pending requests limit. %{click_here} to withdraw pending requests.
+      blocked_by_admin_v1: The %{program} %{administrator} does not allow you to send any requests.
+      export_successful_v1: Requests for %{mentoring} are being exported to %{file_format}. You will receive an email soon with the %{file_format} report
+      no_data_to_export_v1: No requests to export!
+      acceptance_failed_v1_html: You have reached the maximum %{mentoring_connections} limit. %{click_here} to change settings.
+      acceptance_failed_v2_html: You have reached the maximum %{mentoring_connections} limit.
+      accepted_rejected_withdrawn_v1: The request has been %{status}
+      past_accepted_rejected_withdrawn: The request has already been %{status}.
+      closed_v1:
+        one: The selected request has been closed.
+        other: The selected requests have been closed.
+      invalid_request: The request you are trying to access does not exist.
+      rejected_request_flash_v3_html: Thank you for your response. %{mentee_name} has been notified. Your %{mentoring_connection} limit is updated to make sure you don't receive any new requests. You can always update your limit under your %{profile_settings}.
+      rejected_request_flash_v2_not_notified_html: Thank you for your response. Your %{mentoring_connection} limit is updated to make sure you don't receive any new requests. You can always update the same under your %{profile_settings}.
+      mentor_cant_accept_request: "You have opted out of %{mentoring_connection}. Please opt in for %{mentoring_connection} to accept the request"
+    project_request_flash:
+      created_to_admin: Your request has been sent
+      part_of_project_error_html: "<b>%{sender_name}</b> is already part of <b>%{group_name}</b>"
+      unavailable_group_error_html:
+        one: Request could not be accepted as the %{connection_term} <b>%{group_names}</b> is unavailable.
+        other: Requests could not be accepted as the %{connection_term} <b>%{group_names}</b> are unavailable.
+      max_limit_error_html:
+        one: Request not accepted because <b>%{group_names}</b> exceeded maximum limit
+        other: Requests not accepted because <b>%{group_names}</b> exceeded maximum limit
+      rejected:
+        one: The selected %{mentoring_connection} request has been rejected.
+        other: The selected %{mentoring_connection} requests have been rejected.
+      accepted:
+        one: The selected %{mentoring_connection} request has been accepted.
+        other: The selected %{mentoring_connection} requests have been accepted.
+      withdrawn: The selected %{mentoring_connection} request has been withdrawn.
+    mentoring_model:
+      csv_upload_successfully_v2: The %{mentoring_connection} plan template has been set up successfully from the template file
+      csv_upload_failed_v2: The %{mentoring_connection} plan template failed to set up from the template file while %{message}
+      deleted_v1: The %{Mentoring_Connection} Plan Template has been deleted successfully.
+      duration_success_v1: The Duration of the %{Mentoring_Connection} Plan Template has been updated successfully.
+    mentor_offer_flash:
+      offer_rejected: Your response has been recorded and %{mentor} has been notified about your response
+      mentee_offer_v1: Your offer for %{mentoring} has been sent to %{mentee} for acceptance
+      mentee_added_existing_group_v1: "%{mentee} has been added to your %{mentoring_connection}"
+      mentee_added_new_group_v1: A new %{mentoring_connection} between you and %{mentee} has been created
+      mentee_accepts_request_v1: Congratulations on your %{mentoring_connection} with %{mentor}
+      acceptance_failed_mentor_limit_html: The offer cannot be accepted as %{mentor} has reached the %{mentoring_connections} limit.
+      closed:
+        one: The selected offer has been closed.
+        other: The selected offers have been closed.
+      offer_withdrawn: The offer has been withdrawn.
+      invalid_offer: The offer you are trying to access does not exist.
+      past_status_message: The offer has already been %{status}.
+    user_flash:
+      mentoring_mode_change_failure:
+        mentor_offer_pending: "%{mentoring} offer(s)"
+        mentor_request_pending: "%{mentoring} request(s)"
+        meeting_request_pending: "%{meeting} request(s)"
+        kindly_reply_first: You already have pending %{items}, Kindly reply to those first and then you can change the %{mentoring} mode.
+      invalid_invitation_html: The invitation code you provided is not valid. Please contact the %{program_admin}.
+      reusing_invitation: You have already signed up for the %{program}. Please %{click_here} to login.
+      mismatch_email_html: We are unable to complete the signup process because the email address provided during signup does not match the email address the invitation was sent to. Please contact the %{program_admin} to get access to the program.
+      mismatch_uid: Please login using the credentials used during signup.
+      invite_signup_done: Welcome to %{program_name}. Please complete %{and_publish}your online profile to proceed.
+      signup_done: Welcome! Your account has been successfully created
+      profile_invited_v1: The user has been invited to review and publish their profile.
+      user_added_v1_html: "%{user} has been added as %{user_role}."
+      user_added_and_another_v1_html: "%{user} has been added as %{user_role_articleized}. You can continue adding the next %{user_role}."
+      complete_mentoring_profile_v1: You have successfully completed your basic profile. Please follow up by completing your full profile.
+      edit_profile_page_for_direct_landing: Your %{role} profile is incomplete. Please fill all the required fields and publish your profile.
+      edit_profile_page_for_direct_landing_just_publish: Your profile is not yet published. Please review and publish the profile.
+      creation_failed_v1: Please correct the below error(s) highlighted in red.
+      picture_update_success: The picture has been successfully updated
+      picture_update_failure: There were some problems while updating the picture. Please try again with a different picture.
+      required_fields: Required fields cannot be blank
+      suspend_reason_required_v1: Please provide a reason for deactivating the membership of %{user}
+      user_suspended_v2: "%{user}'s membership has been deactivated from this %{program}."
+      user_reactivated_v1: "%{user}'s membership has been reactivated in this %{program}."
+      user_destroy: "%{user}'s profile, any %{mentoring_connection} and other contributions have been removed"
+      user_destroy_v1: "%{user}'s profile, any engagements and other contributions have been removed"
+      user_inactive_v1:
+        one: "%{user} is currently inactive"
+        other: "%{user} are currently inactive"
+      import_profile_success_v1: The education, experiences and publications have been imported
+      import_profile_success_v2: The experiences have been imported
+      import_profile_failure_v1: Sorry, we are unable to import the education, experiences and publications
+      import_profile_failure_v2: Sorry, we are unable to import the experiences
+      import_empty_profile_v1: Your private profile does not have any experience, education information or publications.
+      import_empty_profile_v2: Your private profile does not have any experience.
+      profile_not_published_admin_view: The member has not yet published their profile
+      negative_connections_limit_error: The %{mentoring_connection} limit cannot be negative
+      max_connections_limit_error_v1: Your %{mentoring_connections} limit cannot be less than %{students_count} since you are already %{mentoring} %{student_string}.
+      max_connections_limit_only_increase_error: The %{mentoring_connection} limit cannot be set to a value greater than %{limit}
+      max_connections_limit_only_decrease_error: The %{mentoring_connection} limit cannot be set to a value less than %{limit}
+      user_signup_process_incomplete: "%{user} did not fill a few required fields in the profile during signup."
+      invalid_mentee_name: The %{mentee} with the given name does not exist. Please enter a valid %{mentee} name
+      add_from_other_program_success_v1:
+        one: The selected user (in %{state_name} state) has been imported to this %{program} as %{role}
+        other: The selected %{count} users (%{active_count} in Active state, %{pending_count} in Unpublished state) have been imported to this %{program} as %{role}
+      add_from_other_program_success_only_active_state: The selected %{count} users (in Active state) have been imported to this %{program} as %{role}
+      add_from_other_program_success_only_pending_state: The selected %{count} users (in Unpublished state) have been imported to this %{program} as %{role}
+      meeting_creation_success_v1: Your %{meeting} request has been successfully sent.
+      meeting_creation_success_v2_html: Your request for %{meeting} with %{mentor_name} has been successfully sent. You will be notified when %{mentor_name} responds to your request. You can look for other %{mentors} who are available and reach out to them from %{mentors_page_url}.
+      group_meeting_creation_success: The %{meeting} has been created successfully.
+      meeting_creation_failure_v1: The %{meeting} could not be created
+      meeting_creation_failure_no_occurrences_v1: The %{meeting} could not be created as there can be no occurrences of the %{meeting} between provided start date and end date
+      meeting_updation_success_v1: The changes to this %{meeting} were successfully saved and the attendees were notified about the update.
+      meeting_removal_success: The %{meeting} has been successfully removed.
+      meeting_invalid_attendee_v1: Attendees for this %{meeting} are not valid
+      mentoring_slot_creation_failure: The availability could not be created
+      mentoring_slot_creation_success: The availability slot has been created succesfully
+      mentoring_slot_deletion_success: The availability slot has been deleted succesfully
+      member_already_exist_in_program: "%{member} is already a member of %{program}"
+      member_invite_to_program_success: "%{member} is invited to join %{program}."
+      inadequate_advance_time: Appointments must be reserved %{n} hours in advance.
+      meetings_in_past: "%{meeting}s cannot be created in the past"
+      availability_message_html: You do not have any open availability slots, please %{set_your_availablity}.
+      membership_suspended_v1: "%{member}'s membership has been suspended and their access has been revoked from all the %{programs} they were part of."
+      membership_reactivated_v2: "%{member}'s membership has been reactivated."
+      multiple_user_add_to_program_success: The selected users have been added to the %{program} as %{role} successfully
+      single_user_add_to_program_success: The selected user have been added to the %{program} as %{role} successfully
+      reactivate_org_profile_html: Please %{click_here} to reactivate the user's profile in %{organization_name}.
+    meeting_area_flash:
+      cancelled_meeting: You have successfully marked this %{meeting} as cancelled. Please tell us about your experience to help us get better.
+      completed_meeting: You have successfully marked this %{meeting} as completed. Please tell us about your experience.
+    program_flash:
+      updated: Your changes have been saved
+      created: The %{Program} has been successfully setup!
+      created_using_solution_pack: The solution pack was imported and the %{program} has been successfully setup!
+      created_using_profile_question_pack: Profile fields are successfully imported. Please refresh!
+      created_using_solution_pack_with_data_deleted: Please note that some invalid data in %{Mentoring_Connection} model was deleted
+      mentoring_period_changed_v1: ". The duration of %{mentoring_connection} will be applied only to newly formed %{mentoring_connections}."
+      set_availability_flash: ". Please set your availability for the selected %{mentoring} mode(s)."
+      mentor_offer_acceptance_change_failed: A setting change related to %{mentor} initiated offers acceptance failed as there are offers pending currently.
+      update_failed_v1: Unable to save the program settings. Please correct the below error(s) highlighted in red.
+      failed_from_sp: Failed to create the %{program} using solution pack
+      sign_out_of_all_other_sessions: Signed out successfully from all other sessions
+      close_pending_meeting_requests: close all the pending %{meeting} requests
+      correct_mailer_templates_html: remove %{meeting} request tags from %{mails}
+      to_disable_one_time_mentoring: to disable one-time %{mentoring}
+      third_role_added: The third role has been added.
+      third_role_removed: The role '%{role_name}' has been removed from the %{program_term}.
+      failed_to_add_third_role: Failed to add third role.
+      failed_to_remove_third_role: Failed to remove third role.
+      other_changes_saved: Other changes also have been saved.
+    organization_flash:
+      updated: Your changes have been saved
+      profile_summary_updated: Successfully saved the fields to be displayed in the summary
+      terms_changed_html: The new terminology has been saved. Please also update the %{overview_page} to reflect the new terms.
+      terms_changed_program_html: The new terminology has been saved. Please also update the %{overview_page} and %{connection_settings_page} to reflect the new terms.
+      connection_closure_reasons: "%{Mentoring_Connection} Closure reasons"
+      saml:
+        upload_failed: Error occurred while uploading file. Please upload again.
+        upload_wrong: Wrong file uploaded. Please upload Identity Provider Metadata in .xml file.
+        upload_success: File uploaded successfully
+        auth_creation_fail: Error occured in setting up SAML authentication.
+        auth_creation_success: SAML authentication has been setup successfully.
+        certificate_update_success: IDP certificate has been updated successfully.
+        certificate_update_fail: Error occured in updating the IDP certificate.
+        non_ssl_error: SAML authentication cannot be setup when SSL is not enabled for the organization.
+        certificate_download_fail: Error occured while downloading IDP certificate.
+      manager_error: Manager feature cannot be disabled when Manager type profile question is present
+    announcement_flash:
+      published: The announcement has been published.
+      drafted: The announcement has been saved.
+      updated_v1: The announcement has been updated.
+      deleted_v1: The announcement has been deleted.
+      discarded: The announcement has been discarded.
+      virus_present: Our security system has detected the presence of a virus in the attachment.
+      test_mail_sent: Test emails have been sent to %{email_list}
+    analytics_flash:
+      updated: Analytics script has been successfully updated
+    instructions_flash:
+      success_v1: The instructions have been succesfully updated
+    program_invitation_flash:
+      recipients_empty: Recipients cannot be empty
+      roles_empty: Role(s) cannot be empty
+      program_invitation_error: There is some error in the invitation.
+      created_v3: Invitations will be sent.
+      update_invitation_listing: the 'Invitations Sent' listing will also get updated shortly.
+      update_invitation_listing_v2: The 'Invitations Sent' listing under 'Track Invitation Status' will update shortly.
+      invitations_sent_status: Invitations will be sent to %{sent_invites_count} out of the %{total_invites} entered email ids
+      invalid_domain_invitations: 'Invitations won''t be sent to email id(s) listed below as they are invalid or correspond to existing users or doesn''t fall under allowed domains(%{email_domains}): %{invites}'
+      invalid_invitations: 'Invitations won''t be sent to email id(s) listed below as they are invalid or correspond to existing users: %{invites}'
+      deleted_v1:
+        one: The invitation has been successfully deleted.
+        other: The invitations have been successfully deleted.
+      click_here: Click here
+    forum_flash:
+      f_created: The new forum has been successfully created
+      f_creation_failed_v1: There are some problems with your forum. Please correct the below error(s) highlighted in red.
+      f_removed: The forum has been successfully removed
+      f_updated: The changes have been saved
+      conversation_created: A new conversation has been started successfully.
+      conversation_created_failed: There are some problems creating the conversation. Please try again.
+      conversation_removed: The conversation has been removed.
+      conversation_does_not_exist: The conversation you are are looking for no longer exists.
+      p_moderation_v1: Thank you for your message. Your post will be uploaded to the forum shortly.
+      p_created: Your post is created.
+      p_published: Post by %{user} is published.
+      p_deleted: Post has been deleted
+      p_declined: The post was not published.
+      virus_present: Our security system has detected the presence of a virus in the attachment.
+      subscription: You have joined '%{forum_name}'
+      unsubscription: You have unsubscribed from '%{forum_name}'
+    password_flash:
+      creation_success_html: If %{email} is a registered member of the %{program}, instructions to reset your password will be sent to that address immediately. If you do not receive the email, please contact your %{program_administrator}
+      creation_failed_v1: There were some problems processing your request. Please correct the below error(s) highlighted in red.
+      change_success_single_program: Your password has been successfully changed
+      change_from_reset_success: Your password has been successfully changed. Please login with your new password.
+      change_invalid_code: Invalid reset code
+      invalid_email: Please enter a valid email address
+      account_reactivated: Your account has been successfully reactivated. Please login with your new password.
+      resent_reactivation: If the email address is the address of a registered member of the program, instructions to reactivate your account will be sent to that address immediately.
+      contains_login_name: should not contain your name or your email address
+      invalid_email_domain: should be of %{email_domain}
+      has_password_history:
+        one: Your new password must differ from your last 1 password
+        other: Your new password must differ from your last %{count} passwords
+      contact_admin_v1_html: Your password was not successfully updated since we are facing trouble with your account. Please contact the %{program} %{administrator}.
+    pages:
+      pages_description_v1: The 'Program Overview' pages serve as the welcome pages of your %{program}. Add program specific information and/or general guidelines for members of the program.
+      pages_not_found: The page you are trying to access doesn't exist.
+      pages_login_required_to_view_page: Please log in to access the page.
+    group_flash:
+      admin_view_update_success: The selected users have been successfully added to '%{group_name}'
+      mentor_assigned_html: "%{student} has been assigned to the %{mentoring_connection}"
+      mentoring_connection_saved_as_draft_html: The %{mentoring_connection} has been saved as a draft. %{click_here} to view the draft.
+      reason_not_valid: Enter a reason
+      terminated: The %{mentoring_connection} has been closed
+      draft_actions: The %{mentoring_connection} has been %{action}
+      reactivated: The %{mentoring_connection} has been reactivated
+      reactivated_v1: The %{mentoring_connection} has been reactivated. Users of the %{mentoring_connection} will be notified.
+      mentoring_period: Please provide a reason for changing the expiry date.
+      mentoring_period_v1: Please provide a reason for changing the expiration date.
+      expiration_date_set: New expiration date for the %{mentoring_connection} has been set
+      export_successful_v1: This %{mentoring_area} is being exported. You will receive an email shortly with the exported information.
+      export_does_not_include_discussion_board: Please note that the discussion board information will not be exported.
+      update_success: The %{mentoring_connection} has been updated
+      member_blank: A connection needs at least one %{role_name}. Try closing the connection instead of removing the %{role_name}.
+      member_blank_v1: A %{mentoring_connection} needs at least one %{role_name}. Try closing the %{mentoring_connection} instead of removing the %{role_name}.
+      invalid_member: Please enter a valid user
+      update_answers_failure_v1: There are some problems saving this profile. Please correct the below error(s) highlighted in red.
+      update_answers_success_v1: "%{Mentoring_Connection} profile has been saved"
+      meeting_rsvp_update_yes_html: Your RSVP has been updated to "Yes". %{owner_name} will be notified about the update.
+      meeting_rsvp_update_no_html: Your RSVP has been updated to "No". %{owner_name} will be notified about the update.
+      meeting_rsvp_update_yes_owner: Your RSVP has been updated to "Yes".
+      meeting_rsvp_update_no_owner: Your RSVP has been updated to "No".
+      limit_for_mentor_reached: You cannot offer mentoring as you have reached the %{mentoring_connections} limit. Please update your profile and then retry.
+      limit_for_mentor_reached_cannot_update: You cannot offer mentoring as you have reached the %{mentoring_connections} limit.
+      limit_for_mentee_exceeded_for_mentor_offer: You cannot offer %{mentoring} as %{mentee} has reached the %{mentoring_connections} limit.
+      membership_destroy: You have left the %{Mentoring_Connection}
+      group_closed: "%{Mentoring_Connection} is now closed"
+      already_expired: The %{mentoring_connection} you are looking for might have already expired.
+      note_updated: The notes have been updated for the %{mentoring_connection}
+      active_project_requests:
+        one: "%{name} has 1 pending %{Mentoring_Connection} Request"
+        other: "%{name} has %{count} pending %{Mentoring_Connection} Requests"
+      max_limit_update_error:
+        one: You cannot reduce the maximum limit of the %{plural_role_name}. The %{mentoring_connection} has already more than %{count} %{role_name}.
+        other: You cannot reduce the maximum limit of the %{plural_role_name}. The %{mentoring_connection} has already more than %{count} %{plural_role_name}.
+      max_limit_required: The maximum limit of %{plural_role_name} in the %{mentoring_connection} cannot be empty.
+      group_proposed_success: The %{mentoring_connection} proposal was successful. You will be notified once the %{admin} accepts your %{mentoring_connection}.
+      group_creation_without_approval_success: "The %{mentoring_connection} has been created successfully."
+      group_not_found: The %{mentoring_connection} you are looking for does not exist.
+      set_start_date_success: "A start date has been set for the %{mentoring_connection}."
+      edit_start_date_success: "Start date has been updated successfully for the %{mentoring_connection}."
+    message_flash:
+      created: Your message has been sent
+      creation_failed_v1: There are some problems with your message. Please correct the below error(s) highlighted in red.
+      deleted: The message has been deleted
+      post_failure: Problems posting the message. Please try again
+      virus_present: Our security system has detected the presence of a virus in the attachment.
+    survey_flash:
+      create_success: The survey has been successfully created. Now you can add questions to it.
+      create_success_incase_of_questions_import: The survey has been successfully created.
+      upload_valid_csv: Please upload a valid CSV file.
+      answers_updated_v1: Thanks for completing %{survey_name}
+      delete_success: The survey has been deleted
+      program_survey_expired: The survey has passed it's due date and you cannot participate in it now.
+      survey_deleted: This survey was deleted by the %{program} %{administrator} and is no longer available.
+      copied_successfully: Survey has been cloned successfully.
+      error_in_copying: There are some problems cloning the survey. Please try again.
+      answers_updated_with_next_survey_html: Thanks for your feedback! It looks like you have another survey overdue as well. Click <a href='%{next_survey_link}'>here</a> to complete it.
+      create_failure: Problems posting the response. Please try again.
+      draft_success: Your draft for the survey '%{survey_name}' has been saved successfully.
+      completed_or_cancelled_last_question_error_v1: At least one question which is shown 'Always' or '%{other_condition}' needs to be present.
+      survey_not_found: The survey you are trying to access doesn't exist.
+      response_not_sent: Please note that the response is not shared yet.
+    chronus_session_flash:
+      create_failure: Login failed
+      chronussupport_login_failure: Please ensure that you logged in using email of '%{domain}' domain.
+      chronussupport_admin_does_not_exist: Please ensure that a member account with email '%{email}' exists in the organization.
+    user_session_flash:
+      suspended_user_v3_html: Your access to the %{program} may have been temporarily revoked. Please contact the %{admins} %{here} for further assistance.
+      suspended_user_allowed_to_join_v1_html: Your access to the %{program} may have been temporarily revoked. Please re-join the %{program} %{again} or contact the %{administrator} %{here}.
+      suspended_member_v2: You do not have access to this %{program}. Please contact the %{administrator} for more information.
+      login_failed: Login failed. Try again
+      login_blocked_self_unblock_message_html: Your account has been blocked due to multiple incorrect attempts to login. Please check your email to reactivate your account or %{click_here} to resend the account reactivation email.
+      login_blocked_admin_unblock_message_v1: Your account has been blocked due to multiple incorrect attempts to login. Please contact the %{program} %{administrator}.
+      password_expired: Your password has expired. Please check your email for instructions to reset your password.
+      ip_authentication_failed_v2: This is a restricted site. You must log in to this site through an authorized network. Please contact your %{administrator} if you need further help.
+      not_a_member: You are not a member of this %{program}.
+      successfully_authenticated: Successfully authenticated.
+      member_mismatch: The '%{title}' user account is already tied to another user in the %{program}.
+    feedback:
+      response_flash:
+        create_success_v1: Thank you for your feedback
+        create_failure: Please fix the highlighted errors
+    private_note_flash:
+      deleted: The note has been deleted.
+    mailer_template_flash:
+      update_success: The email has been successfully updated
+      widget_update_success: The widget has been successfully updated
+    resource_flash:
+      create_success_v1_html: The %{resource} has been successfully published. %{click_here} to view the %{resource}.
+      update_success_v1_html: The %{resource} has been successfully updated. %{click_here} to view the %{resource}.
+      delete_success: The %{resource} has been successfully removed
+    admin_view_flash:
+      remove_user_success: The selected users have been removed from the program successfully
+      remove_user_failure:
+        one: "%{users} has not been removed"
+        other: "%{users} have not been removed"
+      suspend_success_v1: The selected users membership have been deactivated from the %{program}.
+      reactivate_success: The selected users membership have been reactivated in the %{program}
+      add_role_success: The selected roles have been successfully added to the selected users in the program
+      no_user_or_member_selected: Please select at least one %{element}
+      invite_to_program_success_v3: Invitations will be sent to all the selected member(s).
+      action_success: The View - %{view_title} has been %{action} successfully
+      export_csv_success_v2: Your report has been generated successfully. Please click on the link below to download.
+      resend_instructions_success:
+        one: The signup instructions for the selected user has been sent successfully
+        other: The signup instructions for the selected users has been sent successfully
+      suspend_member_success: The selected members have been suspended from %{organization_name}
+      suspend_member_failure:
+        one: "%{members} has not been suspended"
+        other: "%{members} have not been suspended"
+      reactivate_member_success: The selected members have been reactivated in the %{organization_name}
+      remove_member_success: The selected users have been removed from %{organization_name}
+      remove_member_failure:
+        one: "%{members} has not been removed"
+        other: "%{members} have not been removed"
+    program_event_flash:
+      action_success: The Program Event - %{title} has been %{action} successfully
+      update_invite_success_from_email_html: Your RSVP has been updated successfully. %{click_here} to set reminder.
+      update_invite_success: Your RSVP has been updated successfully
+      update_reminder_success: Your Reminder for the program event has been updated successfully
+      test_mail_sent: Test emails have been sent to %{email_list}
+      event_not_found: The event you are trying to access doesn't exist.
+    bulk_match_flash:
+      update_notes_success: Notes Updated Successfully
+      connection_already_exists_v1: The %{Mentoring_Connection} already exists between the pair.
+    coaching_goals_flash:
+      created: The goal has been successfully created
+      deleted: The goal has been successfully deleted
+    enrollment:
+      welcome: You are now %{role_names} in %{program_name}
+      roles_cannot_be_blank: Role(s) can't be blank.
+    meeting_request_flash:
+      not_found: The %{meeting} request was not found.
+      moved_to_status: The %{meeting} request was %{status}.
+      status_update_accepted_v1: The %{meeting} request has been accepted
+      status_update_declined_v1: The %{meeting} request has been declined
+      status_update_withdrawn_v1: The %{meeting} request has been withdrawn
+      cannot_update_accepted_v1: The %{meeting} request has already been accepted
+      cannot_update_declined_v1: The %{meeting} request has already been declined
+      cannot_update_withdrawn_v1: The %{meeting} request has already been withdrawn
+      cannot_update_closed_v1: The %{meeting} request has already been closed
+      one_closed: The selected %{meeting} request has been closed
+      other_closed: The selected %{count} %{meeting} requests have been closed
+      rejected_request_flash_v2: Thank you for your response. %{mentee_name} has been notified.
+      rejected_request_flash_not_notified: Thank you for your response.
+      rejected_request_flash_limit_change_v3_html: Thank you for your response. %{mentee_name} has been notified. Your %{meeting} limit per calendar month is updated to make sure you don't receive any new requests. You can always update your limit under your %{profile_settings}.
+    match_config:
+      created: Match config was successfully created.
+      updated: Match config was successfully updated.
+      refresh_started: Match score recomputation has been started successfully
+    group_view_flash:
+      updated: The columns to be shown have been updated
+    themes_flash:
+      css_file_blank: CSS file can't be blank
+    membership_request_flash:
+      not_found: The membership request you are trying to access doesn't exist.
+      update_success: The membership request has been updated successfully.
+    three_sixty:
+      surveys:
+        create_success: The survey has been successfully created. Please choose the competencies and questions you want for the survey.
+        update_success: The survey has been successfully updated.
+        create_failure: Please fix the highlighted errors.
+        no_questions: Please select at least one question before proceeding to preview.
+        no_assessees: Please select at least one assessee before publishing the survey.
+        invalid_expiration_date: Please select a valid expiration date.
+        no_reviewer_groups_v1: Please select at least one reviewer group.
+        survey_not_editable_message: You cannot modify a survey once it is published.
+        expired: The survey you are looking for has expired.
+        publish_success: The survey '%{survey_title}' has been successfully published and the assessees have been notified.
+      survey_assessees:
+        threshold_not_met_v1: Please add the minimum number of reviewers required for this survey.
+        notify_reviewers_success: The reviewers you have added will be notified shortly.
+      survey_reviewers:
+        no_name: The name field cannot be empty
+        answer_success: Thank you for taking part in %{name}'s survey
+        self_answered: Thank you for your response.
+    ab_tests:
+      success: A/B tests have been successfully enabled/disabled
+    successfully_saved: Successfully saved
+    program_asset:
+      file_attachment_invalid: "%{attachment_type} content type is not one of %{supported_file_types}"
+      file_attachment_too_big: "%{attachment_type} file size must be less than %{file_size} MB"
+      errors:
+        file_infected: File is infected
+        invalid_stream: Input stream is invalid
+    auth_config_setting:
+      update_success: The '%{title}' section has been customized successfully.
+    auth_config:
+      update_success: "'%{title}' login has been customized successfully."
+      destroy_success: "'%{title}' login has been removed successfully."
+      enable_success: "'%{title}' login has been enabled successfully."
+      disable_success: "'%{title}' login has been disabled successfully."
+      update_password_policy_success: Password Policy has been set for the '%{title}' login successfully.
+    ignore_mentor:
+      undo_flash: "%{mentor_name}'s profile has been ignored. Click %{here} to reconsider."
+    favorite_mentor:
+      favorite_success: "%{mentor_name}'s profile has been added to Favorites"
+      unfavorite_success: "%{mentor_name}'s profile has been removed from Favorites"

@@ -1,0 +1,72 @@
+<% @title = @program_event.title %>
+<% @title_description = content_tag(:div, "feature.program_event.label.DRAFTED".translate, :class=> "false-label m-t-xs label label-warning") if @program_event.draft? %>
+<% @back_link = {:label => "feature.program_event.back_link.program_events_v1".translate, :link => program_events_path} unless @response_tab.present? %>
+
+<%= response_flash "test_send_success" %>
+<%= response_flash("cjs_program_events_flash") %>
+<% if @response_tab.present? %>
+  <% @title = truncate(@program_event.title, :length => 50) %>
+  <% @title_url = program_event_path(@program_event) %>
+  <% @sub_title = get_reponse_label_tab_pane(@program_event, @response_tab.to_i) %>
+  <% @sub_title_list = [] %>
+  <div id ="program_event_send_message">
+    <% @page_action = {:label => "display_string.Send_Message".translate, :js => %Q[jQueryShowQtip('#program_event_send_message', 600, '#{new_bulk_admin_message_admin_messages_path(:bulk_action => {:event => {event_id: @program_event.id, tab: @response_tab}})}','',{method: "post", modal: true})], :class => "btn btn-primary btn-large"} if @is_admin_view && @users_for_listing.count > 0 %>
+  </div>
+  <% ProgramEventConstants::ResponseTabs.all.each do |invite_reponse| %>
+    <% @sub_title_list << {:label => get_reponse_label_tab_pane(@program_event, invite_reponse), :url => program_event_path(:tab => invite_reponse)} %>
+  <% end %>
+  <div id ="program_event_users_listing">
+    <%= render :partial => "program_events/users_listing", :locals => {:users => @users_for_listing, :tab => @response_tab.to_i, :all_users_for_listing_ids => @all_users_for_listing_ids, :search_content => @search_params} %>
+  </div>
+<% else %>
+  <% if @program_event.published_upcoming? && current_user.is_admin? && @program_event.current_admin_view_changed? %>
+    <%= render partial: "program_events/admin_view_changed_alert", locals: {event: @program_event, from: "show"} %>
+  <% end %>
+  <%= ibox "feature.program_event.header.event_info".translate, :show_collapse_link => true do %>
+
+    <% unless @program_event.draft? %>
+      <div class="m-b-xs p-b-xxs clearfix" id="program_event_attending" >
+        <div class="font-600 col-sm-3 truncate-with-ellipsis whitespace-nowrap no-padding"  data-title='is_attending' data-toggle='tooltip' data-html=true>
+          <%= "feature.program_event.label.is_attending".translate %>
+        </div>
+        <div class="no-padding col-sm-9">
+          <% if @program_event.published? && @program_event.archived? %>
+            <% invite = @program_event.event_invites.for_user(current_user) %>
+            <%= invite.present? ? get_invite_reponse_text(invite.first.status) : "feature.program_event.content.not_responded_to_invite".translate %>
+          <% elsif @program_event.has_current_user_as_attendee?(current_user) %>
+            <div class="m-b-sm">
+              <%= render :partial => "program_events/fetch_response_buttons", :locals => {:program_event => @program_event, :src => "show"} %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <%= render :partial => "program_events/invite_response_popup", :locals => {:program_event => @program_event, :src => "show"} %>
+    <% end %>
+
+    <% unless @program_event.archived? %>
+      <% days_left = distance_of_time_in_words(Time.now.in_time_zone(wob_member.get_valid_time_zone).to_date, @program_event.start_time.in_time_zone(wob_member.get_valid_time_zone).to_date) %>
+      <% days_left_text = content_tag(:span, " (#{"display_string.time_left".translate(:time => days_left)})", :class => "text-muted") %>
+    <% else %>
+      <% days_left_text = content_tag(:span, "") %>
+    <% end %>
+
+    <%= embed_display_line_item("feature.program_event.label.date_v1".translate, get_icon_content('fa fa-calendar')  + event_date_for_display(@program_event) + days_left_text) %>
+    <hr class="m-b-sm m-t-sm"/>
+
+    <div>
+      <%= render :partial => "program_events/program_event_details" %>
+      <hr class="m-b-xs m-t-xs"/>
+    </div>
+    <div class="ckeditor_generated"><%= @program_event.description.present? ? auto_link(@program_event.description.html_safe) : content_tag(:div, "feature.program_event.label.no_details_available".translate, :class => "dim") %></div>
+  <% end %>
+  <%= ibox "feature.program_event.header.activity_feed".translate, :show_collapse_link => true, :content_class => "no-padding" do %>
+    <%= render :partial => 'common/activity_feed', :locals => {:more_url => more_activities_program_event_path(@program_event, :offset_id => @new_offset_id), :activities => @program_event_activities} %>
+  <% end %>
+<% end %>
+<% content_for_sidebar do %>
+  <%= render :partial => "program_events/side_pane" %>
+<% end %>
+
+<%= javascript_tag do %>
+  programEvent.initShowMoreLessInvitedDetails();
+<% end %>

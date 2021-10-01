@@ -1,0 +1,13 @@
+<% milestones = group.mentoring_model_milestones %>
+<% group_status = group.status %>
+<% required_tasks = group.mentoring_model_tasks.select(&:required).group_by(&:milestone_id) %>
+
+<%= panel "feature.mentoring_model.header.milestones_progress_v1".translate, panel_class: "panel-default no-borders m-b-sm" do %>
+  <% if milestones.present? %>
+    <%= render_milestones_progress(milestones, required_tasks, group_status, show_manage_connections_view) %>
+  <% else %>
+    <div class="text-muted">
+      <%= "feature.mentoring_model.header.no_milestones_defined".translate %>
+    </div>
+  <% end %>
+<% end %>

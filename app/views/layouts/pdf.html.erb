@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en" <%= "id='ng-app' ng-app=#{@angularjs_page[:app]}".html_safe if @angularjs_page %>>
+  <head>
+    <meta content="text/html" charset="UTF-8" http-equiv="Content-Type"/>
+    <%= wicked_pdf_stylesheet_link_tag 'v3/application_v3' %>
+    <%= wicked_pdf_stylesheet_link_tag 'pdf' %>
+    <%= render partial: "layouts/translations/pre_js_translations" %>
+    <%= wicked_pdf_javascript_include_tag 'v3/pdf_v3' %>
+    <%= wicked_pdf_javascript_include_tag 'highcharts' %>
+    <%= wicked_pdf_javascript_include_tag 'highcharts-ng' %>
+    <% current_used_theme = (@current_program && @current_program.active_theme) || @current_organization.active_theme %>
+    <% if current_used_theme.css? %>
+      <%= wicked_pdf_stylesheet_link_tag current_used_theme.css.url + "?v=5" %>
+    <% end %>
+    <%= render partial: "layouts/translations/js_translations" %>
+  </head>
+  <body class="md-skin" <%= "ng-controller=#{@angularjs_page[:controller]}" if @angularjs_page && @angularjs_page[:controller] %>>
+    <div id ="pdf-container" class="clearfix">
+      <div class="clearfix">
+        <%= render :partial => "common/pdf_banner" %>
+        <%= yield %>
+        <div id="pdf_footer" class="pull-right grayed">
+          <div class = "span-4">
+            <%= "app_layout.label.on_time".translate(time: DateTime.localize(Date.current, format: :short)) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

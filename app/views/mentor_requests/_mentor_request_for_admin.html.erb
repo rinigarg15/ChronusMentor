@@ -1,0 +1,55 @@
+<% preferred_mentoring = @current_program.matching_by_mentee_and_admin? && mentor_request.active? %>
+<% common_options = {:mentor_request => mentor_request, :preferred_mentoring => preferred_mentoring} %>
+
+<div id="mentor_request_<%= mentor_request.id %>">
+  <div class="actions_box pull-right hidden-xs">
+    <%= render :partial => "mentor_requests/mentor_request_for_admin_actions", :locals => {
+      :dropdown_menu_class => "pull-right"
+    }.merge(common_options) %>
+  </div>
+
+  <div class="no-margins">
+    <div class='media-left'>
+      <label for="ct_mentor_request_checkbox_<%=mentor_request.id%>" class="sr-only"><%= "feature.mentor_request.content.select_this_label_v1".translate %></label>
+      <%= check_box_tag nil, mentor_request.id, false,
+                        :class               => "cjs_mentor_request_record",
+                        :id                  => "ct_mentor_request_checkbox_#{mentor_request.id}",
+                        :'data-sender-id'    => mentor_request.student.id,
+                        :'data-recipient-id' => mentor_request.mentor.try(:id) %>
+    </div>
+    <div class='media-body p-l-m'>
+      <div class='list_content admin_list'>
+        <%= profile_field_container_wrapper("#{'feature.mentor_request.label.Sender'.translate}", link_to_user(mentor_request.student), :answer_class => "font-bold", :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+        <%= profile_field_container_wrapper("#{'feature.mentor_request.label.Sent'.translate }", formatted_time_in_words(mentor_request.created_at, :absolute => true), :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+        <%= profile_field_container_wrapper("#{'feature.mentor_request.label.Request'.translate }", chronus_auto_link(mentor_request.message), :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+
+        <% if @current_program.matching_by_mentee_and_admin? %>
+          <% if @current_program.preferred_mentoring_for_mentee_to_admin? %>
+            <% preferred_mentors_content = mentor_request.request_favorites.empty? ? content_tag(:span, 'display_string.None'.translate) : render(:partial => "mentor_requests/display_request_favorites", :locals => {:mentor_request => mentor_request}) %>
+            <%= profile_field_container_wrapper('feature.preferred_mentoring.header.Preferred_Mentors'.translate(Mentors: _Mentors), preferred_mentors_content, :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+          <% end %>
+
+          <% if (mentor_request.accepted? && !mentor_request.student.mentors.empty?) %>
+            <%= profile_field_container_wrapper("#{'feature.situational_mentoring.content.Assigned_Mentors'.translate(count: mentor_request.student.mentors.size, Mentor: _Mentor, Mentors: _Mentors) }", safe_join(mentor_request.student.mentors.collect { |mentor| link_to_user(mentor) }, ", "), :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+          <% end %>
+        <% elsif mentor_request.mentor.present? %>
+          <%= profile_field_container_wrapper("#{'feature.mentor_request.label.Recipient'.translate}", link_to_user(mentor_request.mentor), :answer_class => "font-bold", :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+        <% end %>
+        <%= render :partial => "mentor_requests/status_details", :locals => {:mentor_request => mentor_request} %>
+      </div>
+    </div>
+  </div>
+  <div class="actions_box col-xs-12 no-padding visible-xs">
+    <%= render :partial => "mentor_requests/mentor_request_for_admin_actions", :locals => {
+      :btn_class => "btn-block m-t-sm",
+      :dropdown_menu_class => "col-xs-12 pull-right table-bordered",
+      :responsive_primary_btn_class => (!preferred_mentoring ? "col-xs-12" : "col-xs-10 col-md-11"),
+      :responsive_caret_class => "col-xs-2 col-md-1" }.merge(common_options) %>
+  </div>
+  <% if preferred_mentoring %>
+    <%= javascript_tag("jQuery('body').append('#{j(render :partial => "mentor_requests/reject_or_withdraw_popup", :locals => {:mentor_request => mentor_request, :reject => true })}')") %>
+  <% end %>
+  <% if @current_program.matching_by_mentee_and_admin? %>
+    <%= javascript_tag("jQuery('body').append('#{j(render :partial => "mentor_requests/assign_mentor", :locals => {mentor_request: mentor_request, assign_mentor: true, match_results_per_mentor: match_results_per_mentor})}')") %>
+  <% end %>
+</div>

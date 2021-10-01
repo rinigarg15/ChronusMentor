@@ -1,0 +1,36 @@
+<% start_time = append_time_zone(DateTime.localize(current_occurrence_time || meeting.start_time, format: :short_time_small), wob_member) %>
+<% end_time = append_time_zone(DateTime.localize(current_occurrence_time + meeting.schedule.duration, format: :short_time_small), wob_member) %>
+
+<div class="clearfix">
+  <% if meeting.calendar_time_available? %>
+    <div class='m-b-sm'>
+      <%= append_text_to_icon("fa fa-calendar", DateTime.localize(current_occurrence_time, format: :full_display_no_time_with_day_short), :media_padding_with_icon => true) %>
+    </div>
+    <div class='m-b-sm'>
+      <%= append_text_to_icon("fa fa-clock-o", "feature.meetings.content.start_and_time_duration".translate(:start_time => start_time, :duration => meeting_duration(meeting)),:media_padding_with_icon => true) %>
+    </div>
+  <% else %>
+    <%= append_text_to_icon("fa fa-clock-o m-t-xs cui_set_meeting_time_clock_icon", meeting.state.present? ? meeting_time_for_display(meeting) : link_to("feature.meetings.content.set_meeting_time".translate(:meeting => _meeting), "javascript:void(0)", class: "btn #{meeting.archived? ? 'btn-white' : 'btn-primary'} btn-sm cjs_set_meeting_time_#{meeting_id} m-b-sm"), :media_padding_with_icon => true) %>
+  <% end %>
+  <div class="m-b-sm cjs_meeting_<%= meeting_id %>_location_detail">
+    <%= render_meeting_location_details(meeting, wob_member, {from_connection_home_page_widget: from_connection_home_page_widget, current_occurrence_time: current_occurrence_time}) %>
+  </div>
+  <% if can_show_meeting_messages?(meeting, meeting_messages) %>
+    <div class="m-b-sm">
+      <% badge_content = get_unread_messages_text(meeting, meeting_messages) %>
+      <%= append_text_to_icon("fa fa-envelope", link_to(content_tag(:span, 'feature.meetings.content.messages'.translate(count: meeting_messages[:all][meeting.id]), class: ''), meeting_scraps_path(meeting, current_occurrence_time: current_occurrence_time, ei_src: EngagementIndex::Src::AccessFlashMeetingArea::MEETING_LISTING)) + badge_content, media_padding_with_icon: true) %>
+    </div>
+  <% end %>
+
+  <% if can_show_meeting_notes?(meeting, meeting_notes) %>
+    <div class="m-b-sm">
+      <%= append_text_to_icon("fa fa-file-text-o", link_to(content_tag(:span, 'feature.meetings.content.notes'.translate(count: meeting_notes[meeting.id]), class: ''), meeting_private_meeting_notes_path(meeting, current_occurrence_time: current_occurrence_time, ei_src: EngagementIndex::Src::AccessFlashMeetingArea::MEETING_LISTING)), media_padding_with_icon: true) %>
+    </div>
+  <% end %>
+</div>
+<%= javascript_tag do  %>
+  jQuery(document).ready(function(){
+    MeetingForm.setMeetingLocationPopup(".cjs_set_meeting_location_<%= meeting_id %>");
+  });
+<% end %>
+

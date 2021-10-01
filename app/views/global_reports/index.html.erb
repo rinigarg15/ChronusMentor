@@ -1,0 +1,4 @@
+<% @title = "tab_constants.sub_tabs.executive_dashboard".translate %>
+<%= render partial: "reports/high_charts" %>
+<%= render partial: "global_reports/overall_impact" %>
+<%= render partial: "global_reports/diversity_reports", locals: {diversity_reports: @diversity_reports} %>

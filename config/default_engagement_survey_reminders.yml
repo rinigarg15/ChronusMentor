@@ -1,0 +1,9 @@
+---
+reminders:
+- subject: "How is your {{customized_mentoring_connection_term}}?"
+  source: "Hi {{receiver_first_name}},<br/><br/>As a member of {{subprogram_name}}, your input is incredibly valuable. Please let us know how your {{customized_mentoring_connection_term}} is going. We know life gets busy, so we've kept this survey under two minutes. We really want to hear from you.<br/>{{start_survey_button}}<br/>Thank you for providing insight into your experience and helping us improve!"
+  duration: 3
+
+- subject: "{{receiver_first_name}} - Help improve {{subprogram_name}}"
+  source: "Hi {{receiver_first_name}},<br/><br/>Has this survey slipped your mind? We really want to hear from you and we’re running out of time! Don't worry, the survey is short. In about two minutes, you can give us the input we need to make our program even better.<br/>{{start_survey_button}}<br/>Thank you for sharing your thoughts. Your input tells us whether this program is a valuable offering, and helps us improve."
+  duration: 7

@@ -1,0 +1,12 @@
+<% @options[:published] = true %>
+<% pagination = render :partial => "three_sixty/surveys/dashboard/pagination_wrapper", :locals => {:objects => objects} %>
+<% if pagination.present? %>
+  <div class="pagination_box clearfix"><%= pagination  %></div>
+<% end %>  
+<%= render :partial => "three_sixty/surveys/published_surveys_view_results", :locals => {:objects => objects} %>
+
+<% if !pagination.present? %>
+  <%= javascript_tag do  %>
+    ThreeSixty.removeTopMerge("published_surveys_table");
+  <% end %>
+<% end %>

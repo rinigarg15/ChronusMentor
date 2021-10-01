@@ -1,0 +1,6 @@
+closeQtip();
+<% content = render partial: "mentoring_model/milestones/milestone_content", locals: {completed: @completed, milestone: @milestone, :target_user_id => @target_user, :target_user_type => @target_user_type} %>
+var milestoneContainer = jQuery("#cjs_milestone_container_<%= @milestone.id %>");
+milestoneContainer.replaceWith("<%= j content %>");
+var linkObjectMilestone = jQuery(".cjs_milestone_description_handler_<%= @milestone.id %>");
+linkObjectMilestone.click();

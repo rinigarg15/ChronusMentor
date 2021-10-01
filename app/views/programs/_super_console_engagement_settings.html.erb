@@ -1,0 +1,44 @@
+<%= control_group do %>
+  <% label = "program_settings_strings.content.private_jounals_for_connection".translate(mentoring_connection: _Mentoring_Connection) %>
+  <%= content_tag(:div, label, :class => "false-label control-label") %>
+  <%= controls do %>
+    <%= choices_wrapper(label) do %>
+      <label class="radio inline">
+        <%= f.radio_button :allow_private_journals, true %> <%= "display_string.Yes".translate %>
+      </label>
+      <label class="radio inline">
+        <%= f.radio_button :allow_private_journals, false %> <%= "display_string.No".translate %>
+      </label>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= control_group do %>
+  <% label = "program_settings_strings.content.allow_feedback_for_connection".translate(mentoring_connection: _Mentoring_Connection) %>
+  <%= content_tag(:div, label, :class => "false-label control-label") %>
+  <%= controls do %>
+    <%= choices_wrapper(label) do %>
+      <label class="radio inline">
+        <%= f.radio_button :allow_connection_feedback, true %> <%= "display_string.Yes".translate %>
+      </label>
+      <label class="radio inline">
+        <%= f.radio_button :allow_connection_feedback, false %> <%= "display_string.No".translate %>
+      </label>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= control_group do %>
+  <% label = "program_settings_strings.content.enable_hybrid_template".translate %>
+  <%= content_tag(:div, label, :class => "false-label control-label") %>
+  <%= controls do %>
+    <%= choices_wrapper(label) do %>
+      <label class="radio inline">
+        <%= f.radio_button :hybrid_templates_enabled, true %> <%= "display_string.Yes".translate %>
+      </label>
+      <label class="radio inline">
+        <%= f.radio_button :hybrid_templates_enabled, false %> <%= "display_string.No".translate %>
+      </label>
+    <% end %>
+  <% end %>
+<% end %>

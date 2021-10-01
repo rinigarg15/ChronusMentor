@@ -1,0 +1,5 @@
+<% if comment_or_checkin.class == MentoringModel::Task::Comment %>
+  <%= render partial: "mentoring_model/task/comments/comment", locals: {group: group, comment: comment_or_checkin} %>
+<% else %>
+  <%= render partial: "group_checkins/group_checkin",  locals: {group: group, group_checkin: comment_or_checkin} %>
+<% end %>

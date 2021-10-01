@@ -1,0 +1,52 @@
+<div class="panel panel-default clearfix">
+  <div class="col-xs-12 p-t-xs p-b-xs clearfix gray-bg">  
+    <div class="h6 m-b-0"><%= "feature.meetings.content.mentor_availability_with_timezone".translate(mentor_name: member.name(name_only: true), time_zone: wob_member.short_time_zone) %></div>
+    <span class="text-muted"><%= get_current_and_next_month_text(wob_member) %></span>
+  </div>
+
+  <div id="cjs_mentoring_slots_list">
+    <div class="cjs_availability_slot_list clearfix">
+      <ul class="list-group b-t clearfix">
+        <% available_slots.each do |slot| %>
+          <% start_time = Member.format_time_with_time_zone(slot[:start]) %>
+          <% end_time = Member.format_time_with_time_zone(slot[:end]) %>
+          <% meeting_location = location_specified?(slot[:location]) ? slot[:location] : "display_string.Not_specified".translate %>
+          <li class="list-group-item col-xs-12 p-l-0 p-r-0">
+            <div class="col-xs-4 col-sm-2 p-t-0 p-b-0 p-xs small m-t-xxs text-center">
+              <b><%= DateTime.localize(start_time, format: :short_time) %></b><br> <%= DateTime.localize(end_time, format: :short_time) %>
+            </div>
+            <div class="col-xs-8 col-sm-10 b-l no-padding">
+              <div class="col-xs-8 col-sm-6">
+                <div class="pull-left">
+                  <div class="font-bold">
+                    <%= DateTime.localize(start_time, format: :short_month_with_date_and_day) %>
+                  </div>
+                  <div class="small text-muted">
+                    <%= append_text_to_icon("fa fa-map-marker", j(h(meeting_location))) %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-4 col-sm-2 col-sm-offset-4">
+                <div class="pull-right">
+                  <%= link_to(("feature.meetings.action.choose_slot".translate + get_icon_content("fa fa-chevron-right no-margins p-l-xxs")).html_safe, "javascript:void(0)", :class => "btn btn-sm btn-primary cjs_choose_mentoring_slot m-t-xs #{hidden_on_mobile}", data: {url: select_meeting_slot_meetings_path(end_time: end_time, start_time: start_time, location: slot[:location], mentor_id: member.id, src: src)}) %>
+                  <%= link_to((content_tag(:span, "feature.meetings.action.choose_slot".translate, :class => "hide") + get_icon_content("fa fa-chevron-right no-margins")).html_safe, "javascript:void(0)", :class => "btn btn-primary btn-xs cjs_choose_mentoring_slot m-t-xs #{hidden_on_web}", data: {url: select_meeting_slot_meetings_path(end_time: end_time, start_time: start_time, location: slot[:location], mentor_id: member.id, src: src)}) %>
+                </div>
+              </div>
+            </div>
+          </li>
+        <% end %>
+        <li class="list-group-item col-xs-12 p-l-0 p-r-0">
+          <div class="pull-right m-r-md">
+            <%= link_to("feature.meetings.action.view_calendar_v1_html".translate(:name => member.first_name).html_safe, member_path(member, :tab => MembersController::ShowTabs::AVAILABILITY, :src => Meeting::AnalyticsParams::MENTORING_CALENDAR_LINK_POPUP), :class => "font-bold cjs_view_calendar_link", target: "_blank") %>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do  %>
+  jQuery(document).ready(function() {
+    MeetingRequest.handleSlotSelection();
+  });
+<% end %>

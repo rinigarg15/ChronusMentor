@@ -1,0 +1,50 @@
+<h4 class="m-t m-b">
+  <%= "feature.profile.header.offer_mentoring_in_v1".translate(:Mentoring => _Mentoring) %>
+</h4>
+<%= choices_wrapper("feature.profile.header.offer_mentoring_in_v1".translate(:Mentoring => _Mentoring)) do %>
+  <%= control_group do %>
+    <%= controls(class: "m-b-sm") do %>
+      <label class="radio no-margins">
+        <%= radio_button_tag "new_connection","new", false, :onchange => "OfferMentoring.mentorToggleRadio(this, #{student.id})" %>
+        <%= "feature.profile.content.new_mentoring_connection".translate(mentoring_connection: _mentoring_connection) %>
+      </label>
+    <% end %>
+
+    <div id="offer_new_connection_<%= student.id %>" style="display:none" class="m-b-sm">
+      <div class="pull-right">
+        <%= get_icon_content("fa fa-spinner fa-spin hide", :id => "assign_loading_2") %>
+        <%= link_to submit_text, "javascript:void(0)", class: 'btn btn-primary btn-sm cjs-offer-mentoring-button', data: { "student-id" => "#{student.id}", disable_with: "display_string.Please_Wait".translate  } %>
+      </div>
+      <div class="m-t-xxs">
+        <%= link_to_user mentor %> :: <%= link_to_user student %>
+      </div>
+    </div>
+
+    <%= controls(class: "m-b-sm") do %>
+      <label class="radio no-margins">
+        <%= radio_button_tag "new_connection","existing", false, :onchange => "OfferMentoring.mentorToggleRadio(this,#{student.id})" %>
+        <%= "feature.profile.content.your_existing_mentoring_connection".translate(mentoring_connection: (@existing_connections_of_mentor.size > 1 ? _mentoring_connections : _mentoring_connection)) %>
+      </label>
+    <% end %>
+
+    <div id="offer_existing_connection_<%= student.id %>" style="display:none">
+      <% @existing_connections_of_mentor.each do |group| %>
+        <div class="m-b-xs clearfix">
+          <div class="pull-right">
+            <%= get_icon_content("fa fa-spinner fa-spin hide", :id => "assign_loading_2_#{group.id}") %>
+            <%= link_to submit_text, "javascript:void(0)", class: 'btn btn-primary btn-sm cjs-offer-mentoring-button', data: { "group_id" => "#{group.id}", "student_id" => "#{student.id}", disable_with: "display_string.Please_Wait".translate } %>
+          </div>
+          <div class="m-t-xxs">
+            <%= link_to_user mentor, :class => 'mentor_link' %> ::
+            <%= group.students.collect{|group_student| link_to_user(group_student, :class => 'student_link')}.join(", ").html_safe %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    OfferMentoring.initializeSubmitForm();
+  });
+<% end %>

@@ -1,0 +1,92 @@
+#!/usr/bin/env ruby
+
+# aws-sdk is not made part of Gemfile as there is a conflict with aws-s3 gem.
+# We need to move this to Gemfile once the conflict is resolved!
+
+if !Gem::Specification::find_all_by_name('aws-sdk-v1').any?
+  puts "aws-sdk gem not found"
+  abort "Please type 'gem install aws-sdk-v1' to install the gem"
+end
+
+require 'aws-sdk-v1'
+require 'trollop'
+require File.dirname(__FILE__) +'/user_mgmt_config.rb'
+require File.dirname(__FILE__) +'/../../lib/ops/user_mgmt_helpers.rb'
+include CmIamConfig
+
+
+
+
+opts = Trollop::options do
+  banner <<-EOS
+This utility is meant to pull the ssh-key to access the gateway machine
+Usage:
+       get_gateway_sshkey [options]
+where [options] are:
+EOS
+  opt :aws_key, "AWS Access key. Defaults to CM_IAM_ACCESS_KEY env variable", :short => '-O', :type => :string
+  opt :aws_secret_key, "AWS Access Secret key. Defaults to CM_IAM_SECRET_ACCESS_KEY env variable", :short => '-W', :type => :string
+  opt :user, "User account on the gateway for whom the SSH key has to be fetched", :required => true, :type => :string
+  opt :keypath, "Filepath to save the ssh key to", :required => true, :type => :string
+  opt :env, "SSH Gateway environment", :required => true, :type => :string
+end
+
+def validate_inputs(opts)
+  if !opts[:aws_key] && !ENV['CM_IAM_ACCESS_KEY']
+    error_log("aws access key not set - Either pass it as -O or set it in CM_IAM_ACCESS_KEY environment variable ")
+    abort
+  end
+
+  if !opts[:aws_secret_key] && !ENV['CM_IAM_SECRET_ACCESS_KEY']
+    error_log("aws access key not set - Either pass it as -W or set it in CM_IAM_SECRET_ACCESS_KEY environment variable ")
+    abort
+  end
+
+
+  env_name = opts[:env]
+  # Check if the gateway environemt is valid
+  abort "Not a valid gateway environment. Possible environments are staging and production " unless VALID_GATEWAY_ENVS.include?(env_name)
+
+  username_prefix = opts[:user].split("_").first
+  # Check if group name is valid
+  abort "Not a valid username. The username should start with dev_ or ops_ " unless USERNAME_CONVENTIONS.has_key?(username_prefix)
+end
+
+
+validate_inputs(opts)
+user_name = opts[:user]
+username_prefix = opts[:user].split("_").first
+convention =  USERNAME_CONVENTIONS[username_prefix]
+key_path = opts[:keypath]
+gateway_env = opts[:env]
+
+if opts[:aws_key] then access_key=opts[:aws_key] else access_key=ENV['CM_IAM_ACCESS_KEY'] end
+if opts[:aws_secret_key] then secret_key=opts[:aws_secret_key] else secret_key=ENV['CM_IAM_SECRET_ACCESS_KEY'] end
+
+AWS.config({
+  :access_key_id => access_key,
+  :secret_access_key => secret_key,
+  :region => DEFAULT_AWS_REGION
+})
+
+creds_bucket_name = "#{CRED_STORE_BUCKET_PREFIX}-#{convention[:iam_creds_suffix]}"
+user_creds_folder = "#{convention[:iam_creds_prefix]}_#{CREDS_DIR_TAG}/#{user_name}/"
+gateway_creds_dir = "#{user_creds_folder}#{GATEWAY_ENV_KEYS_S3_FOLDER_NAME}"
+obj_name = "#{gateway_creds_dir}/#{gateway_env}-#{GATEWAY_KEYS_SUFFIX}"
+
+begin
+  s3 = AWS::S3.new
+  bucket = s3.buckets[creds_bucket_name]
+  obj = bucket.objects[obj_name]
+  abort("SSH key to the gateway user doesn't exist") unless obj.exists?
+
+  priv_key = obj.read
+
+  File.open(key_path, "w", 0600) { |file| file.write(priv_key) }
+
+  success_log "Successfully updated the gateway key!"
+  info_log "Use the below command to connect to the gateway
+ssh -i #{key_path} #{user_name}@<gateway_ip>"
+rescue Exception => e
+  error_log "Request to fetch the gateway key failed with reason: #{e.message}"
+end

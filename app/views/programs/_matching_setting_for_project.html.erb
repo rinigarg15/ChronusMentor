@@ -1,0 +1,123 @@
+<% for_mentoring_roles = @program.roles.for_mentoring.includes(:permissions, {customized_term: :translations}) %>
+<% role_names_mapping = RoleConstants.program_roles_mapping(@program, roles: for_mentoring_roles) %>
+<%= response_flash "matching_setting_flash" %>
+<%= control_group do %>
+  <%= content_tag(:div, "program_settings_strings.content.allow_users_to_propose_groups".translate(mentoring_connection_articleized: _a_mentoring_connection), :class => "false-label control-label") %>
+  <% for_mentoring_roles.each do |role| %>
+    <%= propose_group_settings(role) %>
+  <% end %>
+<% end %>
+
+<%= control_group do %>
+  <%= content_tag(:div, "program_settings_strings.content.allow_circle_start_date".translate(Mentoring_Connection: _Mentoring_Connection), class: "false-label control-label") %>
+  <%= controls do %>
+    <label class = "checkbox inline">
+      <%= f.check_box :allow_circle_start_date, class: "vertical-align-text-bottom m-r-xs" %> <%= "program_settings_strings.content.allow_proposer_to_set_start_date".translate(mentoring_connection: _mentoring_connection) %>
+    </label>
+  <% end %>  
+<% end %>
+
+<%= control_group do %>
+  <%= content_tag(:div, "program_settings_strings.content.allow_project_request_reminder".translate(mentoring_connection: _mentoring_connection), class: "false-label control-label") %>
+  <%= controls do %>
+    <div class="cui-reminder-settings">
+      <label class="checkbox inline pull-left cjs-has-hidden-text">
+        <%= f.check_box :needs_project_request_reminder, class: "cjs-project-request-reminder" %> <%= "display_string.Yes".translate %>
+      </label>
+      <span class="cjs-hidden-text project_request_reminder_duration-container <%= 'hide' unless @program.needs_project_request_reminder? %>">
+        <span class="cjs-show-mentoring-request-reminder-checked p-xxs p-l-sm p-r-sm m-t-xxs pull-left">
+              , <%= "program_settings_strings.content.remind_them_after".translate %>
+        </span>
+        <div class="cjs-show-project-request-reminder-checked col-sm-4 no-padding">
+          <%= f.text_field :project_request_reminder_duration, class: "form-control cjs-project-request-reminder-duration", skip_title: true, wrapper: 'none', data: {value: @program.project_request_reminder_duration} %>
+        </div>
+        <span class="p-xxs p-l-sm p-r-sm m-t-xxs pull-left"><%= "display_string.days".translate %></span>
+        <label class="sr-only" for="program_project_request_reminder_duration"><%= "program_settings_strings.content.remind_them_after".translate %><%= "display_string.days".translate %></label>
+      </span>
+    </div>
+  <% end %>  
+<% end %>
+
+<%= control_group do %>
+  <%= f.label "", "program_settings_strings.content.circle_request_expiration_days".translate, :class => "control-label", :for => "program_circle_request_auto_expiration_days"  %>
+  <%= controls do %>
+    <div class="clearfix">
+      <div class="col-sm-2 no-padding">
+        <%= f.text_field :circle_request_auto_expiration_days, :class => "form-control", :skip_title => true, :wrapper => 'none' %>
+      </div>
+      <%= content_tag(:span, 'display_string.days'.translate(count: :other), :class => "p-xxs p-l-sm p-r-sm m-t-xxs pull-left")  %>
+    </div>
+    <div class="help-block">
+      <%= email_notification_consequences_on_action_html(CircleRequestExpiredNotificationToSender, div_enclose: false, translation_extras: {mentoring_connection:  _mentoring_connection}) %>
+      <%= "program_settings_strings.content.circle_request_expiration_days_notice".translate %>
+    </div>
+  <% end %>
+<% end %>
+
+<hr/>
+
+<%= content_tag(:h3, "program_settings_strings.label.matching_settings.connection_limits".translate(Mentoring_Connection: _Mentoring_Connection)) %>
+<div class=" form-group form-group-sm">
+  <% current_program.roles.for_mentoring.each do |non_admin_role| %>
+    <% id = "role_max_connections_limit_#{non_admin_role.id}" %>
+    <label class="control-label" for='<%= id %>'>
+      <%= "feature.connection.content.max_slot_limit_per_role".translate(mentoring_connections: _mentoring_connections, role_term: non_admin_role.customized_term.articleized_term_downcase) %>
+    </label>
+    <div class="controls ">
+      <div class="clearfix">
+        <div class="col-sm-2 no-padding">
+          <%= select_tag("program[role][#{non_admin_role.id}][max_connections_limit]", options_for_select(get_circle_limit_options, non_admin_role.max_connections_limit), id: id, class: "form-control text_field form-control") %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+<hr/>
+
+<%= content_tag(:h3, "program_settings_strings.content.join_options".translate(connection: _Mentoring_Connection)) %>
+<%= control_group do %>
+  <% for_mentoring_roles.each do |role| %>
+    <% disable_send_request_box = role.project_requests.active.count > 0 && role.has_permission_name?("send_project_request") %>
+    <%= hidden_field_tag "program[role_permissions][#{role.id}][join_project_permissions]", "" %>
+    <%= hidden_field_tag "program[role][#{role.id}][role_attributes]", "" %>
+    <%= content_tag(:div, role.customized_term.pluralized_term, :class => "control-label false-label") %>
+    <%= controls do %>
+      <%= choices_wrapper("display_string.Options".translate) do %>
+        <label class="checkbox <%= disable_send_request_box ? 'attach-bottom' : '' %>">
+          <% if disable_send_request_box %>
+            <%= check_box_tag "dummy_send_project_request_checkbox_#{role.id}", true, role.has_permission_name?("send_project_request"), :class => "vertical-align-text-bottom", disabled: "disabled", id: "dummy_send_project_request_checkbox_#{role.id}" %>
+            <%= hidden_field_tag "program[role_permissions][#{role.id}][send_project_request]", true %>
+          <% else %>
+            <%= check_box_tag "program[role_permissions][#{role.id}][send_project_request]", true, role.has_permission_name?("send_project_request"), :class => "vertical-align-text-bottom" %>
+          <% end %>
+          <%= "program_settings_strings.label.apply_to_join".translate(admin: _Admin) %>
+        </label>
+        <% if disable_send_request_box %>
+          <div>
+            <div class="help-block">
+              <%= "program_settings_strings.content.take_action_html".translate(pending_requests: link_to("program_settings_strings.content.pending_requests".translate, manage_project_requests_path)) %>
+            </div>
+          </div>
+        <% end %>
+        <label class="checkbox">
+          <%= check_box_tag "program[role][#{role.id}][can_be_added_by_owners]", true, role.can_be_added_by_owners?, :class => "vertical-align-text-bottom" %>
+          <%= "program_settings_strings.label.added_by_owner".translate(connection: _Mentoring_Connection) %>
+        </label>
+        <div class="help-block">
+          <%= "program_settings_strings.content.admin_can_add".translate(admins: _Admins) %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if super_console? %>
+  <%= render partial: "programs/slot_config_settings", locals: { for_mentoring_roles: for_mentoring_roles } %>
+  <%= render partial: "non_match_settings", :locals => { f: f} %>
+  <br />
+<% end %>
+<%= javascript_tag do %>
+  showHideElement.initialize('.cjs-has-hidden-text', '.cjs-hidden-text');
+<% end %>
+
+<%= javascript_tag %Q[ProgramSettings.toggleProposeSettingCheckboxTree(#{@program.groups.proposed.present?});] %>

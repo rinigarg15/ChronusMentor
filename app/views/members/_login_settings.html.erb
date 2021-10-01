@@ -1,0 +1,31 @@
+<% linked_auth_config_ids = member.auth_config_ids %>
+<% non_indigenous_auth_configs = @current_organization.auth_configs.non_indigenous %>
+
+<% collapsible_content "feature.profile.header.login_settings".translate, [], false, container_options.merge(pane_content_class: "no-padding") do %>
+  <% non_indigenous_auth_configs.each_with_index do |auth_config, index| %>
+    <% is_linked = linked_auth_config_ids.include?(auth_config.id) %>
+    <% btn_icon = is_linked ? "fa fa-check" : "fa fa-link" %>
+    <% btn_text = is_linked ? "display_string.Linked".translate : "display_string.Link".translate %>
+    <% btn_label = append_text_to_icon(btn_icon, btn_text) %>
+    <% btn_link = is_linked ? "javascript:void(0)" : login_path(auth_config_id: auth_config.id) %>
+    <% btn_class = "btn btn-sm #{is_linked ? 'btn-white noshadow' : 'btn-primary'} #{get_auth_config_link_mobile_class(auth_config)}" %>
+
+    <div class="p-sm clearfix<%= ' b-b' if (index + 1 != non_indigenous_auth_configs.size) %>">
+      <%= link_to btn_label, btn_link, class: "pull-right m-t-xs #{hidden_on_mobile} #{btn_class}" %>
+      <div class="media-left">
+        <% if auth_config.logo_url.present? %>
+          <%= image_tag(auth_config.logo_url, size: "40x40") %>
+        <% else %>
+          <%= get_icon_content("fa fa-sign-in fa-3x m-r-0", style: "width: 40px; height: 40px;") %>
+        <% end %>
+      </div>
+      <div class="media-body p-l-sm">
+        <h4 class="m-b-xs"><%= "feature.profile.content.link_account_to".translate(title: auth_config.title) %></h4>
+        <div class="small text-muted">
+          <%= "feature.profile.content.after_successful_login".translate(programs: _programs, title: auth_config.title) %>
+        </div>
+      </div>
+      <%= link_to btn_label, btn_link, class: "btn-block m-t-sm #{hidden_on_web} #{btn_class}" %>
+    </div>
+  <% end %>
+<% end %>

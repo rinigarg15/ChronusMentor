@@ -1,0 +1,10 @@
+jQuery('#profile_complete_sidebar').find('.completion_stats').html("<%= j 'feature.profile.content.your_profile_is_x_complete_v1_html'.translate(score_text: content_tag(:span, 'feature.profile.content.complete_html'.translate(score: @profile_user.profile_score.sum), class: 'font-bold text-navy')) %>");
+jQuery('#profile_complete_sidebar').find('.cjs_profile_status_box_header').replaceWith("<%= j render('members/profile_status_box_header', :profile_score => @profile_user.profile_score, :home_page => @home_page) %>");
+<% if @profile_user.profile_score.sum == 100 %>
+  <% if @home_page %>
+    jQuery('.complete_questions_promt').hide();
+    jQuery('#profile_complete_sidebar').find('.cjs_profile_status_box_body').find('li').hide();
+  <% else %>
+    jQuery('#profile_complete_sidebar').find('.cjs_profile_status_box_body').hide();
+  <% end %>
+<% end %>

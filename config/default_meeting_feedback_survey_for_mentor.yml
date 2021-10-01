@@ -1,0 +1,40 @@
+---
+questions:
+- question_text: "How satisfying was your %{_meeting} experience?"
+  question_type: <%= CommonQuestion::Type::SINGLE_CHOICE %>
+  question_choices:
+    - Extremely satisfying
+    - Very satisfying
+    - Moderately satisfying
+    - Slightly satisfying
+    - Not at all satisfying
+  allow_other_option: <%= false %>
+  required: <%= true %>
+  condition: <%= SurveyQuestion::Condition::COMPLETED %>
+
+- question_text: "How well did your %{_mentee} utilize their time with you?"
+  question_type: <%= CommonQuestion::Type::SINGLE_CHOICE %>
+  question_choices:
+    - Great use of time
+    - Adequate use of time
+    - Poor use of time
+  allow_other_option: <%= false %>
+  required: <%= true %>
+  condition: <%= SurveyQuestion::Condition::COMPLETED %>
+
+- question_text: "Why was the %{_meeting} cancelled?"
+  question_type: <%= CommonQuestion::Type::SINGLE_CHOICE %>
+  question_choices:
+    - Attendee no-show
+    - "%{_Meeting} never scheduled"
+    - "%{_Meeting} postponed or rescheduled"
+  allow_other_option: <%= true %>
+  required: <%= true %>
+  condition: <%= SurveyQuestion::Condition::CANCELLED %>
+
+- question_text: "Do you have any other feedback?"
+  question_type: <%= CommonQuestion::Type::TEXT %>
+  help_text: "Please share something that went well or could be better."
+  allow_other_option: ""
+  required: <%= false %>
+  condition: <%= SurveyQuestion::Condition::ALWAYS %>

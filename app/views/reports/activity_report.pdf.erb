@@ -1,0 +1,4 @@
+<% role_term_hash = RoleConstants.program_roles_mapping(@current_program, pluralize: true) %>
+<%= render partial: "reports/activity_report_applied_filters", locals: {role_term_hash: role_term_hash}, :formats => [FORMAT::HTML] %>
+
+<%= render :partial => "reports/activity_report_content", :locals => {:format => FORMAT::PDF} %>

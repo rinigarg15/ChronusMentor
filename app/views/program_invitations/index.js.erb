@@ -1,0 +1,4 @@
+jQuery('#cjs_invitation_list').html("<%= j(render(:partial => 'program_invitations/program_invitation_list', :locals => { :program_invitations => @program_invitations, :include_expired_invitations => @filter_hash[:include_expired_invitations].present? })) %>");
+jQuery('#reset_all').<%= @my_filters.any? ? "remove": "add" %>Class('hide');
+jQuery('#cjs_applied_filters').html("<%= j(render :partial => 'common/your_filters', :locals => {:onclick_function => 'ProgramInvitationSearch.clearFilter', :new_filter => true}) %> ");
+jQuery('#loading_results').hide();

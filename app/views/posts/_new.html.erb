@@ -1,0 +1,14 @@
+<%= simple_form_for [topic.forum, topic, Post.new], remote: true, html: { class: "cjs_new_post_form" } do |f| %>
+  <%= f.input :body, placeholder: "feature.forum.content.leave_reply".translate, input_html: { rows: 5, class: "cjs_new_post_body form-control" }, label_html: { class: "hide" } %>
+  <%= f.input :attachment, as: :file, label_html: { class: "hide" } %>
+
+  <% action_set class: "pull-right" do %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", data: { dismiss: "modal" } %>
+    <%= f.button :submit, "display_string.Reply".translate %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  <% error_message = "#{'feature.forum.label.Post'.translate} #{'activerecord.errors.models.post.attributes.body.blank'.translate}" %>
+  NewForumPost.validateForm("<%= error_message %>");
+<% end %>

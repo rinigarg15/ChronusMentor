@@ -1,0 +1,73 @@
+<% if @error_flash %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("meeting_create_flash",'<%= @error_flash + " " + @meeting.errors.full_messages.to_sentence %>');
+  MeetingRequest.gaTrackRequestErroredOut(<%= @is_non_time_meeting.present? %>);
+<% elsif @is_quick_meeting && !@meeting.mentor_created_meeting %>
+  MeetingRequest.gaTrackCompletedRequest(<%= @is_non_time_meeting.present? %>);
+  closeQtip();
+  ChronusValidator.ErrorManager.ShowResponseFlash("meeting_create_flash", '<%= j "flash_message.user_flash.meeting_creation_success_v2_html".translate(:meeting => _a_meeting, :mentors => _mentors, :mentor_name => @mentor.name(name_only: true), mentors_page_url: link_to("display_string.here".translate, users_path(src: EngagementIndex::Src::BrowseMentors::FLASH))) %>', true);
+  <% if @favorite_user_ids.present? %>
+    FavoritePreference.showDelayedPopup("<%= favorite_mentors_user_path(current_user.id, {favorite_user_ids: @favorite_user_ids, request_type: UserPreferenceService::RequestType::MEETING}) %>");
+  <% end %>
+  <% if @is_non_time_meeting %>
+    MeetingRequest.resetProposedSlotIndexAndHash();
+  <% end %>
+<% else %>
+  // Success
+  <% if !@group %>
+    if(jQuery('#calendar').length == 0){
+      ChronusValidator.ErrorManager.ShowResponseFlash('#new_meeting',"<%= 'flash_message.user_flash.meeting_creation_success_v1'.translate(meeting: _meeting) %>", true);
+    }
+    closeQtip();
+    <% if @favorite_user_ids.present? && !@meeting.mentor_created_meeting %>
+      FavoritePreference.showDelayedPopup("<%= favorite_mentors_user_path(current_user.id, {favorite_user_ids: @favorite_user_ids, request_type: UserPreferenceService::RequestType::MEETING}) %>");
+    <% end %>
+    jQuery('#mentoring_calendar, #calendar').fullCalendar('refetchEvents');
+    <% if @from_mentoring_calendar %>
+      chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.GA_MEETING_ACTIVITY_CATEGORY, chrGoogleAnalytics.action.GA_MENTORING_CALENDAR_REQUESTED_MEETING_FROM_SLOT, chrGoogleAnalytics.eventLabel.GA_FLASH_MENTORING_CALENDAR_EVENTS_LABEL, chrGoogleAnalytics.eventLabelId.GA_FLASH_MENTORING_CALENDAR_EVENTS_LABEL_ID);
+    <% end %>
+    <% if @meetings_to_be_held.collect{|m| m[:meeting]}.uniq.include?(@meeting) %>
+      jQuery("#upcoming_meetings").html('<%= j(render(:partial => "meetings/upcoming_meetings")) %>');
+    <% end %>
+    <% if @archived_meetings.collect{|m| m[:meeting]}.uniq.include?(@meeting) %>
+      jQuery("#archived_meetings").html('<%= j(render(:partial => "meetings/archived_meetings")) %>');
+    <% end %>
+  <% else %>
+    <% if @from_connection_home_page_widget %>
+      <% if @past_meeting %>
+        MentoringAreaTracking.gaTrackRecordPastMeeting(true);
+      <% else %>
+        MentoringAreaTracking.gaTrackAddMeeting(true);
+      <% end %>
+      jQuery("#loading_results").hide();
+      closeQtip();
+      jQuery(".cjs_meetings_tab_home_page_<%= @group.id %> a").click();
+      ChronusValidator.ErrorManager.ShowResponseFlash("flash_container","<%= j 'feature.meetings.flash_message.connection_widget_creation_success_html'.translate(:meeting => _meeting, :meeting_area_url => link_to("display_string.here".translate, meeting_path(@meeting, current_occurrence_time: @meeting.first_occurrence), target: '_blank')) %>", true);
+    <% else %>
+      <% if @past_meeting %>
+        MentoringAreaTracking.gaTrackRecordPastMeeting(false);
+      <% else %>
+        MentoringAreaTracking.gaTrackAddMeeting(false);
+      <% end %>
+      jQuery("#loading_results").show();
+      <% if @is_common_form %>
+        <% @skip_hiding_loader = true %>
+        window.location.href = '<%= meetings_path(:group_id => @group.id, :show_past_meetings => params[:past_meeting] ) %>';
+      <% else %>
+        jQuery("#remoteModal").modal('hide');
+        jQuery('#cjs_new_meeting_modal').modal('hide');
+        jQuery('#new_meeting').replaceWith("<%= j(render(partial: 'meetings/new_form')) %>");
+        jQuery("#upcoming_meetings").html('<%= j(render(partial: "meetings/upcoming_meetings")) %>');
+        jQuery("#archived_meetings").html('<%= j(render(:partial => "meetings/archived_meetings")) %>');
+        Meetings.showUpcomingMeetings();
+        ChronusValidator.ErrorManager.ShowResponseFlash("flash_container","<%= j 'flash_message.user_flash.group_meeting_creation_success'.translate(:meeting => _meeting) %>", true);
+        jQueryScrollTo('#flash_container', false, 50);
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+<% if @guidance_experiment && @guidance_experiment.running? %>
+  chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.AB_TEST_GUIDANCE_POPUP, chrGoogleAnalytics.action.GA_SENT_MEETING_REQUEST, '<%= @guidance_experiment.alternative %>', '<%= @guidance_experiment.event_label_id_for_ga %>');
+<% end %>
+<% if @popular_categories_experiment && @popular_categories_experiment.running? %>
+  chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.POPULAR_CATEGORIES, chrGoogleAnalytics.action.GA_SENT_MEETING_REQUEST, '<%= @popular_categories_experiment.alternative %>', '<%= @popular_categories_experiment.event_label_id_for_ga %>');
+<% end %>

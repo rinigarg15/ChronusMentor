@@ -1,0 +1,65 @@
+<% project_request = project_request_admin %>
+<% is_manage_view = local_assigns[:is_manage_view] %>
+<% group = project_request.group %>
+<% group_roles = group.program.roles.for_mentoring.includes(:permissions, customized_term: :translations) %>
+
+<div id="project_request_<%= project_request.id %>" class="clearfix list-group-item p-m">
+  <% if status == AbstractRequest::Status::NOT_ANSWERED %>
+    <div class='pull-left p-r-xs'>
+      <label for="ct_project_request_checkbox_<%=project_request.id%>" class="sr-only"><%= "feature.project_request.content.select_this_label".translate %></label>
+      <%= check_box_tag nil, project_request.id, false, class: "cjs_project_request_record", id: "ct_project_request_checkbox_#{project_request.id}" %>
+    </div>
+  <% end %>
+  <div>
+    <div class="actions_box pull-right hidden-xs">
+      <%= actions_for_project_requests_listing(project_request, ga_src: ga_src, is_manage_view: is_manage_view, dropdown_menu_class: "pull-right") %>
+    </div>
+    <div class='admin_list'>
+      <div class="media-left">
+        <%= image_tag(group.logo_url, class: "media-object img-circle cui_large_to_medium") %>
+      </div>
+      <div class="media-body">
+        <% group_name = render_group_name(group, current_user) %>
+        <h3 class="m-b-xxs <%= hidden_on_mobile %>">
+          <%= group_name %>
+        </h3>
+        <h4 class="m-b-xxs <%= hidden_on_web %>">
+          <%= group_name %>
+        </h4>
+        <% if group.active? || group.closed? %>
+          <% group_duration_content = content_tag(:span, formatted_time_in_words(group.published_at, no_ago: true, no_time: true), :class => "groups_active cjs_expiry_#{group.id}") + " - " + content_tag(:span, get_group_expiry_content(group, true)) %>
+          <%= display_group_data(group_duration_content, nil, "fa fa-clock-o") %>
+        <% elsif group.pending? && group.pending_at.present? %>
+          <%= content_tag(:span, "feature.connection.header.pending_label".translate + formatted_time_in_words(group.pending_at, :no_ago => true, :no_time => true)) %>
+        <% end %>
+      </div>
+      <div class="m-t-sm">
+        <% group_roles.each do |group_role| %>
+          <% group_role_label, group_role_value = group_members_list(group, group_role, show_requests: group_role.has_permission_name?(RolePermission::SEND_PROJECT_REQUEST)) %>
+          <%= profile_field_container_wrapper(group_role_label, group_role_value, answer_class: "font-bold", heading_tag: :h4, class: "m-t-xs m-b-xs") %>
+        <% end %>
+
+        <%= profile_field_container_wrapper("#{'feature.project_request.label.Sender'.translate}", append_text_to_icon("fa fa-user", link_to_user(project_request.sender, {content_method: [:name, name_only: true]})), :answer_class => "font-bold", :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+
+        <%= profile_field_container_wrapper("#{'feature.project_request.label.Request'.translate}", project_request.message, :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+
+        <%= profile_field_container_wrapper("#{'feature.project_request.label.Applied_For'.translate}", RoleConstants.human_role_string([project_request.role.name], :program => project_request.program), :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+
+        <%= profile_field_container_wrapper("#{'feature.project_request.label.Sent'.translate}", get_icon_content("fa fa-clock-o") + formatted_time_in_words(project_request.created_at, :absolute => true), :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+
+        <%= get_reason_for_project_request_non_acceptance(project_request) %>
+
+        <% if project_request.closed? %>
+          <% closed_at = project_request.closed_at %>
+          <% if closed_at.present? %>
+            <%= profile_field_container_wrapper("#{ MentorRequest.human_attribute_name("closed_at")}", formatted_time_in_words(closed_at, :absolute => true), :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="actions_box visible-xs">
+    <%= actions_for_project_requests_listing(project_request, {:btn_class => "btn-block m-t-sm", :dropdown_menu_class => "col-xs-12 pull-right table-bordered", :responsive_primary_btn_class => "col-xs-12", ga_src: ga_src, is_manage_view: is_manage_view}) %>
+  </div>
+</div>
+<%= javascript_tag %Q[ShowAndHideToggle();] %>

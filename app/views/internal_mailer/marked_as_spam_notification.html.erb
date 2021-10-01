@@ -1,0 +1,5 @@
+<p>User with email address <strong><%= @recipient_email %></strong> has marked our email as spam</div>. Further mails wont be sent to this email address till this email address is removed from <a href="https://mailgun.com/cp/spamreports">Spam Complaints list</a> in our mailgun account.</p>
+
+<p>Please make sure that a thorough investigation is made before you remove it from the list</p>
+
+<%= render :partial => "campaign_and_member_information", :locals => {:campaign_information => @campaign_information, :member_information => @member_information} %>

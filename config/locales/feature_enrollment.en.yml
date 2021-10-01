@@ -1,0 +1,12 @@
+en:
+  feature:
+    enrollment:
+      title: All %{programs}
+      join_program: Join %{program}
+      role_request_pending_v2: Pending
+      enroll_in_program: Enroll in %{program_name}
+      apply_v1: Apply to Join as *
+      join_v1_html: Join as %{message} *
+      join_v2_html: Join As %{message} *
+      enroll: Enroll as
+      no_approval: No approval required

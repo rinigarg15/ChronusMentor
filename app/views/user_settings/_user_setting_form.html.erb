@@ -1,0 +1,17 @@
+<div id="user_settings">
+  <% user_setting = user.user_setting %>
+
+  <%= parent_form.fields_for :user_settings, user_setting do |f|  %>
+    <%= control_group(:class => 'm-t-sm') do %>
+      <%= content_tag(:div, "feature.user.label.max_meeting_slots".translate(meetings: _meetings), :class => 'false-label control-label col-sm-2') %>
+      <%= controls(class: "col-sm-10") do %>
+        <%= controls(class: "inline pull-left m-t-xs m-r-sm") do %>
+          <%= f.label :max_meeting_slots, "feature.user.label.max_meeting_slots".translate(meetings: _meetings), :for => "max_meeting_slots_#{user.program.id}", :class => "sr-only" %>
+          <%= f.text_field :max_meeting_slots, :class => "form-control", :id => "max_meeting_slots_#{user.program.id}", :skip_title => true, :wrapper => 'none', :size => 10 %>
+        <% end %>
+        <% help_text = "feature.user.content.max_slots_help_text".translate(meetings: _meetings) %>
+        <%= content_tag('p', help_text ,:class => "help-block m-t-0 col-xs-12 no-padding text-muted")%>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

@@ -1,0 +1,46 @@
+<% if local_assigns[:show_manage_connections_view].nil? %>
+  <% show_manage_connections_view = @is_manage_connections_view || (@profile_user && current_user.can_manage_connections?) %>
+  <% @mentoring_model_v2_enabled ||= @current_program.mentoring_connections_v2_enabled? %>
+  <% if @mentoring_model_v2_enabled %>
+    <% group_roles = @current_program.roles.for_mentoring.includes(:permissions) %>
+    <% role_terms_hash = RoleConstants.program_roles_mapping(@current_program, pluralize: true) %>
+  <% end %>
+  <% survey_exists = show_manage_connections_view && @current_program.surveys.of_engagement_type.present? %>
+  <% mentoring_model_roles = @current_program.roles.for_mentoring_models %>
+<% end %>
+
+<% content = capture do %>
+  <% if is_table_view %>
+    <div class="pull-left m-r-xs">
+      <label for ="cjs_groups_record_<%= group.id %>" class="sr-only">
+        <%= "feature.group.label.select_this".translate(mentoring_connection: _mentoring_connection, connection_name: group.name) %>
+      </label>
+      <input type="checkbox" class="cjs_groups_record" id="cjs_groups_record_<%= group.id %>" value="<%= group.id %>"/>
+    </div>
+  <% end %>
+  <% locals = {
+    :group => group,
+    :is_table_view => is_table_view
+  } %>
+  <% if is_table_view %>
+    <% locals.merge!( {
+      :group_roles => group_roles,
+      :role_terms_hash => role_terms_hash,
+      :show_manage_connections_view => show_manage_connections_view,
+      :survey_exists => survey_exists,
+      :mentoring_model_roles => mentoring_model_roles
+    } ) %>
+  <% end %>
+  <% locals.merge!( {ga_src: EngagementIndex::Src::GROUP_LISTING} ) if local_assigns[:from_group_listing] %>
+  <%= render :partial => 'groups/group_result', locals: locals %>
+<% end %>
+
+<% if local_assigns[:skip_ibox] %>
+  <div id="group_<%= group.id %>">
+    <%= content %>
+  </div>
+<% else %>
+  <%= ibox nil, ibox_id: "group_#{group.id}", ibox_class: "#{'no-margins' if defined?(group_counter) && ((group_counter + 1) == per_page_count)}" do %>
+    <%= content %>
+  <% end %>
+<% end %>

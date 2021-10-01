@@ -1,0 +1,18 @@
+<table class="box-content">
+  <tr class="cui-box-content-padding"></tr>
+  <tr class="cui-box-content-row">
+    <td class="table-box-number"> {{<%= scope %>.connections.count}} </td>
+    <td class="table-box-title p-l-xxs"> <%= connection_title %> </td>
+    <td class="table-box-percentage prev-window p-l-xxs">
+      <%= render partial: "reports/change_difference_percent_and_arrow", locals: {value_name: "#{scope}.connections.change", change_count: 'cui-data-section-head-change-count', change_percent: 'cui-data-section-head-change-percent', change_arrow: 'cui-change-arrow', show_change: 'prevWindowValid'} %>
+    </td>
+  </tr>
+  <tr class="cui-box-content-row">
+    <td class="table-box-number"> {{<%= scope %>.users.count}} </td>
+    <td class="table-box-title p-l-xxs"> <%= user_title %> </td>
+    <td class="table-box-percentage prev-window p-l-xxs">
+      <%= render partial: "reports/change_difference_percent_and_arrow", locals: {value_name: "#{scope}.users.change", change_count: 'cui-data-section-head-change-count', change_percent: 'cui-data-section-head-change-percent', change_arrow: 'cui-change-arrow', show_change: 'prevWindowValid'} %>
+    </td>
+  </tr>
+  <tr class="cui-box-content-padding"></tr>
+</table>

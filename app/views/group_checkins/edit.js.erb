@@ -1,0 +1,12 @@
+<% content = render partial: "group_checkins/new_group_checkin_form", locals: {group: @group, task: @task, checkin: @checkin, form_type: "edit"}
+ %>
+
+<% hours = "#{@checkin.hours}" %>
+<% minutes = "#{@checkin.minutes}" %>
+<% date = formatted_date_in_words(@checkin.date)%>
+
+jQuery("#task_checkin_<%= @checkin.id %>_content").replaceWith('<%= j(content) %>');
+
+jQuery("#task_checkin_<%= @checkin.id %>_container #checkin_hours_<%= @task.id %>_<%= @checkin.id %>").val("<%= j(hours) %>");
+jQuery("#task_checkin_<%= @checkin.id %>_container #checkin_minutes_<%= @task.id %>_<%= @checkin.id %>").val("<%= j(minutes) %>");
+jQuery("#task_checkin_<%= @checkin.id %>_container #checkin_date_<%= @task.id %>_<%= @checkin.id %>").val("<%= j(date) %>");

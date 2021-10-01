@@ -1,0 +1,25 @@
+<div class="ibox-content clearfix no-horizontal-padding p-sm p-b-0 p-t-0">
+  <div class="cjs-connection-plan-container">
+    <% milestones.each do |milestone| %>
+      <div class="cjs-milestone-task-container-for-filter" id="cjs_milestone_task_content_container_<%= milestone.id %>">
+        <%= render partial: "mentoring_model/milestones/milestone_content", locals: {milestone: milestone, target_user_id: target_user_id, target_user_type: target_user_type, home_page_view: true} %>
+      </div>
+    <% end %>
+  </div>
+  <div class="well well-sm light-yellow-bg clearfix text-center no-margins">
+    <%= content_tag(:span, "feature.group.content.tasks_footer_text_homepage_v1_html".translate(Mentoring_Area: link_to("feature.connection.action.Visit_Mentoring_Area_v1".translate(Mentoring_Area: _Mentoring_Connection), group_path(group, {show_plan: true, src: EngagementIndex::Src::AccessMentoringArea::HOME_PAGE_FOOTNOTE, sub_src: EngagementIndex::Src::AccessMentoringArea::SubSource::TASKS_TAB}), class: "m-l-xs font-bold btn btn-outline btn-xs btn-primary hidden-xs") + link_to("feature.connection.action.Visit_Mentoring_Area_v1".translate(Mentoring_Area: _Mentoring_Connection), group_path(group, {show_plan: true, src: EngagementIndex::Src::AccessMentoringArea::HOME_PAGE_FOOTNOTE, sub_src: EngagementIndex::Src::AccessMentoringArea::SubSource::TASKS_TAB}), class: "font-bold visible-xs"))) %>
+  </div>
+  <% if render_past_meeting_modal %>
+    <% modal_container "feature.mentoring_model.button.record_past_meeting".translate(Meeting: _Meeting), { modal_id: "cjs_past_meeting_modal" } do %>
+      <%= render(:partial => 'meetings/new_form',:locals => { :common_form => true, :past_meeting => true } )%>
+    <% end %>
+  <% end %>
+</div>
+<%= javascript_tag do %>
+  MentoringModelMilestones.initialize();
+  jQuery(document).ready(function(){
+    MentoringModelMilestones.descriptionHandler();
+    MentoringModelTask.tasksListHandler(<%= MentoringModel::Task::Section::UPCOMING %>, <%=  MentoringModel::Task::Section::REMAINING %>);
+    MentoringModelMilestones.expandCurrentMilestone(<%= milestones.collect(&:id) %>, [], <%=  MentoringModel::Milestone::MINIMUM_COMPLETED_MILESTONES_UNDER_BAR %>);
+  });
+<% end %>

@@ -1,0 +1,108 @@
+<% new_form = form_id == "edit_meeting_form" ? false : true %>
+<% next_day = false %>
+<% skip_date_change_trigger = false %>
+<% hide_enhanced_meeting_ui = false %>
+<% if !from_calendar && !direct_meeting_outside_group %>
+  <% start_time = Meeting.valid_start_time_boundaries %>
+  <% end_time = Meeting.valid_end_time_boundaries %>
+  <% slot_time_in_minutes = Meeting::SLOT_TIME_IN_MINUTES %>
+<% elsif from_calendar && direct_meeting_outside_group && meeting.state.blank? %>
+  <% start_time = Meeting.get_valid_start_times(@allowed_individual_slot_duration) %>
+  <% end_time = Meeting.get_valid_end_times(@allowed_individual_slot_duration) %>
+  <% slot_time_in_minutes = current_program.get_calendar_slot_time %>
+<% else %>
+  <% slot_end_time = DateTime.localize(meeting.start_time + @slot_duration, format: :short_time_small) %>
+  <% next_day = is_next_day?(meeting.start_time_of_the_day, slot_end_time, nil, nil, @allowed_individual_slot_duration)[0] %>
+  <%= f.input :next_day, as: :hidden, input_html: { value: next_day } if next_day %>
+  <% start_time, end_time = get_valid_times(meeting, @slot_duration, @allowed_individual_slot_duration) %>
+  <% all_time, all_time_val = get_all_time_values(start_time, end_time) if next_day %>
+  <% skip_date_change_trigger = true if new_form %>
+<% end %>
+<% end_time = get_meeting_end_times_for_edit(end_time, meeting) unless new_form %>
+<% start_time_element = "form##{form_id} .meeting_date_container select#meeting_start_time_of_day" %>
+<% end_time_element = "form##{form_id} select#meeting_end_time_of_day" %>
+<% all_time = get_all_time_for_end_time((start_time + end_time)) if !next_day%>
+<% date_container = 'form#' + form_id + ' .meeting_date_container ' %>
+<% onchange_function = if from_calendar && !@unlimited_slot %>
+  <% params = "'#{escape_javascript(all_time.join(','))}', '#{(@allowed_individual_slot_duration/Meeting::SLOT_TIME_IN_MINUTES)}', '#{date_container}', '#meeting_start_time_of_day', '#meeting_end_time_of_day'" %>
+  <% params += "," + "'#{all_time_val.join(',')}'" if next_day%>
+  <% "MeetingForm.toggle_end_date(#{params})" %>
+<% elsif from_calendar && @unlimited_slot %>
+  <% params = "'#{escape_javascript(all_time.join(','))}', '#{(@allowed_individual_slot_duration/Meeting::SLOT_TIME_IN_MINUTES) - 1}', '#{start_time_element}', '#{end_time_element}'"%>
+  <% params += "," + "'#{all_time_val.join(',')}'" if next_day%>
+  <% "calendarSlot.changeEndTime(#{params})" %>
+<% else %>
+  <% "calendarSlot.changeEndTime('#{escape_javascript(all_time.join(','))}', '0', '#{start_time_element}', '#{end_time_element}')" %>
+<% end %>
+<div class="meeting_date_container">
+  <%= control_group(class: "clearfix") do %>
+
+    <% start_time_label = "meeting_start_time_of_day" %>
+    <% end_time_label = "meeting_end_time_of_day" %>
+    <% unlimited_slot = (from_calendar && !@unlimited_slot) ? false : true %>
+
+    <% option_start_time = next_day ? start_time[0] : meeting.start_time_of_the_day %>
+    <% option_end_time = meeting.end_time_of_the_day unless unlimited_slot %>
+    <% option_end_time ||= next_day ? end_time[0] : meeting.end_time_of_the_day %>
+
+    <% partial_options = {input_group_class: {start: "col-sm-6 pull-left m-b-xs #{local_assigns[:show_time_only] ? 'col-xs-6 input-group-sm' : 'col-xs-12'}", end: "#{'input-group-sm' if local_assigns[:show_time_only]}"}, start_time: start_time, end_time: end_time, start_time_label: {class: "", for: start_time_label}, end_time_label: {class: "", for: end_time_label}, start_time_attributes: {name: "meeting[start_time_of_day]", class: "cjs-meeting-start-time-input"}, end_time_attributes: {name: "meeting[end_time_of_day]", class: "cjs-meeting-end-time-input"}, meeting_date_container_class: "meeting_date_container ", slot_start_time: option_start_time, slot_end_time: option_end_time, unlimited_slot: unlimited_slot, additional_classes: {addon_class: "white-bg", text_class: local_assigns[:show_time_only] ? "h6" : "h5"}, hidden_field_name: "meeting[end_time_of_day]"} %>
+    <% unless local_assigns[:show_time_only] %>
+      <% valid_free_slots_target_path_options = {} %>
+      <% max_date = nil %>
+      <% should_show_enhanced_meeting_date_ui = @current_program.enhanced_meeting_scheduler_enabled? && (!local_assigns[:past_meeting]) %>
+      <div class="cjs_meeting_date_picker_container <%= 'hide' if should_show_enhanced_meeting_date_ui %>">
+        <%= content_tag(:div, set_required_field_label("feature.meeting_request.label.pick_a_date".translate), class: "control-label false-label m-b-xs") %>
+        <%= f.input :date, as: :string, label: false, required: true, wrapper: :vertical_input_group do %>
+          <%= construct_input_group_addon(type: "addon", icon_class: "fa fa-calendar", class: "gray-bg") %>
+          <% additional_data = {} %>
+          <% if from_calendar && direct_meeting_outside_group && meeting.state.blank? %>
+            <% valid_free_slots_target_path_options = {partial_options: partial_options, slot_time_in_minutes: slot_time_in_minutes} %>
+            <%= f.input_field :date, value: meeting.date, id: "meeting_date_for_mentor", class: "form-control cjs-meeting-date-input cjs_calendar_sync_v2_date", data: date_picker_options(additional_data).merge(url: valid_free_slots_meetings_path(valid_free_slots_target_path_options)) %>
+            <%= content_tag(:label, "feature.meetings.form.date".translate, class: "sr-only", for: "meeting_date_for_mentor") %>
+          <% else %>
+            <% hide_enhanced_meeting_ui = true if from_calendar %>
+            <% max_date = @group.expiry_time unless from_calendar %>
+            <% additional_data = from_calendar ? { disable_date_picker: true } : { max_date: max_date } %>
+            <% date_picker_options_data = {} %>
+            <% if new_form %>
+              <% if (local_assigns[:past_meeting] && !from_calendar) %>
+                <% max_date = @group.expired? ? @group.expiry_time : Date.current %>
+                <% date_picker_options_data = { max_date: max_date } %>
+              <% else %>
+                <% date_picker_options_data = { min_date: Date.current }.merge(additional_data) %>
+              <% end %>
+            <% else %>
+              <% date_picker_options_data = additional_data %>
+            <% end %>
+            <% date = new_form ? (meeting.date || "") : current_occurrence_date %>
+            <% valid_free_slots_target_path_options = {partial_options: partial_options, slot_time_in_minutes: slot_time_in_minutes, past_meeting: local_assigns[:past_meeting]} %>
+            <%= f.input_field :date, value: date, autocomplete: :off, id: "new_meeting_form_date", class: "form-control meeting_form_date cjs-meeting-date-input cjs_calendar_sync_v2_date", data: date_picker_options(date_picker_options_data).merge(url: valid_free_slots_meetings_path(valid_free_slots_target_path_options)) %>
+            <%= content_tag(:label, "feature.meetings.form.date".translate, class: "sr-only", for: "new_meeting_form_date") %>
+          <% end %>
+        <% end %>
+      </div>
+      <%= render partial: "meetings/propose_slot_date_form", locals: {target_url: valid_free_slots_for_range_meetings_path(valid_free_slots_target_path_options), no_past: !(local_assigns[:past_meeting] || !new_form), no_future: local_assigns[:past_meeting], target_input_class: "cjs_calendar_sync_v2_date", max_date: max_date} if (should_show_enhanced_meeting_date_ui && !hide_enhanced_meeting_ui) %>
+    <% end %>
+
+
+    <%= f.input :slot_start_time, as: :hidden, input_html: { value: meeting.start_time_of_the_day } %>
+    <%= f.input :slot_end_time, as: :hidden, input_html: { value: slot_end_time } %>
+    <% unless local_assigns[:show_time_only] %>
+      <div class="m-b-xs control-label false-label"><%= "feature.meeting_request.label.#{get_choose_time_label_key(force_value: (should_show_enhanced_meeting_date_ui && !hide_enhanced_meeting_ui))}".translate(time_zone: wob_member.short_time_zone) %> </div>
+    <% end %>
+    <div class="meeting_slot_time_form">
+      <%= render partial: "meetings/propose_slot_time_form", locals: partial_options.merge(start_time_onchange: onchange_function) %>
+    </div>
+  <% end %>
+</div>
+<%= javascript_tag do %>
+  jQuery(function(){
+    MeetingRequest.getValidTimeSlots();
+    <% unless skip_date_change_trigger %>
+      MeetingRequest.initializeChangeForDate(".cjs-meeting-date-input");
+    <% end %>
+    <% if hide_enhanced_meeting_ui %>
+      jQuery(".cjs_meeting_date_picker_container").show();
+    <% end %>
+  });
+<% end %>

@@ -1,0 +1,5 @@
+<% if is_mentee_to_mentor_view?(orientation_type) %>
+  <%= render :partial => "bulk_matches/mentee_to_mentor_bulk_match_result", locals: {request_notes: request_notes} %>
+<% else %>
+  <%= render :partial => "bulk_matches/mentor_to_mentee_bulk_match_result", locals: {request_notes: request_notes} %>
+<% end %>

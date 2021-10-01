@@ -1,0 +1,9 @@
+<% divider = "<hr class='m-t-xs m-b-xs'>" %>
+<% filter_roles = @filter_params.present? && @filter_params[:program_roles].presence || [] %>
+<%= field_set_wrapper("feature.admin_view.label.program_and_roles".translate(program: _Program), true) do %>
+  <%= content_tag(:div, "feature.admin_view.content.program_roles_filter_help_text".translate(program: _program), class: "text-muted m-t-xs m-b-xs") %>
+  <%= ProgramsListingService.list_programs self, nil, divider: divider do |programs, options|%>
+    <% render :partial => "admin_views/admin_view_programs", :locals => {programs: programs, filter_roles: filter_roles} %>
+  <%end%>
+
+<% end %>

@@ -1,0 +1,7 @@
+en:
+  feature:
+    common_tasks:
+      content:
+        add_checkin: Check-in
+        no_comments_and_check: This task does not have any comments or check-ins yet.
+        no_tasks_helptext: You are caught up! No upcoming tasks in the near term.

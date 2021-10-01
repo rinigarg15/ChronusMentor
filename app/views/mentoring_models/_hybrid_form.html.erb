@@ -1,0 +1,48 @@
+<% button_text = "display_string.#{@mentoring_model.new_record? ? 'Create' : 'Save'}".translate %>
+<% title_text = @mentoring_model.new_record? ? "feature.multiple_templates.header.new_hybrid_mentoring_model_template_v1".translate(Mentoring_Connection: _Mentoring_Connection) : @mentoring_model.title %>
+<% duration_editing_disabled = !@mentoring_model.can_update_duration? %>
+<% @title = title_text %>
+<% @skip_rounded_white_box_for_content = true %>
+
+<%= simple_form_for @mentoring_model, html: {class: "form-horizontal"}, :wrapper => :horizontal_input do |form| %>
+  <%= form.input :mentoring_model_type, as: :hidden %>
+  <% wizard_info = ActiveSupport::OrderedHash.new %>
+  <% wizard_info[MentoringModelsHelper::HybridHeaders::DESCRIBE_TEMPLATE] = { label: "feature.multiple_templates.wizard_headers.describe_template_v1".translate, url: "#hybrid_form_#{MentoringModelsHelper::HybridHeaders::DESCRIBE_TEMPLATE}", link_options: {:class => "cjs_describe_plan"} } %>
+  <% wizard_info[MentoringModelsHelper::HybridHeaders::CONFIGURE_TEMPLATE] = { label: "feature.multiple_templates.wizard_headers.configure_template".translate, url: "#hybrid_form_#{MentoringModelsHelper::HybridHeaders::CONFIGURE_TEMPLATE}", link_options: {:class => "cjs_configure_template"} } %>
+  <%= cjs_wizard(wizard_info, MentoringModelsHelper::HybridHeaders::DESCRIBE_TEMPLATE, :disable_unselected => @mentoring_model.new_record? ) do %>
+
+    <%= cjs_wizard_section("hybrid_form_#{MentoringModelsHelper::HybridHeaders::DESCRIBE_TEMPLATE}", :class => "active") do %>
+      <%= response_flash("cjs_mentoring_models_flash") %>
+      <%= form.input :title, as: :string, input_html: {id: "cjs_title_field", class: "required-field form-control", "data-existing_mentoring_models" => @mentoring_model_titles.join(",")} %>
+      <%= form.input :description, as: :text, input_html: {class: "form-control", rows: "5"} %>
+      <% action_set(:class => "pull-right") do %>
+        <%= cancel_link %>
+        <%= link_to("display_string.Proceed_raquo_html".translate, "javascript:void(0)", class: "cjs-describe-template btn btn-primary") %>
+      <% end %>
+
+      <%= javascript_tag "MentoringModels.validateHybridTitleAndProceed();" %>
+    <% end %>
+    <%= cjs_wizard_section("hybrid_form_#{MentoringModelsHelper::HybridHeaders::CONFIGURE_TEMPLATE}") do %>
+      <%= response_flash("cjs_mentoring_models_flash_1") %>
+      
+      <%= control_group(:class => "form-inline") do %>
+        <%= content_tag(:label, "feature.mentoring_model.label.duration".translate, class: "false-label col-sm-3 control-label") %>
+        <%= controls(:class => "col-sm-9") do %>
+          <%= label_tag "ada_mentoring_period_value", "feature.mentoring_model.false_label.mentoring_period_value".translate(Mentoring_Connection: _Mentoring_Connection), class: "sr-only" %>
+          <%= form.input_field :mentoring_period_value, class: "required-field input-number form-control", id: "ada_mentoring_period_value", disabled: duration_editing_disabled %>
+          <%= label_tag "ada_mentoring_period_unit", "feature.mentoring_model.false_label.mentoring_period_unit".translate(Mentoring_Connection: _Mentoring_Connection), class: "sr-only" %>
+          <%= form.input_field :mentoring_period_unit, collection: mentoring_period_options, class: "required-field form-control", id: "ada_mentoring_period_unit", include_blank: false, disabled: duration_editing_disabled %>
+        <% end %>
+      <% end %>
+
+      <%= render partial: "associated_templates_section", locals: {form: form, mentoring_model: @mentoring_model, duration_editing_disabled: duration_editing_disabled} %>
+
+      <% action_set(:class => "pull-right") do %>
+        <%= cancel_link %>
+        <%= form.submit button_text, class: "btn btn-primary cjs-hybrid-template-submit", disable_with: "display_string.Please_Wait".translate %>
+      <% end %>
+
+      <%= javascript_tag "MentoringModels.validateHybridAndSubmit();" %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,10 @@
+en:
+  emails:
+    default_content:
+      logo: Logo
+      program_logo: "%{program}"
+    default_mails:
+      task_list:
+        content:
+          task_due_on_html: "%{task_title} is due on %{date} in %{mentoring_area}."
+          task_expired_on_html: "%{task_title} reached its due date on %{date} %{mentoring_area}."

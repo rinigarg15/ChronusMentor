@@ -1,0 +1,26 @@
+<tr>
+  <td class="col-xs-3">
+    <%= link_to post.topic.title, forum_topic_path(post.topic.forum, post.topic, from_moderate_content: true) %>
+  </td>
+  <td class="col-xs-6">
+    <div>
+      <%= formatted_post_body(post) %>
+    </div>
+    <% if post.attachment? %>
+      <%= link_to append_text_to_icon('fa fa-paperclip', post.attachment_file_name), post.attachment.url, :target => "_blank" %>
+    <% end %>
+    <div class="small text-muted">
+      <span><%= "feature.announcements.label.posted_by".translate %><span>
+      <span><%= link_to_user post.user %></span>
+      <span class="m-l-xxs"><%= "display_string.in".translate %></span>
+      <span class="m-l-xxs"><%= link_to post.topic.forum.name, forum_path(post.topic.forum) %></span>
+      <%= vertical_separator %>
+      <span><%= append_text_to_icon("fa fa-clock-o", formatted_time_in_words(post.created_at)) %></span>
+  </td>
+  <td class="col-xs-3">
+    <div class="btn-group btn-group-xs">
+      <%= link_to append_text_to_icon("fa fa-check", "display_string.Publish".translate), moderate_publish_forum_topic_post_path(post.topic.forum, post.topic, post, :publish => true, :redirect_back_to => moderatable_posts_path(:page => params[:page])), method: :post, class: "m-b-xs btn btn-white" %>
+      <%= link_to append_text_to_icon("fa fa-ban", "display_string.Decline".translate), moderate_decline_forum_topic_post_path(post.topic.forum, post.topic, post, :redirect_back_to => moderatable_posts_path(:page => params[:page])), class: "m-b-xs btn btn-white cjs_decline_btn" %>
+    </div>
+  </td>
+</tr>

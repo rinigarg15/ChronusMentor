@@ -1,0 +1,27 @@
+<% common_locals = { member: @member, program_invitation: @program_invitation, password: @password, profile_answers_map: @profile_answers_map } %>
+
+<h3 class="text-center m-b-xl" id="fc-signup-heading">
+  <%= get_heading_for_signup_page(@program_invitation, @password) %>
+</h3>
+
+<%= ibox nil, ibox_class: "middle-box", ibox_id: "fc-signup-container", content_class: "text-center" do %>
+  <div class="m-b-xl">
+    <div class="lead m-b-xs">
+      <%= get_title_for_signup_form(@auth_config) %>
+    </div>
+    <%= "registration_page.title.sign_up_multi_auth".translate if @auth_config.blank? %>
+  </div>
+
+  <% if @login_sections.blank? %>
+    <div class="m-b-md">
+      <%= render partial: "users/signup_form", locals: common_locals.merge!(auth_config: @auth_config) %>
+    </div>
+  <% else %>
+    <%= render partial: "sessions/login_section", collection: @login_sections, locals: { total_count: @login_sections.size, auth_config_locals: common_locals.merge!(signup_page: true) } %>
+  <% end %>
+
+  <% unless logged_in_organization? || new_user_authenticated_externally? %>
+    <% signin_link = link_to("feature.user.action.sign_in".translate, login_path(mode: SessionsController::LoginMode::STRICT)) %>
+    <%= "feature.membership_request.content.already_have_account_html".translate(sign_in: signin_link) %>
+  <% end %>
+<% end %>

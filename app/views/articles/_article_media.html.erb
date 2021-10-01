@@ -1,0 +1,6 @@
+<div id='embedded_content'>
+  <div class='description'>
+    <%= sanitize(auto_link textilize(@article.body)) %>
+  </div>
+  <%= display_embed_content(@article) %>
+</div>

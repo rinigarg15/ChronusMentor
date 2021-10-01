@@ -1,0 +1,19 @@
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th class="col-xs-3"><%= "feature.connection.title".translate %></th>
+        <th class="col-xs-3"><%= "feature.login_management.header.login_type".translate %></th>
+        <th class="col-xs-2"><%= "feature.three_sixty.dashboard.assessees.created".translate %></th>
+        <th class="col-xs-4">
+          <span class="pull-right"><%= "display_string.Actions".translate %></span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% auth_configs.each do |auth_config| %>
+        <%= render partial: "auth_configs/auth_config", locals: { auth_config: auth_config } %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

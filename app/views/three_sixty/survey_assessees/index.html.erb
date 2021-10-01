@@ -1,0 +1,43 @@
+<% @title = "feature.three_sixty.my_surveys.title".translate %>
+<% @skip_rounded_white_box_for_content = true %>
+<%= ibox nil, {:content_class => "no-padding"} do %>
+  <div class="list-group" id ="three_sixty_assessee_dashboard">
+    <% @survey_assessees.each do |survey_assessee| %>
+      <% self_reviewer = @self_reviewers[survey_assessee.id].first %>
+      <% survey = survey_assessee.survey %>
+      <% survey_url = show_reviewers_three_sixty_survey_assessee_reviewers_path(survey, survey_assessee, code:  self_reviewer.invitation_code, :view => ThreeSixty::Survey::MY_SURVEYS) %>
+
+      <% if (self_reviewer.answered? && survey.only_assessee_can_add_reviewers?) %>
+        <% label, url = "feature.three_sixty.my_surveys.add_reviewers".translate, add_reviewers_three_sixty_survey_assessee_path(survey, survey_assessee, :view => ThreeSixty::Survey::MY_SURVEYS) %>
+      <% else %>
+        <% label, url = "feature.three_sixty.my_surveys.complete".translate, survey_url %>
+      <% end %>
+
+      <% drop_down_array = [{:label => label, :url => url}] %>
+      <% buttons_for_mobile = Marshal.load(Marshal.dump(drop_down_array)) %>
+
+      <div class="list-group-item">
+        <%= dropdown_buttons_or_button(drop_down_array, btn_class: "pull-right hidden-xs") %>
+        <div class="media-left">
+          <%= get_icon_content("fa fa-comments-o m-r-0", container_class: "fa-circle", stack_class: "fa-2x") %>
+        </div>
+        <div class="media-body">
+          <h4 class="m-b-xxs">
+            <%= link_to(survey.title, survey_url) %>
+          </h4>
+
+          <div>
+            <% text = "feature.three_sixty.my_surveys.expiry_date".translate + ": " + (survey.expiry_date.present? ? DateTime.localize(survey.expiry_date, format: :full_display_no_time) : content_tag(:span, "display_string.Never".translate, :class => 'text-muted')) %>
+            <%= content_tag(:span, append_text_to_icon("fa fa-clock-o", text), class: "small text-muted") %>
+          </div>
+          <div>
+            <% text = "feature.three_sixty.my_surveys.issued_on".translate + ": " + DateTime.localize(survey.issue_date, format: :full_display_no_time) %>
+            <%= content_tag(:span, append_text_to_icon("fa fa-clock-o", text), class: "small text-muted") %>
+          </div>
+        </div>
+
+        <%= dropdown_buttons_or_button(buttons_for_mobile, btn_class: "m-t-sm visible-xs btn-block btn-group-sm clearfix", responsive_primary_btn_class: "col-xs-10", responsive_caret_class: "col-xs-2", dropdown_menu_class: "col-xs-12 table-bordered") %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

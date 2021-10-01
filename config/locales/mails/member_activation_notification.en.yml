@@ -1,0 +1,19 @@
+en:
+  email_translations:
+    member_activation_notification:
+      enabled_with_count_html:
+        one: An %{email} will be sent to the member if you complete this action.
+        other: An %{email} will be sent to the %{count} members if you complete this action.
+      disabled_with_count_html:
+        one: An %{email} is usually sent to the member as part of completing this action, but has been disabled. No email will be sent.
+        other: An %{email} is usually sent to the %{count} members as part of completing this action, but has been disabled. No email will be sent.
+      title_v1: Member reactivation notification
+      description_v3: This email is generated when %{_a_admin} reactivates a participant who was suspended at the global level.
+      subject_v1: Your account is now reactivated!
+      content_v1_html: Welcome back, {{receiver_first_name}}! <br /> <br />Your account in {{subprogram_or_program_name}} has been reactivated. <br /><br/> Thank you for your continued participation - you can login and review your profile to ensure it is up to date. <br /> {{login_button}}
+      tags:
+        url_organization_login:
+          description: Url to login page for the program
+        login_button:
+          description: Login button
+          login: Login

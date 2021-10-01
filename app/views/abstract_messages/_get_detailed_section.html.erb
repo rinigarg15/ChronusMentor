@@ -1,0 +1,6 @@
+<% from_to_details = message_from_to_names(msg, wob_member) %>
+<% date = formatted_time_in_words(msg.created_at, short_date: true, no_ago: true) %>
+<% time = formatted_time_in_words(msg.created_at, short_time: true, no_ago: true) %>
+<% time_or_date = formatted_time_in_words(msg.created_at, time_or_date: true, no_ago: true) %>
+ 
+<%= render partial: "admin_messages/detailed_section", locals: { msg: msg, from_to_details: from_to_details, date: date, time: time, viewing_member: wob_member, time_or_date: time_or_date } %>

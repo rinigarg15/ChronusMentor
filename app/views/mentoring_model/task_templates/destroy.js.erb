@@ -1,0 +1,9 @@
+<% if manage_mm_milestones_at_admin_level? %>
+  <% @all_task_templates.each do |milestone_template_id, task_templates| %>
+    <% content, merge_top_required = params_content(task_templates) %>
+    MilestoneTemplates.refreshTasks("<%= milestone_template_id.to_s %>", "<%= j(content) %>", "<%= merge_top_required %>");
+  <% end %>
+<% else %>
+  <% content, merge_top_required = params_content(@all_task_templates) %>
+  MilestoneTemplates.refreshTasks("", "<%= j(content) %>", "<%= merge_top_required %>");
+<% end %>

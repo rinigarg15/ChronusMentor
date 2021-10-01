@@ -1,0 +1,85 @@
+en:
+  feature:
+    program:
+      header:
+        setup_new_program: Setup New %{program}
+        analytics: Analytics
+        saml: SAML SSO Setup
+        saml_default_title: SSO Login
+      content:
+        project_based: Project Based Engagements
+        group_mentoring_v1: Group style
+        one_on_one_mentoring_v1: One on one style
+        existing_program: "(existing %{program})"
+        existing_program_will_be_moved_html: The existing %{program} '%{program_name}' will be moved to %{root_path}. If you wish, you can change the name and the web address below.
+        common_parent_program_creation_html: A common parent %{program} will be created for '%{program_name}' and the new %{program} through which you can manage common settings across the two %{programs}. Please provide a name for the parent program.
+        analytics_description_html: You can use this box to add any javascript or HTML code to your %{program}. The most common use of this box is for adding your own web analytics software such as %{ga_link}.
+        cannot_change_afterwards: This cannot be changed afterwards
+        setting_cannot_be_changed: This setting cannot be changed.
+        from: 'from:'
+        items_to_clone_v2: "%{Mentoring} Insights, Settings, Forums, Surveys will be cloned"
+        due_date_empty: Please note that time-dependent fields like due-dates would be annulled and would need resetting.
+        program_not_active_v1_html: This %{program} is no longer active. If you are member, please contact the %{admin} of the %{program}. If you are %{admin} of the %{program}, please %{contact_chronus} to reactivate the %{program}.
+        not_part_of_program_error: Permission Denied. You need to join %{program_name} to access this link.
+        program_type:
+          chronus_mentor: Chronus Mentor
+          chronus_coach: Chronus Coach
+          chronus_learn: Chronus Learn
+        tab_captions:
+          program_details: "%{program} Details"
+          program_settings: "%{program} Settings"
+          portal_details: Portal Details
+        number_of_licenses_help_text: How many users do you think would be part of the %{program}?
+        sp_metadata_helptext: Please download Service Provider (SP) metadata file from Chronus below.
+        saml_authconfig_helptext: Enable SAML Single Sign-On here.
+        saml_authconfig_reconfigure_helptext: Please use this option to reconfigure SAML SSO from scratch.
+        idp_metadata_helptext: Please upload Identity Provider (IDP) metadata file for Chronus here.
+        idp_metadata_download_helptext: Please download a backup of current IDP metadata for safety reasons.
+        idp_file_upload_text: Upload IDP Metadata
+        idp_certificate_upload_text: Upload IDP Certificate
+        idp_certificate_update_text: Update IDP Certificate
+        idp_certificate_update_helptext: Please use this option to update only the IDP certificate.
+        idp_certificate_download_helptext: Please download a backup of current IDP certificate for safety reasons.
+        idp_certificate_update_allow_files: 'Please upload a file of the following types: pem, cer, crt'
+        all_of_role: All %{role_name}
+        mentoring_community: "%{Mentoring} Community"
+        publish_circle_widget_header:
+          one: "Kick start your %{mentoring_connection}"
+          other: "Kick start your %{mentoring_connections}"
+      label:
+        program_name: Name of the %{program}
+        web_address: Web address
+        program_type: "%{program} Type"
+        number_of_licenses: Number of licenses
+        engagement_type_v1: Engagement Type
+        mentor_assignment: "%{mentor} Assignment"
+        mentoring_style_v1: "%{Mentoring_Connection} Style"
+        copy_data_from_another_program: Copy data from another program
+        name: Name
+        parent_program: Parent %{program}
+        match_config_setting: Matching
+        google_analytics: Google Analytics
+        contact_chronus: contact Chronus
+        generate_sp: Generate SP Metadata
+        upload_idp: Upload IDP Metadata
+        setup_authconfig: Setup Auth Config
+        subsciption_type_basic: Basic
+        subsciption_type_premium: Premium
+        subsciption_type_enterprise: Enterprise
+      csv:
+        first_name: First name
+        last_name: Last name
+        email: Email
+      content_pack:
+        use_solution_pack: Use a solution pack
+        upload_solution_pack: Upload the solution pack *
+        successful_export_html: Successfully Exported! %{click_here} to view all the content packs.
+        export_pack: Export Solution Pack
+        solution_packs: Solution Packs
+        creation_help_text: E.g. Vetri Vellore
+        description_help_text: E.g. Setting up Coke program
+        creation_label: 'Created by :'
+        description_label: 'Description :'
+      clone_existing_program: Clone an existing program
+      will_do_myself: I will do it all by myself
+      how_to_configure: How would you like to configure the program *

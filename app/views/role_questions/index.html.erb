@@ -1,0 +1,19 @@
+<% @title = "feature.profile_customization.header.customize_user_profile_fields".translate %>
+<% labels_array = [] %>
+<% labels_array = [{:label => "feature.profile_customization.label.user_profile_form".translate, :url => preview_profile_questions_path}] %>
+<% labels_array << {label: "feature.profile_customization.label.membership_request_form".translate, url: preview_profile_questions_path(preview_type: ProfileQuestionsController::PreviewType::MEMBERSHIP_FORM) } if is_membership_form_enabled?(@current_program) %>
+<% @page_action = labels_array %>
+<% @page_action_options = {:dropdown_title => "display_string.Preview".translate, :large => true} %>
+
+<div id="customizable_profile">
+	<div class="clearfix alert alert-info">
+	  <p>
+	    <%= "feature.profile_customization.content.customize_role_q_description_v1_html".translate(
+	      line_break: "".html_safe, roles: @current_program.roles_without_admin_role.map{|role| role.customized_term.pluralized_term}.to_sentence,
+	      click_here: content_tag(:strong, link_to("display_string.Click_here".translate, "javascript:void(0)", :id => "update_profile_summary_fields", data: { toggle: "modal", target: "#update_profile_summary_fields_form" } ))
+	    ) %>
+	  </p>
+  	</div>
+  <%= render :partial => 'role_questions/profile_summary_fields_popup' %>
+  <%= render :partial => 'role_questions/index' %>
+</div>

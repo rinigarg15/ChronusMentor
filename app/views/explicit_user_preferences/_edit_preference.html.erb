@@ -1,0 +1,45 @@
+<% mobile_view = (mobile_app? || mobile_device?) %>
+<% profile_question = explicit_preference.role_question.profile_question %>
+<% preference_class_name = "cjs_explicit_preference_#{explicit_preference.id}" %>
+<div class="cjs_explicit_preference_row <%= preference_class_name %> b-b">
+  <div class="row cjs_explicit_preference_inline_show <%= mobile_view ? 'p-xs' : 'p-t-md p-b-md p-l-sm p-r-sm' %>">
+    <div class="col-xs-8 col-sm-4">
+      <%= content_tag(:strong, profile_question.question_text) %>
+    </div>
+    <div class="col-xs-4 visible-xs">
+      <%= render partial: "explicit_user_preferences/edit_preference_buttons", locals: {explicit_preference: explicit_preference, src: src} %>
+    </div>
+    <div class="col-xs-12 col-sm-3 text-muted small cjs_explicit_preferences_choices_show p-t-xs p-b-xs m-t-n-sm m-b-n-sm">
+      <%= question_choices_or_location_preference_display_string(explicit_preference) %>
+      <%= link_to(get_icon_content("fa fa-pencil no-margins").html_safe + content_tag(:span, "display_string.Edit".translate, class: "sr-only"), "javascript:void(0);", class: "p-r-xs text-primary pointer cjs_open_update_explicit_preference") %>
+    </div>
+    <div class="col-xs-12 col-sm-3 cjs_explicit_preference_weight_container text-center">
+      <div class="row">
+        <div class="col-sm-12 col-xs-9">
+          <%= content_tag(:div, '', data: {url: change_weight_explicit_user_preference_path(explicit_preference, src: src)}, class: "cjs_explicit_preference_weight_selector") %>
+          <div class="cjs_explicit_preference_weight_string small font-bold"></div>
+        </div>
+      </div>
+      <%= hidden_field_tag("preference_weight", explicit_preference.preference_weight, class: "cjs_hidden_preference_weight") %>
+    </div>
+    <div class="col-xs-12 col-sm-2 hidden-xs cjs_explicit_preference_web_buttons">
+      <%= render partial: "explicit_user_preferences/edit_preference_buttons", locals: {explicit_preference: explicit_preference, src: src} %>
+    </div>
+  </div>
+
+  <div class="cjs_explicit_preference_inline_update hide p-t-xxs p-b-xxs">
+    <div class="light-gray-bg p-md m-b-md">
+      <%= simple_form_for explicit_preference, url: explicit_user_preference_path(explicit_preference, src: src), remote: true, :html => {:class => "form-horizontal"}, :wrapper => :horizontal_input do |f| %>
+        <div class="row">
+          <%= render partial: "explicit_user_preferences/edit_preference_inputs", locals: {f: f, create_view: false} %>
+          <div class="col-xs-12 col-sm-12">
+            <% action_set(class: "pull-right") do %>
+              <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white btn-sm cjs_close_update_explicit_preference" %>
+              <%= f.button :submit, "display_string.Save".translate, class: 'btn btn-sm cjs_update_explicit_preference m-l-xs', data: {disable_with: "display_string.Please_Wait".translate} %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

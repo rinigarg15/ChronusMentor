@@ -1,0 +1,3 @@
+<% modal_v3_popup "csv_import.content.add_user_options_popup_heading".translate do %>
+  <%= render 'add_user_options_popup_content', {:can_add_existing_user => @can_add_existing_member, :can_import_users_from_csv => @can_import_users_from_csv, :can_import_dormant_users => @can_import_dormant_users} %>
+<% end %>

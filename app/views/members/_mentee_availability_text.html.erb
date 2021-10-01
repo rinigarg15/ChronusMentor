@@ -1,0 +1,10 @@
+<% show_scheduling_preference_text = user.can_set_mentee_general_availability_preference? %>
+<% if user.can_set_meeting_preference? %>
+  <div class="form-group form-group-sm mentee_scheduling_preference <%= 'hide' if !show_scheduling_preference_text%>">
+    <%= content_tag(:div, "feature.user.label.scheduling_preference_mentee_and_mentor_v1".translate(:meeting => _meetings), :class => "false-label control-label col-sm-2") %>
+    <%= controls(class: "col-sm-10") do %>
+      <%= member_form.label :availability_not_set_message, "feature.user.label.scheduling_preference_mentee_and_mentor_v1".translate(meeting: _meetings), class: "sr-only" %>
+      <%= member_form.text_area :availability_not_set_message, :skip_title => true, :placeholder => "feature.profile.content.preferred_schedule_placeholder_v2".translate, :rows => 5, :class => "form-control mentee_general_availability" %>
+    <% end %>
+  </div>
+<% end %>

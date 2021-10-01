@@ -1,0 +1,7 @@
+<div class="col-sm-12 cjs-tile-container no-padding m-b-lg" id="mentor_distribution_container">
+  <%= render(partial: "match_reports/tile_settings", locals: {tile: MatchReport::Sections::MentorDistribution, tile_settings_class: " cjs_mentor_distribution_tile_setting", admin_view_id: admin_view_id}) %>
+  <h3 class="font-normal"><%= "feature.match_report.label.mentor_mentees_distributed".translate(mentors: _mentors, mentees: _mentees) %></h3>
+  <div id="mentor_distribution_info">
+    <%= render(partial: "common/tile_placeholder") %>
+  </div>
+</div>

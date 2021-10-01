@@ -1,0 +1,2 @@
+<% view_details = render("admin_views/preview_view_details", { admin_view: @admin_view, admin_view_filters: @admin_view_filters, admin_view_users_count: @admin_view_users_count, source_info: @source_info } ) %>
+jQuery('.cjs_admin_view_content').replaceWith('<%= escape_javascript(view_details) %>');

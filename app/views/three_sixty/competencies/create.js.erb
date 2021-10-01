@@ -1,0 +1,7 @@
+<% if @competency.valid? %>
+  jQuery("#cjs_three_sixty_no_competencies_container").hide();
+  closeQtip();
+  jQuery("#three_sixty_competencies").prepend('<%= j(render :partial => "three_sixty/competencies/competency", :locals => {:competency => @competency, :should_collapse => false, :show_actions => true}) %>');
+<% else %>
+  jQuery("#three_sixty_competency_from_<%= @competency.id %>").replaceWith('<%= j(render(:partial => "three_sixty/competencies/form", :locals => {:competency => @competency})) %>');
+<% end %>

@@ -1,0 +1,13 @@
+<% metrics = current_program.get_metrics(Report::Section::DefaultSections::ENGAGEMENT) %>
+<% if metrics.present? %>
+  <div class="m-t-sm p-t-sm cjs_tile_metrics b-t">
+    <h4><%= "feature.reports.content.other_engagement_metrics".translate %></h4>
+    <div class="clearfix m-t-md">
+      <table>
+        <% metrics.each do |metric| %>
+          <%= get_metric_tr_element(metric) %>
+        <% end %>
+      </table>
+    </div>
+  </div>
+<% end %>

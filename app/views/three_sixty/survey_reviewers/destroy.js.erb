@@ -1,0 +1,6 @@
+<% if @survey_reviewer.destroyed? %>
+  jQuery("#three_sixty_survey_reviewer_container_<%= @survey_reviewer.id %>").remove();
+  <% if @no_pending_reviewers %>
+    jQuery("#three_sixty_survey_notify_reviewers").hide();
+  <% end %>
+<% end %>

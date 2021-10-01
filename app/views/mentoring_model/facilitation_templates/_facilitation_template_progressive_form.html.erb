@@ -1,0 +1,96 @@
+<% facilitation_template_id = facilitation_template.id || "new" %>
+<% duration_unit_list, duration_unit_list_map = generate_duration_unit_list_and_map %>
+<% facilitation_template_duration = facilitation_template.send_on.present? ? facilitation_template.send_on : 1 %>
+<% facilitation_template_duration_id = duration_unit_list[0][1] %>
+
+<% if facilitation_template.send_on.present? && (facilitation_template.send_on % duration_unit_list[1][1]) == 0 %>
+  <% facilitation_template_duration = facilitation_template.send_on / 7 %>
+  <% facilitation_template_duration_id = duration_unit_list[1][1] %>
+<% end %>
+<% date_assigner_mapping = [["feature.mentoring_model.js_translations.predecessor".translate, MentoringModel::FacilitationTemplate::DueDateType::PREDECESSOR], ["feature.mentoring_model.js_translations.specific_date".translate, MentoringModel::FacilitationTemplate::DueDateType::SPECIFIC_DATE]] %>
+<% default_date_assigner = facilitation_template.specific_date.present? ? MentoringModel::FacilitationTemplate::DueDateType::SPECIFIC_DATE : MentoringModel::FacilitationTemplate::DueDateType::PREDECESSOR %>
+<% role_mapping = RoleConstants.program_roles_mapping(@current_program) %>
+
+<%= simple_form_for facilitation_template, url: (facilitation_template.new_record? ? mentoring_model_facilitation_templates_path(@mentoring_model) : mentoring_model_facilitation_template_path(@mentoring_model, facilitation_template)), html: {method: (facilitation_template.new_record? ? "post" : "patch"), class: "clearfix form-horizontal cjs-mentoring-model-template-form  #{get_ckeditor_type_classes(MentoringModel::FacilitationTemplate.name)}", id: "cjs_new_mentoring_model_facilitation_template_#{facilitation_template_id}"}, remote: true do |f| %>
+  <input name="mentoring_model_facilitation_template[milestone_template_id]" type="hidden" value="<%= facilitation_template.milestone_template_id %>">
+  <div class="cjs-elements-container">
+    <%= control_group do %>
+      <label class="col-sm-2 control-label" for="mentoring_model_facilitation_template_subject"><%= "feature.facilitation_message.header.Subject".translate %></label>
+      <div class="col-sm-10">
+        <input class="string required form-control cjs-mentoring-connections-v2-subject-textbox" name="mentoring_model_facilitation_template[subject]" id="mentoring_model_facilitation_template_subject" size="50" type="text" value="<%= facilitation_template.subject %>">
+      </div>
+    <% end %>
+    <%= control_group do %>
+      <label class="col-sm-2 control-label" for="mentoring_model_facilitation_template_message"><%= "feature.mentoring_model.js_translations.message_body".translate %></label>
+      <div class="col-sm-10">
+        <textarea id="mentoring_model_facilitation_template_message" name="mentoring_model_facilitation_template[message]"><%= (facilitation_template.message.presence || "feature.mentoring_model.js_translations.default_message".translate) %></textarea>
+      </div>
+    <% end %>
+    <%= control_group do %>
+      <label class="col-sm-2 control-label" for="mentoring_model_task_template_role_id"><%= set_required_field_label("display_string.To".translate)%></label>
+      <div class="col-sm-5 cjs_choices_wrapper">
+        <% new_record = facilitation_template.role_names.blank? %>
+        <%= choices_wrapper("display_string.Roles".translate) do %>
+          <% assignable_roles.each do |role| %>
+            <label class="checkbox pointer">
+              <% checked = new_record ? true : facilitation_template.role_names.include?(role.name) %>
+              <%= check_box_tag("mentoring_model_facilitation_template[role_names][]", role.name, checked, id: "mentoring_model_facilitation_template_role_names_#{role.id}", class: "cjs_mentoring_model_facilitation_template_role_names" ) %>
+              <%= role_mapping[role.name] %>
+            </label>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+    <% if milestone_templates_to_associate.present? %>
+      <%= control_group do %>
+        <label class="col-sm-2 control-label" for="mentoring_model_facilitation_template_milestone_template_id"><%= "feature.mentoring_model.js_translations.apply_to_milestone_label".translate %></label>
+        <div class="col-sm-5">
+          <%= select_tag("mentoring_model_facilitation_template[milestone_template_id]", options_for_select(milestone_templates_to_associate.collect{|m| [m.title, m.id]}, facilitation_template.milestone_template_id), {:class => "form-control"}) %>
+        </div>
+      <% end %>
+    <% end %>
+    <div class="cjs-required-checkbox-true">
+      <%= control_group do %>
+        <label class="col-sm-2 control-label" for="mentoring_model_facilitation_template_date_assigner"><%= "feature.mentoring_model.js_translations.due_date_connected_to".translate %></label>
+        <div class="col-sm-5">
+          <%= select_tag("mentoring_model_facilitation_template[date_assigner]", options_for_select(date_assigner_mapping, default_date_assigner), {:class => "form-control mentoring_model_facilitation_template_date_assigner"}) %>
+        </div>
+      <% end %>
+      <%= control_group(:class => "hide cjs-predecessor-handler") do %>
+        <label class="col-sm-2 control-label" for="mentoring_model_facilitation_template_duration"><%= set_required_field_label("display_string.Due_Date".translate)%></label>
+        <div class="col-sm-10">
+          <%= construct_input_group([], [], :input_group_class => "col-xs-6 col-sm-2 no-padding pull-left m-b-xs") do %>
+            <input name="mentoring_model_facilitation_template[send_on]" id="mentoring_model_facilitation_template_duration" type="text" value="<%= facilitation_template_duration %>" class="form-control">
+          <% end %>
+          <%= construct_input_group([], [{type: "addon", content: "feature.mentoring_model.js_translations.after_soc".translate(connection: _mentoring_connection), class: "no-border no-background font-600"}], :input_group_class => "col-xs-12 col-sm-6 no-padding pull-left m-b-xs") do %>
+            <label class="col-sm-2 sr-only" for="duration_id_input"><%= "feature.meetings.content.repeat".translate %></label>
+            <%= select_tag("duration_id_input", options_for_select(duration_unit_list, facilitation_template_duration_id), {:class => "form-control"}) %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= control_group(:class => "hide cjs-specific-date-handler") do %>
+        <label class="col-sm-2 control-label" for="mentoring_model_facilitation_template_specific_date"><%= set_required_field_label("display_string.Due_Date".translate)%></label>
+        <div class="col-sm-5">
+          <%= construct_input_group([type: "addon", icon_class: "fa fa-calendar"], []) do %>
+            <%= f.input_field :specific_date, :as => :string, :id => "mentoring_model_facilitation_template_specific_date", :class => "form-control", data: date_picker_options, value: DateTime.localize((facilitation_template.specific_date.present? ? facilitation_template.specific_date : Time.current), format: :full_display_no_time) %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="pull-right">
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "cjs-facilitation-template-cancel-btn btn btn-white" %>
+    <%= f.button :submit, "feature.mentoring_model.js_translations.save_message".translate, class: "cjs-hide-on-outside-click-root cjs-facilitation-template-submit-btn"%>
+  </div>
+<% end %>
+
+
+<div class="p-t-md" id="preview_email_<%= facilitation_template_id %>">
+  <%= render partial: "mailer_templates/preview_email", locals: {facilitation_template_id: facilitation_template_id} %>
+</div>
+
+<%= javascript_tag do %>
+  FacilitationTemplateProgressiveForm.engagementSurveyIds = <%= facilitation_template.mentoring_model.program.surveys.of_engagement_type.pluck(:id) %>;
+  FacilitationTemplateProgressiveForm.initialize("<%= facilitation_template_id %>");
+<% end %>
+<%= javascript_tag %Q[FacilitationTemplateProgressiveForm.initCkeditorOptions("#{j(fetch_placeholders(@facilitation_message_tags, @current_program))}", "#{'feature.facilitate_users.label.Insert_variables'.translate}");] %>

@@ -1,0 +1,5 @@
+<%= link_to_user sidepane_asset, class: "font-bold" %>
+<div class="small text-navy">
+  <% link_text = "feature.question_answers.content.answer_count".translate(count: sidepane_asset.qa_answers_count) %>
+  <%= link_to link_text, member_path(sidepane_asset.member, :tab => "qa_answers") %>
+</div>

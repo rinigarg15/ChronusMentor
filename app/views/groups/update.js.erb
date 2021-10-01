@@ -1,0 +1,32 @@
+<% if @error_flash %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('', '<%= @error_flash %>', false);
+<% elsif @group.errors[:mentors].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('', '<%= "#{_Mentor} #{@group.errors[:mentors].join(', ')}" %>', false);
+<% elsif @group.errors[:students].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('', '<%= "#{_Mentee} #{@group.errors[:students].join(', ')}" %>', false);
+<% elsif @group.errors.blank? %>
+  closeQtip();
+  ChronusValidator.ErrorManager.ShowPageFlash(true, '<%= j(@success_flash || "flash_message.group_flash.update_success".translate(mentoring_connection: _mentoring_connection)) %>')
+  <% if @view == Group::View::DETAILED %>
+    <% content = render(partial: "groups/group", object: @group, locals: { is_table_view: @is_table_view } ) %>
+    jQuery('#group_<%= @group.id %>').replaceWith('<%= j(content) %>');
+    jQueryHighlight('#group_<%= @group.id %>');
+    jQuery(document).ready(function() {
+      GroupSearch.inspectSubCheckBox();
+      GroupSearch.resetTriStateCheckbox();
+    });
+    GroupSearch.getSurveyResponse();
+  <% else %>
+    <% columns_to_show = @current_program.group_view.get_group_view_columns(@tab_number) %>
+    <% content = get_group_row_values(@group, columns_to_show, @tab_number) %>
+    jQuery('#group_pane_<%= @group.id %>').replaceWith('<%= j(content) %>');
+    jQueryHighlight('#group_pane_<%= @group.id %>');
+    jQuery(document).ready(function() {
+      GroupSearch.inspectSubCheckBox();
+      GroupSearch.resetTriStateCheckbox();
+      initialize.initializeTooltip();
+    });
+  <% end %>
+<% else %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('', '<%= @group.errors.full_messages.to_sentence %>', false);
+<% end %>

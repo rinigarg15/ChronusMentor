@@ -1,0 +1,19 @@
+<% if user != current_user %>
+  <% if show_skype && user.skype_id.present? %>
+    <% skype_label = get_icon_content("fa fa-skype fa-lg") + set_screen_reader_only_content("feature.user.label.Skype".translate) %>
+    <%= link_to(skype_label, "skype:" + user.skype_id + "?call", data: { activity: EngagementIndex::Activity::SKYPE_CALL}, class: "pull-right cjs_track_js_ei_activity") %>
+  <% end %>
+  <% if allow_individual_messaging %>
+    <% messaging_label = get_icon_content("fa fa-envelope fa-lg") + set_screen_reader_only_content("display_string.Message".translate) %>
+    <%= link_to(messaging_label, "javascript:void(0)", data: { remote_modal_url: new_message_path(receiver_id: user.member_id, src: EngagementIndex::Src::MessageUsers::MENTORING_AREA_SIDE_PANE) }, class: "pull-right") %>
+  <% end %>
+<% end %>
+
+<div class="col-xs-10 no-horizontal-padding">
+  <div class="col-xs-1 p-l-0">
+    <%= user_picture(user, { no_name: true, size: :small, new_size: :tiny }, { class: "img-circle", size: "21x21" } ) %>
+  </div>
+  <div class="col-xs-9 p-r-0">
+    <%= link_to_user user, content_text: user.name(name_only: true), group_view_id: group.id %>
+  </div>
+</div>

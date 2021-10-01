@@ -1,0 +1,16 @@
+<% cls_preferred = !@preferred_mentors || @preferred_mentors.empty? ? "hide" : "" %>
+
+<%= ibox "feature.preferred_mentoring.header.Preferred_Mentors".translate(Mentors: @user_references_downcase), ibox_class: "cjs_preferred_mentors_box #{cls_preferred}", content_class: "no-padding" do %>
+  <ul class="list-group">
+    <% if @preferred_mentors %>
+      <% @preferred_mentors.each do |mentor| %>
+        <%= display_favorite(mentor) %>
+      <% end %>
+    <% end %>
+  </ul>
+  <div class="b-t">
+    <div class="p-sm text-center">
+      <%= link_to append_text_to_icon("fa fa-user-plus", "feature.user.action.request_connection".translate(connection: _Mentoring_Connection)), new_mentor_request_path, class: "btn-link font-bold" %>
+    </div>
+  </div>
+<% end %>

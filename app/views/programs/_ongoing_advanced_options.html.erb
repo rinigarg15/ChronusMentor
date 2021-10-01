@@ -1,0 +1,45 @@
+<% unless @program.project_based? %>
+  <% if @current_program.connection_profiles_enabled? %>
+    <%= control_group do %>
+      <%= content_tag(:div, "program_settings_strings.content.allow_members_to_mark_connection_public_html".translate(mentoring_connection: _Mentoring_Connection, tooltip: embed_icon(TOOLTIP_IMAGE_CLASS,'', :id => 'allow_members_to_mark_connection_public_tooltip_id')), :class => "false-label control-label") %>
+      <%= controls do %>
+        <%= choices_wrapper("program_settings_strings.content.allow_members_to_mark_connection_public_html".translate(mentoring_connection: _Mentoring_Connection, tooltip: "", id: "")) do %>
+          <label class="radio inline">
+            <%= f.radio_button :allow_users_to_mark_connection_public, true %> <%= "display_string.Yes".translate %>
+          </label>
+          <label class="radio inline">
+            <%= f.radio_button :allow_users_to_mark_connection_public, false %> <%= "display_string.No".translate %>
+          </label>
+        <% end %>
+        <%= tooltip("allow_members_to_mark_connection_public_tooltip_id", "program_settings_strings.content.allow_members_to_mark_connection_public_tooltip_html".translate(mentoring_connection: _mentoring_connection, program: _program, _mentoring_connection: _mentoring_connection) ) -%>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= render partial: "programs/super_console_engagement_settings", locals: {f: f} if super_console? %>
+
+<fieldset id='closure_reasons' class="has-below-1">
+  <legend><%= "program_settings_strings.content.closure_reasons".translate %></legend>
+  <div class="clearfix">
+    <%= control_group do %>
+      <%= content_tag(:div, "program_settings_strings.content.reason_for_closing_mentoring_connections".translate(mentoring_connection: _mentoring_connection), :class=> "control-label false-label") %>
+      <%= controls do %>
+        <% @current_program.permitted_closure_reasons.each do |closure_reason| %>
+          <%= fields_for closure_reason do |fa| %>
+            <% render :partial => "programs/permitted_closure_reasons", :locals => {:fa => fa, :closure_reason => closure_reason} %>
+          <% end %>
+        <% end %>
+        <div id="cjs_new_closure_reason"> </div>
+        <% new_closure_reason = render :partial => "programs/new_closure_reasons" %>
+        <%= content_tag :div, :id => "cjs_add_new_reason", :class => "has-above-1", :data => {:count => 0} do %>
+          <%= link_to get_icon_content("fa fa-plus-circle") + "program_settings_strings.label.add_new_reason".translate, 'javascript:void(0);', :onclick => %Q[ProgramSettings.handleAddNewReason("#{j new_closure_reason}");] %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</fieldset>
+
+<%= javascript_tag do %>
+  showHideElement.initialize('.cjs-has-hidden-text', '.cjs-hidden-text');
+<% end %>

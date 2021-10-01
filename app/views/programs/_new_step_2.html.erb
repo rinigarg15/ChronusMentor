@@ -1,0 +1,77 @@
+<div id="step_2" style="display: none;">
+  
+  <%= wizard_wrapper(tab_captions, ProgramsHelper::Headers::PROGRAM_SETTINGS, :content_ibox_content_class => "p-xl p-t-m p-b-m") do %>  
+    <%= control_group do %>
+      <% label = "How would you like to configure the program" %>
+      <%= content_tag(:div, label, :class => "control-label col-sm-3 false-label") %>
+      <%= controls(:class => "col-sm-9 cui_creation_way") do %>
+        <%= choices_wrapper(label) do %>
+          <% if super_console? %>
+            <label class="radio">
+              <%= radio_button_tag :creation_way, Program::CreationWay::SOLUTION_PACK %>
+              <%= "feature.program.content_pack.use_solution_pack".translate %>
+            </label>
+          <% end %>
+          <label class="radio">
+            <%= radio_button_tag :creation_way, Program::CreationWay::MANUAL %>
+            <%= "feature.program.will_do_myself".translate %>
+          </label>
+        <% end %>
+      <% end %>
+    <% end %>
+
+   <div id="solution_pack_file_path" style="display: none;" class="cui_file_chooser"> 
+    <%= f.input :solution_pack_file, :wrapper => :horizontal_input, as: :file, label: "feature.program.content_pack.upload_solution_pack".translate %>
+   </div>
+    
+    <div style="display:none;" class="cui_choose_engagement_type">
+      <% if @current_organization.basic_type? %>
+        <%= f.hidden_field :engagement_type, value: Program::EngagementType::CAREER_BASED_WITH_ONGOING %>
+      <% else %>
+        <div id="cjs_program_engagement_type">
+          <%= control_group do %>
+            <%= content_tag(:div, "feature.program.label.engagement_type_v1".translate, :class => "control-label col-sm-3 false-label") %>
+            <%= controls(class: 'col-sm-9') do %>
+              <%= one_time_engagement_type_selection(@program) %>
+              <%= javascript_tag %Q[ProgramSettings.showCareerBasedOptions(#{Program::EngagementType::PROJECT_BASED});ProgramSettings.ongoingDetailedSetting();] %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <div id="career_based_project_specific_settings" style="<%= 'display: none' if !@current_organization.basic_type? %>">
+      <%= control_group do %>
+        <%= content_tag(:div, "feature.program.label.mentor_assignment".translate(:mentor => _Mentor), :class => "control-label col-sm-3 false-label") %>
+        <%= controls(class: "col-sm-9") do %>
+          <%= mentor_request_style_selection_first_time %>
+          <%= javascript_tag %Q[ProgramSettings.handleMentorRequestStyleFirstTime();] %>
+        <% end %>
+      <% end %>
+
+      <%= control_group do %>
+        <% label = "feature.program.label.mentoring_style_v1".translate(:Mentoring_Connection => _Mentoring_Connection) %>
+        <%= content_tag(:div, label, :class => "control-label col-sm-3 false-label") %>
+        <%= controls(class: "col-sm-9") do %>
+          <%= one_time_setting_radio_button(f,@program, :allow_one_to_many_mentoring, ["feature.program.content.group_mentoring_v1".translate(:mentoring_connection => _mentoring_connection), "feature.program.content.one_on_one_mentoring_v1".translate], [true, false], label_text: label) %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <% action_set do %>
+      <%= link_to_function "display_string.Back_and_laquo_html".translate, "newProgram.stepOne()", :class => 'btn btn-primary' %>
+      <div class="pull-right">
+        <%= cancel_link %>
+        <% if @current_organization.standalone? %>
+          <%= link_to_function "display_string.Next_raquo_html".translate, "newProgram.validateStepTwo('#{Program::EngagementType::CAREER_BASED}', '#{j("common_text.error_msg.required_field_msg".translate)}', '#{j("program_settings_strings.content.select_some_mode".translate(mentoring: _mentoring))}');", :class => 'btn btn-primary'  %>
+        <% else %>
+          <%= f.button :submit, "display_string.Done".translate, :onclick => "return newProgram.validateEngagementType('#{Program::EngagementType::CAREER_BASED}', '#{j("common_text.error_msg.required_field_msg".translate)}', '#{j("program_settings_strings.content.select_some_mode".translate(mentoring: _mentoring))}') && newProgram.validateProgramCreationInputs('#{Program::EngagementType::CAREER_BASED}','#{j("common_text.error_msg.required_field_msg".translate)}', '#{j("program_settings_strings.content.select_some_mode".translate(mentoring: _mentoring))}', '#{Program::CreationWay::SOLUTION_PACK}', '#{Program::CreationWay::MANUAL}');" %>
+        <% end %>
+      </div>
+
+      
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag %Q[ProgramSettings.setupPageSolutionPackOptions('#{Program::CreationWay::SOLUTION_PACK}'), ProgramSettings.setupPageManualOptions('#{Program::CreationWay::MANUAL}'), ProgramSettings.selectSetupOptions();] %>

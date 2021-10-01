@@ -1,0 +1,4 @@
+<div id="open_ended_questions_container" class="cjs-alt-color-parent">
+  <%= render :partial => "three_sixty/competencies/open_ended_question", :collection => open_ended_questions, :locals => {:show_actions => show_actions} %>
+</div>
+<%= render :partial => "three_sixty/competencies/add_new_three_sixty_open_ended_question" if show_actions %>

@@ -1,0 +1,1500 @@
+function getDefaultVal(value, defaultVal) {
+  if(typeof(value) === "undefined") {
+    return defaultVal;
+  }
+  return value;
+}
+
+function changeTooltipText(selector, newText){
+  jQuery(selector).tooltip('hide').attr('data-original-title', newText).tooltip('fixTitle');
+}
+
+function jQueryResetForm(ele)
+{
+  var elementObj = jQuery(ele);
+  if (elementObj.length)
+  {
+    elementObj[0].reset();
+  }
+}
+
+function appendRandToAttribute(element, attrName, rand){
+   var attrHash = new Object;
+   attrHash[attrName]= element.attr(attrName) + rand;
+   element.prop(attrHash);
+}
+
+// // Scrolls smoothly the element with the given *ele_id*
+// Optionally highlights if shouldHighlight is set true
+function jQueryScrollTo(ele_id, shouldHightlight)
+{
+  scrollTime = arguments[2] ? arguments[2] : 2000
+  var elementObj = jQuery(ele_id);
+  if (elementObj.length)
+  {
+    scrollTop = elementObj.offset().top - jQuery('#chronus_header').outerHeight();
+    if(navigator.userAgent.match('CriOS')) { //iOS chrome
+      setTimeout(function() {window.scrollTo(0, scrollTop);},1)
+    }
+    else {
+      jQuery('html, body').animate({
+        scrollTop: scrollTop
+      }, scrollTime, function(){
+        if(shouldHightlight)
+          jQueryHighlight(elementObj);
+      })
+    }
+  }
+}
+
+function jQueryHighlight(selector, time, opts)
+{
+  if(typeof(opts) !== "undefined" && opts && opts.checkForSupport) {
+    if(isKeyframesSupported() == false) return;
+  }
+  var animationClasses = "animated fadeInDown";
+  jQuery(selector).addClass(animationClasses);
+  if(typeof(opts) !== "undefined" && opts && opts.removeAnimationClassesAfterAnimation) {
+    jQuery(selector).one("webkitAnimationEnd msAnimationEnd animationend", function(event) {
+      jQuery(selector).removeClass(animationClasses);
+    });
+  }
+}
+
+// snippet taken from Modernizr.atRule(prop)
+function chronusAtRule(prop) {
+  var prefixes = ['Moz', 'O', 'ms', 'Webkit'];
+  var length = prefixes.length;
+  var cssrule = window.CSSRule;
+  var rule;
+
+  if (typeof cssrule === 'undefined') {
+    return undefined;
+  }
+
+  if (!prop) {
+    return false;
+  }
+
+  // remove literal @ from beginning of provided property
+  prop = prop.replace(/^@/, '');
+
+  // CSSRules use underscores instead of dashes
+  rule = prop.replace(/-/g, '_').toUpperCase() + '_RULE';
+
+  if (rule in cssrule) {
+    return '@' + prop;
+  }
+
+  for (var i = 0; i < length; i++) {
+    // prefixes gives us something like -o-, and we want O_
+    var prefix = prefixes[i];
+    var thisRule = prefix.toUpperCase() + '_' + rule;
+
+    if (thisRule in cssrule) {
+      return '@-' + prefix.toLowerCase() + '-' + prop;
+    }
+  }
+
+  return false;
+};
+
+function isKeyframesSupported() {
+  return chronusAtRule("@keyframes") ? true : false;
+}
+
+function isMobileOrTablet()
+{
+  return jQuery("body.body-small").size() == 1;
+}
+
+// Blinds the element with the given *ele_id*
+// Default options : Direction = vertical;  Effect = show
+function jQueryBlind(ele_id, effect, options, time)
+{
+  if (typeof options == 'undefined')
+    options = {
+      direction: 'vertical'
+    };
+
+  if (typeof time == 'undefined')
+    time = 1000;
+
+  if (typeof effect == 'undefined' && jQuery(ele_id).is(":visible") )
+    jQuery(ele_id).hide('blind', options, time)
+  else if ( effect == 'show' && !jQuery(ele_id).is(":visible"))
+    jQuery(ele_id).show('blind', options, time)
+}
+
+function jQueryBlindAndRemove(ele_id, effect, time)
+{
+  options = {
+    direction: 'vertical',
+    complete: function(){
+      jQuery(ele_id).remove();
+    }
+  };
+  jQueryBlind(ele_id, effect, options, time)
+}
+
+function jQueryToggleBlind(element)
+{
+  if (jQuery(element).is(":visible"))
+    jQueryBlind(element)
+  else
+    jQueryBlind(element, 'show')
+}
+
+var jQueryShowQtipGlobalVars = {};
+// #TODO - Responsive UI write a wrapper with Bootstrap 3 modals for this functionality if required
+//Qtip with some basic options and additional options which over-ride or add to the commonly-used ones
+function jQueryShowQtip(ele_id, width, url, data, additionalOptions){
+  if (typeof additionalOptions == 'undefined')
+    additionalOptions = {};
+  
+  // removing the class if present from some previous popup
+  jQuery("#remoteModal .modal-dialog").removeClass("modal-lg");
+  // var enable_draggable = additionalOptions.draggable;
+  var type = additionalOptions.method ? additionalOptions.method : "GET";
+
+  if(additionalOptions.largeModal)
+    jQuery("#remoteModal .modal-dialog").addClass("modal-lg");
+
+  jQuery("#remoteModal .modal-content").html(JST['templates/common/remote_modal']());
+  jQuery("#remoteModal").modal('show');
+
+  jQueryShowQtipGlobalVars.additionalOptions = additionalOptions;
+
+  jQuery.ajax({
+    url: url,
+    dataType: 'html',
+    data: data,
+    type: type,
+    success: function(data, status){
+      jQuery("#remoteModal .modal-content").html(data);
+      if(jQueryShowQtipGlobalVars.additionalOptions.successCallback) jQueryShowQtipGlobalVars.additionalOptions.successCallback();
+    }
+  });
+
+  //
+  // jQuery(ele_id).qtip(jQuery.extend({
+  //   content: {
+  //     text: "<div class='loading'>" + calendarTranslations.loading + "</div>",
+  //      ajax: {
+  //        url: url,
+  //        dataType: 'html',
+  //        data: data,
+  //        type: type,
+  //        success: function(data, status){
+  //         this.set('content.text', data);
+  //         if(enable_draggable) {
+  //           jQuery(this.elements.tooltip).find(".popup_header").css('cursor', 'move')
+  //         }
+  //        }
+  //      }
+  //   },
+  //   position: {
+  //     my: 'center', // ...at the center of the viewport
+  //     at: 'center',
+  //     target: jQuery(window)
+  //   },
+  //   show: {
+  //     event: false,
+  //     ready: true,
+  //     solo: true,
+  //     delay: 0,
+  //     modal: modal
+  //   },
+  //   hide: {
+  //     fixed: true,
+  //     event: false
+  //   },
+  //   style: {
+  //     width: width,
+  //     classes: 'cjs-qtip cui-qtip'
+  //   },
+  //   events: {
+  //     hide: function(){
+  //       if(jQuery('.popup-with-childs').length) {
+  //         jQuery('.popup-with-childs').qtip("destroy")
+  //       } else {
+  //         closeQtip();
+  //       }
+  //     },
+  //     render: function(event, api) {
+  //       if(enable_draggable) {
+  //         jQuery(this).draggable({
+  //           containment: 'window',
+  //           handle: api.elements.titlebar
+  //         });
+  //       }
+  //     }
+  //   }
+  // }, additionalOptions));
+}
+
+function jQueryStaticQtipPopup(selector, title, content, width, closeImageAltText, additionalOptions, jstOptions){
+  // if(typeof additionalOptions == 'undefined')
+  //   additionalOptions = {};
+  // if(typeof jstOptions == 'undefined')
+  //   jstOptions = {};
+  //
+  // jQueryShowQtip(selector, width, "", {},
+  //   jQuery.extend({
+  //     content: {
+  //       text: JST["templates/common/qtip_popup"](jQuery.extend({ popup_title: title,
+  //         popup_content: content,
+  //         close_image: "<%= asset_path('close.gif') %>",
+  //         on_close: "closeQtip(); return false",
+  //         close_image_alt_text: closeImageAltText
+  //       }, jstOptions))
+  //     }
+  //   }, additionalOptions)
+  // );
+}
+
+//FullCalendar with some basic options and additional options which over-ride or add to the commonly-used ones
+function jQueryShowFullCalendar(elementId, additionalOptions)
+{
+  if (additionalOptions === undefined)
+    additionalOptions = {};
+
+  jQuery(elementId).fullCalendar(jQuery.extend({
+    defaultView: 'agendaWeek',
+    header: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'month,agendaWeek,agendaDay'
+    },
+    views: {
+      month: {
+        titleFormat: calendarTranslations.titleMonthFormat,
+        selectable: false,
+        eventLimit: 4,
+        eventLimitClick: "day",
+        eventLimitText: calendarTranslations.moreEventsText
+      },
+      agendaWeek: {
+        titleFormat: calendarTranslations.titleWeekFormat
+      },
+      agendaDay: {
+        titleFormat: calendarTranslations.titleDayFormat
+      }
+    },
+    selectConstraint: {
+      start: "00:00",
+      end: "24:00"
+    },
+    contentHeight: "auto",
+    viewRender: function(view, element){
+      // ADA Complaince for the next and prev buttons
+      addAccessibilityContentToEmptyLinks(jQuery(elementId + " .fc-prev-button"), datePickerTranslations.prevText);
+      addAccessibilityContentToEmptyLinks(jQuery(elementId + " .fc-next-button"), datePickerTranslations.nextText);
+      addAccessibilityContentToEmptyLinks(jQuery(elementId + " .fc-axis"), calendarTranslations.timeText);
+    },
+    eventAfterRender: function(event, element){
+      jQuery(element).addTouch();
+    },
+    dayRender: function(date, cell){
+      jQuery(cell).addTouch();
+    },
+    dayClick: function(date, jsEvent, view){
+      if(view.name == "month"){
+        jQuery(elementId).fullCalendar("changeView", "agendaDay");
+        jQuery(elementId).fullCalendar("gotoDate", date);
+      }
+    },
+    allDaySlot: false,
+    weekends: true,
+    theme: false,
+    loading: function(isLoading){
+      if(isLoading)
+        jQuery("#loading_results").show();
+      else
+        jQuery("#loading_results").hide();
+    },
+    hourFormat: calendarTranslations.hourFormat,
+    mediumTimeFormat: calendarTranslations.mediumTimeFormat,
+    smallTimeFormat: calendarTranslations.smallTimeFormat,
+    eventTimeFormat: calendarTranslations.eventTimeFormat,
+    extraSmallTimeFormat: calendarTranslations.extraSmallTimeFormat,
+    noMeridiemTimeFormat: calendarTranslations.noMeridiemTimeFormat
+  }, fullCalendarParamHash, additionalOptions));
+}
+
+// If show is true then shows the element when the condition is satified,
+// else hides the element when the condition is satisfied
+function jQueryShowHide(eleId, divId, val, show)
+{
+  if (typeof jQuery(eleId) == 'undefined' || typeof jQuery(divId) == 'undefined')
+    return;
+  if (show)
+  {
+    (jQuery(eleId).val() == val) ? jQuery(divId).show() : jQuery(divId).hide()
+  }
+  else
+  {
+    (jQuery(eleId).val() == val) ? jQuery(divId).hide() : jQuery(divId).show()
+  }
+}
+
+// Toggles all the inputs inside the given selector. Comes in handy when we have
+// hidden elements inside a form and don't want to send them when submitting it'
+function jQueryToggleDisableInputs(selector)
+{
+  jQuery(selector + ' :input').each(function() {
+    if (jQuery(this).attr('disabled') == true)
+      jQueryEnableInputs(selector);
+    else
+      jQueryDisableInputs(selector);
+  });
+}
+
+// Disables all the inputs inside the given selector. Comes in handy when we have
+// hidden elements inside a form and don't want to send them when submitting it'
+function jQueryDisableInputs(selector)
+{
+  jQuery(selector + ' :input').attr('disabled', true);
+}
+
+// Enables all the inputs inside the given selector.
+function jQueryEnableInputs(selector)
+{
+  jQuery(selector + ' :input').removeAttr('disabled');
+}
+
+/* Read the value associated with +param+ in the url */
+function jQueryReadUrlParam(param)
+{
+  var results = new RegExp('[\\?&]' + param + '=([^&#]*)').exec(window.location.href);
+  if (results != null) {
+    return results[1];
+  }
+  return false;
+}
+
+function jQueryToggleClass(selector, class1, class2)
+{
+  jQueryReplaceClass(selector, class1, class2) || jQueryReplaceClass(selector, class2, class1)
+}
+
+function jQueryReplaceClass(selector, oldClass, newClass)
+{
+  if (jQuery(selector).hasClass(oldClass))
+  {
+    jQuery(selector).removeClass(oldClass);
+    jQuery(selector).addClass(newClass);
+    return true;
+  }
+  return false;
+}
+
+//key - Cookie key
+//value - Cookie value
+//expiry - number of days till expiry, eg. 365 for 1 year
+function jQueryAddToCookie(key, value, expiry_days, options)
+{
+  jQuery.cookie(key,value, jQuery.extend({
+      expires: expiry_days
+    }, options));
+}
+
+function jQueryRemoveCookie(key)
+{
+  jQuery.cookie(key, null);
+}
+
+// returns whether the cookie is present in the browser
+function isCookiePresent(key){
+  return (jQuery.cookie(key) != null);
+}
+
+var jQuerySortable = {
+  simpleSortable: function(){
+    jQuery(".jquery_sortable:not(.no-sort)").sortable({
+      axis: jQuery(this).data("axis"),
+      update: function(event, ui) {
+        jQuery.ajax({
+          type: jQuery(this).data("method"),
+          url: jQuery(this).data("url"),
+          data: jQuery(this).sortable('serialize', {key : 'new_order[]'})
+        });
+      },
+      items: ".jquery_sort_items",
+      handle: jQuery(this).data("sorthandle"),
+      placeholder: "ui-state-highlight"
+    });
+  },
+
+  // Make sure disableSelector param is passed with a valid value if the list which need to be sorted
+  // contains any non li elements. Otherwise this function will silently fail.
+  makeSortable: function(idString, divId, url, connectWithSelector, disableSelector, handle, placeholder, selector)
+  {
+    if(placeholder === undefined)
+      placeholder = "ui-state-highlight"
+    options = {
+      update: function (event,ui)
+      {
+        if (jQuery(this).hasClass('cjs-skip-sorting')){
+            jQuery(this).sortable('cancel');
+            jQuery(this).removeClass('cjs-skip-sorting');
+        }
+        else {
+          params = jQuery(this).sortable('serialize', {key : 'new_order[]'});
+          jQuery.put(url, params + '&' + jQuery.param({section_id : divId.toString()}));
+        }
+      },
+      // writen for profile question drag drop with ckeditor
+      start: function(event, ui){
+        jQuery(this).sortable("refresh");
+        var textareaId = ui.item.find(".q_ck_editor").attr("id");
+        if (typeof(textareaId) != 'undefined'){
+            CKEDITOR.instances[textareaId].destroy();
+          }
+      },
+      stop: function(event, ui){
+        var textareaId = ui.item.find(".q_ck_editor").attr("id");
+        if (typeof(textareaId) != 'undefined'){
+           CkeditorConfig.initCkeditor("#" + textareaId, {height: "100px", width: "640px"}, CkeditorConfig.minimalCkOptions());
+        }
+      },
+      cancel: [jQuery.ui.sortable.prototype.options.cancel, '.cjs-draggable-cancel-handler'].join(),
+      connectWith: connectWithSelector,
+      placeholder: placeholder,
+      handle: handle
+    }
+    if (typeof(disableSelector) != 'undefined' && disableSelector != '')
+    {
+      options = jQuery.extend(options, {items: ">:not(" + disableSelector + ")"});
+    }
+    if (idString != '')
+      jQuery('#' + idString).sortable(options);
+    else
+      jQuery(selector).sortable(options);
+   },
+
+  overDraggable: function (div_selector, callback)
+  {
+    jQuery(div_selector).droppable({
+      over: function(event, ui)
+      {
+        callback.call(jQuerySortable, this);
+      }
+    });
+  },
+
+  makeUnSortable: function (selector)
+  {
+    jQuery(selector).sortable({disabled: true});
+  },
+
+  showQuestionsList: function(ele)
+  {
+    jQueryBlind(jQuery(ele), 'show');
+  },
+
+  disableDraggable: function(selector) {
+    jQuery(selector).closest(".draggable").addClass("cjs-draggable-cancel-handler").removeClass("draggable");
+  },
+
+  enableDraggable: function(selector) {
+    jQuery(selector).closest(".cjs-draggable-cancel-handler").addClass("draggable").removeClass("cjs-draggable-cancel-handler");
+  }
+};
+
+// returns minutes since start of day
+// the input can be a number, a date object or a string in the form '10:30pm', '10pm'
+var DateTimeFunctions = {
+  parseTime: function(s){
+    if (typeof s == 'number') { // an hour
+      return s * 60;
+    }
+    if (typeof s == 'object') { // a Date object
+      return s.getHours() * 60 + s.getMinutes();
+    }
+    var m = s.match(/(\d+)(?::(\d+))?\s*(\w+)?/);
+    if (m) {
+      var h = parseInt(m[1], 10);
+      if (m[3]) {
+        h %= 12;
+        if (m[3].toLowerCase().charAt(0) == 'p') {
+          h += 12;
+        }
+      }
+      return h * 60 + (m[2] ? parseInt(m[2], 10) : 0);
+    }
+  }
+};
+
+function ModalDialog(id,box_width, box_height)
+{
+  jQuery("#"+id).dialog({
+    modal: true,
+    width: box_width,
+    height: box_height,
+    autoOpen: false,
+    resizable: false
+  });
+}
+
+var ValidateRequiredFields = {
+  formFields: ".required-field",
+
+  showFieldError: function(ele){
+    ele.css('border', ChronusValidator.ErrorManager.ERROR_BORDER);
+  },
+
+  hideFieldError: function(ele){
+    ele.css('border', '');
+  },
+
+  checkNonMultiInputCase: function(element){
+    default_value = arguments[1];
+    if(element.val().blank() || element.val() == arguments[1]) {
+      ValidateRequiredFields.showFieldError(element);
+      return false;
+    }else{
+      ValidateRequiredFields.hideFieldError(element);
+      return true;
+    }
+  },
+  // This method will allow 0 and greater than 0 integers.
+  checkForNonNegativeIntegerInTextBox: function(element, withMandatory) {
+    return ValidateRequiredFields.checkForIntegerInTextBox(element, withMandatory, true);
+  },
+  // This method will allow only lgreater than 0 integers.
+  checkForPositiveIntegerInTextBox: function(element, withMandatory) {
+    return ValidateRequiredFields.checkForIntegerInTextBox(element, withMandatory, false);
+  },
+
+  checkIfBlank: function(element, withMandatory){
+    var str = element.val();
+    if (typeof(withMandatory) == "undefined"){
+     withMandatory = true;
+    }
+    if(!withMandatory && str.blank()){
+     ValidateRequiredFields.hideFieldError(element);
+     return true;
+    }
+    return false;
+  },
+
+  checkForIntegerInRange: function(element, withMandatory, min, max, invalidDurationMessage) {
+    var str = element.val();
+
+    if(ValidateRequiredFields.checkIfBlank(element, withMandatory)){
+      return true;
+    }
+
+    var n = ~~Number(str);
+
+    if(max === '' || max === null){
+      var integerInRange = (String(n) === str && n >= min);
+    }
+    else{
+      var integerInRange = (String(n) === str && n >= min && n <= max);
+    }
+
+    if(integerInRange) {
+      ValidateRequiredFields.hideFieldError(element);
+      ChronusValidator.ErrorManager.ClearResponseFlash("flash_duration_error");
+    } else {
+      ValidateRequiredFields.showFieldError(element);
+      element.val('');
+      ChronusValidator.ErrorManager.ShowResponseFlash("flash_duration_error", invalidDurationMessage);
+    }
+    return integerInRange;
+  },
+
+  checkForIntegerInTextBox: function(element, withMandatory, includeZero) {
+    var str = element.val();
+
+    if(ValidateRequiredFields.checkIfBlank(element, withMandatory)){
+      return true;
+    }
+    var n = ~~Number(str);
+    if(includeZero)
+      var validPositiveInteger = (String(n) === str && n >= 0);
+    else
+      var validPositiveInteger = (String(n) === str && n > 0);
+
+    if(validPositiveInteger) {
+      ValidateRequiredFields.hideFieldError(element);
+    } else {
+      ValidateRequiredFields.showFieldError(element);
+    }
+    return validPositiveInteger;
+  },
+
+  validateFormElements: function(submitObj){
+    var formObject = submitObj.closest("form");
+    var formValidity = true;
+    formObject.find(ValidateRequiredFields.formFields).each(function(){
+      var validatebleElement = jQuery(this);
+      if(validatebleElement.val().blank()){
+        ChronusValidator.ErrorManager.ShowFieldError(validatebleElement);
+        // The below two lines may look wierd, but they are required for select2 textboxes validation :(
+        if(!(validatebleElement.is("input") || validatebleElement.is("select") || validatebleElement.is("textarea"))){
+          return; // this is equivalent of continue in jQuery
+        }
+        formValidity = formValidity && false;
+      }
+    });
+    return formValidity;
+  }
+}
+
+//This will select/check the check box/ radio on clicking of the text beside it.
+function jQuerySelectBox(elementId, isCheckBox){
+  if(isCheckBox)
+    jQuery("#"+elementId).attr("checked", !jQuery("#"+elementId).is(":checked"));
+  else
+    jQuery("#"+elementId).attr("checked", true);
+}
+
+var jQueryTab = {
+  //Truncates the text and computes the max width, thus shrinking the jQuery tab
+  //elementId - The div id within which, the jquery_tabs class is placed
+  shrink: function(elementId){
+    var tabObject = jQuery("#" + elementId);
+    var allTabs = tabObject.find("ul.ui-tabs-nav li a");
+    var customTabsCount = jQueryTab.customTabsLength(allTabs);
+    var tabCount = allTabs.length - customTabsCount;
+    var wholeWidth = jQueryTab.getTotalWidth(tabObject, allTabs);
+    var tabWidth = (wholeWidth / tabCount);
+
+    allTabs.each(function(i, val){
+      if(!jQuery(val).hasClass("cjs_custom_tab")){
+        jQuery(val).css({"width": tabWidth + "px", "text-overflow": "ellipsis", "overflow": "hidden"});
+      }
+    });
+  },
+
+  bindShrinkEvents: function(elementId){
+    jQuery(window).resize(function(){
+      jQueryTab.shrink(elementId);
+    });
+    jQuery(document).ready(function(){
+      jQueryTab.shrink(elementId);
+    });
+  },
+
+  getTotalWidth: function(tabObject, allTabs){
+    var customTabWidth = jQueryTab.getCustomTabsWidth(allTabs);
+    var allTabsCount = allTabs.length;
+    // Here, the 30 and 4 are borders and padding in the UI tabs
+    return ((tabObject.find("ul").width() - customTabWidth - (4 * allTabsCount) - (30 * allTabsCount)) - allTabsCount);
+  },
+
+  getCustomTabsWidth: function(tabs){
+    var tabsWidth = 0;
+    tabs.each(function(){
+      if(jQuery(this).hasClass("cjs_custom_tab")){
+        tabsWidth += jQuery(this).width();
+      }
+    });
+    return tabsWidth;
+  },
+
+  customTabsLength: function(tabs){
+    var tabsCount = 0;
+    tabs.each(function(){
+      if(jQuery(this).hasClass("cjs_custom_tab")){
+        tabsCount += 1;
+      }
+    });
+    return tabsCount;
+  }
+}
+
+jQuery.fn.extend = {
+  up: function(count) {
+    if(count == null) {count = 0;}
+    var i;
+    var myparent = jQuery(this).parent();
+    for(i=0; i<count; i++) {
+      myparent = myparent.parent();
+    }
+    return myparent;
+  }
+}
+
+//Code for automatic fecthing of RA as you scroll down .. STARTS HERE
+
+var computePageScroll = {
+//Checks for the end of page.
+//If it is at a distance of 'bottomDistance'(pixels) from bottom of window then it calls the 'callback' function.
+  checkScroll: function(callback, bottomDistance) {
+    if (computePageScroll.nearBottomOfPage(bottomDistance)) {
+      callback();
+    }
+  },
+
+  nearBottomOfPage: function(bottomDistance) {
+    return computePageScroll.scrollDistanceFromBottom() < bottomDistance;
+  },
+
+  scrollDistanceFromBottom: function(argument) {
+    if (jQuery.browser.msie && parseInt(jQuery.browser.version)<9) {
+      return computePageScroll.pageHeight() - (window.document.documentElement.scrollTop + document.documentElement.clientHeight);
+    }
+    else {
+      return computePageScroll.pageHeight() - (window.pageYOffset + self.innerHeight);
+    }
+  },
+
+  pageHeight: function() {
+    return Math.max(document.body.scrollHeight, document.body.offsetHeight);
+  }
+};
+
+//Code for automatic fecthing of RA as you scroll down .. ENDS HERE
+
+ //dateValidation validates if the date is an actual date in folling format
+ //January 21, 2012
+ //and also checks if the date is not befor todays date
+
+var DateValidator = {
+ validateDate: function(date_id,flashId, end_of_day){
+  if(!ValidateRequiredFields.checkNonMultiInputCase(jQuery('#'+date_id)))
+  {
+    return false;
+  }
+  if (DateValidator.validateProperDate(date_id,flashId)){
+    ChronusValidator.ErrorManager.ClearResponseFlash(flashId);
+  }
+  else{
+    return false;
+  }
+  if (DateValidator.validatePastDate(date_id,flashId, end_of_day)){
+    ChronusValidator.ErrorManager.ClearResponseFlash(flashId);
+  }
+  else{
+    return false;
+  }
+  ValidateRequiredFields.hideFieldError(jQuery('#'+date_id));
+  return true;
+ },
+
+ // TODO_DATE_RANGE_FORMAT_GLOBALIZATION
+ convertToDateFromStringWithFormat: function(str,format) {
+  var pattern = "([dMy]+)(.)([dMy]+)(.)([dMy]+)";
+  var strAry = str.match(/(\d+)(.)(\d+)(.)(\d+)/);
+  if(strAry === null) return -1;
+  var dayIndex = format.match(pattern).indexOf("dd");
+  var monthIndex = format.match(pattern).indexOf("MM");
+  var yearIndex = format.match(pattern).indexOf("yyyy");
+  var day = strAry[dayIndex];
+  var month = strAry[monthIndex];
+  var year = strAry[yearIndex];
+  return new Date.parse(month+"/"+day+"/"+year);
+ },
+
+ validateProperDate: function(date_id,flashId,format){
+  format = (typeof format === "undefined") ? "MM/dd/yyyy" : format;
+  date_id_array = jQuery('#'+date_id).val().split('-');
+  for (i = 0; i < date_id_array.length; i++) {
+    var trimmedDate = jQuery.trim(date_id_array[i]);
+    trimmedDate = DateValidator.convertToEnDateFormat(trimmedDate);
+    var date = DateValidator.convertToDateFromStringWithFormat(trimmedDate, format);
+    if(date == -1) date = new Date(trimmedDate);
+    if (isNaN(date))
+    {
+      ChronusValidator.ErrorManager.ShowFieldError(jQuery('#'+date_id));
+      ChronusValidator.ErrorManager.ShowResponseFlash(flashId, jsCommonTranslations.invalidDateError);
+      return false;
+    }
+  }
+  return true;
+ },
+
+ validateDateFormat: function(date_id,flashId,format){
+  format = (typeof format === "undefined") ? "MM/dd/yyyy" : format;
+  date_id_array = jQuery('#'+date_id).val().split('-');
+  for (i = 0; i < date_id_array.length; i++) {
+    if (!jQuery.trim(date_id_array[i]).match(/^(\d{1,2}).?(\d{1,2}).?(\d{4})$/))
+    {
+      ValidateRequiredFields.showFieldError(jQuery('#'+date_id));
+      ChronusValidator.ErrorManager.ShowResponseFlash(flashId, jsCommonTranslations.invalidDateFormatError + " " + format);
+      return false;
+    }
+  }
+  return true;
+ },
+
+ validatePastDate: function(date_id, flashId, end_of_day){
+  var date = new Date(jQuery('#'+date_id).val());
+  var current_date = new Date();
+  if(end_of_day == true){
+    date.setDate(date.getDate() + 1);
+  }
+  if(date < current_date){
+    ChronusValidator.ErrorManager.ShowResponseFlash(flashId, jsCommonTranslations.enterFutureDate);
+    ValidateRequiredFields.showFieldError(jQuery('#'+date_id));
+    return false;
+  }
+  else{
+    return true;
+  }
+ },
+
+  convertToEnDateFormat: function(date_string){
+    if(jsCommonTranslations.i18nLocale != "en"){
+      var translatedMonthNames = datePickerTranslations.monthNames;
+      var enMonthNames = datePickerTranslations.monthNamesInDefaultLocale;
+      for(var j=0; j<12; j++) date_string = date_string.replace(translatedMonthNames[j], enMonthNames[j]);
+    }
+    return date_string;
+  }
+};
+
+//Fix: Select Options in IE8 get truncated to size of select box.
+
+var CustomizeSelect = {
+  selectExpandContract: function(){
+    if(jQuery.browser.msie && parseInt(jQuery.browser.version)<9) {
+      jQuery('select.cjs_expand_contract').live("mousedown", function(){
+        CustomizeSelect.expandSelect(this);
+      }).live("keyup", function(){
+        CustomizeSelect.expandSelect(this);
+      }).live("blur", function(){
+        CustomizeSelect.contractSelect(this);
+      })
+    }
+  },
+
+  expandSelect: function(selectElement) {
+    jQuery(selectElement).addClass('cjs_expand');
+  },
+
+  contractSelect: function(selectElement) {
+    jQuery(selectElement).removeClass('cjs_expand');
+  }
+};
+
+// Give toggle_checkboxes class to the checkboxes and atmost one element will be checked
+// Note that this function assumes that each checkbox element is inside an element with checkbox class
+function toggleCheckboxes(){
+  jQuery(".toggle_checkboxes").click(function() {
+    if(this.checked){
+      jQuery(this).closest('label.checkbox').siblings('.checkbox').find(".toggle_checkboxes").attr("checked", false);
+    }
+  });
+}
+
+//Used to fix the issue of dropdown going behind videos
+//for IE less than 9
+var VideoSetting = {
+  addWmodeToIframe: function()
+  {
+    if(isIEVersionLessThan(10)){
+      jQuery('iframe').each(function(){
+        var url = jQuery(this).attr("src");
+        if(url.indexOf("?") != -1){
+          var merge_char = "&";
+        } else{
+          var merge_char = "?";
+        }
+        jQuery(this).attr("src", url+merge_char+"wmode=opaque");
+      });
+    }
+  },
+
+  addWmodeToEmbed: function()
+  {
+    if(isIEVersionLessThan(10)){
+      jQuery('embed').each(function(){
+        jQuery(this).attr('wmode','opaque');
+        var parentObj = jQuery(this).parent();
+        if(parentObj.find('param[name=wmode]').attr('value') != 'opaque') {
+           parentObj.prepend('<param name="wmode" value="opaque" />');
+        }
+        var parentHtml = parentObj.html();
+        parentObj.html(parentHtml);
+      });
+    }
+  }
+}
+
+//to check if the IE version is less than the argument
+function isIEVersionLessThan(ieVersion){
+  return jQuery.browser.msie && parseInt(jQuery.browser.version) < ieVersion
+}
+
+var SelectSeparator = {
+  addSelectSeparator: function(select_id, separator_text, option_value){
+    selector = "select#"+select_id+ " option[value="+option_value+"]"
+    jQuery(selector).after("<optgroup label="+separator_text+"></optgroup>");
+  }
+};
+
+var QtipPopup = {
+  camelCaseToUnderscore: function(string){
+    return string.replace(/([A-Z])/g, function($1){return "_"+$1.toLowerCase();});
+  },
+
+  convertHashKeyToRubyFormat: function(hash){
+    var newHash = {};
+    jQuery.each(hash, function (key, value) {
+      newHash[QtipPopup.camelCaseToUnderscore(key)] = value;
+    });
+    return newHash;
+  },
+
+  // url data param must be present and size is an optional (dfault 800)
+  // The element for which the remote-popup-link class is added must have an id
+  generateForm: function(){
+    jQuery('.remote-popup-link').unbind('click');
+    jQuery(document).on('click', '.remote-popup-link', function(event){
+      var url = jQuery(this).data("url");
+      var popupSize = jQuery(this).data("size") || 800;
+      var largeModal = jQuery(this).data("largemodal");
+      var data = jQuery(this).data();
+      delete data['url'];
+      delete data['size'];
+      var dataParameters = QtipPopup.convertHashKeyToRubyFormat(data);
+      jQueryShowQtip("#"+jQuery(this).attr('id'), popupSize, url, dataParameters, {modal: true, largeModal: largeModal});
+    });
+  }
+};
+
+//to check if AJAX is enabled in the browser
+function jQueryAjaxEnabled(flash_message){
+  if(!jQuery.support.ajax || !window.XMLHttpRequest){
+    ChronusValidator.ErrorManager.ShowResponseFlash("cjs_ajax_disabled_flash", flash_message);
+  }
+}
+
+// to reset to top of the page after filter/pagination
+// timeout is set to get it working in mobile devices
+// http://stackoverflow.com/questions/11845371/window-scrollto-is-not-working-in-mobile-phones
+function jQueryResetPageTop(){
+  setTimeout(window.scrollTo(0, 0), 100);
+}
+
+var pollData = {
+  intervalId: 0,
+
+  // +pollUrl+ - is the Url to which the client should poll
+  // +callback+ - the js method that should be executed on successful completion
+  // Important thing to note is, this method expects the server to return an array of hash using render :json
+  // [{manju: "sample"},{something: "xyz"}]
+  pollServer: function(pollUrl, callback){
+    var intervalCaller = function(){
+      jQuery.ajax({
+        url: pollUrl,
+        success: function(data){
+          if(data[0].success){
+            pollData.resetIntervals();
+            callback(data[0]);
+          }
+        }
+      });
+    }
+    setTimeout(intervalCaller, 5000);
+    pollData.intervalId = setInterval(intervalCaller, 10000);
+  },
+
+  resetIntervals: function(){
+    clearInterval(pollData.intervalId);
+    pollData.intervalId = 0;
+  },
+
+  confirmReset: function(){
+    if(pollData.intervalId != 0){
+      chronusConfirm(adminViewTranslations.export_csv_confirm, function() {
+        pollData.resetIntervals();
+        closeQtip();
+      });
+    }
+    else{
+      closeQtip();
+    }
+  }
+}
+
+var TimeZoneUtils = {
+
+  // Adds extra zeros to hourString and minutesString to generate Global Format of the TimeZoneOffset
+  padZeros: function(num, numZeros){
+    var n = Math.abs(num);
+    var zeros = Math.max(0, numZeros - Math.floor(n).toString().length);
+    var zeroString = Math.pow(10, zeros).toString().substr(1);
+    if (num < 0){
+      zeroString = '-' + zeroString;
+    }
+    return zeroString + n;
+  },
+
+  getZoneInfo: function(offset) {
+    var hours = parseInt(offset/60);
+    var minutes = Math.abs(offset - 60 * hours);
+    var hourString  = TimeZoneUtils.padZeros(hours, 2);
+    if (!hourString.indexOf('-') == 0) {
+      hourString = '+' + hourString;
+    }
+    var minuteString = TimeZoneUtils.padZeros(minutes, 2);
+    return "(GMT"+hourString+":"+minuteString+")";
+  },
+
+  getSystemTimeZoneOffset: function(forDisplay){
+    var dtDate = new Date();
+    var timeZoneOffset = dtDate.getTimezoneOffset() * (-1);
+    if(forDisplay){
+      return TimeZoneUtils.getZoneInfo(timeZoneOffset);
+    }
+    else{
+      return timeZoneOffset * 60; // Multiplication for obtaining offset in seconds.
+    }
+  }
+}
+
+/*
+  executeFunctionByName:
+  If a function `GroupSearch.applyFilters(arg1,arg2)` has to be called, it can be called like
+  window[GroupSearch][applyFilters](arg1,arg2). The below function helps to achieve that if
+  functionName = GroupSearch.applyFilters &
+  args = Array[arg1,arg2]
+*/
+
+function executeFunctionByName(functionName,args) {
+  var namespaces = functionName.split(".");
+
+  var func = namespaces.pop(); // This is the actual function to be called
+  var context = window;
+
+  for(var i = 0; i < namespaces.length; i++) {
+    context = context[namespaces[i]];
+  }
+  /*By the end of the loop, the value of context would be thisArg that can be passed to .apply below */
+
+  /* .apply help from MDN:
+    Calls a function with a given this value and arguments provided as an array (or an array-like object).
+    For eg: fun.apply(thisArg, [argsArray]) will call fun(argsArray[0],argsArray[1]..) and 'this' inside the
+    function refers to the passed thisArg.
+  */
+  return context[func].apply(context, args);
+}
+
+function populate_fn_params(ele, event_type) {
+  /* TODO: Only one argument is supported as of now. When multiple arguments are needed, we need to freeze on
+      how to set those args in data-* attribtes (either comma seperated (OR) data-arg1="" data-arg2="")
+  */
+
+  args = new Array(ele.data(event_type + "_fn" + "_args"));
+  return {
+    'fn': ele.data(event_type + "_fn"),
+    'fn_args' : args
+  };
+}
+
+//Anonnymous callback - right now! Make it a seperate function when off or unbind is in place
+jQuery(document).on('click','.cjs_exec_fn_on_click', function(event) {
+  var ret = populate_fn_params(jQuery(this), event.type);
+
+  if(ret.fn)
+    executeFunctionByName(ret.fn,ret.fn_args);
+  //TODO: else - unbind this eventcallback
+});
+
+var WizardView = {
+  setup: function(){
+    var wizardContainer = jQuery("#wizard_view");
+    WizardView.configureHeaders(wizardContainer);
+    jQuery(window).bind("resize", function(){
+      WizardView.configureHeaders(wizardContainer);
+    });
+  },
+
+  configureHeaders: function(wizardContainer){
+    var divisions = jQuery(".parallelogram");
+    var divisionWidth = ((wizardContainer.width()/divisions.length) + 8);
+    divisions.width(divisionWidth);
+    jQuery.each(divisions, function(index, element) {
+      jQuery(this).css({ "left": ((index*divisionWidth) -12) +"px"});
+    });
+  }
+}
+
+var CjsWizardView = {
+  init: function(allowSwicthTabs) {
+    allowSwicthTabs = getDefaultVal(allowSwicthTabs, false);
+    WizardView.setup();
+    CjsWizardView.showProperSection();
+    if(allowSwicthTabs) {
+      jQuery(".cjs-wizard-header").on('click', function(){
+        CjsWizardView.setTab(jQuery(this).data("wizard-header-key"));
+      });
+    }
+  },
+
+  setTab: function(wizardKey) {
+    jQuery(".cjs-wizard-header-selected").removeClass("cjs-wizard-header-selected bg-white").addClass("bg-waterhighlight");
+    jQuery(".cjs-wizard-header").filter(function(){
+      return jQuery(this).data("wizard-header-key") == wizardKey;
+    }).addClass("cjs-wizard-header-selected bg-white").removeClass("bg-waterhighlight");
+    CjsWizardView.showProperSection();
+  },
+
+  showProperSection: function() {
+    var wizardKey = jQuery(".cjs-wizard-header-selected").data("wizard-header-key");
+    jQuery(".cjs-wizard-section").hide().filter(function(){
+      return jQuery(this).data("wizard-key") == wizardKey;
+    }).show();
+  }
+}
+
+function ShowAndHideToggle(parrentSelector, subSelector){
+  if(typeof(parrentSelector) == 'undefined')
+    parrentSelector = '.cjs_show_and_hide_toggle_container';
+  //Sub selector is need if ShowAndHideToggle is used in a nested way
+  if(typeof(subSelector) == 'undefined')
+    subSelector = '.cjs_show_and_hide_toggle_sub_selector';
+  jQuery(document).on('click', parrentSelector + ' ' + subSelector + '.cjs_show_and_hide_toggle_show', function() {
+    var container = jQuery(this).closest(parrentSelector);
+    container.find(subSelector + '.cjs_show_and_hide_toggle_show').addClass('hide');
+    container.find(subSelector + '.cjs_show_and_hide_toggle_content').removeClass('hide');
+  });
+  jQuery(document).on('click', parrentSelector + ' ' + subSelector + '.cjs_show_and_hide_toggle_hide', function() {
+    var container = jQuery(this).closest(parrentSelector);
+    container.find(subSelector + '.cjs_show_and_hide_toggle_show').removeClass('hide');
+    container.find(subSelector + '.cjs_show_and_hide_toggle_content').addClass('hide');
+  });
+}
+
+function getValueforOptionalParam(defaultVal, optionalVal){
+  if(typeof(optionalVal)==='undefined') {
+   return defaultVal;
+  }
+  else{
+    return optionalVal;
+  }
+}
+
+function Mutex( cmdObject, methodName ) {
+  // define static variable and method
+  if (!Mutex.Wait) {
+    Mutex.Wait = new function() {
+      this.map  = new Object();
+      this.add     = function(k,o){ this.map[k] = o; }
+      this.remove  = function( k ){ delete this.map[k]; }
+      this.get     = function( k ){ return k==null ? null : this.map[k]; }
+      this.first   = function(   ){ return this.get( this.nextKey( ) ); }
+      this.next    = function( k ){ return this.get( this.nextKey(k) ); }
+      this.nextKey = function( k ){ for (i in this.map) { if (!k) return i; if (k==i) k=null; } return null; }
+    }();
+  }
+  Mutex.SLICE = function( cmdID, startID ) {
+    Mutex.Wait.get(cmdID).attempt( Mutex.Wait.get(startID) );
+  }
+  // define instance method
+  this.attempt = function( start ) {
+    for (var j=start; j; j=Mutex.Wait.next(j.c.id)) {
+      if (j.enter || (j.number && (j.number < this.number || (j.number == this.number && j.c.id < this.c.id) ) ) ) return setTimeout("Mutex.SLICE("+this.c.id+","+j.c.id+")", 10);
+    }
+    this.c[ this.methodID ]();    //run with exclusive access
+    this.number = 0;              //release exclusive access
+    Mutex.Wait.remove( this.c.id );
+  }
+  // constructor logic
+  this.c        = cmdObject;
+  this.methodID = methodName;
+  Mutex.Wait.add( this.c.id, this );
+  this.enter    = true;
+  this.number   = (new Date()).getTime();
+  this.enter    = false;
+  this.attempt( Mutex.Wait.first() );
+}
+
+function NestedShowHideRadioToggle(parentSelector, siblingSelector, toggleSelector, contentSelector){
+  if(typeof(parentSelector) == 'undefined') parentSelector = '.cjs_nested_show_hide_container';
+  if(typeof(siblingSelector) == 'undefined') siblingSelector = '.cjs_show_hide_sub_selector';
+  if(typeof(toggleSelector) == 'undefined') toggleSelector = '.cjs_toggle_radio';
+  if(typeof(contentSelector) == 'undefined') contentSelector = '.cjs_toggle_content';
+  jQuery(document).on('click', parentSelector + ' ' + siblingSelector + ' ' + toggleSelector, function() {
+    var checked = jQuery(this).find("input[type=radio]").prop("checked")
+    jQuery(this).closest(siblingSelector).find(contentSelector).toggle(checked);
+    if (checked) jQuery(this).closest(siblingSelector).siblings(siblingSelector).find(contentSelector).hide();
+  });
+}
+
+// To create a simple non-ajax form http request with some data to send, use the following, examples below:
+//
+// jQuery.form('/index')
+// <form action="/index" method="POST"></form>
+//
+// jQuery.form('/new', { title: 'Hello World', body: 'Foo Bar' })
+// <form action="/index" method="POST">
+//     <input type="hidden" name="title" value="Hello World" />
+//     <input type="hidden" name="body" value="Foo Bar" />
+// </form>
+//
+// jQuery.form('/info', { userIds: [1, 2, 3, 4] }, 'GET')
+// <form action="/info" method="GET">
+//     <input type="hidden" name="userIds[]" value="1" />
+//     <input type="hidden" name="userIds[]" value="2" />
+//     <input type="hidden" name="userIds[]" value="3" />
+//     <input type="hidden" name="userIds[]" value="4" />
+// </form>
+//
+// jQuery.form('/profile', { sender: { first: 'John', last: 'Smith', postIds: null },
+//                           receiver: { first: 'Foo', last: 'Bar', postIds: [1, 2] })
+// <form action="/profile" method="POST">
+//     <input type="hidden" name="sender[first]" value="John">
+//     <input type="hidden" name="sender[last]" value="Smith">
+//     <input type="hidden" name="receiver[first]" value="John">
+//     <input type="hidden" name="receiver[last]" value="Smith">
+//     <input type="hidden" name="receiver[postIds][]" value="1">
+//     <input type="hidden" name="receiver[postIds][]" value="2">
+// </form>
+//
+// With jQuery's .submit() method you can create and submit a form with a simple expression:
+// jQuery.form('http://stackoverflow.com/search', { q: '[ajax]' }, 'GET').submit();
+//
+jQuery(function(jQuery) {
+  jQuery.extend({
+    form: function(url, data, method) {
+      if (method == null) method = 'POST';
+      if (data == null) data = {};
+      var form = jQuery('<form>').attr({
+        method: method,
+        action: url
+       }).css({
+        display: 'none'
+       });
+      var addData = function(name, data) {
+        if (jQuery.isArray(data)) {
+          for (var i = 0; i < data.length; i++) {
+            var value = data[i];
+            addData(name + '[]', value);
+          }
+        } else if (typeof data === 'object') {
+          for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+              addData(name + '[' + key + ']', data[key]);
+            }
+          }
+        } else if (data != null) {
+          form.append(jQuery('<input>').attr({
+            type: 'hidden',
+            name: String(name),
+            value: String(data)
+          }));
+        }
+      };
+      for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+          addData(key, data[key]);
+        }
+      }
+      if (method == 'POST') form.prepend('<input name="utf8" type="hidden" value="✓"><input name="authenticity_token" type="hidden" value="' + jQuery('meta[name="csrf-token"]').attr('content') + '">')
+      return form.appendTo('body');
+    }
+  });
+});
+
+function collectVals(selector){
+  var selectedArr = [];
+  jQuery(selector).each(function(){
+    selectedArr.push(jQuery(this).val());
+  });
+  return selectedArr;
+}
+
+// This is used post data on a 'change' event
+// example when you want to post data on checking/unchecking a checkbox
+// you simply set the destination url and other data params as data attributes and add cjs_ajax_post class to the element
+function AjaxPostOnChange(){
+  jQuery(document).on('change', '.cjs_ajax_post', function(){
+    var data = jQuery(this).data();
+    var url = jQuery(this).data("url");
+    delete data['url'];
+    jQuery.ajax({
+      url : url,
+      data: data
+    });
+  });
+}
+
+function redirect_to_ck_asset(url, flash_message) {
+  if (url !== "" || url!==undefined ) {
+    ChronusValidator.ErrorManager.ShowPageFlash(true, flash_message);
+    window.location = url;
+  }
+}
+
+function realDimensions(obj){
+  // calculates dimensions of a "display: none" object.
+  var clone = obj.clone();
+  clone.show().css({"visibility": "hidden", "display": "table"});
+  jQuery('body').append(clone);
+  var width = clone.outerWidth(false);
+  var height = clone.outerHeight(false);
+  clone.remove();
+  return {'width': width, 'height': height};
+}
+
+function initializeShowHide() {
+  jQuery(document).ready(function(){
+    jQuery(document).on("click", ".show_hide_pane", function(){
+      jQuery(jQuery(this).data("hide-pane")).addClass('hide fadeOutUp').removeClass("fadeInDown");
+      jQuery(jQuery(this).data("show-pane")).removeClass("hide fadeOutUp").addClass('fadeInDown').show();
+    });
+  });
+}
+
+function refreshDoubleScrollOnWindowResize(wrapperForScroll){
+  jQuery(document).on("click", ".navbar-minimalize", function(){ 
+    setTimeout(function() {
+      jQuery(wrapperForScroll).doubleScroll("refresh");
+    },500);
+  });
+  jQuery(window).bind("resize", function () {
+    setTimeout(function() {
+      jQuery(wrapperForScroll).doubleScroll("refresh");
+    },500);
+  });
+}
+
+function initializeDoubleScroll(container, wrapperForScroll, options){
+  jQuery(wrapperForScroll).doubleScroll(options);
+  refreshDoubleScrollOnWindowResize(wrapperForScroll);
+}
+
+function handleDoubleScroll(container, wrapper, wrapperForScroll, kendoGrid, options){
+  var wrapperForScroll = wrapperForScroll || wrapper;
+  var options = options || {};
+
+  var doubleScrollWrapper = jQuery(".suwala-doubleScroll-scroll-wrapper");
+  var isDoubleScrollPresent = doubleScrollWrapper.length > 0;
+  var dataPresent = kendoGrid ? jQuery(kendoGrid).data('kendoGrid').dataSource.data().length != 0 : true;
+  
+  jQuery(container).css("max-width", "initial"); // For Safari
+  var isDoubleScrollRequired = dataPresent && jQuery(container).width() > jQuery(wrapper).width();
+
+  if(isDoubleScrollRequired){
+    if(isDoubleScrollPresent){
+      jQuery(wrapperForScroll).doubleScroll("refresh");
+    }
+    else{
+      initializeDoubleScroll(container, wrapperForScroll, options);
+    }
+    doubleScrollWrapper.show();
+  }
+  else{
+     doubleScrollWrapper.hide();
+  }
+}
+
+var pulsate = {
+  startPulse: function(){
+    var pulser = jQuery('.pulsate')
+    if(!pulser.hasClass('stop-pulse')){
+        pulser.animate({ opacity: 0.4 }, 1200, 'linear')
+              .animate({ opacity: 1 }, 1200, 'linear', pulsate.startPulse)
+    }
+  },
+
+  stopPulse: function(){
+    jQuery('.pulsate').addClass('stop-pulse')
+  }
+}
+
+function setSameHeight(parentSelector, childSelector){
+  var maxHeight = 0;
+  jQuery(parentSelector).find(childSelector).each(function() {
+    maxHeight = maxHeight > jQuery(this).height() ? maxHeight : jQuery(this).height();
+  });
+  jQuery(childSelector).css("height", maxHeight)
+}
+
+function setSameHeightOnResize(parentSelector, childSelector){
+  setSameHeight(parentSelector, childSelector)
+  jQuery(window).resize(function() {
+    jQuery.when(jQuery(parentSelector + " " + childSelector).css('height','auto')).done(function(){setSameHeight(parentSelector, childSelector)})
+  });
+}
+
+// Title actions will be removed only in the mobile view with a single action
+function removeTitleActions(action_element){
+  if(!action_element.blank()){
+    var totalActions = jQuery("#page_actions > li").size();
+    action_element.remove();
+    if(totalActions == 1){
+      jQuery("#title_actions").remove();
+    }
+  }
+}
+
+function removeFromArray(array, element) {
+  var index = array.indexOf(element);
+  if(index != -1) {
+    array.splice(index, 1);
+  }
+}
+
+String.prototype.stripTags = function() {
+  return this.replace(/<\w+(\s+("[^"]*"|'[^']*'|[^>])+)?>|<\/\w+>/gi, '');
+}
+
+String.prototype.escapeHTML = function() {
+  return this.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+String.prototype.unescapeHTML = function(){
+  return this.stripTags().replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+}
+
+String.prototype.underscore = function(){
+  return this.replace(/::/g, '/')
+               .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
+               .replace(/([a-z\d])([A-Z])/g, '$1_$2')
+               .replace(/-/g, '_')
+               .toLowerCase();
+}
+
+Array.prototype.clone = function(original_object){
+  return jQuery.extend([], original_object);
+}
+
+// Function to get the Max value in Array
+Array.prototype.max = function(){
+  return Math.max.apply(Math, this);
+};
+
+// Function to get the Min value in Array
+Array.prototype.min = function(){
+  return Math.min.apply(Math, this);
+};
+
+String.prototype.blank = function() {
+  return /^\s*$/.test(this);
+}
+
+Array.prototype.last = function() {
+  return this[this.length - 1];
+}
+
+Array.prototype.uniq = function() {
+ var u = {}, a = [];
+ for(var i = 0, l = this.length; i < l; ++i){
+    if(u.hasOwnProperty(this[i])) {
+       continue;
+    }
+    a.push(this[i]);
+    u[this[i]] = 1;
+ }
+ return a;
+}
+
+Array.prototype.pluck = function (property) {
+  var results = [];
+  for(var i = 0; i < this.length; ++i){
+    results.push(this[i][property]);
+  };
+  return results;
+}
+
+Array.prototype.contains = function (element) {
+  return this.indexOf(element) > -1;
+}

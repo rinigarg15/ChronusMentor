@@ -1,0 +1,36 @@
+en:
+  email_translations:
+    group_member_addition_notification_to_new_member:
+      title_v3: User added to %{_mentoring_connection} notification to the new user
+      description_v4: When a user has been added to %{_a_mentoring_connection}, the system generates this email to notify the user
+      subject_v2: You have been added as {{role_name_articleized}} to {{group_name}}
+      content_v7_html: 'Thank you for taking part in {{subprogram_or_program_name}}! Based off of the preferences you''ve indicated in your profile, you have been selected to join {{group_name}} as {{role_name_articleized}}. <br/><br/> The following people are also members of {{group_name}}: <br /> <br />  {{list_of_members}} {{message_content}}<br /> Your {{customized_mentoring_connection_term}} will end on {{expiry_date}}. {{mentoring_area_button}}<br/>I look forward to your participation in {{subprogram_or_program_name}}. If you have any questions, please contact me <a href=''{{url_contact_admin}}''>here</a>.<br/>'
+      tags:
+        url_mentoring_connection:
+          description_v1: Url of the %{_mentoring_connection}
+        expiry_date:
+          description_v2: "%{_Mentoring_Connection} expiration date"
+          example: December 24, 2013
+        role_name_articleized:
+          description_v1: Role of the member added to the %{_mentoring_connection} appended with (a/an)
+        list_of_mentors:
+          description_v1: Names of all the mentors in the %{_mentoring_connection}
+        list_of_mentees:
+          description_v1: Names of all the mentees in the %{_mentoring_connection}
+        list_of_members:
+          description_v2: Names of all the members in the %{_mentoring_connection}
+          example_v1_html: "<table cellspacing='0' cellpadding='0' border='0'><tbody><tr><td style='padding-left: 5px; padding-right: 5px'><a href='http://www.chronus.com'><img src='https://chronus-mentor-assets.s3.amazonaws.com/global-assets/images/user_large.jpg' alt='profile picture' style='border: none; border-radius: 50%' height='50px;' width='50px;'></a></td><td style='padding-left: 5px; line-height: 5px'><a href='http://www.chronus.com'>William Smith</a></td></tr></table>"
+        group_name:
+          description: Name of the mentoring area
+          example: Smith and Doe
+        administrator_or_owner_name:
+          description: "'the program administrator'/name of the Owner who added the user"
+          content: the %{program} %{administrator}
+        message_content:
+          description: Optional message sent
+          example: Please connect.
+        mentoring_area_button:
+          description_v1: "%{_Mentoring_Connection} button"
+          visit_your_connection: Visit your %{mentoring_connection} area
+        url_contact_admin:
+          description: Url for the user to contact administrator

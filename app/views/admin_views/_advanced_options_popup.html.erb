@@ -1,0 +1,15 @@
+<% modal_container "feature.admin_view.header.advanced_options".translate, :modal_id => "popup_advanced_options_for_#{role_type}_#{request_type}" do %>
+  <div class="cui_advanced_options_popup_content">
+    <%= content_tag(:div, "", :class => "cjs_selected_option_text") %>
+    <%= render_advanced_options_choices(admin_view, role_type, request_type) %>
+    <%= link_to "display_string.Save".translate, "javascript:void(0);", class: "btn btn-primary pull-right", "data-dismiss" => "modal" %>
+  </div>
+  <%= javascript_tag do %>
+    jQuery(document).ready(function(){
+      NestedShowHideRadioToggle('.cjs_nested_show_hide_container', '.cjs_show_hide_sub_selector', '.cjs_toggle_radio', '.cjs_toggle_content');
+      AdminViewsNewView.showSelectedOptioninPopup();
+      AdminViewsNewView.changeAdvancedOptionsLinkText('<%= "feature.admin_view.action.in_last".translate %>', '<%= "feature.admin_view.action.days".translate %>', '<%= "feature.admin_view.action.after".translate %>', '<%= "feature.admin_view.action.before".translate %>', '<%= "feature.admin_view.action.change_options".translate %>', '<%= "feature.admin_view.action.advanced_options".translate %>');
+      AdminViewsNewView.trackSelectedAdvancedOptionType('<%= "feature.admin_view.action.in_last".translate %>', '<%= "feature.admin_view.action.days".translate %>', '<%= "feature.admin_view.action.after".translate %>', '<%= "feature.admin_view.action.before".translate %>', '<%= "feature.admin_view.action.change_options".translate %>', '<%= "feature.admin_view.action.advanced_options".translate %>');
+    });
+  <% end %>
+<% end %>

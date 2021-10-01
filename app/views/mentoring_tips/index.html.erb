@@ -1,0 +1,39 @@
+<% @title = "feature.mentoring_tips.header.mentoring_tips_v1".translate(:Mentoring => _Mentoring) %>
+<% @title_description = "feature.mentoring_tips.content.listing_page_description_v3_html".translate(:Mentoring => _Mentoring, :mentoring => _mentoring, mentoring_connection: _mentoring_connection, checkbox_tick_image: content_tag(:i, "", class: "fa fa-check-square-o"), checkbox_blank_image: content_tag(:i, "", class: "fa fa-square-o")) %>
+
+<% filter_fields = [] %>
+<% @current_program.roles_without_admin_role.each do |role| %>
+   <% filter_fields << { :value => role.name, :label => role.customized_term.term} %>
+<% end %>
+<div class="pull-sm-right m-b-sm">
+  <%= filter_links("feature.mentoring_tips.content.filter_label_v1".translate(:mentoring => _mentoring), @filter_field, filter_fields, false) %>
+</div>
+
+<div class="m-b-sm">
+  <% buttons = [] %>
+  <% buttons << {:label => embed_icon("fa fa-plus-circle text-default m-r-xxs","feature.mentoring_tips.actions.add_new_v1".translate(:mentoring => _mentoring)), :js => "MentoringTips.callNew()"} %>
+  <% buttons << {:label => embed_icon("fa fa-check text-default m-r-xxs", "feature.mentoring_tips.actions.enable_all".translate), :url => update_all_mentoring_tips_path(:enable => true, :filter => @filter_field), :method => :post} %>
+  <% buttons << {:label => embed_icon("fa fa-ban text-default m-r-xxs", "feature.mentoring_tips.actions.disable_all".translate), :url => update_all_mentoring_tips_path(:enable => false, :filter => @filter_field), :method => :post} %>
+  <%= dropdown_buttons_or_button(buttons, dropdown_title: 'display_string.Actions'.translate)  %>
+</div>
+<%= ibox "feature.mentoring_tips.label.mentoring_tips_v1".translate(Mentoring: _Mentoring) do %>
+  <div class="table-responsive">
+    <table class="table" id="mentoring_tips_list" cellspacing="0" cellpadding="0">
+      <thead>
+        <tr>
+          <th><span style="visibility:hidden">.</span></th>
+          <th><%= "feature.mentoring_tips.label.mentoring_tips_v1".translate(Mentoring: _Mentoring) %></th>
+          <th><%= "feature.mentoring_tips.label.actions".translate %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render :partial => "mentoring_tips/mentoring_tip_form", :locals => {:mentoring_tip => @new_mentoring_tip} %>
+        <% if @mentoring_tips.empty? %>
+          <%= render :partial => "mentoring_tips/empty_content" %>
+        <% else %>
+          <%= render :partial => @mentoring_tips %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

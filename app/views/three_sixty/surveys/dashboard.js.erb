@@ -1,0 +1,6 @@
+<% if params[:published] == "true" %>
+	jQuery("#three_sixty_published_survey").html("<%= j(render :partial => 'three_sixty/surveys/dashboard/published_surveys', :locals => {:objects => @survey_assessees}) %>");
+<% else %>
+	jQuery("#three_sixty_drafted_survey").html("<%= j(render :partial => 'three_sixty/surveys/dashboard/drafted_surveys', :locals => {:objects => @surveys}) %>");
+<% end %>
+jQuery("#loading_results").hide();

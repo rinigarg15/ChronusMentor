@@ -1,0 +1,12 @@
+en:
+  email_translations:
+    mentoring_area_export:
+      title_v3: "%{_Mentoring} area export email"
+      description_v2: Any %{_admin} can export the %{_Mentoring} Area data to a PDF file. When this is done, this email is generated, the PDF file is attached to the email, and the email is sent to the %{_admin}.
+      description_v3: "%{_Mentoring_Connection} members and %{_admins} can export the %{_Mentoring} Area data to a PDF file. When this is done, this email is generated, the PDF file is attached to the email, and the email is sent to the user."
+      subject_v2: Exported PDF file for {{group_name}}
+      content_v2_html: The {{group_name}} {{customized_mentoring_connection_term}} information you exported is attached to this email as a PDF.<br/>
+      tags:
+        group_name:
+          description_v1: Name of the %{_mentoring_connection}
+          example: Smith and Doe

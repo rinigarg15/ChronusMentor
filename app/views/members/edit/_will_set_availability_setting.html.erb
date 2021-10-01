@@ -1,0 +1,65 @@
+<div id="will_set_availability_setting" class="clearfix cjs_will_set_availability">
+  <%= control_group do %>
+    <% start_time = Time.now.utc %>
+    <% mentoring_slots = MentoringSlot.sort_slots!(member.get_mentoring_slots(start_time, start_time.next_month.end_of_month, false, nil, false, false, false, false, {mentor_settings_page: true})) %>
+    <% scheduling_preference_label_text = "feature.user.label.scheduling_preference_mentee_and_mentor_v1".translate(:meeting => _meetings) %>
+    <% if user.is_allowed_to_set_all_availability? %>
+        <%= content_tag(:div, "feature.user.label.when_setup_meetings_v3".translate(:meetings => _meetings), :class => "false-label control-label col-sm-2") %>
+        <%= controls(class: "col-sm-10 controls") do %>
+          <div>
+            <div class="panel panel-default clearfix">
+              <div class="col-xs-12 p-t-xs p-b-xs clearfix gray-bg">
+                <div class="media-left">
+                  <%= label_tag(:will_set_availability_slots, "feature.mentoring_slot.label.general_availability".translate, :class => "sr-only", :for => "member_will_set_availability_slots_false") %>
+                  <%= form.radio_button :will_set_availability_slots, false -%>
+                </div>
+                <div class="media-body">
+                  <div class="m-b-xxs font-600"><%= "feature.profile.header.general_availabilty_header_text".translate %></div><div class="text-muted font-noraml"><%= "feature.profile.content.schedule_vary_set_appointment".translate(mentees: _mentees) %></div>
+                </div>              
+              </div>
+              <div class="col-xs-12 cjs_flash_message_availability_not_set b-t <%= 'hide' if member.will_set_availability_slots? %>">
+                <div>
+                  <%= form.text_area :availability_not_set_message, skip_title: true, placeholder: "feature.profile.content.preferred_schedule_placeholder_v2".translate, rows: 5, class: "form-control no-border p-l-0 p-r-0 mentor_general_availability", id: nil, "aria-label" => scheduling_preference_label_text %>
+                </div>
+              </div>
+            </div>
+            <div class="panel panel-default clearfix">
+              <div class="col-xs-12 p-t-xs p-b-xs clearfix gray-bg">  
+                <div class="media-left">
+                  <%= label_tag(:will_set_availability_slots, "feature.mentoring_slot.label.slot_availability".translate, :class => "sr-only", :for => "member_will_set_availability_slots_true") %>
+                  <%= form.radio_button :will_set_availability_slots, true -%>
+                </div>
+                <div class="media-body">
+                  <div class="m-b-xxs font-600"><%= "feature.profile.header.calender_availabilty_header_text".translate(:Meetings => _Meetings) %></div>
+                  <div class="text-muted font-noraml"><%= "feature.profile.content.set_specific_date_and_time_v1".translate %></div>
+                </div>
+              </div>
+              <%= render :partial => "mentoring_slots/mentoring_slots_pane", :locals => {:member => member, :user => user, :mentoring_slots => mentoring_slots} %>
+            </div>
+          </div>
+       <% end %>
+    <% elsif user.is_allowed_to_set_general_availability? %>
+      <%= form.hidden_field :will_set_availability_slots, value: false %>
+      <%= content_tag(:div, scheduling_preference_label_text, :class => "false-label control-label col-sm-2") %>
+      <%= controls(class: "col-sm-10") do %>
+        <%= form.text_area :availability_not_set_message, skip_title: true, placeholder: "feature.profile.content.preferred_schedule_placeholder_v2".translate, rows: 5, class: "form-control mentor_general_availability", id: nil, "aria-label" => scheduling_preference_label_text %>
+      <% end %>
+    <% else %>
+      <%= form.hidden_field :will_set_availability_slots, value: true %>
+      <%= content_tag(:div, "feature.user.label.how_setup_meetings_only_slots".translate(:meetings => _meetings), :class => "false-label control-label col-sm-2") %>
+      <%= controls(class: "col-sm-10 controls") do %>
+        <div class="panel panel-default clearfix">
+          <%= render :partial => "mentoring_slots/mentoring_slots_pane", :locals => {:member => member, :user => user, :mentoring_slots => mentoring_slots} %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(function(){
+    Meetings.DisableAvailabilitySlot.responseOnclickHandler();
+  });
+  MentoringSlot.initializeAddSlotPopup('.cjs_add_new_mentoring_slot', '<%= new_member_mentoring_slot_path(member_id: wob_member.id, from_settings_page: true) %>');
+  MentoringSlot.handleAvailabilityTextChange('.mentor_general_availability', '.mentee_general_availability');
+<% end %>

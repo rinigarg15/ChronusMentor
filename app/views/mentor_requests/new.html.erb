@@ -1,0 +1,3 @@
+<%= ibox nil do %>
+  <%= render 'mentor_requests/new', locals: { as_popup: false, mentor_users: @mentor_users, notes_hash: @notes_hash, match_array: @match_array, recommended_users: @recommended_users, src: @src } %>
+<% end %>

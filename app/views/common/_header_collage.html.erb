@@ -1,0 +1,20 @@
+<% if member_pictures.present? %>
+  <div class="media-left">
+    <div class="text-center clearfix media-collage">
+      <% member_pictures.first(2).each do |picture| %>
+        <%= picture.html_safe %>
+      <% end %>
+    </div>
+    <% member_pics_size = member_pictures.size %>
+    <% if member_pics_size > 2 %>
+      <div class="text-center media-collage clearfix">
+        <%= member_pictures[2].html_safe %>
+        <% if member_pics_size == AbstractMessagesHelper::FROM_TO_DETAILS::MEMBERS_PICTURES_THRESOLD %>
+          <%= member_pictures[3].html_safe %>
+        <% elsif member_pics_size > AbstractMessagesHelper::FROM_TO_DETAILS::MEMBERS_PICTURES_THRESOLD %>
+          <span class="fa-stack small m-l-n-xs"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-fw fa fa-stack-1x fa-inverse small"><%= member_pics_size %></i></span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

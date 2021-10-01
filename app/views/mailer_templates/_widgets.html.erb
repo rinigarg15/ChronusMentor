@@ -1,0 +1,13 @@
+<%= ibox nil, :ibox_id => "email_tags" do %>
+  <h3 class="has-below-1"><%= "feature.email.header.widgets".translate %></h3>
+  <ul class="clearfix">
+    <% @widgets_hash_list.each do |widget| %>
+      <% if !widget[:super_admin] || @enable_update %>
+        <li class="has-below-1">
+          <%= widget[:title].call %>
+          <small>(<%= link_to(@enable_update ? "feature.email.action.customize".translate : "feature.email.action.preview".translate, edit_mailer_widget_path(widget[:uid]), id: "link-to-widget-#{widget[:uid]}") %>)</small>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+<% end %>

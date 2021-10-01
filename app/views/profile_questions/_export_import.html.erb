@@ -1,0 +1,28 @@
+<% @page_action3 = [{label: get_icon_content("fa fa-upload") + "display_string.Import".translate, url: "javascript:void(0)", class: "cjs_import_profile_questions"}] %>
+<% @page_action3 << {label: get_icon_content("fa fa-download") + "display_string.Export".translate, url: export_profile_questions_path, class: "cjs_export_profile_questions "} %>
+<% @page_action3_options = {dropdown_title: "feature.profile_question.label.actions".translate, large: true} %>
+
+<% modal_container("feature.profile_question.label.profile_question_importer".translate, modal_id: "profile_questions_import_modal") do %>
+  <%= form_tag import_profile_questions_path, method: :post, remote: true, class: "form-vertical", multipart: true do %>
+    <div id="profile_question_importer">
+      <%= control_group do %>
+        <label for="profile_question_import_file" class="control-label">
+          <%= "display_string.attach_zip_file".translate %>
+        </label>
+        <%= controls do %>
+          <%= file_field_tag "profile_question_file", class: "noshadow" %>
+        <% end %>
+      <%end%>
+      <div class="pull-right">
+        <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", "data-dismiss" => "modal" %>
+        <%= submit_tag "display_string.Import".translate, class: "btn btn-primary", data: {disable_with: "display_string.Please_Wait".translate} %>
+      </div>
+    </div>
+  <%end%>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function() {
+    CustomizeProfileQuestions.showImportActionModal();
+  });
+<% end %>

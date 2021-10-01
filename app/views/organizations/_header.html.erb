@@ -1,0 +1,109 @@
+<% programs_listing_options = get_program_listing_options %>
+<% show_programs_dropdown = show_program_selector?(programs_listing_options[:member_has_many_active_programs]) %>
+
+<nav id='chronus_header' class='navbar navbar-fixed-top animated clearfix'>
+  <div id="chronus_header_wrapper" class="clearfix">
+    <div class="navbar-header <%= logged_in_at_current_level? ? "col-xs-7 col-md-4" : "col-xs-10 col-md-6" %> no-padding">
+      <% hide_mobile_side_bar_menu_icon = logged_in_program? && !current_user.profile_pending? %>
+      <span minimaliza-sidebar="" class= "<%= hidden_on_mobile if hide_mobile_side_bar_menu_icon %>">
+        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary noshadow <%= logged_in_at_current_level? ? "" : "#{hidden_on_web}" %>" href="javascript:void(0)">
+          <big>
+            <span class="hidden-lg"><i class="fa fa-bars"></i></span>
+            <span class="visible-lg"><i class="fa fa-bars"></i></span>
+            <%= set_screen_reader_only_content("display_string.show_menu".translate) %>
+          </big>
+        </a>
+      </span>
+
+      <% org_active_and_non_logged_in = @current_organization.active? && !logged_in_organization? %>
+      <div class="<%= ((mobile_device? || is_mobile_app?) && hide_mobile_side_bar_menu_icon) ? "m-l" : "m-l-xl" %> dropdown clearfix">
+        <div data-toggle="<%= org_active_and_non_logged_in ? "" : "dropdown" %>" class="clearfix">
+          <ul id="org_or_program_header_name" class="nav navbar-top-links navbar-right pull-left col-xs-11 no-padding truncate-with-ellipsis">
+            <% if org_active_and_non_logged_in%>
+              <%= render :partial => "layouts/powered_by_brand", :locals => {:container_class => "m-xxs #{hidden_on_mobile}"} %>
+            <% end %>
+            <li class="no-margins">
+              <% content = content_tag(:strong) do %>
+                <%= content_tag(:big, h(program_context.name), class: "truncate-with-ellipsis whitespace-nowrap") %>
+                <%= get_icon_content("fa fa-caret-down no-margins hide #{show_programs_dropdown ? "cjs-show-dropdown" : ""}") %>
+              <% end %>
+              <%= link_to content, "javascript:void(0)", :class => "my_programs_listing_link font-bold no-horizontal-padding show_hide_pane #{logged_in_organization? ? "" : hidden_on_web}", "data-show-pane" => ".sidebar-top" %>
+            </li>
+          </ul>
+        </div>
+        <% if show_programs_dropdown %>
+          <div class="cui_program_selector dropdown-menu remove-right-positioning list-group text-default <%= hidden_on_mobile %>">
+            <ul class = "cjs_program_listing cui_program_dropdown_height unstyled">
+              <%= render :partial => "layouts/my_programs_listing", :locals => programs_listing_options %>
+            </ul>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div id="mobile_header_links" class="pull-right">
+      <% if show_search_box? %>
+        <span class="<%= hidden_on_mobile %> m-r-md">
+          <%= render :partial => 'common/search_box', :locals => {:prepend_icon => true} %>
+        </span>
+      <% end %>
+      <ul id='header_actions' class="nav navbar-top-links navbar-right">
+        <% if can_show_resources_header_icon?(@current_program, current_user) %>
+          <li class="<%= hidden_on_web %>">
+            <%= link_to content_tag(:big, get_icon_content("fa fa-book") + set_screen_reader_only_content("feature.connection.header.browse_resources".translate(Resources: _Resources))), resources_path %>
+          </li>
+        <% end %>
+        <% if show_search_box? %>   
+          <li class="<%= hidden_on_web %>">   
+            <a class="show_hide_pane" data-hide-pane="#chronus_header_wrapper" data-show-pane="#search_wrapper" href="javascript:void(0)">    
+                <%= get_icon_content("fa fa-search big") + set_screen_reader_only_content("display_string.search_program".translate(program: _Program)) %>    
+            </a>    
+          </li>   
+        <% end %>
+        <%= render(:partial => 'languages/dropdown', :locals => {:container_class => "#{org_active_and_non_logged_in ? 'pull-left' : 'p-r-sm'} #{logged_in_program? ? hidden_on_and_below_tab : hidden_on_mobile} m-xxs", :iconclass => "fa fa-language"}) %>
+
+        <%= render(:partial => 'layouts/inbox', :locals => {current_organization: @current_organization}) %>
+
+        <%= render(partial: 'layouts/favorites') if logged_in_program? %>
+
+        <% if can_show_requests_notification_header_icon?(@current_program, current_user) %>
+          <%= render(:partial => 'programs/program_header_requests_notification_icon') %>
+        <% end %>
+
+        <% if @show_side_bar %>
+          <li class="<%= hidden_on_web %>">
+            <%= link_to content_tag(:big, get_icon_content("fa fa-chevron-right", id: "cjs-chevron-header") + set_screen_reader_only_content("display_string.show_side_bar".translate)), "javascript:void(0)", :id => "offcanvasright", "data-toggle" => "offcanvasright", class: "#{'hide' if @filters_in_sidebar}" %>
+          </li>
+        <% end %>
+
+        <% if @current_organization.active? && logged_in_organization? %>
+          <% if organization_view? || (logged_in_program? && current_user.active?) %>
+            <li class="dropdown <%= hidden_on_mobile %>">
+              <%= link_to(member_picture_v3(wob_member, {no_name: true, size: :small, dont_link: true, additional_image_content: get_icon_content("fa fa-caret-down")}, { class: "img-circle" }), "javascript:void(0)", class: "dropdown-toggle profile_header_image", "data-toggle" => "dropdown") %>
+              <%= render :partial => "layouts/nav_profile_dropdown" %>
+            </li>
+          <% end %>
+        <% end %>
+
+        <%= render partial: "common/non_logged_in_links", locals: { container_class: " pull-left #{hidden_on_mobile} m-xxs", join_icon_content: get_icon_content("fa fa-user-plus m-l"), sign_in_icon_content: get_icon_content("fa fa-sign-in m-l"), contact_admin_icon_content: get_icon_content("fa fa-life-ring m-l") } %>
+        <%= render partial: "common/sign_out", locals: { container_class: " pull-left #{hidden_on_mobile} m-xxs", iconclass: "fa fa-sign-out" } unless logged_in_organization? %>
+      </ul>
+    </div>
+  </div>
+
+  <% if show_search_box? %>
+    <div id="search_wrapper" class="clearfix hide m-r-xs m-l-xs animated <%= hidden_on_web %>">
+      <%= render(:partial => 'common/search_box', :locals => {:append_icon => true, :prepend_icon => true}) %>
+    </div>
+  <% end %>
+  <%= display_wob_banner if @current_organization.active? %>
+</nav>
+
+<%= javascript_tag do %>
+   Mobile.initializeMobileSearchActions();
+  jQuery(document).ready(function(){
+    jQuery('.cjs_program_listing').slimScroll({
+      height: ''
+    });
+  });
+<% end %>

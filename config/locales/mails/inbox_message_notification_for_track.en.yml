@@ -1,0 +1,28 @@
+en:
+  email_translations:
+    inbox_message_notification_for_track:
+      title: New message notification to end users in %{track_name}
+      description: This e-mail is sent to the end user when they receive a message from any other user or %{_Admins} in %{track_name}.
+      subject: "{{message_subject}}"
+      content_v1_html: "<table cellspacing='0' border = '0' cellpadding = '0' width='100%' style='table-layout: fixed;' class='wrapper'><tbody><tr><td align = 'center'>{{sender_profile_picture}}</td></tr><tr><td align = 'center'>You have a <a href='{{url_message}}'>message</a> from {{sender_name}} in {{subprogram_name}}.</td></tr></tbody></table><br/><table cellspacing='0' border = '0' cellpadding = '0' bgcolor = '#ECEEF1' width='100%'><tbody><tr><td style='padding: 10px; font-weight: bold; font-style: italic;'>{{message_content}}</td></tr></tbody></table>{{reply_button}}{{reply_button_help_text}}<br/><br/>{{upcoming_meetings_widget}}"
+      reply_text: Reply
+      reply_button_help_text_with_reply_enabled_html: To respond to %{sender_name}, just reply to this email or click the 'Reply' button above. You can also <a href='%{url_message}'>login and reply to this message</a> from the %{program}.
+      reply_button_help_text_without_reply_enabled_html: To respond to %{sender_name}, just reply to this email or click the 'Reply' button above.
+      tags:
+        reply_button:
+          description: Reply button
+        reply_button_help_text:
+          description: Reply button help text
+        message_subject:
+          description: Subject of the message
+          example: Help needed
+        sender_name:
+          description: Name of the sender of the message
+        message_content:
+          description: Content of the message
+          example: Sure. I can help you in choosing a %{role}. Please share the qualities you expect in your %{role}.
+        upcoming_meetings_widget:
+          description: List of first 3 upcoming %{_meetings} between the pair exchanging the message.
+          example_html: "<div style='padding-bottom: 10px;'><span style='font-weight: bold;'>Upcoming %{_Meetings}</span><span style='color: #888888;'> (Next 30 days)</span></div><table cellspacing='0' border = '0' cellpadding = '0'><tbody><tr><td valign='top' align='left' style='padding-left: 15px;'><a href='http://www.chronus.com'>Discussion about career</a></td></tr><tr><td valign='top' align='left' style='padding-left: 15px; font-size: 0.8em;'>Saturday, April 25, 2017, 06:00 am PDT</td></tr></tbody></table>"
+        sender_profile_picture:
+          description: Profile picture of message sender user.

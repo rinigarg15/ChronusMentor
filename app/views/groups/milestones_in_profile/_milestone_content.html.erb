@@ -1,0 +1,24 @@
+<% if milestone.description.present? %>
+  <% milestone_description = content_tag(:div, chronus_auto_link(milestone.description), :class => "cjs-milestone-attrs cjs_show_on_collapse_milestone hide m-b-xs") %>
+<% end %>
+<% header_content = content_tag(:div) do 
+  content_tag(:div, milestone.title, :class => "font-600 word_break h5 m-t-0 m-b-xs") + milestone_description
+end %>
+<div class="cjs_milestone_container b-b" id="cjs_milestone_container_<%= milestone.id %>">
+  <% ibox_options = {
+    ibox_class: "collapsed no-margins noshadow",
+    title_class: "light-gray-bg small #{local_assigns[:home_page_view] ? "hide" : ""}",
+    content_class: "word_break cjs_milestone_description no-padding",
+    ibox_content_id: "cjs_milestone_tasks_list_#{milestone.id}",
+    show_collapse_link: true,
+    collapse_link_class: "no-margins cjs_milestone_description_handler cjs_milestone_description_handler_#{milestone.id}",
+    collapse_html_options: { data: { url: fetch_tasks_mentoring_model_path(milestone.mentoring_model_id, format: :js, milestone_template_id: milestone.id, milestone_link_id: "#cjs_milestone_tasks_list_" + milestone.id.to_s, group_id: @group.id), milestone_id: milestone.id } },
+    header_content: header_content
+  } %>
+  <%= ibox nil, ibox_options do %>
+    <div id="loading_results_<%= milestone.id %>" class="filter_loading_results text-center p-sm" style="display: none;">
+      <span><%= "feature.milestones.label.tasks.loading".translate %></span>
+      <i class="fa fa-spinner fa-pulse fa-fw"></i>
+    </div>
+  <% end %>
+</div>

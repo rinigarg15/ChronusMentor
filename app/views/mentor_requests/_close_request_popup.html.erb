@@ -1,0 +1,24 @@
+<% modal_v3_popup "feature.mentor_request.content.close_request_popup.title".translate(:count => mentor_request_ids.count) do %>
+  <div class="m-b-sm"><%= "feature.mentor_request.content.close_request_popup.help_text_v1".translate(:count => mentor_request_ids.count) %></div>
+  <%= simple_form_for mentor_request, :url => update_bulk_actions_mentor_requests_path, :html => {:id => "close_mentor_requests", :class => "form-vertical", remote: from_manage} do |f| %>
+    <%= f.input :response_text, :as => :text, :label => "feature.mentor_request.content.closing_reason".translate, :input_html => {:rows => "5", :class => "form-control col-xs-12 no-padding", :id => "bulk_actions_reason", :placeholder => "feature.mentor_request.content.close_request_popup.placeholder.reason_v1".translate(count: mentor_request_ids.size)}, :label_html => {:class => "control-label "}, :wrapper_html => {:class => "col-xs-12 no-padding"} %>
+    <%= control_group(class: "col-xs-12 no-padding") do %>
+      <%= content_tag(:label, 'feature.mentor_request.label.to'.translate, :class => "false-label" ) %>
+      <%= controls do %>
+        <%= content_tag(:label, :class => "checkbox inline no-vertical-margins" ) do %>
+          <%= (check_box_tag :sender) + content_tag(:span, 'feature.mentor_request.label.Sender'.translate) %>
+        <% end %>
+        <%= content_tag(:label, :class => "checkbox inline no-vertical-margins" ) do %>
+          <%= (check_box_tag :recipient) + content_tag(:span, 'feature.mentor_request.label.Recipient'.translate) %>
+        <% end %>
+        <%= content_tag(:p, get_icon_content("fa fa-info-circle") + email_notification_consequences_for_multiple_mailers_html([MentorRequestClosedForRecipient, MentorRequestClosedForSender], selected_users: true, pluralize: false), :class => "help-block small text-muted m-t-xs") %>
+      <% end %>
+    <% end %>
+    <%= hidden_field_tag "bulk_actions[request_type]", AbstractRequest::Status::CLOSED %>
+    <%= hidden_field_tag "bulk_actions[mentor_request_ids]", mentor_request_ids %>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => "popup_closebox btn btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "feature.mentor_request.content.close_request_popup.action.close_request".translate(count: mentor_request_ids.size) %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+# TODO: Make changes in chef cookbooks to use this file for stop of Delayed Job
+
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+require 'delayed/command'
+
+Delayed::Command.new(["stop", "-n", "2", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["stop", "--queue", "es_delta", "--identifier", "es_queue_worker", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["stop", "--queue", "mongo_cache", "--identifier", "mongo_queue_worker", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["stop", "--queue", DjQueues::HIGH_PRIORITY, "--identifier", "high_priority_queue_worker_0", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["stop", "--queue", DjQueues::HIGH_PRIORITY, "--identifier", "high_priority_queue_worker_1", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["stop", "--queue", DjQueues::WEEKLY_DIGEST, "--identifier", "weekly_digest_queue_worker", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["stop", "--queue", DjQueues::SPLIT, "--identifier", "split_worker_0", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["stop", "--queue", DjQueues::SPLIT, "--identifier", "split_worker_1", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["stop", "--queue", DjQueues::SPLIT, "--identifier", "split_worker_2", "--", "--no_wait"]).daemonize
+Delayed::Command.new(["stop", "--queue", DjQueues::LONG_RUNNING, "--identifier", "long_running_worker", "--", "--no_wait"]).daemonize

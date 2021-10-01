@@ -1,0 +1,9 @@
+<% book_list_item.id ||= SecureRandom.random_number(MAX_INT32) %>
+
+<%= fields_for_listitem(book_list_item) do |list_item_form| %>
+  <%= panel "feature.article.header.book".translate, { panel_class: "panel-default article_list_item", panel_id: book_list_item.new_record? ? "new_list_item" : "list_item_#{book_list_item.id}", icon_class: "fa fa-book", show_close_link: true } do %>
+    <%= list_item_form.input :type_string, :as => :hidden %>
+    <%= autocompleter_for_item(book_list_item) %>
+    <%= list_item_form.input :description, :as => :text, :input_html => {:class => 'form-control', :rows => 5}, :label => ArticleListItem.human_attribute_name(:description) %>
+  <% end %>
+<% end %>

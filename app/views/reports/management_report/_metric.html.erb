@@ -1,0 +1,12 @@
+<% alert_triggered = alert.present? && alert.can_notify_alert? %>
+<td class="p-b-m">
+  <div id="cjs_metric_count_<%= metric.id %>" class="m-r-md">
+    <span class='<%= "label " + (alert_triggered ? "label-warning" : "label-primary") %>'><%= count %></span>
+    <% if alert_triggered %>
+      <%= tooltip("cjs_metric_count_#{metric.id}", content_tag(:div, metric_count_for_alert.to_s + " - " + h(alert.description).to_str)) %>
+    <% end %>
+  </div>
+</td>
+<td class="p-b-m">
+  <%= link_to(metric.title, get_metric_view_path(metric)) %>
+</td>

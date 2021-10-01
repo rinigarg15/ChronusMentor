@@ -1,0 +1,10 @@
+jQuery('.cjs_reports_time_filter').html('<%= j get_reports_time_filter({start: @start_date, end: @end_date}) %>');
+jQuery('.dropdown-with-datepicker.open').removeClass('open');
+<% content = render "surveys/report_main_content", {:format => FORMAT::HTML} %>
+jQuery("#survey_report").replaceWith("<%= j(content) %>");
+<% if @filters_count.zero? %>
+  jQuery('.cjs-report-filter-count').hide();
+<% else %>
+  jQuery('.cjs-report-filter-count').show();
+  jQuery('.cjs-report-filter-count').text('<%= @filters_count %>');
+<% end %>

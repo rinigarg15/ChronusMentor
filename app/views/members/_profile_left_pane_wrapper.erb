@@ -1,0 +1,46 @@
+<% user_name_prefix = @profile_member == wob_member ? "display_string.Your".translate : "display_string.user_s".translate(user: @profile_member.name(:name_only => true)) %>
+<% @title = "#{user_name_prefix} #{"display_string.profile".translate}" %>
+<% @title_url = nil %>
+<% @title_logo = nil %>
+<% @page_title = @title %>
+
+<% is_admin_editing = local_assigns[:is_edit] && program_view? && !@is_self_view %>
+
+<% if !local_assigns[:no_top_header] %>
+ <%= ibox nil do %>
+    <div class="col-sm-12 no-padding white-bg clearfix cjs_profile_summary">
+      <%= render :layout => 'members/profile_summary_action_buttons', :locals => {:is_edit => local_assigns[:is_edit], :is_admin_editing => is_admin_editing, :pdf_name => pdf_name, open_connect_popup: local_assigns[:open_connect_popup], show_favorite_ignore_links: show_favorite_ignore_links, ignore_preferences_hash: ignore_preferences_hash, profile_user: @profile_user} do %>
+        <%= render :partial => "members/profile_summary", locals: {profile_user: @profile_user, profile_member: @profile_member, is_self_view: @is_self_view, can_see_match_score: @can_see_match_score, can_see_match_label: @can_see_match_label, is_admin_view: @is_admin_view, is_admin_editing: is_admin_editing, :is_edit => local_assigns[:is_edit], program_questions_for_user: @program_questions_for_user, show_favorite_ignore_links: show_favorite_ignore_links, favorite_preferences_hash: favorite_preferences_hash, ignore_preferences_hash: ignore_preferences_hash} %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= yield %>
+
+<% unless local_assigns[:is_edit] %>
+  <%= javascript_tag %Q[jQuery(document).ready(function(){Meetings.inspectRequestMeetingUrl();});] %>
+<% end %>
+<% mobile_view = (mobile_app? || mobile_device?) %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    CoachFeedback.displayRating();
+    CoachFeedback.showRatingPopup();
+    <% if @show_mentor_request_popup %>
+      MentorRequests.renderPopup("<%= @mentor_request_url %>");
+    <% elsif @invalid_mentor_request_flash.present? %>
+      ChronusValidator.ErrorManager.ShowPageFlash(false, "<%= j(@invalid_mentor_request_flash.html_safe) %>");
+    <% end %>
+  });
+  <% unless @is_self_view || local_assigns[:is_edit] || !program_view? || mobile_app? || mobile_device? %>
+    jQuery(window).load(function(){
+      IgnorePreference.initalizeSticky();
+      IgnorePreference.setStyle();
+    });
+  <% end %>
+<% end %>
+
+<% if @show_reviews && @profile_user %>
+  <%= javascript_tag %Q[CoachFeedback.showRatingPopupOpened("mentor_reviews_#{@profile_user.id}");] %>
+<% end %>

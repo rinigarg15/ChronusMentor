@@ -1,0 +1,7 @@
+<li class="dropdown <%= subtab_class %>">
+  <%= link_to(get_safe_string + get_icon_content("fa fa-fw fa-file-text") + translated_tab_label(TabConstants::ADVICE) + content_tag(:span, "", :class => "fa arrow"), tab_info.url, :class => 'dropdown-toggle navigation_tab_link') %>
+  <ul class="nav nav-second-level">
+    <li><%= link_to translated_tab_label(TabConstants::QA), qa_questions_path(src: EngagementIndex::Src::BrowseMentors::SIDE_NAVIGATION, sub_src: EngagementIndex::SideBarSubSrc::MENTORING_COMMUNITY), :class => "truncate" %></li>
+    <li><%= link_to _Articles, articles_path(src: EngagementIndex::Src::BrowseMentors::SIDE_NAVIGATION, sub_src: EngagementIndex::SideBarSubSrc::MENTORING_COMMUNITY), :class => "truncate" %></li>
+  </ul>
+</li>

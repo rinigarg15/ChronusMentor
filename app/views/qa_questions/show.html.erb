@@ -1,0 +1,37 @@
+<% @title = @qa_question.summary %>
+<% @title_description = @qa_question.description.present? ? chronus_auto_link(@qa_question.description) : "" %>
+<% @title_description += content_tag(:div, class: "text-muted #{'m-t-xs' if @qa_question.description.present?}") do %>
+  <% content_tag(:span, get_icon_content("fa fa-clock-o no-margins")) +
+    "feature.question_answers.content.posted_ago_by_html".translate(time_in_words: time_ago_in_words(@qa_question.created_at), user_link: content_tag(:span, link_to_user(@qa_question.user, :current_user => current_user), class: "font-bold")) %>
+<% end %>
+<% @title_description += render(partial: "question_stats", locals: { question: @qa_question } ) %>
+
+<% follow_contents = {
+  active: append_text_to_icon("fa fa-check", "feature.question_answers.action.following".translate),
+  inactive: append_text_to_icon("fa fa-plus-square", "feature.question_answers.action.follow".translate)
+} %>
+<% dropdown_array = [toggle_button(follow_qa_question_path(@qa_question, format: :js), follow_contents, @qa_question.follow?(current_user), get_page_action_hash: true, handle_html_data_attr: true, toggle_class: { active: "active" } )] %>
+<% flag_content_action = popup_link_to_flag_content(@qa_question, get_hash: true) %>
+<% dropdown_array << flag_content_action if flag_content_action.present? %>
+<% dropdown_array << { label: append_text_to_icon("fa fa-trash", "display_string.Delete".translate), url: qa_question_path(@qa_question), method: :delete, data: { confirm: "feature.question_answers.content.delete_warning".translate }  } if (@qa_question.user == current_user) || current_user.is_admin? %>
+<% @page_action = dropdown_array %>
+<% @page_action2 = { label: append_text_to_icon("fa fa-comment", "feature.question_answers.header.answer_this_question".translate), url: "javascript:void(0)", data: { toggle: "modal", target: "#new_qa_answer_modal" }, class: "btn btn-primary" } %>
+
+<% modal_container "feature.question_answers.header.your_answer".translate, modal_id: "new_qa_answer_modal" do %>
+  <%= render :partial => "qa_answers/qa_answer_form", :locals => {:full_qa_question => @qa_question} %>
+<% end %>
+<%= render :partial => "qa_answers/qa_answers" %>
+
+<% content_for_sidebar do %>
+  <% if @similar_qa_questions.present? %>
+    <%= sidepane_assets_pane @similar_qa_questions,
+      pane_header: "feature.question_answers.content.related_questions".translate,
+      sidepane_asset_partial: "qa_questions/qa_questions_pane",
+      user_method: :user %>
+  <% else %>
+    <%= ibox "feature.question_answers.content.related_questions".translate do %>
+      <%= "feature.question_answers.content.no_related_questions_message".translate %>
+    <% end %>
+  <% end %>
+<% end %>
+

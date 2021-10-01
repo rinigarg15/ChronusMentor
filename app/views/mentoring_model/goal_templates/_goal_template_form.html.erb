@@ -1,0 +1,10 @@
+<% goal_template_id = goal_template.id || "new" %>
+<%= simple_form_for goal_template, :url => url, :remote => true, :method => method, :html => {:class => "cjs_goal_template_edit cjs-mentoring-model-cancel-form cjs-mentoring-model-template-form cjs-mentoring-model-goal-template-form clearfix", :id =>"cjs-mentoring-model-goal-template-form-#{goal_template_id}"} do |f| %>
+  <%= f.input :title, :as => :string, :required => true, :input_html => {:class => "#{text_size} has-below cjs_goal_template_title"} %>
+  <%= f.input :description, :as => :text, :input_html => {:rows => 5 , :class => "#{text_size} form-horizontal cjs_goal_template_description"} %>
+  <% action_set(:class => "pull-right") do %>
+    <%= cancel_link(nil, qtip: true, additional_class: "cjs_goal_cancel_btn cjs-mentoring-model-cancel-btn") %>
+    <%= f.button :submit, "display_string.Save".translate, :class => "cjs_goal_template_save_btn" %>
+  <% end %>
+<% end %>
+<%= javascript_tag %Q[GoalTemplates.computeGoalTemplateFormActions('#{goal_template_id}');] %>

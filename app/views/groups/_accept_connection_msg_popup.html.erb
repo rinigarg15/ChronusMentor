@@ -1,0 +1,9 @@
+<% slots_available = current_user.slots_available %>
+<% connection_count = current_user.max_connections_limit - slots_available %> 
+
+<% modal_container h("feature.mentor_request.header.accepted_request".translate(mentoring: _mentoring)), { modal_id: "modal_mentor_request_accept_popup", modal_footer_content: get_mentor_request_popup_footer(slots_available, connection_count, group.program.connection_limit_permission) } do %>
+  <div class="text-center"><i class="fa fa-check-circle fa-2x text-navy"></i></div>
+  <h3 class="text-center">
+    <%= "feature.meetings.content.successful_connect".translate %> 
+  </h3>
+<% end %>

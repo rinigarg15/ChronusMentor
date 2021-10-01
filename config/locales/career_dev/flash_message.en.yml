@@ -1,0 +1,5 @@
+en:
+  career_dev:
+    flash_message:
+      portal_flash:
+        created: The portal has been successfully setup!

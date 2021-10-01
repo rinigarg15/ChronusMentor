@@ -1,0 +1,32 @@
+<% content, show_suspend_message = remove_user_prompt(profile_user) %>
+
+<% modal_container "feature.profile.label.remove_user".translate(user_name: profile_user.name), modal_id: "modal_remove_link_#{profile_user.id}", icon_class: "fa fa-exclamation-triangle" do %>
+  <%= simple_form_for profile_user, html: { method: :delete, id: "remove_user_form" } do |f| %>
+    <div id="remove_user_prompt">
+      <%= content %>
+    </div>
+
+    <div id="confirm_prompt" class="m-t-sm m-b-xs">
+      <% content_key = current_program.standalone? ? "removal_is_irreversible_standalone_html" : "removal_is_irreversible_html" %>
+      <%= "feature.profile.content.#{content_key}".translate(articles: _articles, mentoring_connections: _mentoring_connections, program: _program, irreversible: content_tag(:b, "display_string.irreversible_action".translate)) %>
+      <% if show_suspend_message %>
+        <div class="m-t-xs">
+          <%= "feature.profile.content.suspending_users_instead_v1".translate(program: _program) %>
+        </div>
+      <% end %>
+    </div>
+
+    <div>
+      <hr/>
+      <% action_set(class: "pull-right") do %>
+        <%= button_tag "display_string.Cancel".translate, type: 'button', class: "btn btn-white", data: { dismiss: "modal" } %>
+        <%= submit_tag "display_string.remove_user".translate(count: 1), class: "btn btn-danger", data: { disable_with: "display_string.Please_Wait".translate } %>
+        <% if show_suspend_message %>
+          <%= button_tag "display_string.suspend_user_v1".translate(count: 1), type: 'button', onclick: %Q[jQuery("#suspend_link_#{profile_user.id}").click();], class: "btn btn-primary", data: { dismiss: "modal" } %>
+        <% else %>
+          <%= button_tag "display_string.keep_deactivated".translate(count: 1), type: 'button', class: "btn btn-primary", data: { dismiss: "modal" } %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

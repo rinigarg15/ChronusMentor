@@ -1,0 +1,12 @@
+<div>
+  <%= get_quick_connect_title(options) %>
+  <div class="gray-bg">
+    <div class="row quick_connect_slick" >
+      <% mentors_list.each do |mentor| %>
+        <%= render(partial: "programs/quick_connect_item", locals: { mentor_user: mentor[:user] || mentor[:member].user_in_program(program), match_score: mentor[:max_score], member: mentor[:member], src: 'quick_connect_box', mentors_score: mentors_score, options: options.merge!({from_quick_connect: true})}) %>
+      <% end %>
+    </div>
+  </div>
+  <% mentor_user_ids = mentors_list.collect {|x| x[:user].id if x[:user]}.compact %>
+  <%= render(partial: "mentor_recommendations/banner_footer", locals: {for_admin_recommendation: false, mentor_user_ids: mentor_user_ids }) %>
+</div>

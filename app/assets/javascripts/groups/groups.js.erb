@@ -1,0 +1,1448 @@
+var GroupSearch = {
+
+  groupViewTable: "#cjs_group_record",
+  primaryCheckBoxSelector: "#cjs_groups_listing #cjs_groups_primary_checkbox",
+  subCheckBoxesSelector: "#cjs_groups_listing .cjs_groups_record",
+  selectAllRow: "#cjs_groups_listing #cjs_select_all_option",
+  selectAll: "#cjs_groups_listing #cjs_select_all_option #cjs_select_all_handler",
+  clearAll: "#cjs_groups_listing #cjs_select_all_option #cjs_clear_all_handler",
+  headerElements: "#cjs_group_record .cjs_list_view_header .cjs_sortable_element",
+
+  sortBoth: "sort_both",
+  sortAsc: "sort_asc",
+  sortDesc: "sort_desc",
+
+  selectedIds: [],
+  TaskOptions: [],
+  maxLength: 0,
+  displayStringAnd: "",
+
+  initalizeUpdateActions: function(){
+    GroupSearch.initializeOnHover();
+    GroupSearch.handleReplaceAction();
+    GroupSearch.handleAddAction();
+    GroupSearch.handleRemoveAction();
+    GroupSearch.populateSelectedUserIds();
+  },
+
+  initializeOnHover: function(){
+    jQuery('.cjs_display_member_handler').live({
+      mouseout: function() {
+        var member_actions = jQuery(this).find(".cjs_replace_remove_member");
+        member_actions.hide();
+      },
+      mouseover: function() {
+        var member_actions = jQuery(this).find(".cjs_replace_remove_member");
+        if(jQuery(this).find(".cjs_replace_member_handler").hasClass("hide") && jQuery(this).find(".cjs_remove_member_handler").hasClass("hide"))
+          member_actions.show();
+        else
+          member_actions.hide();
+      }
+    });
+  },
+
+  handleReplaceAction: function(){
+    jQuery(document).on('click', '.cjs_replace_member', function(event){
+      event.preventDefault();
+      var linkObject = jQuery(this);
+      var userId = linkObject.data('user-id');
+      var roleId = linkObject.data('role-id');
+      jQuery(".cjs_replace_member_handler_" + userId + "_" + roleId).find('#replace_member' + roleId).val('');
+      jQuery(".cjs_replace_member_handler_" + userId + "_" + roleId).find('.select2-chosen').text('');
+      jQuery(".cjs_replace_member_handler_" + userId + "_" + roleId).removeClass("hide");
+      jQuery(".cjs_remove_replace_" + userId).addClass("hide");
+      jQuery(".cjs_display_member_handler_" + userId + "_" + roleId).addClass("well white-bg");
+    });
+  },
+
+  handleAddAction: function(){
+    jQuery(document).on('click', '.cjs_add_member', function(event){
+      event.preventDefault();
+      var linkObject = jQuery(this);
+      var roleName = linkObject.data('role-name');
+      jQuery(".cjs_add_" + roleName).find('#add_member_' + roleName).val('');
+      jQuery(".cjs_add_" + roleName).find('.select2-chosen').text('');
+      jQuery(".cjs_add_" + roleName).removeClass("hide");
+      jQuery(".cjs_add_member_" + roleName).addClass("hide");
+    });
+  },
+
+  handleRemoveAction: function(){
+    jQuery(document).on('click', '.cjs_remove_member', function(event){
+      event.preventDefault();
+      var linkObject = jQuery(this);
+      var userId = linkObject.data('user-id');
+      var roleId = linkObject.data('role-id');
+      jQuery(".cjs_remove_" + userId + "_" + roleId).removeClass("hide");
+      jQuery(".cjs_remove_replace_" + userId).addClass("hide");
+      jQuery(".cjs_display_member_handler_" + userId + "_" + roleId).addClass("well white-bg");
+    });
+  },
+
+  populateSelectedUserIds: function() {
+    jQuery(document).on("click", ".cjs_add_member_submit, .cjs_remove_member_submit, .cjs_replace_member_submit", function() {
+      var manageMembersForm = jQuery(this).closest("form");
+      var groupUpdateForm = manageMembersForm.closest(".update_group_members").find("form.group_update_form");
+      var connectionUserFields = groupUpdateForm.find("input[type='hidden'][name*='connection[users]']").serializeArray();
+      var roleIdUserIdsMap = {};
+
+      jQuery.each(connectionUserFields, function(index, connectionUserField) {
+        matchArray = connectionUserField.name.match(/connection\[users\]\[(\d+)\]\[(\d+)\]\['action_type'\]/);
+        if(matchArray) {
+          var userId = matchArray[1];
+          var roleId = matchArray[2];
+
+          roleIdUserIdsMap[roleId] = roleIdUserIdsMap[roleId] || [];
+          if(connectionUserField.value == "<%= Group::MemberUpdateAction::ADD %>") {
+            roleIdUserIdsMap[roleId].push(userId);
+          } else if(connectionUserField.value == "<%= Group::MemberUpdateAction::REMOVE %>") {
+            removeFromArray(roleIdUserIdsMap[roleId], userId);
+          } else if(connectionUserField.value == "<%= Group::MemberUpdateAction::REPLACE %>") {
+            var replacementId = jQuery("connection[users][" + userId + "][" + roleId + "][replacement_id]").val();
+            removeFromArray(roleIdUserIdsMap[roleId], userId);
+            roleIdUserIdsMap[roleId].push(replacementId);
+          } else {
+            roleIdUserIdsMap[roleId].push(userId);
+          }
+        }
+      });
+
+      jQuery.each(roleIdUserIdsMap, function(roleId, userIds) {
+        manageMembersForm.find("input.selected_user_ids_" + roleId).val(userIds.join(","));
+      });
+    });
+  },
+
+  initializeActions: function(selectAtleastOneText){
+    jQuery(document).ready(function(){
+      GroupSearch.translations.selectAtleastOneText = selectAtleastOneText;
+      GroupSearch.inspectBulkActions(selectAtleastOneText);
+      GroupSearch.inspectPrimaryCheckBox();
+      GroupSearch.inspectSubCheckBox();
+      GroupSearch.inspectSelectClearAllSelection();
+      GroupSearch.handleSingleTypeActionState();
+      GroupSearch.initializeEditColumns();
+      GroupSearch.initializeTruncateActions();
+    });
+  },
+
+  initializeEditGroup: function(){
+    RequiredFields.addScopedField('scope_connection_questions', 'similar_connection_name');
+    RequiredFields.addScopedField('scope_connection_questions', 'group_name');
+    jQuery('.cjs-form-submit-validation').on('click', function(){
+      var positiveMembershipSettings = true;
+      isRequiredFieldsFilled = RequiredFields.validate('scope_connection_questions', true);
+      jQuery('.cjs_max_limit_validator').each(function() {
+        isMandatory = jQuery(this).hasClass("cjs_max_limit_required");
+        positiveMembershipSettings = ValidateRequiredFields.checkForPositiveIntegerInTextBox(jQuery(this), isMandatory) && positiveMembershipSettings;
+      });
+      if(!isRequiredFieldsFilled){
+        ChronusValidator.ErrorManager.ShowPageFlash(false, jsCommonTranslations.requiredFieldMissing);
+      }
+      else{
+        toastr.clear();
+      }
+      return isRequiredFieldsFilled && positiveMembershipSettings;
+    });
+  },
+
+  initializeMultiAutoComplete: function(elementId, idToBeSubmitted){
+    jQuery(elementId).on('click', function(){
+      jQuery(idToBeSubmitted).focus();
+    });
+  },
+
+  initializeMemberFilters: function(){
+    jQuery(document).ready(function() {
+      initialize.jQueryAutoComplete();
+    });
+  },
+
+  resetSidePaneFilters: function(falseElements, trueElements){
+    var filterBox = jQuery(".filter_box");
+    if(falseElements !== undefined){
+      filterBox.find(falseElements).attr("checked", false);
+    }
+    if(trueElements !== undefined){
+      filterBox.find(trueElements).attr("checked", true);
+    }
+    GroupSearch.applyFilters();
+  },
+
+  toggleFindNewFilters: function(){
+    var filterBox = jQuery(".filter_box");
+    var availableToJoin = filterBox.find(".available_to_join_filters");
+    var allProjects = filterBox.find(".all_projects_filters");
+    if(!availableToJoin.is(":checked")){
+      allProjects.prop("checked", true);
+    }
+    else{
+      allProjects.prop("checked", false);
+    }
+    GroupSearch.applyFilters();
+  },
+
+  updateMentoringModelsInfo: function(content, isDetailed){
+    if(isDetailed){
+      jQuery.each(GroupSearch.selectedIds, function(index, selectedId){
+        var groupEnclosure = jQuery("#group_" + selectedId);
+        groupEnclosure.find(".cjs_mentoring_model_title").html(content);
+      });
+    }
+    else{
+      jQuery.each(GroupSearch.selectedIds, function(index, selectedId){
+        var groupEnclosure = jQuery("#group_pane_" + selectedId);
+        groupEnclosure.find(".cjs_mentoring_model_list_view").html(content);
+      });
+    }
+    closeQtip();
+  },
+
+  showLoading: function() {
+    jQuery('#loading_results').show();
+  },
+
+  initializeMemberProfileFilters: function(filters) {
+    filters = JSON.parse(filters);
+    jQuery.each(filters, function(key, value){
+      jQuery.each(value, function(index, hashValue){
+        jQuery(".cjs_role_profile_filter_container_" + key).find(".cjs_add_one_more_filter").filter(":last:visible").click();
+        jQuery("#profile_" + key + "_question_" + (index + 1)).val(hashValue.field).trigger('change');
+        if(hashValue.operator == "<%= SurveyResponsesDataService::Operators::DATE_TYPE %>"){
+          var hiddenField = jQuery("#profile_" + key + "_" + "<%= ProfileQuestionsHelper::DATE_VALUE %>" + "_" + (index + 1));
+          DateRangePicker.setDateRangePickerForProfileQuestion(hiddenField, hashValue.value);
+        }
+        else{
+          jQuery("#profile_" + key + "_operator_" + (index + 1)).val(hashValue.operator).trigger('change');
+          jQuery("#profile_" + key + "_value_" + (index + 1)).val(hashValue.value);
+          jQuery("#profile_" + key + "_choices_" + (index + 1)).select2('val', hashValue.value.split(','));
+        }
+      });
+    });
+  },
+
+  updateMemberProfileFilters: function() {
+    jQuery('#search_filter_form .hidden_member_profile_filters').remove();
+    jQuery.each(ReportFilters.getAppliedFiltersData(true), function(index, obj) {
+      if(!obj['field'].blank()) {
+        jQuery.each(['field', 'operator', 'value'], function(i, type){
+          jQuery('<input>').attr({type: 'hidden', class: 'hidden_member_profile_filters', name: (obj['scope'] + '[' + type + ']'), value: (obj[type])}).appendTo('#search_filter_form');
+        });
+      }
+    });
+  },
+
+  applyFilters: function() {
+    GroupSearch.updateMemberProfileFilters();
+    jQuery('#search_filter_form').submit();
+    return false;
+  },
+
+  changeView: function(view){
+    jQuery("#filter_sort_field").val('');
+    jQuery("#filter_sort_order").val('');
+    jQuery("#filter_view_field").val(view);
+    GroupSearch.applyFilters();
+  },
+
+  resetStatusFilters: function(){
+    jQuery("#filter_pane").find("#filter_3").attr("checked", true);
+    jQuery("#filter_pane").find("#filter_2").attr("checked", false);
+    // Reset sub filters
+    jQuery("#filter_pane").find("#sub_filter_active").attr("checked", true).parent().show();
+    jQuery("#filter_pane").find("#sub_filter_inactive").attr("checked", true).parent().show();
+    jQuery("#filter_pane").find("#sub_filter_not_started").attr("checked", true).parent().show();
+    jQuery("#filter_pane").find("#sub_filter_closed").attr("checked", true).parent().show();
+  },
+
+  clearFilter: function(reset_id)
+  {
+    jQuery("#filter_pane").find('#reset_filter_' + reset_id).trigger('click');
+  },
+
+  submitCSVRequest: function(csv_path){
+    var serialData = jQuery("#search_filter_form").serialize();
+    window.location = csv_path + "&" + serialData;
+  },
+
+  inspectSelectClearAllSelection: function(){
+    GroupSearch.setSelectAllPosition();
+    jQuery(GroupSearch.selectAll).on('click', function(){
+      var loaderImage = jQuery(this).parent().find("i.cjs_select_all_loader");
+      var selectAllHandler = jQuery(this);
+      jQuery.ajax({
+        url : selectAllHandler.data("url"),
+        beforeSend : function(){loaderImage.removeClass("hide");},
+        success : function(responseText){
+          CommonSelectAll.resetSelectedIds(GroupSearch);
+          GroupSearch.selectedIds = responseText["group_ids"];
+          loaderImage.addClass("hide");
+          selectAllHandler.closest("div").hide();
+          jQuery("div#cjs_clear_all_message").show();
+          CommonSelectAll.indeterminateState(jQuery(GroupSearch.primaryCheckBoxSelector), false, GroupSearch);
+          GroupSearch.handleSingleTypeActionState();
+        }
+      });
+    });
+
+    jQuery(GroupSearch.clearAll).on('click', function(){
+      jQuery(GroupSearch.primaryCheckBoxSelector).attr("checked", false);
+      var subCheckBoxes = jQuery(GroupSearch.subCheckBoxesSelector);
+      subCheckBoxes.attr("checked", false);
+      GroupSearch.showHideSelectAll(false);
+      CommonSelectAll.resetSelectedIds(GroupSearch);
+      GroupSearch.handleSingleTypeActionState();
+    });
+  },
+
+  inspectPrimaryCheckBox: function(){
+    var primaryCheckBox = jQuery(GroupSearch.primaryCheckBoxSelector);
+    primaryCheckBox.change(function(){
+      var isChecked = primaryCheckBox.is(":checked");
+      var subCheckBoxes = jQuery(GroupSearch.subCheckBoxesSelector);
+      subCheckBoxes.attr("checked", isChecked);
+      GroupSearch.showHideSelectAll(isChecked);
+      CommonSelectAll.computeSelectedIds(subCheckBoxes, GroupSearch);
+      GroupSearch.handleSingleTypeActionState();
+      if(!isChecked){
+        CommonSelectAll.resetSelectedIds(GroupSearch);
+        GroupSearch.resetTriStateCheckbox();
+      }
+      else{
+        CommonSelectAll.indeterminateState(jQuery(GroupSearch.primaryCheckBoxSelector), isChecked, GroupSearch);
+      }
+      GroupSearch.handleSingleTypeActionState();
+    });
+  },
+
+  inspectSubCheckBox: function(){
+    var subCheckBoxes = jQuery(GroupSearch.subCheckBoxesSelector);
+    subCheckBoxes.change(function(){
+      GroupSearch.showHideSelectAll(false);
+      GroupSearch.updateSelectedIdsAndTriState();
+      GroupSearch.handleSingleTypeActionState();
+    });
+  },
+
+  handleSingleTypeActionState: function() {
+    var singleTypeSelector = ".cjs_single_action_groups";
+    var checkedCount = jQuery(GroupSearch.subCheckBoxesSelector + ":checked").length;
+    if(checkedCount == 0) {
+      jQuery(singleTypeSelector).removeClass('btn-link disabled').data('enabled', false);
+    } else if(checkedCount == 1) {
+      jQuery(singleTypeSelector).removeClass('btn-link disabled').data('enabled', true);
+    } else if (checkedCount >= 2) {
+      jQuery(singleTypeSelector).addClass('btn-link disabled').data('enabled', false);
+    }
+  },
+
+  checkAndSendSingleTypeAction: function(id, path, width) {
+    if(jQuery(id).data('enabled')) {
+      ChronusValidator.ErrorManager.ClearResponseFlash("cjs_groups_flash");
+      var selectedId = jQuery(GroupSearch.subCheckBoxesSelector + ":checked").val();
+      jQueryShowQtip('#group_pane_' + selectedId, width, path.replace(/groups\/-1/, "groups/" + selectedId), '', {modal: true});
+    } else {
+      var checkedCount = jQuery(GroupSearch.subCheckBoxesSelector + ":checked").length;
+      if(checkedCount == 0) {
+        ChronusValidator.ErrorManager.ShowResponseFlash("cjs_groups_flash", GroupSearch.translations.selectAtleastOneText);
+      } else if (checkedCount >= 2) {
+        ChronusValidator.ErrorManager.ShowResponseFlash("cjs_groups_flash", GroupSearch.translations.pleaseSelectOneGroupText);
+      }
+      return false;
+    }
+  },
+
+  updateSelectedIdsAndTriState: function(){
+    subCheckBoxes = jQuery(GroupSearch.subCheckBoxesSelector);
+    CommonSelectAll.computeSelectedIds(subCheckBoxes, GroupSearch);
+    if(GroupSearch.selectedIds.length == 0){
+      GroupSearch.resetTriStateCheckbox();
+    }
+    else{
+      GroupSearch.maintainTriStateCheckbox(false);
+    }
+  },
+
+  showHideSelectAll: function(showBox){
+    if(jQuery("#cjs_select_all_option").length > 0){
+      if(showBox){
+        jQuery("#cjs_select_all_option").show();
+      }
+      else{
+        GroupSearch.resetSelectClearAll();
+        jQuery("#cjs_select_all_option").hide();
+      }
+    }
+  },
+
+  resetTriStateCheckbox: function(){
+    CommonSelectAll.indeterminateState(jQuery(GroupSearch.primaryCheckBoxSelector), false, GroupSearch);
+  },
+
+  initializeMaxLength: function(total_entries){
+    GroupSearch.maxLength = total_entries;
+  },
+
+  maintainTriStateCheckbox: function(shouldHighlight){
+    if(GroupSearch.selectedIds.length > 0){
+      CommonSelectAll.indeterminateState(jQuery(GroupSearch.primaryCheckBoxSelector), true, GroupSearch);
+      if(shouldHighlight){
+        jQuery.each(GroupSearch.selectedIds, function(index, selectedId){
+          var selectedCheckbox = jQuery("#cjs_groups_record_" + selectedId);
+          if(selectedCheckbox.length > 0){
+            selectedCheckbox.prop("checked", true);
+          }
+        });
+      }
+    }
+  },
+
+  resetSelectClearAll: function(){
+    if(jQuery("#cjs_select_all_option").is(":visible")){
+      jQuery("div#cjs_clear_all_message").hide();
+      jQuery("div#cjs_select_all_message").show();
+    }
+  },
+
+  validateSelection: function(selectAtleastOneText, bulkLimit, bulkLimitExceededWarning){
+    if(GroupSearch.selectedIds.length == 0){
+      ChronusValidator.ErrorManager.ShowResponseFlash("cjs_groups_flash", selectAtleastOneText);
+      return false;
+    }
+    else if(bulkLimit != undefined && GroupSearch.selectedIds.length > bulkLimit){
+      ChronusValidator.ErrorManager.ShowResponseFlash("cjs_groups_flash", bulkLimitExceededWarning);
+      return false;
+    }
+    else{
+      ChronusValidator.ErrorManager.ClearResponseFlash("cjs_groups_flash");
+      return true;
+    }
+  },
+
+  inspectBulkActions: function(selectAtleastOneText){
+    jQuery(".cjs_bulk_action_groups").on('click', function(event){
+      event.preventDefault();
+      var bulkLimit = jQuery(this).data("bulk-limit");
+      var bulkLimitExceededWarning = jQuery(this).data("bulk-limit-exceeded-warning");
+      if(GroupSearch.validateSelection(selectAtleastOneText, bulkLimit, bulkLimitExceededWarning)){
+        var url = jQuery(this).data("url");
+        var actionType = jQuery(this).data("action-type");
+        var tabNumber = jQuery(this).data("tab-number");
+        var dataParameters = {bulk_action: {group_ids: GroupSearch.selectedIds, action_type: actionType, tab_number: tabNumber}};
+        jQueryShowQtip('#cjs_groups_listing', 600, url, dataParameters, {method: "post", modal: true});
+      }
+    });
+  },
+
+  validateBulkSetExpiryDate: function(){
+    jQuery("form#bulk_groups_set_expiry_date").submit(function(){
+      date_valid = ValidateRequiredFields.checkNonMultiInputCase(jQuery("#bulk_actions_mentoring_period"));
+      reason_valid = ValidateRequiredFields.checkNonMultiInputCase(jQuery("#bulk_actions_reason"));
+      return date_valid && reason_valid;
+    });
+  },
+
+  enableDisableMentoringModelPicker: function(){
+    jQuery(document).ready(function(){
+      jQuery('.cjs_assign_new_template').change(function(){
+        jQuery('#cjs_assign_mentoring_model').prop("disabled", false);
+      });
+      jQuery('.cjs_assign_existing_template').change(function(){
+        jQuery('#cjs_assign_mentoring_model').prop("disabled", true);
+      });
+    });
+  },
+
+  validateBulkReactivate: function(){
+    jQuery("form#bulk_groups_reactivate").submit(function(){
+      date_valid = ValidateRequiredFields.checkNonMultiInputCase(jQuery("#bulk_actions_mentoring_period"));
+      reason_valid = ValidateRequiredFields.checkNonMultiInputCase(jQuery("#bulk_actions_reason"));
+      return date_valid && reason_valid;
+    });
+  },
+
+  publishCallback: function(group_id){
+    jQuery("#group_" + group_id).remove();
+    jQuery("#group_pane_" + group_id).remove();
+    var activeTab = jQuery("#tab-box").find(".active a span");
+    var updatedActiveTabCount = parseInt(activeTab.html()) - 1;
+    activeTab.html(updatedActiveTabCount);
+    updateCurPageInfo(updatedActiveTabCount);
+    jQuery("#cjs_ongoing_count").html(parseInt(jQuery('#cjs_ongoing_count').html()) + 1);
+    GroupSearch.updateListAndSelectedIds(group_id);
+  },
+
+  discardCallback: function(group_id){
+    jQuery("#group_"+group_id).remove();
+    jQuery("#group_pane_"+group_id).remove();
+    var countClass = jQuery(".ct_active.active#drafted_tab").length > 0 ? '#cjs_drafted_count' : '#cjs_closed_count';
+    updatedCount = parseInt(jQuery(countClass).html())-1;
+    jQuery(countClass).html(updatedCount);
+    updateCurPageInfo(updatedCount);
+    GroupSearch.updateListAndSelectedIds(group_id);
+  },
+
+  tabSwitcher: function(groupId, oldTabSelector, transitionTabSelector){
+    jQuery("#group_" + groupId).remove();
+    jQuery("#group_pane_" + groupId).remove();
+    var updatedOldCount = parseInt(jQuery(oldTabSelector).html()) - 1;
+    jQuery(oldTabSelector).html(updatedOldCount);
+    updateCurPageInfo(updatedOldCount);
+    jQuery(transitionTabSelector).html(parseInt(jQuery(transitionTabSelector).html()) + 1);
+    GroupSearch.updateListAndSelectedIds(groupId);
+  },
+
+  reactivateCallback: function(group_id){
+    closeQtip();
+    jQuery('#group_'+group_id).remove();
+    jQuery('#group_pane_'+group_id).remove();
+    updatedClosedCount = parseInt(jQuery('#cjs_closed_count').html())-1;
+    jQuery("#cjs_closed_count").html(updatedClosedCount);
+    updateCurPageInfo(updatedClosedCount);
+    jQuery("#cjs_ongoing_count").html(parseInt(jQuery('#cjs_ongoing_count').html())+1);
+    GroupSearch.updateListAndSelectedIds(group_id);
+  },
+
+  destroyCallback: function(group_id){
+    closeQtip();
+    jQuery("#group_"+group_id).remove();
+    jQuery("#group_pane_"+group_id).remove();
+    jQuery("#cjs_closed_count").html(parseInt(jQuery('#cjs_closed_count').html())+1);
+    updatedOngoingCount = parseInt(jQuery('#cjs_ongoing_count').html())-1;
+    jQuery("#cjs_ongoing_count").html(updatedOngoingCount);
+    updateCurPageInfo(updatedOngoingCount);
+    GroupSearch.updateListAndSelectedIds(group_id);
+  },
+
+  updateListAndSelectedIds: function(group_id){
+    jQuery("#cjs_current_list_count").html(parseInt(jQuery('#cjs_current_list_count').html())-1);
+    jQuery(".cjs_total_list_count").html(parseInt(jQuery('.cjs_total_list_count').html())-1);
+    GroupSearch.selectedIds.splice(GroupSearch.selectedIds.indexOf(group_id), 1);
+    GroupSearch.updateSelectedIdsAndTriState();
+  },
+
+  updateNoGroupText: function(id, content){
+    if(jQuery("#"+id).html()==0){
+      jQuery("#cjs_groups_listing #group_elements").html(content);
+    }
+  },
+
+  onClickExport: function(){
+    jQuery("#cjs_groups_bulk_export_submit").on('click', function(){
+      setTimeout('closeQtip()',3000);
+      return true;
+    });
+  },
+
+  multiSelect: function(currentLocale){
+    jQuery("#cjs_group_view_uixmultiselect").uixmultiselect({
+      availableListPosition: 'left',
+      locale: currentLocale,
+      splitRatio: 0.48,
+      sortable: true
+    });
+  },
+
+  groupViewUpdateValidations: function(selectFieldMsg){
+    jQuery("form input[type=submit]").on("click", function(){
+      if(!jQuery("#cjs_group_view_uixmultiselect").val()) {
+        GroupSearch.addFlash(selectFieldMsg);
+        return false;
+      }
+    });
+  },
+
+  addFlash: function(message){
+    ChronusValidator.ErrorManager.ShowResponseFlash("cjs_group_view_flash", message);
+    jQuery("#cjs_update_view").animate({ scrollTop: 0 }, 800);
+     jQueryScrollTo("#cjs_group_view_flash", false);
+  },
+
+  resetSortImages: function(headElements){
+    headElements.removeClass(GroupSearch.sortDesc).removeClass(GroupSearch.sortAsc).addClass(GroupSearch.sortBoth);
+  },
+
+  setSelectAllPosition: function(){
+    var tableEnclosure = jQuery(GroupSearch.groupViewTable).closest(".cjs_table_enclosure");
+    var tableWidth = tableEnclosure.width() || jQuery("#cjs_groups_listing").width();
+    var position = ((tableWidth/2) - 300);
+    jQuery(GroupSearch.selectAllRow).find("td").css({"padding-left": position + "px"});
+  },
+
+  inspectSortableElements: function(){
+    var sortableElements = jQuery(GroupSearch.headerElements);
+    sortableElements.on('click', function(){
+      var sortParam = jQuery(this).data("sort");
+      var sortOrder = "";
+      GroupSearch.resetSortImages(sortableElements.not(jQuery(this)));
+      if(jQuery(this).hasClass(GroupSearch.sortBoth)){
+        jQuery(this).removeClass(GroupSearch.sortBoth).addClass(GroupSearch.sortAsc);
+        sortOrder = "asc";
+      }
+      else if(jQuery(this).hasClass(GroupSearch.sortAsc)){
+        jQuery(this).removeClass(GroupSearch.sortAsc).addClass(GroupSearch.sortDesc);
+        sortOrder = "desc";
+      }
+      else if(jQuery(this).hasClass(GroupSearch.sortDesc)){
+        jQuery(this).removeClass(GroupSearch.sortDesc).addClass(GroupSearch.sortAsc);
+        sortOrder = "asc";
+      }
+      jQuery('#filter_sort_field').val(sortParam);
+      jQuery('#filter_sort_order').val(sortOrder);
+      GroupSearch.applyFilters();
+    });
+  },
+
+  initializeEditColumns: function(){
+    var editColumn = jQuery("#group_view_columns_update_link");
+    var cancelLink = jQuery("#edit_columns_groups_listing_popup .form-actions a.cancel");
+
+    editColumn.on('click', function(event){
+      event.preventDefault();
+      var url = jQuery(this).data("url");
+      var view = jQuery(this).data("view");
+      var tab = jQuery(this).data("tab");
+      var dataParameters = {view: view, tab: tab};
+
+      jQueryShowQtip('#group_elements', 900, url, dataParameters, {method: "post", modal: true, largeModal: true});
+    });
+
+    cancelLink.on('click', function(){
+      closeQtip();
+      return false;
+    });
+  },
+
+  validateBulkActionsPopup: function(){
+    jQuery("form.cjs-groups-bulk-action-qtip-popup input[type='submit']").on("click", function(){
+      return ValidateRequiredFields.validateFormElements(jQuery(this));
+    });
+  },
+
+  validateNewGroup: function(){
+    jQuery(".cjs_create_group").on("click", function(){
+      var submitBtn = jQuery(this);
+      var requiredFieldObjects = submitBtn.closest("form").find("input.required-field,select.required-field");
+      var submitValidity = true;
+      requiredFieldObjects.each(function(){
+        var isBlank = jQuery(this).val().blank();
+        var select2Field = jQuery(this).closest(".controls").find(".required-field");
+        ChronusValidator.ErrorManager.ShowHideFieldError(select2Field, isBlank);
+        if(isBlank){
+          submitValidity = false;
+        }
+      });
+      return submitValidity;
+    });
+  },
+
+  displayGroupsAlert: function(content, modalSelector, formSelector, actionButtonId) {
+    var groupModal = jQuery(modalSelector);
+    var alertContainer = groupModal.find(".cjs_groups_alert_container");
+
+    groupModal.find(formSelector).hide();
+    alertContainer.find(".cjs_groups_alert").html(content);
+    alertContainer.find(".cjs_groups_alert_yes").data("action_button_id", actionButtonId);
+    alertContainer.find(".cjs_groups_alert_actions").show();
+    alertContainer.find(".alert").removeClass("alert alert-warning").addClass("cjs_groups_alert_confirmation m-b");
+    alertContainer.find("i").addClass("fa-3x text-warning");
+    alertContainer.show();
+  },
+
+  handleGroupsAlert: function(modalSelector, formSelector) {
+    jQuery(".cjs_groups_alert_action").on("click", function() {
+      var flagSelector = "input[name='<%= GroupsHelper::GROUPS_ALERT_FLAG_NAME %>']";
+      var groupModal = jQuery(this).closest(modalSelector);
+      var groupForm = groupModal.find(formSelector);
+      var alertContainer = groupModal.find(".cjs_groups_alert_container");
+      var alertShownFlag = groupForm.find(flagSelector);
+
+      alertContainer.find(".cjs_groups_alert_confirmation").addClass("alert alert-warning").removeClass("cjs_groups_alert_confirmation m-b");
+      alertContainer.find(".cjs_groups_alert_actions").hide();
+      alertContainer.find("i").removeClass("fa-3x text-warning");
+      groupForm.show();
+
+      if(jQuery(this).hasClass("cjs_groups_alert_yes")) {
+        var actionButtonId = jQuery(this).data("action_button_id");
+        alertShownFlag.val(true);
+        groupForm.find(actionButtonId).trigger("click");
+      } else {
+        alertShownFlag.val(false);
+      }
+    });
+  },
+
+  updateAllChoices: function(questionId, isSelected) {
+    checkbox_selector = "input[id^='connection_questions_" + questionId + "']";
+    jQuery(checkbox_selector).prop('checked', isSelected);
+    GroupSearch.applyFilters();
+  },
+
+  selectAllChoices: function(questionId) {
+    GroupSearch.updateAllChoices(questionId, true);
+  },
+
+  deSelectAllChoices: function(questionId) {
+    GroupSearch.updateAllChoices(questionId, false);
+  },
+
+  initializeTruncateActions: function(){
+    jQuery(".see_more_toggle").on("click", function(){
+      id = jQuery(this).data("id");
+      jQuery("#full_content_" + id).removeClass("hide");
+      jQuery("#trunc_content_" + id).addClass("hide");
+    });
+
+    jQuery(".see_less_toggle").on("click", function(){
+      id = jQuery(this).data("id");
+      jQuery("#full_content_" + id).addClass("hide");
+      jQuery("#trunc_content_" + id).removeClass("hide");
+    });
+  },
+
+  initializeTaskStatusFilter: function(andText){
+    GroupSearch.displayStringAnd = andText;
+    GroupSearch.applyMentoringConnectionV2Filter();
+    GroupSearch.customTaskStatusFilterPopup();
+    GroupSearch.initializeApplyCustomTaskFilter();
+    GroupSearch.cancelCustomTaskFilterPopup();
+    GroupSearch.initializeClearCustomTaskStatusFilter();
+    GroupSearch.resetTaskOptionsForCustomTaskStatusFilter();
+    GroupSearch.addAdditionalCustomTaskStatusSelector();
+    GroupSearch.removeAdditionalCustomTaskStatusSelector();
+  },
+
+  applyMentoringConnectionV2Filter: function(){
+    jQuery('#filter_pane_full').on('change', '.mentoring_connections_v2_behind_schedule', function() {
+      GroupSearch.handleMentoringConnectionV2FilterChange(jQuery(this));
+    });
+  },
+
+  handleMentoringConnectionV2FilterChange: function(element){
+    if(element.attr('id') == 'mentoring_connections_custom'){
+      var url = element.data("url");
+      var templateVal = jQuery("#cjs_hidden_custom_task_filter_template").val();
+      jQuery("#cjs_filter_report").modal('hide');
+      jQueryShowQtip("#inner_content", 1400, url, {template: templateVal});
+    }
+    else{
+      GroupSearch.applyFilters();
+    }
+  },
+
+  clearTaskStatusFilter: function(showFilterReportModal){
+    GroupSearch.resetSidePaneFilters(".mentoring_connections_v2_behind_schedule", "#mentoring_connections_all");
+    if(showFilterReportModal){
+      jQuery("#cjs_filter_report").modal('show');
+    }
+    else{
+      jQuery(".cjs_task_status_row").remove();
+      jQuery(".cjs_hidden_custom_task_filter").remove();
+    }
+  },
+
+  initializeClearCustomTaskStatusFilter: function(){
+    jQuery(document).on('click', '.cjs_cancel_custom_task_filter', function(){
+      GroupSearch.clearTaskStatusFilter(true);
+    });
+  },
+
+  initializeApplyCustomTaskFilter: function(){
+    jQuery(document).on('click', '.cjs_apply_custom_task_filter', function(){
+      GroupSearch.customTaskFilterCreateHiddenFieldsFromPopup();
+      GroupSearch.modifyCustomTaskStatusFilterText();
+      closeQtip();
+      GroupSearch.applyFilters();
+      jQuery("#cjs_filter_report").modal('show');
+    });
+  },
+
+  cancelCustomTaskFilterPopup: function(){
+    jQuery(document).on('click', '.cjs_cancel_custom_task_filter_popup', function(){
+      jQuery("#cjs_filter_report").modal('show');
+    });
+  },
+
+  modifyCustomTaskStatusFilterText: function(){
+    small_content = '(<small>'+ jsConnectionActivityReportTranslation.selectedTasksText + '</small>)'
+    var operator_items = jQuery(".cjs_hidden_custom_task_filter_operator");
+    var operator_array = jQuery.map(operator_items, function(element){
+      return jQuery(element).val();
+    });
+    operator_count = operator_array.length;
+    uniq_operator_count = operator_array.uniq().length;
+    if(operator_count > 1 && uniq_operator_count > 1){
+      jQuery("#cjs_custom_task_status_filter_popup").html(operator_count + jsConnectionActivityReportTranslation.differentTasksText)
+    }
+    else{
+      switch(operator_array.pop()) {
+        case "0":
+          jQuery("#cjs_custom_task_status_filter_popup").html(operator_count + jsConnectionActivityReportTranslation.completedTasksText)
+          if(operator_count == 1)
+            jQuery("#cjs_custom_task_status_filter_popup").html(operator_count + jsConnectionActivityReportTranslation.oneCompletedTaskText)
+          break;
+        case "1":
+          jQuery("#cjs_custom_task_status_filter_popup").html(operator_count + jsConnectionActivityReportTranslation.notCompletedTasksText)
+          if(operator_count == 1)
+            jQuery("#cjs_custom_task_status_filter_popup").html(operator_count + jsConnectionActivityReportTranslation.oneNotCompletedTaskText)
+          break;
+        case "2":
+          jQuery("#cjs_custom_task_status_filter_popup").html(operator_count + jsConnectionActivityReportTranslation.overdueTaskText)
+          if(operator_count == 1)
+            jQuery("#cjs_custom_task_status_filter_popup").html(operator_count + jsConnectionActivityReportTranslation.oneOverdueTaskText)
+          break;
+        default:
+          jQuery("#cjs_custom_task_status_filter_popup").html(jsConnectionActivityReportTranslation.customText + small_content)
+      }
+    }
+  },
+
+  customTaskFilterCreateHiddenFieldsFromPopup: function(){
+    var filterElement = jQuery(".cjs_custom_task_status_filter_radio");
+    // Clearing existing hidden params
+    jQuery('.cjs_hidden_custom_task_filter').remove();
+
+    // Copying Template
+    var template = jQuery("#custom_filter_template").val();
+    filterElement.append('<input type="hidden" name="search_filters[custom_v2_tasks_status][template]" value='+ template +' class="cjs_hidden_custom_task_filter" id="cjs_hidden_custom_task_filter_template"/>');
+
+    //Copying Rest
+    jQuery(".cjs_task_status_row").each(function(index){
+      var taskSelected = jQuery(this).find('input.cjs_tasks_selector').val();
+      var operatorSelected = jQuery(this).find('.cjs_tasks_operator_selector').val();
+      if(taskSelected && operatorSelected){
+        content = '<input type="hidden" name="search_filters[custom_v2_tasks_status][rows]['+index+'][task_id]" value='+ taskSelected +' class="cjs_hidden_custom_task_filter_task"/>';
+        content += '<input type="hidden" name="search_filters[custom_v2_tasks_status][rows]['+index+'][operator]" value='+ operatorSelected +' class="cjs_hidden_custom_task_filter_operator"/>';
+        filterElement.append('<div class="hide cjs_hidden_custom_task_filter cjs_hidden_custom_task_rows">'+ content +'</div>');
+      }
+    });
+  },
+
+  customTaskFilterpopulatePopupFromHiddenFields: function(){
+    var template = jQuery("#custom_filter_template")
+    var hiddenTemplateVal = jQuery("#cjs_hidden_custom_task_filter_template").val();
+    if(hiddenTemplateVal){
+      template.val(hiddenTemplateVal);
+    }
+    var numberOfRows = jQuery(".cjs_hidden_custom_task_rows").length
+    if(numberOfRows > 0){
+      jQuery(".cjs_hidden_custom_task_rows").each(function(index){
+        var task = jQuery(this).find('.cjs_hidden_custom_task_filter_task').val();
+        var operator = jQuery(this).find('.cjs_hidden_custom_task_filter_operator').val();
+        GroupSearch.customTaskStatusCloner(task, operator, index + 1 < numberOfRows);
+      });
+    }
+    else{
+      GroupSearch.customTaskStatusLoadFirstTaskSelectionRow();
+    }
+  },
+
+  customTaskStatusFilterPopup: function(){
+    jQuery("#cjs_custom_task_status_filter_popup").on("click", function(){
+      var element = jQuery("#mentoring_connections_custom");
+      element.attr("checked", true);
+      GroupSearch.handleMentoringConnectionV2FilterChange(element);
+    });
+  },
+
+  resetTaskOptionsForCustomTaskStatusFilter: function(){
+    jQuery(document).on('change', '#custom_filter_template', function(){
+      var loaderImage = jQuery('#custom_filter_template_loading');
+      jQuery.ajax({
+        url : jQuery(this).data("url"),
+        data: {template: jQuery(this).val()},
+        beforeSend : function(){loaderImage.show();}
+      });
+    });
+  },
+
+  customTaskStatusSelect2Format: function(item){
+    if(item.role){
+      return item.text + ' - <span class="text-muted">' + item.role + '</span>';
+    }
+    else{
+      return item.text;
+    }
+  },
+
+  customTaskStatusInitializeSelect2For: function(element){
+    element.select2({
+      allowClear: true,
+      placeholder: element.data("placeholder"),
+      data: { results: GroupSearch.TaskOptions },
+      formatSelection: GroupSearch.customTaskStatusSelect2Format,
+      formatResult: GroupSearch.customTaskStatusSelect2Format
+    });
+    CampaignManagement.bindAccessibilityAttributes();
+  },
+
+  customTaskStatusLoadFirstTaskSelectionRow: function(){
+    GroupSearch.customTaskStatusCloner();
+  },
+
+  changeAddAdditionalButtonToEnd: function(element){
+    element.closest(".cjs-add-task-status-container").html("<div class='m-t-xs m-b-sm'><strong>"+GroupSearch.displayStringAnd+"</strong><i class='fa fa-trash fa-fw m-l-xs cjs-remove-task-status-selector'></i></div>");
+  },
+
+  removeAdditionalCustomTaskStatusSelector: function(){
+    jQuery(document).on('click', '.cjs-remove-task-status-selector', function(){
+      jQuery(this).closest(".cjs_task_status_row").remove();
+    });
+  },
+
+  addAdditionalCustomTaskStatusSelector: function(){
+    jQuery(document).on('click', '.cjs-add-task-status-selector', function(){
+      GroupSearch.changeAddAdditionalButtonToEnd(jQuery(this));
+      GroupSearch.customTaskStatusCloner();
+    });
+  },
+
+  customTaskStatusCloner: function(task, operator, removeAdd){
+    var clone = jQuery(".cjs_dummy_for_clone").clone();
+    clone.removeClass("cjs_dummy_for_clone");
+    clone.removeClass("hide");
+    clone.addClass("cjs_task_status_row");
+    clone.find('input.cjs_tasks_selector').val(task);
+    clone.find('.cjs_tasks_operator_selector').val(operator);
+    if(removeAdd){
+      GroupSearch.changeAddAdditionalButtonToEnd(clone.find('.cjs-add-task-status-selector'));
+    }
+    var prependElement = jQuery(".cjs_task_status_prepend_element")
+    prependElement.before(clone);
+    GroupSearch.customTaskStatusInitializeSelect2For(clone.find(".cjs_tasks_selector"));
+  },
+
+  updateCustomTaskStatusText: function(text){
+    jQuery("#cjs_custom_task_status_filter_popup").html(text);
+  },
+
+  getSurveyResponse: function(){
+    jQuery(document).on('click', '.cjs_show_response', function(event){
+      jQueryShowQtip('#survey_response', 600, jQuery(this).data("url"), "", {modal: true});
+    });
+  },
+
+  showAllResponses: function(){
+    jQuery(".cjs_show_all_responses").on("click", function(){
+      var groupId = jQuery(this).data("group-id");
+
+      jQuery(this).closest(".cjs_show_all_responses_container").hide();
+      jQuery("#cjs_hidden_responses_" + groupId).show();
+    });
+  },
+
+  clearSurveyFilter: function(){
+    jQuery("#filter_survey_name").val("");
+    jQuery("#filter_survey_question_container").remove();
+    jQuery("#filter_survey_answer_container").remove();
+  },
+
+  clearSurveyStatusFilter: function(){
+    jQuery("#filter_survey_name_status").val("");
+    jQuery("#survey_task_status").val("");
+    jQuery("#filter_survey_task_status_container").hide();
+  }
+};
+
+var Groups = {
+  addMembers: {
+    submitWithQtip: function(){
+      var addMembersForm = jQuery("#group_add_members").find("form.add_members_form");
+      addMembersForm.find(".mark_avaialable_btn").on("click", function(event){
+        var groupMembers = addMembersForm.find(".cjs_group_members_hidden_fields");
+        var enableQtip = false;
+        groupMembers.each(function(){
+          enableQtip = enableQtip || !jQuery(this).val().blank();
+        });
+        if(enableQtip){
+          jQueryShowQtip("#inner_content", 600, jQuery(this).data("qtip-url"), {}, {modal: true});
+          return false;
+        }
+        else{
+          return true
+        }
+      });
+    },
+
+    submitAddMembers: function(){
+      jQuery("#bulk_groups_make_available .cjs_make_available").on("click", function(){
+        var addMembersForm = jQuery("#group_add_members").find("form.add_members_form");
+        if(addMembersForm.length > 0){
+          var makeAvailableMessageBox = jQuery(this).closest("form#bulk_groups_make_available").find(".cjs_make_available_message");
+          addMembersForm.find(".cjs_make_available_message").val(makeAvailableMessageBox.val());
+          jQuery(this).prop("disabled", true);
+          jQuery(this).val(jQuery(this).data("disable-with"));
+          addMembersForm.submit();
+          return false;
+        }
+        else{
+          return true
+        }
+      });
+    }
+  },
+
+  displaySurveyQuestions: function(){
+    jQuery('#filter_survey_name').on('change', function(){
+      survey_ele = jQuery('#filter_survey_name');
+      jQuery.ajax({
+        url: survey_ele.data("url"),
+        data: {survey_id: survey_ele.val(), is_reports_view: survey_ele.data("is-reports-view")},
+        beforeSend: function(){
+          jQuery("#loading_results").show();
+        }
+      });
+    });
+  },
+
+  showAcceptPopup: function(mentorRequestSelector)
+  {
+    jQuery(mentorRequestSelector).modal('show');
+  },
+
+  redirectGroupPage: function(){
+    jQuery('.cjs_groups_info_mobile').on('click', function (event) {
+      var url = jQuery(this).data("redirect-url");
+      window.location.href = url ;
+    });
+  },
+
+  initializeTab: function(class_selector)
+  {
+    jQuery("."+class_selector).click(function() {
+      var tab = jQuery(this);
+      var tab_url = tab.find('a').data("url");
+      tab.removeClass('cjs_not_loaded');
+      tab.closest('.inner_tabs').find('.active').toggleClass('active');
+      if(tab.closest('.cjs_dropdown').length > 0){
+        tab = tab.closest('.cjs_dropdown');
+      }
+      if(!tab.hasClass('active'))
+      {
+        tab.toggleClass('active');
+      }
+      jQuery.ajax({
+          url : tab_url,
+          dataType: "script",
+          beforeSend: function(){
+            tab.closest('.connections-slick').find('.cjs_tab_content').addClass('unhighlight');
+            tab.closest('.connections-slick').find('.cjs_tab_content').removeClass('animated fadeIn');
+          },
+          success: function() {
+            tab.closest('.connections-slick').find('.cjs_tab_content').removeClass('unhighlight');
+            tab.closest('.connections-slick').find('.cjs_tab_content').addClass('animated fadeIn');
+            tab.closest('.connections-slick').find('.cui_loading_tab').addClass('hide');
+          }
+      });
+    });
+  },
+
+  gaTrackHomepageSwitchTabs: function(){
+    jQuery(".cjs_message_tabs, .cjs_tasks_tab, .cjs_home_page_meetings_tab").click(function(){
+      if(!disableSwitchTabTracking){
+        var selector = jQuery(this);
+        var switchTab;
+        if(selector.hasClass("cjs_message_tabs")){
+          switchTab = chrGoogleAnalytics.action.GA_MENTORING_AREA_SWITCHED_TO_MESSAGES_TAB;
+        }
+        else if(selector.hasClass("cjs_tasks_tab")){
+          switchTab = chrGoogleAnalytics.action.GA_MENTORING_AREA_SWITCHED_TO_TASKS_TAB;
+        }
+        else{
+          switchTab = chrGoogleAnalytics.action.GA_MENTORING_AREA_SWITCHED_TO_MEETINGS_TAB;
+        }
+        chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MENTORING_AREA_ACTIVITY, switchTab, chrGoogleAnalytics.eventLabel.GA_MENTORING_AREA_ACTIVITY_LABEL_HOME_PAGE, chrGoogleAnalytics.eventLabelId.GA_MENTORING_AREA_ACTIVITY_HOME_PAGE_LABEL_ID);
+      }
+    })
+  },
+
+  displaySurveyAnswerBox: function(){
+    jQuery('#survey_question_dropdown').on('change', function(){
+      surveyBox = jQuery('#filter_survey_name');
+      questionBox = jQuery('#survey_question_dropdown');
+      jQuery.ajax({
+        url: questionBox.data("url"),
+        data: {survey_id: surveyBox.val(), question_id: questionBox.val(), is_reports_view: questionBox.data("is-reports-view")},
+        beforeSend: function(){
+          jQuery("#loading_results").show();
+        }
+      });
+    });
+  },
+
+  displaySurveyAnswerChoices: function(choicesIdsString, choicesTextsString, selectedChoices, separator){
+    var choicesIds = choicesIdsString.split(separator);
+    var choicesTexts = choicesTextsString.split(separator);
+    var choicesArray = [];
+    var length = choicesIds.length;
+    for(var i = 0; i < length; i++) {
+      choicesArray.push({id: choicesIds[i], text: choicesTexts[i]})
+    }
+    var ans_div = jQuery('#survey_answer_choice');
+    ans_div.select2({
+      allowClear: true,
+      placeholder: ans_div.data('placeholder'),
+      multiple: true,
+      tags: choicesArray,
+      createSearchChoice: false,
+      formatResult: function(result, container, query, escapeMarkup){
+        removeFastClickForSelect2(container);
+        return result.text;
+      }
+    });
+    ans_div.select2("val", selectedChoices.split(","));
+    GroupUpdate.bindAccessibilityAttributes("#filter_survey_answer_container");
+  },
+
+  resetSurveyStatusAndResponse: function(){
+    jQuery("#filter_survey_question_container").remove();
+    jQuery("#filter_survey_answer_container").remove();
+    jQuery("#filter_survey_task_status_container").remove();
+  },
+
+  displayTaskStatusBox: function(){
+    jQuery('#filter_survey_name_status').on('change', function(){
+      jQuery("#survey_task_status").val("");
+      if(jQuery("#filter_survey_name_status").val() == ""){
+        jQuery('#filter_survey_task_status_container').hide();
+      }
+      else{
+        jQuery('#filter_survey_task_status_container').show(); 
+      }
+    });
+  },
+
+  initializeOwnerSelect2: function(groupId){  
+    var owner_input = jQuery("#group_owner_"+groupId);
+    jQuery(owner_input).select2({
+      data: jQuery(owner_input).data('select'),
+      multiple: true,
+      minimumInputLength: 0,
+      formatResult: function(result, container){
+        removeFastClickForSelect2(container);
+        return result.text;
+      }
+    });
+    GroupUpdate.bindAccessibilityAttributes("#fetch_owners_form");
+  },
+
+  hideOrShowLimitHelpText: function () {
+    jQuery('#group_join_as_role_id').change(function () {
+      jQuery('.connection-limit-help-text').hide()
+      jQuery('#limit-help-text-' + jQuery('#group_join_as_role_id').val()).show();
+    });
+  },
+
+  loadRoleUsers: function(allowOneToOneMentoring) {
+    if(allowOneToOneMentoring){
+      jQuery(document).ready(function(event) {
+        jQuery(".cjs_users_of_role_panel_header").click(); 
+      });
+    }
+    jQuery(".cjs_users_of_role_panel_header").on("click", function(){
+      var parentContainer = jQuery(this).closest(".cjs_users_of_role_panel");  
+      var usersContainer = jQuery(parentContainer).find('[id^=users_of_role_]');
+      var dataLoaded = jQuery(usersContainer).data("loaded");
+      if(!dataLoaded) {
+        jQuery.ajax({
+          url: jQuery(usersContainer).data('url'),
+          success: function() {
+            jQuery(parentContainer).find(".cjs_users_of_role_loading_results").slideUp();
+            jQuery(usersContainer).data("loaded", true);
+          }
+        });
+      }
+    });
+  },
+  
+  showSetStartDatePopup: function(url){
+    jQueryShowQtip('#inner_content', 650, url,'',{modal: true});
+  },
+
+  showManageMembersPopup: function(group_id){
+    jQuery("#update_members_link_" + group_id).click();
+  },
+
+  handleCloseStartDatePopupProposeFlow: function(url){
+    jQuery(".cjs_close_set_start_date_propose_flow").on("click", function(event){
+      event.preventDefault();
+      closeQtip();
+      window.location.href = url;
+    });
+  },
+
+  handleSetChangeStartDate: function(){
+    jQuery(document).on('click', '.cjs_set_or_edit_connection_start_date', function(event){
+      var url = jQuery(this).data("url");
+      Groups.showSetStartDatePopup(url);
+    });
+  },
+
+  validateCircleStartDate: function(shouldvalidate){
+    if(shouldvalidate && jQuery("#circle_start_date_form").val() == ""){
+      ChronusValidator.ErrorManager.ShowResponseFlash("", GroupSearch.translations.selectNewStartDate);
+      return false;
+    }
+    return true;
+  }
+}
+
+var HomePageWidget = {
+  getHomePageWidgetData: function(url){
+    jQuery.ajax({
+      url: url
+    });  
+  },
+
+  initNewRequest: function(){
+    jQuery(".cjs_hpw_project_request").on("click", function(event){
+      event.preventDefault();
+      var url = jQuery(this).attr("href");
+      jQueryShowQtip("#inner_content", 600, url, {}, {modal: true});
+    });
+  },
+
+  adjustHomePageWidgetHeight: function(){
+    jQuery(window).load(function(){
+      setTimeout(function(){
+        jQuery(".contact-box-footer").each(function(){
+          var footerHeight = jQuery(this).offset().top;
+          var userLinkContainer = jQuery(this).parent().find(".cjs_circle_widget_members_container");
+          if(userLinkContainer.length){
+            var userLinkContainerHeight = userLinkContainer.offset().top + userLinkContainer.outerHeight();
+            if(footerHeight < userLinkContainerHeight){
+              HomePageWidget.setHomePageWidgetHeight();
+              return false;
+            }
+          }
+        });
+      }, 2000);
+    });
+  },
+
+  setHomePageWidgetHeight: function(){
+    jQuery(".contact-box-footer").each(function(){
+      jQuery(this).parent().find(".height-239").removeClass("height-239").addClass("height-307");
+    });
+  }
+}
+
+var PublishCircleWidget = {
+  removeCircleFromWidget: function(){
+    jQuery(".cjs_remove_circle_from_widget").on("click", function(){
+      url = jQuery(this).data("url");
+      jQuery.ajax({
+        url: url,
+        dataType: "script"
+      });
+    });
+  }
+}
+
+var ConnectionsWidget = {
+  getConnectionsWidgetData: function(url){
+    jQuery.ajax({
+      url: url
+    });  
+  },
+
+  loadSlick: function(urlSelector, slickCurrentSlide){
+    var slideSelector = jQuery('.connections-slick .slick-slide[data-slick-index="'+ (slickCurrentSlide) +'"]');
+    jQuery("#cjs_connections_widget").addClass("cjs_next_connection");
+    if(slideSelector.length > 0 && slideSelector.hasClass('not-loaded')){
+      jQuery.ajax({
+          url : jQuery('.connections-slick .slick-slide[data-slick-index="'+ (slickCurrentSlide-1) +'"]').find(urlSelector).attr('href'),
+          beforeSend: function(){
+            slideSelector.removeClass('not-loaded');
+          }
+      });
+    }
+  },
+
+  getNextConnectionsWidget: function(classSelector, urlSelector){
+    jQuery('.listing_bottom_bar').on("click", classSelector,function(){
+      jQuery('.listing_bottom_bar').addClass("cjs_carousel_action");
+      var slickCurrentSlide = jQuery('.connections-slick').slick('slickCurrentSlide');
+      ConnectionsWidget.loadSlick(urlSelector, slickCurrentSlide);
+    });
+  },
+
+  activateMeetingsTab: function(group_id){
+    jQuery(".cjs_meetings_tab_home_page_" + group_id).addClass("active");
+    jQuery(".cjs_messages_tab_home_page_" + group_id).removeClass("active");
+    jQuery(".cjs_tasks_tab_" + group_id).removeClass("active");
+    jQuery(".cjs_discussions_tab_home_page_" + group_id).removeClass("active");
+  }
+}
+
+var AdminGroupNotes = {
+  initialize: function(){
+    jQuery(".cjs-admin-group-notes-link").on("click", function(){
+      jQueryShowQtip("#inner_content", 470, jQuery(this).data("url"), {}, { modal: true });
+    });
+  },
+
+  updateNotes: function(content){
+    var notesContainer = jQuery(".cjs-admin-group-notes-container");
+    var notesBlock = notesContainer.find(".cjs-admin-group-notes");
+    var notesDescription = jQuery(".cjs-admin-group-notes-description");
+    if(content){
+      notesBlock.html(content);
+      notesDescription.hide();
+      notesContainer.removeClass("animated fadeInDown").show();
+      jQueryHighlight(notesContainer);
+    } else {
+      notesDescription.show();
+      notesContainer.hide();
+    }
+  }
+}
+
+var MentoringAreaTracking = {
+  gaGetEventLabelId: function(homePageView){
+    if(homePageView){
+      eventLabelId = chrGoogleAnalytics.eventLabelId.GA_MENTORING_AREA_ACTIVITY_HOME_PAGE_LABEL_ID;
+    }
+    else{
+      eventLabelId = chrGoogleAnalytics.eventLabelId.GA_MENTORING_AREA_ACTIVITY_MENTORING_AREA_LABEL_ID;
+    }
+    return eventLabelId;
+  },
+
+  gaGetEventLabel: function(homePageView){
+    if(homePageView){
+      eventLabel = chrGoogleAnalytics.eventLabel.GA_MENTORING_AREA_ACTIVITY_LABEL_HOME_PAGE;
+    }
+    else{
+      eventLabel = chrGoogleAnalytics.eventLabel.GA_MENTORING_AREA_ACTIVITY_LABEL_MENTORING_AREA;
+    }
+    return eventLabel;
+  },
+
+  gaTrackTaskViewed: function(homePageView){
+    eventLabel = MentoringAreaTracking.gaGetEventLabel(homePageView);
+    eventLabelId = MentoringAreaTracking.gaGetEventLabelId(homePageView);
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MENTORING_AREA_ACTIVITY, chrGoogleAnalytics.action.GA_MENTORING_AREA_VIEWED_TASK, eventLabel, eventLabelId);
+  },
+
+  gaTrackTaskCommentClicked: function(homePageView){
+    eventLabel = MentoringAreaTracking.gaGetEventLabel(homePageView);
+    eventLabelId = MentoringAreaTracking.gaGetEventLabelId(homePageView);
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MENTORING_AREA_ACTIVITY, chrGoogleAnalytics.action.GA_MENTORING_AREA_CLICKED_ADD_COMMENT, eventLabel, eventLabelId);
+  },
+
+  gaTrackTaskCommentAdded: function(homePageView){
+    eventLabel = MentoringAreaTracking.gaGetEventLabel(homePageView);
+    eventLabelId = MentoringAreaTracking.gaGetEventLabelId(homePageView);
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MENTORING_AREA_ACTIVITY, chrGoogleAnalytics.action.GA_MENTORING_AREA_ADDED_COMMENT, eventLabel, eventLabelId);
+  },
+
+  gaTrackTaskCommentDeleted: function(homePageView){
+    eventLabel = MentoringAreaTracking.gaGetEventLabel(homePageView);
+    eventLabelId = MentoringAreaTracking.gaGetEventLabelId(homePageView);
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MENTORING_AREA_ACTIVITY, chrGoogleAnalytics.action.GA_MENTORING_AREA_DELETED_COMMENT, eventLabel, eventLabelId);
+  },
+
+  gaTrackMessageViewed: function(homePageView){
+    eventLabel = MentoringAreaTracking.gaGetEventLabel(homePageView);
+    eventLabelId = MentoringAreaTracking.gaGetEventLabelId(homePageView);
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MENTORING_AREA_ACTIVITY, chrGoogleAnalytics.action.GA_MENTORING_AREA_VIEWED_MESSAGE, eventLabel, eventLabelId);
+  },
+
+  gaTrackMessageReplyClicked: function(homePageView){
+    eventLabel = MentoringAreaTracking.gaGetEventLabel(homePageView);
+    eventLabelId = MentoringAreaTracking.gaGetEventLabelId(homePageView);
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MENTORING_AREA_ACTIVITY, chrGoogleAnalytics.action.GA_MENTORING_AREA_CLICKED_REPLY_TO_MESSAGE, eventLabel, eventLabelId);
+  },
+
+  gaTrackMessageRepliedToMessage: function(homePageView){
+    eventLabel = MentoringAreaTracking.gaGetEventLabel(homePageView);
+    eventLabelId = MentoringAreaTracking.gaGetEventLabelId(homePageView);
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MENTORING_AREA_ACTIVITY, chrGoogleAnalytics.action.GA_MENTORING_AREA_REPLIED_TO_MESSAGE, eventLabel, eventLabelId);
+  },
+
+  gaTrackMessageDeleted: function(homePageView){
+    eventLabel = MentoringAreaTracking.gaGetEventLabel(homePageView);
+    eventLabelId = MentoringAreaTracking.gaGetEventLabelId(homePageView);
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MENTORING_AREA_ACTIVITY, chrGoogleAnalytics.action.GA_MENTORING_AREA_DELETED_MESSAGE, eventLabel, eventLabelId);
+  },
+
+  gaTrackViewedConnection: function(slideId){
+    eventLabel = MentoringAreaTracking.gaGetEventLabel(true);
+    eventLabelId = MentoringAreaTracking.gaGetEventLabelId(true);
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MENTORING_AREA_ACTIVITY, chrGoogleAnalytics.action.GA_MENTORING_AREA_VIEWED_CONNECTION + slideId, eventLabel, eventLabelId);
+  },
+
+  gaTrackSentMessage: function(homePageView){
+    eventLabel = MentoringAreaTracking.gaGetEventLabel(homePageView);
+    eventLabelId = MentoringAreaTracking.gaGetEventLabelId(homePageView);
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MENTORING_AREA_ACTIVITY, chrGoogleAnalytics.action.GA_MENTORING_AREA_SENT_MESSAGE, eventLabel, eventLabelId);
+  },
+
+  gaTrackAddMeeting: function(homePageView){
+    eventLabel = MentoringAreaTracking.gaGetEventLabel(homePageView);
+    eventLabelId = MentoringAreaTracking.gaGetEventLabelId(homePageView);
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MENTORING_AREA_ACTIVITY, chrGoogleAnalytics.action.GA_MENTORING_AREA_ADDED_MEETING, eventLabel, eventLabelId);
+  },
+
+  gaTrackRecordPastMeeting: function(homePageView){
+    eventLabel = MentoringAreaTracking.gaGetEventLabel(homePageView);
+    eventLabelId = MentoringAreaTracking.gaGetEventLabelId(homePageView);
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.MENTORING_AREA_ACTIVITY, chrGoogleAnalytics.action.GA_MENTORING_AREA_ADDED_PAST_MEETING, eventLabel, eventLabelId);
+  }
+}
+
+var BulkGroupPublish = {
+  onPublishComplete: function(){
+    jQuery('#progress_bar_container').modal('hide');
+    element = jQuery('.progress_data_url');
+    jQuery.ajax({
+      url: element.attr('href'),
+      data: element.data(),
+      type: 'POST'
+    });
+  }
+}
+
+var SimilarCircles = {
+  lastEnteredName: "",
+
+  initialize: function(url){
+    SimilarCircles.showSimilarCircles(url);
+    SimilarCircles.hideSimilarCircles();
+  },
+
+  getSimilarCircles: function(url){
+    var inputText = jQuery("#similar_connection_name").val().trim();
+    if(inputText.length > 3){
+      if(inputText != SimilarCircles.lastEnteredName){
+        SimilarCircles.lastEnteredName = inputText;
+        jQuery.ajax({
+          url: url,
+          data: {search: inputText}
+        });
+      } 
+    }
+    else{
+      jQuery(".similar_circles_content").hide();
+    }
+  },
+
+  showSimilarCircles: function(url){
+    jQuery("#similar_connection_name").on("keydown", function(){
+      SimilarCircles.getSimilarCircles(url);
+    });
+
+    jQuery("#similar_connection_name").on("focus", function(){
+      SimilarCircles.getSimilarCircles(url);
+    });
+  },
+
+  hideSimilarCircles: function(){
+    jQuery(document).on("click", function(e){
+      if(!(e.target.id == "cjs_similar_circles_content" || e.target.id == "similar_connection_name" || jQuery(e.target).parents("#cjs_similar_circles_content").length > 0)){
+        jQuery(".similar_circles_content").hide();
+      }
+    });
+  }
+}

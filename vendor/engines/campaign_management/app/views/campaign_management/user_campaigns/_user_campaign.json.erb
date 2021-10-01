@@ -1,0 +1,9 @@
+<%= {
+  "id" => user_campaign.id,
+  "title" => campaign_details_action(user_campaign),
+  "open_rate" => user_campaign.open_rate,
+  "click_rate" => user_campaign.click_rate,
+  "total_sent" => user_campaign.total_sent,
+  "enabled_at" => user_campaign.enabled_at,
+  "created_at" => user_campaign.created_at
+}.to_json.html_safe %>

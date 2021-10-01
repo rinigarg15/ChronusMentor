@@ -1,0 +1,16 @@
+<% content = render partial: "mentoring_model/tasks/progressive_task_form", locals: {
+    group: @group,
+    task: @task,
+    goals_to_associate: @goals_to_associate,
+    as_ajax: true
+} %>
+TaskProgressiveForm.showMenuAndCloseForm();
+<% if @goal_specific_task %>
+  MentoringModelGoal.addTaskForm("<%= j @related_goal.id.to_s %>","<%= j content %>");
+<% elsif @milestone.try(:id).present? %>
+  MentoringModelMilestones.addForm("<%= @milestone.id.to_s %>", "<%= j content %>")
+<% elsif  params[:task_section_id].present? %>
+  MentoringModelTask.addForm("#cjs_add_section_task_<%= params[:task_section_id].to_s %> .cjs-action-item-response-container", "<%= j content %>");
+<% else %>
+  MentoringModelTask.addForm(".cjs-action-item-response-container", "<%= j content %>");
+<% end %>

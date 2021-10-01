@@ -1,0 +1,50 @@
+<% @title = "feature.article.content.pick_a_type".translate(an_article: _a_article) %>
+<% @back_link = { label: "feature.article.action.See_more_articles".translate(articles: _articles), link: articles_path } if current_user.can_view_articles? %>
+<% article_types = [
+  {
+    type: ArticleContent::Type::TEXT,
+    icon: "fa fa-file-text",
+    heading: "feature.article.content.types.general".translate(Article: _Article),
+    description: "feature.article.content.types.general_description".translate,
+    id: "a_text"
+  },
+  {
+    type: ArticleContent::Type::MEDIA,
+    icon: "fa fa-file-video-o",
+    heading: "feature.article.content.types.media".translate,
+    description: "feature.article.content.types.media_description".translate(an_article: _a_article),
+    id: "a_media"
+  },
+  {
+    type: ArticleContent::Type::LIST,
+    icon: "fa fa-book",
+    heading: "feature.article.content.types.list".translate,
+    description: "feature.article.content.types.list_description_v2".translate(program: _program),
+    id: "a_list"
+  },
+  {
+    type: ArticleContent::Type::UPLOAD_ARTICLE,
+    icon: "fa fa-paperclip",
+    heading: "feature.article.content.types.upload".translate(Article: _Article),
+    description: "feature.article.content.types.upload_description_v1".translate(an_article: _a_article),
+    id: "a_upload"
+  }
+] %>
+
+<%= render :partial => "articles/drafts_warning" if wob_member.articles.drafts.any? %>
+
+<%= ibox "feature.article.content.article_type_question".translate(article: _article), ibox_id: "new_article", content_class: "no-padding" do %>
+  <% article_types.each do |article_type| %>
+    <%= link_to(new_article_path(type: article_type[:type]), class: "text-default") do %>
+      <div id="<%= article_type[:id] %>" class="p-md b-b">
+        <div class="media-left">
+          <%= get_icon_content("#{article_type[:icon]} fa-4x") %>
+        </div>
+        <div class="media-body">
+          <h4><%= article_type[:heading] %></h4>
+          <%= article_type[:description] %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

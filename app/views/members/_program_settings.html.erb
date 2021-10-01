@@ -1,0 +1,48 @@
+<% program = (local_assigns.has_key?(:program) ? program : program_settings) %>
+<% collapsed_or_not = !program_view? %>
+<% collapsed_or_not &&=  local_assigns[:accordion_collapsed] if local_assigns.has_key?(:accordion_collapsed) %>
+<% profile_user = member.user_in_program(program) %>
+
+<div id="account_settings_<%= program.id %>">
+  <% collapsible_content "feature.profile.content.org_prog_settings".translate(org_prog_name: program.name), [], collapsed_or_not, :class => "stacked acc-unstyled" do %>
+    <div class="program_settings">
+      <% user_in_program = member.user_in_program(program) %>
+      <%= form_for user_in_program, :remote => true, :url => update_settings_member_path(member), :html => {:class => 'form-horizontal'} do |user_form| %>
+        <%= response_flash "settings_errors_flash_#{program.id}" %>
+        <%= render :partial => "members/edit/select_mentoring_mode", :locals => {:form => user_form, program: program} if user_in_program.is_mentor? %>
+        <% if user_in_program.allowed_to_edit_max_connections_limit?(program, @is_admin_view) %>
+          <div class="cjs_mentoring_setting_<%= program.id %> cjs_hide_setting_<%= program.id %>_<%= User::MentoringMode::ONE_TIME %> <%= 'hide' if profile_user.is_available_only_for_one_time_mentoring? %>">
+            <%= content_tag :h4, "feature.user.content.mentoring_mode.ongoing.name".translate(:Mentoring => _Mentoring), class: "m-b-xs" %>
+            <%= render_max_connections_limit(user_form, program, text_field_id: "max_connections_limit_#{program.id}", wrapper_class: "m-t-xs") %>
+          </div>
+        <% end %>
+        <div class="cjs_mentoring_setting_<%= program.id %> cjs_hide_setting_<%= program.id %>_<%= User::MentoringMode::ONGOING %> <%= 'hide' if profile_user.is_available_only_for_ongoing_mentoring? %>">
+          <% if program.calendar_enabled? && user_in_program.is_mentor?  %>
+            <%= render :partial => "user_settings/user_setting_form", :locals => {:user => user_in_program, :parent_form => user_form} %>
+          <% end %>
+          <% if profile_user.member.show_one_time_settings?(program) %>
+            <%= fields_for member do |member_form| %>
+              <% if program_view? && profile_user.can_set_meeting_availability? %>
+                <div class="cjs_mentoring_setting_<%= program.id %> cjs_hide_setting_<%= program.id %>_<%= User::MentoringMode::ONGOING %>">
+                  <%= render :partial => "members/edit/will_set_availability_setting", :locals => {:member => member, :form => member_form, :first_visit => false, :user => profile_user} %>
+                </div>
+              <% end %>
+
+              <%= render :partial => "members/mentee_availability_text", :locals => {:user => profile_user, :member_form => member_form} if program.calendar_enabled?%>
+            <% end %>
+          <% end %>
+        </div>
+        <%= render partial: "members/edit/user_notification_setting", locals: { user_form: user_form, program: program, show_heading: true } %>
+
+        <%= user_form.hidden_field :program_id, :value => program.id, id: "program_id_#{program.id}" %>
+        <%= hidden_field_tag 'acc_settings', 'true', id: nil %>
+        <% action_set do %>
+          <div class="pull-right">
+            <%= link_to "display_string.Cancel".translate, program_root_path, :class => 'btn btn-white' %>
+            <%= user_form.submit "display_string.Save_Settings".translate, :class => "btn btn-primary" %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

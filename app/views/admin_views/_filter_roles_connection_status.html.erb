@@ -1,0 +1,201 @@
+<% can_show_field = (new_view && used_as_filter) %>
+<%= field_set_wrapper("feature.admin_view.label.role_&_status".translate, true) do %>
+  <%= control_group do %>
+    <div class="control-label col-sm-2 false-label"><%= "display_string.Roles".translate %></div>
+    <%= controls(class: "col-sm-10") do %>
+      <%= render partial: "admin_views/role_filter_template", locals: {program: @current_program, filter_params: @filter_params} %>
+    <% end %>
+  <% end %>
+
+  <%= control_group do %>
+    <% label = "feature.admin_view.label.User_Status".translate %>
+    <div class="false-label control-label col-sm-2"><%= label %></div>
+    <%= controls(class: "col-sm-10") do %>
+      <%= choices_wrapper(label, class: "well white-bg") do %>
+        <label class="checkbox">
+          <%= render_admin_view_check_box_or_radio_button(@admin_view, "admin_view[roles_and_status][state][active]", User::Status::ACTIVE, "feature.admin_view.status.active".translate, @filter_params, :checkbox => true) %>
+        </label>
+        <label class="checkbox">
+          <%= render_admin_view_check_box_or_radio_button(@admin_view, "admin_view[roles_and_status][state][pending]", User::Status::PENDING, "feature.admin_view.status.unpublished".translate, @filter_params, :checkbox => true) %>
+          <%= embed_icon(TOOLTIP_IMAGE_CLASS + " cjs-tool-tip", "", :data => {:desc => "feature.admin_view.content.not_published_profile_tooltip".translate}) %>
+        </label>
+        <% unless can_show_field %>
+          <label class="checkbox">
+            <%= render_admin_view_check_box_or_radio_button(@admin_view, "admin_view[roles_and_status][state][suspended]", User::Status::SUSPENDED, "feature.admin_view.status.deactivated".translate, @filter_params, :checkbox => true) %>
+          </label>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% unless can_show_field %>
+    <%= control_group do %>
+      <% label = "feature.admin_view.label.Sign_up_Status".translate %>
+      <div class="false-label control-label col-sm-2"><%= label %></div>
+      <%= controls(class: "col-sm-10") do %>
+        <%= choices_wrapper(label, class: "well white-bg") do %>
+          <label class="checkbox no-margin">
+            <%= render_admin_view_check_box_or_radio_button(@admin_view, "admin_view[roles_and_status][signup_state][added_not_signed_up_users]", AdminView::RolesStatusQuestions::ADDED_NOT_SIGNED_UP, "feature.admin_view.content.added_not_signed_up".translate(program: _program), @filter_params, :key_param => :signup_state, :checkbox => true) %>
+          </label>
+          <label class="checkbox">
+            <%= render_admin_view_check_box_or_radio_button(@admin_view, "admin_view[roles_and_status][signup_state][accepted_not_signed_up_users]", AdminView::RolesStatusQuestions::ACCEPTED_NOT_SIGNED_UP, "feature.admin_view.content.accepted_not_signed_up".translate(program: _program), @filter_params, :key_param => :signup_state, :checkbox => true) %>
+          </label>
+          <label class="checkbox">
+            <%= render_admin_view_check_box_or_radio_button(@admin_view, "admin_view[roles_and_status][signup_state][signed_up_users]", AdminView::RolesStatusQuestions::SIGNED_UP, "feature.admin_view.content.signed_up_users".translate, @filter_params, :key_param => :signup_state, :checkbox => true) %>
+          </label>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>  
+
+<% end %>    
+
+<%= render :partial => "admin_views/filter_by_language" if @admin_view.languages_filter_enabled? %>
+
+<% if @current_program.ongoing_mentoring_enabled? || @current_program.calendar_enabled? || @current_program.consider_mentoring_mode? %>
+
+  <%= content_tag(:div, :class => "cjs_mentor_mentee_applicable") do %>
+    <%= field_set_wrapper("feature.admin_view.label.engagement_and_matching_status".translate, false, @filter_params.present? && connection_status_collapse?(@filter_params[:connection_status], @admin_view)) do %>
+      
+      <% if @current_program.ongoing_mentoring_enabled? %>     
+        <% unless @current_program.project_based? %>
+          <%= control_group(:class => "cjs_mentor_applicable cjs_hidden_input_box_container") do %>
+            <label class="control-label col-sm-2" for="new_view_filter_mentor_availability_status">
+              <%= "feature.admin_view.label.mentor_availability".translate(:mentor => _Mentor) %>
+              <%= embed_icon(TOOLTIP_IMAGE_CLASS + " cjs-tool-tip", "", :data => {:desc => "feature.admin_view.content.mentors_availability_tooltip_v1".translate(:mentors => h(_Mentors), :a_mentoring_connection => h(_a_mentoring_connection))}) %>
+            </label>
+            <label class="sr-only" for="admin_view_connection_status_availability_value">
+              <%= "feature.admin_view.label.mentor_availability_slots".translate(:mentor => _mentor) %>
+            </label>
+            <%= controls(class: "col-sm-5") do %>
+              <%= generate_mentor_availabilty_list("admin_view[connection_status][availability][operator]", {:class => " cjs_show_input_field cjs_additional_text_box form-control"}, @filter_params) %>
+            <% end %>
+            <%= controls(class: "col-sm-2") do %>
+              <%= admin_view_availability_value_box("admin_view[connection_status][availability][value]", {:class => "form-control cjs_input_hidden", :style => "display:none"}, @filter_params) %>
+            <% end %>
+          <% end %>
+        <% end %>
+
+        <% if @current_program.consider_mentoring_mode? %>
+          <%= control_group(:class => "cjs_mentor_applicable") do %>
+            <label class="control-label col-sm-2" for="new_view_engagement_models"><%= "feature.admin_view.mentoring_model_preference_label".translate(:Mentor => _Mentor, :Mentoring => _Mentoring) %></label>
+            <%= controls(class: "col-sm-5") do %>
+              <%= generate_mentoring_mode_list("admin_view[connection_status][mentoring_model_preference]", @current_program, @filter_params) %>
+            <% end %>
+          <% end %>
+        <% end %>
+
+        <% if @current_program.coach_rating_enabled? %>
+          <%= control_group(:class => "cjs_mentor_applicable") do %>
+            <label class="control-label col-sm-2" for="new_view_filter_mentor_rating">
+              <%= "feature.coach_rating.label.rating_filter_label".translate(:Mentor => _Mentor) %>
+            </label>
+            <label class="sr-only" for="admin_view_connection_status_mentor_rating_value">
+              <%= "feature.coach_rating.label.rating_value_label".translate(:Mentor => _Mentor) %>
+            </label>
+            <%= controls(class: "col-sm-5") do %>
+              <%= rating_options_list("admin_view[connection_status][rating][operator]", {:class => "form-control cjs_show_rating_input_field"}, @filter_params) %>
+            <% end %>
+            <%= controls(class: "col-sm-2") do %>
+              <%= admin_view_rating_value_dropdown("admin_view[connection_status][rating][greater_than]", {:class => "form-control cjs_rating_option cjs_rating_greater_than", :style => "display:none", :placeholder => Feedback::Response::MIN_RATING, :value => AdminViewsHelper::Rating::GREATER_THAN}, @filter_params, AdminViewsHelper::Rating::GREATER_THAN) %>
+              <%= admin_view_rating_value_dropdown("admin_view[connection_status][rating][equal_to]", {:class => "form-control cjs_rating_option cjs_rating_equal_to", :style => "display:none", :placeholder => Feedback::Response::MAX_RATING, :value => AdminViewsHelper::Rating::EQUAL_TO}, @filter_params, AdminViewsHelper::Rating::EQUAL_TO) %>
+              <%= admin_view_rating_value_dropdown("admin_view[connection_status][rating][less_than]", {:class => "form-control cjs_rating_option cjs_rating_less_than", :style => "display:none", :placeholder => Feedback::Response::MAX_RATING, :value => AdminViewsHelper::Rating::LESS_THAN}, @filter_params, AdminViewsHelper::Rating::LESS_THAN) %>
+            <% end %>
+          <% end %>
+        <% end %>
+
+        <%= horizontal_line(:class => "cjs_mentor_applicable") if @current_program.coach_rating_enabled? || @current_program.consider_mentoring_mode? || !@current_program.project_based? %>
+      <% end %>
+        
+      <% if @current_program.calendar_enabled? %>
+        <%= content_tag(:div, "feature.admin_view.label.onetime_mentoring".translate(:mentoring => _mentoring), :class => "h5 font-600") %>
+        <%= control_group(:class => "cjs_mentee_applicable") do %>
+          <label class="control-label col-sm-2" for="new_view_filter_mentees_meeting_requests"><%= "feature.admin_view.label.mentees_who_have".translate(:Mentees => _Mentees) %></label>
+          <%= generate_connection_status_request_filter("admin_view[connection_status][meeting_requests][mentees]", @filter_params, :mentees, :meeting_requests) %>
+          <%= render_advanced_options_choices(@admin_view, "mentees", "meeting_requests", :get_hidden_field_tags => true) %>
+          <%= render :partial => "advanced_options_popup", :locals => {:role_type => "mentees", :request_type => "meeting_requests", :admin_view => @admin_view} -%>
+        <% end %>
+
+        <%= control_group(:class => "cjs_mentor_applicable") do %>
+          <label class="control-label col-sm-2" for="new_view_filter_mentors_meeting_requests"><%= "feature.admin_view.label.mentors_who_have".translate(:Mentors => _Mentors) %></label>
+          <%= generate_connection_status_request_filter("admin_view[connection_status][meeting_requests][mentors]", @filter_params, :mentors, :meeting_requests) %>
+          <%= render_advanced_options_choices(@admin_view, "mentors", "meeting_requests", :get_hidden_field_tags => true) %>
+          <%= render :partial => "advanced_options_popup", :locals => {:role_type => "mentors", :request_type => "meeting_requests", :admin_view => @admin_view} -%>
+        <% end %>
+
+        <%= control_group do %>
+          <label class="control-label col-sm-2" for="new_view_filter_both_meetingconnection_status"><%= "feature.admin_view.label.meeting_connection_status".translate %></label>
+          <%= generate_connection_status_request_filter("admin_view[connection_status][meetingconnection_status]", @filter_params, :both, :meetingconnection_status) %>
+          <%= render_advanced_options_choices(@admin_view, "both", "meetingconnection_status", :get_hidden_field_tags => true) %>
+          <%= render :partial => "advanced_options_popup", :locals => {:role_type => "both", :request_type => "meetingconnection_status", :admin_view => @admin_view} -%>
+        <% end %>
+
+        <%= horizontal_line if @current_program.ongoing_mentoring_enabled? %>
+      <% end %>
+
+      <% if @current_program.ongoing_mentoring_enabled? %>
+        <% if !@current_program.project_based? && (@current_program.matching_by_mentee_and_admin? || @current_program.matching_by_mentee_alone?) %>
+          <%= content_tag(:div, "feature.admin_view.label.ongoing_mentoring".translate(:mentoring => _mentoring), :class => "h5 font-600") %>
+
+          <% if @current_program.mentor_recommendation_enabled? %>
+            <div class="cjs_mentee_applicable">
+              <%= get_adminview_second_level_title("feature.admin_view.label.mentor_recommendations_v1".translate(:Mentor => _Mentor)) %>
+              <%= control_group do %>
+                <label class="control-label col-sm-2" for="new_view_filter_mentees_mentor_recommendations"><%= "feature.admin_view.label.mentees_who_have".translate(:Mentees => _Mentees) %></label>
+                <%= generate_connection_status_request_filter("admin_view[connection_status][mentor_recommendations][mentees]", @filter_params, :mentees, :mentor_recommendations) %>
+                <%= render_advanced_options_choices(@admin_view, "mentees", "mentor_recommendations", :get_hidden_field_tags => true) %>
+                <%= render :partial => "advanced_options_popup", :locals => {:role_type => "mentees", :request_type => "mentor_recommendations", :admin_view => @admin_view} -%>
+              <% end %>
+            </div>
+          <% end %>
+
+          <%= get_adminview_second_level_title("feature.admin_view.label.mentoring_request_status".translate(:Mentoring => _Mentoring)) %>
+          <%= control_group(:class => "cjs_mentee_applicable") do %>
+            <label class="control-label col-sm-2" for="new_view_filter_mentees_mentoring_requests"><%= "feature.admin_view.label.mentees_who_have".translate(:Mentees => _Mentees) %></label>
+            <%= generate_connection_status_request_filter("admin_view[connection_status][mentoring_requests][mentees]", @filter_params, :mentees, :mentoring_requests) %>
+            <%= render_advanced_options_choices(@admin_view, "mentees", "mentoring_requests", :get_hidden_field_tags => true) %>
+            <%= render :partial => "advanced_options_popup", :locals => {:role_type => "mentees", :request_type => "mentoring_requests", :admin_view => @admin_view} -%>
+          <% end %>
+
+          <% if @current_program.matching_by_mentee_alone? %>
+            <%= control_group(:class => "cjs_mentor_applicable") do %>
+              <label class="control-label col-sm-2" for="new_view_filter_mentors_mentoring_requests"><%= "feature.admin_view.label.mentors_who_have".translate(:Mentors => _Mentors) %></label>
+              <%= generate_connection_status_request_filter("admin_view[connection_status][mentoring_requests][mentors]", @filter_params, :mentors, :mentoring_requests) %>
+              <%= render_advanced_options_choices(@admin_view, "mentors", "mentoring_requests", :get_hidden_field_tags => true) %>
+              <%= render :partial => "advanced_options_popup", :locals => {:role_type => "mentors", :request_type => "mentoring_requests", :admin_view => @admin_view} -%>
+            <% end %>
+          <% end %>
+
+          <%= horizontal_line(:class => "cjs_ongoing_mentoring_divider") %>
+        <% end %>
+
+        <%= control_group do %>
+          <div class="control-label col-sm-2 false-label"><%= "feature.admin_view.label.Connection_Status_v2".translate(:mentoring_connection => _mentoring_connection) %></div>
+          <%= controls(class: "col-sm-10") do %>
+            <%= render partial: "admin_views/connection_status_filter_template", locals: {program: @current_program, filter_params: @filter_params} %>
+          <% end %>
+        <% end %>
+
+        <%= control_group do %>
+          <div class="control-label col-sm-2 timeline false-label"><%= "feature.admin_view.label.last_closed_group_time".translate(:Mentoring_Connection => _Mentoring_Connection) %></div>
+          <%= controls(:class => "col-sm-10 no-padding") do %>
+            <%= generate_last_connection_on_filter(@filter_params) %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    AdminViewsNewView.disableSelectedOptionsOnLoad();
+    AdminViewsNewView.lastConnectionUpdateVisibility();
+    AdminViewsNewView.showHideFiltersBasedOnRoles(<%= @current_program.matching_by_mentee_alone? %>, <%= @current_program.matching_by_mentee_and_admin? %>);
+    AdminViewsNewView.trackRoleChange(<%= @current_program.matching_by_mentee_alone? %>, <%= @current_program.matching_by_mentee_and_admin? %>);
+    AdminViewsNewView.showHideAdvancedOptionsLink();
+    AdminViewsNewView.captureSelectedOptionText();
+    AdminViewsNewView.initializeAdvancedOptionsLinks();
+    AdminViewsNewView.trackRoleRequestType();
+  });
+<% end %>

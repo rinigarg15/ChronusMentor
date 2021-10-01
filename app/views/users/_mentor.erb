@@ -1,0 +1,99 @@
+<% can_display_match_label = @match_view && @student_document_available && mentor != current_user %>
+<% can_display_score = can_display_match_label && @current_program.allow_user_to_see_match_score?(current_user) %>
+<% match_score = @match_results[mentor.id] if can_display_match_label %>
+<% student_can_connect_to_mentor = logged_in_program? && current_user.can_connect_to_mentor?(mentor, @match_results) %>
+<% user_favorite = current_user.get_user_favorite(mentor) if @student_of_moderted_group || (logged_in_program? && current_user.student_of_moderated_groups?) %>
+<% member_name = mentor.member.name(name_only: true) %>
+<% src = local_assigns[:src].present? ? src : "" %>
+
+<% listing_options = {user_favorite: user_favorite, mentor_groups_map: @mentor_groups_map, active_received_requests: @active_received_requests, mentors_with_slots: @mentors_with_slots, student_can_connect_to_mentor: student_can_connect_to_mentor, analytics_param:  src.present? ? src : EngagementIndex::Src::SendRequestOrOffers::USER_LISTING_PAGE} %>
+<% actions, dropdown_title = actions_for_mentor_listing(current_user, mentor, listing_options) %>
+
+<% labels = [] %>
+<% labels << status_indicator(mentor, { mentor_groups_map: @mentor_groups_map, mentor_required_questions: @mentor_required_questions, mentors_with_slots: @mentors_with_slots, return_hash: true, consider_user_as_mentor: true, consider_user_as_student: local_assigns[:consider_user_as_student].present? } ) %>
+<% labels << drafted_connections_indicator(mentor, @current_program, {:draft_count => @mentor_draft_count}) %>
+<% if @recommended_users_hash && @recommended_users_hash[mentor.id] %>
+  <% labels << { content: "feature.mentor_recommendation.recommended_badge".translate, label_class: "label-success" } %>
+<% end %>
+<% labels << { content: "feature.user.label.Preferred".translate, label_class: "label-success" } if user_favorite %>
+
+<div id="mentor_<%= mentor.id %>">
+  <div class="clearfix pull-right hidden-xs">
+    <% if show_favorite_ignore_links && !skip_ignore_links && current_user != mentor %>
+      <div class="btn-md btn btn-default btn-outline m-r-xs waves-effect mentor_ignore_<%= mentor.id %>">
+        <%= render partial: "users/show_ignore_links", locals: {mentor_id: mentor.id, ignore_preferences_hash: ignore_preferences_hash, recommendations_view: AbstractPreference::Source::LISTING, src: src, show_match_config_matches: false} %>
+      </div>
+    <% end %>
+    <%= dropdown_buttons_or_button(Marshal.load(Marshal.dump(actions)), { dropdown_title: dropdown_title }.merge( { btn_class: "cjs_mentor_actions" } )) %>
+  </div>
+  <div class="media-left">
+    <%= user_picture(mentor, {no_name: true, size: :large, src: src.present? ? src : EngagementIndex::Src::BrowseMentors::MENTOR_LISTING_PAGE}, { class: "cui_large_to_medium img-circle" } ) %>
+  </div>
+  <div class="media-body">
+    <% favorite_preferences_hash = show_favorite_ignore_links ? favorite_preferences_hash : {} %>
+    <% user_link = link_to_user mentor, content_text: mentor.name(name_only: true), no_hovercard: true, params: {src: src.present? ? src : EngagementIndex::Src::BrowseMentors::MENTOR_LISTING_PAGE}, show_favorite_links: show_favorite_ignore_links, favorite_preferences_hash: favorite_preferences_hash %>
+    <% mentor_availability_text = content_tag(:div, get_mentor_availability_text(mentor), class: "m-t-xs text-muted") if @show_mentor_availability %>
+    <% program_questions_for_user = current_user.get_visibile_match_config_profile_questions_for(mentor) %>
+    <% match_details_content, tags_count, matched_configs_or_preferences_count, total_match_configs_or_preferences_count = get_match_details_for_display(current_user, mentor, program_questions_for_user) %>
+    <% show_details_link = match_details_content.present? %>
+    <% if show_favorite_ignore_links %>
+      <% ignore_preference_user_ids = ignore_preferences_hash.keys %>
+      <% mentor_ignored = ignore_preference_user_ids.include?(mentor.id) %>
+    <% end %>
+    <% if can_display_score %>
+      <% score_content = display_match_score(match_score, in_listing: true, mentor_id: mentor.id, tooltip_options: {member_name: member_name, mentor_ignored: mentor_ignored}) %>
+    <% end %>
+    <% if current_user.explicit_preferences_configured? && can_display_match_label %>
+      <% score_content = get_matched_preferences_label(matched_configs_or_preferences_count, total_match_configs_or_preferences_count, mentor_ignored, {show_no_match_label: get_show_match_lable_value(match_score)}) %>
+    <% end %>
+    <% user_match_score =  content_tag(:div, score_content, class: "mentor_match_score_#{mentor.id} m-t-xs m-b-xs") if score_content.present? %>
+    <div class="<%= hidden_on_mobile %>">
+      <h3 class="m-b-0 clearfix">
+        <%= user_link %>
+      </h3>
+      <%= user_match_score %>
+      <div class="font-bold font-16 m-t-xs"><%= icons_for_availability(mentor, mentors_with_slots: @mentors_with_slots, no_left_margin: true) if local_assigns[:show_availability_icons] %></div>
+      <%= mentor_availability_text if @show_mentor_availability %>
+    </div>
+    <div class="<%= hidden_on_web %>">
+      <h4 class="m-b-0 clearfix">
+        <%= user_link %>
+      </h4>
+      <span class="mentor_match_score_<%= mentor.id %>">
+        <%= user_match_score %>
+      </span>
+      <div class="font-bold font-16 m-t-xs"><%= icons_for_availability(mentor, mentors_with_slots: @mentors_with_slots, no_left_margin: true) if local_assigns[:show_availability_icons] %></div>
+      <%= mentor_availability_text if @show_mentor_availability %>
+    </div>
+    <% if current_user && current_user.can_send_mentor_request? && @current_program.ongoing_mentoring_enabled? && mentor.opting_for_ongoing_mentoring? %>
+      <div class="text-muted ct_mentees_count m-t-xs">
+        <%= "feature.user.label.mentee_member_since".translate(:mentee => "feature.user.content.n_mentees".translate(:count => @students_count[mentor.id].to_i, :mentee => _mentee, :mentees => _mentees), since_time: DateTime.localize(mentor.created_at, format: :full_month_year)) %>
+      </div>
+    <% end %>
+    <%= available_and_ongoing_groups_list(mentor) if current_program.project_based? %>
+    <div class="cjs_mentor_labels_container">
+      <%= labels_container(labels, { class: "cjs_mentor_labels m-t-xs" } ) %>
+    </div>
+    <%= content_tag(:div, link_to(('feature.match_config.content.show_compatibility'.translate + get_icon_content("fa fa-angle-right")).html_safe, "javascript:void(0);", class: "cjs_show_match_details h6 link-color", data: {url: match_details_user_path(id: mentor.id, src: src.present? ? src : EngagementIndex::Src::MatchDetails::MENTOR_LISTING_PAGE)}), class: "m-t-xs", id: "show_compatibility_link_#{mentor.id}") if show_compatibility_link?(can_display_match_label, show_details_link, match_score) %>
+  </div>
+  <div class="section-pane m-t">
+    <%= render :partial => "users/show_profile_summary_fields", :locals => {:user => mentor, :role => RoleConstants::MENTOR_NAME, :profile_last_updated_at => local_assigns[:profile_last_updated_at]} %>
+    <% show_last_logged_in(mentor) do |last_logged_in| %>
+      <%= profile_field_container("feature.user.label.Last_Login".translate, last_logged_in, { class: "m-t-sm m-b-xs" } ) %>
+    <% end %>
+  </div>
+  <%= dropdown_buttons_or_button(Marshal.load(Marshal.dump(actions)), { dropdown_title: dropdown_title }.merge( { btn_class: "cjs_mentor_actions_block col-xs-12 no-padding visible-xs btn-block m-t-sm", dropdown_menu_class: "col-xs-12 pull-right table-bordered", btn_group_btn_class: "col-xs-12" } )) %>
+  <% if show_favorite_ignore_links && !skip_ignore_links && current_user != mentor %>
+    <div class="btn-md btn btn-default btn-outline m-t-sm waves-effect visible-xs col-xs-12 mentor_ignore_<%= mentor.id %>">
+      <%= render partial: "users/show_ignore_links", locals: {mentor_id: mentor.id, ignore_preferences_hash: ignore_preferences_hash, recommendations_view: AbstractPreference::Source::LISTING, src: src, show_match_config_matches: false} %>
+    </div>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  <% if show_favorite_ignore_links && !skip_ignore_links %>
+    jQuery(document).ready(function(){
+      IgnorePreference.ignoreProfile("<%= mentor.id %>");
+    });
+  <% end %>
+<% end %>

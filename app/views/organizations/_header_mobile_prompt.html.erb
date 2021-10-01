@@ -1,0 +1,18 @@
+<nav id='chronus_header' class='navbar navbar-fixed-top animated clearfix'>
+  <div id="chronus_header_wrapper" class="clearfix">
+    <div class="navbar-header col-xs-12 col-md-10 no-padding">
+      <div class="m-l-xl dropdown clearfix">
+        <div class="clearfix">
+          <ul id="org_or_program_header_name" class="nav navbar-top-links navbar-right pull-left col-xs-11 no-padding truncate-with-ellipsis">   
+            <li class="no-margins">
+              <% content = content_tag(:strong) do %>
+                <%= content_tag(:big, h(program_context.name), class: "truncate-with-ellipsis whitespace-nowrap") %>
+              <% end %>
+              <%= link_to content, "javascript:void(0)", :class => "my_programs_listing_link font-bold no-horizontal-padding show_hide_pane" %>
+            </li>
+          </ul>
+        </div>      
+      </div>
+    </div>
+  </div> 
+</nav>

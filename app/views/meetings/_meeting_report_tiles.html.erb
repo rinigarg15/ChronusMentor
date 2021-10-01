@@ -1,0 +1,6 @@
+<%= render :layout => 'common/report_tiles' do %>
+  <%= render_report_tiles(meeting_hash[:scheduled_meetings].count, "fa fa-calendar", "feature.meetings.header.scheduled".translate, "feature.reports.label.meetings_scheduled_v2".translate(Meetings: _Meetings), {percentage: percentage, prev_periods_count: prev_periods_count}) %>
+  <%= render_report_tiles(meeting_hash[:overdue_meetings].count, "fa fa-exclamation-triangle ", "feature.meetings.header.overdue".translate, "feature.reports.label.meetings_overdue".translate(Meetings: _Meetings)) %>
+  <%= render_report_tiles(meeting_hash[:completed_meetings].count, "fa fa-calendar-check-o", "feature.meetings.header.completed".translate, "feature.reports.label.meetings_completed".translate(Meetings: _Meetings)) %>
+  <%= render_report_tiles(meeting_hash[:cancelled_meetings].count, "fa fa-calendar-times-o", "feature.meetings.header.canceled".translate, "feature.reports.label.meetings_cancelled".translate(Meetings: _Meetings)) %>
+<% end %>

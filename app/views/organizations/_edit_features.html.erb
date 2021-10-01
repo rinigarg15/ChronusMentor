@@ -1,0 +1,21 @@
+<%= hidden_field_tag input_field, "" %>
+<div id="enable_features" class="clearfix">
+  <h4><%= "program_settings_strings.content.select_features_to_enable".translate %></h4>
+  <br/>
+  <%= hidden_field_tag 'features_tab', 'true' -%>
+  <% disabled_list = prepare_disabled_list(prog_or_org) %>
+  <% features_to_hide = get_features_to_hide(prog_or_org) %>
+  <% translate_hash = FeatureName::Titles.get_translate_hash(prog_or_org) %>
+  <% description_translate_hash = FeatureName::Descriptions.get_translate_hash(prog_or_org) %>
+  <% (FeatureName.all - features_to_hide).sort { |x,y| FeatureName::Titles.translate(x, prog_or_org, use_translate_hash: translate_hash) <=> FeatureName::Titles.translate(y, prog_or_org, use_translate_hash: translate_hash) }.each do |feature_name| %>
+    <% if !FeatureName.super_user_features.include?(feature_name) || super_console? %>
+      <%= render_editable_feature(prog_or_org, feature_name, input_field, disabled_list, use_translate_hash: translate_hash, use_description_translate_hash: description_translate_hash) %>
+      <hr class="has-above-1 has-below-1"/>
+    <% end %>
+  <% end %>
+</div>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    Features.undisableCheckBoxes();
+  });
+<% end %>

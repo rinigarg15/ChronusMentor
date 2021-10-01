@@ -1,0 +1,69 @@
+<div id="cjs_detailed_section_<%= msg.id %>" class="row-fluid cjs_detailed_section" style="display:none;">
+  <div class="cjs_detailed_clickable_header pointer">
+    <div class="cjs_detailed_tr clearfix">
+        <% other_options = {} %>
+        <% other_options[:reply_action] = "jQuery('#new_admin_message_#{msg.id }').show();jQuery('#message_content_#{msg.id }').focus();jQueryScrollTo('#new_admin_message_#{msg.id } form', false)" %>
+        <% other_options[:icon_class] = 'fa-fw m-r-xxs' %>
+        <% other_options[:delete_action] = url_for(msg)%>
+      <div class="pull-right">
+        <%= get_reply_delete_buttons(msg, viewing_member, {}, other_options) %>
+        <div class="col-xs-12 m-t-xs hidden-xs no-padding cjs_detailed" data-id="<%= msg.id %>">
+          <div class="pull-right">
+            <%= append_text_to_icon("fa fa-clock-o", "#{time} #{date}") %>
+          </div>
+        </div>
+      </div>
+
+      <div class="cjs_detailed media no-margins" data-id="<%= msg.id %>">
+        <div class="media-left">
+          <%= display_profile_pic(msg) %>
+        </div>
+        <div class="media-body">
+          <strong class="font-bold cui_sender_name m-b-0">
+            <div class="m-t-n-xs">
+              <%= from_to_details[:from] %>
+            </div>
+          </strong>
+          <div class="cui_recipient_name cjs_detailed_tr text-muted ">
+            <%= "display_string.to".translate %><span class="m-l-xs cjs_message_receivers_<%= msg.id %>"><%= from_to_details[:to] %></span>
+            <div class="visible-xs m-t-xxs col-xs-12 no-padding m-b-sm">
+              <%= time %> <%= date %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="m-t-sm cui_mail_content word_break">
+    <div class="m-b-xs">
+      <%= message_content_format(msg) %>
+    </div>
+    <% if msg.attachment? %>
+      <div class="m-b-xs small">
+        <%= link_to content_tag(:div, get_icon_content('fa fa-paperclip text-default'), class: "media-left p-r-0") + content_tag(:div, msg.attachment_file_name, class: "media-body"), msg.attachment.url, target: "_blank", class: 'cjs_android_download_files', data: { filename: msg.attachment_file_name, targeturl: msg.attachment.url } %>
+      </div>
+    <% end %>
+    <% if msg.parent %>
+      <div class="m-b-sm">
+        <span class="pointer cjs_toggle_thread" data-id="<%= msg.id %>">
+          <%= image_tag 'icons/ellipsis.png'%>
+        </span>
+      </div>
+      <div id="cjs_thread_<%= msg.id %>" class="cui_thread hide">
+        <%= render partial: 'admin_messages/threaded_parent', locals: { msg: msg.parent } %>
+      </div>
+    <% end %>
+    <% if msg.can_be_replied?(viewing_member) %>
+      <% from_inbox = msg.is_a?(AdminMessage) ? (@from_inbox ? true : false) : true %>
+      <% reply = msg.build_reply(viewing_member, from_inbox: from_inbox) %>
+      <div class="m-t-sm">
+        <%= render partial: 'admin_messages/reply', locals: { id: msg.id, reply: reply, from_inbox: from_inbox, remote: false, home_page: false, from_discussion: false } %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<% if is_ios_app? %>
+  <%= javascript_tag do %>
+    Discussions.hideMobileFooterOnInputFocus('#message_content_<%= msg.id %>');
+  <% end %>
+<% end %>

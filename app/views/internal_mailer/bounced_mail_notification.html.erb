@@ -1,0 +1,18 @@
+<p>A mail to the email address <b><%= @recipient_email %></b> has bounced. Mails wont be sent to this email address till this email address is removed from the <a href="https://mailgun.com/cp/bounces">Bounces list</a> in our mailgun account.</p>
+
+<p>Please make sure that a thorough investigation is made before you remove it from the list</p>
+
+<% if @bounce_reason.any? %>
+  <h3>Reason for bounce:</h3>
+  <% if @bounce_reason[:code].present? %>
+    <p><%= "Code : #{@bounce_reason[:code]}" %></p>
+  <% end %>
+  <% if @bounce_reason[:error_message].present? %>
+    <p><%= "Error Message : #{@bounce_reason[:error_message]}" %></p>
+  <% end %>
+  <% if @bounce_reason[:detailed_reasoning].present? %>
+    <p><%= "Error Description : #{@bounce_reason[:detailed_reasoning]}" %></p>
+  <% end %>
+<% end %>
+
+<%= render :partial => "campaign_and_member_information", :locals => {:campaign_information => @campaign_information, :member_information => @member_information} %>

@@ -1,0 +1,59 @@
+<% group_expiry_date = DateTime.localize(group.expiry_time, format: :full_display_no_time) %>
+<%= control_group do %>
+  <%= controls do %>
+    <label class="checkbox inline no-margins">
+      <%= check_box_tag 'meeting[recurrent]', true, false, onclick: "MeetingForm.openRepeatSection('#{group_expiry_date}');" %>
+      <%= "feature.meetings.content.repeat".translate %>
+    </label>
+  <% end %>
+<% end %>
+
+<div class="meeting_repeats hide">
+  <%= control_group(class: "clearfix") do %>
+    <%= content_tag(:div, "feature.meetings.content.repeat".translate, class: "control-label false-label m-b-xs") %>
+    <div>
+      <%= construct_input_group([], [], input_group_class: "input-group-sm col-xs-12 col-sm-2 pull-left m-b-xs") do %>
+        <%= content_tag(:label, "feature.meetings.content.repeat".translate, class: "sr-only", for: "meeting_schedule_rule") %>
+        <%= select_tag("meeting[schedule_rule]", options_for_select(Meeting::Repeats.options_for_select, Meeting::Repeats::MONTHLY), class: "form-control") %>
+      <% end %>
+      <%= construct_input_group([ { type: "addon", content: "feature.meetings.content.every".translate, class: "white-bg no-borders" } ], [ { type: "addon", content: "feature.full_calendar.content.month".translate, class: "cjs-repeat-every-help gray-bg" } ], input_group_class: "input-group-sm col-xs-12 col-sm-4 pull-left m-b-xs") do %>
+        <%= content_tag(:label, "feature.meetings.content.repeat_every".translate, class: "sr-only", for: "meeting_repeat_every") %>
+        <%= select_tag("meeting[repeat_every]", options_for_select((1..30).to_a), class: "form-control") %>
+      <% end %>
+      <%= construct_input_group([ { type: "addon", content: "feature.meetings.content.until_v1".translate, class: "white-bg no-borders" }, { type: "addon", icon_class: "fa fa-calendar", class: "gray-bg" } ], [], input_group_class: "input-group-sm repetition_end_date col-xs-12 col-sm-6 m-b-xs") do %>
+        <%= content_tag(:label, "feature.meetings.content.until_v1".translate, class: "sr-only", for: "meeting_repeats_end_date") %>
+        <%= f.input_field :repeats_end_date, as: :string, value: group_expiry_date, class: "form-control cjs_end_date", data: date_picker_options(max_date: group.expiry_time, min_date: Date.current) %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div id="repeats_by_month_date" class="hide">
+    <% radio_options = [["feature.mentoring_slot.form.day_of_month".translate, true], ["feature.mentoring_slot.form.day_of_week".translate, false]] %>
+    <%= f.input :repeats_by_month_date, collection: radio_options, as: :radio_buttons, checked: true, item_wrapper_class: "inline", label: "feature.meetings.content.repeat_by".translate %>
+  </div>
+  <div id="repeats_on_week_day" class="hide">
+    <%= control_group do %>
+      <label class="control-label">
+        <%= "feature.meetings.content.repeat_on".translate %>
+      </label>
+      <%= controls do %>
+        <%= choices_wrapper("program_settings_strings.content.days".translate) do %>
+          <% days_list_first_letter.each_with_index do |day, index| %>
+            <label class="checkbox-inline">
+              <%= check_box_tag "meeting[repeats_on_week][]", index, false, class: "cjs_meeting_repeats_on_week day_name", id: nil %>
+              <%= day %>
+            </label>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_tag "MentoringSlotForm.toggleDayListing('#{MentoringSlot::OPTIONS_FOR_AVAILABILITY::WEEKLY}', '#meeting_schedule_rule', '.meeting_repeats');" %>
+<%= javascript_tag "MentoringSlotForm.toggleMonthOptions('#{MentoringSlot::OPTIONS_FOR_AVAILABILITY::MONTHLY}', '#meeting_schedule_rule', '.meeting_repeats');" %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function() {
+    initialize.setDatePicker();
+  });
+<% end %>

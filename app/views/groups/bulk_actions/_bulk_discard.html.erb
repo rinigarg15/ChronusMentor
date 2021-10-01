@@ -1,0 +1,20 @@
+<% modal_v3_popup "feature.connection.header.bulk_discard_connections".translate(Mentoring_Connections: _Mentoring_Connections) do %>  
+  <%= form_tag update_bulk_actions_groups_path, :remote => true, :id => "bulk_groups_discard" do %>
+    <div class="m-b-sm">
+      <div class="media-left">
+        <%= get_icon_content("fa fa-exclamation-triangle fa-3x text-warning") %>
+      </div>
+      <div class="media-body">
+        <%= "#{'feature.connection.content.help_text.bulk_discard_v2'.translate(mentoring_connections: _mentoring_connections, mentoring_connection: _mentoring_connection, count: @group_ids.size)} #{'feature.connection.content.help_text.info_loss_on_discard'.translate(mentoring_connections: _mentoring_connections)}" %>
+      </div>
+    </div>
+
+    <%= hidden_field_tag "bulk_actions[action_type]", Group::BulkAction::DISCARD %>
+    <%= hidden_field_tag "bulk_actions[group_ids]", @group_ids %>
+
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => "btn btn-white", data: { dismiss: "modal" } %>
+      <%= submit_tag "display_string.Discard".translate, :class => 'btn btn-primary', data: {:disable_with => "display_string.Please_Wait".translate} %>
+    <% end %>
+  <% end %>
+<% end %>

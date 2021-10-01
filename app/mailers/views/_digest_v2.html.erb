@@ -1,0 +1,106 @@
+<link rel="stylesheet" type="text/css" href="<%= Rails.root.to_s + '/app/assets/stylesheets/profile_picture.css' %>">
+<table cellpadding="0" cellspacing="0" border="0" style="padding:0px;margin:0px;width:100%;">
+  <tbody>
+    <tr>
+      <td bgcolor='#F3F3F3' align="center" style="padding:0px;margin:0px; text-align: center;" width="600">
+        <table cellpadding="0" cellspacing="0" border="0" style="padding:0px;margin:0px;width:100%;">
+          <tbody>
+
+            <tr>
+              <td align="center" style="padding:0px;margin:0px; text-align: center; width: 100%;" width="100%">
+                <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%'>
+                  <tbody>
+                    <tr>
+                      <% if program_logo.present? %>
+                        <td bgcolor="#FFFFFF" align="left" style='padding: 10px; text-align: left;' class='hide-below700'>
+                          <a href='<%= @program_url %>' target="_blank"><%= program_logo %></a>
+                        </td>
+                      <% end %>
+                      <td bgcolor="#FFFFFF" align="right" style='padding: 10px; text-align: right; color: #05B9E0; white-space: nowrap;' class='center-below700'>
+                        <span style="font-size: 1.2em;"><%= "email_translations.digest_v2.content.your_week_v1".translate %></span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            <% @selected_connection_memberships.each do |membership| %>
+              <tr>
+                <td align="center" style="padding:0px;margin:0px; text-align: center; width: 100%;" width="100%">
+                  <%= render partial: 'digest_v2/group_card', locals: {membership: membership, details: @selected_connection_membership_details[membership.id], url_options: @url_options, program: @program, custom_term_hash: @custom_term_hash} %>
+                </td>
+              </tr>
+            <% end %>
+
+            <% if @user_pending_notifications.present? %>
+              <tr>
+                <td align="center" style="padding:0px;margin:0px; text-align: center; width: 100%;" width="100%">
+                  <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%'>
+                    <tbody>
+                      <tr>
+                        <td width='100%' style='padding: 10px;'>
+                          <%= "email_translations.digest_v2.content.updates_and_activites".translate %>
+                          <%= "display_string.LAST_WEEK".translate if @user.digest_v2_weekly_program_update? %>
+                          <%= "display_string.YESTERDAY".translate if @user.digest_v2_daily_program_update? %>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            <% end %>
+
+            <% @card_details.each do |pending_notification_hsh| %>
+              <tr>
+                <td align="center" style="padding:0px;margin:0px; text-align: center; width: 100%;" width="100%">
+                  <%= render partial: 'digest_v2/card', locals: pending_notification_hsh.merge(url_options: @url_options.merge(src1: :program_updates)) %>
+                </td>
+              </tr>
+            <% end %>
+
+            <% if @viewed_by_users.present? %>
+              <tr>
+                <td align="center" style="padding:0px;margin:0px; text-align: center; width: 100%;" width="100%">
+                  <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%'>
+                    <tbody>
+                      <tr>
+                        <td width='100%' style='padding: 10px;'>
+                          <%= "email_translations.digest_v2.content.most_recent_viewers".translate(count: @viewed_by_users.size) %>
+                          <%= "display_string.LAST_WEEK".translate if @user.digest_v2_weekly_program_update? %>
+                          <%= "display_string.YESTERDAY".translate if @user.digest_v2_daily_program_update? %>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td align="center" style="padding:0px;margin:0px; text-align: center; width: 100%;" width="100%">
+                  <%= render partial: 'digest_v2/viewed_by_users', locals: {capped_viewed_by_users: @viewed_by_users, url_options: @url_options.merge(src1: :profile_view), program: @program} %>
+                </td>
+              </tr>
+            <% end %>
+
+            <% if (@received_requests_count + @unread_inbox_messages_count + @upcoming_not_responded_meetings_count) > 0 %>
+              <tr>
+                <td align="center" style="padding:0px;margin:0px; text-align: center; width: 100%;" width="100%">
+                  <%= render partial: 'digest_v2/important_next_steps', locals: {data_hsh: {received_requests_count: @received_requests_count, unread_inbox_messages_count: @unread_inbox_messages_count, upcoming_not_responded_meetings_count: @upcoming_not_responded_meetings_count}, received_requests_call_to_action: @received_requests_call_to_action, unread_inbox_messages_call_to_action: @unread_inbox_messages_call_to_action, upcoming_not_responded_meetings_call_to_action: @upcoming_not_responded_meetings_call_to_action, url_options: @url_options} %>
+                </td>
+              </tr>
+            <% end %>
+
+            <% if @popular_content_card_details.present? %>
+              <tr>
+                <td align="center" style="padding:0px;margin:0px; text-align: center; width: 100%;" width="100%">
+                  <%= render partial: 'digest_v2/popular_content', locals: {popular_content_card_details: @popular_content_card_details, url_options: @url_options} %>
+                </td>
+              </tr>
+            <% end %>
+
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>

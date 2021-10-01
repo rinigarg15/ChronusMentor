@@ -1,0 +1,21 @@
+<% @title = "ab_testing.ab_tests".translate %>
+<%= form_tag(update_for_program_ab_tests_path) do %>
+  <%= choices_wrapper(@title) do %>
+    <% ProgramAbTest.experiments.each do |experiment| %>
+      <%= control_group do %>
+        <%= controls do %>
+          <label class="checkbox">
+            <%= check_box_tag('experiments[]', experiment, current_program_or_organization.ab_test_enabled?(experiment), :id => experiment) %>
+            <%= ProgramAbTest.experiment(experiment).title %>
+          </label>
+          <div class="dim fixed-checkbox-offset"><%= ProgramAbTest.experiment(experiment).description %></div>
+        <% end %>
+      <% end %>
+      <hr class="has-above-1 has-below-1"/>
+    <% end %>
+  <% end %>
+
+  <% action_set do %>
+    <%= submit_tag("display_string.Save".translate, :class => 'list_action btn btn-primary') %>
+  <% end %>
+<% end %>

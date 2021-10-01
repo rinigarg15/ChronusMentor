@@ -1,0 +1,23 @@
+---
+questions:
+- question_type: <%= CommonQuestion::Type::MULTI_CHOICE %>
+  question_text: "How do you communicate with the members of this mentoring connection?"
+  question_choices:
+    - Mentoring Area
+    - Chat/IM
+    - Emails
+    - Phone
+    - Face to face meetings
+    - Other
+  question_mode: <%= CommonQuestion::Mode::CONNECTIVITY %>
+  required: true
+
+- question_type: <%= CommonQuestion::Type::RATING_SCALE %>
+  question_text: "How effective is this mentoring connection?"
+  question_choices:
+    <%= SurveyConstants::EFFECTIVENESS_LEVELS %>
+  question_mode: <%= CommonQuestion::Mode::EFFECTIVENESS %>
+  required: true
+
+- question_type: <%= CommonQuestion::Type::TEXT %>
+  question_text: "Additional feedback (optional)"

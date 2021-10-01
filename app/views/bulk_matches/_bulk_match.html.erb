@@ -1,0 +1,37 @@
+<%= render :partial => 'layouts/translations/bulk_match' %>
+<% @skip_rounded_white_box_for_content = true %>
+<% select_users_tab_link = recommend_mentors ? bulk_recommendation_path : bulk_match_path %>
+<% match_tab_link = recommend_mentors ? bulk_recommendation_path(format: :js) : bulk_match_path(format: :js) %>
+
+<div id="bulk_match" ng-controller="BulkMatchCtrl">
+  <% modal_container get_translated_text(BulkMatch::UpdateType::DRAFT), modal_id: "cjs_bulk_match_groups_alert_modal" do %>
+  <% end %>
+  <ul class="nav nav-tabs no-margins">
+    <li class="active">
+      <%= link_to(content_tag(:h4,"feature.bulk_match.tab.select_users".translate), "javascript:void(0);", :id => "select_users", data: {url: select_users_tab_link}) %>
+    </li>
+    <li>
+      <%= link_to(content_tag(:h4,"feature.#{bulk_match_type.underscore}.tab.assign_matches".translate(Mentors: _Mentors)), "javascript:void(0);", :id => "find_matches", :data => {:disabled => true, :url => match_tab_link}) %>
+    </li>
+  </ul>
+  <%= render :partial => "bulk_matches/select_users", locals: {orientation_type: orientation_type, recommend_mentors: recommend_mentors} %>
+  <div id="find_match_content"></div>
+</div>
+<% src_text = "export_all_pairs_from_#{recommend_mentors.present? ? "recommendation" : "bulk_match"}" %>
+<%= form_tag(export_all_pairs_bulk_matches_path(src: src_text), id: "cjs_export_all_form") do%>
+  <%= hidden_field_tag "students", nil, class: "cjs_students_field" %>
+  <%= hidden_field_tag "mentors", nil, class: "cjs_mentors_field" %>
+  <%= hidden_field_tag "orientation_type", orientation_type %>
+  <%= hidden_field_tag "recommendation", recommend_mentors %>
+<% end %>
+
+<%= form_tag(export_csv_bulk_matches_path, id: "cjs_bulk_match_export_drafted_pairs") do%>
+  <%= hidden_field_tag "students", nil, class: "cjs_students_field", id: "drafted_csv_students" %>
+  <%= hidden_field_tag "mentors", nil, class: "cjs_mentors_field", id: "drafted_csv_mentors" %>
+  <%= hidden_field_tag "orientation_type", orientation_type, id: "drafted_csv_orientation_type" %>
+<% end %>
+
+<%= javascript_tag do %>
+  BulkMatch.initalizeActions("<%= bulk_match_type %>", <%= !!recommend_mentors %>, <%= orientation_type %>);
+  BulkMatch.initalizeOrientationOptions(<%= BulkMatch::OrientationType::MENTEE_TO_MENTOR %>, <%= BulkMatch::OrientationType::MENTOR_TO_MENTEE %>);
+<% end %>

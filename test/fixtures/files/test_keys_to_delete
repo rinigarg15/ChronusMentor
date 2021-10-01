@@ -1,0 +1,7 @@
+---
+feature:
+  test:
+    key: Test key
+    key_1: Testing key
+  test_keys:
+    b: Another test

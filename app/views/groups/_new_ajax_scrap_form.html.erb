@@ -1,0 +1,26 @@
+<% new_scrap = local_assigns[:new_scrap].present? ? local_assigns[:new_scrap] : @new_scrap %>
+<% form_id = new_scrap.is_group_message? ? "cjs_new_ajax_message_form_" + new_scrap.ref_obj_id.to_s : "cjs_new_ajax_message_form" %>
+<% modal_container "feature.mentoring_model.button.new_mm_message".translate, { modal_id: "cjs_new_message_modal_"+new_scrap.ref_obj_id.to_s } do %>
+  <%= response_flash("cjs_scrap_error_message") %>
+  <%= simple_form_for new_scrap, :remote => true, :format => :js, :html => {:id => form_id, :class => "clearfix" } do |f| %>
+    <%= hidden_field_tag :group_id, new_scrap.ref_obj_id, id: "group_id_" + new_scrap.ref_obj_id.to_s if new_scrap.is_group_message? %>
+    <%= hidden_field_tag :meeting_id, new_scrap.ref_obj_id if new_scrap.is_meeting_message? %>
+    <%= hidden_field_tag :current_occurrence_time, @current_occurrence_time if @current_occurrence_time.present? %>
+    <%= hidden_field_tag :home_page, local_assigns[:home_page].present?, id: "home_page_" + new_scrap.ref_obj_id.to_s %>
+    <div class="clearfix">
+      <div class="clearfix">
+        <p class="font-bold"><%= "#{'feature.mentoring_model.label.to'.translate} #{new_scrap.receiver_names(current_user)}" %></p>
+        <%= f.input :subject, :as => :string, :input_html => {:class => "cjs-message-box form-control", id: new_scrap.is_group_message? ? "new_scrap_subject_" + new_scrap.ref_obj_id.to_s : "new_scrap_subject"}, :placeholder => "feature.connection.content.placeholder.subject".translate, :label_html => {:class => "sr-only"} %>
+        <%= f.input :content, :as => :text, :input_html => {:class => "form-control cjs-message-box", :rows => 5, id: new_scrap.is_group_message? ? "new_scrap_content_" + new_scrap.ref_obj_id.to_s : "new_scrap_content"}, :placeholder => "feature.connection.content.placeholder.type_your_message".translate, :label_html => {:class => "sr-only"} %>
+      </div>
+      <% attachment_id = new_scrap.is_group_message? ? "new_message_attachment_" + new_scrap.ref_obj_id.to_s : "new_message_attachment" %>
+      <div class="cjs-scrap-attach-panel">
+        <%= f.input :attachment, :as => :file, label: "display_string.attach_file".translate, wrapper: :bootstrap_with_label_wrapper, input_html: { :id => attachment_id } %>
+      </div>
+    </div>
+    <div class="cjs-message-box pull-right">
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white cancel cjs-new-scrap-form-cancel-link", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "feature.connection.action.send_message".translate, :class =>"cjs-scrap-submit" %>
+    </div>
+  <% end %>
+<% end %>

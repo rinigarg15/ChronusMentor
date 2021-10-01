@@ -1,0 +1,160 @@
+#!/usr/bin/env ruby
+
+require "rubygems"
+require 'trollop'
+require 'fileutils'
+include FileUtils
+require 'tmpdir'
+require 'find'
+require 'colorize'
+# require 'ruby-debug'
+
+PROG_NAME = "rcucumber"
+DEFAULT_FAILED_TEST_RETRY_LIMIT = 1
+DEFAULT_FEATURE_BATCH_SIZE = 0
+RAILS_ROOT_DIR = "#{File.dirname(File.dirname(File.expand_path(__FILE__)))}"
+RERUN_FILE = "rerun.txt"
+
+def my_system(cmd)
+  # puts "Executing #{cmd}"
+  # $stdin.gets.chomp
+  status = system(cmd)
+  # puts "status = #{status}"
+  return status
+  #  abort("Error : #{status}") unless status
+end
+
+def get_failed_features
+  failed_list = []
+  if File.exist?(RERUN_FILE)
+    s = IO.read(RERUN_FILE) 
+    failed_list = s.split(" ")
+  end
+  return failed_list
+end
+
+def print_failed_features(failed_list)
+  puts "** Consolidated list of Failing Scenarios:".yellow
+  failed_list.each do |entry|
+    puts "cucumber #{entry}".red
+  end
+end
+
+def retry_features
+  my_system("cucumber @rerun.txt --require features/step_definitions --require features/support")
+end
+
+def run_features(feature_list, retry_count)
+  if feature_list.empty?
+    puts "Emtpy feature_list. Skipping...".yellow
+    return
+  end
+
+  FileUtils.rm(RERUN_FILE, :force => true) # Delete state of previous reruns
+  feature_list_cmdline = feature_list.join(' ')
+  status = my_system("cucumber -p rerun #{feature_list_cmdline}")
+   
+
+  unless status || retry_count < 1
+    failed_list = get_failed_features
+    puts "Retrying failed scenarios : #{failed_list}".yellow
+  end
+
+  retries = 0
+  while !status && retries < retry_count
+    retries += 1
+    puts "Retry attempt ##{retries}".yellow
+    status = retry_features
+  end
+
+  return get_failed_features
+end
+
+def flatten_features(feature_list)
+  if feature_list.length == 1 && Dir.exist?(feature_list[0])
+    feature_list_dir = feature_list[0]
+    FileUtils.cd(feature_list_dir) do
+      feature_list = Find.find(".").select { |entry| entry.end_with?('.feature') }.collect { |f| "#{feature_list_dir}/#{File.basename(f)}"}
+    end    
+  end
+  feature_list
+end
+
+def run_features_in_batch(feature_list, retry_count, batch_size)
+  feature_list = flatten_features(feature_list)
+  full_failed_list = []
+  no_of_features = feature_list.length 
+  no_of_batches = no_of_features / batch_size
+  last_batch_size = no_of_features % batch_size
+  puts "no_of_features = #{no_of_features}".yellow
+  puts "no_of_batches = #{no_of_batches}".yellow
+  puts "last_batch_size = #{last_batch_size}".yellow
+  start_i = 0
+  batch_no = 1
+  while batch_no <= no_of_batches
+    end_i = start_i + batch_size - 1
+    batch_feature_list = feature_list[start_i..end_i]
+    puts "Running batch ##{batch_no} : #{batch_feature_list}".yellow
+    failed_list = run_features(batch_feature_list, retry_count)
+    full_failed_list << failed_list
+    batch_no += 1
+    start_i = end_i + 1
+  end
+  if last_batch_size > 0
+    batch_feature_list = feature_list[start_i..-1]
+    puts "Running batch #last : #{batch_feature_list}" .yellow
+    failed_list = run_features(batch_feature_list, retry_count)
+    full_failed_list << failed_list
+  end
+  return full_failed_list.flatten.uniq
+end
+
+opts = Trollop::options do
+  version "#{PROG_NAME} 1.0 (c) 2012 Chronus"
+  banner <<-EOS
+#{PROG_NAME} is a wrapper script which adds auto-retry and batch execution features to cucumber. Comes in handy with the below scenarios =>
+  1) Failure of feature scenarios in a non-deterministic fashion due to timeouts/race conditions. (use retries)
+  2) cucumber/ruby crashes when running many scenarios due to bugs in ruby or cucumber. (use batch_size)
+
+Usage:
+       #{PROG_NAME} [options] <featurefilenames>+
+where [options] are:
+EOS
+
+  opt :retries, "Number of times the failed feature scenarios need to be retried",
+        :short => "-r", :default => DEFAULT_FAILED_TEST_RETRY_LIMIT
+  opt :batch_size, "Indicates the number of feature files which will be run at a time by cucumber. Used as a workaround for cucumber/ruby crashes when running with all feature files",
+        :short => "-b", :default => DEFAULT_FEATURE_BATCH_SIZE
+  opt :retry_last, "Indicates whether the feature scenarios which failed in the last run need to retried. This option cannot be used with feature_list option",
+        :short => "-l"
+end
+
+batch_size = opts[:batch_size]
+retry_count = opts[:retries]
+retry_last = opts[:retry_last]
+feature_list = ARGV
+
+abort "feature file list cannot be specified with retry_last option".red if retry_last && !feature_list.empty?
+abort "batch_size option cannot be specified with retry_last option".red if retry_last && batch_size > 0
+
+feature_list = ["features"] if feature_list.empty?
+
+# puts "retry_count = #{retry_count}"
+# puts "feature_list = #{feature_list}"
+# puts "retry_last = #{retry_last}"
+# puts "batch_size = #{batch_size}"
+feature_list = flatten_features(feature_list)
+
+ENV['CUCUMBER_FORMAT'] = 'pretty'
+# ENV['USE_MYSQL'] = 'true'
+
+FileUtils.cd(RAILS_ROOT_DIR) do
+  if retry_last
+    retry_features
+  elsif batch_size == 0
+    run_features(feature_list, retry_count)
+  else
+    failed_list = run_features_in_batch(feature_list, retry_count, batch_size)
+    print_failed_features(failed_list)
+  end
+end

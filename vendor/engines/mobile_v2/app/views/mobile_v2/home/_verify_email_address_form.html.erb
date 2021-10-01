@@ -1,0 +1,13 @@
+<%= simple_form_for :verify_email_address, url: "javascript:void(0)", :html => { :method => :post, :class => "cjs_verify_email_address"} do |f| %>
+  <%= content_tag(:label, "verify_email_page.label.select_email".translate, :class => "url required control-label", :for => "verify_email_address_email") %>
+  <%= construct_input_group([ { type: "addon", class: "p-r-sm gray-bg", content: get_icon_content("fa fa-user m-r-0") } ], [], input_group_class: "clearfix m-b-sm") do %>
+    <%= f.input :email, label: false, :input_html => { :class => "form-control required-field cjs_verify_email_address_email", placeholder: "display_string.Email".translate, type: "email"} %>
+  <% end %>
+  <%= f.submit "verify_email_page.content.confirm_email_address".translate, :class => "theme-btn-bg theme-btn-font-color btn btn-primary btn-block", :disable_with => "display_string.Please_Wait".translate %>
+  <%= content_tag(:div, link_to(append_text_to_icon("fa fa-question-circle", "verify_email_page.content.enter_program_url_fakedoor".translate), "javascript:void(0)", class: "text-navy cjs_enter_program_url_link"), class: "m-t-md") %>
+  <%= content_tag(:div, link_to(append_text_to_icon("fa fa-question-circle", "verify_email_page.content.not_a_member_fakedoor".translate), "javascript:void(0)", class: "text-navy cjs_signup_link"), class: "m-t-sm") %>
+<% end %>
+
+<%= javascript_tag do %>
+  FeatureMobile.verifyEmail({ emptyErrorMessage: '<%= "verify_email_page.content.empty_email_address_message".translate %>', invalidErrorMessage: '<%= "verify_email_page.content.invalid_email_address_message".translate %>', validatePath: '<%= mobile_v2_home_global_member_search_path %>', eventLabel: '<%= Experiments::MobileAppLoginWorkflow::Alternatives::ALTERNATIVE_B %>', eventLabelId: '<%= Experiments::MobileAppLoginWorkflow::Alternatives::GA_EVENT_LABEL_ID_MAPPING[Experiments::MobileAppLoginWorkflow::Alternatives::ALTERNATIVE_B] %>', successMessage: '<%= "verify_email_page.content.valid_email_address".translate %>' });
+<% end %>

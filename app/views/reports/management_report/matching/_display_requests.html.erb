@@ -1,0 +1,16 @@
+<h4><%= link_to(get_matching_report_link_text(data[:report_type]), get_matching_report_links(data[:report_type]), class: "") %></h4>
+<div class="row">
+  <div class="col-xs-3">
+    <small class="stats-label"><%= "display_string.Sent".translate %></small>
+    <h4><%= data[:sent] %></h4>
+  </div>
+  <div class="col-xs-4">
+    <small class="stats-label"><%= "display_string.Accepted".translate %></small>
+    <h4><%= data[:accepted] %></h4>
+  </div>
+  <div class="col-xs-5">
+    <small class="stats-label"><%= "feature.admin_view.label.Others_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS,'', :id => 'other_desc')) %></small>
+    <%= tooltip("other_desc", get_matching_report_tooltip_text(data[:report_type])) %>
+    <h4><%= data[:rejected] %></h4>
+  </div>
+</div>

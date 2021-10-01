@@ -1,0 +1,21 @@
+<% goal_template_has_description = goal_template.description.present? %>
+<div id="cjs-goal-template-container-<%= goal_template.id %>" class="list-group-item p-t-sm p-b-sm">
+  <div class="cjs-goal-template-edit-action-<%= goal_template.id %>">
+    <div class="cjs-description-toggle cjs-hover-well-<%= goal_template.id %>">
+      <%= render partial: "mentoring_model/goal_templates/goal_template_right_block", locals: {goal_template: goal_template} %>
+      <div class="inline cjs-goal-template-title cjs-goal-template-title-<%= goal_template.id %> <%= "pointer" if goal_template_has_description %>">
+        <%= "<a>".html_safe if goal_template_has_description %>
+        <%= goal_template.title %>
+        <%= "</a>".html_safe if goal_template_has_description %>
+      </div>
+    </div>
+
+    <% if goal_template_has_description %>
+      <div class="hide cjs-goal-template-description">
+        <div class="p-t-xs">
+          <%= preserve_new_line(goal_template.description) %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

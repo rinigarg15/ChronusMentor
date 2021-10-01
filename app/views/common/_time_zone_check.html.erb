@@ -1,0 +1,42 @@
+<div id="cjs_display_time_zone_alert">
+  <div class="cjs_display_time_zone hide">
+      <%= ibox "feature.timezoneflash.header.reset_time".translate, {
+        :ibox_class => "m-b-sm",
+        :show_close_link => true,
+        :close_link_class => "hide_time_zone_alert_box",
+        :icon_class => "fa fa-exclamation-triangle text-danger"} do %>
+        <div id="time_zone_message" class="m-b-sm">
+          <%= "feature.timezoneflash.message.text_html_v1".translate(:meetings => _meetings) %>
+        </div>
+
+        <div class="m-b-sm clearfix">
+          <div class="col-sm-2 no-padding"><strong><%= "feature.timezoneflash.message.your_device".translate %></strong></div>
+          <div class="col-sm-10 time_zone_text no-padding"></div>
+        </div>
+
+        <div class="m-b-sm clearfix">
+          <div class="col-sm-2 no-padding"><strong><%= "feature.timezoneflash.message.your_profile".translate %></strong></div>
+          <div class="col-sm-10 no-padding" id="profile_time_zone"><%= wob_member.full_time_zone %></div>
+        </div>
+
+        <div class="m-l-sm col-md-4 col-xs-12 col-sm-12 no-padding pull-right cjs_time_zone_alert_submit_container">
+          <%= simple_form_for wob_member, :url => update_time_zone_member_path(wob_member), :html => {:class => 'has-below'} do |f| %>
+            <%= f.hidden_field :time_zone, :class => "cjs_time_zone" %>
+            <%= f.submit "feature.timezoneflash.action.use_my_devices_time_zone".translate,
+            :class => 'btn btn-primary col-sm-12 col-xs-12', id: 'time_zone_alert_submit', onclick: "computeTimeZone(#{TimezoneConstants::VALID_TIMEZONE_IDENTIFIERS.to_json}, #{TimezoneConstants::OBSOLETE_TIMEZONES_HASH.to_json}, '#{notify_new_timezone_path}')" %>
+          <% end %>
+        </div>
+
+        <div class="m-l-sm col-xs-12 col-sm-12 col-md-2 no-padding pull-right">
+          <%= link_to("feature.timezoneflash.action.Ignore_this".translate, "", :class => "hide_time_zone_alert_box btn btn-white col-sm-12 col-xs-12") %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+<%= display_time_zone_alert %>
+<%= javascript_tag do %>
+  jQuery(function(){
+    TimeZoneFlash.initializeForm();
+  });
+<% end %>

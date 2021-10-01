@@ -1,0 +1,20 @@
+<div class="false-label control-label col-sm-12 p-l-0 p-r-0 m-b-xs"><%= "feature.mentoring_model.label.tasks_with_status".translate %></div>
+<span class="cjs_dummy_for_clone hide">
+  <%= control_group(class: "cjs_task_status_container") do %>
+    <%= controls(class: "m-b-sm col-sm-7 p-l-0") do %>
+      <label class="control-label sr-only"><%= "feature.mentoring_model.header.task".translate %></label>
+      <%= hidden_field_tag "task[]", "", { id: nil, class: "cjs_tasks_selector col-xs-12 no-padding", data: { placeholder: "feature.mentoring_model.label.select_a_task".translate } } %>
+    <% end %>
+    <%= controls(class: "m-b-sm col-sm-3 p-l-0 p-r-xs") do %>
+      <%= select_tag "operator", options_for_select([["feature.mentoring_model.label.select_status".translate, nil]]+get_task_status_filter_options), id: nil, class: "form-control cjs_tasks_operator_selector", "aria-label" => "feature.mentoring_model.label.tasks_with_status".translate %>
+    <% end %>
+    <div class="col-sm-2 p-l-0 p-r-0 cjs-add-task-status-container m-t-sm">
+      <%= link_to(get_icon_content("fa fa-plus-circle") + "display_string.Add".translate, "javascript:void(0)", :class => "cjs-add-task-status-selector") %>
+    </div>
+  <% end %>
+</span>
+<div class="hide cjs_task_status_prepend_element"></div>
+
+<%= javascript_tag do %>
+  GroupSearch.TaskOptions = <%= chr_json_escape(selected_template.get_task_options_array.to_json) %>;
+<% end %>

@@ -1,0 +1,134 @@
+<head>
+  <style type="text/css">
+    table, td, th {
+      border: 1px solid green;
+      text-align: left;
+    }
+
+    td {
+      padding-left: 3px;
+    }
+    
+    table {
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    thead {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #ffffbb;
+    }
+
+    .cui_table_heading {
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    #cui_summary_table {
+      width: 300px;
+    }
+
+    .cui_failed_events_list {
+      width: 1280px;
+    }
+
+    .cui_info {
+      color: grey;
+      font-style: italic;
+      font-size: 10px;
+      font-weight: normal;
+    }
+
+    .cui_timestamp {
+      width: 80px;
+    }
+
+    .cui_failed_events_list {
+      padding: 5px;
+    }
+
+  </style>
+  
+</head>
+
+<body>
+
+  <div class="cui_table_heading">Overview of failed events</div>
+  <table id="cui_summary_table">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @failed_events.each do |event_type, events| %>
+        <tr>
+          <td> <%= event_type.camelize %> </td>
+          <td><%= events.count %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% @failed_events.each do |event_type, events| %>
+
+    <% unless events.empty? %>
+      <div class="cui_table_heading">
+        List of <%=event_type%> events
+      </div>
+      <table class="cui_failed_events_list">
+        <thead>
+          <tr>
+            <th class="cui_timestamp">Timestamp</th>
+            <th>Recipient</th>
+            <th>Subject</th>
+            <th>Error Code</th>
+            <th>Error Description</th>
+            <th>Message-Id</th>
+          </tr>
+        </thead>
+        <tbody>
+            <% events.each do |evt| %>
+              <tr>
+                <td> <%=Time.parse(evt[:timestamp]).strftime('%b %d %H:%M')%> </td>
+                <td> <%= evt[:recipient] %> </td>
+                <td> <%= evt[:subject] %> </td>
+                <td> <%= evt[:error_code] %> </td>
+                <td> <%= evt[:error_description] %> </td>
+                <td> <%= evt[:message_id] %> </td>
+              </tr>
+            <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  
+  <% end %>
+
+  <% if @all_events.present? %>
+    <div class="cui_table_heading">Overview of all the events</div>
+    <table class="cui_failed_events_list">
+      <thead>
+        <tr>
+          <th class="cui_timestamp">Timestamp</th>
+          <th>Error Code</th>
+          <th>Error Description</th>
+          <th>Occurrence</th>
+          <th>Recipients</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @all_events.each do |error_code, details| %>
+          <tr>
+            <td> <%=Time.parse(details[:timestamp]).strftime('%b %d %H:%M')%> </td>
+            <td> <%= error_code %> </td>
+            <td> <%= details[:error_description] %> </td>
+            <td> <%= details[:count] %> </td>
+            <td> <%= details[:recipients].join(", ") %> </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</body>

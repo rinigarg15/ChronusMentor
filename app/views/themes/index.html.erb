@@ -1,0 +1,13 @@
+<% @title = "feature.custom_themes.header.customize_appearance_v1".translate(Program: _Program) %>
+
+<% if super_console? %>
+  <% @page_action = { label: "feature.custom_themes.actions.add_theme".translate, url:  new_theme_path, class: "btn btn-primary" } %>
+<% end %>
+<%= ibox nil do %>
+  <div id="themes">
+    <div class="m-b-xs">
+      <%= "feature.custom_themes.content.usage_instructions".translate %>
+    </div>
+    <%= render "themes/theme_table", themes: @themes %>
+  </div>
+<% end %>

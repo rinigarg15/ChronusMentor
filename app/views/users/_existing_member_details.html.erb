@@ -1,0 +1,19 @@
+<%= ibox nil, :ibox_class => "m-t-n-mlg", :collapse_link_class => "hide" do %>
+  <%= control_group do %>
+    <%= content_tag(:label, "feature.user.content.selected_user".translate, :class => 'false-label control-label col-sm-3') %>
+    <%= controls(:class => "col-sm-9 no-padding") do %>
+      <div class="no-padding">
+        <div class="media-left member_box_wrapper">
+          <%= member_picture_v3(@existing_member, {:no_name => true, :size => :medium, :dont_link => true}, image_options = {:class => "img-circle"}) %>
+        </div>
+        <div class="media-body">
+          <div id="name_email">
+            <%= content_tag(:div, @existing_member.name, :class => "h4 m-t-0 m-b-xs") %>
+            <%= content_tag(:div, @existing_member.email) %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+  <%= hidden_field_tag :member_id, @existing_member.id %>
+<% end %>

@@ -1,0 +1,6 @@
+<tr>
+  <td class="col-xs-3"><%= auth_config.title %></td>
+  <td class="col-xs-3"><%= AuthConfig::Type.verbose(auth_config.auth_type) %></td>
+  <td class="col-xs-2"><%= formatted_date_in_words(auth_config.created_at) %></td>
+  <td class="col-xs-4"><%= safe_join(get_auth_config_actions(auth_config), " ") %></td>
+</tr>

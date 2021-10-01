@@ -1,0 +1,16 @@
+<div class="text-center">
+  <div class="p-b-sm">
+    <%= "feature.user.content.no_mentors_matching_preferences".translate(:mentors => _mentors) %>
+  </div>
+  <div>
+    <% if (my_filters.collect{|filter| filter[:label]} - ["feature.user.filter.availability_status".translate, "feature.user.filter.match_score".translate]).present? %>
+      <%= link_to(append_text_to_icon("fa fa-refresh", "feature.user.content.reset_filters".translate), "javascript:void(0);", class: "btn btn-large btn-default btn-outline m-r-xs cjs-no-mentors-reset-filters") %>
+    <% else %>
+      <%= link_to(append_text_to_icon("fa fa-sliders", "feature.explicit_preference.label.personalize_recommendations".translate), "javascript:void(0);", class: "btn btn-large btn-primary cjs_show_explicit_preference_popup_no_results") %>
+    <% end %>
+  </div>
+</div>
+<%= javascript_tag do %>
+  MentorSearch.initializeNoMentorsResetFilters();
+  ExplicitPreference.openPreferencePopup("<%= new_explicit_user_preference_path(src: EngagementIndex::Src::ExplicitPreferences::MENTOR_LISTING_NO_RESULTS) %>", ".cjs_show_explicit_preference_popup_no_results");
+<% end %>

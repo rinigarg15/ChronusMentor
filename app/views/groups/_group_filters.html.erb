@@ -1,0 +1,60 @@
+<% survey_params = group_params[:search_filters].present? ? (group_params[:search_filters].delete(:survey_response) || {}) : {} %>
+<% survey_params_for_task_status = group_params[:search_filters].present? ? (group_params[:search_filters].delete(:survey_status) || {}) : {} %>
+
+<% show_status_links = @is_manage_connections_view && (@tab_number == Group::Status::ACTIVE || @tab_number.nil?) %>
+<% show_status = !@drafted_connections_view && !@is_global_connections_view && show_status_links %>
+<% proposed_or_rejected_tab = [Group::Status::REJECTED, Group::Status::PROPOSED].include?(@tab_number) %>
+<% show_multiple_templates_filter = @is_manage_connections_view && @mentoring_model_v2_enabled && !proposed_or_rejected_tab %>
+<% survey_filter = @is_manage_connections_view && @current_program.mentoring_connections_v2_enabled? && (@tab_number == Group::Status::ACTIVE || @tab_number.nil? || @tab_number == Group::Status::CLOSED) %>
+
+<%= hidden_field_tag(:filters_applied, true) %>
+<%= hidden_field_tag(:view, @view, id: 'filter_view_field') %>
+<%= hidden_field_tag(:sort, @sort_field, id: 'filter_sort_field', class: 'sort') %>
+<%= hidden_field_tag(:order, @sort_order, id: 'filter_sort_order', class: 'order') %>
+<%= hidden_field_tag(:src, "", id: 'filter_src') %>
+<%= hidden_field_tag(:tab, @tab_number, id: 'filter_tab') %>
+
+<%= render partial: "groups/quick_find" if @find_new %>
+
+<% if show_status %>
+  <%= generate_collapsible_status_links((group_params[:sub_filter] || {}), @not_started_filter, { add_closed_filter: @add_closed_filter, closed_filter: @closed_filter, is_reports_view: reports_view } ) %>
+<% end %>
+<% if @v2_tasks_overdue_filter %>
+  <%= mentoring_connections_v2_behind_schedule(group_params[:search_filters], reports_view) %>
+<% end %>
+<% if show_multiple_templates_filter %>
+  <%= multiple_templates_filters(@current_program, group_params[:search_filters], reports_view) %>
+<% end %>
+<% if survey_filter %>
+  <%= get_survey_status_filter(@current_program, survey_params_for_task_status, reports_view) %>
+  <%= get_survey_response_filter(@current_program, survey_params, reports_view) %>
+<% end %>
+
+<% collapsible_find_new_filters(reports_view) if local_assigns[:find_new_filters].present? %>
+<%= collapsible_group_search_filter("feature.connection.header.connection_name".translate(Mentoring_Connection: _Mentoring_Connection), @search_params_hash, reports_view) %>
+<%= collapsible_group_role_slots_filter(@current_program, @search_params_hash, reports_view) if show_role_availability_slot_filters?(@current_program, @is_manage_connections_view, @tab_number) %>
+<%= collapsible_group_member_filters(@current_program, { :can_manage_view => @is_manage_connections_view, is_reports_view: reports_view } ) %>
+<%= collapsible_group_member_profile_filters(@current_program, { is_reports_view: reports_view } ) if @is_manage_connections_view %>
+
+<% 
+  if @is_manage_connections_view && !@find_new
+    if (@tab_number == Group::Status::ACTIVE || @tab_number == Group::Status::CLOSED || @tab_number.nil?)
+      construct_date_filter_for_groups *generate_data_for_groups_date_filters("started_date", @started_start_time, @started_end_time, reports_view)
+    end
+    if reports_view
+      construct_date_filter_for_groups *generate_data_for_groups_date_filters("close_date", @close_start_time, @close_end_time, reports_view)
+    else
+      if (@tab_number == Group::Status::ACTIVE)
+        construct_date_filter_for_groups *generate_data_for_groups_date_filters("expiry_date", @expiry_start_time, @expiry_end_time)
+      elsif (@tab_number == Group::Status::CLOSED)
+        construct_date_filter_for_groups *generate_data_for_groups_date_filters("closed_date", @closed_start_time, @closed_end_time)
+      end
+    end
+  end
+%>
+<% if @is_manage_connections_view && (@tab_number == Group::Status::CLOSED) %>
+  <%= closure_reason_filters(@current_program, group_params[:search_filters]) %>
+<% end %>
+<% if @current_program.connection_profiles_enabled? %>
+  <%= render :partial => "groups/question", :collection => @filterable_connection_questions, locals: {is_reports_view: reports_view} %>
+<% end %>

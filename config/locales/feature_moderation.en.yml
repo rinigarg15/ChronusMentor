@@ -1,0 +1,12 @@
+en:
+  feature:
+    moderate:
+      header:
+        Moderation: Content Awaiting Moderation
+      table_header:
+        content: Content
+        action: Actions
+      message_header:
+        Decline_Header_v1: Please specify a reason for declining to publish the post.
+      content:
+        reason_for_declining: Reason for declining

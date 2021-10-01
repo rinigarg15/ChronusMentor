@@ -1,0 +1,40 @@
+<% @title = "feature.match_config.label.matching_customization".translate %>
+<% @page_action = {:label => "feature.match_config.label.new_config".translate, :url => new_match_config_path(@match_config), :class => 'btn btn-primary'} %>
+<% @page_action2 = {:label => "feature.match_config.label.recompute_match_scores".translate, :url => refresh_scores_match_configs_path, :class => "btn btn-primary", data: { method: :post, :disable_with => "display_string.Please_Wait".translate } } %>
+
+<% @skip_rounded_white_box_for_content = true %>
+<%= ibox nil, :ibox_id => "match_configs" do %>
+  <div class="table-responsive">
+    <table class="table table-striped" cellpadding="0" cellspacing="0">
+      <thead class="pane-header">
+        <tr>
+          <th class="col-sm-3"><%= "feature.match_config.table.mentor_question".translate(:Mentor => _Mentor) %></th>
+          <th class="col-sm-3"><%= "feature.match_config.table.mentee_question".translate(:Mentee => _Mentee) %></th>
+          <th nowrap ><%= "feature.match_config.table.weight".translate %></th>
+          <th nowrap ><%= "feature.match_config.table.threshold".translate %></th>
+          <th><span class="pull-right"><%= "feature.match_config.table.actions".translate %></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @match_configs.each do |match_config| %>
+          <% operator_html = (MatchConfig::Operator.gt == match_config.operator) ? 'feature.match_config.label.gt'.translate : 'feature.match_config.label.lt'.translate %>
+          <tr>
+            <td class="col-sm-3"><%= match_config.mentor_question.question_text %></td>
+            <td class="col-sm-3"><%= match_config.student_question.question_text %></td>
+            <td nowrap  title="<%= 'activerecord.attributes.match_config.weight'.translate %>"><%= match_config.weight %></td>
+            <td nowrap title="<%= 'feature.match_config.label.threshold'.translate(mentor: _mentor) %>"><%= operator_html %> <%= match_config.threshold %></td>
+            <td class="col-sm-2" >
+              <% common_actions = [] %>
+              <span class="pull-right">
+                <% common_actions << (link_to get_icon_content("fa fa-pencil") +  "display_string.Edit".translate, edit_match_config_path(match_config), :class => "btn btn-white btn-xs btn-block-xxs") %>
+                <%  common_actions << (link_to get_icon_content("fa fa-trash") +  "display_string.Delete".translate, match_config, :method => :delete, :class => "btn btn-white btn-xs btn-block-xxs", data: {:confirm => "feature.match_config.label.destroy_confirmation".translate}) %>
+                <%= render_button_group(common_actions) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <%= link_to("feature.match_config.label.play_with_matching".translate, play_match_configs_path(), :class => 'btn btn-primary pull-right') %>
+<% end %>

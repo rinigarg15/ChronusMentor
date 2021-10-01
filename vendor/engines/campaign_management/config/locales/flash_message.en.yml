@@ -1,0 +1,23 @@
+en:
+  flash_message:
+    campaign_management:
+      campaign:
+        create_failure: Please fix the highlighted errors.
+        update_success: The campaign has been successfully updated.
+        update_failure: Please fix the highlighted errors.
+        activate_success_v1: The campaign is now active.
+        disable_success_v1: The campaign has been stopped.
+        csv_upload_successfully: The Campaign template has been set up successfully from the template file
+        csv_parse_error: The uploaded file is not in the csv format.
+        clone_success: "%{campaign_name} campaign has been created successfully."
+      campaign_message:
+        create_success: The email has been successfully created.
+        create_success_user_campaign: The email '%{email_subject}' has been added to the campaign '%{campaign_name}'
+        create_failure: Please fix the highlighted errors.
+        update_success_v2: The email has been successfully updated.
+        update_failure: Please fix the highlighted errors.
+        email_success: A test email has been sent to %{email}
+        create_active_v2: Congratulations on starting the '%{campaign_name}' campaign. You can track the effectiveness of the campaign on the campaign page.
+        zero_duration_campaign_email_help_text:
+          one: The email %{email_subjects} will be sent to targeted users within couple of hours.
+          other: The emails ' %{email_subjects} ' will be sent to targeted users within couple of hours.

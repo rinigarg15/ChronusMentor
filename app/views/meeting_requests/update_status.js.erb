@@ -1,0 +1,6 @@
+<% if @is_valid_proposed_slot || @is_valid_message %>
+  window.location.href = '<%= meeting_path(@meeting, current_occurrence_time: @occurrence_time, ei_src: EngagementIndex::Src::AccessFlashMeetingArea::MEETING_REQUEST_LISTING, src: EngagementIndex::Src::AccessFlashMeetingArea::MEETING_REQUEST_ACCEPTANCE) %>';
+<% else %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("meeting_create_flash", '<%= "feature.meeting_request.content.slot_time_error".translate(:Meeting => _Meeting) %>');
+  MeetingRequest.enableWithForLink(".cjs_propose_meeting", "<%= "feature.meetings.content.accept_and_propose".translate %>");
+<% end %>

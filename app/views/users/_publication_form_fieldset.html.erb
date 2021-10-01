@@ -1,0 +1,33 @@
+<div id="edit_publication_<%=question.id%>" class="edit_publication clearfix cjs_question_#{question.id}">
+  <div class="publications">
+    <%= hidden_field_tag "profile_answers[#{question.id}][hidden]" %>
+    <% if question.question_type == ProfileQuestion::Type::MULTI_PUBLICATION %>
+      <div class = "text-center hide cjs_empty_message p-sm"><%= "feature.education_and_experience.label.no_publication_specified".translate %></div>
+      <div id="publication_cur_list_<%=question.id%>" class="clearfix panel-body list-group p-l-xs p-r-xs">
+        <% publications = answer.publications.empty? ? [Publication.new] : answer.publications %>
+        <%= render :partial => "publications/new_publication", :collection => publications, :locals => {:question => question, :required => local_assigns[:required]} %>
+      </div>
+      <% unless question.help_text.blank? %>
+        <div class="m-t-xs b-t p-l-sm">
+          <%= help_text_content(question.help_text.html_safe, question.id) %>
+        </div>
+      <% end %>
+
+      <div class="add_new m-t-sm panel-footer clearfix">
+        <span class="pull-right">
+          <%= add_publication_link(question, embed_icon('fa fa-plus-circle m-r-xs',"feature.education_and_experience.action.add_publication_v1".translate), :required => local_assigns[:required]) %>
+        </span>
+      </div>
+        
+    <% elsif question.question_type == ProfileQuestion::Type::PUBLICATION %>
+      <div id="publication_cur_list_<%=question.id%>" class="clearfix panel-body">
+        <%= render :partial => "publications/new_publication", :object => answer.publications.first || Publication.new, :locals => {:question => question, :required => local_assigns[:required]} %>
+        <% unless question.help_text.blank? %>
+          <div class="m-t-xs b-t p-l-sm">
+            <%= help_text_content(question.help_text.html_safe, question.id) %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

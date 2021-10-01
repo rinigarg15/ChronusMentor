@@ -1,0 +1,17 @@
+<% competency = survey_competency.competency %>
+<% additional_right_links = render(:partial => "three_sixty/surveys/survey_competency_right_links", :locals => {:survey => survey, :survey_competency => survey_competency, :competency => competency}) %>
+
+<li id="three_sixty_survey_competency_<%= survey_competency.id %>" class="well no-borders white-bg no-padding">
+  <% collapsible_content content_tag(:big, competency.title), [], false,
+    :render_panel => true,
+    :class => "no-vertical-margins draggable sortable_item",
+    :pane_content_class => "no-padding",
+    :additional_header_class => "gray-bg b-t b-b b-r b-l draggable",
+    :additional_right_links => additional_right_links,
+    :collapsible => false do %>
+
+    <ul id="three_sixty_survey_competency_questions_<%= survey_competency.id %>" class="sortable_list unstyled no-borders cjs-alt-color-parent">
+      <%= render :partial => "three_sixty/surveys/survey_question", :collection => survey_competency.survey_questions, :locals => {:survey => survey, :survey_competency => survey_competency} %>
+    </ul>
+  <% end %>
+</li>

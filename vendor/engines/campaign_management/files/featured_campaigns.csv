@@ -1,0 +1,31 @@
+#Campaign,,,
+Name,AdminView,Enable,Type
+Program Invitations to sign up,,Yes,ProgramInvitation
+,,,
+#Emails,,,
+Subject,Message,Schedule,Campaign
+Invitation to join {{subprogram_or_program_name}} {{as_role_name_articleized}},"Hello,<br />
+<br />
+I would like to invite you to join the&nbsp;{{subprogram_or_program_name}} {{as_role_name_articleized}}.<br />
+<br />
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for {{subprogram_or_program_name}}. Once you do that, you can fill out your profile (which we use to match you up with other participants with similar interests and goals) and participate in the program activities.<br />
+<br />
+I look forward to your participation! If you have any questions, please contact me <a href=""{{url_contact_admin}}"">here</a>.",0,Program Invitations to sign up
+You have a pending invitation to join {{subprogram_or_program_name}} ,"Hello,<br />
+<br />
+A couple of weeks ago I invited you to participate in {{subprogram_or_program_name}} {{as_role_name_articleized}}. As of today, I have not heard back from you.<br />
+<br />
+This is a reminder that your invitation will expire in about 15 days.<br />
+<br />
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for {{subprogram_or_program_name}}. Once you do that, you can fill out your profile (which we use to match you up with other participants with similar interests and goals) and participate in the program activities.<br />
+<br />
+I look forward to your participation! If you have any questions, please contact me <a href=""{{url_contact_admin}}"">here</a>.",15,Program Invitations to sign up
+Your invitation expires tomorrow!,"Hello,<br />
+<br />
+About a month ago, I invited you to participate in {{subprogram_or_program_name}} {{as_role_name_articleized}}. As of today, I still have not heard back from you.<br />
+<br />
+Your invitation will expire on {{invitation_expiry_date}}. This will be the last reminder you will receive.<br />
+<br />
+<a href=""{{url_invitation}}"">Click here</a> to accept the invitation and sign up for {{subprogram_or_program_name}}.<br />
+<br />
+I look forward to your participation! If you have any questions, please contact me <a href=""{{url_contact_admin}}"">here</a>.",29,Program Invitations to sign up

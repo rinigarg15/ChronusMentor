@@ -1,0 +1,8 @@
+<% content = render partial: "mentoring_model/tasks/progressive_edit_assignee_or_due_date_form.html.erb", locals: {
+  group: @group,
+  task: @task,
+  alter_due_date: @alter_due_date,
+  as_ajax: true
+} %>
+TaskProgressiveForm.showMenuAndCloseForm();
+MentoringModelTask.appendForm("<%= @task.id.to_s %>", "<%= j(content) %>");

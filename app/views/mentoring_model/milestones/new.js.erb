@@ -1,0 +1,3 @@
+<% modal_v3_popup "feature.mentoring_model.button.add_custom_milestone".translate do %>
+  <%= render partial: "mentoring_model/milestones/milestone_form", locals: {milestone: @milestone, group: @group, target_user_id: @target_user.try(:id), :target_user_type => @target_user_type}  %>
+<% end %>

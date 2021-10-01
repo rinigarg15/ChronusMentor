@@ -1,0 +1,43 @@
+<% sort = non_filter_params[:sort] %>
+<% order = non_filter_params[:order] %>
+<% membership_request_questions = @membership_questions_for_roles.values.flatten.uniq %>
+
+<div class="cjs_table_enclosure">
+  <table id="cjs_mem_req_record" class="table" cellpadding="0" cellspacing="0">
+    <thead>
+      <tr class="cjs_mem_req_header cui_table_sort">
+        <th>
+          <label for ="cjs_primary_checkbox" class="sr-only"><%= "feature.mentor_request.content.select_all_label_v1".translate %></label>
+          <%= check_box_tag :cjs_primary_checkbox %>
+        </th>
+        <%= membership_user_info_header(sort, order) %>
+        <th class="truncate-with-ellipsis whitespace-nowrap" data-toggle="tooltip" data-title="<%= "feature.membership_request.label.request_to_join_as".translate %>">
+          <%= "feature.membership_request.label.request_to_join_as".translate %>
+        </th>
+        <th class="truncate-with-ellipsis whitespace-nowrap" data-toggle="tooltip" data-title="<%= "feature.membership_request.label.sent".translate %>">
+          <%= "feature.membership_request.label.sent".translate %>
+        </th>
+        <%= get_membership_request_title_header(membership_request_questions, sort, order, tab) %>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= render partial: "membership_requests/select_all", locals: { membership_requests: membership_requests, filter_params: filter_params, non_filter_params: non_filter_params, tab: tab } %>
+      <% membership_requests.each do |request| %>
+        <tr id="ct_mem_req_record_<%= request.id %>">
+          <td>
+            <%= get_checkbox_data_for_membership_request(request) %>
+          </td>
+          <%= membership_user_info_for_listing(request, wob_member, @current_program) %>
+          <td class='role'>
+            <%= request.formatted_role_names %>
+          </td>
+          <td class='sent'>
+            <%= formatted_time_in_words(request.created_at) %>
+          </td>
+          <%= get_membership_request_row_values(request, membership_request_questions, tab) %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

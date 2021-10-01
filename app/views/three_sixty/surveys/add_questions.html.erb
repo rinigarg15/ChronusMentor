@@ -1,0 +1,46 @@
+<% @title = @survey.title %>
+
+<%= three_sixty_survey_show_view_bar(@view, @survey) do %>
+  <div class="cjs_three_sixty_container clearfix m-t-xs">
+    <div class="well white-bg no-borders noshadow no-margins p-t-xs p-b-xs">
+      <h3><%= get_icon_content("fa fa-shield") + "feature.three_sixty.survey.competencies_and_questions".translate %></h3>
+    </div>
+    <div class="well flat-border white-bg no-margins">
+      <ul id="three_sixty_survey_competencies" class="sortable_list unstyled no-borders">
+        <%= render :partial => "three_sixty/surveys/survey_competency", :collection => @survey_competencies, :locals => {:survey => @survey} %>
+      </ul>
+      <%= javascript_tag %Q[jQuerySortable.makeSortable('three_sixty_survey_competencies', '', '#{reorder_competencies_three_sixty_survey_path(@survey)}', '', '', '')] %>
+
+      <div id="three_sixty_new_survey_competency">
+        <%= render :partial => "three_sixty/surveys/new_survey_competency", :locals => {:survey => @survey, :available_competencies => @available_competencies} %>
+      </div>
+
+    </div>
+
+    <div class="well white-bg no-borders noshadow no-margins p-t-sm p-b-xs">
+      <h3><%= get_icon_content("fa fa-question-circle") + "feature.three_sixty.survey.open_ended_questions".translate %></h3>
+    </div>
+    <div class="well white-bg flat-border">
+      <div id="three_sixty_survey_oeqs" class="table-bordered cjs-alt-color-parent">
+        <%= render :partial => "three_sixty/surveys/survey_oeq", :collection => @survey_oeqs, :locals => {:survey => @survey} %>
+      </div>
+
+      <div id="three_sixty_new_survey_oeq" class="m-t">
+        <%= render :partial => "three_sixty/surveys/new_survey_oeq", :locals => {:survey => @survey, :available_oeqs => @available_oeqs, :show_actions => @show_actions} %>
+      </div>
+    </div>
+
+    <div class="well white-bg p-t-0 p-b-0 clearfix no-borders noshadow">
+      <div class="pull-right">
+        <%= link_to("feature.three_sixty.survey.discard".translate, three_sixty_survey_path(@survey), :method => :delete, data: {:confirm => "feature.three_sixty.survey.delete_warning".translate}, :class => "btn btn-white has-next") %>
+        <%= link_to("feature.three_sixty.survey.preview_html".translate, preview_three_sixty_survey_path(@survey), :class => "btn btn-primary") %>
+      </div>
+      <%= link_to("feature.three_sixty.survey.back_to_settings_html".translate, edit_three_sixty_survey_path(@survey), :class => "btn btn-primary pull-left") %>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do  %>
+  QtipPopup.generateForm();
+  ThreeSixty.initializeAddSurveyQuestions();
+<% end %>

@@ -1,0 +1,93 @@
+div.v2_pages {
+  .cui-progressive-form-faclitation-template-body {
+    float: left;
+    margin-left: -50px;
+    margin-top: 9px;
+    width: 50px;
+  }
+
+  .cui-label-type-bg {
+    padding: 4px;
+    border: 1px solid #E6E6E6;
+    background-color: #F3F3F3;
+  }
+
+  .cui-label-type-bg.cui-date-type-selected-btn {
+    background-color: #035598;
+    color: white;
+  }
+
+  .cui-assignee-container-picture {
+    width: 26px;
+    margin-top: -4px;
+  }
+
+  .cui-meeting-title-link {
+    max-width: 160px;
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-bottom: -5px;
+  }
+
+  .cui-add-margin-bottom-to-page-canvas {
+    margin-bottom: 50px;
+  }
+
+  .cui-progressive-form-drop-down-head {
+    padding: 4px;
+    border: 1px solid #E6E6E6;
+    background-color: #F3F3F3;
+  }
+
+  .cui-progressive-form-milestones-drop-down-option, .cui-progressive-form-action-items-drop-down-option {
+    padding: 4px;
+    border-bottom: 1px solid #E6E6E6;
+    z-index: 60000;
+  }
+
+  .cui-progressive-form-duration-drop-down-head-inner-style {
+    display: inline-block;
+    width: 40px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    vertical-align: top;
+  }
+
+  .cui-progressive-form-drop-down-options {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #E6E6E6;
+    border-bottom: none;
+    z-index: 60000;
+  }
+
+  .cui-progressive-form-duration-drop-down-option {
+    padding: 4px;
+    border-bottom: 1px solid #E6E6E6;
+    z-index: 60000;
+    width: 60px;
+  }
+
+  .cui-progressive-form-label-styling {
+    font-size: 13px;
+    margin-top: 10px;
+  }
+
+  .select2-drop.cui-progressive-select2-dropdown {
+    z-index: 60000;
+  }
+
+  .select2-container.cui-task-template-select2-styling {
+    width: 250px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: -1px;
+  }
+
+  .hr-display-divider {
+    margin-top: -5px;
+    margin-bottom: 10px;
+  }
+}

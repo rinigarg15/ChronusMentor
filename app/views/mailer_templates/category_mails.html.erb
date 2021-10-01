@@ -1,0 +1,45 @@
+<% @title = EmailCustomization.get_translated_email_type_name(EmailCustomization::NewCategories::NAMES[@category]).call(current_program_or_organization) %>
+<% @title_description =  EmailCustomization.get_translated_email_category_description(EmailCustomization::NewCategories::NAMES[@category]).call(current_program_or_organization) %>
+<% @back_link = {:label => "feature.email.header.emails_v1".translate, :link => mailer_templates_path} %>
+<% if @show_rollout_update_all %>
+  <% @header_alert_content = update_all_alert_for_rollout %>
+  <% @header_alert_options = {
+    :close_link_url => dismiss_rollout_flash_by_admin_rollout_emails_path(format: :js)
+    } %>
+<% end %>
+
+<% if @emails_hash_list.count > 0 %>
+  <% if @sub_categories.present? %>
+    <% @sub_categories.each do |subcategory| %>
+      <% emails_in_subcategory = @emails_by_subcategory_hash[subcategory] %>
+      <% if emails_in_subcategory && emails_in_subcategory.count > 0 %>
+        <%= ibox "#{EmailCustomization.get_translated_email_subcategory_name(EmailCustomization::NewCategories::SubCategories::NAMES[subcategory]).call(current_program_or_organization)} #{email_enabled_and_disabled_info(@emails_by_subcategory_hash[subcategory], current_program_or_organization)} #{invitation_mails_info_text(subcategory, current_program_or_organization)}", :ibox_id => "subcategory_#{subcategory}", :ibox_class => "subcatogories", :content_class => "no-padding" do %>
+          <%= listing_page(emails_in_subcategory, :partial => "mailer_templates/email", :collection_key => :email) %>
+        <% end %>
+      <% elsif subcategory == EmailCustomization::NewCategories::SubCategories::INVITATION && current_program_or_organization.is_a?(Program) %>
+        <%= render_empty_invitation_subcategory(current_program_or_organization) %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <%= ibox nil, :ibox_id => "email_templates_listing", :content_class => "no-padding" do %>
+      <%= listing_page(@emails_hash_list, :partial => "mailer_templates/email", :collection_key => :email) %>
+    <% end %>
+  <% end %>
+<% else %>
+  <%= ibox nil, :ibox_id => "email_templates_listing", :content_class => "no-padding" do %>  
+    <div id="empty_message" class="p-sm text-center">
+      <%= "feature.email.content.no_mails_empty_message".translate(_program: _program) %>
+    </div>
+  <% end %>
+<% end %>
+
+<% content_for_sidebar do %>
+  <%= render :partial => 'mailer_templates/filter' %>
+  <% @filters_in_sidebar = false %>
+  <% @sidebar_footer_content = "" %>
+  <%= render :partial => 'mailer_templates/widgets' %>
+<% end %>
+
+<%= javascript_tag do  %>
+  MailerTemplates.initializeIndex();
+<% end %>

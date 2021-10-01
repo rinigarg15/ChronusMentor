@@ -1,0 +1,36 @@
+<div class="clearfix p-t-sm p-b-sm" id="add_new_mentor_link">
+  <% rand_id = SecureRandom.hex(3) %>
+  <div class="cjs_name_text_box m-t col-xs-12 no-padding">
+    <%= control_group do %>
+      <%= content_tag(:label, class: "cjs_mentor_name_label control-label col-sm-3 false-label", for: "choice_#{rand_id}") do %>
+        <%= "feature.preferred_mentoring.label.select_mentor_v1".translate(Mentor: _Mentor) %>
+      <% end %>
+      <%= controls(class: "col-sm-9") do %>
+        <%= name_auto_complete :member, :name, rand_id, { name: "" }, {clear_text: true} %>
+        <% suggestions_hash = suggested_users(@favorites, recommended_users) %>
+        <% unless suggestions_hash.empty? %>
+          <%= selected_mentor_box %>
+          <div class="cjs_autocomplete_textarea clearfix auto_complete z-index-10 absolute m-r">
+            <ul class="list-group elements-list white-bg b-l b-r b-b cjs_preferred_list hide">
+              <li class="list-group-item font-bold gray-bg">
+                <%= 'feature.preferred_mentoring.header.recommended_mentors'.translate(Mentors: _Mentors) %>
+              </li>
+              <% suggestions_hash.each do |id, mentor| %>
+                <%= dropdown_cell_recommendation(mentor, { match_array: match_array, mentor_users: mentor_users } ) %>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function() {
+    MentorRequests.toggleAddNewMentor(<%= current_user.can_view_mentors? %>);
+    jQuery(document).on("autocompletesearch", '<%= "#choice_#{rand_id}" %>', function(event, ui){
+      jQuery(".cjs_preferred_list").hide();
+    });
+  });
+<% end %>

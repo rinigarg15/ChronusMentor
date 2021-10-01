@@ -1,0 +1,29 @@
+<% email_enabled_class = !email[:disabled] ? "cjs_enabled_mail" : "cjs_disabled_mail" %>
+<% email_customization_class = email[:content_customized] ? "cjs_customized_mail" : "cjs_non_customized_mail" %>
+<div id="mailer_template_<%= email[:uid] %>" class="clearfix cjs_email_container <%= email_enabled_class %> <%= email_customization_class %>">
+  <div class="clearfix">
+    <% unless email[:disable_customization] %>
+      <div class="pull-right <%= hidden_on_mobile %>">
+        <%= link_to *email_edit_link_params(@enable_update, email) %>
+      </div>
+    <% end %>
+
+    <div class="no-padding pull-left">
+      <%= @enable_update && !disable_status_change?(email[:uid], current_program_or_organization)  ? fetch_status_icon(email, update_status_mailer_template_path(email[:uid], :enabled => "false"), update_status_mailer_template_path(email[:uid], :enabled => "true"), !email[:disabled]) : fetch_dummy_status_icon(!email[:disabled]) %>
+    </div>
+    <div class="p-l-lg">
+      <span class="font-bold"><%=  email[:title].call(current_program_or_organization) %></span>
+      <div class="text-muted clearfix m-t-xs"><%= email[:description].call(current_program_or_organization) %></div>
+      <div class="text-muted clearfix m-t-xs"><%= content_last_updated_at_info(email[:uid], current_program_or_organization) %></div>
+    </div>
+  </div>
+
+
+
+  <% unless email[:disable_customization] %>
+    <div class="m-t-sm <%= hidden_on_web %>">
+      <%= link_to *email_edit_link_params(@enable_update, email, :additional_class => "btn-block") %>
+    </div>
+  <% end %>
+
+</div>

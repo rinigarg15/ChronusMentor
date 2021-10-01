@@ -1,0 +1,60 @@
+@import "mixins.scss";
+
+/*Override*/
+.cui-qtip{
+  padding: 0px;
+
+  max-width: 900px;
+
+  font-size: inherit;
+  line-height: inherit;
+  z-index: 15000;
+
+  .ui-tooltip-content {
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    color: inherit;
+  }
+}
+
+.cui-qtip.cui-qtip-ckeditor{
+  z-index: 990; //Should be same as CKEDITOR baseFloatZIndex
+}
+
+#qtip-overlay div {
+  z-index: 14000;
+}
+
+/*Styles for inner content*/
+.cui-qtip{
+  .loading{
+    background-color: #F5F5F5;
+    border: 3px solid #666666;
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: bold;
+    padding: 20px;
+    height: 35px;
+    padding: 40px 65px;
+    line-height: 32px;
+  }
+  .cui-qtip-contentwrapper {
+    position: relative !important;
+    background-color: #FAFAFA;
+    a.button, input.button {
+      width: auto;
+    }
+    .popup_header .close_image_link{
+      float: right;
+      width: 15px;
+      margin: 7px 7px 7px 5px;
+    }
+  }
+  .cui-qtip-contentwrapper.old_popup_styles {
+    .popup_header h3 {
+      white-space: nowrap;
+      margin-right: 25px;
+    }
+  }
+}

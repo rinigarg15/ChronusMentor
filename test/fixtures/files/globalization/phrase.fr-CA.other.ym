@@ -1,0 +1,5 @@
+---
+fr-CA:
+  feature:
+    only_english_key: French:only fr-CA
+    both_english_and_french_key: French:both en and fr-CA

@@ -1,0 +1,69 @@
+en:
+  feature:
+    resources:
+      header:
+        new_resource: New %{resource}
+      action:
+        add_new_resource: Add new %{resource}
+        delete_resource: Delete %{resource}
+        reorder_resources: Reorder %{resources}
+        accessible_to: "Accessible to*"
+        pin_to_homepage: "Pin this %{resource} in homepage for*"
+      content:
+        global_resource: Global %{resource}
+        no_resources_yet_v1: There are no %{resources} yet.
+        create_resource_html: "%{click_here} to create one."
+        updated_time_ago: 'Updated: %{time} ago'
+        time_ago: "%{time} ago"
+        content_hint_text: Please note that the layout may stretch or contract depending on the screen resolution of the viewer.
+        select_things_to_publish: Select %{things} to publish
+        show_in_quick_links_tooltip_html_v1: This allows the user quick access to the %{resource} from their home page and the navigation
+        show_in_quick_links_html: Provide quick access to this %{resource} %{tooltip}
+        mentor_default_handbook_title: "%{mentor} Handbook"
+        mentor_default_handbook_content_label: here
+        mentor_default_handbook_content_html: Click %{mentor_handbook_url} to download
+        mentee_default_handbook_title: "%{mentee} Handbook"
+        mentee_default_handbook_content_label: here
+        mentee_default_handbook_content_html: Click %{mentee_handbook_url} to download
+        shared_with: Shared with %{roles}
+        shared_with_none: Shared with none
+        shared_with_program:
+          zero: Not shared with any %{program}
+          one: Shared with %{content}
+          other: Shared with %{content}
+        n_other_programs:
+          one: 1 other %{program}
+          other: "%{count} other %{programs}"
+        organization_resource_tooltip_html: This %{resource} is created at %{organization_name} portal level. Content cannot be edited at %{program} level
+        shared_with_v1: Shared with
+        views_stat:
+          one: 1 View
+          other: "%{count} Views"
+        views_stat_v1:
+          one: 1 view
+          other: "%{count} views"
+        resource_helpful: Was this %{resource} helpful?
+        have_a_question: Have a question?
+        thank_you: Thank You!
+        sorry_about_that: Sorry about that!
+        let_us_know: We're always looking for feedback - how can this %{resource} be updated to be more useful to you?
+        describe_your_question: Please describe your question...
+        resource_admin_message_subject: "%{Resource} %{resource_title} is marked not helpful"
+        marked_helpful: "%{count} marked helpful"
+        resource_question_mail_subject: Question regarding the %{resource} - %{resource_title}
+      label:
+        view_details: View details
+        view_details_v1_html: View details &raquo;
+        edit_resource: Edit %{resource}
+        title: Title
+        content: Body
+        access_for_all: All users who can access it
+        select_user_set: Select a different user set
+      description:
+        reorder_resources_description_html: To reorder the %{resources}, simply <strong> drag and drop </strong> them to their new position and the position will be automatically saved.
+      sort_options:
+        position: Position
+        position_v1: Position in menu
+        position_end_user: Default order
+        title_asc: Title A to Z
+        title_dsc: Title Z to A

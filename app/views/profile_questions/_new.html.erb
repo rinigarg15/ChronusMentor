@@ -1,0 +1,21 @@
+<% profile_question = @profile_question %>
+<% titles = get_safe_string %>
+<% contents = get_safe_string %>
+<% titles << get_profile_question_tabs_title(profile_question, "feature.profile_question.label.Definition".translate, active: true, class: "col-xs-12 no-padding text-center", display_string: "feature.profile_question.label.new_profile_field_definition".translate) %>
+
+<% form_id = "edit_profile_question_#{profile_question.id}" %>
+<% edit_form = simple_form_for profile_question, :remote => true, :html => { :class => "form-horizontal cjs_ckeditor_dont_register_for_insecure_content", :id => form_id} do |f| %>
+  <%= response_flash "flash_new_#{profile_question.section.id}" %>
+  <%= render :partial => "profile_questions/question_form", :locals => {:profile_question => profile_question, :section => profile_question.section, :f => f} %>
+<% end %>
+
+<% contents << get_profile_question_tabs_content("feature.profile_question.label.Definition".translate, [{description: [edit_form]}], active: true) %>
+
+<div class="col-xs-12">
+  <ul class="nav nav-tabs h5 no-margins row" style="border-bottom: 0px">
+    <%= titles %>
+  </ul>
+  <div class="tab-content">
+    <%= contents %>
+  </div>
+</div>

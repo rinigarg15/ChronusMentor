@@ -1,0 +1,11 @@
+<% @title = @meeting.topic %>
+<%= ibox nil, content_class: "no-padding" do %>
+  <%= render(:partial => 'meetings/meeting_area_details_tab', :locals => {meeting: meeting, :tab => tab, is_admin_view: is_admin_view, :src => local_assigns[:src]}) %>
+  <%= yield %>
+<% end %>
+<% content_for_sidebar do %>
+  <% tips = ["feature.meetings.header.meeting_area_tip_note".translate(:meeting => _meeting, :resource => _resource)]
+    tips = tips.unshift("feature.meetings.header.meeting_area_tip_message".translate(:meeting => _meeting)) if !meeting[:meeting].group_meeting?
+   %>
+  <%= render_tips_in_sidepane tips %>
+<% end %>

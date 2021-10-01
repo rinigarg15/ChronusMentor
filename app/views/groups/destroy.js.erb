@@ -1,0 +1,6 @@
+<% content = render :partial => "groups/no_groups", :locals => {:view => @view} %>
+GroupSearch.destroyCallback('<%= @group.id %>');
+GroupSearch.updateNoGroupText("cjs_ongoing_count", "<%= escape_javascript content %>");
+<% flash_message = "#{'flash_message.group_flash.terminated'.translate(mentoring_connection: _mentoring_connection)}" %>
+ChronusValidator.ErrorManager.ShowResponseFlash("cjs_groups_flash", "<%= j(flash_message) %>", true);
+<%= render :partial => "groups/update_member_group_tabs_counts" %>

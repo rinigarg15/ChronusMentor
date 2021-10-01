@@ -1,0 +1,25 @@
+<div class="list-group-item clearfix no-padding no-borders m-b cjs_individual_comment <%= local_assigns[:wrapper_class] %>" id="<%= local_assigns[:wrapper_id] %>">
+  <%= local_assigns[:actions] %>
+  <div class="media no-margins">
+    <div class="media-left">
+      <%= local_assigns[:user_picture] %>
+    </div>
+    <div class="media-body">
+      <%= local_assigns[:user_link] %>
+      <span class="hidden-xs m-l-sm text-muted small" data-toggle="tooltip" data-title="<%= formatted_time_in_words(local_assigns[:comment_created]) %>">
+        <%= get_icon_content("fa fa-clock-o m-r-0") %>
+        <%= formatted_time_in_words(local_assigns[:comment_created], time_or_date: true) %>
+      </span>
+      <div class="visible-xs text-muted small">
+        <%= get_icon_content("fa fa-clock-o m-r-0") %>
+        <%= formatted_time_in_words(local_assigns[:comment_created]) %>
+      </div>
+      <% comment_body_class = "m-t-xs" %>
+      <% comment_body_class += local_assigns[:ie_browser_support] ? " word_break cui_ie_maxwidth300" : "" %>
+      <div class="<%= comment_body_class %>">
+        <%= local_assigns[:comment_body] %>
+      </div>
+    </div>
+  </div>
+  <%= local_assigns[:actions_block] %>
+</div>

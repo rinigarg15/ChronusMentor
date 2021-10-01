@@ -1,0 +1,6 @@
+jQuery("#infinite-scrolling").find(".sk-spinner").hide();
+<% scrolled_content = render(partial: "reports/management_report/engagements/survey_responses_with_scroll", locals: {survey_responses: @survey_responses, next_page_index: @next_page_index}) %>
+jQuery("#infinite-scrolling").replaceWith('<%= j scrolled_content %>');
+<% unless @next_page_index %>
+  jQuery('.cjs_infinite_scroll').off('scroll');
+<% end %>

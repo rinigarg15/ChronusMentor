@@ -1,0 +1,289 @@
+#!/usr/bin/env ruby
+# # # cm_iam.rb
+#
+# Copyright (c) 2013 Chronus
+#
+# This script can be used by Chronus IAM users who are part of ops IAM group to manage ops / dev accounts both on the gateway and on Amazon IAM. This script has to run from a gateway machine. The high-level wrappers (addUser, removeUser,syncUser,checkUser), by default,  operate on STAGING_ENVS incase the script is being run on gateway-staging and they pick up PRODUCTION_ENVS in case the script is being run on gateway-production.
+
+# For help type ./user_mgmt_util -h
+
+# Manage IAM user accounts
+# user_mgmt_utils addIAMUser
+# user_mgmt_utils disableIAMUser
+# user_mgmt_utils removeIAMUser
+
+# #Manage user accounts on production environment machines
+# #The below commands can be run only from the gateway machine
+
+# #Manage user accounts for the gateway machine. The below commands will manage  user accounts locally
+# user_mgmt_utils addGatewayUser 
+# user_mgmt_utils disableGatewayUser 
+# user_mgmt_utils removeGatewayUser
+
+# user_mgmt_utils addUser - This internally calls:
+#   - user_mgmt_utils addIAMUser
+#   - user_mgmt_utils addGatewayUser
+
+# user_mgmt_utils checkUser 
+#   - checks if IAM user exists
+#   - checks if gateway user exists
+#   - checks if user exists in all the environments
+
+
+require 'trollop'
+require 'highline/import'
+require_relative './user_mgmt.rb'
+
+
+# Command line parser
+SUB_COMMANDS = %w(
+  addUser 
+  removeUser 
+  disableUser 
+  addIAMUser 
+  disableIAMUser 
+  removeIAMUser
+  addGatewayUser
+  disableGatewayUser
+  removeGatewayUser
+  checkUser
+  syncUser
+  syncUserSSHKeys
+  )
+global_opts = Trollop::options do
+  version "User Management Utilities 1.0.0 (c) 2013 Chronus"
+  banner <<-EOS
+User Management Utilities 1.0.0 (c) 2013 Chronus
+This utility is meant for Ops users to manage Chronus Mentor IAM users, User Accounts on Gateway Environments, User Accounts on Production Environments
+Usage:
+       user_mgmt_util [options] [subcommand] [subcommand_options]
+where [options] are:
+EOS
+  opt :aws_key, "AWS Access key. Defaults to CM_IAM_ACCESS_KEY env variable", :short => '-O', :type => :string
+  opt :aws_secret_key, "AWS Access Secret key. Defaults to CM_IAM_SECRET_ACCESS_KEY env variable", :short => '-W', :type => :string
+  banner <<-EOS
+where [subcommand] can be one of:
+  addUser             Adds IAM User, Creates user accounts on Gateway and Production Environments defined in deploy.yml
+  removeUser          Removes IAM User, Removes user accounts on Gateway and Production Environments defined in deploy.yml
+  disableUser         Disables IAM User, Disables user accounts on Gateway and Prodcution Environments defined in deploy.yml
+
+  addIAMUser          Adds IAM User
+  disableIAMUser      Disables IAM User
+  removeIAMUser       Removes IAM User
+
+  addGatewayUser      Adds User account on the Gateway (localhost)
+  disableGatewayUser  Disables User account on the Gateway (localhost)
+  removeGatewayUser   Removes User account on the Gateway (localhost)
+
+  checkUser           Checks if the IAM user exists, Checks if the user account exists on the Gateway, Checks if the user
+                      account exists on all the environments defined in deploy.yml
+
+  syncUser            Sync all the deploy dependencies for the user - This can be used when app/dev proxy aws creds are rotated
+  syncUserSSHKeys     Sync the ssh-keys to all the environments on which the specified user account is created
+  
+Use user_mgmt_util [subcommand] -h for help on the usage of subcommands
+EOS
+  stop_on SUB_COMMANDS
+end
+cmd = ARGV.shift # get the subcommand
+subcmd_ops = case cmd
+  when "addUser" # parse delete options
+    Trollop::options do
+      opt :user, "Creates IAM user, user account on GW, user accounts on all the environments of deploy.yml and lays down deploy dependencies on the Gateway Machine", :required => true, :type => :string
+      opt :aws_user, "The sudoer account on the production environments", :required => true, :type => :string
+    end
+  when "disableUser"
+    Trollop::options do
+      opt :user, "Disables SSH access to GW, Disables IAM user account", :required => true, :type => :string
+      opt :aws_user, "The sudoer account on the production environment", :required => true, :type => :string
+    end
+  when "removeUser"
+    Trollop::options do
+      opt :user, "Removes IAM user account, user account from GW", :required => true, :type => :string
+      opt :aws_user, "The sudoer account on the production environment", :required => true, :type => :string
+    end
+  when "addIAMUser"
+    Trollop::options do
+      opt :user, "The IAM username to be added", :required => true, :type => :string
+    end
+  when "disableIAMUser"
+    Trollop::options do
+      opt :user, "The IAM username to be disabled", :required => true, :type => :string
+    end
+  when "removeIAMUser"
+    Trollop::options do
+      opt :user, "The IAM username to be removed", :required => true, :type => :string
+    end
+  when "addGatewayUser"
+    Trollop::options do
+      opt :user, "The user account name to be created on the gateway", :required => true, :type => :string
+    end
+  when "disableGatewayUser"
+    Trollop::options do
+      opt :user, "The user account name to be created on the gateway", :required => true, :type => :string
+    end
+  when "removeGatewayUser"
+    Trollop::options do
+      opt :user, "The user account name to be created on the gateway", :required => true, :type => :string
+    end
+  when "checkUser"
+    Trollop::options do
+      opt :user, "Username for whom the status will be checked", :required => true, :type => :string
+      opt :aws_user, "The sudoer account on the production environment", :required => true, :type => :string
+    end
+  when "syncUser"
+    Trollop::options do
+      opt :user, "Sync all the deploy dependecies for this user", :required => true, :type => :string
+    end
+  when "syncUserSSHKeys"
+    Trollop::options do
+      opt :user, "Sync the ssh-keys of this user to the specified directory", :required => true, :type => :string
+      opt :dir, "The directory to which the ssh keys have to be synced. Defaults to ~/chronus-mentor-ks/<username>", :type => :string
+    end
+  else
+    Trollop::die "unknown subcommand #{cmd.inspect}"
+  end
+
+def validate_inputs(opts,subcmd,subcmd_ops,deploy_info)
+
+  # Validate the AWS access keys
+  if !opts[:aws_key] && !ENV['CM_IAM_ACCESS_KEY']
+    error_log("aws access key not set - Either pass it as -O or set it in CM_IAM_ACCESS_KEY environment variable ")
+    abort
+  end
+
+  if !opts[:aws_secret_key] && !ENV['CM_IAM_SECRET_ACCESS_KEY']
+    error_log("aws access key not set - Either pass it as -W or set it in CM_IAM_SECRET_ACCESS_KEY environment variable ")
+    abort
+  end
+
+  # Check if group name is valid
+  username_prefix = subcmd_ops[:user].split("_").first
+  abort "Not a valid username. The username should start with dev_ or ops_ " unless USERNAME_CONVENTIONS.has_key?(username_prefix)
+
+end
+
+
+deploy_info = parse_deploy_yml
+
+# Gateway env validation
+begin
+  gateway_env = get_gateway_env
+  raise "Not a valid gateway environment" unless VALID_GATEWAY_ENVS.include? gateway_env
+
+  if gateway_env=="staging"
+    exclude_envs = deploy_info.keys - STAGING_ENVS
+  else
+    exclude_envs = STAGING_ENVS
+  end
+  
+rescue Exception => e
+  abort "Gateway environment verification failed: #{e.message}"
+end
+
+validate_inputs(global_opts,cmd,subcmd_ops,deploy_info)
+
+user_name = subcmd_ops[:user]
+if global_opts[:aws_key] then access_key=global_opts[:aws_key] else access_key=ENV['CM_IAM_ACCESS_KEY'] end
+if global_opts[:aws_secret_key] then secret_key=global_opts[:aws_secret_key] else secret_key=ENV['CM_IAM_SECRET_ACCESS_KEY'] end
+
+# TODO: If there is no environment variable passed, assume the script is running for all the environments
+# envs = form_envs(deploy_info,subcmd_ops)
+
+cm_iam_obj = UserMgmt.new(user_name,access_key,secret_key)
+
+case cmd
+when "addUser"
+  begin
+    envs = deploy_info.delete_if{|key,value| exclude_envs.include? key}
+    cm_iam_obj.add_user(gateway_env,envs,subcmd_ops[:aws_user])
+  rescue Exception => e
+    abort "Adding user failed"
+  end
+when "disableUser"
+  begin
+    envs = deploy_info.delete_if{|key,value| exclude_envs.include? key}
+    cm_iam_obj.disable_user(gateway_env,envs,subcmd_ops[:aws_user])
+  rescue Exception => e
+    abort "Disabling user failed "
+  end
+when "removeUser"
+  begin
+    envs = deploy_info.delete_if{|key,value| exclude_envs.include? key}
+    cm_iam_obj.remove_user(gateway_env,envs,subcmd_ops[:aws_user])
+  rescue Exception => e
+    abort "Removing user failed"
+  end
+when "addIAMUser"
+  begin
+    cm_iam_obj.add_iam_user
+  rescue Exception => e
+    abort "Creating IAM user failed"
+  end
+when "disableIAMUser"
+  begin
+    cm_iam_obj.disable_iam_user
+  rescue Exception => e
+    abort "Disabling IAM user failed"
+  end
+when "removeIAMUser"
+  # Ask for confirmation
+  ans = ask("Are you sure you want to delete the user #{user_name}?(y/n)")
+  case ans
+  when "y"
+    begin
+      cm_iam_obj.remove_iam_user
+    rescue Exception => e
+      abort "Removing IAM user failed"
+    end
+  else
+    error_log "Aborted on user request"
+  end
+when "addGatewayUser"
+  begin
+    cm_iam_obj.add_gateway_user(gateway_env)
+  rescue Exception => e
+    abort "Adding User to the gateway env failed"
+  end
+when "disableGatewayUser"
+  begin
+    cm_iam_obj.disable_gateway_user
+  rescue Exception => e
+    abort "Disabling user on the gateway failed"
+  end
+when "removeGatewayUser"
+  begin
+    cm_iam_obj.remove_gateway_user(gateway_env)
+  rescue Exception => e
+    abort "Removing Gateway User failed"
+  end
+when "checkUser"
+  begin
+    envs = deploy_info.delete_if{|key,value| exclude_envs.include? key}
+    cm_iam_obj.check_user(envs,subcmd_ops[:aws_user])
+  rescue Exception => e
+    abort "Checking user #{user_name} failed"
+  end
+when "syncUser"
+  begin
+    cm_iam_obj.sync_user
+  rescue Exception => e
+    abort "Sync User failed! Please check the status of the user first!"
+  end
+when "syncUserSSHKeys"
+  begin
+    unix_user_name,unix_group_name = get_original_user_details
+
+    if !subcmd_ops[:dir]
+      local_folder = "/home/#{unix_user_name}/chronus-mentor-ks/#{user_name}"
+    else
+      local_folder = subcmd_ops[:dir]
+    end
+    cm_iam_obj.laydown_user_env_keys(local_folder)
+    # The script is being run with sudo privileges. So, owner of the would be root. Change it back to the user who is running it
+    FileUtils.chown_R unix_user_name,unix_group_name,local_folder
+  rescue Exception => e
+    abort "Sync SSH Keys request failed! #{e.message}"
+  end
+end
+

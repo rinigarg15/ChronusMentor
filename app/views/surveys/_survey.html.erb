@@ -1,0 +1,13 @@
+<div class="clearfix">
+  <% if @survey.program_survey? %>
+    <div class="clearfix">
+      <span class="font-bold m-r-xs"><%= "#{"feature.survey.header.Expires".translate}: " %></span>
+      <span><%= (@survey.formatted_due_date || "feature.survey.content.Never".translate) %></span>
+    </div>
+
+    <div class="clearfix">
+      <span class="font-bold m-r-xs"><%= "#{"feature.survey.header.Recipients".translate}: " %></span>
+      <span><%= RoleConstants.human_role_string(@survey.recipient_role_names, :program => current_program) %></span>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,26 @@
+en:
+  email_translations:
+    pending_group_added_notification:
+      title_v2: Notification to users added to available %{_mentoring_connections}
+      description_v3: "%{_Admins} or owners can add members to %{_a_mentoring_connection} which is in available state. This email goes out to members when they are added along with a custom message"
+      subject_v1: You have been added as {{role_name_articleized}} to {{group_name}}
+      content_v1_html: Congratulations! {{administrator_or_owner_name}} has added you to <a href='{{url_mentoring_connection}}'>{{group_name}}</a> as {{role_name_articleized}}.<br/>{{message_from_admin_as_quote}}<br/>We will notify you when the {{customized_mentoring_connection_term}} starts. Meanwhile, you can visit the {{customized_mentoring_connection_term}} to see your other available activities.<br/>{{mentoring_connection_button}}
+      visit_your_connection_text_html: Go to %{mentoring_connection_term}
+      tags:
+        url_mentoring_connection:
+          description_v1: Url of the %{_mentoring_connection}
+        role_name_articleized:
+          description_v1: Role of the member added to the %{_mentoring_connection} appended with (a/an)
+        group_name:
+          description: Name of the mentoring area
+          example: Smith and Doe
+        message_from_admin:
+          description: Optional message sent by the administrator/owner
+          example: Please connect.
+        message_from_admin_as_quote:
+          example: Please connect.
+        administrator_or_owner_name:
+          description: "'Administrator'/name of the Owner who added the user"
+          content: the %{program} %{administrator}
+        mentoring_connection_button:
+          description_v1: "%{_Mentoring_Connection} button"

@@ -1,0 +1,21 @@
+<%= response_flash("cjs_project_requests_flash") %>
+<% @report_actions = {
+  url: manage_project_requests_path,
+  data_js: %Q[ProjectRequests.getProjectRequestFilterData();],
+  reset_js: %Q[ProjectRequests.resetFilters();],
+  time_filter: { time: {start: @start_time, end: @end_time}, date_range_preset: DateRangePresets::PROGRAM_TO_DATE, label: "feature.membership_request.label.sent_between".translate },
+  other_filters_partial: "project_requests/requestor_project_filters",
+  ga_label: ReportsController::GoogleAnalytics::PROJECT_REQUESTS_REPORT_LABEL,
+  pre_filter_js: %Q[CommonSelectAll.resetSelectedIds(ProjectRequests);]
+} %>
+
+
+<div id='project_requests'>
+  <%= render partial: "project_requests/manage" %>
+</div>
+<%= hidden_field_tag(:switch_tabs_options, { data_attribute: "status" }.to_json, id: 'switch_tabs_options') %>
+
+<%= javascript_tag do %>
+  ProjectRequests.setFiltersCount('<%= @filters_count %>');
+  commonReportFilters.initializeSwitchTab();
+<% end %>

@@ -1,0 +1,27 @@
+<% modal_v3_popup "feature.mentor_offer.content.close_offer_popup.title".translate(:count => mentor_offer_ids.count) do %>
+  <div class="m-b-sm"><%= "feature.mentor_offer.content.close_offer_popup.help_text_v1".translate(:count => mentor_offer_ids.count) %></div>
+  <%= simple_form_for @mentor_offer, :url => update_bulk_actions_mentor_offers_path, :html => {:id => "close_mentor_requests", :class => "form-vertical", remote: true} do |f| %>
+
+    <%= f.input :response, :as => :text, :label => "feature.mentor_offer.content.closing_reason".translate, :input_html => {:rows => "5", :class => "form-control col-xs-12 no-padding", :id => "bulk_actions_reason", :placeholder => "feature.mentor_offer.content.close_offer_popup.placeholder.reason".translate(count: mentor_offer_ids.size)}, :label_html => {:class => "control-label "}, :wrapper_html => {:class => "col-xs-12 no-padding"} %>
+    <%= control_group(class: "col-xs-12 no-padding") do %>
+      <%= content_tag(:label, 'feature.mentor_request.label.to'.translate, :class => "false-label control-label" ) %>
+      <%= controls do %>
+        <%= content_tag(:label, :class => "checkbox inline no-vertical-margins" ) do %>
+          <%= (check_box_tag :sender) + content_tag(:span, 'feature.mentor_request.label.Sender'.translate) %>
+        <% end %>
+        <%= content_tag(:label, :class => "checkbox inline no-vertical-margins" ) do %>
+          <%= (check_box_tag :recipient) + content_tag(:span, 'feature.mentor_request.label.Recipient'.translate) %>
+        <% end %>
+        <%= content_tag(:p, get_icon_content("fa fa-info-circle") + email_notification_consequences_for_multiple_mailers_html([MentorOfferClosedForRecipient, MentorOfferClosedForSender], selected_users: true), :class => "help-block small text-muted m-t-xs") %>
+      <% end %>
+    <% end %>
+    
+    <%= hidden_field_tag "bulk_actions[offer_status]", MentorOffer::Status::CLOSED %>
+    <%= hidden_field_tag "bulk_actions[mentor_offer_ids]", mentor_offer_ids %>
+    <%= hidden_field_tag "is_manage_view", is_manage_view %>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to_function "display_string.Cancel".translate, "closeQtip();", :class => "popup_closebox btn-white btn cancel", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "feature.mentor_offer.content.close_offer_popup.action.close_offer".translate(count: mentor_offer_ids.size) %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,15 @@
+en:
+  email_translations:
+    proposed_project_rejected:
+      title_v3: Proposed %{_mentoring_connection} rejected notification to the user
+      description_v3: When %{_a_admin} rejects a user's %{_mentoring_connection} proposal, this email is sent to the user.
+      subject_v1: Your request to create {{project_name}} has not been approved
+      content_v2_html: Unfortunately, we have to reject your proposed {{customized_mentoring_connection_term}}, {{project_name}}, in <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a>.<br/>{{message_from_admin}}
+      tags:
+        project_name:
+          description: Name of the project
+        url_project:
+          description: Url to the project page
+        message_from_admin:
+          description: Optional reason provided by the admin when rejecting a project proposal
+          example: Sorry. This Project cannot be approved.

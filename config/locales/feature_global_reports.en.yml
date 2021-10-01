@@ -1,0 +1,43 @@
+en:
+  feature:
+    global_reports:
+      overall_impact:
+        header:
+          section_title: What is the overall impact of my %{program}?
+          section_title_v1: Overall impact of all the %{programs}
+          users_participated: Users Participated
+          matches_created: Matches Created
+          engagement_stats: Engagement Stats
+          satisfied_users: Satisfied Users
+        content:
+          precentage_difference_html: "%{percentage_difference} compared to previous time period"
+          survey_satisfaction_configuration: Survey Satisfaction Configuration
+          based_on_surveys_list_html: Based on the responses from %{surveys_list}.
+          not_configured_html: "%{icon} Not configured Yet"
+          ignored_html: "%{icon} Ignored"
+          symbol_for_thousand: k
+          symbol_for_million: M
+          messages:
+            one: "1 message"
+            other: "%{count} messages"
+          posts:
+            one: "1 post"
+            other: "%{count} posts"
+          meetings:
+            one: "1 meeting"
+            other: "%{count} meetings"
+          tooltip_for_user_participation: Members who published their profile and were ready to be matched in atleast one %{program} during the specified time period
+          tooltip_for_user_participation_v1: Users who published their profile and were ready to be matched in atleast one %{program} during the specified time period
+          tooltip_for_matches_created: Number of connections that were active across all the %{programs} during the specified time period
+          tooltip_for_engagement_created: "%{messages_count} message(s), %{posts_count} post(s) and %{mentoring_time_in_minutes} mentoring minutes were recorded across all the %{programs} during the specified time period"
+          tooltip_for_engagement_created_v1: "%{engagement_counts} recorded across all the %{programs} during the specified time period"
+          tooltip_for_satisfaction_rate: Members who indicated positive outcomes in at least one %{program} during the specified time period
+          tooltip_for_satisfaction_rate_v1: Users who indicated positive outcomes in at least one %{program} during the specified time period
+        action:
+          ignore_html: "%{icon} Ignore"
+          reconsider_html: "%{icon} Reconsider"
+          configure_html: "%{icon} Configure"
+          contact_support_to_configure_html: To configure, contact %{support_url}
+          configure: configure
+        label:
+          between: Overall impact between

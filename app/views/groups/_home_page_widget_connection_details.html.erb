@@ -1,0 +1,16 @@
+<h4 class="h5 no-margins">
+  <%= link_to(content_tag(:span, group.name) + get_icon_content("m-l-xs fa fa-external-link fa-small"), group_path(group, src: EngagementIndex::Src::AccessMentoringArea::HOME_PAGE_TITLE)) %>
+</h4>
+<div class="small m-t-xs">
+  <%= formatted_time_in_words(group.published_at, no_ago: true, short_date: true) + " - " %>
+  <%= formatted_time_in_words(group.expiry_time, no_ago: true, short_date: true) %>
+  <% if !group.expired? && group.about_to_expire? %>
+    <span class="m-l-xs font-bold"><%= fetch_date_change_action(group, home_page: true) %></span>
+  <% end %>
+</div>
+
+<% if !group.expired? && group.about_to_expire? %>
+  <div class="m-t-xs cjs_expiry_text_connections_widget_<%= group.id %>">
+    <span class="label inline m-r-xs m-b-xxs label-warning"><%= "feature.connection.content.help_text.expiry_days_text".translate(time: distance_of_time_in_words(Time.now, group.expiry_time)) %></span>
+  </div>
+<% end %>

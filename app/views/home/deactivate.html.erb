@@ -1,0 +1,22 @@
+<% @title = "program_settings_strings.content.deactivate_org".translate %>
+<% if @current_organization && @current_organization.active? %>
+  <%= ibox nil, ibox_class: "middle-box" do %>
+    <%= "program_settings_strings.content.org_active_text".translate(org_name: @current_organization.name) %>
+    <%= simple_form_for @current_organization, url: deactivate_organization_path, html: { method: :post, class: "m-t" } do |f| %>
+      <%= control_group do %>
+        <label class="checkbox inline">
+          <%= f.check_box :active, { checked: false } %>
+          <span class="font-bold">
+            <%= "program_settings_strings.label.deactivate_org".translate(org_name: @current_organization.name) %>
+          </span>
+          <p class="help-block">
+            <%= "program_settings_strings.content.org_active_help_text".translate(mentors: _mentors) %>
+          </p>
+        </label>
+      <% end %>
+      <% action_set do %>
+        <%= f.submit "display_string.Deactivate".translate, class: "btn btn-danger btn-block" %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

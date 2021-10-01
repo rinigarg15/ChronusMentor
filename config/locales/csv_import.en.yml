@@ -1,0 +1,122 @@
+en:
+  csv_import:
+    content:
+      validation_information:
+        emails_note_html: 'Note: The users added are sent emails asking them to complete signup. To view the emails %{catogory_link}'
+        emails_note_v1_html: 'Note: The users added are sent emails asking them to complete signup. To view the emails %{catogory_link}.'
+        message: 'We are almost done. Below is the summary, please review and confirm to complete the import:'
+        new_users_active_and_pending_html:
+          one: "%{count} new user (%{active_link} in Active state and %{pending_link} in Unpublished state %{tooltip}) will be imported to your %{program}"
+          other: "%{count} new users (%{active_link} in Active state and %{pending_link} in Unpublished state %{tooltip}) will be imported to your %{program}"
+        new_users_active_html:
+          one: "%{active_link} new user in Active state will be imported to your %{program}"
+          other: "%{active_link} new users in Active state will be imported to your %{program}"
+        new_users_pending_html:
+          one: "%{pending_link} new user in Unpublished state %{tooltip} will be imported to your %{program}"
+          other: "%{pending_link} new users in Unpublished state %{tooltip} will be imported to your %{program}"
+        new_members_html:
+          one: "%{count_link} new member will be imported to %{org_name}"
+          other: "%{count_link} new members will be imported to %{org_name}"
+        invited_users_html:
+          one: "%{count_link} user who is part of the %{org_name} and not a part of this %{program} will be invited"
+          other: "%{count_link} users who are part of the %{org_name} and not a part of this %{program} will be invited"
+        update_users_html:
+          one: Profile information for %{count_link} user who is already part of this %{program} will be updated
+          other: Profile information for %{count_link} users who are already part of this %{program} will be updated
+        update_members_html:
+          one: Profile information for %{count_link} member who is already part of %{org_name} will be updated
+          other: Profile information for %{count_link} members who are already part of %{org_name} will be updated
+        suspended_users_html:
+          one: "%{count_link} user will not be imported as they are suspended from %{org_name}"
+          other: "%{count_link} users will not be imported as they are suspended from %{org_name}"
+        errors_html:
+          one: There is an error in %{count_link} row and the erroneous row will be ignored and not imported. Click <a href='%{download_url}'>here</a> to download the row as a csv.
+          other: There are errors in %{count_link} rows and the erroneous rows will be ignored and not imported. Click <a href='%{download_url}'>here</a> to download the rows as a csv.
+        errors:
+          one: There is an %{error_link}. They will be ignored and not imported.
+          other: There are %{error_link}. They will be ignored and not imported.
+        errors_link_text:
+          one: error in %{count} row
+          other: errors in %{count} rows
+      instructions_html: "<h3>Instructions</h3>"
+      map_user_columns_message_with_question_type_html: Map the columns from CSV to the fields in your %{program}. Here are some tips:<ol><li>Please note the %{program} fields which are marked * must be present in the CSV.</li><li>Please note that fields of type %{question_types_text} cannot be imported.</li></ol>
+      map_user_columns_message_html: Map the columns from CSV to the fields in your %{program}. Here are some tips:<ol><li>Please note the %{program} fields which are marked * must be present in the CSV.</li></ol>
+      required_for_import: Required for Import
+      optional_for_import: Optional for Import
+      example: 'eg: '
+      upload_valid_csv: Please upload a valid csv file.
+      row_limit_exceeded: Please upload a csv file with maximum of %{row_limit} rows.
+      encoding_error: We are sorry we are not able to process the file. Please make sure the file is UTF 8 encoded.
+      select_a_role: Please select a role or map role using csv.
+      required_program_fields: "%{field_name} *"
+      add_user_options_popup_heading: How would you like to add users
+      add_users_manually_link_text: Add users manually
+      add_users_manually_link_description: Add users one at a time, by entering their name, emails. You can prepopulate all the profile information.
+      import_user_csv_link_text_v1: Add users from CSV
+      import_user_csv_link_description_v1: You can simply add users from any CSV file into this %{program}. All you need to do is map the CSV headers to the profile fields.
+      import_users_in_dormant_state: Add users from CSV in Dormant state
+      import_users_in_dormant_state_link_description: You can simply add users from any CSV file into %{org_name} in Dormant state. All you need to do is map the CSV headers to the profile fields. You can view the added users in Member views.
+      add_users_from_other_programs_link_text_v1: Add users from %{org_name}
+      add_users_from_other_programs_link_description: You can browse the list of all the users in %{org_name} and select the users you would like to add and add them to this %{program}.
+      records: Records
+      profile_question_type_5: Upload File
+      profile_question_type_9: Experience
+      profile_question_type_10: Experience
+      profile_question_type_11: Education
+      profile_question_type_12: Education
+      profile_question_type_17: Publication
+      profile_question_type_18: Publication
+      profile_question_type_19: Manage
+      join_with_and: " and "
+      progress_status:
+        import: We're processing the data, please wait
+      import_success: The import has been successfully completed.
+      import_failure_message_html: Due to an unexpected error, only part of the file could be imported. You can, </br></br><ol><li>Download the file of users pending import <a href='%{download_url}'>here</a> and try importing the new file. Importing the new file ensures that no user is imported more than once. </li><li>Contact Chronus Support if you continue to run into the error.</li><ol>
+      import_bulk_users_message: Please ensure that the first row of the CSV file are headers that match corresponding profile fields. Please only upload a maximum of 1000 users at a time.
+      import_bulk_users_message_with_date_format_html: "%{icon} Please ensure that the first row of the CSV file are headers that match corresponding profile fields. Please only upload a maximum of 1000 users at a time. Date field data should be provided in 'DD MMM, YYYY' format, ex: %{date_str}."
+      unpublished_tooltip: These users will be in Unpublished state as mandatory profile fields are missing
+      select_a_role_tooltip: All the users added will be assigned the role selected below.
+      map_column_in_csv_tooltip: You can map a column in CSV to roles and those roles will be assigned to the users added. Choose this option if your file includes multiple roles.
+      not_a_csv_file: Please upload a valid CSV file. If you are using an Excel file, follow these %{instructions} to convert the file into a CSV file.
+      instructions_text: instructions
+      csv_error_column: Errors
+    errors:
+      missing_field: field cannot be blank.
+      email:
+        not_unique: has to be unique.
+        invalid_format: doesn't look like an email.
+      name:
+        invalid: is invalid.
+      profile_answer:
+        invalid_choice_v2: contains invalid choice(s).
+        text_only: only text allowed.
+        invalid_date: contains invalid date
+      role:
+        invalid_v1: is invalid.
+      uuid:
+        not_unique: has to be unique.
+    header:
+      import_data: Import Data
+      map_content_v1: Map Data
+      create_users: Create Users
+      add_bulk_users_v1: Add users from CSV
+      imported_fields: Imported Fields
+      track_fields: Track Fields
+    label:
+      select_a_role_v1_html: Select Role %{tooltip}
+      role: Role
+      csv_file: CSV File
+      map_column_in_csv_v1_html: Map a column in CSV %{tooltip}
+      reset_csv_text: Click to remove current csv and upload a new one.
+      select_a_column_from_csv: Select a column to map from csv.
+      select_a_profile_column: Select a profile field to map with selected column on the left from csv.
+    import_user_csv_headers:
+      first_name: First Name
+      last_name: Last Name
+      email: Email
+      roles: Roles
+      uuid: UUID
+      dont_map: Don't map this field
+      select_csv_column: Select a csv column
+      select_imported_field: Select an imported Field
+      select_imported_field_v1: Select an imported field

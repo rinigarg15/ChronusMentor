@@ -1,0 +1,3 @@
+<% content = render_coaching_goal_activity_feed(@group, @coaching_goal, @new_offset_id, @coaching_goal_activities) %>
+jQuery("#show_more_activities").replaceWith("<%= j content %>")
+jQuery('#show_more_activities .loading_ra').hide();

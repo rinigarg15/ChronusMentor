@@ -1,0 +1,25 @@
+<div class="cjs_confirmation_dialog modal confirmationDialog fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title"">
+            <i class="fa fa-exclamation-triangle text-danger fa-fw m-r-xs"></i>
+            <%= warning_header %>
+          </h4>
+      </div>
+      <div class="modal-body clearfix">
+        <div>
+          <%= tags_warning_text %>
+        </div>
+        <br/>
+        <div class="cjs_ckeditor_tags_content"></div>
+      </div>
+      <div class='modal-footer'>
+        <a data-dismiss='modal' class='btn btn-primary cjs_tags_content_proceed_actions'>
+        <%= ok %>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

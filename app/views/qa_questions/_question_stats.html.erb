@@ -1,0 +1,26 @@
+<% if local_assigns[:in_listing] %>
+  <div class="m-t-lg btn-group btn-group-sm">
+    <%# Answers %>
+    <% answer_content = content_tag(:span, question.qa_answers_count, class: "m-r-xs") %>
+    <% answer_content += content_tag(:span, (question.qa_answers_count == 1) ? "feature.question_answers.content.answer".translate : "feature.question_answers.content.answers".translate, class: "hidden-xs") %>
+    <%= link_to(append_text_to_icon("fa fa-comment-o", answer_content), qa_question_path(question, root: question.program.root), class: "btn btn-sm btn-white noshadow") %>
+
+    <%# Followers %>
+    <% following = question.follow?(current_user) %>
+    <% tooltip_options = following ? { toggle: "tooltip", title: "feature.question_answers.action.following".translate } : {} %>
+    <% followers_content = content_tag(:span, question.followers.count, class: "m-r-xs") %>
+    <% followers_content += content_tag(:span, "feature.question_answers.content.question_stats.followers".translate(count: question.followers.count), class: "hidden-xs") %>
+    <%= content_tag(:span, append_text_to_icon("fa fa-users", followers_content), class: "btn btn-sm noshadow cursor-default no-waves #{following ? 'btn-primary' : 'btn-white'}", data: tooltip_options) %>
+
+    <%# Views %>
+    <% view_content = content_tag(:span, question.views.to_i, class: "m-r-xs") %>
+    <% view_content += content_tag(:span, "feature.article.content.views_stat".translate(count: question.views.to_i), class: "hidden-xs") %>
+    <%= content_tag(:span, append_text_to_icon("fa fa-eye", view_content), class: "btn btn-sm btn-white noshadow cursor-default no-waves") %>
+  </div>
+<% else %>
+  <div class="m-t-xs text-navy">
+    <%= content_tag(:span, "feature.question_answers.content.n_followers".translate(count: question.followers.count), class: "qa_question_stats_followers") %>
+    <%= circle_separator %>
+    <%= content_tag(:span,"feature.question_answers.content.question_stats.views".translate(count: question.views.to_i), class: "qa_question_stats_views") %>
+  </div>
+<% end %>

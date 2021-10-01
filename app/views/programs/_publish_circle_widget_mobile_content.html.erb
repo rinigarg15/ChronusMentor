@@ -1,0 +1,85 @@
+<% member_container_class = groups_have_third_role_user?(publishable_groups) ? 'height-307' : 'height-239' %>
+<div class="row <%= hidden_on_web %>">
+  <div class="publish-circle-slick-mobile">
+    <% publishable_groups.each do |group| %>
+      <div class="col-lg-4 col-xs-12 col-sm-6 m-b-xs text-center">
+        <%= ibox nil, ibox_class: "no-margins", content_class: "no-padding" do %>
+          <div class="contact-box center-version no-margins slick_box clearfix">
+            <%= content_tag(:span, content_tag(:i, "", :class => "fa fa-lg fa-close"), class: "pointer pull-right cjs_remove_circle_from_widget m-t-sm m-r-sm", data: {url: remove_circle_from_publish_circle_widget_path(group_id: group.id, format: :js)}) %>
+            <div class="black-bg p-t-lg">
+              <div class="media large">
+                <div class="media-middle">
+                  <%= link_to(home_page_widget_group_logo(group, {img_class: "m-b-n-xl"}), profile_group_url(group)) %>
+                </div>
+              </div>
+            </div>
+            <div class="m-t p-m clearfix <%= member_container_class %>">
+              <div class="p-t-xs p-b-xxs whitespace-nowrap truncate-with-ellipsis h5 no-margins"><%= link_to(group.name, profile_group_url(group)) %></div>
+              <%= content_tag(:span, "feature.connection.content.project_available_for_text".translate(number_of_days: (Date.today - group.pending_at.to_date).to_i), class: "small text-muted font-bold") %>
+              <div class="m-t m-b-xxs">
+                <div class="col-sm-12 col-xs-12">
+                  <%= content_tag(:div, (_Mentors + render_publish_circle_widget_slot_tooltip(group, RoleConstants::MENTOR_NAME, true)).html_safe, class: "h6") %>
+                  <%= group_members_for_users_listing(group, max_project_members_in_home_page_widget_for(), {mentors_only: true}) %>
+                </div>
+                <div class="col-sm-12 col-xs-12">
+                  <%= content_tag(:div, (_Mentees + render_publish_circle_widget_slot_tooltip(group, RoleConstants::STUDENT_NAME, true)).html_safe, class: "h6") %>
+                  <%= group_members_for_users_listing(group, max_project_members_in_home_page_widget_for(), {students_only: true}) %>
+                </div>
+                <% if group.custom_users.present? %>
+                  <div class="col-sm-12 col-xs-12">
+                    <%= content_tag(:div, (group.program.get_role(RoleConstants::TEACHER_NAME).customized_term.pluralized_term + render_publish_circle_widget_slot_tooltip(group, RoleConstants::TEACHER_NAME, true)).html_safe, class: "h6") %>
+                    <%= group_members_for_users_listing(group, max_project_members_in_home_page_widget_for(), {teachers_only: true}) %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <div class="contact-box-footer p-t-xxs clearfix">
+              <div class="m-t-xs">
+                <div class="text-center col-sm-6">
+                  <%= render_page_action(get_publish_action(group, {src: EngagementIndex::Src::PUBLISH_CIRCLE_WIDGET, ga_src: EngagementIndex::Src::PUBLISH_CIRCLE_WIDGET, btn_text: "display_string.Publish".translate, btn_class: "btn-block btn-sm p-l-xxs p-r-xxs truncate-with-ellipsis m-b-xs", mobile_view: true}), { small: true }) %>
+                </div>
+                <div class="text-center col-sm-6">
+                  <%= link_to(append_text_to_icon("fa fa-group", "feature.connection.content.view_project".translate(mentoring_connection: _mentoring_connection)), profile_group_url(group), class: "btn btn-default btn-outline btn-block btn-sm p-l-xxs p-r-xxs truncate-with-ellipsis") %>
+                </div>
+              </div>
+            </div>
+          </div> 
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% if publishable_groups.size > 3 %>
+  <div class="text-center listing_bottom_bar clearfix p-t-xs <%= hidden_on_web %>">
+    <%= link_to(get_icon_content("fa fa-chevron-left no-margins"), "javascript:void(0)", class: "btn btn-xs btn-default publish-circle-slick-mobile-prev pull-left") %>
+    <%= link_to(get_icon_content("fa fa-chevron-right no-margins"), "javascript:void(0)", class: "btn btn-xs btn-default publish-circle-slick-mobile-next pull-right") %>
+  </div>
+<% end %>
+
+<%= javascript_tag do  %>
+  carousel.addCarousel('.publish-circle-slick-mobile', {dots: false,
+  responsive: [
+    {
+      breakpoint: 1900,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 1
+      }
+    },
+    {
+      breakpoint: 991,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 1
+      }
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1
+      }
+    }
+  ], slidesToShow: 3, slidesToScroll: 1, prevArrow: jQuery('.publish-circle-slick-mobile-prev'), nextArrow: jQuery('.publish-circle-slick-mobile-next')});
+<% end %>

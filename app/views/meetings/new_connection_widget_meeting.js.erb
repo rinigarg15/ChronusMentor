@@ -1,0 +1,4 @@
+<% popup_title = @is_past_meeting ? "feature.mentoring_model.button.record_past_meeting".translate(Meeting: _Meeting) : "feature.mentoring_model.button.add_new_meeting".translate(Meeting: _Meeting) %>
+<% modal_v3_popup popup_title do %>
+  <%= render(:partial => 'meetings/new_form',:locals => { :common_form => true, :past_meeting => @is_past_meeting, :from_connection_home_page_widget => true } ) %>
+<% end %>

@@ -1,0 +1,18 @@
+<%= ibox "feature.portal.header.career_development_programs".translate(Programs: _Programs, Career_Development: _Career_Development) do %>
+  <div class='row-fluid clearfix min-height-90'>
+    <div class="span" style="display: none;"></div>
+    <!-- #TODO ask for new icon -->
+    <%= link_box("manage-icon-add-program", "feature.portal.header.new_portal".translate(Portal: _Program), new_career_dev_portal_path, :absolute_img => true) if can_create_portal %>
+
+    <% portals.each do |portal| %>
+      <% if portal.logo_or_banner_url.present? %>
+        <% portal_icon = portal.logo_or_banner_url %>
+        <% icon_options = { absolute_img: true, custom_icon: true } %>
+      <% else %>
+        <% portal_icon = "manage-icon-program" %>
+        <% icon_options = {} %>
+      <% end %>
+      <%= link_box(portal_icon, portal.name, manage_program_path(root: portal.root), icon_options) %>
+    <% end %>
+  </div>
+<% end %>

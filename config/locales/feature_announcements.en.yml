@@ -1,0 +1,47 @@
+en:
+  feature:
+    announcements:
+      header:
+        announcements: Announcements
+        new_announcement: New Announcement
+        edit_announcement: Edit Announcement
+        published_announcements: Published Announcements
+        drafted_announcements: Drafted Announcements
+      label:
+        no_title: "(No title)"
+        title: Title
+        message: Message
+        for: For
+        expires_on: Expires on
+        announcements: announcements
+        announcement: announcement
+        Announcement: Announcement!
+        expired: "(expired)"
+        Expired: Expired
+        posted: Posted
+        expires_on_default: "--"
+        attachment: Attachment
+        posted_by: Posted by
+        add_an_attachment: Add an attachment
+        published: Published
+        last_updated: Last Updated
+      content:
+        no_announcements: There are no announcements.
+        immediately: Immediately
+        digest: As part of user digest email (according to their notification setting)
+        dont_send: Don't send
+        no_draft_announcements: There are no draft announcements.
+        no_published_announcements: There are no published announcements.
+        create_new_announcement_html: "%{click_here} to create the first announcement."
+        example_mails: example1@gmail.com, example2@yahoo.com, example3@aol.com, ...
+        take_part_in_survey_html: 'Please click on the following url to take part in the survey : %{survey_link}'
+        select_date: click to select a date
+        caution_msg_v1_html: An %{email_link} will be sent immediately. Before posting the announcement, it is advisable to verify that the announcement content is displayed as expected in different email clients (outlook, gmail, yahoomail, etc) using &quot;%{test_email_link}&quot; action.
+        get_test_mail_addresses: Please provide a comma separated list of email addresses to which the test email should be sent.
+        delete_or_discard_warning: Are you sure you want to %{delete_or_discard} this announcement?
+        confirm_email_notification: The announcement has already expired. Do you still want to send email notifications?
+      action:
+        post: Post
+        test_email: Test Email
+        create_new_announcement: Create a New Announcement
+        update: Update

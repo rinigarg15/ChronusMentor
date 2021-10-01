@@ -1,0 +1,27 @@
+en:
+  feature:
+    diversity_reports:
+      add_diversity_report: Add Participation Distribution Report
+      new_diversity_report_popup_title: Configure Member Diversity Report
+      new_diversity_report_popup_title_v1: Configure Diversity Report
+      create_button_text: Generate Report
+      member_diversity: Member Diversity
+      impact_on_diversity: Impact on Diversity
+      no_segment_or_dimension: Either member segment or reporting dimension is empty.
+      no_segment_or_dimension_v1: Either user segment or reporting dimension is empty.
+      display_name: Member Diversity by %{dimension_name}
+      display_name_v1: Diversity by %{dimension_name}
+      select_admin_view: Select admin view
+      select_profile_question: Select profile question
+      percentage_of_participants: "% of Participants"
+      percentage_of_users: "% of Users"
+      choose_user_segment: Choose User Segment
+      content:
+        no_member_diversity: Specify the member view and dimension to generate this report
+        remove_confirmation: This will remove the report from the dashboard, click 'OK' to complete the action.
+        engagement_diversity_html: "%{percentage_text} of all the engagements had participants across different '%{dimension_name}'"
+      label:
+        participant: Participants and Non-Participants
+        time_period: Current time period and Previous time period
+        time_period_v1: Selected time period and Previous time period
+

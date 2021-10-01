@@ -1,0 +1,155 @@
+@import 'mixins';
+
+img.ui-datepicker-trigger
+{
+  padding: 6px 1px 2px 2px;
+  vertical-align:text-bottom;
+}
+
+
+//jQuery Dialog Styles
+
+.ui-dialog{
+  padding: 0;
+}
+
+.ui-dialog .ui-dialog-titlebar{
+  background: asset-url("v3/layout/pane_bg.png") repeat-x scroll 0 0 #E1E6F1;
+  padding: 0;
+  border: none;
+  font-size: 14px;
+}
+
+input[type="text"],
+input[type="password"],
+.ui-autocomplete-input,
+textarea,
+.uneditable-input {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;  
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;  
+}
+
+.ui-tabs .ui-tabs-nav li a {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;  
+}
+
+.ui-datepicker td .ui-state-active{
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;  
+}
+
+.ui-datepicker td .ui-state-default:hover{
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;  
+}
+
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;  
+}
+
+.ui-button,
+.ui-button-primary,
+.ui-button-success,
+.ui-button-error,
+.ui-buttonset .ui-state-active,
+.ui-dialog .ui-dialog-buttonpane,
+.ui-dialog-buttonpane .ui-dialog-buttonset .ui-button,
+input, textarea,
+input:focus, textarea:focus,
+.ui-dialog-buttonset .ui-button:nth-child(2),
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+  text-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+/*Overriding jquery widget*/
+
+.ui-widget{
+  font-family: arial,tahoma,verdana,helvetica;
+  font-size: inherit;
+}
+.ui-widget-overlay{
+  background: none repeat scroll 0 0 #000;
+  opacity: 0.5;
+}
+
+/*Overriding jquery tabs*/
+.ui-tabs.ui-widget-content{
+  background: transparent;
+}
+
+/*Overriding jquery widget*/
+.ui-widget-content {
+  border-color: $border-color;
+  a{
+    color: #315BB4;
+  }  
+}
+
+.ui-state-highlight {  
+  background: #EEDC94 !important;  
+}
+
+/*Overriding jquery tabs*/
+
+.ui-tabs.ui-widget-content{
+  background: transparent;
+}
+
+.ui-tabs .ui-tabs-panel{
+  border-width: 1px;
+  background-color: #FFFFFF;
+}
+
+.ui-tabs ul.ui-tabs-nav{
+  border: 0;  
+  padding: 0;
+}
+
+.ui-tabs ul.ui-tabs-nav li{
+  a{
+    border-left: 1px solid $border-color;
+    border-right: 1px solid $border-color;
+    border-top: 1px solid $border-color;
+  }
+  &.ui-state-active a{
+    font-weight: bold;
+    color: #363636;
+    border: 1px solid $border-color;
+    border-bottom-color: transparent;  
+  }
+}  
+
+.ui-tabs .ui-tabs-nav li:hover, 
+.ui-tabs .ui-tabs-nav li a:hover, 
+.ui-tabs .ui-tabs-nav li.ui-state-disabled a{
+  border-bottom: 1px solid $border-color;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-state-disabled {
+  opacity: 1;
+  a{
+    cursor: pointer;
+    background: transparent;
+  }
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected:hover{
+  background: none;
+}

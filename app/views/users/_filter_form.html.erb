@@ -1,0 +1,9 @@
+<div id="filter_pane_import_users">
+  <div class="filter_pane clearfix fixed-col-md-5">
+    <div class="filter_content">
+      <% programs = @current_organization.programs.ordered.includes(:translations) %>
+      <% get_collapsible_filter_for_programs(programs, listing_options[:filters]) if !@current_organization.standalone? && current_user.import_members_from_subprograms? %>
+    </div>
+  </div>
+</div>
+<%= javascript_tag %Q[UserImport.handleIndeterminateStateForProgram();UserImport.handleProgramRolesSelection();] %>

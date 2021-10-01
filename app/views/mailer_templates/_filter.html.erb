@@ -1,0 +1,22 @@
+<% js_action = "MailerTemplates.applyFilters('#{Mailer::Template::Customized::CUSTOMIZED}', '#{Mailer::Template::Customized::NON_CUSTOMIZED}', '#{Mailer::Template::Status::ENABLED}', '#{Mailer::Template::Status::DISABLED}');" %>
+<%# not showing sidebar footer in mobile view %>
+<% mobile_footer_actions = { see_n_results: { results_count: @emails_hash_list.count }} %>
+<%= filter_container_wrapper(mobile_footer_actions) do %>
+  <div id="email_templates_filters" class="clearfix">
+    <% profile_filter_wrapper "feature.email.header.status".translate, false do %>
+      <div id="cjs_email_enabled_filter">
+        <%= radio_button_filter "display_string.All".translate, Mailer::Template::Status::ALL, Mailer::Template::Status::ALL, :status, :js_action => js_action %>
+        <%= radio_button_filter "feature.email.filter.enabled".translate, Mailer::Template::Status::ALL, Mailer::Template::Status::ENABLED, :status, :js_action => js_action %>
+        <%= radio_button_filter "feature.email.filter.disabled".translate, Mailer::Template::Status::ALL, Mailer::Template::Status::DISABLED, :status, :js_action => js_action %>
+      </div>
+    <% end %>
+
+    <% profile_filter_wrapper "feature.email.header.show".translate, false do %>
+      <div id="cjs_email_customized_filter">
+        <%= radio_button_filter "feature.email.filter.all_emails".translate, Mailer::Template::Customized::ALL, Mailer::Template::Customized::ALL, :customized, :js_action => js_action %>
+        <%= radio_button_filter "feature.email.filter.customized_emails".translate, Mailer::Template::Customized::ALL, Mailer::Template::Customized::CUSTOMIZED, :customized, :js_action => js_action %>
+        <%= radio_button_filter "feature.email.filter.non_customized_emails".translate, Mailer::Template::Customized::ALL, Mailer::Template::Customized::NON_CUSTOMIZED, :customized, :js_action => js_action %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

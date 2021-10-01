@@ -1,0 +1,22 @@
+en:
+  email_translations:
+    group_mentoring_offer_notification_to_new_mentee:
+      title_v3: New %{_mentoring} offer notification to %{_mentee}
+      description_v2: "%{_Mentors} can directly offer %{_mentoring} to %{_mentees}. This email (including a personal  message from the %{_mentor}) is sent to %{_a_mentee} when %{_a_mentor} offers %{_mentoring} to them."
+      subject_v1: You have received a new offer for {{customized_mentoring_term}}!
+      content_v2_html: "<a href ='{{mentor_url}}'>{{mentor_name}}</a> has offered to be your {{customized_mentor_term}} in <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a>.<br/>{{message_content_as_quote}}{{view_offer_button}}<br/>You can also: <br/><ul><li>View <a href='{{mentor_url}}'>{{mentor_name}}</a>'s profile to learn more about them and determine if it is a good fit</li><li>If you think it is a good fit, please accept their offer as soon as possible.</li><li>If you must decline, please do so in a timely manner and be tactful.</li></ul>"
+      button_text: View Offer
+      tags:
+        mentor_name:
+          description: Name of the mentor
+        url_mentoring_offers:
+          description: Url to mentoring offers page for the mentee_term
+        message_content:
+          description: Message from the mentor
+          example: I am offering you mentoring as per your request at the meet.
+        view_offer_button:
+          description: View Mentoring Offers Button
+        mentor_url:
+          description: Url to the profile of the mentor
+        message_content_as_quote:
+          description: Message as quoted by mentor.

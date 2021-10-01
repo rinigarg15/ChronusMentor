@@ -1,0 +1,8 @@
+en:
+  distributed_metric:
+    name:
+      Online: Online
+      Chat: Chat
+      Phone: Phone
+      Email: Email
+      Face_to_Face: Face-to-Face

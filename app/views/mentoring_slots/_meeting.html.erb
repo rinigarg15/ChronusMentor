@@ -1,0 +1,8 @@
+<div id="meeting_form_container" class="tab-pane no-padding <%= 'active' unless @can_mark_availability_slot %>">
+  <% unless @can_mark_availability_slot %>
+    <div class="help-block m-t-0 m-b">
+      <%= "feature.meetings.content.past_meeting_creation_help_text_v1".translate(meeting: h(_meeting)) %>
+    </div>
+  <% end %>
+  <%= render partial: "meetings/meeting_form", locals: { from_calendar: true, direct_meeting_outside_group: true } %>
+</div>

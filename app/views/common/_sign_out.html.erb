@@ -1,0 +1,5 @@
+<% if @current_organization.active? && (logged_in_organization? || new_user_authenticated_externally?) %>
+  <li class="<%= local_assigns[:container_class] || '' %>">
+    <%= link_to append_text_to_icon(local_assigns[:iconclass], "display_string.Sign_out".translate), logout_path, get_logout_options %>
+  </li>
+<% end %>

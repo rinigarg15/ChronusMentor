@@ -1,0 +1,52 @@
+en:
+  feature:
+    flag:
+      header:
+        Flags: Flags
+        Flagged: Flagged
+        Unresolved: Unresolved
+        Resolved: Resolved
+        Deleted: Deleted
+        Edited: Edited
+        Allowed: Allowed
+        flag_popup_title: Report Inappropriate Content
+        Pending: Pending (%{pending_count})
+        Type: Type
+        Preview: Preview
+        Status: Status
+        Resolved_by: Resolved by
+        Resolved_at: Resolved at
+      action:
+        Allow: Allow
+        Resolve_Flagging: Resolve Flagging
+        Resolve_Flagging_v1: Resolve
+        view_content: View content
+        Report: Report
+        Delete_content: Delete %{content}
+        Ignore_Flags: Ignore Flags
+      content:
+        unresolved_deleted: Deleted before resolving
+        content_deleted_html: Content Deleted
+        not_possible_html: Not Possible
+        flagged_note_v1: Reported
+        flag_note_v1: Report Content
+        ignore_note: Ignore the flag and allow the content to stay
+        delete_confirm: Are you sure you want to delete this %{content_type}?
+        reason_required: Reason is required
+        flagged_by_info_html: by %{flagged_by}, %{time_ago_in_words}
+        flagged_inappropriate: Reported as inappropriate content, waiting for admin action
+        flagged_by_and_reason: List of users and their reasons for flagging this content
+        reason_for_reporting: Reason for reporting
+        flagged_info_html:
+          one: by %{flagged_by}, %{time_ago_in_words} - 1 flag
+          other: by %{flagged_by}, %{time_ago_in_words} - %{count} flags
+        forum_flagged_info_html:
+          one: by %{flagged_by}, in %{flagged_in}, %{time_ago_in_words} - 1 flag
+          other: by %{flagged_by}, in %{flagged_in}, %{time_ago_in_words} - %{count} flags
+        content_type:
+          Post: Forum Post
+          Article: Article
+          Comment: Comment
+          QaQuestion: Question
+          QaAnswer: Answer
+          NilClass: Content Deleted

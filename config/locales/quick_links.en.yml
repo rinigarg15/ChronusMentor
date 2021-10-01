@@ -1,0 +1,29 @@
+en:
+  quick_links:
+    header: Quick links
+    organization:
+      all_program: See All %{program}
+      three_sixty_surveys_v1: My Three Sixty Degree Surveys
+    program:
+      mentor_requests_v1: "%{Mentoring} Requests"
+      project_requests: "%{mentoring_connection} Requests"
+      meeting_requests_v1: "%{Meeting} Requests"
+      upcoming_meetings: Upcoming %{Meetings}
+      mentoring_offers_v2: "%{Mentoring} Offers"
+      program_events: Program Events
+      program_events_v1: Events
+      account_blocked_users: Account blocked users
+      three_sixty_surveys_v1: My Three Sixty Degree Surveys
+      moderate_content: content moderation
+    side_pane:
+      provide_feedback: Provide Feedback
+      view_mentoring_connection_profile: View %{mentoring_connection} Profile
+      edit_mentoring_connection_profile: Edit %{mentoring_connection} Profile
+      manage_notif_setting: Manage Notification Settings
+      export_mentoring_area_v1: Export %{Mentoring_Area}
+      close_mentoring_connection: Close %{mentoring_connection}
+      leave_mentoring_connection: Leave %{mentoring_connection}
+      closing_the_mentoring_connection: closing the %{mentoring_connection}
+      leaving_the_mentoring_connection: leaving the %{mentoring_connection}
+      change_user_roles: Change Roles
+      requests_to_join: Requests to Join

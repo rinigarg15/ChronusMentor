@@ -1,0 +1,9 @@
+<%= sidepane_assets_pane(@unanswered_program_events,
+      :pane_header => "feature.profile.subtitle.program_event_invites".translate + " (#{@unanswered_program_events.size})",
+      :asset_icon_class => "fa-calendar",
+      :see_all_url => program_events_path,
+      :empty_pane_message => "feature.profile.content.no_prog_events_awaiting_response".translate,
+      :sidepane_asset_partial => "members/profile_right_pane_event",
+      :asset_type => "program_event",
+      :item_class => "pointer"
+    ) %>

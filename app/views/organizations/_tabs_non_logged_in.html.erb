@@ -1,0 +1,15 @@
+<nav id="tab_box" class="<%= hidden_on_mobile %>" role="navigation">
+  <div id="navbar" class="navbar-collapse collapse row no-padding">
+    <ul id="tabs" class="nav nav-tabs no-margins">
+      <% self.controller.all_tabs.each_with_index do |tab_info, i| %>
+        <% tab_class = '' %>
+        <% tab_class << ' active' if tab_info.active || tab_info.open_by_default %>
+        <% tab_class << ' last' if i == self.controller.all_tabs.size - 1 %>
+        <%= render_tab(tab_info, tab_class, {non_logged_in: true}) %>
+      <% end %>
+
+      <%= render(:partial => 'languages/dropdown', :locals => {:ui_pattern => "nav nav-second-level collapse", :container_class => hidden_on_web, :caret_class => "fa arrow", :iconclass => "fa fa-language"}) %>
+      <%= render(:partial => "common/non_logged_in_links", :locals => {:container_class => hidden_on_web}) %>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,16 @@
+<% modal_v3_popup "feature.connection.header.Update_Goal_Progress".translate do %>
+  <div class="has-below-1 strong">
+    <%= @coaching_goal.title %>
+  </div>  
+  <%= simple_form_for [@group, @coaching_goal, @coaching_goal_activity], :url => group_coaching_goal_coaching_goal_activities_path(@group, @coaching_goal, :is_show_page => @is_show_page), :remote => true, :html => {:class => "has-below cjs_progress_bar_form"} do |f| %>
+    <%= render :partial => "coaching_goal_activity_progress_bar", :locals => {:coaching_goal => @coaching_goal, :is_update_progress_popup => true} %>
+    <%= coaching_goal_activity_message_box(f) %>
+    <% action_set do %>
+      <%= f.button :submit, "display_string.Save".translate, :class => "cjs_coaching_goal_activity_submit" %>
+      <%= cancel_link(nil, :qtip => true) %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= javascript_tag do %>
+  CoachingGoals.validateForm();
+<% end %>

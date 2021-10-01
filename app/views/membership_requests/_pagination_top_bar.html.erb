@@ -1,0 +1,33 @@
+<% left_most_content = "".html_safe %>
+
+<% if membership_requests.any? %>
+  <div class="p-sm clearfix b-b">
+    <div class="pull-left">
+      <%= membership_requests_bulk_actions(tab) %>
+    </div>
+    <%= get_detailed_list_toggle_buttons(%Q[commonReportFilters.changeView(#{MembershipRequest::ListStyle::DETAILED})], %Q[commonReportFilters.changeView(#{MembershipRequest::ListStyle::LIST})], (list_type == MembershipRequest::ListStyle::LIST)) %>
+  </div>
+<% end %>
+
+<% if list_type != MembershipRequest::ListStyle::LIST && membership_requests.any? %>
+  <% left_most_content += capture do %>
+    <div class="pull-left m-r-lg m-l-xs p-t-xxs">
+      <label for="cjs_primary_checkbox" class="sr-only">
+        <%= "feature.mentor_request.content.select_all_label_v1".translate %>
+      </label>
+      <%= check_box_tag :cjs_primary_checkbox %>
+    </div>
+  <% end %>
+<% end %>
+
+<% unless membership_requests.empty? %>
+  <% sort_fields = [
+    { field: :id, order: :desc, label: "feature.membership_request.label.recent_first".translate },
+    { field: :id, order: :asc, label: "feature.membership_request.label.oldest_first".translate },
+    { field: :last_name, order: :asc, label: "feature.membership_request.label.last_name_asc".translate },
+    { field: :last_name, order: :desc, label: "feature.membership_request.label.last_name_dsc".translate }
+  ] %>
+  <% sort_by_options = { sort_url: membership_requests_path, sort_field: non_filter_params[:sort], sort_order: non_filter_params[:order], sort_info: sort_fields, use_ajax: true, on_select_function: "commonReportFilters.changeSortOptions"} %>
+<% end %>
+
+<%= top_bar_in_listing( { collection: membership_requests }, {}, (list_type == MembershipRequest::ListStyle::DETAILED ? sort_by_options : nil), { left_most_content: left_most_content } ) %>

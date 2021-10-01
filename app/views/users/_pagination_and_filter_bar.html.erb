@@ -1,0 +1,12 @@
+<% if users.any? %>
+  <% listing_info_options = { collection: users } %>
+
+  <% sort_fields = populate_sort_options(current_user, is_match_view: match_view, is_relevance_view: relevance_view) %>
+  <% url_params = {} %>
+  <% url_params[:filter] = filter_field %>
+  <% url_params[:search] = search_query if search_view? %>
+  <% url_params[:view] = RoleConstants::STUDENTS_NAME if role == RoleConstants::STUDENT_NAME %>
+  <% sort_by_options = { sort_url: sort_url, sort_field: sort_field, sort_order: sort_order, sort_info: sort_fields, url_params: url_params, use_ajax: true } %>
+
+  <%= top_bar_in_listing(listing_info_options, { show: true, user_filter: true, applied_count: @my_filters.try(:size) }, sort_by_options) %>
+<% end %>

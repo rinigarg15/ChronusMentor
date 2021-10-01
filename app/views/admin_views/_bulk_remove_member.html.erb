@@ -1,0 +1,35 @@
+<%= simple_form_for @admin_view, :url => remove_member_admin_view_path(@admin_view), :html => {:method => :post, :class => "no-margin", :id => "form_admin_view_bulk_actions"} do |f| %>
+  <%= f.input "members", :as => :hidden, :input_html => {:value => @members.collect(&:id).join(",")} %>
+  <div class="media m-t-0">
+    <div class="media-left">
+      <%= embed_icon("fa fa-exclamation-triangle fa-5x") %>
+    </div>
+    <div class="media-body">
+      <div class="popup_content clearfix col-xs-12">
+        <p class="m-b-0">
+          <%= "feature.admin_view.content.following_members_will_be_removed_v1".translate(:count => @members.size, :members => "feature.admin_view.content.member".translate(:count => @members.size), :program => @current_organization.name) %>
+        </p>
+        <%= render(:partial => "admin_views/selected_users", :locals => {:users_or_members => @members}) %><br/>
+        <p class="m-b-0">
+          <%= "feature.profile.content.removal_member_is_irreversible_html".translate(:articles => _articles, :mentoring_connections => _mentoring_connections, :program => @current_organization.term_for(CustomizedTerm::TermType::PROGRAM_TERM).term_downcase.pluralized_term, :irreversible => content_tag(:b, "display_string.irreversible_action".translate)) %><br/>
+        </p>
+        <p class="m-b-0">
+          <%= "feature.profile.content.suspending_members_instead".translate(program: @current_organization.term_for(CustomizedTerm::TermType::PROGRAM_TERM).term_downcase.pluralized_term) %>
+        </p>
+      </div>
+      <div class="popup_content clearfix col-xs-12">
+        <%= horizontal_line(class: "m-b-sm m-t-xs") %>
+        <% action_set do %>
+          <div class="pull-right">
+            <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+            <%= f.submit "display_string.remove_member".translate(:count => @members.size), :class => "btn btn-danger", :disable_with => "display_string.Please_Wait".translate %>
+            <%= f.submit "display_string.suspend_member".translate(:count => @members.size), :class => "btn btn-primary", :disable_with => "display_string.Please_Wait".translate, :data => {:button_type => "suspend_member"} %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+  AdminViews.openSuspendMembershipModal("#form_admin_view_bulk_actions", "#cjs_suspend_member_membership");
+</script>

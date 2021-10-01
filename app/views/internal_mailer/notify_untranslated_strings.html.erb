@@ -1,0 +1,17 @@
+</br>
+You have untranslated strings in the following locale:
+</br>
+<ol>
+  <% @untranslated_strings_hash.each do |locale, keys| %>
+    <li> <%= "#{locale} - #{keys.count}" %> </li>    
+  <% end %>
+</ol>
+</br>
+</br>
+Keys list:
+</br>
+<ol>
+  <% @untranslated_strings_hash.each do |locale, keys| %>
+    <li> <%= "#{locale} - #{keys.join(", ")}" %> </li>    
+  <% end %>
+</ol>

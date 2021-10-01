@@ -1,0 +1,11 @@
+<% see_more_text = "&raquo;".html_safe %>
+<% mobile_truncated_text, mobile_truncated = truncate_html(chronus_auto_link(h(connection_question_answer_in_summary)), max_length: 60, status: true) %>
+<% desktop_truncated_text, desktop_truncated = truncate_html(chronus_auto_link(h(connection_question_answer_in_summary)), max_length: 80, status: true) %>
+<% see_more_link = link_to(see_more_text, "javascript:void(0)", class: "cjs_see_more_circle_summary_link_#{group.id}") %>
+
+<div class="word_break m-b-sm m-t-sm">
+  <%= desktop_truncated ? content_tag(:span, desktop_truncated_text + see_more_link, class: "#{hidden_on_mobile}") : content_tag(:span, desktop_truncated_text, class: "#{hidden_on_mobile}") %>
+  <%= mobile_truncated ? content_tag(:span, mobile_truncated_text + see_more_link, class: "#{hidden_on_web}") : content_tag(:span, mobile_truncated_text, class: "#{hidden_on_web}") %>
+</div>
+
+<%= popover(".cjs_see_more_circle_summary_link_#{group.id}", group.name, connection_question_answer_in_summary, {container: "body"}) %>

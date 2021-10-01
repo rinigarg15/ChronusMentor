@@ -1,0 +1,17 @@
+if(jQuery(".cjs_topic_main_page").length == 0){
+  <% topic_content = render partial: "forums/topic", locals: { topic: @topic.reload, home_page: @home_page, see_more: true, topics_badge_count_hash: {}} %>
+  jQuery(".cjs_selected_topic").html("<%= j topic_content %>");
+  GroupTabs.adjustSlickSlideHeight(".connections-slick", 100);
+  <% content = render partial: "topics/sidepane_posts", locals: { topic: @topic, posts: @posts, show_title: @show_title, home_page: @home_page} %>
+  GroupTabs.showHideContentInSidebar("<%= j content %>");
+  <% if @forum.is_group_forum? %>
+    Discussions.markPostsViewed("<%= mark_viewed_forum_topic_path(@topic.forum, @topic, home_page: @home_page) %>");
+  <% end %>
+}
+else{
+  var postsListing = jQuery(".cjs_posts_listing");
+  if(postsListing.length > 0) {
+    <% content = render partial: "topics/posts_listing", locals: { topic: @topic, posts: @posts, show_in_sidepane: false } %>
+    postsListing.replaceWith("<%= j content %>");
+  }
+}

@@ -1,0 +1,7 @@
+<% category_items.each do |item| %>
+  <% percent = item[:score].second.zero? ? 100 : item[:score].first*100/item[:score].second %>
+  <div class="pointer m-l-lg p-xs p-r-0 b-t word_break subheader cjs_left_pane_list_child_items cjs_show_translatable_details <%= 'light-gray-bg font-bold cjs_select_content' if (category == chosen_category && item[:id] == @base_id) %>" data-category="<%= category %>" data-id="<%= item[:id] %>" data-url="<%= show_category_content_translations_path(format: :js) %>">
+    <div class="pull-right p-r-xs text-muted" id="cjs_percent_completed_<%= category %>_<%= item[:id] %>"><%= "display_string.percent".translate(percent: percent) %></div>
+    <div> <%= item[:heading] %></div>
+  </div>
+<% end %>

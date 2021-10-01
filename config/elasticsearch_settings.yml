@@ -1,0 +1,82 @@
+common: &common
+  #Increment the reindex_version key by 1 if you want complete reindexing of elasticsearch
+  #THIS IS JUST A DUMMY KEY USED TO CHECK IF COMPLETE REINDEXING IS NEEDED OR NOT
+  reindex_version: 2
+  index_suffix: <%= Rails.env %>
+  aws_es_endpoint: <%= ENV['AWS_ES_6_2_ENDPOINT_URL'] %>
+
+development:
+  host: 'localhost'
+  port: '9200'
+  user:
+  password: <%= ENV['ELASTICSEARCH_PASSWORD'] %>
+  scheme: 'http'
+  index_suffix: <%= Rails.env %>
+
+test: &test
+  host: 'localhost'
+  port: '9200'
+  user:
+  password: <%= ENV['ELASTICSEARCH_PASSWORD'] %>
+  scheme: 'http'
+  index_suffix: <%= Rails.env + ENV['TEST_ENV_NUMBER'].to_s %>
+
+cucumber:
+  <<: *test
+
+production: &production_settings
+  <<: *common
+  es_region: "us-east-1"
+  s3_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"] == "true" ? "chronus-mentor-production-elasticsearch-backup" : "chronus-mentor-production-elasticsearch" %>
+  s3_region: <%= defined?(S3_REGION) ? S3_REGION : "us-east-1" %>
+  s3_repository: "chronus-mentor-production-es-repository"
+  s3_access_role: "arn:aws:iam::380152926876:role/es_mentor_production_role"
+
+staging: &staging_settings
+  <<: *common
+  es_region: "us-east-1"
+  s3_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"] == "true" ? "chronus-mentor-staging-elasticsearch-backup" : "chronus-mentor-staging-elasticsearch" %>
+  s3_region: <%= defined?(S3_REGION) ? S3_REGION : "us-east-1" %>
+  s3_repository: "chronus-mentor-staging-es-repository"
+  s3_access_role: "arn:aws:iam::380152926876:role/es_mentor_staging_role"
+
+standby:
+  <<: *staging_settings
+
+performance:
+  <<: *staging_settings
+
+productioneu:
+  <<: *production_settings
+  es_region: "eu-central-1"
+  s3_bucket: <%= ENV["USE_S3_BACKUP_BUCKET"] == "true" ? "chronus-mentor-productioneu-elasticsearch-backup" : "chronus-mentor-productioneu-elasticsearch" %>
+  s3_region: <%= defined?(S3_REGION) ? S3_REGION : "eu-central-1" %>
+  s3_repository: "chronus-mentor-productioneu-es-repository"
+  s3_access_role: "arn:aws:iam::380152926876:role/es_mentor_productioneu_role"
+
+generalelectric:
+  <<: *production_settings
+
+veteransadmin:
+  <<: *production_settings
+
+nch:
+  <<: *production_settings
+
+demo:
+  <<: *production_settings
+
+scanner:
+  <<: *production_settings
+
+opstesting:
+  <<: *staging_settings
+
+training:
+  <<: *staging_settings
+
+releasestaging1:
+  <<: *staging_settings
+
+releasestaging2:
+  <<: *staging_settings

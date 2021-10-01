@@ -1,0 +1,27 @@
+<h3 class="m-b-sm">
+  <%= "program_settings_strings.label.matching_settings.connection_limits".translate(Mentoring_Connection: _Mentoring_Connection) %>
+</h3>
+
+<%= control_group do %>
+  <%= f.label "", "program_settings_strings.content.default_max_connections_limit_v2_html".translate(mentor: _mentor, mentees: _mentees, tooltip: embed_icon(TOOLTIP_IMAGE_CLASS, '', id: 'connection_limit_help_text')), class: "control-label", for: "program_default_max_connections_limit" %>
+  <%= tooltip("connection_limit_help_text", get_connection_limit_help_text(@program)) %>
+  <%= controls(class: "m-t-xs") do %>
+    <%= f.text_field :default_max_connections_limit, class: "form-control", skip_title: true, wrapper: 'none', data: { value: @program.default_max_connections_limit } %>
+    <div style="display: none;">
+      <%= f.label :apply_to_all_mentors, "program_settings_strings.content.all_mentors".translate %>
+      <%= f.check_box :apply_to_all_mentors %>
+    </div>
+    <label class="checkbox dim m-t-xs">
+      <%= f.check_box :can_increase_connection_limit %>
+      <%= "program_settings_strings.content.can_increase_mentors_connection_limit".translate(mentoring_connection: _mentoring_connection, mentors: _mentors) %>
+    </label>
+    <label class="checkbox dim m-t-xs">
+      <%= f.check_box :can_decrease_connection_limit %>
+      <%= "program_settings_strings.content.can_decrease_mentors_connection_limit".translate(mentoring_connection: _mentoring_connection, mentors: _mentors) %>
+    </label>
+  <% end %>
+<% end %>
+<div class="cjs_max_connections_for_mentee">
+  <%= f.select :max_connections_for_mentee, get_mentor_limit_options, { selected: @current_program.max_connections_for_mentee, title: "program_settings_strings.content.maximum_mentors_for_mentee_v1".translate(mentors: _mentors, mentee: _mentee) } %>
+  <%= javascript_tag %Q[MatchingSettings.handleMaxConnectionForMentee();] %>
+</div>

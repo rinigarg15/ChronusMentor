@@ -1,0 +1,5 @@
+<div id="pending_drafts_message" class="alert alert-info m-b-sm">
+  <%= get_icon_content("fa fa-file-text") %>
+  <% link_text = "feature.article.content.drafted_article_count".translate(count: wob_member.articles.drafts.size, article: _article) %>
+  <%= "feature.article.content.draft_flash_v1_html".translate(n_articles: (link_to link_text, member_path(wob_member, :tab => 'articles'), class: "alert-link")) %>
+</div>

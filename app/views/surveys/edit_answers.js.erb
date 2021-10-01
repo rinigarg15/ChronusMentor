@@ -1,0 +1,4 @@
+<% modal_v3_popup "#{@survey.engagement_survey? ? "#{@task.title} - #{@survey.name}" : "feature.survey.content.meeting_feedback_survey".translate(:Meeting => _Meeting)}", {additional_close_button_class: "cjs_dismiss_survey_popup" } do %>
+  <%= content_tag(:div, "feature.survey.content.survey_popup_description_v1".translate(:survey_name => @survey.name), :class => "m-t-xs m-b-md #{"hide" if @survey.meeting_feedback_survey?}") %>
+  <%= render :partial => 'edit_answers_form', :locals => {:survey_response => @response} %>
+<% end %>

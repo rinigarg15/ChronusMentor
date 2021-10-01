@@ -1,0 +1,26 @@
+<% @title = "terms_and_conditions_page.title".translate %>
+
+<%= ibox nil do %>
+  <% if @current_organization && @current_organization.active? && !logged_in_organization? %>
+    <div class="lead text-center">
+      <%= "terms_and_conditions_page.title".translate %>
+    </div>
+  <% end %>
+
+  <% if @current_organization && @current_organization.agreement.present? %>
+    <div class="p-sm">
+      <%= content_tag(:div, 'terms_and_conditions_page.organization_terms_and_conditions'.translate(org_name: @current_organization.name), class: "lead") unless @current_organization.display_custom_terms_only %>
+      <%= content_tag(:div, class: "ckeditor_generated", id: "custom_terms") do %>
+        <%= auto_link(@current_organization.agreement.to_s.html_safe) %>
+      <% end %>
+      <%= content_tag(:hr) unless @current_organization.display_custom_terms_only %>
+    </div>
+  <% end %>
+
+  <% if @current_organization && (!@current_organization.display_custom_terms_only || @current_organization.agreement.blank?) %>
+    <div class="p-sm">
+      <%= content_tag(:div, "terms_and_conditions_page.chronus_terms".translate, class: "lead") if @current_organization && @current_organization.agreement.present? %>
+      <%= render partial: 'home/chronus_terms' %>
+    </div>
+  <% end %>
+<% end %>

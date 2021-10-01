@@ -1,0 +1,8 @@
+<div class="ibox-content clearfix" id="<%= DashboardReportSubSection::Tile::GROUPS_ACTIVITY %>">
+  <%= render_groups_activity_report(current_program, {date_range: date_range, date_range_preset: date_range_preset}) %>
+</div>
+<%= render(partial: "reports/management_report/lower_ibox", locals: {show_date_filter: true, object_links: get_dashboard_groups_activiy_report_lower_ibox_link_options(current_program), date_range: date_range, date_range_preset: date_range_preset, tile: DashboardReportSubSection::Tile::GROUPS_ACTIVITY}) %>
+
+<%= javascript_tag do %>
+  commonReportFilters.initializeTimeFilter();
+<% end %>

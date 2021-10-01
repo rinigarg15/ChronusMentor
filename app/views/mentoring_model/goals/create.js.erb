@@ -1,0 +1,5 @@
+<% content = render :partial => "mentoring_model/goals/goal", :locals => {goal: @new_goal, update_task: true, required_tasks: []} %>
+jQuery('.cjs_display_all_goals').append("<%= j(content) %>");
+jQuery('.cjs_no_goal_msg').hide();
+jQueryScrollTo('#cjs_display_goal_info_<%=@new_goal.id.to_s%>', true);
+closeQtip();

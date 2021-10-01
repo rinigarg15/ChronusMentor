@@ -1,0 +1,9 @@
+<%= simple_form_for goal, :url => url, :remote => true, :method => method, :html => {:class => "#{show_option} cjs_goal_edit_form"} do |f| %>
+  <%= f.input :title, :as => :string, :required => true, :input_html => {:id => "mentoring_model_goal_title_#{goal.id}", :class => "#{text_size} cjs_goal_title"} %>
+  <%= f.input :description, :as => :text, :input_html => {:rows => 5 , :id => "mentoring_model_goal_description_#{goal.id}", :class => "#{text_size} cjs_goal_description"} %>
+
+  <% action_set(:class => " pull-right #{"no-padding cui-form-dynamic-length-input" if show_remove_link}") do %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => "cjs_goal_cancel_btn btn btn-white", "data-dismiss" => "modal" %>
+    <%= f.button :submit, "display_string.Save".translate, :class => "cjs_goal_save_btn" %>
+  <% end %>
+<% end %>

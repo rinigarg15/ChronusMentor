@@ -1,0 +1,1 @@
+yes, no, true, false, none, none of the above, na, n.a, not applicable, others

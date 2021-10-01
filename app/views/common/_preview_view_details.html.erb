@@ -1,0 +1,23 @@
+<% admin_view_users = local_assigns[:admin_view_users] %>
+<% user_view_details = get_view_user_details(current_program, admin_view_users) %>
+<div class="cui_view_content cjs_<%= role %>_view_content">
+  <div class="clearfix">
+    <div class="font-bold col-sm-3 truncate-with-ellipsis whitespace-nowrap no-padding"><%= "feature.bulk_match.content.user_count".translate %></div>
+    <div class="no-padding col-sm-9">
+      <span> <%= admin_view_users.size %></span>
+      <% if user_view_details %>
+        <span><%= "feature.admin_view.content.user_view_details".translate(unconnected_count: user_view_details[:unconnected], drafted_count: user_view_details[:drafted], connected_count: user_view_details[:connected]) %></span>
+      <% end %>
+    </div>
+  </div>
+  <%= horizontal_line(:class => "m-t m-b") %>
+
+  <h4 class="m-b-xs"><%= "feature.admin_view.header.filters_applied".translate %></h4>
+  <%= render :partial => "admin_views/applied_filters", :locals => {:admin_view_filters => admin_view_filters} %>
+  <%= horizontal_line(:class => "m-t m-b") %>
+
+  <%= link_to("feature.bulk_match.action.view_users".translate, admin_view_path_with_source(:show, admin_view: admin_view), class: "btn btn-xs btn-white") %>
+  <% unless admin_view.default? %>
+    <%= link_to("feature.bulk_match.action.edit_view".translate, admin_view_path_with_source(:edit, admin_view: admin_view), :class => "no-margin btn btn-xs btn-white") %>
+  <% end %>
+</div>

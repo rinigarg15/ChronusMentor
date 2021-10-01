@@ -1,0 +1,39 @@
+<% current_class = "input-sm form-control" %>
+<% if @compose_type == AdminMessagesController::ComposeType::MEMBERS %>
+  <%= hidden_field_tag "admin_message[receiver_ids]" %>
+  <% id_to_be_submitted = 'admin_message_receiver_ids' %>
+  <% url = program_view? ? auto_complete_for_name_users_path(:format => :json, :show_all_users => true, :multi_complete => true) : auto_complete_for_name_members_path(:format => :json, :admin_message => true, :multi_complete => true, :show_all_members => true) %>
+
+<% elsif @compose_type == AdminMessagesController::ComposeType::CONNECTIONS %>
+  <%= hidden_field_tag "admin_message[connection_ids]" %>
+  <% id_to_be_submitted = 'admin_message_connection_ids' %>
+  <% url = auto_complete_for_name_users_path(:format => :json, :show_all_users => true, :multi_complete => true, :connections => true) %>
+<% end %>
+
+<div>
+  <div class="multi_auto_complete">
+    <div id="multi_complete_box">
+      <div id="selected_names" class="clearfix"></div>
+       <%= text_field_with_auto_complete(:admin_message, "receivers", {:value => "", :name => "admin_message_receivers", :class => current_class, :id => "receiver", :autocomplete => "off"},
+          {:min_chars => 3,
+           :url => url,
+           :param_name => 'search',
+           :clear_text => true
+          }
+       ) %>
+   </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  <% if @group %>
+    window.onload = function(){
+      MulitAutoComplete.prefillGroups("<%= display_selected_group_in_auto_complete(@group) %>", "<%= @group.id %>", "<%= id_to_be_submitted %>");
+      jQuery('#'+MulitAutoComplete.adminMessageInputAutoCompleteId).focus();
+    }
+  <% end %>
+  jQuery(document).on("autocompleteselect", "#receiver", function(event, ui){
+    MulitAutoComplete.updateElement("#receiver", ui.item, "<%= id_to_be_submitted %>");
+  });
+  jQuery(document).on('click', '#multi_complete_box', function(){ jQuery('#'+MulitAutoComplete.adminMessageInputAutoCompleteId).focus();});
+</script>

@@ -1,0 +1,32 @@
+<% program_level = local_assigns[:program_level] %>
+<% add_class = profile_question.default_type? || program_level ? 'disabled_no_drop cjs-no-drag' : "cursor-move" %>
+<% highlighter_class = nil %>
+<% active_class = nil %>
+<% if local_assigns[:active_element] %>
+  <% highlighter_class = "light-gray-bg font-bold" %>
+  <% active_class = "cjs_active_profile_question" %>
+<% end %>
+<div class="row cjs_profile_question cjs-profile-question-draggable cjs-profile-question-container cjs-profile-question-section-<%= profile_question.section_id %> hide <%= add_class %> <%= highlighter_class %>" data-question-id="<%= profile_question.id %>" data-program-id="<%= profile_question.programs.collect(&:id) %>" data-section-id="<%= profile_question.section_id %>" id="profile_question_<%= profile_question.id %>" data-dependent-question-ids="<%= profile_question.dependent_questions.pluck(:id).uniq.join(",") %>">
+  <div class="col-xs-12 b-b cjs-profile-question-click-handle-element cjs_profile_question_<%= profile_question.id %> p-b-xs p-t-xs <%= active_class %>" data-url="<%= edit_profile_question_path(id: profile_question.id) %>" data-profile-question-id="<%= profile_question.id %>"> 
+    <div class="row cjs_profile_question_information_<%= profile_question.id %>">
+      <% profile_question_icon_class = get_profile_question_icon_class(profile_question) %>
+      <div class="col-sm-12">
+        <% icon_id = "cjs-profile-question-icon-#{profile_question.id}" %>
+        <div id="<%= icon_id %>" class="m-t-xs <%= profile_question_icon_class %> pull-left"></div>
+        <%= tooltip(icon_id, compressed_question_type(profile_question, text_only: true), true, container_class: 'text-indent-0', container: ".cjs-profile-questions-containing-column") %>
+        <%= content_tag :div, link_to("display_string.Add".translate, "javascript:void(0);", class: "btn btn-xs btn-primary cjs_add_pq_at_program_level_button pull-right hide", 'data-url': update_for_all_roles_profile_question_path(id: profile_question.id, section_id: profile_question.section_id)), class: "clearfix pull-right m-t-7 cjs-add-button-tooltip-container", data: {toggle: 'tooltip', title: (profile_question.conditional_question_id ? "feature.profile_customization.label.enable_question".translate(question: profile_question.conditional_question.question_text) : '')} %>
+        <% profile_question_programs = profile_question.programs %>
+        <div class="p-l-xxs p-t-xs p-b-xs m-t-3 small pull-right text-right truncate-with-ellipsis whitespace-nowrap text-muted cjs_no_of_programs cursor-default" id="cjs-programs-count-for-profile-question-<%= profile_question.id %>">
+          <%= "feature.profile_customization.label.n_programs_v1".translate(count: profile_question_programs.size, program: _Program, programs: _Programs) unless program_level %>
+        </div>
+        <%= list_of_programs_tooltip("cjs-programs-count-for-profile-question-#{profile_question.id}", profile_question_programs) %>
+        <div class="p-t-xs pull-right">
+          <%= profile_question_actions(profile_question, program_level: program_level) %>
+        </div>
+        <div class="p-t-xs p-l-xs p-b-xs m-l-xs truncate-with-ellipsis whitespace-nowrap">
+          <%= profile_question.question_text %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

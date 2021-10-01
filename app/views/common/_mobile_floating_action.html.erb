@@ -1,0 +1,18 @@
+<% label = content_tag(:i, "", class: options.delete(:icon_class)) + set_screen_reader_only_content(options.delete(:sr_text)) %>
+<% content = capture do %>
+  <div class="cui-mobile-floater-action <%= hidden_on_web %>" id="cjs-mobile-footer-action">
+    <%= render_action_for_dropdown_button(options.merge(label: label, class: "btn btn-primary btn-lg btn-circle #{options.delete(:additional_class)}")) %>
+  </div>
+<% end %>
+
+<% if local_assigns[:inline] %>
+  <%= javascript_tag do %>
+    if(jQuery("#cjs-mobile-footer-action").length > 0) {
+      jQuery("#cjs-mobile-footer-action").replaceWith("<%= j content %>");
+    } else {
+      jQuery("body").append("<%= j content %>");
+    }
+  <% end %>
+<% else %>
+  <%= content %>
+<% end %>

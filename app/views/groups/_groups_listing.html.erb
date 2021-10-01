@@ -1,0 +1,17 @@
+<% profile_view = (@profile_tab == MembersController::ShowTabs::MANAGE_CONNECTIONS) %>
+
+<%= ibox nil, ibox_class: "#{profile_view ? "no-margins": "noshadow"}", content_class: "no-padding" do %>
+  <% unless profile_view %>
+    <%= get_tab_box(@tab_number, view, @tab_counts, group_settings_hash(@is_manage_connections_view, @is_open_connections_view, current_user, {counts: @tab_counts}), @show_params) %>
+  <% end %>
+<% end %>
+
+<% if dashboard_flash.present? && dashboard_flash[:count].present? %>
+  <div class="alert alert-info">
+    <%= get_dashboard_filters_in_groups_listing_flash(dashboard_flash[:count], groups.size, dashboard_flash[:filters], @tab_number) %>
+  </div>
+<% end %>
+
+<div id="group_elements" class="<%= "col-md-8 p-l-0" unless profile_view %>">
+  <%= render partial: "groups/group_elements", locals: { view: view } %>
+</div>

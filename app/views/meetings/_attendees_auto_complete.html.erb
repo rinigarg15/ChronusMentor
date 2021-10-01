@@ -1,0 +1,18 @@
+<%= ibox "", header_content: content_tag(:b, "feature.reports.label.attendees".translate), content_class: "p-t-0" do %>
+  <label class="sr-only" for="mentoring_session_attendee">
+    <%= Member.model_name.human %>
+  </label>
+  <%= text_field_with_auto_complete(:mentoring_session, "attendee", {
+      value: nil,
+      name: "mentoring_session[attendee]",
+      class: "form-control",
+      autocomplete: "off",
+      placeholder: "feature.reports.content.meeting_calendar_report_attendee_filter_placeholder".translate
+    }, {
+      min_chars: 1,
+      url: auto_complete_for_name_users_path(format: :json, show_all_users: false, for_autocomplete: true) ,
+      param_name: 'search',
+      highlight: true
+    }
+  ) %>
+<% end %>

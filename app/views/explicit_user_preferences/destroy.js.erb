@@ -1,0 +1,5 @@
+jQuery('.cjs_explicit_preference_<%= @preference_id %>').remove();
+ExplicitPreference.hidePreferencePopupActions();
+var eventDetails = ExplicitPreference.getGaEventDetails("<%= @ga_src %>");
+chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.EXPLICIT_PREFERENCES, chrGoogleAnalytics.action.GA_REMOVED_PREFERENCE, eventDetails[0], eventDetails[1]);
+ExplicitPreference.preferencesChanged = true;

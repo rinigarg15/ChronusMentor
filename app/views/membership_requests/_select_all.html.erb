@@ -1,0 +1,22 @@
+<% if membership_requests.total_entries > membership_requests.size %>
+  <% colspan ||= 12 %>
+  <tr id="cjs_select_all_option" class="bg-warning cui_disable_hover hide">
+    <td colspan="<%= colspan %>">
+      <div id="cjs_select_all_message">
+        <%= "feature.admin_view.content.all_selected_on_the_page_html".translate(context: "feature.membership_request.header.membership_requests".translate, size: content_tag(:span, membership_requests.size, class: "font-bold")) %>
+        <% filter_params[:filters].try(:permit!) %>
+        <u class="pointer" id="cjs_select_all_handler" data-url="<%=select_all_ids_membership_requests_path(filter_params.merge(tab: tab))%>">
+          <%= "feature.admin_view.content.select_all_in_this_view_html".translate(context: 'feature.membership_request.header.membership_requests'.translate, size: content_tag(:span, membership_requests.total_entries, class: "font-bold")) %>
+        </u>
+        <%= content_tag(:i, "", :class => "hide fa fa-spinner fa-spin fa-fw") %>
+      </div>
+
+      <div id="cjs_clear_all_message" class="hide">
+        <%= "feature.admin_view.content.all_selected_in_the_view_html".translate(context: 'feature.membership_request.header.membership_requests'.translate, size: content_tag(:span, membership_requests.total_entries, class: "font-bold")) %>
+        <u class="pointer" id="cjs_clear_all_handler">
+          <%= "feature.admin_view.action.Clear_selection".translate %>
+        </u>
+      </div>
+    </td>
+  </tr>
+<% end %>

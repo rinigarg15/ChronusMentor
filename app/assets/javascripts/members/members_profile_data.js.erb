@@ -1,0 +1,6 @@
+var MemberEdit = {};
+MemberEdit.loadSectionData = function(fetch_url, section_id)
+{ 
+	jQuery.ajax({url: fetch_url})
+  jQuery("#collapsible_section_content_" + section_id).closest(".ibox").find(".collapse-link").prop('onclick',null);
+}

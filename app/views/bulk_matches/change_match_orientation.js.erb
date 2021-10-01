@@ -1,0 +1,10 @@
+jQuery('#bulk_match #find_matches h4').text("<%= j(@step_2_tab_title) %>")
+<%= render partial: "refresh_admin_view_details" %>
+jQuery("#cjs_export_all_form").find("input#orientation_type").val(<%= @orientation_type %>);
+jQuery("#cjs_bulk_match_export_drafted_pairs").find("input#drafted_csv_orientation_type").val(<%= @orientation_type %>);
+BulkMatch.initalizeActions("<%= @bulk_match.type %>", false, <%= @orientation_type %>);
+<% if is_mentee_to_mentor_view?(@orientation_type) %>
+  jQuery("#mentee_view_container").insertBefore("#mentor_view_container");
+<% else %>
+  jQuery("#mentor_view_container").insertBefore("#mentee_view_container");
+<% end %>

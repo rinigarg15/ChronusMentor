@@ -1,0 +1,10 @@
+jQuery('#loading_results').hide();
+jQuery("#meeting_session_report").html('<%= j(render(partial: "meetings/meeting_report_main_content", :locals => {meetings: @meetings, :tab => @tab, :meeting_hash => @meeting_hash, :percentage => @percentage, :prev_periods_count => @prev_periods_count})) %>');
+jQuery('.cjs_reports_time_filter').html('<%= j get_reports_time_filter({start: @from_date_range, end: @to_date_range}) %>');
+jQuery('.dropdown-with-datepicker.open').removeClass('open');
+<% if @filters_count.zero? %>
+  jQuery('.cjs-report-filter-count').hide();
+<% else %>
+  jQuery('.cjs-report-filter-count').show();
+  jQuery('.cjs-report-filter-count').text('<%= @filters_count %>');
+<% end %>

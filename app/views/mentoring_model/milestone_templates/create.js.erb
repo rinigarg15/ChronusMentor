@@ -1,0 +1,4 @@
+<% arg_options = {locals: { milestone_template: @milestone_template, milestone_task_templates: { @milestone_template.id => []} }} %>
+<% content = render({partial: "mentoring_model/milestone_templates/milestone_template"}.merge(arg_options)) %>
+MilestoneTemplates.appendTemplate("<%= j(content) %>", <%= @previous_position_template_id || false %>, <%= @next_position_template_id || false %>);
+closeQtip();

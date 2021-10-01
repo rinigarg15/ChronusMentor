@@ -1,0 +1,16 @@
+<div class="panel panel-default cui_view_content cjs_admin_view_content">
+  <div class="panel-body bg-highlight">
+  	<% if local_assigns[:render_name] %>
+    	<%= embed_display_line_item(admin_view.title, "") %>
+    	<%= horizontal_line(:class => "m-t-xs m-b-xs") %>
+	<% end %>
+    <%= embed_display_line_item("feature.bulk_match.content.usercount".translate, admin_view_users_count.to_s) %>
+    <%= horizontal_line(:class => "m-t-xs m-b-xs") %>
+
+    <%= render :partial => "admin_views/applied_filters", :locals => {:admin_view_filters => admin_view_filters} %>
+    <%= horizontal_line(:class => "m-t-xs") %>
+
+    <%= link_to("feature.bulk_match.action.view_users".translate, admin_view_path_with_source(:show, admin_view: admin_view, :source_info => source_info), :class => "btn-white btn btn-xs") %>
+    <%= link_to("feature.bulk_match.action.edit_view".translate, admin_view_path_with_source(:edit, admin_view: admin_view, :source_info => source_info), :class => "btn btn-white btn-xs") %>
+  </div>
+</div>

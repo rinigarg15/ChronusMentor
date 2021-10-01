@@ -1,0 +1,34 @@
+en:
+  feature:
+    education_and_experience:
+      action:
+        import_your_help_text_v1: Click here to import your experience, education and publications from
+        import_your_help_text_v2: Click here to import your experience from
+        Remove_Education: Remove Education
+        add_degree_v1: Add another degree
+        Remove_Position: Remove Position
+        add_position_v1: Add another position
+        remove_publication: Remove Publication
+        add_publication_v1: Add another publication
+      content:
+        one_required_v1: At least one required
+        time_period: Time period
+        current_job_v1: This is my current job
+        loading: Loading ...
+        college_school_name: College/School Name
+        degree: Degree
+        major: Major
+        graduation_year: Graduation Year
+        job_title: Job Title
+        start_year: Start year
+        end_year: End year
+        start_month: Start Month
+        end_month: End Month
+        company_institution: Company/Institution
+        authors: 'Authors:'
+        authors_desc: Add author names separated by commas
+      label:
+        present: Present
+        no_education_specified: No Education Degree Specified
+        no_experience_specified: No Experience Specified
+        no_publication_specified: No Publication Specified

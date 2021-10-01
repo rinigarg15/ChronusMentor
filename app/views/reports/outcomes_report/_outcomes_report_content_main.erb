@@ -1,0 +1,62 @@
+<% @title = "feature.outcomes_report.title.outcomes_report".translate(Program: _Program) %>
+<%= render partial: "reports/high_charts", :formats => [FORMAT::HTML] %>
+<%= render partial: "reports/outcomes_report/js_routes" %>
+
+
+<% col = (format == FORMAT::HTML) ? "col-sm" : "col-xs" %>
+
+<% if format == FORMAT::PDF %>
+  <div class="cui-header-box clearfix">
+    <h3 class="inline m-b-xs cjs-daterange-display-container pull-right">
+      <%= start_date_text %> - <%= end_date_text %>
+    </h3>
+  </div>
+
+  <% if applied_filters.any? %>
+    <div id="cur" class="clearfix pull-right">
+      <div class="m-b-xs pull-right">
+        <% applied_filters.each do |filter_label| %>
+          <span class="m-r-xs label label-default">
+            <%= filter_label %>
+          </span>
+        <% end %>
+      </div>
+    <div class='m-r-xs pull-right'>
+      <i><%= "feature.outcomes_report.title.applied_filter_title".translate %></i>
+    </div>
+  </div>
+  <% end %>
+<% end %>
+
+<% groups_or_meeting_term = show_flash_mentoring_sections ? _meetings : _mentoring_connections %>
+<%= render partial: "reports/outcomes_report/membership", locals: {format: format, col: col, groups_or_meeting_term: groups_or_meeting_term} %>
+
+<% if show_flash_mentoring_sections %>
+  <%= render partial: "reports/outcomes_report/one_time_engagements", locals: {format: format, col: col, groups_or_meeting_term: groups_or_meeting_term} %>
+<% else %>
+  <%= render partial: "reports/outcomes_report/matching", locals: {format: format, col: col, groups_or_meeting_term: groups_or_meeting_term} %>
+  <%= render partial: "reports/outcomes_report/ongoing_engagements", locals: {format: format, col: col, groups_or_meeting_term: groups_or_meeting_term} %>
+<% end %>
+
+<%= render partial: "reports/outcomes_report/positive_outcome", locals: {show_flash_mentoring_sections: show_flash_mentoring_sections, format: format, col: col, groups_or_meeting_term: groups_or_meeting_term, positive_outcome_surveys: positive_outcome_surveys} %>
+
+<div class="cjs_cache_key hide"></div>
+<div class="cjs_previous_n_days_tooltip_text"></div>
+<span class="cjs_previous_help_text_n hide"><%= "feature.outcomes_report.content.percent_previous_window_help_text_html".translate(count: 0) %></span>
+<span class="cjs_previous_help_text_1 hide"><%= "feature.outcomes_report.content.percent_previous_window_help_text_html".translate(count: 1) %></span>
+
+<%= javascript_tag do %>
+  outcomesReport.isFlashProgram = <%= show_flash_mentoring_sections %>
+  <% if(format == FORMAT::PDF) %>
+    outcomesReport.membershipSectionData = <%= raw user_outcomes_report.to_json %>;
+    <% if show_flash_mentoring_sections %>
+      outcomesReport.flashSectionData =  <%= raw closed_meeting_outcomes_report.to_json %>;
+      outcomesReport.positiveOutcomesSectionData = <%= raw positive_meeting_outcomes_report.to_json %>;
+    <% else %>
+      outcomesReport.matchingSectionData = <%= raw active_connection_outcomes_report.to_json %>;
+      outcomesReport.engagementSectionData = <%= raw closed_connection_outcomes_report.to_json %>;
+      outcomesReport.positiveOutcomesSectionData = <%= raw positive_connection_outcomes_report.to_json %>;
+    <% end %>
+  <% end %>
+  outcomesReport.initialize('<%= format %>');
+<% end %>

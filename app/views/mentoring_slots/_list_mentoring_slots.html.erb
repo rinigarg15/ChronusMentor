@@ -1,0 +1,39 @@
+<% show_delete_slot_link = wob_member == member %>
+<div id="cjs_mentoring_slots_list">
+  <div class="cjs_availability_slot_list scroll-2 clearfix" data-slim-scroll="true" data-slim-scroll-height="">
+    <ul class="list-group b-t clearfix">
+      <% mentoring_slots.each do |slot| %>
+        <% start_time = slot[:start].to_datetime %>
+        <% end_time = slot[:end].to_datetime %>
+        <li class="list-group-item col-xs-12 p-l-0 p-r-0">
+          <div class="col-xs-4 p-t-0 p-b-0 p-xs small col-sm-2 m-t-xxs text-center"><b><%= DateTime.localize(start_time, format: :short_time) %></b><br> <%= DateTime.localize(end_time, format: :short_time) %></div>
+          <div class="col-xs-6 col-sm-8 b-l p-xs p-t-0 p-b-0 <% 'b-r' if show_delete_slot_link %>">
+            <div class="col-xs-12 col-sm-6 no-padding">
+              <div class="pull-left">
+                <div class="font-bold"><i class="fa fa-fw fa-calendar m-r-xs"></i><%= DateTime.localize(start_time, format: :abbr_short)%></div>
+                <% if slot[:repeats] != MentoringSlot::Repeats::NONE%>
+                  <div class="small text-muted m-t-xs"><i class="fa fa-retweet fa-fw m-r-xs"></i><%= get_recurring_mentoring_slot_display_text(slot) %></div>
+                <% end %>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 no-padding">
+              <div class="m-t-xs">
+                <div class="small text-muted ">
+                  <div class="media-left no-padding"><i class="fa fa-map-marker fa-fw m-r-xs"></i></div>
+                  <div class="media-body"><%= chronus_auto_link(slot[:location]) %></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% if show_delete_slot_link %>
+            <div class="col-xs-2 col-sm-2 p-xs p-t-0 p-b-0">
+              <% confirmation_message = (slot[:repeats] == MentoringSlot::Repeats::NONE) ? "feature.mentoring_slot.content.delete_non_recurrent_slot_confirm".translate : "feature.mentoring_slot.content.delete_recurrent_slot_confirm".translate %>
+              <%= link_to (get_icon_content("fa fa-trash m-r-0") + "display_string.Delete".translate), member_mentoring_slot_path(id: slot[:dbId], member_id: slot[:eventMemberId], from_settings_page: true), remote: true, class: "pull-right m-t-xs text-muted m-r-sm delete_icon", method: :delete, data: { confirm: confirmation_message } %>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<%= javascript_tag("initialize.setSlimScroll()") %>

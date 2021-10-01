@@ -1,0 +1,33 @@
+<% select_a_question_label = "feature.outcomes_report.content.select_a_question".translate %>
+<% select_a_option_label = "feature.outcomes_report.content.select_a_option".translate %>
+<div class="m-b-sm"><%= heading_text %></div>
+
+<div class="cjs_positive_outcome_popup_dummy_for_clone hide">
+  <div class="well well-sm white-bg clearfix m-b-sm">
+    <div class="col-xs-11 no-padding clearfix cui-outcomes-report">
+      <div class="clearfix col-xs-6 p-l-0">
+        <%= control_group do %>
+          <%= content_tag(:label, select_a_question_label, class: "control-label sr-only") %>
+          <%= hidden_field_tag "survey_questions[]", "", class: "cjs_positive_outcome_question_selector col-xs-12 no-padding", data: {placeholder: select_a_question_label } %>
+        <% end %>
+      </div>
+      <div class="clearfix col-xs-6">
+        <%= control_group do %>
+          <%= content_tag(:label, select_a_option_label, class: "control-label sr-only") %>
+          <%= hidden_field_tag("answer_choices[]", "", class: "cjs_positive_outcome_choices col-xs-12 no-padding", data: { placeholder: select_a_option_label }) %>
+        <% end %>
+      </div>
+    </div>
+    <i class="fa fa-minus-square fa-2x m-l-sm pull-right pointer hide"></i>
+    <i class="fa fa-plus-square fa-2x m-l-sm pull-right pointer"></i>
+  </div>
+</div>
+
+<div class="cjs_positive_outcome_popup_selection_container"></div>
+
+
+<%= javascript_tag do %>
+  outcomesReport.questionsData = <%= chr_json_escape(@questions_data.to_json) %>;
+  outcomesReport.setChoicesDataForQuestions();
+  outcomesReport.loadPositiveOutcomesPopupContent();
+<% end %>

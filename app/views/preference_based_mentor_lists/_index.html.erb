@@ -1,0 +1,8 @@
+<div class="row preference_based_mentor_lists_slick">
+  <%= render partial: "preference_based_mentor_lists/list", collection: lists %>
+</div>
+
+<script type="text/javascript">
+  homePageRecommendation.addCarousel(".preference_based_mentor_lists_slick");
+  PreferenceBasedMentorLists.initialize();
+</script>

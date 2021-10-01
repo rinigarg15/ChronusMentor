@@ -1,0 +1,45 @@
+<% tooltip_enabled = !@outsider_view && !(@is_admin_view || !!@is_group_profile_view || (defined? no_privacy_tooltip && no_privacy_tooltip )) %>
+<% privacy_tip = @mentoring_context == :private_notes ?
+  "feature.connection.content.privacy_tip_self_html".translate(you: content_tag(:b, "display_string.you".translate), mentoring_connection: _mentoring_connection) :
+  "feature.connection.content.privacy_tip_all".translate(mentoring_connection: _mentoring_connection) %>
+
+<%= render :layout => 'groups/show_layout', locals: { show_tabs: true, journal_tab: true, show_page_actions: true } do %>
+  <div id='private_notes'>
+    <% if @page_controls_allowed %>
+      <% add_new_note_action = link_to(get_icon_content("fa fa-file-text-o") + "feature.connection.action.Add_New_Note".translate, "javascript:void(0)", data: { toggle: "modal", target: "#cjs_new_private_note_modal" }, :class => "btn btn-primary btn-sm pull-right") %>
+      <% modal_container "feature.connection.action.Add_New_Note".translate, { modal_id: "cjs_new_private_note_modal" } do %>
+        <%= render partial: "connection/private_notes/new" %>
+      <% end %>
+    <% else %>
+      <% add_new_note_action = "" %>
+    <% end%>
+
+    <% if @private_notes.empty? %>
+      <%= ibox nil do %>
+        <% if add_new_note_action.present? %>
+          <%= content_tag(:div, add_new_note_action, :class => "clearfix m-b-sm") %>
+          <% if @group.has_mentor?(current_user) %>
+            <%= "feature.connection.content.help_text.private_notes_mentor_v1".translate(mentee: _mentee) %>
+          <% elsif @group.has_mentee?(current_user) %>
+            <%= "feature.connection.content.help_text.private_notes_mentee_v1".translate(mentor: _mentor) %>
+          <% else %>
+            <%= "feature.connection.content.help_text.private_notes_help_text".translate %>
+          <% end %>
+        <% else %>
+          <%= content_tag(:div, "feature.connection.content.No_notes".translate, :class => 'text-center') %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <%= ibox nil, :ibox_id => "old_entries", :content_class => "p-xxs" do %>
+        <%= top_bar_in_listing( { collection: @private_notes }, {}, {}, { right_most_content: add_new_note_action } ) %>
+        <%= render :partial => "connection/private_notes/private_note", :collection => @private_notes %>
+        <%= bottom_bar_in_listing( {collection: @private_notes, :param_name => 'journal_page', :params => { :controller => :private_notes, :action => :index } } ) %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+<% if params[:add_new_private_note_popup] && @page_controls_allowed %>
+  <% @hide_group_overdue_survey_popup = true %>
+  <%= javascript_tag %Q[jQuery("#cjs_new_private_note_modal").modal("show");] %>
+<% end %>

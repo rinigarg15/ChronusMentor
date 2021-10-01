@@ -1,0 +1,47 @@
+<%= form_for @program, :as => :program, :url => update_program_path, :builder => MyFormBuilder,
+  :html => {:multipart => true, :class => "cjs_ckeditor_dont_register_for_insecure_content edit_program #{"form-horizontal" unless vertical_form }", :id => "cjs_connection_limit_form", :method => :patch} do |f| %>
+  <%= f.fields_for @current_organization do |org_f| %>
+    <%= formatted_form_error(f, :header_message => "flash_message.program_flash.update_failed_v1".translate, :message => "", objects: [@current_organization]) %>
+    <%= hidden_field_tag :first_visit, 1, id: nil if @first_visit %>
+    <%= hidden_field_tag :tab, @tab %>
+    <%= hidden_field_tag :src, @src %>
+    <% if @tab == ProgramsController::SettingsTabs::GENERAL %>
+      <% default_txt = "program_settings_strings.content.general_default_txt".translate(program: _program) %>
+      <%= render(:partial => 'programs/edit_general', :locals => { :f => f, :org_f => org_f, :default_txt => default_txt }) %>
+    <% elsif @tab == ProgramsController::SettingsTabs::MEMBERSHIP %>
+      <%= render(:partial => 'programs/edit_membership', :locals => { :f => f }) %>
+    <% elsif @tab == ProgramsController::SettingsTabs::MATCHING %>
+      <%= render(:partial => @current_program.project_based? ? 'programs/matching_setting_for_project' : 'programs/matching_setting', :locals => { :f => f }) %>
+    <% elsif @tab == ProgramsController::SettingsTabs::CONNECTION %>
+      <%= render(:partial => 'programs/edit_engagement', :locals => { :f => f }) %>
+    <% elsif @tab == ProgramsController::SettingsTabs::FEATURES %>
+      <%= render(:partial => 'organizations/edit_features', :locals => {:input_field => 'program[organization][enabled_features][]', :prog_or_org => @current_program}) %>
+    <% elsif @tab == ProgramsController::SettingsTabs::PERMISSIONS %>
+      <%= render(:partial => 'programs/edit_permissions', :locals => { :f => f }) %>
+    <% elsif @tab == ProgramsController::SettingsTabs::SECURITY %>
+      <%= render(:partial => 'organizations/edit_security' , :locals => {:org_f => org_f})%>
+    <% end %>
+    <%= control_group(:class => "clearfix") do %>
+      <div class="pull-right <%= ' form-horizontal' if (@tab== ProgramsController::SettingsTabs::PERMISSIONS) %>">
+        <%= f.actions do %>
+          <% onclick_text = "clearDefaultText(jQuery('#program_description'), '#{default_txt}');" %>
+          <% button_opts = (@tab != ProgramsController::SettingsTabs::GENERAL) ? {} : {:onclick => onclick_text} %>
+
+          <%= f.cancel_path "display_string.Cancel".translate, manage_program_path unless @first_visit %>
+          <% if @first_visit %>
+            <%= f.submit "display_string.Done_raquo_html".translate, {:class => '' + ("new_program_submit_button" if @first_visit)}.merge(button_opts) %>
+          <% elsif @tab == ProgramsController::SettingsTabs::MATCHING %>
+            <%= f.submit "display_string.Save".translate, :class => "cjs_connection_limit_submit #{ 'cjs_slot_config_submit' if @program.project_based? && super_console? }"%>
+            <span id="connection_limit_popup" class="hide"></span>
+          <% else %>
+            <%= f.submit "display_string.Save".translate, button_opts %>
+          <% end %>
+
+          <%= render :partial => "programs/connection_limit_popup"%>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[ProgramSettings.ConnectionLimitOption();ProgramSettings.ConnectionLimitPopup();ProgramSettings.handleAutoTerminateSetting();ProgramSettings.handleClosureReasonsForm();ProgramSettings.showOngoingEngagementAdvancedOptions();] %>

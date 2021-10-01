@@ -1,0 +1,46 @@
+<% task_templates = capture do %>
+  <div class="cjs_display_task_templates">
+    <div class="elements-list cjs-mm-task-templates-list-container cjs-sortable-list" id="<%= "cjs_milestone_task_templates_#{local_assigns[:milestone_template_id] || "list"}" %>">
+      <%= render partial: "mentoring_model/task_templates/task_template", collection: task_templates %>
+    </div>
+    <% if @read_only %>
+      <%  if task_templates.blank? %>
+        <div class="b-t">
+          <%= no_mentoring_model_entities("feature.mentoring_model.description.no_task_templates".translate) %>
+        </div>
+      <% end %>
+    <% else %>
+      <%= render partial: "mentoring_model/task_templates/add_action_item", locals: {task_templates: task_templates, task_template_options: local_assigns} %>
+    <% end %>
+  </div>
+<% end %>
+<% if !manage_mm_milestones_at_admin_level? && (manage_mm_tasks_at_admin_level? || manage_mm_messages_at_admin_level?) %>
+  <% if @no_wizard_view %>
+    <%= ibox "feature.mentoring_model.header.timeline".translate, :content_class => "no-padding", :collapse_link_class => "hide" do %>
+      <% task_templates %>
+    <% end %>
+  <% else %>
+    <div class="p-sm">
+      <div class="clearfix m-b-sm">
+        <h3 class="font-600"><%= "feature.mentoring_model.header.timeline".translate %></h3>
+      </div>
+      <%= task_templates %>
+    </div>
+  <% end %>
+
+<% else %>
+  <%= task_templates %>
+<% end %>
+<%= javascript_tag do %>
+  TaskTemplates.initializeSortable();
+  <% unless local_assigns[:milestone_template_id].present? %>
+    jQuery(document).ready(function(){
+      MentoringModels.taskRelated();
+    });
+  <% end %>  
+  jQuery(function(){
+    MentoringModelTask.showMenuOnClick();
+    MentoringModelTask.hideMenuOnOutsideClick();
+    TaskTemplates.menuItemsControlsInit();
+  });
+<% end %>

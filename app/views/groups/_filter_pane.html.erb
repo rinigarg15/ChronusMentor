@@ -1,0 +1,8 @@
+<% filter_params = { search_filters: {}, sub_filter: {}, filter: nil, from: "filters", abstract_view_id: nil, metric_id: nil, src: nil } %>
+<% reset_url = url_for(group_params.to_unsafe_h.merge(filter_params)) %>
+<% mobile_footer_actions = { see_n_results: { results_count: @groups.total_entries }, reset_filters: { url: reset_url, class: "#{'hide' if @my_filters.blank?}" } } %>
+
+<%= filter_container_wrapper mobile_footer_actions do %>
+  <%= render partial: "common/your_filters", locals: { :onclick_function => "GroupSearch.clearFilter", reset_url_options: { url: reset_url } } %>
+  <%= render partial: "groups/filter_form" %>
+<% end %>

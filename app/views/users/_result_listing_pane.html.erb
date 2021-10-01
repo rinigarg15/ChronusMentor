@@ -1,0 +1,51 @@
+<% if @users.empty? %>
+  <div class="no_mentors empty_listing p-sm">
+    <% if (@role == RoleConstants::MENTOR_NAME) && current_user.explicit_preferences_configured? %>
+      <%= render(:partial => 'users/no_mentors_matching_preference', locals: {my_filters: my_filters}) %>
+    <% else %>
+      <%= "feature.user.content.no_results_for_criteria".translate(:context => @user_references_downcase) %>
+      <ul class="m-t-xs">
+        <li class="m-b-xs">
+          <%= "feature.user.content.broaden_your_search".translate %>
+          <span class="<%= hidden_on_web %>">
+            <%= "feature.user.content.click_to_modify_filters_html".translate(click_here: link_to("display_string.Click_here".translate, "javascript:void(0)", class: "font-bold", data: { toggle: "offcanvasright" } )) %>
+          </span>
+        </li>
+        <% view_params.merge({src: EngagementIndex::Src::BrowseMentors::MENTOR_LISTING_PAGE}) if view_params.blank? %>
+        <li><%= link_to "common_text.search.view_all".translate(:results => @user_references_downcase), users_path(view_params), class: "font-bold" %></li>
+      </ul>
+      <% if @role == RoleConstants::MENTOR_NAME && (!logged_in_program? || current_user.is_student?) %>
+        <div id="search_contact_admin">
+          <%= "feature.user.content.click_here_to_get_help_html".translate(:link => link_to("display_string.Click_here".translate, get_contact_admin_path(@current_program, :only_url => true), class: "font-bold")) %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="listing clearfix">
+    <% if @role == RoleConstants::MENTOR_NAME %>
+      <%= listing_page(@users, partial: 'users/mentor', collection_key: :mentor, locals: { profile_last_updated_at: @profile_last_updated_at, show_availability_icons: true, show_favorite_ignore_links: show_favorite_ignore_links, skip_ignore_links: false, favorite_preferences_hash: favorite_preferences_hash, ignore_preferences_hash: ignore_preferences_hash} ) %>
+      <% if current_user.can_configure_explicit_preferences? %>
+        <div class="list-group-item p-m text-center">
+          <span class="p-r-xxs"><%= "feature.explicit_preference.content.customize_mentors_you_see".translate(mentors: _mentors) %></span>
+          <%= link_to("feature.explicit_preference.label.personalize_recommendations".translate, "javascript:void(0)", class: "btn btn-sm btn-primary btn-outline cjs_show_explicit_preference_popup_listing_page_bottom m-t-xs m-b-xs") %>
+          <%= javascript_tag do %>
+            ExplicitPreference.openPreferencePopup("<%= new_explicit_user_preference_path(src: EngagementIndex::Src::ExplicitPreferences::MENTOR_LISTING_BOTTOM_BAR) %>", ".cjs_show_explicit_preference_popup_listing_page_bottom", true);
+          <% end %>
+        </div>
+      <% end %>
+    <% elsif @role == RoleConstants::STUDENT_NAME %>
+      <%= listing_page(@users, partial: 'users/user', collection_key: :user, locals: { profile_last_updated_at: @profile_last_updated_at } ) %>
+    <% else %>
+      <%= listing_page(@users, partial: 'users/other_non_administrative_user', collection_key: :user, locals: { profile_last_updated_at: @profile_last_updated_at } ) %>
+    <% end %>
+  </div>
+  <%= render_user_bottom_pagination(@items_per_page, @users, @users, @filter_field, @user_references_downcase, view_params, users_path(src: EngagementIndex::Src::BrowseMentors::MENTOR_LISTING_PAGE)) %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    MentorRequests.showRequestConnectionPopup();
+  });
+  initialize.initializeMatchDetailsPopup();
+<% end %>

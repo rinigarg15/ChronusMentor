@@ -1,0 +1,20 @@
+<% duration_editing_disabled = !@mentoring_model.can_update_duration? %>
+<div id="cjs_mentoring_model_duration_form" class="clearfix p-sm m-b-xxs boxshadow-sm">
+  <%= simple_form_for @mentoring_model, remote: true, url: update_duration_mentoring_model_path(@mentoring_model, format: :js), html: {class: "form-inline form-search cjs_mentoring_model_duration_form", id: "cjs_mentoring_model_duration"} do |form| %>
+    <h3 class="control-label font-600"><%= "feature.multiple_templates.labels.Duration".translate %></h3>
+    <%= label_tag "ada_mentoring_period_value", "feature.mentoring_model.false_label.mentoring_period_value".translate(Mentoring_Connection: _Mentoring_Connection), class: "sr-only" %>
+    <div class="col-xs-12 no-padding m-t-sm">
+      <%= form.input_field :mentoring_period_value, class: "required-field input-number form-control", id: "ada_mentoring_period_value", disabled: duration_editing_disabled %>
+      <%= label_tag "ada_mentoring_period_unit", "feature.mentoring_model.false_label.mentoring_period_unit".translate(Mentoring_Connection: _Mentoring_Connection), class: "sr-only" %>
+      <%= form.input_field :mentoring_period_unit, collection: mentoring_period_options, class: "required-field form-control", id: "ada_mentoring_period_unit", include_blank: false, disabled: duration_editing_disabled %>
+      <%= form.button :submit, "display_string.Save".translate, class: "form-submit-validation", disabled: duration_editing_disabled %>
+      <div class="help-block">
+        <%= "feature.multiple_templates.help_text.#{duration_editing_disabled ? 'ongoing_connections_v1' : 'duration'}".translate(mentoring_connections: _mentoring_connections) %>.
+        <%= "feature.multiple_templates.help_text.duration_or_ongoing_last_part_#{current_program.email_template_disabled_for_activity?(GroupTerminationNotification) ? "disabled" : "enabled"}_html".translate(mentoring_connections: _mentoring_connections, email: email_notification_consequences_on_action_html(GroupTerminationNotification, return_email_link_only: true)) %>
+      </div>
+    </div>
+  <% end %>
+  <%= javascript_tag do %>
+    MentoringModels.validateDuration();
+  <% end %>
+</div>

@@ -1,0 +1,18 @@
+<%# Please refer, https://github.com/railsware/js-routes, it seems it has security risks, so need to be investigated and included, for now going with the following approach %>
+<%= javascript_tag do %>
+var outcomesReportRoutes = {
+  userOutcomesReportPath: '<%= j(user_outcomes_report_path) %>',
+  connectionOutcomesReportPath: '<%= j(connection_outcomes_report_path) %>',
+  meetingOutcomesReportPath: '<%= j(meeting_outcomes_report_path) %>',
+  positiveOutcomesOptionsPopupPath: '<%= j(positive_outcomes_options_popup_path) %>',
+  updatePositiveOutcomesOptionsPath: '<%= j(update_positive_outcomes_options_path) %>',
+  detailedConnectionOutcomesReportGroupDataPath: '<%= j(detailed_connection_outcomes_report_group_data_path) %>',
+  detailedUserDataPath: '<%= j(detailed_users_outcomes_report_data_path)%>',
+  filterUsersOnProfileQuestionsPath: '<%= j(filter_users_on_profile_questions_path) %>',
+  getFilteredUsersPath: '<%= j(get_filtered_users_path) %>',
+  detailedConnectionOutcomesReportNonTableDataPath: '<%= j(detailed_connection_outcomes_report_non_table_data_path) %>',
+  detailedConnectionOutcomesReportUserDataPath: '<%= j(detailed_connection_outcomes_report_user_data_path) %>',
+  membersPath: '<%= j(members_path) %>',
+  groupsPath: '<%= j(groups_path) %>'
+};
+<% end %>

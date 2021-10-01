@@ -1,0 +1,27 @@
+en:
+  email_translations:
+    mentor_request_reminder_notification:
+      enabled_html: A reminder %{email} will be sent to the user when requests are pending.
+      disabled_html: A reminder %{email} is usually sent to the user when requests are pending, but has been disabled. No email will be sent.
+      title_v4: Reminder to %{_mentor} of pending %{_mentoring} request
+      description_v2: "%{_Admins} can choose to remind %{_mentors} that %{_a_mentoring} request from %{_a_mentee} is pending action. %{_Admins} can customize after how many days of sending a request this email goes out."
+      subject_v1: 'Reminder: You have a pending request from {{mentor_request_creator_name}}'
+      content_v3_html: "{{mentor_request_creator_name}} sent you a request for {{customized_mentoring_term}} on {{sent_time}} and is waiting for your response. <br /> <br /> {{mentor_request_reminder_notification_content}} {{message_from_mentee}} <br /> Tips: <br /><ul><li>View <a href='{{mentee_url}}'>{{mentor_request_creator_name}}</a>'s profile to learn more about them and determine if it is a good fit.</li><li>If the {{customized_mentoring_connection_term}} is a good fit, please accept their request as soon as possible.</li><li>If you must decline, please do so in a timely manner and be tactful.</li></ul>{{view_request_button}}"
+      tags:
+        mentor_request_reminder_notification_content:
+          description: Image of the sender and description of the request
+          example_v3_html: "<table cellspacing='0' cellpadding='0' border='0'><tbody><tr><td style='padding-left: 5px; padding-right: 5px'><a href='http://www.chronus.com'><img src='https://chronus-mentor-assets.s3.amazonaws.com/global-assets/images/user_large.jpg' alt='profile picture' style='border: none; border-radius: 50%' height='50px;' width='50px;'></a></td><td style='padding-left: 5px; line-height: 5px'><a href='http://www.chronus.com'>William Brown</a></td></tr></table>"
+        sent_time:
+          description: Request sent time
+          example: Feb 18, 2014 at 12:42 AM
+        mentor_request_creator_name:
+          description: Name of the creator of the request.
+          example_v1: William Brown
+        mentee_url:
+          description: Profile Url of the creator of the request.
+        view_request_button:
+          description: View Request Button
+          view_request: View Request
+        message_from_mentee:
+          description: Message types by mentee while sending the mentor request.
+          example: I want you to mentor me.

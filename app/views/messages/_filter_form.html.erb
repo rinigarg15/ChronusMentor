@@ -1,0 +1,55 @@
+<% search_params_hash = @messages_presenter.search_params_hash %>
+<div id="filter_pane_full">
+  <div class="filter_pane clearfix">
+    <div class="filter_content">
+    <% profile_filter_wrapper 'feature.messaging.content.search_placeholder'.translate, false, false, false do %>
+      <% right = { type: "btn",
+          btn_options: {
+            class:'btn btn-primary',
+            onclick: "MessageSearch.applyFilters();"
+          },
+          content: (get_icon_content("fa fa-search m-r-0") + set_screen_reader_only_content("display_string.Go".translate))
+        } %>
+      <%= construct_input_group([], right) do %>
+          <%= label_tag :search_content, "feature.messaging.content.search_placeholder".translate, for: "search_content", class: "sr-only" %>
+          <%= text_field_tag 'search_filters[search_content]', search_params_hash[:search_content], id: 'search_content', placeholder: "feature.messaging.content.search_placeholder".translate, class: "form-control" %>
+        <% end %>
+        <%= link_to_function("feature.connection.action.reset".translate, "MessageSearch.resetSearchFilters();", id: "reset_filter_search", class: 'hide') %>
+    <% end %>
+
+      <div id ="groups_situational_collapsible_filters">
+        <%= profile_filter_wrapper("feature.messaging.label.status".translate, search_params_hash[:status].blank?, true, true) do %>
+          <label class="checkbox">
+            <%= check_box_tag "search_filters[status][read]", AbstractMessageReceiver::Status::READ, search_params_hash[:status].try(:[], 'read').present?, id: "search_filters_status_read", onclick: "MessageSearch.applyFilters();" %>
+            <%= "feature.messaging.label.statuses.read".translate %>
+          </label>
+          <label class="checkbox">
+            <%= check_box_tag "search_filters[status][unread]", AbstractMessageReceiver::Status::UNREAD, search_params_hash[:status].try(:[], 'unread').present?, id: "search_filters_status_unread", onclick: "MessageSearch.applyFilters();" %>
+            <%= "feature.messaging.label.statuses.unread".translate %>
+          </label>
+        <% end %>
+        <%= link_to_function("feature.connection.action.reset".translate, "MessageSearch.resetStatusFilters();", id: "reset_filter_status", class: 'hide') %>
+      </div>
+
+      <%= collapsible_message_users_filters(local_assigns[:from_messages]) %>
+      <% date_range_values_present = search_params_hash[:date_range].present? %>
+      <% profile_filter_wrapper "common_text.filter.label.date_range".translate, !date_range_values_present, false, false do %>
+        <% daterange_presets = [DateRangePresets::LAST_7_DAYS, DateRangePresets::LAST_30_DAYS, DateRangePresets::CUSTOM] %>
+        <% daterange_values = date_range_values_present ? { start: search_params_hash[:date_range][:start_time].to_date, end: search_params_hash[:date_range][:end_time].to_date } : {} %>
+        <%= construct_daterange_picker("search_filters[date_range]", daterange_values, presets: daterange_presets, max_date: Date.current, right_addon: { type: "btn", btn_options: { class: "btn btn-primary no-margins", onclick: "return MessageSearch.applyFilters();" }, content: "display_string.Go".translate } ) %>
+        <%= link_to_function("feature.connection.action.reset".translate, %Q[DateRangePicker.clearInputs("#search_filters_date_range"); MessageSearch.applyFilters();], id: "reset_filter_date_range", style: 'display:none;') %>
+      <% end %>
+
+      <%= hidden_field_tag :tab, '', id: 'tab_number' %>
+      <%= hidden_field_tag :include_system_generated, '', id: 'include_system_generated' %>
+
+      <%= javascript_tag do %>
+        jQuery(function(){
+          jQuery(document).on('ajax:beforeSend', "#search_filter_form", function(){
+            MessageSearch.showLoading();
+          });
+        });
+      <% end %>
+    </div>
+  </div>
+</div>

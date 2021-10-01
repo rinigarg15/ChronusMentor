@@ -1,0 +1,35 @@
+<%= render :layout => 'groups/show_layout' , locals: { show_tabs: @group.pending? && @can_show_tabs, profile_tab: @is_pending_group_show_profile_tab, engagement_plan_tab: @is_pending_group_show_plan_tab, show_page_actions: @group.pending? } do %>
+  <% if @is_pending_group_show_plan_tab %>
+    <% if @mentoring_model_milestones.present? %>
+      <%= render partial: "groups/milestones_in_profile/milestones", locals: { milestones: @mentoring_model_milestones, show_title: !@can_show_tabs } %>
+    <% elsif @mentoring_model_tasks.present? %>
+      <%= render partial: "groups/milestones_in_profile/tasks", locals: { tasks: @mentoring_model_tasks, no_merge_top: true, show_title: !@can_show_tabs } %>
+    <% end %>
+  <% elsif @connection_questions.present? %>
+    <% ibox_options = { collapse_link_class: "hide", ibox_id: "show_profile" } %>
+    <% if !@can_show_tabs %>
+      <% ibox_title = "feature.mentoring_model.header.mentoring_connection_information".translate(Mentoring_Connection: _Mentoring_Connection) %>
+    <% elsif @is_pending_group_show_profile_tab && @current_user.can_manage_or_own_group?(@group) %>
+      <% ibox_options[:header_content] = link_to(append_text_to_icon("fa fa-pencil-square-o", "quick_links.side_pane.edit_mentoring_connection_profile".translate(mentoring_connection: _Mentoring_Connection)), edit_answers_group_path(@group), class: "btn btn-primary btn-sm pull-right m-b-xs") %>
+    <% end %>
+
+    <%= ibox ibox_title, ibox_options do %>
+      <%= render_connection_profile(@group, @connection_questions) %>
+    <% end %>
+  <% elsif @profile_page_filler_content.present? %>
+    <%= ibox do %>
+      <%= content_tag(:div) do %>
+        <%= @profile_page_filler_content %>
+        <%= render_find_new_group_link_text(current_user, @group) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if group_params[:track_publish_ga].try(:to_boolean) %>
+  <%= javascript_tag do %>
+    <% if group_params[:ga_src] == EngagementIndex::Src::PUBLISH_CIRCLE_WIDGET %>
+      chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.CIRCLES, chrGoogleAnalytics.action.GA_PUBLISH_CIRCLE, chrGoogleAnalytics.eventLabel.GA_PUBLISH_CIRCLE_WIDGET, chrGoogleAnalytics.eventLabelId.GA_PUBLISH_CIRCLE_WIDGET_LABEL_ID);
+    <% end %>
+  <% end %>
+<% end %> 

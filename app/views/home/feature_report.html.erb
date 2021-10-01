@@ -1,0 +1,23 @@
+<div class="hide cjs-angular-data-init cjs-angularjs-init">
+</div>
+
+<div ng-app="featureReportApp">
+<div class="cui-feature-report" ng-controller="featureReportCtrl">
+
+  <div class="filter-container pull-left" >
+    <input class="cjs-filter-on" type="text" ng-model="filterOn" placeholder="Filter On (Eg. program_name, outcomes_report etc.)"></br>
+    <input class="cjs-filter-value" type="text" ng-model="filterValue" placeholder="Value (Eg. true/false etc)" ng-change="filterName(filterValue)">
+  </div>
+  <%= link_to "feature.reports.report_listing.label.export".translate, feature_report_path(:format => :csv), {:class => "btn btn-primary pull-right"} %>
+
+  <div class="grid-style text-center clear-both" ng-grid="gridOptions" ng-show="dataLoaded"></div>
+</div>
+</div>
+<script>
+jQuery( document ).ready(function() {
+  var width = jQuery('#app_content').width();
+  var height = jQuery(window).height();
+  jQuery( '.grid-style' ).height(height-200);
+});
+</script>
+<% @loading_results_message = "feature.reports.report_listing.label.getting_organization_data".translate %>

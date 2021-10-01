@@ -1,0 +1,24 @@
+jQuery('#loading_results').hide();
+
+<% tab_box_content = get_tab_box(@tab_number, @view, @tab_counts, group_settings_hash(@is_manage_connections_view, @is_open_connections_view, current_user, {counts: @tab_counts}), @show_params) %>
+jQuery("#tab-box").replaceWith("<%= j(tab_box_content) %>");
+
+<% content = render(:partial => 'groups/group_elements', :locals => { :view => @view } ) %>
+jQuery('#group_elements').html("<%= j(content) %>");
+<% if @view == Group::View::LIST %>
+  jQuery('#title_actions #action_2 #group_view_columns_update_link').removeClass('hide');
+<% else %>
+  jQuery('#title_actions #action_2 #group_view_columns_update_link').addClass('hide');
+<% end %>
+
+initialize.setDatePicker();
+initialize.initializeTooltip();
+initialize.initializeStopFilterPropogation();
+<% if @is_manage_connections_view %>
+  GroupSearch.maintainTriStateCheckbox(true);
+<% end %>
+
+<% reset_url = url_for(group_params.to_unsafe_h.slice(:order, :sort, :tab, :view, :show, :action, :controller).merge(from: "filters")) %>
+<% content = render(:partial => 'common/your_filters', :locals => { onclick_function: 'GroupSearch.clearFilter', results_count: @groups.total_entries, reset_url_options: { url: reset_url } } ) %>
+jQuery('#your_filters').replaceWith("<%= j(content) %>");
+GroupSearch.updateCustomTaskStatusText("<%= j(get_task_status_custom_filter_text(group_params[:search_filters])) %>");

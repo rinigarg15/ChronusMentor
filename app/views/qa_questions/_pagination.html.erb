@@ -1,0 +1,8 @@
+<% sort_fields = [
+  {:field => :id, :order => :desc, :label => "feature.question_answers.header.sort_by.latest".translate},
+  {:field => :views, :order => :desc, :label => "feature.question_answers.header.sort_by.most_viewed".translate},] %>
+<% other_params = {} %>
+<% other_params[:filter] = params[:filter] %>
+<% other_params[:search] = params[:search] if search_view? %>
+
+<%= top_bar_in_listing( { collection: @qa_questions }, { show: search_view? }, { sort_url: qa_questions_path, sort_field: @sort_field, sort_order: @sort_order, sort_info: sort_fields, url_params: other_params } ) %>

@@ -1,0 +1,2 @@
+<% content = render(:partial => "program_events/users_listing", :locals => {:users => @users_for_listing, :tab => @response_tab.to_i, :all_users_for_listing_ids => @all_users_for_listing_ids, :search_content => @search_params}) %>
+jQuery('#program_event_users_listing').html("<%= j(content) %>");

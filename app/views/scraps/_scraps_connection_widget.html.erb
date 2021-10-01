@@ -1,0 +1,30 @@
+<div class="hide cjs_tabs_group_<%= @group.id %>">
+  <div class="clearfix cjs_tab_content_home discussion-list">
+    <div class="display-scraps panel-group clearfix no-margins b-t">
+      <% if scraps_count == 0 %>
+        <div class="p-md text-center clearfix">
+          <span class="fa-stack fa-lg fa-3x text-success">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+          </span>
+
+          <div class="m">
+            <span class="text-muted">
+              <%= "feature.connection.content.placeholder.no_messages".translate %>
+            </span>
+            <% if (@group.pending? || (@group.active? && !@group.expired?)) %>
+              <a class="cjs-new-scrap-link-<%= @group.id %> font-bold">
+                <%= "feature.connection.content.placeholder.send_new_message".translate %>
+              </a>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <% if scraps_count > 0 %>
+    <div class="well well-sm light-yellow-bg clearfix text-center no-margins">
+      <%= content_tag(:span, "feature.group.content.messages_footer_text_homepage_v1_html".translate(Mentoring_Area: link_to("feature.connection.action.Visit_Mentoring_Area_v1".translate(Mentoring_Area: _Mentoring_Connection), group_scraps_path(url_options.merge(group_id: @group.id, src: EngagementIndex::Src::AccessMentoringArea::HOME_PAGE_FOOTNOTE, sub_src: EngagementIndex::Src::AccessMentoringArea::SubSource::MESSAGES_TAB)), class: "m-l-xs font-bold btn btn-outline btn-xs btn-primary hidden-xs") + link_to("feature.connection.action.Visit_Mentoring_Area_v1".translate(Mentoring_Area: _Mentoring_Connection), group_scraps_path(url_options.merge(group_id: @group.id, src: EngagementIndex::Src::AccessMentoringArea::HOME_PAGE_FOOTNOTE, sub_src: EngagementIndex::Src::AccessMentoringArea::SubSource::MESSAGES_TAB)), class: "font-bold visible-xs"))) %>
+    </div>
+  <% end %>
+</div>

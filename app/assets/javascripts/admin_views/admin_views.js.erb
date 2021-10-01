@@ -1,0 +1,437 @@
+var AdminViews = {
+
+  adminViewTable: "#cjs_admin_view_result",
+  primaryCheckBoxSelector: "#cjs_admin_view_result #cjs_admin_view_primary_checkbox",
+  subCheckBoxesSelector: "#cjs_admin_view_result .cjs_admin_view_record",
+  selectAllRow: "#cjs_admin_view_result #cjs_select_all_option",
+  selectAll: "#cjs_admin_view_result #cjs_select_all_option u#cjs_select_all_handler",
+  clearAll: "#cjs_admin_view_result #cjs_select_all_option u#cjs_clear_all_handler",
+
+  selectedIds: [],
+  filters: {},
+  kendoElements: [],
+  dataSource: [],
+  showHideSelect: true,
+  maxLength: 0,
+  perPage: 0,
+  dateRanges: {},
+  kendoSticky: null,
+
+  initializeKendo: function(elements, options) {
+    jQuery(document).ready(function(){
+      var kendoOptions = JSON.parse(options);
+      AdminViews.kendoElements = JSON.parse(elements);
+      kendoUtils.refineColumns(AdminViews.kendoElements);
+
+      AdminViews.dataSource = new kendo.data.DataSource({
+        serverSorting: true,
+        serverFiltering: true,
+        serverPaging: true,
+        pageSize: kendoOptions.perPage,
+        transport: {
+          read: {
+            url: kendoOptions.readUrl,
+            dataType: "json"
+          },
+          parameterMap: function(data, type) {
+            kendoUtils.formatFilterData(data.filter, "#cjs_admin_view_kendogrid");
+            return data;
+          }
+        },
+        sort: {
+          field: kendoOptions.sortField,
+          dir: kendoOptions.sortDir
+        },
+        filter: kendoOptions.filters,
+        schema: {
+          data: function(response) {
+            AdminViews.filters = response.filters;
+            AdminViews.perPage = response.perPage;
+            AdminViews.dateRanges = response.dateRanges;
+            if(response.total <= response.perPage) {
+              AdminViews.showHideSelectAll(false);
+              AdminViews.showHideSelect = false;
+            } else {
+              if(!jQuery(AdminViews.clearAll).is(":visible")) {
+                jQuery("#cjs_select_all_option .cjs_total_entries_size").html(response.total);
+              }
+              AdminViews.showHideSelect = true;
+            }
+
+            setTimeout(function() {
+              AdminViews.maintainTriStateCheckbox(true);
+            }, 200);
+            return JSON.parse(response.results);
+          },
+          model: {
+            fields: AdminViews.getKendoFieldsTypes(kendoOptions.numericFields)
+          },
+          total: "total"
+        }
+      });
+
+      var grid = jQuery("#cjs_admin_view_kendogrid").kendoGrid({
+        dataSource: AdminViews.dataSource,
+        columns: AdminViews.kendoElements,
+        filterable: kendoOptions.messages,
+        pageable: {
+          pageSizes: kendoOptions.perPageOptions,
+          buttonCount: 5,
+          messages: kendoOptions.messages
+        },
+        sortable: true,
+        dataBound: function () {
+          handleDoubleScroll("#cjs_admin_view_result table", ".cjs_table_enclosure", ".k-grid-content", "#cjs_admin_view_kendogrid", { contentElement: "table" });
+          AdminViews.initializeKendoHeaderTooltips();
+          AdminViews.kendoSticky = new KendoSticky(jQuery("#cjs_admin_view_kendogrid"));
+          AdminViews.kendoSticky.process();
+        }
+      }).data("kendoGrid");
+
+      // For pagination scrolling
+      jQuery("table[role='grid']").wrap("<div class='kendo-grid-wrapper k-content k-widget no-border'/>");
+
+      // Accessibility
+      var pagerSizesSelect = grid.element.find('.k-pager-sizes').find("select").attr("id", "pager_sizes");
+      grid.element.find(".k-pager-sizes [aria-owns='']").removeAttr("aria-owns");
+      addAccessibilityLabelForInputs(pagerSizesSelect, "pager_sizes", pagerSizesSelect.val());
+
+      kendoUtils.initializeFilterMenu(grid, kendoOptions);
+    });
+  },
+
+  initializeKendoHeaderTooltips: function(){
+    jQuery(".cjs_kendo_title_header").each(function(){
+      jQuery(this).parent().tooltip({title: jQuery(this).text(), container: 'body', placement: "bottom"});
+    });
+  },
+
+  showPopup: function(url){
+    jQueryShowQtip('#inner_content', 860, url,'',{modal: true});
+  },
+
+  getKendoFieldsTypes: function(fields) {
+    var fieldsTypes = {};
+    fields.forEach(function(field) {
+      fieldsTypes[field] = { type: 'number' }
+    });
+    return fieldsTypes;
+  },
+
+  inspectActions: function(selectionErrorMsg, loadingExportMessage, progressBarAltText, closeImageAltText, limitExceededWarning, allowedlimit){
+    jQuery(document).ready(function(){
+      AdminViews.inspectPrimaryCheckBox();
+      AdminViews.inspectSubCheckBox();
+      AdminViews.inspectSelectClearAllSelection();
+      AdminViews.inspectBulkActions(selectionErrorMsg, loadingExportMessage, progressBarAltText, closeImageAltText);
+      AdminViews.disableBulkActionExceedingLimit(limitExceededWarning, allowedlimit);
+      initialize.initializeTooltip();
+    });
+
+    jQuery(document).on("ajax:beforeSend", "#admin_view_search_box", function(){
+      jQuery("#loading_results").show();
+    });
+  },
+
+  initializeMaxLength: function(total_entries){
+    AdminViews.maxLength = total_entries;
+  },
+
+  initalizeSelect2: function(oneToMany, detailedView){
+    CampaignManagement.initializePlugin(oneToMany, detailedView);
+    CampaignManagement.bindAccessibilityAttributes();
+  },
+
+  setAdminViewSelect2: function(value, id, selector){
+    jQuery('#s2id_'+selector).select2("data", { title: value, id: id });
+    var element = jQuery("#"+selector);
+    element.data("select2").setPlaceholder();
+  },
+
+  displayDetailAdminView: function(action, controller, id, selector){
+    jQuery(document).on('change', "#"+selector, function(){
+      var element = jQuery(this);
+      CampaignManagement.setAdminViewLink(element, action, controller, id);
+    });
+  },
+
+  maintainTriStateCheckbox: function(shouldHighlight){
+    if(AdminViews.selectedIds.length > 0){
+      CommonSelectAll.indeterminateState(jQuery(AdminViews.primaryCheckBoxSelector), true, AdminViews);
+      if(shouldHighlight){
+        jQuery.each(AdminViews.selectedIds, function(index, selectedId){
+          var selectedCheckbox = jQuery("#"+ "ct_admin_view_checkbox_" + selectedId);
+          if(selectedCheckbox.length > 0){
+            selectedCheckbox.attr("checked", true);
+            AdminViews.selectAndHighlight(selectedCheckbox, true);
+          }
+        });
+      }
+    }
+  },
+
+  resetTriStateCheckbox: function(){
+    CommonSelectAll.indeterminateState(jQuery(AdminViews.primaryCheckBoxSelector), false, AdminViews);
+  },
+
+  inspectPrimaryCheckBox: function(){
+    jQuery(AdminViews.primaryCheckBoxSelector).on('change', function(){
+      var primaryCheckBox = jQuery(AdminViews.primaryCheckBoxSelector);
+      var isChecked = primaryCheckBox.is(":checked");
+      var subCheckBoxes = jQuery(AdminViews.subCheckBoxesSelector);
+      subCheckBoxes.attr("checked", isChecked);
+      AdminViews.selectAndHighlight(subCheckBoxes, isChecked);
+      AdminViews.showHideSelectAll(isChecked);
+      CommonSelectAll.computeSelectedIds(subCheckBoxes, AdminViews);
+      jQuery("#cjs_select_all_option #objects_size").html(AdminViews.perPage);
+      if(!isChecked){
+        CommonSelectAll.resetSelectedIds(AdminViews);
+        AdminViews.resetTriStateCheckbox();
+      }
+      else{
+        CommonSelectAll.indeterminateState(jQuery(AdminViews.primaryCheckBoxSelector), isChecked, AdminViews);
+      }
+    });
+  },
+
+  inspectSubCheckBox: function(){
+    jQuery(document).on('change', AdminViews.subCheckBoxesSelector, function(){
+      var subCheckBoxes = jQuery(AdminViews.subCheckBoxesSelector);
+      AdminViews.selectAndHighlight(jQuery(this), jQuery(this).is(":checked"));
+      AdminViews.showHideSelectAll(false);
+      CommonSelectAll.computeSelectedIds(subCheckBoxes, AdminViews);
+      if(AdminViews.selectedIds.length == 0)
+        AdminViews.resetTriStateCheckbox();
+      else
+        AdminViews.maintainTriStateCheckbox(false);
+    });
+  },
+
+  inspectSelectClearAllSelection: function(){
+    AdminViews.setSelectAllPosition();
+    jQuery(AdminViews.selectAll).click(function(){
+      var loaderImage = jQuery(this).parent().find("i.fa");
+      var selectAllHandler = jQuery(this);
+      jQuery.ajax({
+        url : selectAllHandler.data("url"),
+        data: {filter: AdminViews.filters},
+        beforeSend : function(){loaderImage.removeClass("hide");},
+        success: function(responseText){
+          CommonSelectAll.resetSelectedIds(AdminViews);
+          AdminViews.selectedIds = responseText;
+          loaderImage.addClass("hide");
+          selectAllHandler.closest("div").hide();
+          jQuery("div#cjs_clear_all_message").show();
+          CommonSelectAll.indeterminateState(jQuery(AdminViews.primaryCheckBoxSelector), false, AdminViews);
+        }
+      });
+    });
+
+    jQuery(AdminViews.clearAll).click(function(){
+      jQuery(AdminViews.primaryCheckBoxSelector).attr("checked", false);
+      var subCheckBoxes = jQuery(AdminViews.subCheckBoxesSelector);
+      subCheckBoxes.attr("checked", false);
+      AdminViews.selectAndHighlight(subCheckBoxes, false);
+      AdminViews.showHideSelectAll(false);
+      CommonSelectAll.resetSelectedIds(AdminViews);
+    });
+  },
+
+  inspectBulkActions: function(selectionErrorMsg, loadingExportMessage, progressBarAltText, closeImageAltText){
+    var sendMessageLink = jQuery("#cjs_send_message");
+    var exportCsv = jQuery("#cjs_export_csv");
+    var otherBulkActions = jQuery(".cjs-admin-views-actions div.btn-group li a").not(sendMessageLink).not(exportCsv);
+    sendMessageLink.click(function(event){
+      event.preventDefault();
+      if(AdminViews.validateSelection(selectionErrorMsg)){
+        paramName = sendMessageLink.data("param-name");
+        var url = sendMessageLink.data("url");
+        var dataParameters = { bulk_action: { } };
+        dataParameters["bulk_action"][paramName] = AdminViews.selectedIds;
+        jQueryShowQtip('#cjs_admin_view_result', 600, url, dataParameters, {method: "post", modal: true});
+      }
+    });
+
+    jQuery(document).on('click', '#cjs_export_csv', function(event){
+      event.preventDefault();
+      if(AdminViews.validateSelection(selectionErrorMsg)){
+        var popupContent = JST["templates/admin_views/export_csv"]({
+          loader_image: "<%= asset_path('ajax-loader-progress-bar.gif') %>",
+          message: loadingExportMessage,
+          loader_image_alt_text: progressBarAltText
+        });
+        var hiddenForm = jQuery("#cjs_export_csv_form");
+        hiddenForm.find("input.cjs_admin_view_users_list").val(AdminViews.selectedIds.join(','));
+        hiddenForm.attr('action', hiddenForm.attr("action").split('?')[0] + '?' + jQuery.param(AdminViews.dateRanges));
+        hiddenForm.submit();
+      }
+    });
+
+
+    otherBulkActions.click(function(event){
+      event.preventDefault();
+      if(jQuery(event.target).hasClass('cui_button_disabled'))
+        return false;
+      if(AdminViews.validateSelection(selectionErrorMsg)){
+        AdminViews.generateForm(jQuery(this));
+      }
+    });
+  },
+
+  disableBulkActionExceedingLimit: function(limitExceededWarning, allowedlimit) {
+    jQuery('#cjs_show_admin_view_results .cjs-admin-views-actions a.dropdown-toggle').on('click', function(){
+      var linksWithRestriction = jQuery('#cjs_remove_member, #cjs_remove_from_program, #cjs_add_to_circle');
+      if(AdminViews.selectedIds.length > allowedlimit){
+        linksWithRestriction.addClass('cui_button_disabled').removeClass('waves-effect');
+        linksWithRestriction.tooltip( { title: limitExceededWarning, container: 'body', placement: 'bottom'} );
+      } else {
+        linksWithRestriction.removeClass('cui_button_disabled').addClass('waves-effect');
+        linksWithRestriction.tooltip('destroy');
+      }
+    });
+  },
+
+  generateForm: function(jQueryObj){
+    var url = jQueryObj.data("url");
+    var actionType = jQueryObj.data("type");
+    var title = jQueryObj.data("title") || jQueryObj.text();
+    var dataParameters = {bulk_action_confirmation: {users: AdminViews.selectedIds, type: actionType, title: title}};
+    // Though the request below should be a get, we make a post here to avoid the get request length restriction which
+    // the web servers like nginx, webrick etc. have
+    jQueryShowQtip('#cjs_admin_view_result', 600, url, dataParameters, {method: "post", modal: true});
+  },
+
+  selectAndHighlight: function(checkBoxes, checkBoxValue){
+    if(checkBoxValue){
+      checkBoxes.closest("tr").addClass("bg-highlight cui_disable_hover");
+    }
+    else{
+      checkBoxes.closest("tr").removeClass("bg-highlight cui_disable_hover");
+    }
+  },
+
+  resetSelectClearAll: function(){
+    if(jQuery("#cjs_select_all_option").is(":visible")){
+      jQuery("div#cjs_clear_all_message").hide();
+      jQuery("div#cjs_select_all_message").show();
+    }
+  },
+
+  showHideSelectAll: function(showBox){
+    if(jQuery("#cjs_select_all_option").length > 0 && AdminViews.showHideSelect){
+      if(showBox){
+        jQuery("#cjs_select_all_option").show();
+      }
+      else{
+        AdminViews.resetSelectClearAll();
+        jQuery("#cjs_select_all_option").hide();
+      }
+      if(AdminViews.kendoSticky != null) {
+        AdminViews.kendoSticky.process();
+      }
+    }
+  },
+
+  validateSelection: function(selectionErrorMsg){
+    if(AdminViews.selectedIds.length == 0){
+      ChronusValidator.ErrorManager.ShowResponseFlash("cjs_admin_view_flash", selectionErrorMsg);
+      return false;
+    }
+    else{
+      ChronusValidator.ErrorManager.ClearResponseFlash("cjs_admin_view_flash");
+      return true;
+    }
+  },
+
+  validateFields: function(){
+    var params = arguments;
+    var formName = params[0];
+    jQuery("#" + formName + " input[type=submit]").click(function(){
+      if(params[2] == 'multiInput'){
+        return RequiredFields.checkMultiInputCase(jQuery("#" + params[1]));
+      }
+      else if(params[2] == 'tag'){
+        if(jQuery("#" + params[1]).find(jQuery('.select2-search-choice')).length > 0){
+          ValidateRequiredFields.hideFieldError(jQuery("#" + params[1]));
+          return true
+        }
+        ValidateRequiredFields.showFieldError(jQuery("#" + params[1]));
+        return false;
+      }
+      else{
+        return ValidateRequiredFields.checkNonMultiInputCase(jQuery("#" + params[1]));
+      }
+    });
+  },
+
+  setSelectAllPosition: function(){
+    var tableEnclosure = jQuery(AdminViews.adminViewTable).closest(".cjs_table_enclosure");
+    var tableWidth = tableEnclosure.width();
+    var position = ((tableWidth/2) - 100);
+    jQuery(AdminViews.selectAllRow).find("td").css({"padding-left": position + "px"});
+  },
+
+  embedS3Link: function(data){
+    var exporterPopup = jQuery(".cui-qtip-contentwrapper.popup #export_to_csv_popup");
+    exporterPopup.find(".content").html(data.flash);
+    exporterPopup.find(".loader").html(data.s3Link);
+  },
+
+  initializeAdminFav: function(data, id, link){
+    jQuery('#admin_views_drop').on('change', function(){
+      window.location.href = jQuery('#admin_views_drop').select2('data').url;
+    });
+    jQuery(document).on("click", '#admin_view_fav_or_unfav_icon', function(){
+      initialize.initializeTooltip();
+    });
+    jQuery("#clicked-title-admin-view").on('click', function(){
+      jQuery(id).select2('open');
+      AdminViews.hideForAdminView(data);
+    });
+    adminViewInitSelect2.initialize(data, id, link, false);
+    var idSelect2 = jQuery('.select2-focusser.select2-offscreen').attr("id");
+    adminViewInitSelect2.addFalseLabel("#" + idSelect2);
+    AdminViews.hideForAdminView(data);
+  },
+
+  hideForAdminView: function(data){
+    jQuery('.select2-container').children().hide();
+    jQuery('#admin_views').hide();
+    if(data.length == 0){
+      jQuery('.select2-no-results').hide()
+    }
+  },
+
+  openSuspendMembershipModal: function(form_id, suspend_link_id) {
+    jQuery(form_id).on('submit', function(e){
+      var val = jQuery(form_id + " input[type=submit]:focus").data('button-type');
+      if(val == "suspend_member")
+      {
+        closeQtip();
+        setTimeout(function(){jQuery(suspend_link_id).click();}, 750);
+        return false;
+      }
+    })
+  },
+
+  handleViewChange: function(){
+    jQuery(BulkMatch.menteeViewSelect + ", " + BulkMatch.mentorViewSelect + ", " + MatchReport.mentorDistributionMentorView + ", " + MatchReport.mentorDistributionMenteeView + ", " + MatchReport.menteeActionMenteeView).on('change', function(){
+      var selectedValue = jQuery(this).val();
+      if(selectedValue=="new"){
+        window.location.href = jQuery(this).attr("url");
+      }
+      else if(selectedValue.blank()){
+        var selectedRole = jQuery(this).data("role");
+        jQuery(".cjs_" + selectedRole + "_view_content").hide();
+      }
+      else{
+        var selectedRole = jQuery(this).data("role");
+        jQuery(".cjs-drafted-note").show();
+        jQuery.ajax({
+          url: jQuery(this).data("url"),
+          data: {admin_view_id: selectedValue, role: selectedRole}
+        });
+      }
+    });
+  }
+}

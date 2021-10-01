@@ -1,0 +1,28 @@
+<% msgs_collection = msg.root.tree.select{ |msg| msg.can_be_viewed?(wob_member) } %>
+<%# preview: when first/last 2 of thread [OR] message is unread [OR] sent message from sent box %>
+<% messages_to_expand = msgs_collection.select { |msg| msg.unread?(wob_member) || (!@inbox && (msg.sender == wob_member)) } %>
+<% messages_to_expand << msgs_collection[-1] %>
+<% messages_to_expand.uniq! %>
+
+<% messages_to_preview = [msgs_collection[0], msgs_collection[-2]] + messages_to_expand %>
+<% messages_to_preview.uniq! %>
+<%= ibox nil, content_class: "no-padding" do %>
+  <div class="cjs_messages_list">
+  	<%= listing_page(msgs_collection, :partial => "admin_messages/child_msg", :list_group_item_class => "cjs_mail_section", :collection_key => :child_msg, :locals => {messages_to_expand: messages_to_expand, messages_to_preview: messages_to_preview, msgs_size: msgs_collection.size}) %>
+	</div>
+  </div>
+<% end %>
+<div class="cjs_compressed_count white-bg pointer hide" data-url="<%= show_collapsed_abstract_message_path(msg, collapsed_message_ids: (msgs_collection - messages_to_preview).map(&:id)) %> "></div>
+
+<%= javascript_tag %Q[Messages.initShow();] %>
+
+<script type="text/javascript">
+  jQuery(window).load(function(){
+    Messages.displayReadMessageCount(true);
+  })
+</script>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    Comment.initializeForm("<%= j('common_text.error_msg.please_correct_highlighted_errors'.translate) %>", 5);
+  });
+<% end %>

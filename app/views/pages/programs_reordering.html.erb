@@ -1,0 +1,19 @@
+<% @title = "app_layout.label.reorder_programs".translate(programs: _Programs) %>
+<% @title_description = "feature.page.description.reorder_programs_description_html".translate(programs: _Programs) %>
+<% @back_link = {:label => _Programs, :link => programs_pages_path} %>
+
+<%= ibox nil, :ibox_id => "program_reorder_list" do %>
+  <ul class="elements-list list-group resource_list table-bordered">
+    <div id = "programs_list_sortable">
+      <% @programs.each do |program| %>
+        <div class="reorder_resources_list" id="programs_list_<%= program.id%>">
+          <li class="list-group-item animated fadeInDown draggable">
+            <span><%= program.name %></span>
+          </li>
+          <hr class="no-margins" />
+        </div>
+      <% end %>
+      <%= javascript_tag %Q[jQuerySortable.makeSortable('programs_list_sortable', '', '#{reorder_programs_pages_path}', '', '', '')] %>
+    </div>
+  </ul>
+<% end %>

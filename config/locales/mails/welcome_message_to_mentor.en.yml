@@ -1,0 +1,15 @@
+en:
+  email_translations:
+    welcome_message_to_mentor:
+      title_v3: Welcome message to new %{_mentor} after joining
+      description_v2: This email is sent to a new %{_mentor} to welcome them and introduce them to the %{_program}.
+      subject_v1: "{{receiver_first_name}}, welcome to {{subprogram_or_program_name}}!"
+      content_v1_html: Welcome to {{subprogram_or_program_name}}! You are now {{customized_mentor_term_articleized}}. <br /> <ol> <li> The best way to get started is by making sure you've completed your <a href='{{url_edit_profile}}'>profile</a>. This will ensure that we can assist in finding you a fantastic match and give your new {{customized_mentoring_term}} partner a little info about you prior to your first meeting. </li> <li> Please feel free to explore the {{customized_subprogram_term}} and all its resources. </li> </ol> {{login_to_program_button}} <br /> We look forward to your participation. If you have any questions, please contact the {{customized_admin_term_pluralized}} <a href='{{url_contact_admin}}' > here </a>.<br/>
+      tags:
+        url_edit_profile:
+          description: Url to complete the profile
+        login_to_program_button:
+          description: Login to Program Button
+          visit: Login to %{program_name}
+        url_contact_admin:
+          description: Url for the user to contact administrator

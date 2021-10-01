@@ -1,0 +1,7 @@
+Section Name,Section Description,Field Name,Field Type,Allow Multiple Responses,Options,Options Count,Allow to Specify Different Answer,Field Description,Include for Mentor|Mentee,Include in Profile,Include in Membership Form,Visibility,Editable by Admin Only,Mandatory,Show in Listing,Available for Search
+,,Location,location,,,,,,yes,yes,yes|no,user_and_his_members|administrators,no,no|yes,yes,yes
+Work and Education,Work and Education information,Education,multi_education,,,,,What is your education?,yes,yes,yes,everyone,yes,no,yes,yes
+Work and Education,,Industry,multi_choice,no,"Accounting,Airlines/Aviation,Alternative Dispute Resolution",2,yes,Describe you working industry,yes|no,yes|no,no,user_and_his_members,no,no,no,yes|no
+Work and Education,,Programming Languages,multi_choice,no,"Ruby,Ruby on Rails,Python,Django",2,yes,Pick the programming languages you are an expert in,yes|no,yes|no,no,"user_and_mentors,user_and_mentees",no,no,no,yes|no
+Work and Education,,Javascript Frameworks,multi_choice,no,"AngularJS,Ember,React",2,yes,Pick the javascript frameworks you are an expert in,yes|no,yes|no,no,user,no,no,no,yes|no
+Work and Education,,CSS Frameworks,multi_choice,no,"Bootstrap,Zurb",2,yes,Pick the css frameworks you are an expert in,yes|no,yes|no,no,administrators,no,no,no,yes|no

@@ -1,0 +1,47 @@
+<% drafted_or_pending_group = group.status.in?([Group::Status::DRAFTED, Group::Status::PENDING]) %>
+<% show_remove_icon = @current_program.allow_one_to_many_mentoring? || !RoleConstants::MENTORING_ROLES.include?(role.name) %>
+<div class='media clearfix cjs_display_member_handler cjs_well_handler cjs_display_member_handler_<%= user.id %>_<%= role.id %>'>
+  <div class='media-left'>
+    <%= user_picture(user, { no_name: true, new_size: :tiny }, { size: "21x21" }) %>
+  </div>
+  <div class="media-body media-middle">
+    <%= link_to_user user, content_text: user.name(name_only: true), no_hovercard: true %>
+    <span class = "normal_font_weight"><%= owner_content_for_user_name(group, user) %></span>
+    <% if modified == Group::MemberUpdateAction::ADD %>
+      <span class="label label-warning"><%= "feature.group.action.add_tag_v1".translate %></span>
+    <% end %>
+    <% if modified == Group::MemberUpdateAction::REPLACE %>
+      <span class="label label-warning"><%= "feature.group.action.replacement_tag_v1".translate %></span>
+    <% end %>
+    <div class="<%= hidden_on_mobile %> pull-right">
+      <% if modified != Group::MemberUpdateAction::REPLACE %>
+        <h6 class="no-margins cjs_remove_replace_<%= user.id %>">
+          <% if modified == Group::MemberUpdateAction::NONE %>
+            <span> <%= link_to get_icon_content("fa fa-pencil-square-o text-default") + "display_string.Replace_v1".translate, "javascript:void(0);", class: "cjs_replace_member font-bold", data: {user_id: user.id, role_id: role.id}%></span>
+            <span class="sr-only"><%= "display_string.Replace_v1".translate %></span>
+          <% end %>
+          <% if show_remove_icon %>
+            <span> <%= link_to get_icon_content("fa fa-trash-o text-default") + "display_string.Remove".translate, "javascript:void(0);", class: "p-l-xxs cjs_remove_member font-bold", data: {user_id: user.id, role_id: role.id}%></span>
+            <span class="sr-only"><%= "display_string.Remove".translate %></span>
+          <% end %>
+        </h6>
+      <% end %>
+    </div>
+    <div class="<%= hidden_on_web %> m-t-xs">
+      <% if modified != Group::MemberUpdateAction::REPLACE %>
+        <h6 class="no-margins cjs_remove_replace_<%= user.id %>">
+          <% if modified == Group::MemberUpdateAction::NONE %>
+            <span> <%= link_to get_icon_content("fa fa-pencil-square-o text-default") + "display_string.Replace_v1".translate, "javascript:void(0);", class: "cjs_replace_member font-bold", data: {user_id: user.id, role_id: role.id}%></span>
+            <span class="sr-only"><%= "display_string.Replace_v1".translate %></span>
+          <% end %>
+          <% if show_remove_icon %>
+            <span> <%= link_to get_icon_content("fa fa-trash-o text-default") + "display_string.Remove".translate, "javascript:void(0);", class: "p-l-xxs cjs_remove_member font-bold", data: {user_id: user.id, role_id: role.id}%></span>
+            <span class="sr-only"><%= "display_string.Remove".translate %></span>
+          <% end %>
+        </h6>
+      <% end %>
+    </div>
+  </div>
+  <%= render partial: "groups/replace_member", locals: {role: role, user: user, group: group, modified: modified, drafted_or_pending_group: drafted_or_pending_group} %>
+  <%= render partial: "groups/remove_new_member", locals: {role: role, user_id: user.id, name: user.first_name, group: group, drafted_or_pending_group: drafted_or_pending_group, newly_added_member: (modified == Group::MemberUpdateAction::ADD)} %>
+</div>

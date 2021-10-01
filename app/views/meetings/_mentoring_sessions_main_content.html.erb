@@ -1,0 +1,11 @@
+<%= inner_tabs(get_tabs_for_mentoring_sessions_listing(tab), {}) %>
+<%= ibox nil, content_class: "no-padding" do %>
+  <div id="meeting_report_container">
+    <%= hidden_field_tag(:tab, tab, id: 'filter_tab') %>
+    <% if meetings.blank? %>
+      <%= render :partial => "meetings/mentoring_sessions_no_results" %>
+    <% else %>
+      <%= render :partial => "meetings/render_mentoring_sessions_data", :locals => {format: FORMAT::HTML, meetings: meetings, filter_params: filter_params} %>
+    <% end %>
+  </div>
+<% end %>

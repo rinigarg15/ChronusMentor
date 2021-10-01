@@ -1,0 +1,114 @@
+<% can_show_popup = local_assigns[:src_path].present? ? (src_path != EngagementIndex::Activity::ACCEPT_MENTOR_REQUEST) : true %>
+<% can_show_mentoring_insights = @is_member_view && @random_tip && @current_program.mentoring_insights_enabled? && !session[UsersController::SessionHidingKey::MENTORING_TIP] %>
+<% @page_action = [] %>
+<% if @is_group_profile_view %>
+  <% join_button = render_join_button(@group, src_path: @src_path) %>
+  <% if join_button.present? %>
+    <% @page_action << join_button %>
+    <%= javascript_tag("ProjectRequests.initNewRequest();ProjectRequests.loadJoinPopup();") %>
+  <% end %>
+<% end %>
+
+<% if @group.pending? && current_user.can_manage_or_own_group?(@group) %>
+  <% @page_action3 = get_publish_action(@group, {src: "profile"}) %>
+<% end %>
+
+<% if @page_controls_allowed && local_assigns[:show_page_actions] %>
+  <% if @show_forum_tab %>
+    <% group_forum = @group.forum %>
+    <% @page_action << new_topic_action(group_forum, false, false, class: "btn btn-primary") %>
+    <%= render partial: "topics/new", locals: { forum: group_forum, home_page: false} %>
+  <% end %>
+  <% if @show_messages_tab %>
+    <% @page_action << { label: append_text_to_icon("fa fa-plus-circle", "feature.mentoring_model.button.new_mm_message".translate), url: "javascript:void(0)", class: "#{ 'btn btn-primary' unless @show_forum_tab } cjs-new-scrap-link-#{ @group.id }", js_class: "cjs-new-scrap-link-#{ @group.id }" } %>
+    <%= render partial: 'groups/new_ajax_scrap_form' %>
+  <% end %>
+<% end %>
+
+<% if @show_meetings_tab && local_assigns[:show_tabs] %>
+  <% @page_action2 = [] %>
+  <% @page_action2_options = {:dropdown_title => append_text_to_icon("fa fa-calendar-plus-o", "feature.mentoring_model.button.add_meeting".translate(Meeting: _Meeting)), :large => true} if @page_controls_allowed && @past_meeting_controls_allowed %>
+  <% if @page_controls_allowed %>
+    <% @page_action2 << {:label => append_text_to_icon("fa fa-calendar-plus-o", "feature.mentoring_model.button.add_new_meeting".translate(Meeting: _Meeting)), js: %Q[jQueryShowQtip('', 600, '#{setup_meeting_group_path(@group.id, {format: :js, :common_form => !local_assigns[:meetings_tab], ei_src: EngagementIndex::Src::CreateGroupMeeting::MENTORING_AREA_TITLE})}','',{modal: true, successCallback: function(){CalendarAvailabilityInfo.initialize()}})]} %>
+  <% end %>
+  <% if @past_meeting_controls_allowed %>
+    <% @page_action2 << {:label => append_text_to_icon("fa fa-calendar-plus-o", "feature.mentoring_model.button.record_past_meeting".translate(Meeting: _Meeting)), js: %Q[jQueryShowQtip('', 600, '#{setup_meeting_group_path(@group.id, {format: :js, :common_form => true, :past_meeting => true })}','',{modal: true, successCallback: function(){CalendarAvailabilityInfo.initialize()}})]} %>
+  <% end %>
+<% end %>
+
+<% @title = @group.name %>
+<% if @group.admin_enter_mentoring_connection?(@current_user, super_console?) && !local_assigns[:show_tabs] %>
+  <% @title_url = (@group.published? && !@outsider_view) ? group_path(@group) : profile_group_path(@group) %>
+<% end %>
+<% @title_logo = @group.logo_url %>
+<% if @is_group_profile_view %>
+  <% instantiate_group_profile_back_link(@from_find_new, session[:back_url]) %>
+  <% instantiate_group_profile_title_badge_and_sub_title(@group, @user_is_member_or_can_join_pending_group) %>
+<% end %>
+<% if can_show_pending_group_header_alert?(@group, current_user, @user_is_member_or_can_join_pending_group) %>
+  <% if @is_tab_or_connection_questions_present_in_page || can_show_mentoring_insights %>
+    <% @header_alert_content = render_alert_for_pending_groups(current_user, @group) %>
+  <% else %>
+    <% @profile_page_filler_content = render_alert_for_pending_groups(current_user, @group) %>
+  <% end %>
+<% elsif @group.proposed? %>
+  <% if @connection_questions.present? || can_show_mentoring_insights %>
+    <% @header_alert_content = render_alert_for_proposed_groups(current_user, @group) %>
+  <% else %>
+    <% @profile_page_filler_content = render_alert_for_proposed_groups(current_user, @group) %>
+  <% end %>
+<% elsif !@outsider_view and @group.published? %>
+  <% if (@group.show_notice? && !(session[UsersController::SessionHidingKey::MENTORING_PERIOD_NOTICE].present? && session[UsersController::SessionHidingKey::MENTORING_PERIOD_NOTICE]["#{@group.id}"])) %>
+    <% @header_alert_content = content_tag(:span, get_notice_text(@group, current_user, _mentoring_connection, _Admin), :class => "font-600") %>
+    <% @header_alert_options = {
+      :alert_id => "group_notice_message",
+      :close_link_id => "group_notice_message_hide_id",
+      :close_link_url => hide_item_users_path(:item_key => UsersController::SessionHidingKey::MENTORING_PERIOD_NOTICE, :nested_item_key => @group.id)
+      } %>
+  <% end %>
+<% end %>
+<% if @feedback_questions.present? && @current_program.allow_connection_feedback? && @current_program.connection_feedback_enabled? %>
+  <%= render :partial => "groups/feedback_form"%>
+<% end %>
+
+<div id='group'>
+  <% if @show_side_pane_meetings && @upcoming_meetings_in_next_seven_days.present? %>
+    <div class="visible-xs">
+      <%= render :partial => "groups/side_pane_meetings", :locals => {:show_close_icon => true, :upcoming_seven_day_meetings_only => true, :upcoming_meetings => @upcoming_meetings_in_next_seven_days, initialize_rsvp_js: false, mobile_only: true, meetings_tab: local_assigns[:meetings_tab]} %>
+    </div>
+  <% end %>
+  <% unless @outsider_view %>
+    <% if can_show_mentoring_insights %>
+      <%= render(:partial => 'groups/mentoring_tips_message') %>
+    <% end %>
+    <%= response_flash "scrap_errors" %>
+  <% end %>
+  <%= render partial: "groups/group_tabs", locals: { meetings_tab: local_assigns[:meetings_tab], profile_tab: local_assigns[:profile_tab], engagement_plan_tab: local_assigns[:engagement_plan_tab], goals_tab: local_assigns[:goals_tab], journal_tab: local_assigns[:journal_tab], messages_tab: local_assigns[:messages_tab], forum_tab: local_assigns[:forum_tab] } if local_assigns[:show_tabs] %>
+  <%= yield %>
+  <% content_for_sidebar do %>
+    <%= render partial: "groups/side_pane", locals: { forum_tab: local_assigns[:forum_tab], meetings_tab: local_assigns[:meetings_tab] } %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function() {
+    Groups.handleSetChangeStartDate();
+    AdminGroupNotes.initialize();
+    NewScrap.initialize("<%= @group.id %>");
+    Meetings.handleRsvpChange();
+    Meetings.resetModalDateContainer("#cjs_new_meeting_modal, #cjs_past_meeting_modal");
+    Meetings.setNewMeetingFormEISrc();
+    <% if @show_set_start_date_popup %>
+      Groups.showSetStartDatePopup("<%= get_edit_start_date_popup_group_path(id: @group.id) %>");
+    <% elsif @manage_circle_members %>
+      Groups.showManageMembersPopup("<%= @group.id %>");
+    <% end %>
+    <% if !@hide_group_overdue_survey_popup && can_show_popup %>
+      <% if @oldest_overdue_survey %>
+        GroupsShow.renderPopup("<%= @survey_answer_url %>");
+      <% elsif !@outsider_view && @show_feedback_form %>
+        jQuery("#connection_inactivity_feedback_form").modal("show");
+      <% end %>
+    <% end %>
+  });
+<% end %>

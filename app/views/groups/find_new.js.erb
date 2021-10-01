@@ -1,0 +1,7 @@
+<% content = render partial: "groups/find_new_index", locals: { groups: @groups } %>
+jQuery("#find_new_projects_results_pane").html("<%= j content %>");
+jQuery('#loading_results').hide();
+
+<% reset_url = url_for(group_params.to_unsafe_h.except(:format).merge(:search_filters => {}, :sub_filter => {}, :filter => nil)) %>
+<% content = render(:partial => 'common/your_filters', :locals => { onclick_function: 'GroupSearch.clearFilter', results_count: @groups.total_entries, reset_url_options: { url: reset_url } } ) %>
+jQuery('#your_filters').replaceWith("<%= j(content) %>");

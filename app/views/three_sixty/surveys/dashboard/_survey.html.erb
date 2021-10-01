@@ -1,0 +1,18 @@
+<tr id= "three_sixty_survey_<%= survey.id %>">
+  <% program = survey.program %>
+  <td>
+    <%= link_to(survey.title, edit_three_sixty_survey_path(survey)) %>
+    <% if organization_view? && program %>
+      <div class="text-muted">
+        <%= program.name %>
+      </div>
+    <% end %>
+  </td>
+  <td><%= assigned_survey_assessees(survey) %></td>
+  <td><%= DateTime.localize(survey.created_at, format: :full_display_no_time) %></td>
+  <td>
+    <%= link_to(get_icon_content("fa fa-trash") + "display_string.Delete".translate, three_sixty_survey_path(survey, @options), :remote => true, :method => :delete, data: {:confirm => "feature.three_sixty.survey.delete_warning".translate}, :class => "divider-vertical pull-right btn btn-white btn-xs") %>
+    <%= link_to(get_icon_content("fa fa-check") + "display_string.Publish".translate, publish_three_sixty_survey_path(survey), :method => :patch, :class => "pull-right btn btn-white btn-xs") if survey.may_publish? %>
+    <%= link_to(get_icon_content("fa fa-pencil") + "display_string.Edit".translate, edit_three_sixty_survey_path(survey), :class => "pull-right btn btn-white btn-xs") %>
+  </td>
+</tr>

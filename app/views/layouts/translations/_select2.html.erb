@@ -1,0 +1,23 @@
+<%= javascript_tag do %>
+  jQuery(function() {
+    jQuery.fn.select2.defaults.formatNoMatches = function () {
+      return "<%= j 'js_translations.select2.no_matches_found'.translate %>";
+    }
+
+    jQuery.fn.select2.defaults.formatInputTooShort = function () {
+      return "<%= j 'js_translations.select2.enter_more_characters'.translate %>";
+    }
+
+    jQuery.fn.select2.defaults.formatInputTooLong = function () {
+      return "<%= j 'js_translations.select2.enter_fewer_characters'.translate %>";
+    }
+
+    jQuery.fn.select2.defaults.formatLoadMore = function () {
+      return "<%= j 'js_translations.select2.loading_more_results'.translate %>";
+    }
+
+    jQuery.fn.select2.defaults.formatSearching = function () {
+      return "<%= j 'js_translations.select2.searching'.translate %>";
+    }
+  });
+<% end %>

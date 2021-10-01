@@ -1,0 +1,10 @@
+<% collapsible_content "feature.profile.header.account_activity".translate, [], false, container_options do %>
+  <%= form_tag update_settings_member_path(member), remote: true, method: :patch, class: "form-horizontal" do %>
+    <p><%= "feature.profile.content.active_sessions".translate %></p>
+    <%= hidden_field_tag "sign_out_of_all_other_sessions", "true" %>
+
+    <% action_set(class: "pull-right") do %>
+      <%= button_tag append_text_to_icon("fa fa-sign-out", "feature.profile.content.sign_out_of_all_other_sessions".translate), confirm: "feature.profile.content.sign_out_confirmation_message".translate, class: "btn btn-white btn-block-xxs truncate-with-ellipsis whitespace-nowrap" %>
+    <% end %>
+  <% end %>
+<% end %>

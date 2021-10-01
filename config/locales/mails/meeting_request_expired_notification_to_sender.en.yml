@@ -1,0 +1,28 @@
+en:
+  email_translations:
+    meeting_request_expired_notification_to_sender:
+      enabled_html: An %{email} will be sent to the user when a %{meeting} request gets autoclosed.
+      disabled_html: An %{email} is usually sent to the user when a %{meeting} request is autoclosed, but has been disabled. No email will be sent.
+      title_v2: "%{_Meeting} request expired notification to %{_mentee}"
+      description_v3: This email is sent to the %{_mentee} who sent the request when %{_a_meeting} request auto-expires. The number of days after which it auto-expires is specified by the %{_admin}.
+      subject_v1: Your {{customized_meeting_term}} request sent to {{recipient_name}} is now closed
+      subject_v3: Request a new {{customized_mentor_term}} - {{recipient_name}} is unavailable at this time
+      content_v1_html: Your {{customized_meeting_term}} request sent to {{recipient_name}} in {{subprogram_or_program_name}} has been closed because it was not accepted within {{max_pending_duration}}. <br /> <br/>We have other {{customized_mentors_term}} available who may align with some of your intended goals and objectives. <br /> {{view_mentors_button}} <br /> If you are having trouble finding a suitable {{customized_mentor_term}}, please reach out to one of the {{customized_admin_term_pluralized}} and we'd be happy to help you.<br/>
+      content_v2_html: Your request for {{customized_meeting_term}} sent to <a href='{{mentor_url}}'>{{recipient_name}}</a> in {{subprogram_or_program_name}} has been closed because it was not accepted within {{max_pending_duration}}.<br/><br/>That’s ok! There are still plenty of great {{customized_mentors_term}} who are eager to help. Connect now to find a new {{customized_mentor_term}}.<br />{{recommended_mentors}}<br/>If you are having trouble finding a suitable {{customized_mentor_term}}, please reach out to one of the <a href='{{url_contact_admin}}'>{{customized_admin_term_pluralized}}</a> and we'd be happy to help you.<br/>
+      content_v3_html: Your request for {{customized_meeting_term}} sent to <a href='{{mentor_url}}'>{{recipient_name}}</a> in {{subprogram_or_program_name}} has been closed because it was not accepted within {{max_pending_duration}}.<br/><br/>That’s ok! There are still plenty of great {{customized_mentors_term}} who are eager to help. Connect now to find a new {{customized_mentor_term}}.<br />{{recommended_mentors}}<br/>If you are having trouble finding a suitable {{customized_mentor_term}}, please reach out to one of the <a href='{{admin_url}}'>{{customized_admin_term_pluralized}}</a> and we'd be happy to help you.<br/>
+      pending_duration:
+        one: 1 day
+        other: "%{count} days"
+      tags:
+        recipient_name:
+          description: Name of the recipient to whom the closed request was originally sent
+        url_mentors_listing:
+          description: Url to the mentor listing page
+        auto_close_message:
+          description: Expired time
+        max_pending_duration:
+          description: Auto-expiration time for a meeting request
+          example: 4 days
+        view_mentors_button:
+          view_mentors: View %{Mentors}
+          description: View mentors' listing page

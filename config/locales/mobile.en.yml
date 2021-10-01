@@ -1,0 +1,16 @@
+en:
+  mobile:
+    network:
+      offline_message_html: You are not connected to the Internet. Please check and %{Retry}
+      Retry: Retry
+      connected_now: You are connected now
+    app_update:
+      header_text: New updates available
+      content: Please update to continue.
+      ok: OK
+    file:
+      download_failed: Download failed. Please try again later.
+      download_started: Your download has started.
+    back:
+      exit_app: Press back again to exit the app
+      

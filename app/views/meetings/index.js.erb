@@ -1,0 +1,10 @@
+<% if @from_connection_home_page_widget %>
+  ConnectionsWidget.activateMeetingsTab("<%= @group.id %>");
+  jQuery('#mentoring_area_tabs_content_<%= @group.id %>').html("<%= j(render(:partial => 'meetings/meetings_for_home_page_connection_widget', :locals => { :meetings => @meetings_to_show, :group_admin_view => @group.present? && @is_admin_view, :ei_src => @ei_src, :group => @group, :can_show_meetings => @show_meetings, :page_controls_allowed => @page_controls_allowed, :show_view_all => @meetings_to_be_held.present? && @meetings_to_be_held.size > MeetingsController::MEETINGS_COUNT_INSIDE_HOME_PAGE_CONNECTION_WIDGET })) %>");
+  GroupTabs.adjustSlickSlideHeight(".connections-slick", 100);
+<% else %>
+  jQuery('#archived_meetings').html("<%= j(render(:partial => 'meetings/archived_meetings')) %>");
+  jQuery('#upcoming_meetings').html("<%= j(render(:partial => 'meetings/upcoming_meetings')) %>");
+  Meetings.handleRsvpPopup();
+<% end %>
+jQuery('#loading_results').hide();

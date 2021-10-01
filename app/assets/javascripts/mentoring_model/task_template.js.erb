@@ -1,0 +1,165 @@
+var TaskTemplates = {
+  formPrefix: "#cjs-mentoring-model-task-template-form-",
+  descriptionPrefix: "cjs-mentoring-model-task-template-description-",
+  newFormLink: ".cjs_add_new_task",
+  menuItemsControlsInitDone: false,
+
+  initialize: function(taskTemplateId) {
+    var taskTemplateForm = jQuery(TaskTemplates.formPrefix + taskTemplateId);
+    var descriptionEditor = TaskTemplates.descriptionPrefix + taskTemplateId;
+
+    jQuery('form[id!="' + taskTemplateForm.attr('id') + '"]').remove();
+    MentoringModels.closeFormAction(taskTemplateForm);
+    MentoringModels.initializeCKEditor(descriptionEditor, {});
+    TaskTemplates.formValidate(taskTemplateForm, descriptionEditor);
+    TaskTemplates.toggleIsDueText(taskTemplateForm);
+    MentoringModels.toggleAdvancedOptions(taskTemplateForm);
+  },
+
+  menuItemsControlsInit: function() {
+    if(!TaskTemplates.menuItemsControlsInitDone) {
+      jQuery(document).on('click', ".cjs-add-new-action-container .dropdown-menu li a", function(event) {
+        event.stopPropagation();
+        jQuery.ajax({
+          url: jQuery(this).attr('href'),
+          context: jQuery(this)
+        }).done(function(data, textStatus, jqXHR) {
+          MentoringModels.removeMentoringModelForms();
+          jQuery(".cjs-action-item-response-container").hide();
+          jQuery(this).closest(".cjs-add-new-action-container").removeClass("open");
+          jQuery(this).closest(".cjs-add-new-action-container").hide();
+          var responseContainer = jQuery(this).closest(".cjs-add-new-action-container").next(".cjs-action-item-response-container");
+          TaskTemplateProgressiveForm.targetResponseContainer = responseContainer;
+          responseContainer.html(data).find("form.hide").removeClass("hide");
+          responseContainer.show();
+          if(TaskTemplateProgressiveForm.targetHeaderContainer) TaskTemplateProgressiveForm.targetHeaderContainer.show();
+        });
+        return false;
+      });
+      jQuery(document).on('click', ".cjs-edit-task-template-link", function(event) {
+        event.stopPropagation();
+        jQuery(this).closest(".cjs-task-template-container").find(".btn-group").removeClass("open");
+        jQuery.ajax({
+          url: jQuery(this).attr('href'),
+          context: jQuery(this)
+        }).done(function(data, textStatus, jqXHR) {
+          MentoringModels.removeMentoringModelForms();
+          jQuery(this).closest(".cjs-task-template-container").addClass("no-background");
+          jQuery(".cjs-action-item-response-container").hide();
+          var responseContainer = jQuery(this).closest(".cjs-task-template-container").find(".cjs-action-item-response-container");
+          TaskTemplateProgressiveForm.targetResponseContainer = responseContainer;
+          responseContainer.html(data).find("form.hide").removeClass("hide");
+          jQuery(".cjs-task-template-header, .cjs-facilitation-template-header").show();
+          (TaskTemplateProgressiveForm.targetHeaderContainer = responseContainer.closest(".cjs-task-template-container").find(".cjs-task-template-header, .cjs-facilitation-template-header")).hide();
+          responseContainer.closest(".cjs-task-template-container").find(".cjs-task-template-description").hide();
+          responseContainer.show();
+        });
+        return false;
+      });
+      TaskTemplates.menuItemsControlsInitDone = true;
+    }
+  },
+
+  toggleIsDueText: function(taskTemplateForm){
+    var associatedTaskSelector = taskTemplateForm.find("select.cjs_associated_task_templates");
+    var isDueText = taskTemplateForm.find("span.cjs_is_due");    
+    associatedTaskSelector.on("change", function(){
+      var selectBoxObj = jQuery(this);
+      if(selectBoxObj.find("option[value='" + selectBoxObj.val() + "']").hasClass("cjs_hide_is_due")){
+        isDueText.addClass("hide");
+      }
+      else{
+        isDueText.removeClass("hide");
+      }
+    });
+  },
+
+  formValidate: function(taskTemplateForm, ckSelector) {
+    taskTemplateForm.find("input[type=submit]").on('click', function(){
+      MentoringModels.updateCKEditorInputs(jQuery("#" + ckSelector), ckSelector);
+      var retValue = ValidateRequiredFields.checkNonMultiInputCase(taskTemplateForm.find("#mentoring_model_task_template_title"));
+      if(taskTemplateForm.find("#mentoring_model_task_template_required_true").is(':checked')) {
+        retValue = ValidateRequiredFields.checkForPositiveIntegerInTextBox(taskTemplateForm.find("#mentoring_model_task_template_duration")) && retValue;
+      }
+      return retValue;
+    });
+
+    taskTemplateForm.find("#mentoring_model_task_template_required_true").on("change", function(){
+      taskTemplateForm.find(".cjs-required-false-show").hide();
+      taskTemplateForm.find(".cjs-required-true-show").show();
+    });
+
+    jQuery("#mentoring_model_task_template_required_false").on("change", function(){
+      taskTemplateForm.find(".cjs-required-false-show").show();
+      taskTemplateForm.find(".cjs-required-true-show").hide();
+    });
+  },
+
+  appendForm: function(taskId, content) {
+    var editFormEnclosure = jQuery("#mentoring_model_task_template_" + taskId  + " .cjs-task-template-edit-action-" + taskId);
+    jQuery(".cjs-mentoring-model-task-template-form, .cjs-action-item-response-container form").remove();
+    editFormEnclosure.append(content);
+    editFormEnclosure.find(".cjs-mentoring-model-task-template-form").slideDown();
+    jQuery(".cjs-hover-well").closest('.cjs-mentoring-model-hover-well').removeClass('bg-hover');
+    jQuery(".cjs-hover-actions").addClass('invisible');
+  },
+
+  inspectAddNewTask: function(){
+    jQuery(document).on("click", TaskTemplates.newFormLink, function(event){
+      event.preventDefault();
+      var linkObject = jQuery(this);
+      jQuery.ajax({
+        url: linkObject.attr("href"),
+        success: function(content){
+          TaskTemplates.addForm(linkObject, content);
+        }
+      });
+    });
+  },
+
+  addForm: function(linkObject, content) {
+    var newFormEnclosure = linkObject.closest(".cjs-add-task-template-form-link");
+    jQuery('.cjs-mentoring-model-task-template-form').remove();
+    newFormEnclosure.append(content);
+    newFormEnclosure.find(".cjs-mentoring-model-task-template-form").slideDown();
+  },
+
+  descriptionToggler: function(descriptionSelector){
+    jQuery("." + descriptionSelector).on("click", function(){
+      jQuery(this).parent().next(".cjs-task-template-description").toggle();
+    });
+  },
+
+  onDragdropStop: function(item, container) {
+    item.find(".cjs-sortable-list-item .cjs-sortable-list-item-inner-container").addClass("merge-top").eq(0).removeClass("merge-top");
+    var data = item.sortable("serialize");
+    jQuery.ajax({data: data, type: 'POST', url: container.item.data('post-url')});
+  },
+
+  initializeSortable: function() {
+    jQuery(".cjs-sortable-list").sortable({
+      items: ".cjs-sortable-list-item",
+      cancel: ".cjs-sortable-list-item-disabled",
+      handle: ".cjs-sortable-list-item-handle",
+      stop: function(item, container, _super) {
+        TaskTemplates.sortedItem = jQuery(this);
+        TaskTemplates.sortedItemContainer = container;
+        if(MentoringModels.should_sync) {
+          chronusConfirm(MentoringModelTranslations.syncToGroupConfirmation, function() {
+            TaskTemplates.onDragdropStop(TaskTemplates.sortedItem, TaskTemplates.sortedItemContainer);
+            TaskTemplates.sortedItem = '';
+          }, function() {
+            TaskTemplates.sortedItem.sortable('cancel');
+            TaskTemplates.sortedItem.find(".cjs-sortable-list-item .cjs-sortable-list-item-inner-container").addClass("merge-top").eq(0).removeClass("merge-top");
+            TaskTemplates.sortedItem = '';
+          });
+        } else {
+          TaskTemplates.onDragdropStop(TaskTemplates.sortedItem, TaskTemplates.sortedItemContainer);
+        }
+      },
+      change: function(event, ui) {
+        jQuery(ui.item).find(".cjs-sortable-list-item-inner-container").removeClass("merge-top");
+      }
+    });
+  }
+}

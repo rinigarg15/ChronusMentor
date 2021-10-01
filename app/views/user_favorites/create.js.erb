@@ -1,0 +1,17 @@
+<% mentor = @user_favorite.favorite %>
+<% actions, dropdown_title = actions_for_mentor_listing(current_user, mentor, { user_favorite: true, mentor_groups_map: @mentor_groups_map } ) %>
+<% actions_in_web = dropdown_buttons_or_button(Marshal.load(Marshal.dump(actions)), { dropdown_title: dropdown_title }.merge( { btn_class: "cjs_mentor_actions hidden-xs pull-right" } )) %>
+<% actions_in_mobile = dropdown_buttons_or_button(Marshal.load(Marshal.dump(actions)), { dropdown_title: dropdown_title }.merge( { btn_class: 'cjs_mentor_actions_block col-xs-12 no-padding visible-xs btn-block m-t-sm', dropdown_menu_class: 'col-xs-12 pull-right table-bordered', btn_group_btn_class: 'col-xs-12' } )) %>
+<% preferred_label = { content: "feature.user.label.Preferred".translate, label_class: "label-success" } %>
+
+UserFavorites.appendPreferredMentor("<%= j display_favorite(mentor) %>");
+ChronusValidator.ErrorManager.ShowPageFlash(true, "<%= j get_prompt_preferred_request_message %>");
+jQuery('#mentor_<%= mentor.id %> .cjs_mentor_actions').replaceWith("<%= j actions_in_web %>");
+jQuery('#mentor_<%= mentor.id %> .cjs_mentor_actions_block').replaceWith("<%= j actions_in_mobile %>");
+
+// if labels container has labels
+if (jQuery('#mentor_<%= mentor.id %> .cjs_mentor_labels').length > 0) {
+  jQuery("#mentor_<%= mentor.id %> .cjs_mentor_labels").append("<%= j render_label_inline(preferred_label) %>");
+} else {
+  jQuery("#mentor_<%= mentor.id %> .cjs_mentor_labels_container").html("<%= j labels_container([preferred_label], { class: 'cjs_mentor_labels m-t-xs' } ) %>");
+}

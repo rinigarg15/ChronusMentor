@@ -1,0 +1,15 @@
+<%= ibox nil, ibox_id: "qa_answers_list", :content_class => "no-padding" do %>
+  <% if @qa_answers.present? %>
+    <% sort_fields = PaginationService.build_sort_fields(QaAnswer.name) %>
+    <%= top_bar_in_listing( { collection: @qa_answers.all }, {}, { sort_url: qa_question_path(@qa_question), sort_field: @answers_sort_options[:field], sort_order: @answers_sort_options[:order], sort_info: sort_fields } ) %>
+    <%= listing_page(@qa_answers, partial: "qa_answers/qa_answer", collection_key: :qa_answer) %>
+    <%= bottom_bar_in_listing( { collection: @qa_answers.all, params: { format: nil } } ) %>
+  <% else %>
+    <div class="p-sm text-center">
+      <%= "feature.question_answers.content.no_answers_message".translate %>
+      <span class="m-l-xxs">
+        <%= link_to "feature.question_answers.header.answer_this_question".translate, "javascript:void(0)", data: { toggle: "modal", target: "#new_qa_answer_modal" } %>
+      </span>
+    </div>
+  <% end %>
+<% end %>

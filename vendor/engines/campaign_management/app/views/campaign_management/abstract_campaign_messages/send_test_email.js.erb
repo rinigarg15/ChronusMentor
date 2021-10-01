@@ -1,0 +1,5 @@
+<% if @campaign_message_email_success.present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('campaign_message_flash', '<%= @campaign_message_email_success %>', true);
+<% elsif @campaign_message_email_failure.present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('campaign_message_flash', '<%= @campaign_message_email_failure %>', false);
+<% end %>

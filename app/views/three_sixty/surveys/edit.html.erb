@@ -1,0 +1,6 @@
+<% survey = ": " + @survey.title if @survey.title %>
+<% @title = "feature.three_sixty.survey.edit_survey_title".translate(:survey => survey) %>
+
+<%= three_sixty_survey_show_view_bar(@view, @survey) do %>
+  <%= render :partial => 'three_sixty/surveys/form', :locals => {:survey => @survey, :reviewer_groups => @reviewer_groups, :reviewer_group_names => @reviewer_group_names} %>
+<% end %>

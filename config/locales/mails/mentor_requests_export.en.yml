@@ -1,0 +1,7 @@
+en:
+  email_translations:
+    mentor_requests_export:
+      title_v2: "%{_Mentor} request export"
+      description_v2: "%{_Admins} can export %{_mentor} requests to a file.  When the system receives this  export request, it  generates the file, attaches it to this email, and sends the email to the %{_admin}. Please do not disable this email."
+      subject_v2: Your {{customized_mentoring_term}} requests report is here!
+      content_v2: The {{customized_mentoring_term}} requests report is attached to this email.<br/>

@@ -1,0 +1,60 @@
+var chart;
+jQuery(document).ready(function() {
+  chart_<%= options[:render_to] %> = new Highcharts.Chart({
+    credits: {
+      enabled: false
+    },
+    chart: {
+      renderTo: '<%= options[:render_to] %>',
+      type: 'column',
+      height: <%= options[:height] || 300 %>,
+      borderColor: "#FFFFFF"
+    },
+    title: {
+      <%= options[:title_text] ?  "text: '#{options[:title_text]}'" : "text: null" %>
+    },
+    xAxis: {
+      categories: [
+        jsReportTranslation.lastXToYDays,
+        jsReportTranslation.lastXdays,
+        jsReportTranslation.nextXdays
+      ]
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: jsReportTranslation.time_in_hours
+      }
+    },
+    legend: {
+      backgroundColor: '#FFFFFF',
+      align: 'center',
+      floating: false,
+      shadow: <%= (format == FORMAT::HTML) %>
+    },
+    tooltip: {
+      formatter: function() {
+        return ''+ this.x +': '+ this.y +' ' +jsReportTranslation.hours;
+      }
+    },
+    plotOptions: {
+      column: {
+        animation: {
+          duration: <%= (format == FORMAT::HTML) ? 1500 : 0 %>
+        },
+        shadow: <%= (format == FORMAT::HTML) %>,
+        enableMouseTracking: <%= (format == FORMAT::HTML) %>,
+        pointPadding: 0.2,
+        borderWidth: 0
+      }
+    },
+      series: [{
+      name: jsReportTranslation.mentorAvailability,
+      data: <%= options[:mentor_availablities].to_s %>
+
+    }, {
+      name: jsReportTranslation.meetingScheduled,
+      data: <%= options[:meting_schedules].to_s %>
+    }]
+  });
+});

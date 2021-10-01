@@ -1,0 +1,13 @@
+<% input_size = "form-control" %>
+<% options = {} %>
+
+<%= simple_form_for [group, milestone], remote: true, html: {class: "clearfix cjs_milestone_form"} do |milestone_form| %>
+  <%= milestone_form.input(:title, {as: :string, required: true, input_html: {id: "cjs_mentoring_model_milestone_title_#{milestone.id}", class: "#{input_size} form-control cjs_milestone_title"}}.merge(options)) %>
+  <%= milestone_form.input(:description, {as: :text, input_html: {id: "cjs_mentoring_model_milestone_description_#{milestone.id}", class: "#{input_size} form-control", :rows => 5}}.merge(options)) %>
+  <% action_set({fields_required: milestone.new_record?}) do %>
+    <div class="pull-right">
+      <%= cancel_link(nil, additional_class: "cjs_milestone_cancel_link") %>
+      <%= milestone_form.button :submit, "display_string.Save".translate, :class => "cjs_milestone_submit_btn", locals: {:target_user_id => target_user_id, :target_user_type => target_user_type} %>
+    </div>
+  <% end %>
+<% end %>

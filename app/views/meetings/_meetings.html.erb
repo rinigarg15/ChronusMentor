@@ -1,0 +1,3 @@
+<% meeting_messages = Meeting.get_meeting_messages_hash(wob_member, meetings) %>
+<% meeting_notes = Meeting.get_meeting_notes_hash(meetings) %>
+<%= listing_page(meetings, partial: "meetings/meeting", collection_key: :meeting, locals: { :ei_src => ei_src, group_admin_view: group_admin_view , survey_src: Survey::SurveySource::MEETING_LISTING, meeting_messages: meeting_messages, meeting_notes: meeting_notes, rsvp_src: local_assigns[:rsvp_src] || MemberMeeting::RSVP_SOURCE::MEETING_LISTING, :from_connection_home_page_widget => from_connection_home_page_widget, :send_message_allowed => local_assigns[:send_message_allowed]} ) %>

@@ -1,0 +1,19 @@
+<% if @current_organization.active? %>
+  <% unless logged_in_at_current_level? %>
+    <% if show_join_now? %>
+      <%= content_tag(:li, link_to((local_assigns[:join_icon_content] || "") + "app_layout.label.join".translate, join_now_join_url, class: "no-waves"), class: "#{local_assigns[:container_class] || ""} nav-item")    %>
+    <% end %>
+  <% end %>
+
+  <% unless logged_in_organization? || new_user_authenticated_externally? %>
+    <% unless @login_active %>
+      <li class="<%= local_assigns[:container_class] || "" %>">
+        <%= link_to (local_assigns[:sign_in_icon_content] || content_tag(:i)) + "display_string.Login".translate, login_path(mode: (@login_mode || SessionsController::LoginMode::STRICT)), class: "no-waves" %>
+      </li>
+    <% end %>
+  <% end %>
+
+  <% unless @hide_contact_admin || logged_in_organization? || !program_view? %>
+    <%= content_tag(:li, get_contact_admin_path(@current_program, iconclass: local_assigns[:contact_admin_icon_content]), class: local_assigns[:container_class] || "") %>
+  <% end %>
+<% end %>

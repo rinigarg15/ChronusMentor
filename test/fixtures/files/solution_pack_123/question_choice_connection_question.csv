@@ -1,0 +1,7 @@
+id,text,is_other,ref_obj_id,ref_obj_type,created_at,updated_at,position
+4073,opt_1,false,734,CommonQuestion,2017-12-13 17:31:24 +0530,2017-12-13 17:31:24 +0530,1
+4074,opt_2,false,734,CommonQuestion,2017-12-13 17:31:24 +0530,2017-12-13 17:31:24 +0530,2
+4075,opt_3,false,734,CommonQuestion,2017-12-13 17:31:24 +0530,2017-12-13 17:31:24 +0530,3
+4076,Stand,false,735,CommonQuestion,2017-12-13 17:31:24 +0530,2017-12-13 17:31:24 +0530,4
+4077,Walk,false,735,CommonQuestion,2017-12-13 17:31:24 +0530,2017-12-13 17:31:24 +0530,4
+4078,Run,false,735,CommonQuestion,2017-12-13 17:31:24 +0530,2017-12-13 17:31:24 +0530,4

@@ -1,0 +1,25 @@
+<% modal_container "feature.survey.content.clone_survey_name".translate, :modal_id => "modal_clone_survey_name_popup_form" do %>
+  <%= form_tag(clone_survey_path(survey), :id => "clone_survey_name_form", :class => "form-inline") do %>
+    <% controls do %>
+      <div class="text-center">
+        <%= label_tag :clone_survey_name, "feature.survey.content.clone_survey_name".translate, :for => "clone_survey_name", :class => "sr-only" %>
+        <% right = { type: "btn",
+          btn_options: {
+            id: "survey_name_submit",
+            class: 'btn btn-primary',
+            data: {:disable_with => "display_string.Please_Wait".translate}
+          },
+          content: "display_string.Create".translate
+        } %>
+        <%= construct_input_group({}, right) do %>
+          <%= filter_text_field(:clone_survey_name, "display_string.Copy_of".translate(:string => survey.name), class: "form-control") %>
+        <% end %>
+      </div>
+      <%= hidden_field_tag(:original_survey_type, survey.type, id: 'survey_type_clone_popup')  %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  clonePopup.validateAndResetPopup("<%= 'display_string.Copy_of'.translate(:string =>  survey.name) %>");
+<% end %>

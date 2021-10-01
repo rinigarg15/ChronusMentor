@@ -1,0 +1,31 @@
+<% @title = "feature.profile_customization.header.preview_membership_form".translate -%>
+
+<% cur_program = @preview_program || @programs.first %>
+<% if !@current_organization.standalone? && !program_view? %>
+  <% @sub_title = h(cur_program.name) %>
+  <% @sub_title_list = [] %>
+  <% @current_organization.programs.ordered.allowing_membership_requests.each do |program| %>
+    <% @sub_title_list << {:label => program.name, :url => preview_membership_questions_path(:program_id => program.id)} %>
+  <% end %>
+<% end %>
+
+<% cust_link = ((!@current_organization.standalone? && program_view?) || @current_organization.standalone?) ? membership_questions_path : profile_questions_path %>
+<% @page_action = {:label => "feature.profile_customization.header.customize_membership_form".translate, :url => cust_link, :class => "btn btn-primary btn-large"} %>
+
+<% @skip_rounded_white_box_for_content = true %>
+
+<%= get_preview_checkboxes(cur_program.roles_without_admin_role.allowing_join_now.pluck(:name), cur_program, selected: @filter_role) %>
+
+<div id="customizable_profile">
+  <div class="pane_tab_contents" id ="profile_questions_filter_pane">
+    <div class="item">
+      <div class="filter_loading_results ibox-content hide text-center m-b-sm" id="loading_results">
+        <span><%= "common_text.prompt_text.filtering_results".translate %></span> <%= content_tag(:i, "", class: "fa fa-spinner fa-spin fa-fw") %>
+      </div>
+      <%= render :partial => 'profile_questions/preview_result_pane', :locals => {
+        :profile_questions => @membership_profile_questions, :is_membership_preview => true} %>
+    </div>
+  </div>
+</div>
+<%= javascript_tag %Q[PreviewQuestions.initializeRoleChange('#{preview_membership_questions_url}', '#{cur_program.id}')] %>
+<%= javascript_tag "jQuery(document).ready(function(){CustomizeSelect.selectExpandContract();});" %>

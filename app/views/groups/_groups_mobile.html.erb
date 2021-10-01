@@ -1,0 +1,7 @@
+<% modal_v3_popup("feature.connection.header.my_group".translate(Mentoring_Connection: _Mentoring_Connections) , modal_body_class: "no-padding") do %>
+  <% if my_groups.present? %>
+    <%= render :partial => 'groups/my_group_mobile', collection: my_groups, as: :group %>
+  <% else %>
+    <%= render :partial => 'groups/no_connections' %>
+  <% end %>
+<% end %>

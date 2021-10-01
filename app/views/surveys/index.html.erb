@@ -1,0 +1,20 @@
+<% @title = "feature.survey.header.Surveys".translate %>
+<% @skip_rounded_white_box_for_content = true %>
+
+<div id="surveys">
+  <% if @surveys.empty? %>
+    <%= ibox nil, :content_class => "text-center" do %>
+      <p><%= "feature.survey.content.no_survey".translate %></p>
+      <%= link_to "feature.survey.action.Create_a_New".translate, new_survey_path, :class => 'add_icon cjs_new_survey_button' %>
+    <% end %>
+  <% else %>
+    <% survey_type_to_name_hash = { ProgramSurvey.name => _Program, EngagementSurvey.name => _Mentoring_Connections, MeetingFeedbackSurvey.name => _Meeting } %>
+    <% Survey::Type.all.each do |survey_type| %>
+      <%= render partial: 'surveys/survey_content', locals: { surveys: @surveys_by_type[survey_type], survey_name: survey_type_to_name_hash[survey_type], survey_type: survey_type } if @surveys_by_type.has_key?(survey_type) %>
+    <% end %>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  SurveysGoogleAnalytics.handleNewSurvey();
+</script>

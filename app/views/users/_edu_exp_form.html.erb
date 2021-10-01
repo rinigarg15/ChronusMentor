@@ -1,0 +1,15 @@
+<% is_from_membership_request = local_assigns[:is_membership_request] %>
+<% membership_request_member_id = local_assigns[:membership_request_member_id] %>
+<% show_linked_in_form = is_from_membership_request || (!profile_user.new_record? && current_user == profile_user) %>
+<% if !is_kitkat_app? && current_program_or_organization.linkedin_imports_feature_enabled? && show_linked_in_form %>
+  <div class='m-b-xs'>
+    <h4 class="import_linkedin text-center">
+      <%= link_to_function "#{'feature.education_and_experience.action.import_your_help_text_v2'.translate} #{image_tag("linkedin.png", :class => "m-l-xs")}".html_safe, "Users.startLinkedIn('#{j("feature.education_and_experience.content.loading".translate)}', '#{linkedin_login_url}','#{import_linkedin_data_url}',#{!is_from_membership_request && profile_user.id}, #{section.id}, '#{membership_request_member_id}', '#{is_from_membership_request ? @roles.join(MembershipRequest::SEPARATOR) : false}', '#{@program ? @program.id : false}', #{is_mobile_app?})", :id => "import_profile_link_login_#{section.id}" %>
+      <%= javascript_tag "jQuery(document).ready(function(){CustomizeProfileQuestions.showHideImportLinkedIn();});"%>
+      <div id="ajax_success_flash_<%= section.id %>" style="display:none;"></div>
+      <%= horizontal_or_separator("m-t-lg m-b-lg") %>
+      <%= "join_now_page.content.fill_details_v1".translate %>
+      <br/>
+    </h4>
+  </div>
+<% end %>

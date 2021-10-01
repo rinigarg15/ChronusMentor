@@ -1,0 +1,18 @@
+en:
+  email_translations:
+    content_moderation_user_notification:
+      enabled_html: An %{email} will be sent to the author of the post if you complete this action.
+      disabled_html: An %{email} is usually sent to the author of the post as part of completing this action, but has been disabled. No email will be sent.
+      title_v2: Notification to poster when %{_admin} declines the post
+      description_v3: When a new forum post is created and it requires %{_admin} approval, this email is sent to the author if the posting is declined. It includes the reason for the rejection.
+      subject_v2: Your post in the conversation '{{conversation_title}}' has not been approved
+      content_v3_html: 'The following content posted by you in the conversation <b>''{{conversation_title}}''</b> has not been approved by the {{customized_admin_term_pluralized}}:<br/><br/>{{post_content}}<br/><br/>Reason: {{reason}}<br/><br/>If you have any questions, please contact the {{customized_admin_term_pluralized}} <a href=''{{url_contact_admin}}''>here</a>.<br/>'
+      tags:
+        post_content:
+          description: Content of the post
+          example: Mentioning the ways in which this technology can be used.
+        reason:
+          description: Reason for declining the post
+          example: Such posts are not allowed in this topic
+        url_contact_admin:
+          description: Url for the user to contact administrator

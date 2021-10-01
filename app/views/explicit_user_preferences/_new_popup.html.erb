@@ -1,0 +1,68 @@
+<% mobile_view = (mobile_app? || mobile_device?) %>
+<% ios_app = !!(is_ios_app? || ios_browser?) %>
+<% priority_values = ExplicitUserPreference::PriorityValues.preference_weights_for_slider %>
+<% modal_v3_popup append_text_to_icon("fa fa-sliders fa-lg fa-rotate-90", "feature.explicit_preference.title.your_preferences".translate), modal_body_class: "explicit_preferences_popup no-padding", additional_close_button_class: "cjs_close_preference_popup", modal_id: "explicit_preferences_popup" do %>
+
+  <%= render partial: "common/loading_results", locals: { loading_result_id: "cjs_preferences_loading_result_id", page_loading_result_id: "cjs_preferences_page_loading_result_id", message: "display_string.Please_Wait".translate } %>
+  <div class="<%=  mobile_view ? 'cjs_explicitpreferences_content_mobile' : 'cjs_explicitpreferences_content' %>" data-slim-scroll="true" data-slim-scroll-height="" data-slim-scroll-visible="false">
+    <%= content_tag(:div, append_text_to_icon(TOOLTIP_IMAGE_CLASS, "feature.explicit_preference.label.auto_populate_help_text_v2".translate(a_mentor: _a_mentor)), class: "text-center alert alert-info cjs_default_preference_text flat-border") if default_preferences_populated %>
+    <div class="text-center alert alert-info cjs_preference_popup_alert_actions no-margins hide flat-border">
+      <%= content_tag(:div, "feature.explicit_preference.label.no_preferences_label".translate, class: "text-center") %>
+      <div>
+        <%= link_to("feature.explicit_preference.label.add_preferences".translate, "javascript:void(0)", class: "cjs_help_add_preference") %>
+        <%= content_tag(:span, "|", class: "p-l-xxs p-r-xxs")  %>
+        <%= link_to("feature.explicit_preference.label.browse_default_recommendations".translate, users_path) %>
+      </div>
+    </div>
+    <div class="p-t-m p-l-m p-r-m">
+      <div class="p-b-xs text-right visible-xs cjs_open_preference_creator">
+        <%= link_to(append_text_to_icon("fa fa-plus text-navy", "feature.explicit_preference.label.add_new".translate ), "javascript:void(0)", class: "btn btn-xs btn-outline btn-primary text-primary") %>
+      </div>
+      <div class="cjs-explicit-preference-rows-creation-container hide b-b light-gray-bg hidden-xs">
+        <div class="cjs_explicit_preference_row p-sm">
+          <%= simple_form_for explicit_preference, url: explicit_user_preferences_path(src: src), remote: true, html: {id: "cjs_explicit_preference_creation_form", class: "form-horizontal", method: :post}, wrapper: :horizontal_input do |f| %>
+            <div class="row" >
+              <%= render partial: "explicit_user_preferences/edit_preference_inputs", locals: {f: f, create_view: true} %>
+              <div class="col-xs-12 col-sm-2 pull-right">
+                <% action_set(class: "pull-right") do %>
+                  <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white btn-sm m-r-xs cjs_close_preference_creator" if mobile_view %>
+                  <%= f.button :submit, "feature.explicit_preference.label.add".translate, class: 'btn btn-sm cjs_create_explicit_preference', data: {disable_with: "display_string.Please_Wait".translate} %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="cjs-explicit-preference-rows-show-container hide">
+        <%= render partial: "explicit_user_preferences/edit_preference", collection: existing_questions_data, as: :explicit_preference, locals: {src: src} %>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-m cjs_preference_popup_actions">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12">
+      <% action_set(class: "pull-right") do %>
+        <%= link_to(content_tag(:span, "feature.explicit_preference.content.start_over".translate) + content_tag(:span, "feature.explicit_preference.content.start_over".translate, class: "sr-only"), bulk_destroy_explicit_user_preferences_path(src: src), remote: true, method: :delete, data: { confirm: "feature.explicit_preference.content.delete_message".translate }, class: "btn font-bold no-borders noshadow cjs_explicit_preference_start_over") %>
+        <%= link_to(content_tag(:span, "feature.explicit_preference.content.show_recommendations".translate) + content_tag(:span, "feature.explicit_preference.content.show_recommendations".translate, class: "sr-only"), users_path, class: "btn btn-primary btn m-l-sm cjs_explicit_show_recommendations") %>
+      <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  ExplicitPreference.questionsData = <%= chr_json_escape(all_questions_data.to_json) %>;
+  <% if ios_app %>
+    ExplicitPreference.isIosApp = true;
+  <% end %>
+  ExplicitPreference.loadExplicitUserPreferencesContent(<%= chr_json_escape(priority_values.to_json) %>, "<%= get_filtered_locations_for_autocomplete_locations_path(format: :json) %>", "<%= ProfileQuestion::Type::LOCATION %>");
+  ExplicitPreference.trackGa("<%= ga_src %>");
+  initialize.setSlimScroll();
+  ExplicitPreference.preferencesAutoPopulated = false;
+  ExplicitPreference.preferencesChanged = false;
+  ExplicitPreference.showRecommendationsClicked = false;
+  <% if default_preferences_populated %>
+    ExplicitPreference.preferencesAutoPopulated = true;
+  <% end %>
+<% end %>

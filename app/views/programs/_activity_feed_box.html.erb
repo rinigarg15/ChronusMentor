@@ -1,0 +1,19 @@
+<% tab_in_store = fetch_primary_home_tab(@current_program, current_user) %>
+<div id='recent_activities' class='recent_activities'>
+  <%= ibox nil, :ibox_class => "m-b-sm",
+                :content_class => "act_tabs tabs-container no-borders no-padding" do %>
+    <%= render(:partial => "programs/activity_feed_tabs", :locals => {:tab_in_store => tab_in_store}) %>
+    <div class="pane_tab_contents m-xs">
+    <% tabs.each do |tab| %>
+      <%= render :partial => "programs/home_page_tab_contents", :locals => {
+        :load_url => tab[:url],
+        :update_url => update_url,
+        :tab_in_store => tab_in_store,
+        :tab_order => tab[:tab_order],
+        :div_suffix => tab[:div_suffix]
+      } %>
+    <% end %>
+    </div>
+  <% end %>
+</div>
+<%= javascript_tag %Q[RecentActivities.RATabSwitch(true)] %>

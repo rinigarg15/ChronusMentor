@@ -1,0 +1,5 @@
+<% if @current_organization.present? && !@current_organization.white_label %>
+  <li class="<%= local_assigns[:container_class] || "m-r-sm" %>">
+    <%= link_to "#{"footer.powered_by_v1".translate} #{"display_string.default_brand_label_v1".translate}", Brand::Defaults::URL, :target => :_blank, :class => "cui-powered-by-label no-waves #{local_assigns[:link_class]}" %>
+  </li>
+<% end %>

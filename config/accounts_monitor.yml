@@ -1,0 +1,38 @@
+common: &common
+  active_members:
+    max_limit: 10000
+    exclusions:
+  sftp:
+    max_limit: 25000
+    exclusions:
+
+production:
+  active_members:
+    max_limit: 25000
+    exclusions:
+      - org_id: 876 # Amazon
+        max_limit: 50000
+  sftp:
+    max_limit: 40000
+    exclusions:
+      - org_id: 876 # Amazon
+        max_limit: 150000
+
+productioneu:
+  <<: *common
+
+veteransadmin:
+  <<: *common 
+
+nch:
+  <<: *common 
+
+demo:
+  <<: *common 
+
+staging:
+  <<: *common
+
+
+
+

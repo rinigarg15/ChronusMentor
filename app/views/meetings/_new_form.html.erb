@@ -1,0 +1,3 @@
+<div id="new_meeting">
+  <%= render :partial => "meetings/meeting_form", :locals => {:from_calendar => false, :direct_meeting_outside_group => false, :common_form => local_assigns[:common_form], :past_meeting => local_assigns[:past_meeting], :from_connection_home_page_widget => local_assigns[:from_connection_home_page_widget], ei_src: local_assigns[:ei_src], task_id: local_assigns[:task_id] } %>
+</div>

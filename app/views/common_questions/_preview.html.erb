@@ -1,0 +1,48 @@
+<% no_edit = common_question[:no_edit].presence || no_edit %>
+<% no_remove = common_question[:no_remove].presence || no_remove %>
+
+<% q_id = common_question.id %>
+<div id="common_question_value_<%= q_id %>">
+  <%= simple_form_for form_obj do %>
+    <% add_class = 'type field_view clearfix' + (local_assigns[:profile_ques] ? " profile_ques_field" : "") %>
+    <%= control_group(:class => add_class) do %>
+      <% question_label = common_question.question_text %>
+      <% question_label += " *" if common_question.required %>
+      <div>
+        <% if needs_false_label_common_question?(common_question) %>
+          <div class="big false-label control-label font-bold col-md-10 p-l-0">
+            <%= question_label %>
+          </div>
+        <% else %>
+          <label class="big control-label col-md-10 p-l-0" for="preview_<%=common_question.id %>">
+            <%= question_label %>
+          </label>
+        <% end %>
+          
+        <% if !(no_edit && no_remove) %>
+          <% add_class = "type add_remove clearfix" + (local_assigns[:profile_ques] ? " profile_ques_add_remove" : "") %>
+          <% actions = [] %>
+          <%= control_group do %>
+            <div class="col-sm-2 col-md-2 <%=add_class%>">
+              <% if !no_edit %>
+                <% actions << {:label => get_icon_content('text-default fa fa-pencil') + "display_string.Edit".translate, :js => "jQuerySortable.disableDraggable('#edit_common_question_#{common_question.id}'); toastr.clear();", :data => {"show-pane" => "#edit_common_question_#{q_id}", "hide-pane" => "#common_question_value_#{q_id}"}, :class => "edit_common_question_#{q_id} m-r-sm show_hide_pane" } %>
+              <% end %>
+              <% if !no_remove %>
+                <% actions << { label: get_icon_content('text-default fa fa-trash') + "display_string.Remove".translate, url: form_object_for_common_question(common_question), id: "cjs-survey-question-#{common_question.id}-delete", data: { remote: true , confirm: get_delete_confirmation_warning(common_question) }, method: :delete } %>
+              <% end %>
+              <%= dropdown_buttons_or_button(actions, :dropdown_title => "", :is_not_primary => true, :primary_btn_class => "btn-white", :btn_class => "pull-right") %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>  
+
+      <%= controls() do %>
+        <%= content_tag(:div, class: "col-sm-10 no-padding") do %>
+          <%= content_tag(:span, "", :class => "m-t-sm fa #{hidden_on_web}") %>
+          <% view_options = common_question.matrix_question_type? ? {:mobile_view => mobile_browser? || mobile_device?} : {} %>
+          <%= preview_common_question(common_question, view_options) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

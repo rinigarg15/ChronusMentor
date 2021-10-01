@@ -1,0 +1,14 @@
+<div class="text-center m-t-md m-b-md b-t b-b">
+  <div class="well no-padding m-b-0 flat-border no-border">
+    <div class="row text-default text-center cjs-program-info-box-numbers-container">
+      <% get_current_status_data(program, common_total_link_options: {root: program.root, src: OrganizationsHelper::SrcTracker::GLOBAL_REPORTS_V2}).each_with_index do |data, index| %>
+        <div class="col-xs-4">
+          <div class="p-t-xs p-b-xs <%= "p-r-xs" if index == 2 %> <%= "p-l-xs" if index == 0 %> text-center">
+            <div class="larger font-600"><%= data[:total] %></div>
+            <div class="small"><%= data[:title] %></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

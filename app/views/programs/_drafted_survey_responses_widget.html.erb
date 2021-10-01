@@ -1,0 +1,8 @@
+<% list = drafted_survey_responses_list(current_user) %>
+<%= ibox "feature.survey.content.survey_to_complete_v1".translate, :show_collapse_link => true do %>
+  <div class="list-group">
+    <% list.reverse.each do |item| %>
+      <%= item %>
+    <% end %>
+  </div>
+<% end %>

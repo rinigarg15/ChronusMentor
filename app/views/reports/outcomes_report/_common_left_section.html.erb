@@ -1,0 +1,106 @@
+<div class="m-b-sm">
+  <div class="m-b-lg">
+    <div id="<%= total_id %>" class="row h5">
+      <div class="<%= col %>-7 no-border">
+        <h3 class="no-margins font-noraml">
+          <%= total_title %>
+        </h3>
+      </div>
+      <div class="<%= col %>-5 no-border text-right">
+        <h3 class="no-margins font-noraml">
+          <span class="cjs_value m-r-sm" data-tooltip-text='<%= "feature.outcomes_report.content.positive_outcomes_role_user_tooltip".translate(role_name: "display_string.Users".translate, groups_or_meetings: groups_or_meeting_term) %>'></span>
+          <span class="cjs_change">
+            <span class="small">
+              <span class="cjs_change_value"></span>
+              <span>%</span>
+              <i class="fa fa-level-up text-navy cjs_change_up"></i>
+              <i class="fa fa-level-down text-danger cjs_change_down"></i>
+            </span>
+          </span>
+        </h3>
+      </div>
+    </div>
+    <% if local_assigns[:show_total_progress_bar] %>
+      <div id="<%= total_progress_bar_id %>" class="row">
+        <div class="<%= col %>-12 no-border p-t-0-important">
+          <div class='progress progress-mini no-margins cjs_progress_show_tooltip'>
+            <div class="cjs_progress_bar_tooltip_text hide"><%= get_outcomes_progress_bar_tooltip(progress_bar_tooltip_string, "display_string.users".translate, groups_or_meeting_term) %></div>
+            <div class="progress-bar bar cjs-progress-bar-completition"></div>
+            <div class="progress-bar bar progress-bar-light"></div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <% @current_program.roles.for_mentoring.each do |role| %>
+    <div id="<%= role_id_proc.call(role) %>" class="row m-b-xs m-t-sm">
+      <div class="<%= col %>-7 no-border">
+        <h5 class="no-margins font-noraml">
+          <%= role.customized_term.pluralized_term %>
+        </h5>
+      </div>
+      <div class="<%= col %>-5 no-border text-right">
+        <h5 class="no-margins font-noraml">
+          <span class="cjs_value m-r-sm" data-tooltip-text='<%= "feature.outcomes_report.content.positive_outcomes_role_user_tooltip".translate(role_name: role.customized_term.pluralized_term, groups_or_meetings: groups_or_meeting_term) %>'></span>    
+          <span class="cjs_change">
+            <span class="small">
+              <span class="cjs_change_value"></span>
+              <span>%</span>
+              <i class="fa fa-level-up text-navy cjs_change_up"></i>
+              <i class="fa fa-level-down text-danger cjs_change_down"></i>
+            </span>
+          </span>
+        </h5>
+      </div>
+    </div>
+    <% if local_assigns[:show_role_progress_bar] %>
+      <div id="<%= role_bar_id_proc.call(role) %>" class="row m-b-xs">
+        <div class="<%= col %>-12 no-border p-t-0-important">
+          <div class='progress progress-mini no-margins cjs_progress_show_tooltip'>
+            <div class="cjs_progress_bar_tooltip_text hide"><%= get_outcomes_progress_bar_tooltip(progress_bar_tooltip_string, role.customized_term.pluralized_term_downcase, groups_or_meeting_term) %></div>
+            <div class="progress-bar bar cjs-progress-bar-completition"></div>
+            <div class="progress-bar bar progress-bar-light"></div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% if local_assigns[:show_secondary_total] %>
+    <div id="<%= total_connections_id %>" class="h5 row">
+      <div class="<%= col %>-7 no-border">
+        <div class="m-t-xl">
+          <h3 class="no-margins font-noraml">
+            <%= total_connections_title %>
+          </h3>
+        </div>
+      </div>
+      <div class="<%= col %>-5 no-border text-right">
+        <div class="m-t-xl">
+          <h3 class="no-margins font-noraml">
+            <span class="cjs_value m-r-sm" data-tooltip-text='<%= "feature.outcomes_report.content.positive_outcomes_engagement_tooltip".translate(groups_or_meetings: groups_or_meeting_term) %>'></span>
+            <span class="cjs_change">
+              <span class="small">
+                <span class="cjs_change_value"></span>
+                <span>%</span>
+                <i class="fa fa-level-up text-navy cjs_change_up"></i>
+                <i class="fa fa-level-down text-danger cjs_change_down"></i>
+              </span>
+            </span>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <% if local_assigns[:show_total_connections_progress_bar] %>
+      <div id="<%= total_connections_progress_bar_id %>" class="row">
+        <div class="<%= col %>-12 no-border p-t-0-important">
+          <div class='progress progress-mini no-margins cjs_progress_show_tooltip'>
+            <div class="cjs_progress_bar_tooltip_text hide"><%= get_outcomes_progress_bar_tooltip(progress_bar_tooltip_string_engagements, "", groups_or_meeting_term) %></div>
+            <div class="progress-bar bar cjs-progress-bar-completition"></div>
+            <div class="progress-bar bar progress-bar-light"></div>
+          </div>
+        </div>
+      </div>
+    <% end %>  
+  <% end %>
+</div>

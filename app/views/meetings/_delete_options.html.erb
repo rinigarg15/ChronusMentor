@@ -1,0 +1,29 @@
+<% confirmation = "#{'common_text.confirmation.sure_to_delete_this'.translate(title: _meeting)} #{'common_text.confirmation.cant_be_undone'.translate}" %>
+<% common_options = { group_id: group_id, from_connection_home_page_widget: from_connection_home_page_widget, current_occurrence_time: current_occurrence_time, format: :js, outside_group: local_assigns[:outside_group], meeting_area: local_assigns[:from_meeting_area] } %>
+<% modal_v3_popup "feature.meetings.action.delete_meeting_v1".translate(:Meeting => _Meeting) do %>
+  <div id="meeting_delete_options">
+    <div>
+      <%= "feature.meetings.content.about_to_modify_html".translate(meeting_topic: meeting.topic, time: DateTime.localize(DateTime.parse(current_occurrence_time), format: :short_date_short_time)) %>
+    </div>
+    <div>
+     <%= "feature.meetings.content.edit_question".translate(:meeting => _meeting, :meetings => _meetings) %>
+    </div>
+    <div class="p-t-sm clearfix">
+        <% url = meeting_path(meeting, common_options.merge(delete_option: Meeting::EditOption::CURRENT)) %>
+        <%= link_to_function "feature.meetings.action.only_this".translate(:meeting => _meeting), "Meetings.hidePopup('#{url}', '#{confirmation}')", :class => "btn m-r-xs btn-sm btn-white delete col-sm-4 col-xs-12" %>
+      <p class="p-t-xxs no-margins"><%= "feature.meetings.content.delete_only_this_help_text".translate(:meetings => _meetings) %></p>
+    </div>
+
+    <div class="p-t-sm clearfix">
+      <% url = meeting_path(meeting, common_options.merge(delete_option: Meeting::EditOption::FOLLOWING)) %>
+      <%= link_to_function "feature.meetings.action.following".translate(:meetings => _meetings, format: :js), "Meetings.hidePopup('#{url}', '#{confirmation}')", :class => "btn btn-white btn-sm m-r-xs delete col-sm-4 col-xs-12" %>
+      <p class="p-t-xxs no-margins"><%= "feature.meetings.content.delete_following_help_text".translate(:meetings => _meetings) %></p>
+    </div>  
+
+    <div class="p-t-sm clearfix">
+      <% url = meeting_path(meeting, common_options.merge(delete_option: Meeting::EditOption::ALL)) %>
+      <%= link_to_function "feature.meetings.action.all".translate(:meetings => _meetings, format: :js), "Meetings.hidePopup('#{url}', '#{confirmation}')", :class => "btn btn-white btn-sm m-r-xs delete col-sm-4 col-xs-12" %>
+      <p class="p-t-xxs no-margins"><%= "feature.meetings.content.delete_all_help_text".translate(:meetings => _meetings) %></p>
+    </div>
+  </div>
+<% end %>

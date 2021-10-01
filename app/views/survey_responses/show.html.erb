@@ -1,0 +1,8 @@
+<% @title = @survey.name %>
+<% @back_link = {:label => "feature.survey.content.back_to_individual_responses".translate, :link => survey_responses_path(@survey)} %>
+<% @page_action = {:label => get_icon_content("fa fa-envelope") + "feature.survey.content.email_this_report".translate, :url => "javascript:void(0)", class: "email_survey_report btn btn-primary"} %>
+<% @page_action2 = {:label => get_icon_content("fa fa-download") + "feature.survey.action.export_to_xls".translate, :url => export_as_xls_survey_responses_path(@survey, :id => params[:id], :format => :xls), class: "btn btn-primary export_xls"} %>
+
+<%= render partial: "survey_responses/response_content", locals: {group: @group, meeting: @meeting, user: @user, submitted_at: @submitted_at, survey_questions: @survey_questions, survey_answers: @survey_answers} %>
+
+<%= javascript_tag "ProgressReports.emailIndividualReport('#{email_report_popup_survey_responses_path(@survey, response_id: @response_id)}');EmailReport.initialize();" %>

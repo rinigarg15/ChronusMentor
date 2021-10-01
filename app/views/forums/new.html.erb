@@ -1,0 +1,47 @@
+<% @title = "feature.forum.title.new_forum".translate %>
+<% @back_link = {:label => "feature.forum.back_link.forums".translate, :link => forums_path} %>
+
+<%= ibox nil, ibox_id: "forum_change" do %>
+  <%= simple_form_for @forum, :html => {:class => "form-horizontal"}, wrapper: :horizontal_input do |f| %>
+    <%= formatted_form_error f, :header_message => "flash_message.forum_flash.f_creation_failed_v1".translate, :message => nil %>
+    <%= f.input :name, input_html: { class: "form-control", id: "forum_name" } %>
+    <%= control_group do %>
+      <div class="control-label col-sm-3" for="forum_role_list"><%= set_required_field_label(Forum.human_attribute_name(:access_roles)) %></div>
+      <%= controls(id: "forum_role_list", class: "col-sm-9") do %>
+        <div id="forum_roles">
+          <% if @forum.new_record? %>
+            <%= choices_wrapper("display_string.Roles".translate) do %>
+              <% current_program.roles_without_admin_role.each do |role| %>
+                <label class="checkbox-inline">
+                  <%= check_box_tag "forum[access_role_names][]", role.name, @forum.access_role_names.include?(role.name), :id => "forum_access_role_names_#{role.name}" %>
+                  <%= role.customized_term.term %>
+                </label>
+              <% end %>
+            <% end %>
+            <div class="help-block">
+              <%= "feature.forum.content.cannot_change_afterwards".translate %>
+            </div>
+          <% else %>
+            <p class="form-control-static">
+              <%= RoleConstants.human_role_string(@forum.access_role_names, program: @current_program, pluralize: true) %>
+            </p>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+    <%= f.input :description, input_html: { rows: "5", class: "form-control" } %>
+
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, forums_path, class: "btn btn-white" %>
+      <%= f.button :submit, @forum.new_record? ? "display_string.Create".translate : "display_string.Save".translate, :class => "cjs_forun_submit" %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  RequiredFields.fieldIds.push('forum_name');
+  <% if @forum.new_record? %>
+    RequiredFields.fieldIds.push('forum_roles');
+  <% end %>
+  RequiredFields.validateForum();
+<% end %>

@@ -1,0 +1,29 @@
+<% action_set(class: "pull-right m-t") do %>
+  <% if @announcement.new_record? %>
+    <%= cancel_link announcements_path %>
+  <% else %>
+    <%= cancel_link announcement_path(@announcement) %>
+    <% if @announcement.drafted? %>
+      <%= link_to("display_string.Discard_Draft".translate, announcement_path(@announcement), :method => :delete, :class => "btn btn-white", data: {:confirm => "feature.announcements.content.delete_or_discard_warning".translate(:delete_or_discard => "display_string.discard".translate)}) %>
+    <% else %>
+      <%= f.submit "feature.announcements.action.update".translate, :class => "btn btn-primary cjs_forun_submit" %>
+    <% end %>
+  <% end %>
+  <% if @announcement.new_record? || @announcement.drafted? %>
+    <%= f.submit "display_string.Save_as_draft".translate, :class => "btn btn-white cjs_draft_submit" %>
+    <%= f.submit "feature.announcements.action.post".translate, :class => "btn btn-primary cjs_forun_submit", :onclick => "Announcements.setStatus(#{Announcement::Status::PUBLISHED})" %>
+  <% end %>
+<% end %>
+<% modal_container "feature.announcements.header.announcements".translate, modal_id: "confirm_email_notification" do %>
+  <%= "feature.announcements.content.confirm_email_notification".translate %>
+  <% action_set(class: "pull-right m-t") do %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0);", class: "btn btn-white", data: { dismiss: "modal" } %>
+    <%= link_to "display_string.Send".translate, "javascript:void(0);", class: "btn btn-danger cjs_submit_announcement_form", data: { form_id: f.options[:html][:id], dismiss: "modal" } %>
+    <%= link_to "feature.announcements.content.dont_send".translate, "javascript:void(0);", class: "btn btn-primary cjs_submit_announcement_form", data: { form_id: f.options[:html][:id], dismiss: "modal" }, onclick: "Announcements.disableEmailNotification(#{UserConstants::DigestV2Setting::ProgramUpdates::DONT_SEND})" %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  Announcements.confirmEmailNotification('<%= Date.current %>', '<%= UserConstants::DigestV2Setting::ProgramUpdates::DONT_SEND %>');
+  Announcements.saveDraft();
+<% end %>

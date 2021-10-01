@@ -1,0 +1,8 @@
+<% your_filters_content = render(:partial => "common/your_filters", :locals => { :onclick_function => "MentorSearch.clearFilter", results_count: @users.total_entries, reset_url_options: { js: "BBQPlugin.applySavedFilters(this, '');" } } ) %>
+jQuery('#results_pane').html("<%= j render(:partial => 'users/mentor_matches_list') %>");
+jQuery('#your_filters').replaceWith("<%= j your_filters_content %>");
+jQuery('#loading_results').hide();
+<% if @search_filters_param.present? %>
+  jQuery('.cjs_mentor_container .cjs_show_and_hide_toggle_sub_selector.cjs_show_and_hide_toggle_show').addClass('hide');
+  jQuery('.cjs_mentor_container .cjs_show_and_hide_toggle_sub_selector.cjs_show_and_hide_toggle_content').removeClass('hide');
+<% end %>

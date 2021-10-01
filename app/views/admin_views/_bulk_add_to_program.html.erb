@@ -1,0 +1,41 @@
+<% option_proc = Proc.new{|program| {"data-follow_link" => url_to_admin_adding_users(program.root)}} %>
+<%= simple_form_for admin_view, :url => add_to_program_admin_view_path(admin_view, :from => from), :html => {:method => :post, :id => "form_admin_view_bulk_actions"} do |f| %>
+  <%= f.input "members", :as => :hidden, :input_html => {:value => members.collect(&:id).join(",")} %>
+  <% if from == AdminViewsController::REFERER::ADMIN_VIEW %>
+    <div class="m-b-sm">
+      <p class="m-b-xs"> <%= "feature.admin_view.content.following_will_be_added_to_program".translate(:members => "feature.admin_view.content.member".translate(:count => members.size)) %> </p>
+      <%= render(:partial => "admin_views/selected_users", :locals => {:users_or_members => members}) %>
+    </div>
+  <% end %>
+  <%= control_group do %>
+    <%= label_tag 'Program', "#{@_Program}", :class => "control-label", :for => "admin_view_program_id" %>
+    <%= controls do %>
+      <%= select_tag 'admin_view[program_id]', get_programs_and_portals_select_box(self, options_proc: option_proc), class: "form-control", :id => "admin_view_program_id" %>
+    <% end %>
+  <% end %>
+  <%= control_group do %>
+    <%= content_tag(:div, "feature.user.content.select_a_role".translate, :class => "false-label control-label") %>
+    <%= controls(id: "role_btn_group_add", data: {url: get_add_to_program_roles_admin_views_path(format: :js)}) do %>
+    <% end %>
+  <% end %>
+  <div class="text-muted m-b-sm">
+    <% current_program_link = (link_to "display_string.click_here".translate, "", :target => "_blank", :id => "cjs_add_to_program_mails_link") %>
+    <%= "feature.admin_view.content.add_members_to_program_emails_note_v1_html".translate(catogory_link: current_program_link) %>
+  </div>
+  <%= get_note_for_actions_on_suspended %>
+  <%= horizontal_line(class: "m-b-sm m-t-xs") %>
+  <% action_set(class: "form-group") do %>
+    <div class="pull-right">
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "display_string.Submit".translate %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    ProgramInvitation.initializeProgramChange('#admin_view_program_id', '#cjs_add_to_program_mails_link', 'add');
+    ProgramInvitation.handleProgramChange('#admin_view_program_id', '#cjs_add_to_program_mails_link', 'add');
+    ProgramInvitation.validateRequiredField('form_admin_view_bulk_actions');
+  });
+<% end %>

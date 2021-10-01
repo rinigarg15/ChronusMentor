@@ -1,0 +1,26 @@
+<div class="m-t">
+  <div class="faq-answer clearfix">
+    <div class="p-b-xs b-b">
+      <div class="media-left no-padding">
+        <%= get_icon_content("fa fa-comment", container_class: "fa-circle") %>
+      </div>
+      <div class="media-body media-middle">
+        <div class="font-bold">
+          <%= "feature.question_answers.header.recent_answer".translate(member: user_name_prefix) %>
+        </div>
+        <div class="small">
+          <%= get_icon_content("fa fa-clock-o no-margins") %>
+          <span class="text-muted">
+            <%= "feature.question_answers.content.posted_ago".translate(time_in_words: time_ago_in_words(qa_answer.created_at)) %>
+          </span>
+        </div>
+      </div>
+      <div class="p-t-xs">
+        <%= truncate_html(chronus_auto_link(qa_answer.content), max_length: 300) %>
+      </div>
+    </div>
+    <div class="pull-right small p-t-xs">
+      <%= link_to "feature.question_answers.content.see_all_answers_raquo_html".translate, qa_question_path(qa_question, :root => qa_question.program.root), class: "btn btn-xs btn-white font-bold" %>
+    </div>
+  </div>
+</div>

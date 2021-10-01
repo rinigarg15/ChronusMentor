@@ -1,0 +1,264 @@
+en:
+  feature:
+    user:
+      header:
+        selected_role: Selected %{role}
+        recommended_role: Recommended %{role}
+        Profile: Profile
+        users_profile: "%{member_name}'s profile"
+        account_blocked_users: Account blocked users
+        sign_up_with: Sign up with %{title}
+        add_users_manually: Add users manually
+        import_users_from_organization: Import users from %{org_name}
+      content:
+        deactivated_not_listed_html: The deactivated users are not listed as part of the search results. Please visit %{all_users} view to see the deactivated users.
+        pending_mentor_requests_html: Pending %{mentor} requests %{tooltip}
+        pending_mentor_requests_help_text: "%{Mentees} won't be able to send requests to %{user_name} until the user responds to pending requests"
+        add_user_emails_note_v1_html: 'Note: The user will be sent an email asking them to sign up. To view emails for this workflow %{catogory_link}.'
+        add_user_from_other_program_emails_note_v1_html: The users are sent emails asking them to complete the signup. To view the emails %{catogory_link}.
+        acceptable_use_policy: Acceptable Use Policy
+        privacy_policy: Privacy Policy
+        cookies: cookies
+        view_request:
+          one: View Pending Request
+          other: View Pending Requests
+        read_and_agreed_v3_html: By clicking "%{button_text}" you are indicating that you have read and agreed to the %{terms_url} and the %{privacy_policy_url} which also contains information on our use of %{cookies_url}.
+        read_and_agreed_v4_html: By clicking "%{button_text}" you are indicating that you have read and agreed to the %{terms_url}. You are also indicating that you have read the %{privacy_policy_url} which also contains information on our use of %{cookies_url}.
+        click_and_accept_v2_html: Please click on '%{button_text}' below to indicate that you have read and agreed to the %{terms_url} and the %{privacy_policy_url} which also contains information on our use of %{cookies_url}.
+        click_and_accept_v3_html: Please click on '%{button_text}' below to indicate that you have read and agreed to the %{terms_url}. You are also indicating that you have read the %{privacy_policy_url} which also contains information on our use of %{cookies_url}.
+        preferred_mentor:
+          one: 1 preferred %{mentor}
+          other: "%{count} preferred %{mentors}"
+        upload_file: You can upload a JPG, GIF or PNG file (File size limit is 5 MB).
+        upload_file_v1: You can upload a JPG, GIF or PNG file (File size limit is 20MB).
+        picture_link: Enter the link to a picture
+        change_roles:
+          has_ongoing_connection:
+            one: Has an ongoing %{mentoring_connection}
+            other: Has %{count} ongoing %{mentoring_connections}
+          has_pending_mentor_requests:
+            one: Has a pending %{mentor} request
+            other: Has %{count} pending %{mentor} requests
+          has_pending_project_requests:
+            one: Has a pending %{mentoring_connection} request
+            other: Has %{count} pending %{mentoring_connection} requests
+          has_pending_mentor_offers:
+            one: Has a pending %{mentor} offer
+            other: Has %{count} pending %{mentor} offers
+          has_pending_meeting_requests:
+            one: Has a pending %{meeting} request
+            other: Has %{count} pending %{meeting} requests
+          user_must_have_atleast_one_role: User must have at least one role
+          popup_title: Change Roles
+          popup_same_user_help_text: What roles would you like to play in this program?
+          popup_different_user_help_text: What roles would you like to assign to %{name} in this program?
+          message_placeholder: Type an optional message for the role change. This message will be sent to %{name}.
+        status:
+          profile_unpublished: profile not published
+          membership_suspended_v1: Membership deactivated
+          suspension_through_api: Suspended by %{admin}
+          my_mentor_v1: my %{mentor}
+          unavailable: unavailable
+          slots_available:
+            one: "%{count} slot available"
+            other: "%{count} slots available"
+          fields_missing: mandatory fields missing
+          invalid_email_domain: Email domain should be of %{email_domain}
+        tooltips:
+          student_listing: "%{Mentor} has reached maximum %{mentee} limit and is available for messaging only"
+          slots_preferred_html: "%{User} preferred to have at most %{connection_count} %{connection}. "
+          slots_assigned_html: "(%{connection_count} %{connection} assigned)"
+          fields_missing: The user hasn't filled in all the required profile fields.
+        complete_your_role_profile: Complete Your %{role_str} Profile
+        welcoming: Welcome %{name}
+        max_slots_help_text: Number of %{meetings} you are available for in a calendar month. Set this to zero to become unavailable.
+        no_user_in_program_yet: There are no %{role} in the %{program} yet.
+        match_score_not_available_yet: Matching in progress. This may take a few minutes depending on number of %{mentors} being considered for matching.
+        never_logged_in: Never logged in
+        signup_to_send_a_request_v1: Sign up or login to send a request to administrator and the admin will find a %{mentor} for you.
+        click_here_to_send_a_request_v1: Click here to send a request to administrator and the admin will find a %{mentor} for you.
+        no_results_for_criteria: No %{context} found matching your criteria. You can try the following.
+        no_mentors_matching_preferences: Sorry! We can't find any %{mentors} matching your preferences.
+        reset_filters: Reset Filters
+        broaden_your_search: Broaden your search by clearing a few filters.
+        click_here_to_get_help_html: "%{link} to get help from the program administrators."
+        find_a_mentor_instruction: Type the %{mentee}'s name and click on the 'Find %{mentors_upcase}' button to see the list of %{mentors} ordered by the best match for the %{mentee}. Find a suitable %{mentor} from the list and click on 'Assign' to assign the %{mentor} to the %{mentee}.
+        no_recomended_role: There are no recommended %{role}
+        n_mentees:
+          one: 1 %{mentee}
+          other: "%{count} %{mentees}"
+        n_mentors:
+          one: 1 %{mentor}
+          other: "%{count} %{mentors}"
+        invalid_user: Invalid user
+        no_blocked_users: There are no users whose account has been blocked.
+        account_blocked_at: 'Account blocked at: %{date}'
+        meeting_preferences_updated_v1: Your %{meeting} preferences has been updated. Do you want to set your availability now?
+        unknown_location: Unknown location
+        invalid_radius: Invalid radius value
+        select_a_role: Select a role *
+        selected_user: Selected User *
+        select_an_email: Email *
+        reset_user_email: Click here to remove the filled details and restart the whole process again.
+        drafted_connections:
+          one: 1 drafted %{connection}
+          other: "%{count} drafted %{connections}"
+        choose_another_mentee: Choose Another %{Mentee}
+        view_profile_summary_html: View Profile Summary &raquo;
+        all_selected_on_the_page_html: All %{size} users on this page are selected.
+        select_all_in_this_view_html: Select all %{size} users in this view
+        all_selected_in_the_view_html: All %{size} users in this view are selected.
+        select_at_least_one_user: Please select at least one user
+        no_users_found: No users found with current filters. Please clear some filters and try again.
+        no_users_found_for_current_tab: No users found with current filters.
+        no_users_present: No users present in organization to add to this %{program}
+        will_be_added_to_program:
+          one: "%{count} user will be added to the %{program}"
+          other: "%{count} users will be added to the %{program}"
+        will_be_added_to_program_as_admins: User(s) will be added as %{administrator}
+        choose_mentoring_mode: I am available for
+        mentoring_mode:
+          one_time:
+            name_v1: One-time %{Mentoring}
+            description_v1: "(Single %{meetings} to help %{mentees} with specific topics as needed)"
+          ongoing:
+            name: Ongoing %{Mentoring}
+            description_v1: "(A relationship that persists over a period of time)"
+          both:
+            name_v1: Both modes
+        click_to_modify_filters_html: "%{click_here} to modify filters."
+        mentor_has_n_previous_connection:
+          one: This %{mentor} has 1 previous %{mentoring_connection} with %{student_name}
+          other: This %{mentor} has %{count} previous %{mentoring_connections} with %{student_name}
+        available_for_connection: Available for %{a_connection}
+        available_for_meeting: Available for %{a_meeting}
+        unavailable_for_connection: Not available for %{a_connection}
+        unavailable_for_meeting: Not available for %{a_meeting}
+        pending_response: Pending Response
+        available: Available
+        available_current_month: Available this month
+        available_next_month: Available next month
+        not_available_v1: Not available till %{calendar_month}
+      action:
+        sign_in: Sign In
+        join_now: Join %{program}
+        publish_and_add_another_html: Publish and add another &raquo;
+        publish_and_finish_html: Publish and finish &raquo;
+        enter_link_to_picture_html: enter link to picture &raquo;
+        upload_picture_html: "&laquo; upload a picture"
+        invite_role: Invite %{role}
+        add_user_profiles: Add %{role} Profiles
+        add_user_directly: Add %{role} Directly
+        Connect: Connect
+        create_a_mentoring_connection: Create a %{mentoring_connection}
+        draft_a_mentoring_connection: Draft a %{mentoring_connection}
+        request_a_mentor: Request %{a_mentor}
+        request_connection: Request %{connection}
+        offer_mentoring_v1: Offer %{Mentoring}
+        unblock: Unblock
+        Clear_selection: Clear selection
+        connect_with_a_mentor: Connect with a %{Mentor}
+        connect_with_a_mentee: Connect with a %{Mentee}
+      status:
+        active: Active
+        unpublished: Unpublished
+      label:
+        summary: Summary
+        dormant_users: Dormant users
+        see_mentoring_calendar_v1: See %{Mentoring} Calendar
+        meeting_information_with_mentor: You have upcoming %{meetings} with this %{mentor}
+        match: Match
+        not_a_match: Not a Match
+        ignored: Ignored
+        not_a_match_tooltip_text: You ignored %{username}'s profile. Click on 'Reconsider' to connect with this user.
+        go_to_mentoring_area_v1: Go to %{Mentoring_Area}
+        request_meeting_v1: Request %{Meeting}
+        send_message: Send Message
+        Message: Message
+        Skype: Skype
+        Manage: Manage
+        view_your_pending_request: View your pending request
+        request_mentoring_v1: Request %{Mentoring_Connection}
+        Connect: Connect
+        Last_Login: 'Last Login:'
+        last_login_time: Last login %{time}
+        Manage_role: Manage %{role}
+        request_mentor: Request %{a_mentor}
+        find_mentor: Find %{a_mentor}
+        find_mentors: Find %{mentors}
+        mentoring_offer_pending: Mentoring Offer Pending
+        mentee_name: "%{mentee} name"
+        join_program: Join %{program}
+        mentee_member_since: "%{mentee}, %{since_time}"
+        mentor_member_since: "%{mentor}, %{since_time}"
+        relevance: Relevance
+        preference: Preference
+        name_asc: Name (A-Z)
+        name_desc: Name (Z-A)
+        recently_joined_asc: Join Date (Old to New)
+        recently_joined_desc: Join Date (New to Old)
+        match_asc: Match Score (Low to High)
+        match_desc: Match Score (High to Low)
+        recently_logged_in_asc: Last Logged In (Old to Recent)
+        recently_logged_in_desc: Last Logged In (Recent to Old)
+        next_n_days: Next %{n} days
+        date_range: Date Range
+        when_setup_meetings_v3: How would you prefer to schedule your %{meetings}?
+        how_setup_meetings_only_slots: Set your availability timeslots
+        scheduling_preference_mentee_and_mentor_v1: What are your scheduling preferences for %{meeting}?
+        location_filter_radius: Enter miles of the radius to search around location
+        location_filter_name: Enter name of the locaion to search around
+        max_meeting_slots: Maximum number of %{meetings} in a calendar month
+        select_all: Select all members to perform an action
+        select_this: Select this member to perform an action
+        ongoing_mentoring_connections: Ongoing %{mentoring_connections}
+        past_mentoring_connections: Past %{mentoring_connections}
+        draft_mentoring_connections: Drafted %{mentoring_connections}
+        mentoring_settings: "%{Mentoring} Settings"
+        mentor_does_not_allow_ongoing_mentoring_v1: "%{Mentor} is not available for ongoing %{mentoring}."
+        mentor_has_no_slots_available: "%{Mentor} has already reached the %{mentoring_connection} limit and currently not available for Ongoing %{mentoring}."
+        mentor_does_not_allow_onetime_meeting_v1: "%{Mentor} is not available for %{meetings}."
+        Preferred: Preferred
+        user_already_exists_in_the_program_html: "%{user_name} (%{user_email}) is already a user of this %{program}. <a href='%{user_profile}'>Click here</a> to view the profile."
+        permission_not_present_to_add_existing_member_html: "%{member_name} is already present in %{org_name} and you do not have the permission to access the profile and the user. However, you can invite %{member_name} by <a href='%{invite_url}'>clicking here</a> or request the permission from %{org_name} %{admins}."
+        member_suspended_at_org_level: "%{member_name} (%{member_email}) has been suspended from %{org_name} and cannot be added to the %{program}."
+        pending_profile_because_of_mandatory_fields_missing_v1_html: "%{user_profile} has been added to the %{program} in 'Unpublished' state, as mandatory information is missing in the profile."
+      photo:
+        current_photo: Current Photo
+        photo: Photo
+        crop_and_upload: Crop uploaded photo
+        upload_picture_or_link: Please upload a picture or link to a picture
+        upload_picture: Please upload a picture
+        give_link_to_picture: Please give link to a picture
+        select_another_photo: Select another photo
+        edit_this_photo: Edit this photo
+        edit_picture: Edit photo
+      placeholder:
+        education_v1: School, degree, etc.
+        experience_v1: Company, job title, etc.
+        publication_v1: Title, publisher, etc.
+        location_v1: Miles
+        location_city: City
+        location_search: City, State or Location
+      filter:
+        availability_status: Availability Status
+        match_score: Match Score
+        match_score_reset: Match Score Reset
+        include_not_matching_mentors: Include %{mentors} who are not a match
+        reset_availability_status_filter: Reset availability status filter
+        connection_status: Connection Status
+        apply_last_search: Apply last search
+        available_for_meeting_v2_html: Available for a %{meeting}%{time_period_text_html}
+        long_term_availability_v2: Available for a long term %{mentoring_connection}
+        title:
+          filter_mentors: Filter %{Mentors}
+        Keyword: Keyword
+        quick_find: Quick Find
+        abailable_mentors: Available %{mentors}
+        connected_mentees: Connected %{mentees}
+        unconnected_mentees: Unconnected %{mentees}
+        never_connected_mentees: Never connected %{mentees}
+        unconnected_mentees_tooltip_v1: Includes all the %{mentees} who are not currently part of any %{mentoring_connection}
+        never_connected_mentees_tooltip_v1: Includes all the %{mentees} who were never part of any %{mentoring_connection}
+        unpublished_profiles: Unpublished Profiles
+        suspended_profiles_v1: Deactivated Profiles

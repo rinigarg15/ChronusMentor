@@ -1,0 +1,12 @@
+<% if @current_organization.has_feature?(FeatureName::MEMBER_TAGGING) %>
+  <% all_tags_names = @all_tags_list.join(",") %>
+  <%= field_set_wrapper("feature.admin_view.label.Others".translate, false, @filter_params.present? && other_accordion_collapse?(@filter_params[:others])) do %>
+    <%= control_group do %>
+      <label class="control-label col-sm-2" for="admin_view_others_tags"><%= "feature.admin_view.label.Have_tags".translate %></label>
+      <%= controls(:class => "col-sm-10") do %>
+        <%= admin_view_tags_field("admin_view[others][tags]", all_tags_names, @filter_params) %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= javascript_tag %Q[initialize.tagList();] %>
+<% end %>

@@ -1,0 +1,23 @@
+<% is_new_record = @coaching_goal.new_record? %>
+<%= content_tag(:h3, "feature.connection.header.Edit_Goal".translate(goal_name: @coaching_goal.title)) unless is_new_record %>
+<%= simple_form_for [@group, @coaching_goal], :remote => is_ajax, :html => { :class => "form-horizontal has-above-1 cjs_goal_form"} do |f| %>
+  <%= response_flash "coaching_goal_flash" %>
+  <%= f.input :title, :required => true,  :input_html => {:maxlength => 200, :class => "form-control", :id => 'cjs_cgoal_title'} %>
+  <%= f.input :description, :as => :text, :input_html => {:class => "form-control", :rows => 4} %>
+  <%= f.input :due_date, :as => :string, :autocomplete => :off, 
+      :placeholder => "common_text.placeholder.select_date".translate, :input_html => {:id => "goal_due_date_new", :class => "form-control", :value => formatted_time_in_words(@coaching_goal.due_date, :no_time => true), data: date_picker_options } %>
+  <%= render :partial => "coaching_goal_activities/coaching_goal_activity_progress_bar", :locals => {:coaching_goal => @coaching_goal, :is_update_progress_popup => false } if is_new_record %>
+
+  <% action_set(:fields_required => true) do %>
+    <%= f.button :submit, "display_string.Save".translate, :class => "cjs_goal_submit" %>
+    <%= f.button :submit, "display_string.Save_and_View".translate, :class => "cjs_goal_submit", :name => 'view_goal' if is_new_record %>
+    <%= link_to "display_string.Cancel".translate, "", :class => 'btn cjs_goal_cancel' if is_ajax %>
+  <% end %>
+<% end %>
+
+<% title_error_text = "activerecord.custom_errors.coaching_goal.title.blank".translate %>
+<%= javascript_tag %Q[CoachingGoals.validateTitle('#{j title_error_text}');] %>
+<% unless is_new_record %>
+  <% content = render(:partial => "coaching_goals/coaching_goal", :locals => { :coaching_goal => @coaching_goal, :is_show_page => true }) %>
+  <%= javascript_tag %Q[CoachingGoals.handleEditCancel("#{escape_javascript content}");] %>
+<% end %>

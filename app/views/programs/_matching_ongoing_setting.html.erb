@@ -1,0 +1,16 @@
+<div class="cjs_ongoing_matching_setting_details has-above-7 <%= 'hide' unless @program.ongoing_mentoring_enabled? %>">
+  <%= render partial: "programs/how_matching_happens" %>
+  <%= render partial: "programs/mentor_request_offer_settings", locals: { f: f } %>
+  <%= render partial: "programs/connection_limit_settings", locals: { f: f } %>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(function() {
+    MatchingSettings.showMentorRequestSettings();
+    MatchingSettings.matchingOngoingAdvanceSetting();
+    jQuery(".cjs-mentoring-request-reminder").on("click", function() {
+      jQuery(this).is(":checked") ? jQuery(".cjs-show-mentoring-request-reminder-checked").show() : jQuery(".cjs-show-mentoring-request-reminder-checked").hide();
+      jQuery(".cjs-mentoring-request-reminder-duration").prop("disabled", !jQuery(this).is(":checked"));
+    });
+  });
+<% end %>

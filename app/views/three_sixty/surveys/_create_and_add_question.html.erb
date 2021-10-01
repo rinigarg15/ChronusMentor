@@ -1,0 +1,25 @@
+<%= simple_form_for question, :url => create_and_add_to_survey_three_sixty_questions_path, :method => :post, :remote => true, :html => { :class => "cjs_three_sixty_create_and_add_to_survey_object cui_three_sixty_inline_question hide", :id => "create_and_add_question_to_survey"} do |f| %>
+  <%  right = [
+        {
+            type: "btn",
+            btn_options: {
+              class: 'btn btn-primary',
+              data: { disable_with: "display_string.Please_Wait".translate }
+            },
+            content: "display_string.Save".translate
+        },
+        {
+          type: "addon",
+          class: "btn btn-white cjs_three_sixty_create_and_add_to_survey_cancel_link",
+          content: link_to("display_string.Cancel".translate, "javascript:void(0)", class: "text-default")
+        }
+      ]
+  %>
+  <%= construct_input_group([], right) do %>
+    <%= label_tag("title", "feature.three_sixty.question.title".translate, :for => "new_three_sixty_question_title", class: "sr-only")  %>
+    <%= f.input(:title, :as => :string, :input_html => {:id => "new_three_sixty_question_title", :class => "form-control", :placeholder => "feature.three_sixty.question.add".translate}, :label => false) %>
+  <% end %>
+
+  <%= f.hidden_field :question_type, :value => ThreeSixty::Question::Type::TEXT %>
+  <%= f.hidden_field :survey_id, :value => survey.id %>
+<% end %>

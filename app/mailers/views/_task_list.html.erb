@@ -1,0 +1,9 @@
+<% list do %>
+  <% tasks.each do |task| %>
+    <% mentoring_area_path = link_to(task.group.name, group_url(task.group, show_plan: true, subdomain: @program.organization.subdomain, root: @program.root, src: :wu)) %>
+    <% list_item do %>
+    	<%= expired ? "emails.default_mails.task_list.content.task_expired_on_html".translate(date: content_tag(:b, DateTime.localize(task.due_date, format: :default_with_day)), mentoring_area: mentoring_area_path, task_title: content_tag(:b, task.title)) :
+    				"emails.default_mails.task_list.content.task_due_on_html".translate(date: content_tag(:b, DateTime.localize(task.due_date, format: :default_with_day)), mentoring_area: mentoring_area_path, task_title: content_tag(:b, task.title)) %>
+    <% end %>
+  <% end %>
+<% end %>

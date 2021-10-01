@@ -1,0 +1,53 @@
+<% invalid_answer_details = local_assigns[:invalid_answer_details] %>
+<% invalid_password = local_assigns[:invalid_password] %>
+<% button_text = new_request ? "display_string.Submit".translate : "display_string.Update".translate %>
+<%= ibox nil do %>
+  <div class="cui_custom_fields_container">
+    <div class="common_questions">
+      <%= simple_form_for membership_request, html: { class: "form-horizontal cui_new_membership_request cjs_new_membership_request", multipart: true } do |f| %>
+        <% if new_request %>
+          <%= display_membership_instruction(membership_instruction_content, empty_form) %>
+          <%= verified_using_sso_text %>
+          <%= render partial: "membership_requests/role_select", locals: { hide: (!@show_roles && membership_request.role_names.present?), from_enrollment: from_enrollment, program: program } %>
+          <%= display_error_flash(membership_request, (@member.present? && @member.suspended?) ? "email_translations.member_suspension_notification.subject".translate : "flash_message.membership.creation_failed_v1".translate) %>
+          <%= hidden_field_tag "membership_request[roles][]", membership_request.role_names %>
+          <%= f.hidden_field :program_id, value: program.id if from_enrollment %>
+          <%= hidden_field_tag "signup_code", password.try(:reset_code) %>
+          <%= hidden_field_tag :time_zone, "", class: "cjs_time_zone" %>
+        <% end %>
+
+        <div id="membership_sections_list" class="m-t-xs">
+          <%= render partial: "membership_requests/display_section_membership_questions", locals: { form: f, membership_request: membership_request, new_request: new_request, answer_map: answer_map } %>
+        </div>
+
+        <% if new_request && display_terms_and_conditions %>
+          <div class="col-sm-offset-2 col-sm-10 p-l-xxs">
+            <%= render partial: "users/signup_terms", locals: { button_text: "display_string.Submit".translate } %>
+          </div>
+        <% end %>
+
+        <% action_set(class: "m-t-xs pull-right") do %>
+          <%= submit_tag(button_text, class: "btn btn-primary cjs_submit_btn", data: {disable_with: false}) %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  MembershipRequest.validateForm(<%= organization.email_question.id %>, <%= organization.name_question.id %>, <%= !!is_checkbox %>, "<%= j button_text %>", "<%= j 'display_string.Please_Wait'.translate %>", <%= new_request %>);
+
+  jQuery(document).ready(function(){
+    computeTimeZone(<%= chr_json_escape "#{TimezoneConstants::VALID_TIMEZONE_IDENTIFIERS.to_json}" %>, <%= chr_json_escape "#{TimezoneConstants::OBSOLETE_TIMEZONES_HASH.to_json}" %>, '<%= "#{notify_new_timezone_path}" %>');
+    CustomizeSelect.selectExpandContract();
+    <% if invalid_answer_details.present? %>
+      var invalidProfileAnswers = [];
+      <% invalid_answer_details.each do |detail| %>
+        invalidProfileAnswers.push(["<%= get_membership_question_id(detail) %>", "<%= j content_tag(:span, detail[:message], class: "text-danger") %>"]);
+      <% end %>
+      MembershipRequestForm.validate(invalidProfileAnswers);
+    <% elsif invalid_password.present? %>
+      MembershipRequestForm.highlightInvalidPassword();
+    <% end %>
+  });
+<% end %>

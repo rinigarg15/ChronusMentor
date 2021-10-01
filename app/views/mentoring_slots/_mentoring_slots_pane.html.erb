@@ -1,0 +1,20 @@
+<% show_add_slot_link = wob_member == member %>
+<div class="col-xs-12 cjs_availability_slots clearfix no-padding <%= 'hide' unless (member.will_set_availability_slots? || user.is_allowed_to_set_only_slot_availability?) %>">
+  <div class="cjs_slots_available_add_slot <%= 'hide' unless mentoring_slots.present? %>">
+    <%= render :partial => "mentoring_slots/list_mentoring_slots", :locals => {:member => member, :mentoring_slots => mentoring_slots} %>
+    <% if show_add_slot_link %>
+      <div class="col-xs-12 p-t-xs p-b-xs b-t">
+        <% if member.ask_to_set_availability? %>
+          <div class="m-t-xs pull-left"><%= link_to("feature.mentoring_slot.label.calendar".translate, member_url(member, :tab => MembersController::ShowTabs::AVAILABILITY), target: "_blank", class: "m-t-xs font-bold") %></div>
+        <% end %>
+        <%= link_to(append_text_to_icon("fa fa-plus-circle", "feature.profile.content.add_timeslot".translate), "javascript:void(0)", class: "btn btn-primary btn-sm pull-right cjs_add_new_mentoring_slot") %>
+      </div>
+    <% end %>
+  </div>
+  <div class="cjs_slots_unavailable_add_slot <%= 'hide' if mentoring_slots.present? %>">
+    <div class="col-xs-12 p-t-sm p-b-sm b-t">
+      <%= "feature.profile.content.slots_unavailability_text_v2".translate(time_period: get_current_and_next_month_text(wob_member)) %>
+      <%= link_to(append_text_to_icon("fa fa-plus-circle", "feature.profile.content.add_timeslot".translate), "javascript:void(0)", class: "cjs_add_new_mentoring_slot") if show_add_slot_link %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<% is_invitation = local_assigns[:is_invitation] || false %>
+<%= ibox @campaign.class.get_campaign_emails_title, :ibox_class => "campaign_emails_title #{'no-margins' if is_invitation}" do %>
+  <% if is_invitation && current_user.is_admin? %>
+    <div class="clearfix m-b-xs">
+      <%= link_to "feature.program_invitations.label.add_email".translate, new_campaign_management_program_invitation_campaign_abstract_campaign_message_path(@campaign), :class => "btn btn-white btn-xs pull-right" %>
+    </div>
+  <% end %>
+  <div id="campaign-messages-result" class="campaign-management-kendo-result">
+      <div id="cjs_campaign_messages_result" class="k-content table-responsive">
+        <%= content_tag :div, "", id: "cjs_campaign_messages_kendogrid"%>
+        <%= initialize_campaign_messages_kendo_script(@campaign, @tour_taken, @less_than_ie9) %>
+      </div>
+  </div>
+<% end %>

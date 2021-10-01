@@ -1,0 +1,31 @@
+en:
+  feature:
+    preferred_mentoring:
+      header:
+        preferred_mentors: preferred %{mentors}
+        Preferred_Mentors: Preferred %{Mentors}
+        recommended_mentors: Recommended %{Mentors}
+        no_results: No Results Found
+        title_v1: Request %{connection}
+      label:
+        select_mentor_v1: Select %{Mentor}
+        type_name_html: Type %{Mentor}'s Name...
+      content:
+        default_message: Say a few words about what advice you are looking for
+        min_preference_flash_v2: Please select at least %{min_preferred_mentors} %{mentors}
+        instructions:
+          header: Instructions
+          atleast_one_mentor_html: You should have at least %{preferred_mentor} to send the request.
+          browse_mentors_html: You can %{browse_mentors} here.
+          order_preferences_before_requesting_assignment_v1: You can drag and drop to order your preferences before sending your request.
+          specify_help_needed_to_admin_v1: Elaborate on what you are looking for and send your request. The %{admin}(s) will do their best to take your preferences into account.
+          specify_help_needed_to_mentor_v1: Leave a note for the %{mentor} about what you are looking for. The request can be seen only by the %{mentor} and the %{program} %{admins}.
+        remove_mentor_confirm: Are you sure you want to remove this %{mentor} from your preferred %{mentors}?
+        enter_mentor_name: Enter the %{mentor}'s name
+        tooltips:
+          match_score_nil: Match score for this user is not available at this time, please try again later
+          match_score: This shows the compatibility percentage between %{mentee_or_you} and the %{mentor}. Matching will be based on similar fields.
+      action:
+        add_to_list: Add to preferred %{mentors}
+        Remove: Remove
+        send_request: Send request

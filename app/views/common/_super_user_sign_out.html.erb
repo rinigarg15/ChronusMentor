@@ -1,0 +1,6 @@
+<% if super_console? %>
+  <li class="<%= local_assigns[:container_class] || "" %>">
+    <% icon_content = get_icon_content(local_assigns[:iconclass]) %>
+    <%= link_to icon_content + "app_layout.label.super_user_signout_text".translate, super_logout_path, :method => :delete %>
+  </li>
+<% end %>

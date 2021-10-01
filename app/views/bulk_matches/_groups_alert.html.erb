@@ -1,0 +1,24 @@
+<% groups_alert_html_options = { icon_class: "fa fa-exclamation-triangle fa-3x text-warning", alert_class: "m-b" } %>
+<% groups_alert_context = params[:bulk_action] ? :user : nil %>
+<% groups_alert = existing_groups_alert([], @student_id_mentor_id_sets, Group::Status::DRAFTED, groups_alert_context, false, groups_alert_html_options) %>
+
+<% if groups_alert.present? %>
+  <% button_text = get_translated_text(BulkMatch::UpdateType::DRAFT) %>
+  <% click_handler = if params[:bulk_action]
+    "bulkUpdatePairStatus('#{BulkMatch::UpdateType::DRAFT}');"
+  else
+    "updatePair($event, #{@orientation_type == BulkMatch::OrientationType::MENTEE_TO_MENTOR ? @student.id : @mentor.id}, #{@student.id}, '#{BulkMatch::UpdateType::DRAFT}', {updateNotes: false, addMessage: false});"
+  end %>
+
+  <%= form_tag "javascript:void(0)" do %>
+    <div id="cjs_bulk_match_groups_alert" ng-controller="BulkMatchCtrl">
+      <%= groups_alert %>
+      <% action_set class: "pull-right" do %>
+        <%= link_to_function "display_string.Cancel".translate, "jQuery('#cjs_bulk_match_groups_alert_modal').modal('hide');", class: "btn btn-white" %>
+        <%= submit_tag button_text, class: "btn btn-primary", "ng-click" => click_handler, data: { disable_with: "display_string.Please_Wait".translate } %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= javascript_tag "jQuery(document).ready(function() { angular.bootstrap(jQuery('#cjs_bulk_match_groups_alert')); });" %>
+<% end %>

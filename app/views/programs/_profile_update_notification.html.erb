@@ -1,0 +1,11 @@
+<div class="alert alert-info text-xs-center text-sm-left profile_update_notifications" id="profile_update">
+  <%= link_to_function(get_icon_content("fa fa-times") + set_screen_reader_only_content("display_string.Remove".translate), "disableProfileUpdatePrompt('#{disable_profile_update_prompt_path(t: current_program.profile_questions_last_update_timestamp(current_user))}')", class: "pull-right") %>
+  <%= get_icon_content("fa fa-info-circle text-info", {container_class: "fa-circle", stack_class: "fa-1x m-r-sm hidden-xs"}) %>
+  <% if profile_incomplete_roles.any? %>
+    <% edit_member_link = link_to "display_string.here".translate, edit_member_path(wob_member, role: profile_incomplete_roles.first, prof_c: true, ei_src: EngagementIndex::Src::EditProfile::HOMEPAGE_FLASH), class: "font-bold" %>
+    <%= "feature.profile.content.new_mandatory_filed_html".translate(admin: _admin, here: edit_member_link) %>
+  <% else %>
+    <% edit_member_link = link_to "display_string.here".translate, edit_member_path(wob_member, section: MembersController::EditSection::PROFILE, src: UserConstants::PROFILE_UPDATE_PROMPT, ei_src: EngagementIndex::Src::EditProfile::HOMEPAGE_FLASH), class: "font-bold" %>
+    <%= raw "feature.profile.content.change_in_profile_fields_html".translate(admin: _admin, here: edit_member_link) %>
+  <% end %>
+</div>

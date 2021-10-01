@@ -1,0 +1,10 @@
+<div id = "cjs_connection_summary">
+<%= ibox "feature.connection.header.connection_summary".translate(Mentoring_Connection: _Mentoring_Connection), :content_class=> "p-l-sm", :show_collapse_link => true do %>
+    <div class="row-fluid p-b-xxs">
+      <%= embed_display_line_item("feature.connection.header.Started".translate, formatted_time_in_words(@group.published_at, :no_ago => true, :no_time => true), heading_class: "group_started_at", content_class: "group_started") %>
+    </div>
+    <div class="row-fluid">
+      <%= generate_connection_summary_expires(@group) %>
+    </div>
+  <% end %>
+</div>

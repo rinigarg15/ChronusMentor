@@ -1,0 +1,36 @@
+<div class="col-xs-offset-4 col-sm-offset-6 no-horizontal-padding">
+  <%= form_tag program_event_path(program_event), :remote =>true, :method => :get, :id => 'search_filter_form', :class => "search-icon search_container navbar-search pull-right no-margin search-with-autocomplete no-padding" do %>
+    <%= hidden_field_tag :tab, tab %>
+    <%= label_tag :search_content, "feature.program_event.content.search_guests".translate, :for => "search_content", :class => "sr-only" %>
+      <% right  = [
+        { type: "btn",
+          btn_options: {
+            class:'btn btn-primary'
+          },
+          content: get_icon_content("fa fa-search m-r-0") + set_screen_reader_only_content("display_string.Search".translate)
+        }
+      ] %>
+
+      <% right << { type: "btn",
+                    btn_options: {
+                        class:'btn btn-outline btn-default'
+                      },
+                    class: "remove-search-icon cancel-search",
+                    content: link_to(get_icon_content("fa fa-times m-r-0") + set_screen_reader_only_content("display_string.Cancel".translate), "javascript:void(0)", :class => "text-default")
+                  } if params[:search_content].present? %>
+
+      <%= construct_input_group([], right, :input_group_class => "input-group-sm") do %>
+       <%= text_field_with_auto_complete(:search_content, "search_content", {:value => params[:search_content], :name => "search_content", :placeholder => "feature.program_event.content.search_guests".translate, :class => "form-control input-sm", :id => "search_content", :autocomplete => "off"},
+         {
+           :min_chars => 3,
+           :url => auto_complete_for_name_users_path(format: :json, no_email: true, show_all_users: true, program_event_users: all_users_for_listing_ids.join(COMMON_SEPARATOR), for_autocomplete: true),
+           :param_name => 'search',
+           :highlight => true
+         })
+       %>
+     <% end %>
+  <% end %>
+</div>
+
+
+<%= javascript_tag "programEvent.initializeSearch();programEvent.initFilterLoading();" %>

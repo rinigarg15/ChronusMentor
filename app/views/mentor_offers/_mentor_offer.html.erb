@@ -1,0 +1,44 @@
+<%
+  if @received_offers_view
+    user = mentor_offer.mentor
+    req_created_time_header = 'feature.mentor_request.label.Received'.translate
+  else
+    user = mentor_offer.student
+    req_created_time_header = 'feature.mentor_request.label.Sent'.translate
+  end
+  actions = []
+  offer_message = mentor_offer.message
+  message_present = offer_message.presence
+%>
+
+<div class='pull-right hidden-xs'>
+  <% actions = mentor_offers_actions_end_user(mentor_offer, @received_offers_view, @filter_params) %>
+  <%= dropdown_buttons_or_button(actions, dropdown_title: actions.size > 1 ? 'display_string.Actions'.translate : nil, :dropdown_menu_class => "pull-right") %>
+  <%= render partial: "mentor_offers/reject_withdraw_popup", locals: {mentor_offer: mentor_offer, reject: @received_offers_view} %>
+</div>
+<div class="no-margins">
+  <div class="clearfix">
+    <div class="media-left">
+      <%= user_picture user, {size: :medium, no_name: true, :outer_class => "pull-left"}, {:class => "img-circle"} %>
+    </div>
+    
+    <div class="media-body">
+      <h4>
+        <%= link_to_user user %>
+        <div class="small m-t-xs"><%= get_icon_content("fa fa-clock-o no-margins") + content_tag(:span, "#{req_created_time_header} #{formatted_time_in_words(mentor_offer.created_at, :absolute => true)}") %></div>
+      </h4>
+    </div>
+
+    <div class="m-t-sm clearfix">
+      <%= profile_field_container_wrapper("#{'feature.mentor_offer.label.Message'.translate}", (message_present ? chronus_auto_link(offer_message) : "feature.mentor_offer.content.no_message".translate), :heading_tag => :h4, :class => "m-t-sm m-b-xs", :answer_class => (message_present ? "" : "text-muted")) %>
+
+      <% if mentor_offer.rejected? %>
+        <%= profile_field_container_wrapper("#{ "feature.mentor_offer.label.rejection_reason_v1".translate }", mentor_offer.response, :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class='pull-right visible-xs col-xs-12 no-padding'>
+  <% mobile_actions = mentor_offers_actions_end_user(mentor_offer, @received_offers_view, @filter_params) %>
+  <%= dropdown_buttons_or_button(mobile_actions, dropdown_title: mobile_actions.size > 1 ? 'display_string.Actions'.translate : nil, :dropdown_menu_class => "pull-right", :btn_class => "btn-block m-t-sm", :btn_group_btn_class => "btn-block", :dropdown_menu_class => "col-xs-12 pull-right  table-bordered") %>
+</div>

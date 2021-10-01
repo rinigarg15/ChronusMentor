@@ -1,0 +1,32 @@
+<% milestone_template_id = milestone_template.id %>
+<% if milestone_template.description.present? %>
+  <% milestone_description = content_tag(:div, preserve_new_line(milestone_template.description.presence), :class => "cjs_description_container cjs_show_on_collapse_milestone_template hide") %>
+<% end %>
+<% header_content = content_tag(:div, milestone_template.title, :class => "font-600 h5 m-t-0 m-b-xs") + milestone_description %>
+<% delete_message = ("feature.mentoring_model.description.delete_template_message".translate({title: h(milestone_template.title), should_sync_text: @should_sync_warn ? "feature.multiple_templates.js_translations.syncToGroupOnDeleteConfirmation".translate(mentoring_connections: _mentoring_connections, mentoring_connection: _mentoring_connection, count: (@ongoing_connections_count || 0)) : ""})) %>
+<% ibox_options = {
+    :show_delete_link => !@read_only,
+    :delete_url => mentoring_model_milestone_template_path(@mentoring_model, milestone_template),
+    :delete_html_options => {:data => {remote: true, method: :delete, confirm: delete_message}},
+    :delete_link_class => "hide cjs_show_on_collapse_milestone_template no-margins",
+    :show_edit_link => !@read_only,
+    :edit_url => "javascript:void(0)",
+    :edit_html_options => {:data => {:url => edit_mentoring_model_milestone_template_path(@mentoring_model, milestone_template)}},
+    :edit_link_class => "hide cjs_edit_milestone_template cjs_show_on_collapse_milestone_template no-margins",
+    :ibox_id => "collapsible_pane_milestone_#{milestone_template_id}",
+    :ibox_class => "collapsed no-margins noshadow table-bordered",
+    :title_class => "gray-bg cjs-sortable-milestone-handle",
+    :content_class => "word_break no-padding",
+    :collapse_link_class => "cjs_show_on_collapse_milestone_template_handler no-margins",
+    :collapse_html_options => {:data => {:remote => true, :milestone_template_id => milestone_template.id}},
+    :header_content => header_content
+  } %>
+<div class="cjs_milestone_template_entity b-b" id="<%= "cjs_milestone_template_#{milestone_template_id}"%>" data-id="<%= milestone_template_id %>" >
+  <%= ibox nil, ibox_options do %>
+    <div class="hide cjs_milestone_edit_form cjs_milestone_template_form">
+    </div>
+    <div class="cjs_milestone_task_templates">
+      <%= render partial: "mentoring_model/task_templates/index", locals: { task_templates: milestone_task_templates[milestone_template_id], milestone_template_id: milestone_template_id, header_class: :h3 } %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,7 @@
+<% if @similar_circles.present? %>
+  <% groups_listing_content = render(:partial => "groups/similar_circles_listing", :locals => { similar_circles: @similar_circles}) %>
+  jQuery(".similar_circles_listing").html('<%= j(groups_listing_content) %>');
+  jQuery(".similar_circles_content").show();
+<% else %>
+  jQuery(".similar_circles_content").hide();
+<% end %>

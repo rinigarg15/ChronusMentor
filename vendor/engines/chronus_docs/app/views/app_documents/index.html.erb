@@ -1,0 +1,21 @@
+<% @title = get_icon_content("fa fa-file-archive-o") + "documents_page.title".translate %>
+<%= ibox nil do %>
+  <table id="solution_packs" class="table table-bordered table-striped table-vertical-centered table-responsive">
+    <thead>
+      <tr>
+        <th> Title </th>
+        <th> Description </th>
+        <th> <%= "display_string.Download".translate %> </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @documents.each do |document| %>
+        <tr>
+          <td> <%= document.title.gsub("_", " ") %></td>
+          <td><%= document.description %></td>
+          <td><%= link_to "display_string.Download".translate, app_document_path(document.id) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

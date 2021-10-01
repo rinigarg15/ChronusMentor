@@ -1,0 +1,19 @@
+<% text = @current_organization.present? ? "app_layout.header.update_your_browser_program".translate(program_name: h(program_context.name)) : "app_layout.header.update_your_browser_nil_organization".translate %>
+
+<% modal_container text, modal_id: "browser_warning" do %>
+
+  <%= content_tag(:div, class: "ckeditor_generated") do %>
+    <%= auto_link(@browser_warning_content.html_safe) %>
+  <% end %>
+  <div class="clearfix text-center text-danger">
+    <strong>
+      <%= "app_layout.header.access_revoked_in".translate(program: _Program, cutofftime: DateTime.localize(BROWSER_WARNING_DATE.utc, format: :full_display_no_time)) %>
+    </strong>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    jQuery("#browser_warning").modal('show');
+  });
+<% end %>

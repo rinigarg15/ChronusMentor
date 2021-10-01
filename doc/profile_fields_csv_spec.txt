@@ -1,0 +1,107 @@
+General notes:
+  CSV file should be comma separated (,). Any fields that contains comma, should be wrapped with "".
+  Example: "Accounting,Airlines,Aviation,Alternative"
+
+Section Name
+  optional
+  values: string
+  default: "Basic Information"
+
+Section Description
+  optional
+  values: plain text
+  default: ""
+
+Field Name
+  required
+  values: string
+
+Field Type
+  required
+  values: string|text|single_choice|multi_choice|file|multi_string|
+          location|experience|multi_experience|education|multi_education|publication|multi_publication|email|skype_id|ordered_options
+
+Allow Multiple Responses
+  required for: string|multi_string|single_choice|multi_choice|experience|multi_experience|education|multi_education|publication|multi_publication
+  values: yes|no
+  default: "no" for string|multi_string|single_choice|multi_choice|experience|multi_experience|education|multi_education|publication|multi_publication
+           "" for others
+
+Options
+  required for: single_choice|multi_choice
+  values: list of comma-separated values
+  default: ""
+
+Options Count
+  required for: ordered_options
+  values: number from 1 to values count (from prev. column)
+  default: "2" for ordered_options
+           "" for others
+
+Allow to Specify Different Answer
+  required for: single_choice|multi_choice|ordered_options
+  values: yes|no
+  default: "no" for single_choice|multi_choice|ordered_options
+           "" for others
+
+Field Description
+  optional
+  values: plain text
+  default: ""
+
+# Mentor|Mentee fields
+note: for following fields you can use:
+      "yes" instead of "yes|yes"
+      "everyone" instead of "everyone|everyone"
+      etc.
+
+Include for Mentor|Mentee
+  optional
+  values: 2 comma separated values with [yes|no]
+  default: yes
+
+Include in Profile
+  optional
+  values: 2 comma separated values with [yes|no]
+  default: yes
+
+Include in Membership Form
+  optional
+  values: 2 comma separated values with [yes|no]
+  default: yes
+
+Visibility
+  optional
+  values: everyone|user_and_mentors|user_and_his_members|user|administrators
+  default: everyone
+
+Editable by Admin Only
+  optional
+  values: 2 comma separated values with [yes|no]
+  default: no
+
+Mandatory
+  optional
+  values: 2 comma separated values with [yes|no]
+  default: no
+
+Show in Listing
+  optional
+  values: 2 comma separated values with [yes|no]
+  default: yes
+
+Available for Search
+  optional
+  values: 2 comma separated values with [yes|no]
+  default: yes
+
+# [TBD] Advanced
+show_if_field
+  optional
+  values: string from the list of fields
+  default: ""
+
+show_if_value
+  optional
+  values: string
+  default: ""

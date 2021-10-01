@@ -1,0 +1,15 @@
+<% header_content = capture do %>
+  <%= "feature.mentoring_model.header.tasks_progress_v1".translate %>
+  <%= get_icon_content("fa fa-info-circle m-r-0", data: { toggle: "tooltip", title: "feature.mentoring_model.information.tasks_progress_tooltip".translate } ) if local_assigns[:without_goals].blank? %>
+<% end %>
+
+<%= panel nil, panel_class: "panel-default no-borders m-b-sm", header_content: header_content do %>
+  <% mentoring_model_tasks = group.mentoring_model_tasks %>
+  <% if mentoring_model_tasks.present? %>
+    <%= display_tasks_progress_bar(mentoring_model_tasks, {modified_task_bar: show_manage_connections_view}) %>
+  <% else %>
+    <div class="text-muted">
+      <%= "feature.mentoring_model.header.no_tasks_defined".translate %>
+    </div>
+  <% end %>
+<% end %>

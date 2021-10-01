@@ -1,0 +1,19 @@
+<% role_mapper = {RoleConstants::ROLE_DISPLAY_NAME_MAPPING[RoleConstants::STUDENT_NAME] => RoleConstants::STUDENT_NAME, RoleConstants::MENTOR_NAME => RoleConstants::MENTOR_NAME} %>
+<div class="m-r <%= "m-l" if form.present? %>">
+  <% form_options = {include_blank: "feature.bulk_match.content.prompt.select_view".translate, label: nil, required: true} %>
+  <% input_html_options = {id: "#{id_suffix}_#{role}_view_id", class: "form-control no-padding no-border", url: admin_view_path_with_source(:new), autocomplete: :off, data: {url: preview_view_url, role: role_mapper[role], selected: admin_view.try(:id)}} %>
+  <% input_options = form_options.merge({input_html: input_html_options}) %>
+  <%= form.present? ? (form.input "#{role}_view_id", input_options) : number_field_tag("#{role}_view_id", nil, form_options.merge(input_html_options)) %>
+</div>
+<% admin_view_preview = if admin_view.present?
+  render partial: "common/preview_view_details", locals: {admin_view: admin_view, admin_view_filters: admin_view_filters, role: role_mapper[role], admin_view_users: admin_view_users}
+else
+  content_tag(:div, "", class: "cjs_#{role_mapper[role]}_view_content")
+end %>
+<% if form.present? %>
+  <%= admin_view_preview %>
+<% else %>
+  <%= panel "", {panel_class: "panel-default m-t-sm", panel_heading_class: "hide"} do %>
+    <%= admin_view_preview %>
+  <% end %>
+<% end %>

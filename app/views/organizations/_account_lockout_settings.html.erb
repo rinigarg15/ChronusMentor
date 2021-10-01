@@ -1,0 +1,40 @@
+<% login_attempts_enabled = @current_organization.login_attempts_enabled? %>
+<% auto_reactivate_enabled = @current_organization.auto_reactivate_enabled? %>
+<%= control_group do %>
+  <div class="false-label control-label">
+    <%= "program_settings_strings.content.account_lockout_v1_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS + " cjs-tool-tip",'', "data-desc" => "program_settings_strings.content.account_lockout_tooltip_v1".translate)) %>
+  </div>
+  <%= controls do %>
+    <div class="cjs_group_enclosure clearfix">
+      <label class="checkbox inline pull-left">
+        <%= check_box_tag :account_lockout, 1, login_attempts_enabled, :class => "cjs_set_value_checkbox cjs_primary_checkbox", :data => {:value => OrganizationsHelper::SecuritySetting::DEFAULT_LOGIN_ATTEMPTS} %> <%= "display_string.Enable".translate %>
+      </label>
+      <label class="cjs_hidden_control m-t-xxs col-xs-10 no-horizontal-padding font-noraml <%= get_toggle_class_for_security(login_attempts_enabled) %>" for="organization_security_setting_attributes_maximum_login_attempts">
+        <%= content_tag(:span, ", #{"program_settings_strings.content.account_login_attempt_html".translate(times: "")}", :class => "p-xxs p-l-0 p-r-sm m-t-xxs pull-left") %>
+        <div class="col-sm-4 no-padding">
+          <%= security_setting_form.text_field(:maximum_login_attempts, :skip_title => true, :wrapper => :none, :class => "cjs_value_recepient input-sm form-control") %>
+        </div>
+      </label>
+    </div>
+    <div class="cjs_group_enclosure clearfix">
+      <label class="checkbox iconcol-md-offset-1 cjs_hidden_control <%= get_toggle_class_for_security(login_attempts_enabled) %>">
+        <%= security_setting_form.check_box :reactivation_email_enabled, :class => "inline pull-left" %>
+        <%= content_tag(:span, "#{"program_settings_strings.content.email_recovery".translate}", :class => "pull-left") %>
+      </label>
+    </div>
+    <div class="cjs_group_enclosure m-t-xs cjs_hidden_control <%= get_toggle_class_for_security(login_attempts_enabled) %>">
+      <label class="iconcol-md-offset-1 checkbox inline pull-left">
+        <%= check_box_tag :reactivate_account, 1, auto_reactivate_enabled, :class => "cjs_set_value_checkbox", :data => {:value => OrganizationsHelper::SecuritySetting::DEFAULT_AUTO_REACTIVATE_PASSWORD} %>
+        <%= set_screen_reader_only_content("program_settings_strings.content.automatically_reactivate_v1".translate) %>
+      </label>
+      <label class="cjs_hidden_control m-t-xxs col-xs-10 no-horizontal-padding font-noraml <%= get_toggle_class_for_security(login_attempts_enabled) %>" for="organization_security_setting_attributes_auto_reactivate_account">
+        <%= content_tag(:span, "#{"program_settings_strings.content.automatically_reactivate_v1".translate}", :class => "p-l-0 p-xxs m-t-xxs pull-left") %>
+        <div class="col-sm-4 no-padding m-l-sm">
+          <%= security_setting_form.text_field(:auto_reactivate_account, :wrapper => :none, :skip_title => true, :class => "form-control input-sm cjs_value_recepient") %>
+        </div>
+        <%= content_tag(:span, "program_settings_strings.content.after_x_hours_v1_html".translate(x: ""), :class => "p-xxs p-l-sm p-r-sm m-t-xxs pull-left") %>
+      </label>
+    </div>
+  <% end %>
+<% end %>
+  

@@ -1,0 +1,14 @@
+<% unless meeting.description.blank? %>
+  <div class="p-r-sm clearfix p-b-sm <%= hidden_on_mobile %>">
+    <%= render_more_less(chronus_auto_link(h(meeting.description)), 300) %>
+  </div>
+  <div class="p-r-sm clearfix p-b-sm <%= hidden_on_web %>">
+    <%= render_more_less(chronus_auto_link(h(meeting.description)), 80) %>
+  </div>
+<% end %>
+
+<div class="clearfix">
+  <div class="cjs_attendees_list">
+    <%= meeting_attendees_for_display(meeting, current_occurrence_time) %>
+  </div>
+</div>

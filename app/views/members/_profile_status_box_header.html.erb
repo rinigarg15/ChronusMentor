@@ -1,0 +1,16 @@
+<div class="cjs_profile_status_box_header text-center <%= "m-b-md" if local_assigns[:first_visit] %>">
+  <div class="progress progress-striped centered_content mail-search">
+    <div class="progress-bar" style='<%= "width: #{profile_score.sum}%;"%>'></div>
+  </div>
+  <span class="completion_stats col-xs-12 m-t-sm"> <%= "feature.profile.content.your_profile_is_x_complete_v1_html".translate(score_text: content_tag(:span, "feature.profile.content.complete_html".translate(score: profile_score.sum), class: "font-bold text-navy")) %> </span>
+
+  <div class="m-b-sm small text-muted">
+    <span class='complete_questions_promt'>
+      <% if local_assigns[:first_visit].present? %>
+        <%= "feature.profile.content.complete_sections_for_score".translate(sections_green: sections_green, total_sections: total_sections) %>
+      <% elsif local_assigns[:first_visit].blank? %>
+        <%= "feature.profile.content.complete_questions_for_score".translate %>
+      <% end %>
+    </span>
+  </div>
+</div>

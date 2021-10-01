@@ -1,0 +1,4 @@
+<div class="pagination_box clearfix">
+  <%= pagination_bar(@group_coaching_goals, :entries_name => "feature.coaching_goal.header.Goals".translate) %>
+</div>
+<%= render :partial => "coaching_goals/coaching_goal", :collection => @group_coaching_goals, :locals => { :is_show_page => false } %>

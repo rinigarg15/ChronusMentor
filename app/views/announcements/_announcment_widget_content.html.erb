@@ -1,0 +1,42 @@
+<% mobile_view = (mobile_app? || mobile_device?) %>
+<div class="announcements-slick white-bg">
+  <% announcements.each_with_index do |announcement, index| %>
+    <div>
+      <% header_content = capture do %>
+        <div class="modal-header no-padding clearfix">
+          <h4 class="modal-title no-margins">
+            <span class='p-l-m p-r-m p-sm pull-left col-xs-10 col-sm-10'><%= get_icon_content("fa fa-lg fa-bullhorn m-r-sm")%><%= "feature.announcements.label.Announcement".translate %></span>
+          </h4>
+          <%= link_to("javascript:void(0)", class: "close-link-announcements cjs_slick_modal_close_link no-padding", id: "", data: {url: mark_viewed_announcement_path(id: announcement.id)}) do %>
+            <%= get_icon_content("fa fa-times fa-lg text-muted pull-right p-sm m-t-3 m-r text-white-mobile")  + set_screen_reader_only_content("display_string.Close".translate) %>
+          <% end %>
+        </div>
+        <%= content_tag(:div, horizontal_line(class: "no-margins")) %>
+      <% end %>
+      <%= ibox nil, {ibox_class: "no-margins noshadow slick_box #{index == 0 ? '' : 'hide'}", icon_class: "fa fa-bullhorn fa-lg", content_class: "no-padding", ibox_id: "announcement_box", no_collapse: true, header_content: header_content, title_class: "no-padding", scroll_required: !mobile_view, scroll_height_class: "scroll-7"} do %>
+        <div class="well well-sm p-l-sm p-r-sm m-l-n-md m-r-n-md m-t-0 m-b-0 no-borders noshadow h5 text-center word_break"><%= announcement.title %></div>
+        <% unless announcement.body.blank? %>
+          <div class="p-sm ckeditor_generated">
+            <%= announcement.body.html_safe %>              
+          </div>
+        <% end %>
+        <% if announcement.attachment? %>
+          <div class="well well-sm p-l-sm p-r-sm m-t-0 m-b-0 noshadow no-border-bottom h5 clearfix announcement_attachment_container">
+            <div class="text-right col-xs-6 col-xs-offset-6 p-r-0">
+              <div class="clearfix">
+                <%= link_to(get_icon_content("fa fa-download") + announcement.attachment_file_name, announcement.attachment.url, target: "_blank", class: 'cjs_android_download_files btn btn-primary btn-sm max-full-width truncate-with-ellipsis', data: {filename: announcement.attachment_file_name, targeturl: announcement.attachment.url}) %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<%= javascript_tag do  %>
+  jQuery(document).ready(function(){
+    Announcements.initializeAnnouncementsScroll();
+    Announcements.handleAnnouncementsClosePopup();
+  });
+<% end %>

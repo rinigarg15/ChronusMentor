@@ -1,0 +1,19 @@
+<% preference_question_label = "feature.explicit_preference.label.profile_field".translate %>
+<% preference_options_label = "feature.explicit_preference.label.preferences".translate %>
+<% preference_location_label = "feature.explicit_preference.label.location".translate %>
+<div class="cjs_explicit_preference_question_selector_row">
+  <div class="col-xs-12 col-sm-5">
+    <%= create_view ? content_tag(:label, preference_question_label, class: "control-label sr-only") : content_tag(:label, (preference_question_label + get_icon_content("fa fa-lock")).html_safe, class: "control-label") %>
+    <%= f.input :role_question_id, label: false, placeholder: "feature.explicit_preference.placeholder.select_question".translate, input_html: {class: "col-xs-9 col-sm-12 no-padding cjs_explicit_preference_question_selector"}, control_wrapper_html: {class: 'col-sm-12'} %>
+  </div>
+</div>
+<div class="col-xs-12 col-sm-5">
+  <div class="cjs_explicit_preference_option_selector_row <%= 'hide' if create_view %>">
+    <%= create_view ? content_tag(:label, preference_options_label, class: "control-label sr-only") : content_tag(:label, preference_options_label, class: "control-label") %>
+    <%= f.input :question_choice_ids, label: false, placeholder: "feature.explicit_preference.placeholder.select_option".translate, input_html: {class: "col-xs-9 col-sm-12 no-padding cjs_explicit_preference_option_selector"}, control_wrapper_html: {class: 'col-sm-12'} %>
+  </div>
+  <div class="cjs_explicit_preference_string_selector_row <%= 'hide' if create_view %>">
+    <%= create_view ? content_tag(:label, preference_location_label, class: "control-label sr-only") : content_tag(:label, preference_options_label, class: "control-label") %>
+    <%= f.input :preference_string, label: false, placeholder: "feature.explicit_preference.placeholder.select_location".translate, input_html: {class: "col-xs-9 col-sm-12 no-padding cjs_explicit_preference_string_selector"}, control_wrapper_html: {class: 'col-sm-12'} %>
+  </div>
+</div>

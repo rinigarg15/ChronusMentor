@@ -1,0 +1,1 @@
+cst_web_login: <%= Psych.to_json(self.multi_dimensional_hash_lookup(params, [:envelope, :body, :execute_method_response, :execute_method_result, :result, :cst_web_login])).chomp %>

@@ -1,0 +1,113 @@
+<% @title = "feature.meetings.content.calendar_sync.page_title_v1".translate(meetings: _meetings) %>
+<%= ibox nil, content_class: "p-m" do %>
+  <%= content_tag(:p, "feature.meetings.content.calendar_sync.introduction_para_v2".translate(meetings: _meetings, meeting: _meeting)) %>
+  <br/>
+  <%= content_tag(:h3, "feature.meetings.content.calendar_sync.few_things_to_note".translate) %>
+  <%= content_tag(:ul, :class => "m-t-md") do %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.note_point_1_v1".translate(meetings: _meetings)) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.note_point_2_v1".translate(meetings: _meetings)) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.note_point_3_v1".translate(meetings: _meetings)) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.note_point_4_v1".translate) %>
+  <% end %>
+  <br/>
+  <%= content_tag(:p, "feature.meetings.content.calendar_sync.to_subscribe_to_calendar".translate) %>
+  <%= content_tag(:ol, :class =>"m-t-sm") do %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.subscribe_calendar_point_1".translate(Meetings: _Meetings)) %>
+    <%= content_tag(:li) do %>
+      <%= "feature.meetings.content.calendar_sync.subscribe_calendar_point_2".translate %>
+      <br/>
+      <%= image_tag('subscribe_to_calendar.png', :height => '230px', :width => '500px', :class => 'm-t-md m-b-md img-responsive img-shadow') %>
+    <% end %>
+    <%= content_tag(:li) do %>
+      <%= 'feature.meetings.content.calendar_sync.subscribe_calendar_point_3'.translate(meetings: _meetings, mentoring: _mentoring) %>
+      <%= content_tag(:ul, :class => "m-t-md m-b-lg") do %>
+        <%= content_tag(:li, link_to("feature.meetings.content.calendar_sync.sync_with_google".translate, "#sync_google")) %>
+        <%= content_tag(:li, link_to("feature.meetings.content.calendar_sync.sync_with_outlook".translate, "#sync_outlook")) %>
+        <%= content_tag(:li, link_to("feature.meetings.content.calendar_sync.sync_with_ical".translate, "#sync_ical")) %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:h2, "feature.meetings.content.calendar_sync.sync_with_google".translate, :class => "m-b-md", :id => "sync_google") %>
+
+  <%= content_tag(:ol, :class => "m-t-md m-b-xl") do %>
+    <%= content_tag(:li) do %>
+      <%= "feature.meetings.content.calendar_sync.sync_with_google_point_1".translate %>
+      <br/>
+      <%= image_tag('google_calendar.png', :height => '350px', :width => '700px', :class => 'm-t-md m-b-md img-responsive img-shadow') %>
+    <% end %>
+    <%= content_tag(:li) do %>
+      <%= "feature.meetings.content.calendar_sync.sync_with_google_point_2".translate %>
+      <br/>
+      <%= image_tag('other_calendars.png', :height => '200px', :width => '400px', :class => 'm-t-md m-b-md m-l-sm img-responsive img-shadow') %>
+    <% end %>
+    <%= content_tag(:li) do %>
+      <%= "feature.meetings.content.calendar_sync.sync_with_google_point_3".translate(mentoring: _mentoring) %>
+      <br/>
+      <%= image_tag('add_by_url.png', :height => '220px', :width => '500px', :class => 'm-t-md m-b-md m-l-sm img-responsive img-shadow') %>
+    <% end %>
+    <%= content_tag(:li) do %>
+      <%= "feature.meetings.content.calendar_sync.sync_with_google_point_4".translate %>
+      <br/>
+      <%= image_tag('calendar_color_change.png', :height => '300px', :width => '500px', :class => 'm-t-md m-b-md m-l-sm img-responsive img-shadow') %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:h2, "feature.meetings.content.calendar_sync.sync_with_outlook".translate, :class => "m-b-md", :id => "sync_outlook") %>
+
+  <%= content_tag(:h5, "feature.meetings.content.calendar_sync.for_outlook_2007".translate, :class => "m-b-md") %>
+
+  <%= content_tag(:ol, :class => "m-t-xs m-b-md") do %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2007_point_1".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2007_point_2".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2007_point_3".translate(mentoring: _mentoring)) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2007_point_4".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2007_point_5".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2007_point_6".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2007_point_7".translate(mentoring: _mentoring, meetings: _meetings)) %>
+  <% end %>
+
+  <%= content_tag(:h5, "feature.meetings.content.calendar_sync.for_outlook_2010".translate, :class => "m-b-md m-t-md") %>
+
+  <%= content_tag(:ol, :class => "m-t-xs m-b-md") do %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2010_point_1".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2010_point_2".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2010_point_3".translate(mentoring: _mentoring)) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2010_point_4".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2010_point_5".translate(mentoring: _mentoring)) %>
+  <% end %>
+
+  <%= content_tag(:h5, "feature.meetings.content.calendar_sync.for_outlook_2013_and_2016".translate, :class => "m-b-md m-t-md") %>
+
+  <%= content_tag(:ol, :class => "m-t-xs m-b-md") do %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2016_2013_point_1".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2016_2013_point_2".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2016_2013_point_3".translate(mentoring: _mentoring)) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2016_2013_point_4".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2016_2013_point_5".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_2016_2013_point_6".translate) %>
+  <% end %>
+
+  <%= content_tag(:h5, "feature.meetings.content.calendar_sync.for_outlook_web_app".translate, :class => "m-b-md m-t-md") %>
+
+  <%= content_tag(:ol, :class => "m-t-xs m-b-md") do %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_web_app_point_1".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_web_app_point_2".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_web_app_point_3".translate(mentoring: _mentoring)) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.outlook_web_app_point_4".translate(meetings: _meetings)) %>
+  <% end %>
+
+  <%= content_tag(:h2, "feature.meetings.content.calendar_sync.sync_with_ical".translate, :class => "m-b-md", :id => "sync_ical") %>
+
+  <%= content_tag(:ol, :class => "m-t-xs m-b-md") do %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.sync_with_ical_point_1".translate) %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.sync_with_ical_point_2".translate(mentoring: _mentoring)) %>
+    <%= content_tag(:li) do %>
+      <%= "feature.meetings.content.calendar_sync.sync_with_ical_point_3".translate %>
+      <br/>
+      <%= image_tag('calendar_name_change.png', :height => '300px', :width => '500px', :class => 'm-t-md m-b-md m-l-sm img-responsive img-shadow') %>
+    <% end %>
+    <%= content_tag(:li, "feature.meetings.content.calendar_sync.sync_with_ical_point_4".translate) %>
+  <% end %>
+
+<% end %>

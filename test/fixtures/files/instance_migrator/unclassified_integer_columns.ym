@@ -1,0 +1,150 @@
+bulk_matches:
+- max_pickable_slots
+- default
+- orientation_type
+calendar_settings:
+- max_capacity_student_hours
+- max_capacity_student_frequency
+- feedback_survey_delay_not_time_bound
+- max_pending_meeting_requests_for_mentee
+- max_meetings_for_mentee
+ckeditor_assets:
+- locale
+cm_campaign_messages:
+- duration
+common_answers:
+- response_id
+common_questions:
+- matrix_position
+connection_membership_state_changes:
+- date_id
+delayed_jobs:
+- priority
+- attempts
+- source_priority
+- organization_id
+- max_workers
+group_checkins:
+- duration
+group_membership_settings:
+- max_limit
+group_state_changes:
+- date_id
+groups:
+- version
+job_logs:
+- action_type
+- version_id
+locations:
+- cleanup_status
+meetings:
+- ics_sequence
+members:
+- failed_login_attempts
+mentoring_model_facilitation_templates:
+- send_on
+mentoring_model_goals:
+- template_version
+mentoring_model_milestones:
+- template_version
+mentoring_model_task_templates:
+- duration
+- action_item_type
+- action_item_id
+mentoring_model_tasks:
+- action_item_type
+- action_item_id
+- template_version
+mentoring_models:
+- mentoring_period
+- version
+- goal_progress_type
+mentoring_slots:
+- repeats
+moderatorships:
+- forum_id
+- user_id
+programs:
+- mentoring_period
+- default_max_connections_limit
+- min_preferred_mentors
+- max_connections_for_mentee
+- inactivity_tracking_period
+- base_program_id
+- max_pending_requests_for_mentee
+- manager_matching_level
+- connection_limit_permission
+- number_of_licenses
+- meeting_request_reminder_duration
+- mentoring_request_reminder_duration
+- mentor_request_expiration_days
+- project_request_reminder_duration
+- meeting_request_auto_expiration_days
+- allow_mentoring_mode_change
+- admin_access_to_mentoring_area
+- creation_way
+- circle_request_auto_expiration_days
+progress_status_counts:
+- count
+progress_statuses:
+- maximum
+publications:
+- day
+- month
+- year
+qa_answers:
+- score
+qa_questions:
+- views
+ratings:
+- rating
+report_alerts:
+- target
+security_settings:
+- password_expiration_frequency
+- login_expiry_period
+- maximum_login_attempts
+- password_history_limit
+sessions:
+- member_id
+surveys:
+- total_responses
+temp_members:
+- member_id
+- batch
+three_sixty_reviewer_groups:
+- threshold
+three_sixty_survey_answers:
+- answer_value
+topics:
+- hits
+- sticky_position
+user_settings:
+- max_capacity_hours
+- max_capacity_frequency
+- max_meeting_slots
+user_state_changes:
+- date_id
+users:
+- max_connections_limit
+user_activities:
+- mentor_request_style
+member_meetings:
+- rsvp_change_source
+member_meeting_responses:
+- rsvp_change_source
+mentor_requests:
+- rejection_type
+scheduling_accounts:
+- status
+temp_profile_objects:
+- ref_obj_id
+calendar_sync_rsvp_logs:
+- notification_id
+temp_profile_answer_locations:
+- profile_answer_id
+- location_id
+user_search_activities:
+- source
+roles:
+- max_connections_limit

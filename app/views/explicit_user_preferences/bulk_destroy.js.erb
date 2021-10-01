@@ -1,0 +1,6 @@
+jQuery(".cjs-explicit-preference-rows-show-container").empty();
+ExplicitPreference.hidePreferencePopupActions();
+jQuery("#cjs_preferences_loading_result_id").hide();
+var eventDetails = ExplicitPreference.getGaEventDetails("<%= @ga_src %>");
+chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.EXPLICIT_PREFERENCES, chrGoogleAnalytics.action.GA_STARTED_OVER, eventDetails[0], eventDetails[1]);
+ExplicitPreference.preferencesChanged = true;

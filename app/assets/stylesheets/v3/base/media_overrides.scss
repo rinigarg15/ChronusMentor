@@ -1,0 +1,39 @@
+@media (max-width: 1199px) {
+  #page-wrapper {
+    position: inherit;
+    margin: 0 0 0 0px;
+    min-height: 1000px;
+  }
+
+  .body-small .navbar-static-side {
+    display: none;
+    z-index:2001;
+    position: absolute;
+    width: 70px;
+  }
+  .body-small.mini-navbar .navbar-static-side {
+    display: block;
+  }
+  .fixed-sidebar.body-small .navbar-static-side {
+    display: none;
+    z-index: 2001;
+    position: fixed;
+    width: $sidebar-width;
+  }
+  .fixed-sidebar.body-small.mini-navbar .navbar-static-side {
+    display: block;
+  }
+}
+
+@media (min-width: 1200px) {
+  .navbar-static-side {
+    z-index: 2001;
+    position: absolute;
+    width: $sidebar-width;
+  }
+  #page-wrapper {
+    position: inherit;
+    margin: 0 0 0 $sidebar-width;
+    min-height: 1200px;
+  }
+}

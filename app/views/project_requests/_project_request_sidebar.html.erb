@@ -1,0 +1,8 @@
+<% reset_url = project_requests_path %>
+<% mobile_footer_actions = { see_n_results: { results_count: @project_requests.total_entries }, reset_filters: { url: reset_url, class: "#{'hide' if @my_filters.blank?}" } } %>
+<div id='project_requests_filter_pane' class="filter_pane">
+  <%= filter_container_wrapper mobile_footer_actions do %>
+    <% render(:partial => 'common/your_filters', :locals => { onclick_function: 'ProjectRequests.clearFilter', results_count: @project_requests.total_entries, reset_url_options: { url: reset_url } } ) %>
+    <%= render partial: "project_requests/filters_pane", locals: {filter_params: filter_params} %>
+  <% end %>
+</div>

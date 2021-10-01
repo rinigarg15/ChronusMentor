@@ -1,0 +1,67 @@
+<% @title = "feature.survey.header.New_Survey".translate %>
+<% @back_link = {:label => "feature.survey.header.All_Surveys".translate, :link =>  surveys_path} %>
+<%= ibox nil do %>
+  <%= simple_form_for @survey, :html => {:class => 'form-horizontal'} do |f| %>
+    <%= f.input :name, :label => Survey.human_attribute_name(:name), :as => :string, :wrapper => :horizontal_input, :input_html => {:class => "form-control"} %>
+    <%= javascript_tag("RequiredFields.fieldIds.push('survey_name')") %>
+    <% if @current_program.mentoring_connections_v2_enabled? %>
+      <%= f.input :type, wrapper: :horizontal_input, label: Survey.human_attribute_name(:type), collection: Survey.select_options(@current_program), label_method: lambda { |t| "feature.survey.content.#{t.underscore}".translate(Mentoring_Connection: _Mentoring_Connection, Program: _Program) }, include_blank: "feature.survey.content.select_survey_type".translate, selected: @survey_type, input_html: {class: "form-control"} %>
+    <% else %>
+      <%= f.input :type, :as  => :hidden, :input_html => { :value =>  Survey::Type::PROGRAM} %>
+    <% end %>
+    <%= javascript_tag("RequiredFields.fieldIds.push('survey_type')") %>
+    <div id="program_survey_options" <%= 'class="hide"'.html_safe if @current_program.mentoring_connections_v2_enabled? %>>
+
+      <%= f.input :due_date, :as => :string, :wrapper => :datepicker_input, :label => Survey.human_attribute_name(:due_date),  input_html: { :class => "form-control", :placeholder => "feature.survey.content.due_date_placeholder".translate, data: date_picker_options(min_date: Date.current) } %>
+      <%= control_group do %>
+        <%= content_tag(:div, set_required_field_label(Survey.human_attribute_name(:recipient_role_names)), :class => "false-label control-label col-sm-3") %>
+        <%= controls(:id => 'survey_role_list', class: "col-sm-9") do %>
+          <%= choices_wrapper("display_string.Roles".translate) do %>
+            <% @current_program.roles_without_admin_role.includes({:customized_term => :translations}).each do |role| %>
+              <label class="checkbox inline">
+                <%= check_box_tag 'survey[recipient_role_names][]', role.name, set_survey_role_check_box_tag_value(params[:survey],role.name), :id => "survey_recipient_role_names_#{role.name}"  %>
+                <%= role.customized_term.term %>
+              </label>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= javascript_tag("RequiredFields.fieldIds.push('survey_role_list')") %>
+    </div>
+
+    <div class ="col-md-3 col-sm-3 advanced_options_div">
+    </div>
+
+    <div class = "show_additional_option_div">
+    <%= link_to(get_icon_content("fa fa-plus-circle") + "feature.survey.label.advanced_options".translate,"javascript:void(0)", {:id => "show_additional_option"}) %>
+    </div>
+
+    <div class="hide p-b-xs cjs_show_advanced_options">
+      <div class="survey_importer">
+        <div class = "col-sm-3 control-label">
+          <%= content_tag(:label, "feature.survey.label.import_survey_questions_csv".translate, :for => "import_questions_csv", :class => "false-label") %>
+          <label class ="small font-bold">
+            <%= "feature.survey.label.optional".translate %>
+          </label>
+        </div>
+        <%= controls(:id => 'import_questions_csv_upload', :class => "col-sm-9 cjs_import_questions_csv") do %>
+          <%= f.input :questions_file, as: :file, :id => "import_survey_questions_csv", label: false%>
+        <% end %>
+      </div>
+
+      <% if @current_program.share_progress_reports_enabled? %>
+        <%= render_progress_report_checkbox(@survey, {class: "no-padding"}) %>
+      <% end %>
+    </div>
+
+    <% action_set :fields_required => [:name], class: "pull-right" do %>
+      <%= cancel_link %>
+      <%= f.button :submit, "display_string.Create".translate, :class => "cjs_forun_submit cjs_survey_create" %>
+    <% end %>
+
+    <%= javascript_tag %Q[SurveysGoogleAnalytics.handleCreateSurvey();] %>
+    <%= javascript_tag %Q[RequiredFields.validateForum();] %>
+    <%= javascript_tag %Q[Survey.initializeNewForm();] %>
+  <% end %>
+<% end %>
+

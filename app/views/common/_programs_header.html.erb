@@ -1,0 +1,18 @@
+<% left = [
+  { type: "addon",
+    content: get_icon_content("fa fa-th-large"),
+    :class => "theme-bg theme-font-color no-borders"
+  }] %>
+
+<% right = [
+  { type: "addon",
+    content: get_icon_content("fa fa-times"),
+    :class => "show_hide_pane theme-bg theme-font-color no-borders pointer",
+    :data => {"hide-pane" => ".sidebar-top"}
+  }] %>
+
+<%= construct_input_group(left, right, :input_group_class => "input-group-lg") do %>
+  <span class="pull-left p-l-xxs p-r-xxs col-xs-8 font-bold p-sm truncate-with-ellipsis whitespace-nowrap">
+      <big><%= "app_layout.label.my_programs_html".translate(programs: h(_Programs)) %></big>
+  </span>
+<% end %>

@@ -1,0 +1,12 @@
+<% @title = "login_page.content.chronus_console".translate + " " + "display_string.login".translate %>
+
+<%= ibox nil, :ibox_class => "middle-box no-vertical-margins clearfix text-center", :ibox_id => "new_chronus_session" do %>
+  <label class="lead text-center" for="passphrase"><%= "login_page.content.passphrase".translate %></label>
+  <%= form_tag '/chronus_sessions', :method => :post, :class => "form-horizontal" do %>
+  	<%= password_field_tag :passphrase, nil, :autocomplete => :off, :class => "form-control" %>
+	  <% action_set(class: "m-t-sm") do %>
+	    <%= submit_tag "display_string.Login".translate, :class => 'btn btn-primary btn-block' %>
+	  <% end %>
+	<% end %>
+<% end %>
+

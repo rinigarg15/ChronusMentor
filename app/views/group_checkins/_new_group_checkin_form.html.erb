@@ -1,0 +1,48 @@
+<div id="checkin_<%= task.id %>_<%= form_type %>_form_container" class="p-t-sm clearfix p-b-sm cjs_checkin_form_container">
+  <%= simple_form_for checkin, remote: true, format: :js, html: { id: "cjs_new_ajax_checkin_form_for_task", class: "cjs-#{form_type}-checkin-form" } do |f| %>
+    <%= response_flash("#{form_type}_checkin_duation_error_#{task.id}_#{checkin.id}") %>
+    <%= hidden_field_tag :task_id, checkin.checkin_ref_obj_id %>
+    <%= hidden_field_tag :group_id, group.id %>
+    <%= control_group do %>
+      <label class="col-sm-12 control-label"><%= 'feature.connection.header.check_in_time'.translate %></label>
+      <div class = "col-sm-12">
+        <div class="input-group input-group-sm col-xs-12 no-padding pull-left m-b-xs">
+          <%= select_box_in_checkin_form_for(:hours, f, task.id, checkin.id) %>
+          <div class="input-group-addon no-background no-border font-600 pull-left"><%= "display_string.hours".translate %></div>
+          <label class="sr-only" for="checkin_hours_<%= task.id %>_<%= checkin.id %>"><%= "display_string.hours".translate %> </label>
+        </div>
+        <div class="input-group input-group-sm col-xs-12 no-padding pull-left m-b-xs">
+          <%= select_box_in_checkin_form_for(:minutes, f, task.id, checkin.id) %>
+          <div class="input-group-addon no-background no-border font-600 pull-left"><%= "feature.group_checkin.label.minutes".translate %></div>
+          <label class="sr-only" for="checkin_minutes_<%= task.id %>_<%= checkin.id %>"><%= "feature.group_checkin.label.minutes_on".translate %> </label>
+        </div>
+        <div class = "input-group input-group-sm  col-xs-12 no-padding">
+          <div class="input-group-addon no-background no-border font-600"><%= "feature.group_checkin.label.on".translate %></div>
+          <div class="input-group-addon gray-bg"><%= get_icon_content("fa fa-calendar") %></div>
+          <%= text_field_tag "group_checkin[date]", nil, class: "form-control", id: "checkin_date_#{task.id}_#{checkin.id}", required: true, data: date_picker_options(max_date: Date.current, current_date: Date.current) %>
+          <label class="sr-only" for="checkin_date_<%= task.id %>_<%= checkin.id %>"><%= "display_string.Date".translate %> </label>
+        </div>
+      </div>
+    <% end %>
+    <% checkin_comment_id = "checkin_comment_#{task.id}_#{checkin.id}" %>
+    <label class="sr-only" for="<%= checkin_comment_id %>"><%= "display_string.Comment".translate %></label>
+    <%= f.input :comment, placeholder: "feature.group_checkin.placeholder.type_your_message".translate, input_html: { class: "form-control", id: checkin_comment_id, rows: 2 }, label: false, input_wrapper_html: { class: "col-sm-12 m-t-sm" } %>
+    <div class="col-xs-12">
+      <% action_set(class: "pull-right m-t-sm") do %>
+        <% if checkin.new_record? %>
+          <%= link_to "display_string.Cancel".translate, "javascript:void(0);", class: " btn-white btn-sm btn cancel cjs-cancel cjs_cancel_checkin", data: { task_id: "#{task.id}" } %>
+        <% else %>
+          <%= link_to "display_string.Cancel".translate, group_checkin_path(checkin, task_id: task.id, group_id: group.id), class: "btn-sm btn btn-white cancel", data: { remote: true } %>
+        <% end %>
+        <%= f.submit "display_string.Save".translate, class: "btn-sm btn btn-primary", data: { task_id: task.id } %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    TaskCheckin.validateCheckInForm("<%= task.id %>", "<%= checkin.id %>", "<%= form_type %>");
+    initialize.setDatePicker();
+  });
+<% end %>

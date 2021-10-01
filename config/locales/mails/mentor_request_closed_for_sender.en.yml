@@ -1,0 +1,29 @@
+en:
+  email_translations:
+    mentor_request_closed_for_sender:
+      title_v2: "%{_Mentor} request closed notification to %{_mentee}"
+      description_v2: "%{_Mentees} can request a specific %{_mentor}. When %{_a_admin} closes the %{_mentor} request, they can include a personalized message in this system-generated email; the email is then sent to the %{_mentee}."
+      subject_v2: "{{customized_admin_term_capitalized}} has closed your {{customized_mentoring_term}} request"
+      content_v3_html: Your request for {{customized_mentoring_term}} sent to <a href='{{mentor_url}}'>{{recipient_name}}</a> in <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a> has been closed by the {{customized_admin_term}}.<br />{{message_from_admin_as_quote}} <br />We have many other great {{customized_mentors_term}} available (who align with some of your intended goals and objectives) for you to choose from. If you are having trouble finding a suitable {{customized_mentor_term}}, please reach out to the <a href='{{url_contact_admin}}'>{{customized_admin_term}}</a> and we'd be happy to help you.<br /> {{view_mentors_button}}
+      tags:
+        recipient_name:
+          description: Name of the mentor to whom the closed request was sent
+          example: William Brown
+        url_mentors_listing:
+          description: Url to the mentor listing page
+        message_from_admin:
+          description: Reason provided by the admin when closing the mentor request
+          example: Sorry. Your request is invalid.
+          example_v1: Sorry. The request is invalid.
+        admin_name:
+          description: Name of the admin
+          example: Administrator
+        view_mentors_button:
+          description: View Mentors listing page
+          view_mentors: View %{Mentors}
+        message_from_admin_as_quote:
+          description: Optional message sent by the administrator
+        mentor_url:
+          description: Url to the profile of the mentor
+        url_contact_admin:
+          description: Url for the user to contact administrator

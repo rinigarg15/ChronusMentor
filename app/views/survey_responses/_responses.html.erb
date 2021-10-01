@@ -1,0 +1,16 @@
+<% @back_link = { label: "feature.survey.header.Surveys".translate, link: surveys_path } %>
+
+<% if @total_count > 0 %>
+  <div class="cjs_table_enclosure clearfix">
+    <div class="k-content" id="cjs_survey_resposnes_content">
+      <div id="cjs_survey_responses_listing_kendogrid">
+        <%= render partial: "common/select_all_results", locals: { total_entries: @total_count, entries_in_page: @entries_in_page, select_all_ids_path: select_all_ids_survey_responses_path(@survey) } %>
+      </div>
+    </div>
+  </div>
+  <%= initialize_survey_responses_script(@survey, @total_count) %>
+<% else %>
+  <div class="b-t p-sm text-center clearfix">
+    <%= "feature.survey.responses.kendo.no_responses".translate %>
+  </div>
+<% end %>

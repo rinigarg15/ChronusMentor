@@ -1,0 +1,12 @@
+closeQtip();
+<% content = render :partial => "groups/no_groups", :locals => {:view => @view} %>
+GroupSearch.discardCallback('<%= @group.id %>');
+<% if @group.drafted? %>
+  GroupSearch.updateNoGroupText("cjs_drafted_count", "<%= escape_javascript content %>");
+  <% flash_message = "#{'flash_message.group_flash.draft_actions'.translate(mentoring_connection: _mentoring_connection, action: 'display_string.discarded'.translate)}" %>
+<% else %>
+  GroupSearch.updateNoGroupText("cjs_closed_count", "<%= escape_javascript content %>");
+  <% flash_message = "#{'flash_message.group_flash.draft_actions'.translate(mentoring_connection: _mentoring_connection, action: 'display_string.deleted'.translate)}" %>
+<% end %>
+ChronusValidator.ErrorManager.ShowResponseFlash('cjs_groups_flash', "<%= j(flash_message) %>", true);
+<%= render :partial => "groups/update_member_group_tabs_counts" %>

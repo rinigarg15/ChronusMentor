@@ -1,0 +1,18 @@
+ /app/mailers/tags/calendar_ics_attachment_tag.rb:    S3Helper.transfer(file_path, PROGRAM_EVENT_ICS_S3_PREFIX, APP_CONFIG[:chronus_mentor_common_bucket], {:content_type => ICS_CONTENT_TYPE, :url_expires => 7.days}).html_safe
+ /app/mailers/tags/meeting_attachment_tag.rb:    S3Helper.transfer(file_path, MEETING_ICS_S3_PREFIX, APP_CONFIG[:chronus_mentor_common_bucket], {:content_type => ICS_CONTENT_TYPE, :url_expires => 7.days}).html_safe
+ /app/models/engagement_survey.rb:    s3_object = ChronusS3Utils::S3Helper.get_bucket(APP_CONFIG[:chronus_mentor_common_bucket]).objects[s3_file_key]
+ /app/models/meeting_proposed_slot.rb:      S3Helper.transfer(file_path, MEETING_ICS_S3_PREFIX, APP_CONFIG[:chronus_mentor_common_bucket], {content_type: ICS_CONTENT_TYPE, url_expires: 7.days})
+ /app/models/meeting.rb:    S3Helper.transfer(file_path, MEETING_ICS_S3_PREFIX, APP_CONFIG[:chronus_mentor_common_bucket], {content_type: ICS_CONTENT_TYPE, url_expires: 7.days})
+ /lib/chronus_s3_utils.rb:        self.transfer(file, s3_prefix, APP_CONFIG[:chronus_mentor_common_bucket], options)
+ /lib/file_uploader.rb:    s3_object = ChronusS3Utils::S3Helper.get_bucket(APP_CONFIG[:chronus_mentor_common_bucket]).objects[s3_object_key]
+ /lib/globalization/phraseapp_utils.rb:      S3Helper.delete_all(APP_CONFIG[:chronus_mentor_common_bucket], Globalization::PhraseappUtils::DEPLOYMENT_FILES_LOCATION)
+ /lib/globalization/phraseapp_utils.rb:    S3Helper.get_objects_with_prefix(APP_CONFIG[:chronus_mentor_common_bucket], BACKUP_LOCATION).each do |obj|
+ /lib/globalization/phraseapp_utils.rb:    S3Helper.get_objects_with_prefix(APP_CONFIG[:chronus_mentor_common_bucket],Globalization::PhraseappUtils::DEPLOYMENT_FILES_LOCATION).each do |obj|
+ /lib/globalization/phraseapp_utils.rb:        S3Helper.transfer(file, Globalization::PhraseappUtils::DEPLOYMENT_FILES_LOCATION, APP_CONFIG[:chronus_mentor_common_bucket])
+ /lib/globalization/phraseapp_utils.rb:    S3Helper.transfer(output_path, BACKUP_LOCATION, APP_CONFIG[:chronus_mentor_common_bucket], {url_expires: 2.minutes})
+ /lib/sales_demo/sales_populator.rb:      bucket_name = APP_CONFIG[:chronus_mentor_common_bucket]
+ /lib/saml_automator_utils.rb:      objects_with_prefix = S3Helper.get_objects_with_prefix(APP_CONFIG[:chronus_mentor_common_bucket], "#{SAML_SSO_DIR}/#{organization_id}/")
+ /lib/saml_automator_utils.rb:        S3Helper.transfer(file, s3_prefix, APP_CONFIG[:chronus_mentor_common_bucket], options)
+ /lib/tasks/common/api_key_generator.rake:        Common::RakeModule::Utils.print_alert_messages("Api key file is uploaded in S3 bucket #{APP_CONFIG[:chronus_mentor_common_bucket]} in the path 'api_keys/#{Rails.env}/#{organization.id}'")
+ /lib/tasks/instance_migration.rake:      s3_migrator_options[:target_common_bucket] = APP_CONFIG[:chronus_mentor_common_bucket]
+ /lib/tasks/mobile.rake:      ChronusS3Utils::S3Helper.transfer(filepath, "mobile/#{platform}", APP_CONFIG[:chronus_mentor_common_bucket], {file_name: "cordova.js", publicaccess: true, content_type: "text/javascript", discard_source: false})

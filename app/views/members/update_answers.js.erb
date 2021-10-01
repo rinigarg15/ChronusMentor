@@ -1,0 +1,23 @@
+<% section_id = "#section_question_#{params[:section_id]}" %>
+<% program_questions_for_user = @current_program.profile_questions_for(@profile_user.role_names, :skype => @current_organization.skype_enabled?, user: current_user) %>
+<% sec_questions = program_questions_for_user.select{|q| q.section_id == @section_updated.id}.sort_by(&:position) %>
+<% has_edu_exp = has_importable_question?(sec_questions) %>
+
+<% if @is_profile_completion || has_edu_exp %>
+  <% @grouped_role_questions = @current_program.role_questions_for(@profile_user.role_names, user: current_user).role_profile_questions.group_by(&:profile_question_id) %>
+  <% @all_answers = @profile_member.profile_answers.includes([:profile_question, :location, :answer_choices]).group_by(&:profile_question_id) %>
+  <% section_content = capture {render_section_questions(get_simple_section_questions(sec_questions, :exclude_basic_section => true).first, true, false)} %>
+  jQuery("<%= section_id %>").replaceWith("<%= j(section_content) %>");
+<% end %>
+
+ChronusEffect.ToggleIbox("collapsible_section_content_<%= params[:section_id] %>");
+jQueryScrollTo("<%= section_id %>", true);
+
+<% if @profile_user && @current_program.profile_completion_alert_enabled? && need_profile_complete_sidebar?(@profile_user)%>
+  jQuery('#profile_complete_sidebar').replaceWith("<%= j(render(:partial => 'members/profile_completion', :locals => {:profile_user => @profile_user})) %>");
+  jQueryHighlight('.profile_status_box');
+<% end %>
+<% if @successfully_updated %>
+  <% success_flash_message = "flash_message.program_flash.updated".translate %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("", "<%= j(success_flash_message) %>", true);
+<% end %>

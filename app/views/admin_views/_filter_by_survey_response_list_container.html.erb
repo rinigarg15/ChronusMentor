@@ -1,0 +1,10 @@
+<% survey_questions = survey_questions_for_the_survey_filter(surveys, filter_params) %>
+<%= content_tag(:div, :class => "m-b-xs prof-ques-cont animated fadeInDown clearfix cjs_admin_views_container_box cjs_survey_report_filter_container cjs_hidden_input_box_container") do %>
+  <div class ="form-group m-b-0">
+    <%= label_tag("admin_view[survey][survey_questions][questions_#{prefix_id}][survey_id]", "feature.admin_view.label.select_survey_placeholder".translate, :for => "admin_view_survey_survey_questions_questions_#{prefix_id}_survey_id", :class => "sr-only") %>
+    <%= controls(class: "col-sm-2 survey_container", :id => "admin_view_survey_survey_questions_questions_#{prefix_id}_survey_container") do %>
+      <%= select_tag("admin_view[survey][survey_questions][questions_#{prefix_id}][survey_id]", options_for_select(surveys.collect{|s| [s.name, s.id]}, filter_params[:survey_id]), :class => "form-control m-t-lg survey_selector", data: {url: fetch_survey_questions_admin_views_path(format: :js), prefix_id: prefix_id, rows_size: rows_size}, :id => "admin_view_survey_survey_questions_questions_#{prefix_id}_survey_id", prompt: "feature.admin_view.label.select_survey_placeholder".translate) %>
+    <% end %> 
+    <%= render :partial => "admin_views/filter_questions_container_survey_response_list" , :locals => {:prefix_id => prefix_id, :filter_params => filter_params, rows_size: rows_size, :survey_questions => survey_questions} %>
+  </div>
+<% end %>  

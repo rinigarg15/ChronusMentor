@@ -1,0 +1,6 @@
+<% profile_filter_wrapper(status_filter_label, false, false, true) do %>
+  <%= choices_wrapper(status_filter_label) do %>
+    <div><%= link_to_function set_screen_reader_only_content("feature.user.filter.reset_availability_status_filter".translate), "BBQPlugin.clearStatusFilters();MentorSearch.applyFilters()", :id => "reset_filter_#{status_filter_label.to_html_id}", :class => 'none', :style => "display: none" %></div>
+    <%= status_filter_links_ajax(filter_fields, filter_param, current_user.try(:can_render_calendar_ui_elements?, @role), {ei_class: local_assigns[:ei_class], activity: local_assigns[:activity]}) %>
+  <% end %>
+<% end %>

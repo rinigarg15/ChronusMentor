@@ -1,0 +1,51 @@
+<% dropdown_options = {
+  btn_class: "pull-right",
+  dropdown_title: "",
+  is_not_primary: true,
+  btn_group_btn_class: "btn-white btn-sm dropdown_options_#{private_meeting_note.id}"
+  }
+%>
+<% dropdown_actions = private_meeting_note.can_be_edited_or_deleted_by_member?(wob_member) ? [{
+    label: append_text_to_icon("fa fa-pencil-square-o text-default", "display_string.Edit".translate),
+    class: 'edit',
+    id: "edit_private_meeting_note_#{private_meeting_note.id}"
+  },
+  {
+    label: append_text_to_icon("fa fa-trash text-default","display_string.Delete".translate),
+    url: meeting_private_meeting_note_path(private_meeting_note.id, meeting_id: @meeting.id),
+    method: :delete,
+    data: { 
+      confirm: "feature.connection.content.delete_confirm_note".translate
+    },
+    class: 'delete'
+  }] : [] %>
+<%= dropdown_buttons_or_button(dropdown_actions, dropdown_options) 
+%>
+<div class="media-left">
+  <%= get_icon_content("fa fa-file-text-o no-margins", :container_class => "fa-circle", :stack_class => "fa-1x") %>
+</div>
+<div class="media-body">
+  <div class="word_break m-r-xl">
+    <%= textilize_without_paragraph(auto_link(private_meeting_note.text, :all, {:target => "_blank"})).html_safe %>
+  </div>
+  <div class="p-t-xxs">
+    <span class='small text-muted dim p-t-xxs'>
+        <%= append_text_to_icon("fa fa-clock-o no-margins",formatted_time_in_words(private_meeting_note.created_at, :no_ago => true)) %>
+    </span>
+    <% if private_meeting_note.attachment? %>
+      <span class="p-t-xxs <%= hidden_on_mobile %>">
+        <%= vertical_separator %>
+        <%= link_to(append_text_to_icon("fa fa-paperclip text-default", h(private_meeting_note.attachment_file_name)), private_meeting_note.attachment.url, :target => "_blank", :class => 'text-muted small attachment') %>
+      </span>
+      <div class="p-t-xxs <%= hidden_on_web %>">
+        <%= link_to(append_text_to_icon("fa fa-paperclip text-default", h(private_meeting_note.attachment_file_name)), private_meeting_note.attachment.url, :target => "_blank", :class => "text-muted small attachment #{mobile_app_class_for_download_files}", :data => {:filename => h(private_meeting_note.attachment_file_name), :targeturl => private_meeting_note.attachment.url}) %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  jQuery("#edit_private_meeting_note_<%=private_meeting_note.id%>").on('click', function(){
+    jQueryShowQtip('#note_<%=private_meeting_note.id%>', 450, "<%= edit_meeting_private_meeting_note_path(private_meeting_note.id, meeting_id: @meeting.id) %>", '',{modal: true});
+  });
+</script>

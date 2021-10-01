@@ -1,0 +1,5 @@
+<% user_subscribed_to_topic = @topic.subscribed_by?(current_user) %>
+<% message = user_subscribed_to_topic ? "feature.forum.content.conversation_started_following".translate : "feature.forum.content.conversation_stopped_following".translate %>
+
+ChronusValidator.ErrorManager.ShowResponseFlash("", "<%= j message %>", true);
+jQuery(".cjs_follow_topic_link_<%= @topic.id %>").replaceWith("<%= j follow_topic_link(@topic, true, params[:from_topics_listing] == 'true') %>");

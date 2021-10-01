@@ -1,0 +1,44 @@
+<% synced_external_calendar = user.synced_external_calendar? %>
+<% panel_icon = synced_external_calendar ? "fa fa-check-circle text-navy" : "fa fa-exclamation-triangle text-warning" %>
+<% panel_text = synced_external_calendar ? "feature.calendar_sync_v2.content.calendar_synced".translate(calendar_provider: user.member.o_auth_credentials.map{|obj| obj.class::Provider::NAME}.to_sentence) : "feature.calendar_sync_v2.content.calendar_not_synced".translate %>
+<% callback_params = local_assigns[:show_submit] ? "" : {section: MembersController::EditSection::SETTINGS, scroll_to: MembersController::EditSection::CALENDAR_SYNC_V2_SETTINGS, focus_settings_tab: true}.to_query %>
+<%= ibox ibox_options.delete(:header_title), ibox_options do %>
+  <div class="row">
+    <div class="panel panel-default clearfix m-b-none m-l m-r gray-bg">
+      <div class="col-xs-12 text-center m-t-sm">
+        <%= append_text_to_icon("#{panel_icon} fa-lg") %>
+      </div>
+      <div class="col-xs-12 text-center h5">
+        <%= panel_text %>
+      </div>
+    </div>
+    <% if @profile_member == current_member %>
+      <% if user.synced_external_calendar? %>
+        <div class="col-xs-12 p-t-xs text-center">
+          <span class="btn btn-danger btn-outline cjs-external-calendar-disconnect-link" data-url="<%= o_auth_credentials_disconnect_path(callback_params: callback_params) %>">
+            <%= "feature.calendar_sync_v2.action.disconnect".translate %>
+          </span>
+        </div>
+      <% else %>
+        <div class="col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3 m-t m-b">
+          <%= render partial: "calendar_sync_v2/calendar_to_sync", collection: OAuthCredential::Provider.supported, as: :provider, locals: {callback_params: callback_params, ei_src: ei_src} %>
+        </div> 
+        <div class="col-xs-12 p-t-sm text-center">
+          <%= "feature.contact_admin.content.contact_for_questions_html".translate(contact_admin: get_contact_admin_path(program, target: :blank)) %>
+        </div> 
+      <% end %>
+    <% end %>
+    <% if local_assigns[:show_submit] %>
+      <%= hidden_field_tag :section, MembersController::EditSection::CALENDAR_SYNC_V2_SETTINGS %>
+      <%= hidden_field_tag :section_id, MembersController::EditSection::CALENDAR_SYNC_V2_SETTINGS %>
+      <%= hidden_field_tag :first_visit, true %>
+      <%= hidden_field_tag :last_section, true %>
+      <% action_set(class: "pull-right m-t m-r") do %>
+        <div class="pull-right">
+          <%= local_assigns[:form].submit "display_string.Save_Proceed_html".translate, id: "submit_general_settings", class: "btn btn-primary", data: {disable_with: "display_string.Please_Wait".translate} %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+<%= javascript_tag %Q[CalendarSyncV2.setupCalendarDisconnect("#{'feature.calendar_sync_v2.content.disconnect_confirm_alert'.translate(a_meeting: _a_meeting)}");CalendarSyncV2.initializeExternalRedirect();] %>

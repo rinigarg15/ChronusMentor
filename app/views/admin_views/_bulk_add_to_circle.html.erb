@@ -1,0 +1,19 @@
+<% circle_name = @current_program.term_for(CustomizedTerm::TermType::MENTORING_CONNECTION_TERM).  term_downcase %>
+<%= control_group do %>
+  <%= controls do %>
+    <%= "feature.admin_view.content.select_users_to_add_to_circle".translate(circle_name: circle_name, count: @users.size) %>
+  <% end %>
+<% end %>
+<%= control_group do %>
+  <%= controls do %>
+    <%= hidden_field_tag "selected_group_id", nil, class: "cjs-groups-select2 no-padding cui_fixed_width_300 col-xs-12 m-b", data: { url: auto_complete_for_name_groups_path, on_select_url: bulk_add_users_to_project_admin_views_path } %>
+  <% end %>
+<% end %>
+<%= control_group(class: "cjs_user_auto_complete_for_groups") do %>
+  <%= controls do %>
+    <%= render partial: "groups/add_users_select2_auto_complete", locals: { user_role_hash: get_users_role_hash(@current_program, @users) } %>
+  <% end %>
+<% end %>
+<%= javascript_tag do %>
+  GroupSelect2.initializePlugin('<%= "feature.admin_view.content.select_a_different_circle".translate(circle_name: circle_name) %>', '<%= "feature.admin_view.content.select_a_circle".translate(circle_name: circle_name) %>');
+<% end %>

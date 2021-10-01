@@ -1,0 +1,1 @@
+CALENDAR_API_CREDS_DIR = "/mnt/app/inapp_keys/"

@@ -1,0 +1,657 @@
+var outcomesReport = {
+
+  isFlashProgram: false,
+  isPDF: false,
+
+  membershipSectionLoadingInProgress: false,
+  membershipSectionGraphLoadingInProgress: false,
+  matchingSectionLoadingInProgress: false,
+  matchingSectionGraphLoadingInProgress: false,
+  engagementSectionLoadingInProgress: false,
+  flashSectionLoadingInProgress: false,
+  positiveOutcomesSectionLoadingInProgress: false,
+
+  membershipSectionData: "",
+  matchingSectionData: "",
+  engagementSectionData: "",
+  flashSectionData: "",
+  positiveOutcomesSectionData: "",
+
+  defaultPointInterval: 86400000,
+  questionsData: "",
+  questionChoicesHash: {},
+
+  initialize: function(format){
+    if(format == "html"){
+      outcomesReport.initializeTooltips();
+      outcomesReport.applyFilters();
+      outcomesReport.initializePositiveOutcomesPopup();
+    } else{
+      outcomesReport.isPDF = true;
+      outcomesReport.applyDataForPdf();
+    }
+  },
+
+  initializeTooltips: function(){
+    jQuery(".cjs_change").tooltip({
+      title: function(){return jQuery(".cjs_previous_n_days_tooltip_text").data["title"]},
+      html: true,
+      delay: { "show" : 200, "hide" : 100 }
+    });
+
+    jQuery(".cjs_progress_show_tooltip").tooltip({
+      title: function(){return jQuery(this).find('.cjs_progress_bar_tooltip_text').text()},
+      html: true,
+      delay: { "show" : 200, "hide" : 100 }
+    });
+  },
+
+  applyDataForPdf: function(){
+    outcomesReport.updateMembershipSection(outcomesReport.membershipSectionData);
+    if(outcomesReport.isFlashProgram){
+      outcomesReport.updateFlashSection(outcomesReport.flashSectionData);
+    }
+    else{
+      outcomesReport.updateMatchingSection(outcomesReport.matchingSectionData);
+      outcomesReport.updateOngoingEngagementsSection(outcomesReport.engagementSectionData);
+    }
+    outcomesReport.updatePositiveOutcomesSection(outcomesReport.positiveOutcomesSectionData);
+    outcomesReport.updateProgressBars();
+  },
+
+  getParamsForPDF: function(){
+    data = {};
+    data["date_range"] = jQuery("#report_time_filter_form .cjs_daterange_picker_value").val();
+    data["cache_key"] = jQuery(".cjs_cache_key").data["cache_key"];
+    return data;
+  },
+
+  applyFilters: function(){
+    jQuery("#loading_results").show();
+    jQuery.ajax({
+      url: outcomesReportRoutes.getFilteredUsersPath,
+      data: commonReportFilters.getFiltersData(),
+      type: "POST",
+      success: function() {
+        outcomesReport.loadSections();
+        commonReportFilters.updateExportUrls();
+      }
+    });
+  },
+
+  loadSections: function(){
+    outcomesReport.setAllSectionsAsLoading();
+    outcomesReport.loadMembershipSection();
+    if(outcomesReport.isFlashProgram){
+      outcomesReport.loadFlashSection();
+    }
+    else{
+      outcomesReport.loadMatchingSection();
+      outcomesReport.loadOngoingEngagementsSection();
+    }
+    outcomesReport.loadPositiveOutcomesSection();
+  },
+
+  setAllSectionsAsLoading: function(){
+    outcomesReport.membershipSectionLoadingInProgress = true;
+    outcomesReport.membershipSectionGraphLoadingInProgress = true;
+    if(outcomesReport.isFlashProgram){
+      outcomesReport.flashSectionLoadingInProgress = true;
+    }
+    else{
+      outcomesReport.matchingSectionLoadingInProgress = true;
+      outcomesReport.matchingSectionGraphLoadingInProgress = true;
+      outcomesReport.engagementSectionLoadingInProgress = true;
+    }
+    outcomesReport.positiveOutcomesSectionLoadingInProgress = true;
+  },
+
+  // Membership Section
+
+  loadMembershipSection: function(){
+    jQuery.ajax({
+      url: outcomesReportRoutes.userOutcomesReportPath,
+      data: outcomesReport.getDataParams({data_side: '<%= OutcomesReportUtils::DataType::NON_GRAPH_DATA %>', include_rolewise_summary: true}),
+      dataType: "json",
+      success: function(data) {
+        outcomesReport.membershipSectionData = data;
+        outcomesReport.updateMembershipNonGraphData(data);
+        outcomesReport.membershipSectionLoadingInProgress = false;
+        outcomesReport.runAfterAllSectionsLoaded();
+      }
+    });
+
+    jQuery.ajax({
+      url: outcomesReportRoutes.userOutcomesReportPath,
+      data: outcomesReport.getDataParams({data_side: '<%= OutcomesReportUtils::DataType::GRAPH_DATA %>'}),
+      dataType: "json",
+      success: function(data) {
+        outcomesReport.updateMembershipGraphData(data);
+        outcomesReport.membershipSectionGraphLoadingInProgress = false;
+        outcomesReport.runAfterAllSectionsLoaded();
+      }
+    });
+  },
+
+  updateMembershipSection: function(data){
+    outcomesReport.membershipSectionData = data;
+    outcomesReport.updateMembershipNonGraphData(data);
+    outcomesReport.updateMembershipGraphData(data);
+  },
+
+  updateMembershipNonGraphData: function(data){
+    outcomesReport.setValueAndPercentageChange("#cjs_membership_total", data.totalCount, data.overallChange);
+    outcomesReport.setRowData(data);
+  },
+
+  updateMembershipGraphData: function(data){
+    jQuery('#registered-user-chart').highcharts(outcomesReport.highchartsLineGraphOptions(data));
+  },
+
+  // Matching Section
+
+  loadMatchingSection: function(){
+    jQuery.ajax({
+      url: outcomesReportRoutes.connectionOutcomesReportPath,
+      data: outcomesReport.getDataParams({data_side: '<%= OutcomesReportUtils::DataType::NON_GRAPH_DATA %>'}),
+      dataType: "json",
+      success: function(data) {
+        outcomesReport.matchingSectionData = data;
+        outcomesReport.updateMatchingNonGraphData(data);
+        outcomesReport.matchingSectionLoadingInProgress = false;
+        outcomesReport.runAfterAllSectionsLoaded();
+      }
+    });
+
+    jQuery.ajax({
+      url: outcomesReportRoutes.connectionOutcomesReportPath,
+      data: outcomesReport.getDataParams({data_side: '<%= OutcomesReportUtils::DataType::GRAPH_DATA %>'}),
+      dataType: "json",
+      success: function(data) {
+        outcomesReport.updateMatchingGraphData(data);
+        outcomesReport.matchingSectionGraphLoadingInProgress = false;
+        outcomesReport.runAfterAllSectionsLoaded();
+      }
+    });
+  },
+
+  updateMatchingSection: function(data){
+    outcomesReport.matchingSectionData = data;
+    outcomesReport.updateMatchingNonGraphData(data);
+    outcomesReport.updateMatchingGraphData(data);
+  },
+
+  updateMatchingNonGraphData: function(data){
+    outcomesReport.setValueAndPercentageChange("#cjs_matching_total", data.userSummary.count, data.userSummary.change);
+    outcomesReport.setRowData(data);
+    outcomesReport.setValueAndPercentageChange("#cjs_matching_total_connections", data.totalCount, data.overallChange);
+  },
+
+  updateMatchingGraphData: function(data){
+    jQuery('#total-connections-chart').highcharts(outcomesReport.highchartsLineGraphOptions(data));
+  },
+
+  // Ongoing Connections Section
+
+  loadOngoingEngagementsSection: function(){
+    jQuery.ajax({
+      url: outcomesReportRoutes.connectionOutcomesReportPath,
+      data: outcomesReport.getDataParams({status: <%= Group::Status::CLOSED %>}),
+      dataType: "json",
+      success: function(data) {
+        outcomesReport.updateOngoingEngagementsSection(data);
+        outcomesReport.engagementSectionLoadingInProgress = false;
+        outcomesReport.runAfterAllSectionsLoaded();
+      }
+    });
+  },
+
+  updateOngoingEngagementsSection: function(data){
+    outcomesReport.engagementSectionData = data;
+    outcomesReport.updateOngoingEngagementsNonGraphData(data);
+    outcomesReport.updateOngoingEngagementsGraphData(data);
+  },
+
+  updateOngoingEngagementsNonGraphData: function(data){
+    outcomesReport.setValueAndPercentageChange("#cjs_ongoing_total", data.userSummary.count, data.userSummary.change);
+    outcomesReport.setRowData(data);
+    outcomesReport.setValueAndPercentageChange("#cjs_ongoing_total_connections", data.totalCount, data.overallChange);
+  },
+
+  updateOngoingEngagementsGraphData: function(data){
+    jQuery('#total-completed-chart').highcharts(outcomesReport.highchartsBarGraphOptions(data));
+  },
+
+  // Flash Section
+
+  loadFlashSection: function(){
+    jQuery.ajax({
+      url: outcomesReportRoutes.meetingOutcomesReportPath,
+      data: outcomesReport.getDataParams({type: '<%= MeetingOutcomesReport::Type::CLOSED %>'}),
+      dataType: "json",
+      success: function(data) {
+        outcomesReport.updateFlashSection(data);
+        outcomesReport.flashSectionLoadingInProgress = false;
+        outcomesReport.runAfterAllSectionsLoaded();
+      }
+    });
+  },
+
+  updateFlashSection: function(data){
+    outcomesReport.flashSectionData = data;
+    outcomesReport.updateFlashNonGraphData(data);
+    outcomesReport.updateFlashGraphData(data);
+  },
+
+  updateFlashNonGraphData: function(data){
+    outcomesReport.setValueAndPercentageChange("#cjs_flash_total", data.userSummary.count, data.userSummary.change);
+    outcomesReport.setRowData(data);
+    outcomesReport.setValueAndPercentageChange("#cjs_flash_total_meetings", data.totalCount, data.overallChange);
+  },
+
+  updateFlashGraphData: function(data){
+    jQuery('#total-flash-chart').highcharts(outcomesReport.highchartsBarGraphOptions(data));
+  },
+
+  // Positive Outcomes Section
+
+  loadPositiveOutcomesSection: function(){
+    var url = outcomesReport.isFlashProgram ? outcomesReportRoutes.meetingOutcomesReportPath : outcomesReportRoutes.connectionOutcomesReportPath;
+    jQuery.ajax({
+      url: url,
+      data: outcomesReport.getDataParams({type: '<%= ConnectionOutcomesReport::POSITIVE_OUTCOMES %>'}),
+      dataType: "json",
+      success: function(data) {
+        outcomesReport.updatePositiveOutcomesSection(data);
+        outcomesReport.positiveOutcomesSectionLoadingInProgress = false;
+        outcomesReport.runAfterAllSectionsLoaded();
+      }
+    });
+  },
+
+  updatePositiveOutcomesSection: function(data){
+    outcomesReport.positiveOutcomesSectionData = data;
+    // Loading non graph data after all sections are loaded
+    outcomesReport.updatePositiveOutcomesGraphData(data);
+  },
+
+  updatePositiveOutcomesGraphData: function(data){
+    jQuery('#total-positive-outcomes-chart').highcharts(outcomesReport.highchartsBarGraphOptions(data));
+  },
+
+  getCountTextForPositiveOutcomes: function(count, responseRate, prevCount){
+    var extrapolatedVal = Math.min(outcomesReport.getExtrapolatedValue(count, responseRate), prevCount);
+    return "<span class='text-navy cjs-positive-value'>"+count+"</span><span class='text-navy-light cjs-positive-extrapolated-value font-85percent'> ~ ("+extrapolatedVal+")</span>"
+  },
+
+  getExtrapolatedValue: function(count, responseRate){
+    if(responseRate == 0){
+      return count;
+    }
+    else{
+      return Math.floor((count * 100)/responseRate);
+    }
+  },
+
+  // Common
+
+  getDataParams: function(hash){
+    data = hash || {}
+    data["date_range"] = jQuery("#report_time_filter_form .cjs_daterange_picker_value").val();
+    data["data_side"] = data["data_side"] || '<%= OutcomesReportUtils::DataType::ALL_DATA %>';
+    data["user_ids_cache_key"] = jQuery(".cjs_cache_key").data["cache_key"];
+    return data;
+  },
+
+  highchartsCommonGraphOptions: function(data){
+    return { credits: { enabled: false },
+            legend: { borderWidth: 0 },
+            title: { text: null },
+            xAxis: { type: 'datetime' },
+            yAxis: { min: 0, title: { text: null } },
+            plotOptions: {
+              line: { marker: { enabled: false } },
+              column: { events: { afterAnimate: function(event){ jQuery(window).resize(); } } }
+            },
+            tooltip: { pointFormat: '{series.name}: <b>{point.y}</b>' },
+            series: data.graphData.map(function(obj) {
+              return {
+                'name': obj.name,
+                'pointInterval': outcomesReport.defaultPointInterval,
+                'pointStart': data.startDateForGraph,
+                'data': obj.data,
+                'visible': obj.visibility,
+                'color': obj.color,
+                'animation': !outcomesReport.isPDF
+              };
+            })
+           }
+  },
+
+  highchartsLineGraphOptions: function(data){
+    var options = outcomesReport.highchartsCommonGraphOptions(data);
+    options["chart"] = { zoomType: 'x', height: 300 };
+    return options;
+  },
+
+  highchartsBarGraphOptions: function(data){
+    var options = outcomesReport.highchartsCommonGraphOptions(data);
+    options["chart"] = { zoomType: 'x', type: 'column', height: 300 };
+    return options;
+  },
+
+  setRowData: function(data, forPositiveOutcomesSection, prevSecData){
+    if(forPositiveOutcomesSection){
+      var prevSectionRoleData = outcomesReport.convertArrayToHash(prevSecData.rolewiseSummary);
+    }
+    jQuery.each(data.rolewiseSummary, function(i, rowData){
+      var countText = rowData.count
+      if(forPositiveOutcomesSection){
+        var countText = outcomesReport.getCountTextForPositiveOutcomes(rowData.count, data.responseRate, prevSectionRoleData[rowData.name].count);
+      }
+      outcomesReport.setValueAndPercentageChange("#"+rowData.id, countText, rowData.change, forPositiveOutcomesSection);
+    });
+  },
+
+  setPositiveOutvomesTooltip: function(selector){
+    var element = jQuery(selector);
+    element.find('.cjs-positive-value').tooltip({
+      title: element.find(".cjs_value").data('tooltipText'),
+      delay: { "show" : 200, "hide" : 100 }
+    });
+
+    element.find('.cjs-positive-extrapolated-value').tooltip({
+      title: jQuery(".cjs-extrapolated-tooltip-text").data('tooltipText'),
+      delay: { "show" : 200, "hide" : 100 }
+    });
+  },
+
+  setValueAndPercentageChange: function(selector, value, change, forPositiveOutcomesSection){
+    var element = jQuery(selector);
+    element.find(".cjs_value").html(value);
+    outcomesReport.setPercentageChange(element, change);
+    if(forPositiveOutcomesSection){
+      outcomesReport.setPositiveOutvomesTooltip(selector)
+    }
+  },
+
+  setPercentageChange: function(element, value){
+    var changeElelment = element.find(".cjs_change");
+    if(value === null || value === undefined){
+      changeElelment.hide();
+    }
+    else{
+      changeElelment.show();
+      changeElelment.find(".cjs_change_value").text(Math.round(value));
+      if(value > 0){
+        changeElelment.find(".cjs_change_up").show();
+        changeElelment.find(".cjs_change_down").hide();
+      }
+      else if(value < 0){
+        changeElelment.find(".cjs_change_up").hide();
+        changeElelment.find(".cjs_change_down").show();
+      }
+      else{
+        changeElelment.find(".cjs_change_up").hide();
+        changeElelment.find(".cjs_change_down").hide(); 
+      }
+    }
+  },
+
+  // After ALL Sections Load
+
+  runAfterAllSectionsLoaded: function(){
+    if(!outcomesReport.membershipSectionLoadingInProgress && !outcomesReport.membershipSectionGraphLoadingInProgress && !outcomesReport.matchingSectionLoadingInProgress && !outcomesReport.matchingSectionGraphLoadingInProgress && !outcomesReport.engagementSectionLoadingInProgress && !outcomesReport.positiveOutcomesSectionLoadingInProgress && !outcomesReport.flashSectionLoadingInProgress){
+      outcomesReport.updateProgressBars();
+      outcomesReport.setIntervelText(outcomesReport.membershipSectionData);
+      jQuery("#loading_results").hide();
+    }
+  },
+
+  updateProgressBars: function(){
+    if(outcomesReport.isFlashProgram){
+      outcomesReport.updateFlashSectionProgressBar();
+    }
+    else{
+      outcomesReport.updateMatchingSectionProgressBar();
+      outcomesReport.updateOngoingEngagementsSectionProgressBar();
+    }
+    outcomesReport.updatePositiveOutcomesSectionProgressBar();
+  },
+
+  updateMatchingSectionProgressBar: function(){
+    outcomesReport.updateSectionProgressBar("#cjs_matching_bar", outcomesReport.matchingSectionData, outcomesReport.membershipSectionData, outcomesReport.membershipSectionData.totalCount);
+    outcomesReport.updateCurrentSectionDataWithPercentageValues("#cjs_matching_total", outcomesReport.matchingSectionData, outcomesReport.membershipSectionData, outcomesReport.membershipSectionData.totalCount);
+  },
+
+  updateOngoingEngagementsSectionProgressBar: function(){
+    outcomesReport.updateSectionProgressBar("#cjs_ongoing_bar", outcomesReport.engagementSectionData, outcomesReport.matchingSectionData, outcomesReport.matchingSectionData.userSummary.count);
+    outcomesReport.updateCurrentSectionDataWithPercentageValues("#cjs_ongoing_total", outcomesReport.engagementSectionData, outcomesReport.matchingSectionData, outcomesReport.matchingSectionData.userSummary.count);
+    outcomesReport.setProgressBar("#cjs_ongoing_total_connections_bar", outcomesReport.engagementSectionData.totalCount, outcomesReport.matchingSectionData.totalCount);
+    outcomesReport.updateCurrentElementDataWithPercentageValue("#cjs_ongoing_total_connections", outcomesReport.engagementSectionData.totalCount, outcomesReport.matchingSectionData.totalCount);
+  },
+
+  updateFlashSectionProgressBar: function(){
+    outcomesReport.updateSectionProgressBar("#cjs_flash_bar", outcomesReport.flashSectionData, outcomesReport.membershipSectionData, outcomesReport.membershipSectionData.totalCount);
+    outcomesReport.updateCurrentSectionDataWithPercentageValues("#cjs_flash_total", outcomesReport.flashSectionData, outcomesReport.membershipSectionData, outcomesReport.membershipSectionData.totalCount);
+  },
+
+  updatePositiveOutcomesSectionProgressBar: function(){
+    var previousSection = outcomesReport.isFlashProgram ? outcomesReport.flashSectionData : outcomesReport.engagementSectionData;
+    outcomesReport.setProgressBar("#cjs_positive_results_total_connections_bar", outcomesReport.positiveOutcomesSectionData.totalCount, previousSection.totalCount, outcomesReport.positiveOutcomesSectionData.responseRate);
+    outcomesReport.updateSectionProgressBar("#cjs_positive_results_bar", outcomesReport.positiveOutcomesSectionData, previousSection, previousSection.userSummary.count, outcomesReport.positiveOutcomesSectionData.responseRate)
+    outcomesReport.updatePositiveOutcomesNonGraphData(outcomesReport.positiveOutcomesSectionData, previousSection);
+  },
+
+  // Loading this section only after all sections are loaded as we need previous section data for extrapolation
+  updatePositiveOutcomesNonGraphData: function(data, previousSectionData){
+    outcomesReport.setValueAndPercentageChange("#cjs_positive_total", outcomesReport.getCountTextForPositiveOutcomes(data.userSummary.count, data.responseRate, previousSectionData.userSummary.count), data.userSummary.change, true);
+    outcomesReport.setRowData(data, true, previousSectionData);
+    outcomesReport.setValueAndPercentageChange("#cjs_positive_results_total_connections", outcomesReport.getCountTextForPositiveOutcomes(data.totalCount, data.responseRate, previousSectionData.totalCount), data.overallChange, true);
+    jQuery(".cjs_response_rate").text((Math.round(data.responseRate*10)/10) + "%");
+    jQuery(".cjs_margin_of_error").text(data.marginError + "%");
+  },
+
+  updateSectionProgressBar: function(id, curSecData, prevSecData, previousSectionTotal, responseRate){
+    outcomesReport.setProgressBar(id, curSecData.userSummary.count, previousSectionTotal, responseRate);
+    var prevSectionRoleData = outcomesReport.convertArrayToHash(prevSecData.rolewiseSummary);
+    jQuery.each(curSecData.rolewiseSummary, function(i, rowData){
+      outcomesReport.setProgressBar("#"+rowData.id+"_bar", rowData.count, prevSectionRoleData[rowData.name].count, responseRate);
+    });
+  },
+
+  updateCurrentSectionDataWithPercentageValues: function(id, curSecData, prevSecData, previousSectionTotal){
+    outcomesReport.updateCurrentElementDataWithPercentageValue(id, curSecData.userSummary.count, previousSectionTotal);
+    var prevSectionRoleData = outcomesReport.convertArrayToHash(prevSecData.rolewiseSummary);
+    jQuery.each(curSecData.rolewiseSummary, function(i, rowData){
+      outcomesReport.updateCurrentElementDataWithPercentageValue("#"+rowData.id, rowData.count, prevSectionRoleData[rowData.name].count)  
+    });
+  },
+
+  updateCurrentElementDataWithPercentageValue: function(id, currCount, prevCount){
+    var percent = Math.round(outcomesReport.computePercentage(currCount, prevCount));
+    var element = jQuery(id).find(".cjs_value");
+    var currText = element.html();
+    element.html(currText + " <span class='small'>(" + percent + "%)</span>");
+  },
+
+  setProgressBar: function(selector, current, total, responseRate){
+    var successPercentage = outcomesReport.computePercentage(current, total)
+    jQuery(selector).find(".cjs_progress_bar_percent").text(Math.round(successPercentage) + "%")
+    jQuery(selector).find(".progress-bar.cjs-progress-bar-completition").width(successPercentage + "%")
+    if(responseRate != undefined){
+      if(responseRate == 0){
+        jQuery(selector).find(".progress-bar.progress-bar-light").width("0%")
+      }
+      else{
+        var extrapolatedPercentage = Math.min(100.0, (successPercentage*100/responseRate));
+        jQuery(selector).find(".cjs_progress_bar_percent").text(Math.round(extrapolatedPercentage) + "%")
+        jQuery(selector).find(".progress-bar.progress-bar-light").width((extrapolatedPercentage - successPercentage) + "%")
+      }
+    }
+  },
+
+  computePercentage: function(current, total){
+    if(total>0){ 
+      return (current/total)*100;
+    }
+    else{
+      return 0;
+    }
+  },
+
+  convertArrayToHash: function(arr){
+    var hash = {};
+    jQuery.each(arr, function(i, ele){
+      hash[ele["name"]] = ele;
+    });
+    return hash;
+  },
+
+  setIntervelText: function(data){
+    if(data.prevWindowValid){
+      if(data.intervalInDays == 1){
+        jQuery(".cjs_previous_n_days_tooltip_text").data["title"] = jQuery(".cjs_previous_help_text_1").html();
+      }
+      else{
+        jQuery(".cjs_previous_help_text_n b").text(data.intervalInDays);
+        jQuery(".cjs_previous_n_days_tooltip_text").data["title"] = jQuery(".cjs_previous_help_text_n").html();
+      }
+    }
+  },
+
+  // Positive Outcomes Popup
+
+  initializePositiveOutcomesPopup: function(){
+    jQuery("#page_canvas").on("click", ".cjs_positive_outcomes_popup", function(){
+      jQueryShowQtip('#inner_content', null, outcomesReportRoutes.positiveOutcomesOptionsPopupPath,{}, {largeModal: true});
+    });
+  },
+
+  loadPositiveOutcomesPopupContent: function(){
+    outcomesReport.loadExistingQuestions();
+    outcomesReport.addEmptyPositiveOutcomesField();
+    outcomesReport.handleQustionSelectorChange();
+    outcomesReport.handleAddQuestionSelector();
+    outcomesReport.handleRemoveQuestionSelector();
+    outcomesReport.handleupdatePositiveOutcomesConfig();
+  },
+
+  loadExistingQuestions: function(){
+    var questionsArray = jQuery.map(outcomesReport.questionsData, (function(obj) { return obj.children }));
+    jQuery.each(questionsArray, function(i, questionData){
+      if(questionData.selected.length != 0){
+        outcomesReport.loadQuestion(questionData);
+      }
+    });
+  },
+
+  loadQuestion: function(data){
+    var clone = outcomesReport.getQuestionSelectorContainerClone(true);
+    clone.find('.fa-plus-square').hide()
+    clone.find('.fa-minus-square').show()
+    var questionSelector = clone.find('.cjs_positive_outcome_question_selector');
+    var choiceSelector = clone.find('.cjs_positive_outcome_choices');
+
+    questionSelector.select2({
+      allowClear: true,
+      data: { results: outcomesReport.questionsData }
+    });
+
+    questionSelector.select2("val", data.id);
+
+    choiceSelector.select2({
+      multiple: true,
+      data: { results: outcomesReport.questionChoicesHash[data.id] }
+    });
+
+    choiceSelector.select2("val", data.selected);
+
+    CampaignManagement.bindAccessibilityAttributes();    
+  },
+
+  addEmptyPositiveOutcomesField: function(){
+    var clone = outcomesReport.getQuestionSelectorContainerClone(false);
+
+    clone.find('.cjs_positive_outcome_question_selector').select2({
+      allowClear: true,
+      data: { results: outcomesReport.questionsData }
+    });
+
+    clone.find('.cjs_positive_outcome_choices').select2({
+      multiple: true,
+      data: { results: [] }
+    });
+
+    CampaignManagement.bindAccessibilityAttributes();
+  },
+
+  getQuestionSelectorContainerClone: function(add_or) {
+    var clone = jQuery(".cjs_positive_outcome_popup_dummy_for_clone").clone();
+    clone.removeClass("cjs_positive_outcome_popup_dummy_for_clone");
+    clone.removeClass("hide");
+    clone.addClass("cjs_positive_outcome_question_selector_container clearfix");
+
+    var rand_id = Math.floor(Math.random()*100000);
+    clone.find(".cjs_positive_outcome_question_selector").attr("name", "survey_questions["+rand_id+"]");
+    clone.find(".cjs_positive_outcome_choices").attr("name", "answer_choices_[" + rand_id + "]");
+    clone.find(".cjs_positive_outcome_question_selector").attr("id", "survey_questions_" + rand_id);
+    clone.find(".cjs_positive_outcome_choices").attr("id", "answer_choices_" + rand_id);
+    jQuery(".cjs_positive_outcome_popup_selection_container").append(clone);
+    if (add_or == true){
+      clone.append("<div class='col-xs-11 cjs_or'><h4 class='text-center m-b-sm'>" +  jsCommonTranslations.OR + "</h4></div>");
+    }
+    return clone;
+  },
+
+  handleAddQuestionSelector: function(){
+    jQuery(".cjs_positive_outcome_popup_selection_container").on("click", ".fa-plus-square", function(){
+      var container = jQuery(this).closest('.cjs_positive_outcome_question_selector_container');
+      container.find('.fa-plus-square').hide();
+      container.find('.fa-minus-square').show();
+      container.append("<div class='col-xs-11 cjs_or'><h4 class='text-center m-b-sm'>" +  jsCommonTranslations.OR + "</h4></div>");
+      outcomesReport.addEmptyPositiveOutcomesField();
+    });
+  },
+
+  handleRemoveQuestionSelector: function(){
+    jQuery(".cjs_positive_outcome_popup_selection_container").on("click", ".fa-minus-square", function(){
+      jQuery(this).closest('.cjs_or').remove();
+      jQuery(this).closest('.cjs_positive_outcome_question_selector_container').remove();
+    });
+  },
+
+  handleQustionSelectorChange: function(){
+    jQuery(".cjs_positive_outcome_popup_selection_container").on("change", ".cjs_positive_outcome_question_selector", function(e) { 
+      var container =  jQuery(this).closest(".cjs_positive_outcome_question_selector_container");
+      var choicesField = container.find(".cjs_positive_outcome_choices");
+      choicesField.val("");
+      var questionId = jQuery(this).val();
+      choicesField.select2('destroy').empty().select2({ multiple: true, data: outcomesReport.questionChoicesHash[questionId]||[]});
+      CampaignManagement.bindAccessibilityAttributes();
+    });
+  },
+
+  setChoicesDataForQuestions: function(){
+    var questionsArray = jQuery.map(outcomesReport.questionsData, (function(obj) { return obj.children }));
+    jQuery.each(questionsArray, (function(i, obj){ outcomesReport.questionChoicesHash[obj.id] = obj.choices;}));
+  },
+
+  handleupdatePositiveOutcomesConfig: function(){
+    jQuery(document).on("click", ".cjs_update_positive_outcomes_config", function(){
+      jQuery.form(outcomesReportRoutes.updatePositiveOutcomesOptionsPath, {
+        data: outcomesReport.positiveOutcomesConfigData()
+      }).submit();
+    });
+  },
+
+  positiveOutcomesConfigData: function(){
+    var data = []
+    jQuery(".cjs_positive_outcome_question_selector_container").each(function(){
+      var questionSelector = jQuery(this).find('.cjs_positive_outcome_question_selector');
+      var choiceSelector = jQuery(this).find('.cjs_positive_outcome_choices');
+      data.push({id: questionSelector.select2("val"), selected: choiceSelector.select2("val")});
+    });
+    return data;
+  }
+}

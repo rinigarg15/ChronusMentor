@@ -1,0 +1,44 @@
+<% klass = @bulk_match.type.underscore %>
+<div class="dropdown <%= local_assigns[:container_classes] %> quick_search_mentors">
+  <div class="cui_find_and_select_item no-padding table-bordered dropdown-toggle" data-toggle="dropdown" ng-show="student.group_status == selected_label || student.group_status == unmatched_label" >
+    <label for="cjs_quick_search_{{student.id}}" class="sr-only"><%= "feature.bulk_match.label.quick_search_mentors".translate(Mentor: _Mentor) %></label>
+    <input class="no-margin noshadow p-xxs full-width b-t b-b b-r b-l" id="cjs_quick_search_{{student.id}}" type="text" ng-model="searchText" placeholder='<%= "feature.bulk_match.content.#{@bulk_match.is_a?(BulkMatch) ? 'select_a_different_mentor' : 'add_a_mentor_recommendation'}".translate(mentor: _mentor, a_mentor: _a_mentor) %>' />
+  </div>
+  <div class="dropdown-menu col-xs-12 m-b-sm">
+    <ul class="cjs-content-area cui-content-area list-group" id="search_text_results_{{student.id}}" inner-scroll-position>
+      <li ng-repeat="mentor_obj in student.suggested_mentors | filter: searchText | limitTo: student.suggested_mentors_length" class="list-group-item no-padding pointer">
+        <div id='mentor_search_item_{{student.id}}_{{mentor_obj[0]}}' class="p-xs clearfix" ng-class='getSuggestedItemClass(student, mentor_obj[0])' ng-click='updateSelectedMentor(student, mentor_obj[0])'>
+          <div class="media">
+            <div ng-bind-html-unsafe="mentors_hash[mentor_obj[0]].picture_with_profile_url" class="media-left"></div>
+            <div class="media-body">
+                <div class="col-xs-11 no-padding">
+                  <div>
+                    <b class="clearfix truncate-with-ellipsis whitespace-nowrap" ng-bind-html-unsafe="mentors_hash[mentor_obj[0]].name"></b>
+                  </div>
+                  <div class="clearfix">
+                    <span class="label label-success m-r-xs pull-right">{{mentor_obj[1]}}%</span>
+                    <span class='cjs_slot_{{mentor_obj[0]}}' ng-hide="mentors_hash[mentor_obj[0]].mentor_prefer_one_time_mentoring_and_program_allowing">
+                      <%= "feature.#{klass}.label.remaining_slots_html".translate(remaining: '{{mentors_hash[mentor_obj[0]].pickable_slots}}', total: '{{mentors_hash[mentor_obj[0]].slots_available}}') %> 
+                      <br/>
+                      <% if @recommend_mentors %>
+                        <%= "#{"feature.bulk_match.label.times_recommended".translate} : " %> <b>{{mentors_hash[mentor_obj[0]].recommended_count}}</b>
+                      <% end %>
+                    </span>
+                    <span class='mentor_available_{{mentor_obj[0]}}'
+                      ng-show="mentors_hash[mentor_obj[0]].mentor_prefer_one_time_mentoring_and_program_allowing">
+                      <%= "display_string.NA".translate %>
+                    </span>
+                  </div>
+                </div>
+                <div class="col-xs-1 no-padding">
+                  <div class="clearfix">
+                    <i class="pull-right fa fa-plus m-t-md" ng-class="{'invisible' : !canSelectMentor(student, mentor_obj[0])}"></i>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

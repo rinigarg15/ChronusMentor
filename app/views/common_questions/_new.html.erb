@@ -1,0 +1,10 @@
+<div class="question_answer clearfix well white-bg animated fadeInDown" id="common_question_new">
+  <%= simple_form_for form_object_for_common_question(common_question), :remote => true, :html => { :class => "form-horizontal"} do |f| %>
+    <%= response_flash "flash_new" %>
+    <%= render :partial => "common_questions/question_form", :locals => {common_question: common_question, section: (local_assigns[:section] ? section : nil), f: f} %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  initialize.initializeTooltip();
+<% end %>

@@ -1,0 +1,28 @@
+en:
+  email_translations:
+    project_request_rejected:
+      enabled_with_count_html:
+        one: An %{email} will be sent to the selected user, with the reason for rejecting the %{mentoring_connection} request if you complete this action.
+        other: An %{email} will be sent to the selected users, with the reason for rejecting the %{mentoring_connection} request if you complete this action.
+      disabled_with_count_html:
+        one: An %{email} is usually sent to the selected user, with the reason for rejecting the %{mentoring_connection} request as part of completing this action, but has been disabled. No email will be sent.
+        other: An %{email} is usually sent to the selected users, with the reason for rejecting the %{mentoring_connection} request as part of completing this action, but has been disabled. No email will be sent.
+      title_v3: "%{_Mentoring_Connection} request rejected notification to sender"
+      description_v3: "%{_Admin} or owners can reject user's request to join %{_a_mentoring_connection}. This email goes out to users when they are rejected, along with a custom message"
+      subject_v1: Your request to join {{customized_mentoring_connection_term}} has not been accepted
+      content_v2_html: Unfortunately, we have to reject your request to join the {{customized_mentoring_connection_term}}, {{project_name}}, in <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a>.<br/>{{message_from_admin_as_quote}}<br/>However, there are other {{customized_mentoring_connections_term}} that you may find more suitable!<br/>{{visit_other_connections_button}}
+      visit_other_connections_html: Visit other %{mentoring_connection_term}
+      tags:
+        project_name:
+          description: Name of the project
+          example: Develop TO-DO Android App
+        url_projects_listing:
+          description: Url to the projects listing page
+        message_from_admin:
+          description: Optional reason provided by the admin when rejecting the project request
+          example: Sorry. Project has already reached maximum limit.
+        message_from_admin_as_quote:
+          description: Optional reason provided by the admin when rejecting the project request with the sender's name
+          example: Sorry. Project has already reached maximum limit.
+        visit_other_connections_button:
+          description_v1: Visit other %{_mentoring_connections} button

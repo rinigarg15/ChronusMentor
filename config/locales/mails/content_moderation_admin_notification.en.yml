@@ -1,0 +1,22 @@
+en:
+  email_translations:
+    content_moderation_admin_notification:
+      title_v2: Notification to %{_admin} of new post pending approval
+      description_v3: When a new forum post is created and it requires %{_admin} approval, this email is generated and sent to the %{_admin}.
+      subject_v2: New post in the conversation '{{conversation_title}}' needs review
+      content_v3_html: "<a href='{{author_url}}'>{{author_name}}</a> has posted the following content in the conversation <b>'{{conversation_title}}'</b>:<br/><br/>{{post_content}}<br/><br/>Please review the content and approve/decline the post. The post will only appear in the forum upon your approval.<br/>{{review_post_button}}"
+      review_post: Review Post
+      tags:
+        author_name:
+          description: Name of the user who posted the content
+        author_url:
+          description: Url to the profile of the user who has created the post
+        post_content:
+          description: Content of the post
+          example: This technology can be used in many ways, I am mentioning the few ways here.
+        moderation_page_url:
+          description: Url to the moderation page
+        post_url:
+          description: Url to topic of the post
+        review_post_button:
+          description: Review post button

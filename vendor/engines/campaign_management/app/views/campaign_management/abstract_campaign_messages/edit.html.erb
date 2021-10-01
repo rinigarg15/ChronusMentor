@@ -1,0 +1,6 @@
+<%= ibox nil, :content_class => "campaign_message_container" do %>
+  <%= render :partial => 'campaign_management/abstract_campaign_messages/form' %>
+<% end %>
+<% if @campaign.is_survey_campaign? %>
+  <%= javascript_tag %Q[SurveysGoogleAnalytics.handleCreateRerminder(SurveysGoogleAnalytics.GA_ACTION_UPDATE_REMINDER);] %>
+<% end %>

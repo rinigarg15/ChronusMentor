@@ -1,0 +1,58 @@
+en:
+  feature:
+    translations:
+      categories:
+        announcement: Announcements
+        campaign: Campaigns
+        contact_admin: Contact Admin Setting
+        mentoring_connection_profile_field: "%{Mentoring_Connection} Questions"
+        mentoring_model: "%{Mentoring_Connection} Model"
+        program_asset: Images
+        logo: Logo
+        banner: Banner
+        program_events: "%{Program} Events"
+        program_goals: "%{Program} Goals"
+        program_settings: "%{Program} Settings"
+        overview_pages: Overview Pages
+        resources: "%{Resources}"
+        survey: Survey
+        user_profile: Profile
+        role: Role
+        instruction: Instructions
+        profile_question: Profile Question
+        survey_question: Survey Question
+      label:
+        localization: Localization
+        english: English(US)
+        english_lang: English
+        more_programs: More %{Programs}
+        edit_languages: Edit Languages
+        import: Import from csv
+        import_modal_heading: Attach translation file to be imported
+        import_errors_modal_heading: Errors
+        export: Export to csv
+        csv_export_name: Translations_%{date}
+        language_absent: There are no languges added in the system yet, Kindly add to proceed.
+        content_in_lang: Content in %{second_locale}
+        ckeditor_tooltip: Click here to edit the rich text content
+        language_version: "%{language_name} version"
+        mentor_request_instruction: "%{mentor} Request Instruction"
+        membership_instruction: Membership Instruction
+        choose_image: Choose Image
+        change_image: Change Image
+        error_lines: 'Errors found in the following lines:'
+        error_category: 'You can fix the errors by doing the following:'
+      errors:
+        wrong_attribute: Trying to change non translatable attribute
+        infect_file: File is infected
+        import_second_locale: Incorrect Second Locale in Imported file.
+        import_errors: Imported Translations with few %{errors}
+        error_link: ERRORS
+        invalid_tags: "Content contains invalid tags: "
+      notice:
+        import_success: Successfully Imported Translations.
+      helper_headings:
+        task_template: TASKS
+        goal_template: GOALS
+        milestone_template: MILESTONES
+        facilitatoin_message_template: FACILITATION MESSAGES

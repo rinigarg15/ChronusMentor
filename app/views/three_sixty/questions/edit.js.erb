@@ -1,0 +1,5 @@
+<% if @question.competency.present? %>
+  jQuery("#competency_question_row_<%= @question.id %>").html('<%= j(display_three_sixty_question_new_inline(@question, @question.competency, false)) %>');
+<% else %>
+  jQuery("#open_ended_question_row_<%= @question.id %>").html('<%= j(render(:partial => "three_sixty/competencies/new_open_ended_question", :locals => {:question => @question, :for_new => false})) %>');
+<% end %>

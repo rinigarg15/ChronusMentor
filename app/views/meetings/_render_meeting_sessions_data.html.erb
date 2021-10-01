@@ -1,0 +1,43 @@
+<div id="meeting_sessions" class="no-padding">
+  <%= top_bar_in_listing({collection: @meetings}) %>
+  <% time_zone = wob_member.short_time_zone %>
+  <% mobile_view = mobile_browser? || is_mobile_app? %>
+  <div class="col-xs-12 p-t-md">
+    <table id="meeting_sessions_table" class="table table-bordered">
+      <thead>
+        <tr>
+          <th><%= "feature.reports.label.meeting_title".translate(:Meeting => _Meeting) %></th>
+          <th class="text-center"><%= _Mentor %></th>
+          <th class="text-center"><%= _Mentee %></th>
+          <th><%= "feature.meetings.header.details_v2".translate(:time_zone => time_zone) %></th>
+          <th class="text-center"><%= "feature.meetings.header.state".translate %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%  @meetings.each_with_index do |meeting, meeting_index|%>
+          <% current_occurrence_time = meeting.first_occurrence %>
+          <tr>
+            <td class="col-md-4">
+              <%= link_to(meeting.topic, meeting_path(meeting, :current_occurrence_time => current_occurrence_time)) %>
+            </td>
+            <td class="text-center col-md-1">
+              <% mentor = meeting.get_member_for_role(RoleConstants::MENTOR_NAME)%>
+              <%= get_member_pictures_with_links(meeting, mentor, @mentor_feedback_survey_questions, meeting_index, @meeting_feedback_answers[meeting_index]) %>
+            </td>
+            <td class="text-center col-md-1">
+              <% mentee = meeting.get_member_for_role(RoleConstants::STUDENT_NAME)%>
+              <%= get_member_pictures_with_links(meeting, mentee, @mentee_feedback_survey_questions, meeting_index, @meeting_feedback_answers[meeting_index]) %>
+            </td>
+            <td class="col-md-3">
+              <%= render :partial => "meetings/render_meeting_sessions_data_and_time", :locals => {meeting: meeting, current_occurrence_time: current_occurrence_time} %>
+            </td>
+            <td class="text-center col-md-2">
+              <%= content_tag(:span, get_meeting_state(meeting), class: "#{get_meeting_state_class(meeting)}") %>
+            </td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  </div>
+  <%= bottom_bar_in_listing({collection: @meetings, params: {tab: params[:tab], filters: params[:filters]}, ajax: true}) %>
+</div>

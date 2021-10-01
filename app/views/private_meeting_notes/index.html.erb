@@ -1,0 +1,5 @@
+<%= render :layout => 'meetings/meeting_area_common_content', :locals => {meeting: @meeting.build_recurring_meeting(Meeting.parse_occurrence_time(@current_occurrence_time)), :tab => Meeting::Tabs::NOTES, is_admin_view: @is_admin_view} do %>
+  <div id='private_notes' class= "p-b-sm p-l-sm m-l-sm m-r-sm">
+    <%= render :partial => "private_meeting_notes/private_note_lists", :locals => {private_meeting_notes:  @private_meeting_notes, is_admin_view: @is_admin_view} %>
+  </div>
+<% end %>

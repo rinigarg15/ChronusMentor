@@ -1,0 +1,465 @@
+var ProfileConfigUI = {
+  init: function() {
+    jQuery(".cjs-empty-section-placeholder").hide();
+    ProfileConfigUI.programFilterListener();
+    
+    // click all programs filter on load
+    jQuery(".cjs_filter_program_all_programs").click();
+
+    ProfileConfigUI.updateSectionMetaDataForAllSections();
+
+    jQuery(".cjs-profile-question-drop-container").droppable({
+      accept: ".cjs-profile-question-draggable",
+      drop: function(event, ui) {
+        var draggedProfileQuestionElement = jQuery(ui.draggable[0]);
+        if (jQuery(this).data('section-id') != draggedProfileQuestionElement.data('section-id')) {
+          ui.draggable.parent().addClass('cjs-skip-sorting');
+          jQuery.ajax({
+            url: jQuery(this).data('url'),
+            type: 'PATCH',
+            data: {section_id: jQuery(this).data('section-id'), id: draggedProfileQuestionElement.data('question-id')},
+            beforeSend: function(){
+              jQuery("#loading_results").show();
+            }
+          });
+          jQuery(this).removeClass("boxshadow-top-bottom-inset");
+        }
+      },
+      over: function(event, ui) {
+        jQuery(this).addClass("boxshadow-top-bottom-inset");
+      },
+      out: function(event, ui) {
+        jQuery(this).removeClass("boxshadow-top-bottom-inset");
+      },
+      activate: function(event, ui) {
+        var draggedProfileQuestionElement = jQuery(ui.draggable[0]);
+        draggedProfileQuestionElement.addClass("b-t b-b border-left-right");
+        draggedProfileQuestionElement.closest(".slimScrollDiv").css("position", "");
+        if(draggedProfileQuestionElement.find(".cjs-profile-question-click-handle-element").hasClass("cjs_active_profile_question")) {
+          draggedProfileQuestionElement.removeClass("light-gray-bg");
+        }
+      },
+      deactivate: function(event, ui) {
+        var draggedProfileQuestionElement = jQuery(ui.draggable[0]);
+        draggedProfileQuestionElement.removeClass("b-t b-b border-left-right");
+        draggedProfileQuestionElement.closest(".slimScrollDiv").css("position", "relative");
+        if(draggedProfileQuestionElement.find(".cjs-profile-question-click-handle-element").hasClass("cjs_active_profile_question")) {
+          draggedProfileQuestionElement.addClass("light-gray-bg");
+        }
+      }
+    });
+
+    jQuery(document).on("click", ".cjs-section-click-handle-element", function(){
+      ProfileConfigUI.sectionClickBeforeShowActions();
+      jQuery("#profile_questions_for_section_" + jQuery(this).data('section-id')).show();
+      var highlighterClasses = 'gray-bg font-bold cjs_active_section';
+      jQuery(".cjs-section-container").removeClass(highlighterClasses);
+      jQuery(".cjs-section-title-container").addClass("font-noraml");
+      jQuery(this).closest(".cjs-section-container").addClass(highlighterClasses);
+      jQuery(this).find(".cjs-section-title-container").removeClass("font-noraml");
+      ProfileConfigUI.sectionClickAfterShowActions();
+      ProfileConfigUI.updateAndShowNumberOfProfileQuestions();
+      ProfileConfigUI.updateAndShowNoOfSections();
+    });
+
+    jQuery(window).resize(function () {
+      ProfileConfigUI.adjustUiCommon();
+    });
+
+    jQuery(document).on('click', '.cjs-new-field-invoker', function(){
+      jQuery.ajax({
+        url: jQuery(this).data('url'),
+        type: 'GET',
+        data: {section_id: jQuery(".cjs_active_section").data('section-id')},
+        beforeSend: function(){
+            jQuery("#loading_results").show();
+          },
+        success: function(response){
+          jQuery(".cjs-profile-question-details-container").html(response); 
+          ProfileConfigUI.showProfileQuestionDetailsPanel(true);
+          ProfileConfigUI.adjustUiCommon();
+          // set first form element to autofocus
+          jQuery(".cjs_first_form_element").focus();
+          jQuery("#loading_results").hide();
+        }
+      });
+    });
+
+    jQuery(document).on('click', '.cjs-profile-question-click-handle-element', function(){
+      ProfileConfigUI.hideIconOnDeselect();
+      var options = {};
+      if(jQuery(this).data('set-this-tab-on-next-edit')) {
+        options.activeTab = jQuery(this).data('set-this-tab-on-next-edit');
+        jQuery(this).removeData('set-this-tab-on-next-edit');
+      }
+      ProfileConfigUI.loadEditProfileQuestion(this, options);
+      ProfileConfigUI.showIconOnSelect();
+    });
+
+    jQuery(document).on({
+      mouseenter: function () {
+        ProfileConfigUI.showHideActions(this, ".cjs-profile-question-actions", true);
+        ProfileConfigUI.setResetDraggableIndication(this, true);
+      },
+      mouseleave: function () {
+        ProfileConfigUI.showHideActions(this, ".cjs-profile-question-actions", false);
+        ProfileConfigUI.setResetDraggableIndication(this, false);
+      }
+    }, ".cjs_profile_question"); 
+
+    jQuery(document).on({
+      mouseenter: function () {
+        ProfileConfigUI.setResetDraggableIndication(this, true);
+        ProfileConfigUI.showHideActions(this, ".cjs-section-actions", true);
+      },
+      mouseleave: function () {
+        ProfileConfigUI.setResetDraggableIndication(this, false);
+        ProfileConfigUI.showHideActions(this, ".cjs-section-actions", false);
+      }
+    }, ".cjs-section-container"); 
+
+    jQuery(document).on('click', '.cjs-section-edit-invoker', function(){
+      jQuery('#edit_section_' + jQuery(this).closest(".cjs-section-container").data("section-id")).modal('show');
+      return false;
+    });
+
+    jQuery(document).on('click', '.nav-tabs a', function(){
+      ProfileConfigUI.adjustUiCommon();
+    });
+
+    // show or hide icons
+    jQuery(".cjs-profile-question-details-panel-closer").on('click', function(){
+      ProfileConfigUI.showProfileQuestionDetailsPanel(false);
+      ProfileConfigUI.adjustUiCommon();
+    });
+
+    // add profile questions at program level
+    jQuery(document).on('click', '.cjs_add_pq_at_program_level', function(){
+      jQuery(".cjs_show_only_program_fields, .cjs-section-count-for-add-pq-at-prg-level, .cjs-pq-count-for-add-pq-at-prg-level, .cjs-section-not-included, .cjs_add_pq_at_program_level_instruction, .cjs-section-total-count-including-hidden-sections").show();
+      jQuery(".cjs_add_pq_at_program_level, .cjs-section-count, .cjs-pq-count, .cjs_membership_instruction, .cjs-section-total-count").hide();
+      jQuery(document).data('add-pq-at-program-level', true);
+      ProfileConfigUI.toggleAddProfileQuestionAtProgramLevel();
+      ProfileConfigUI.updateAndShowNumberOfProfileQuestions();
+    });
+
+    jQuery(document).on('click', '.cjs_show_only_program_fields', function(){
+      jQuery(".cjs_add_pq_at_program_level, .cjs-section-count, .cjs-pq-count, .cjs_membership_instruction, .cjs-section-total-count").show();
+      jQuery(".cjs_show_only_program_fields, .cjs-section-count-for-add-pq-at-prg-level, .cjs-pq-count-for-add-pq-at-prg-level, .cjs-section-not-included, .cjs_add_pq_at_program_level_instruction, .cjs-section-total-count-including-hidden-sections").hide();
+      jQuery(document).data('add-pq-at-program-level', false);
+      ProfileConfigUI.toggleAddProfileQuestionAtProgramLevel();
+      ProfileConfigUI.updateAndShowNumberOfProfileQuestions();
+    });
+
+    jQuery(document).on('click', '.cjs_add_pq_at_program_level_button', function(event){
+      event.stopPropagation();
+      ProfileConfigUI.addProfileQuestionAtProgramLevel(this);
+    });
+    
+    jQuery(document).on('click', '.cjs_profile_edit', function(event){
+      jQuery.ajax({
+        url: jQuery(this).data('url'),
+        type: 'GET',
+        success: function(response){
+          jQuery(".cjs-profile-question-details-container").html(response);
+        }
+      });
+      event.stopPropagation();
+      ProfileConfigUI.showProfileQuestionDetailsPanel(true);
+      ProfileConfigUI.adjustUiCommon();
+    });
+
+    jQuery(document).on('click', '.cjs-add-button-tooltip-container', function(event) {
+      if(jQuery(this).find('.cjs_add_pq_at_program_level_button').hasClass('disabled')) event.stopPropagation();
+    });
+
+    jQuery(".cjs-section-click-handle-element").eq(0).click(); // make first section active by default
+    ProfileConfigUI.updateConditionalQuestionButtons();
+    jQuery(".cjs-profile-question-click-handle-element").eq(0).click(); // make first profile field active by default
+  },
+
+  updateConditionalQuestionButtons: function() {
+    if(ProfileConfigUI.programLevel) {
+      jQuery(".cjs-add-button-tooltip-container").tooltip('disable');
+      jQuery(".cjs_add_pq_at_program_level_button").removeClass("disabled");
+      jQuery.each(jQuery(".cjs-profile-question-container"), function(index, element) {
+        var jqueryElement = jQuery(element);
+        if(jqueryElement.find(".cjs_add_pq_at_program_level_button").hasClass("disabled")) return;
+        if(!jqueryElement.find(".cjs_add_pq_at_program_level_button").hasClass("hide")) {
+          var queue = jqueryElement.attr('data-dependent-question-ids').split(',');
+          while(queue.length) {
+            var dependentQuestionId = queue.shift();
+            if(dependentQuestionId.length < 1) continue;
+            var dependentQuestionHtmlContainer = jQuery("#profile_question_" + dependentQuestionId);
+            if(dependentQuestionHtmlContainer.length < 1) continue;
+            dependentQuestionHtmlContainer.find(".cjs_add_pq_at_program_level_button").addClass("disabled");
+            dependentQuestionHtmlContainer.find(".cjs-add-button-tooltip-container").tooltip('enable');
+            jQuery.each(dependentQuestionHtmlContainer.attr('data-dependent-question-ids').split(','), function(i, id) { queue.push(id) });
+          }
+        }
+      });
+    }
+  },
+
+  sectionClickBeforeShowActions: function() {
+    jQuery(".cjs-profile-question-details-panel-closer").click();
+    jQuery(".cjs-profile-questions-for-section").hide();
+    jQuery(".cjs_active_section").find(".cjs-section-actions-container").addClass("cjs-section-actions");
+    jQuery(".cjs_active_section").find(".cjs-section-description-container").addClass("cjs-section-description");
+    ProfileConfigUI.showHideActions(jQuery(".cjs_active_section"), ".cjs-section-actions", false);
+    ProfileConfigUI.showHideActions(jQuery(".cjs_active_section"), ".cjs-section-description", false);
+  },
+
+  sectionClickAfterShowActions: function() {
+    ProfileConfigUI.filterProfileQuestionsByProgram();
+    ProfileConfigUI.showHideActions(jQuery(".cjs_active_section"), ".cjs-section-actions", true);
+    ProfileConfigUI.showHideActions(jQuery(".cjs_active_section"), ".cjs-section-description", true);
+    jQuery(".cjs_active_section").find(".cjs-section-actions-container").removeClass("cjs-section-actions");
+    jQuery(".cjs_active_section").find(".cjs-section-description-container").removeClass("cjs-section-description");
+  },
+
+  updateAndShowNumberOfProfileQuestions: function(sectionId) {
+    sectionId = getDefaultVal(sectionId, jQuery(".cjs_active_section").data('section-id'));
+    var addedQuestions = jQuery(".cjs-profile-question-section-" + sectionId + ":visible").find(".cjs_add_pq_at_program_level_button:hidden").length;
+    var availableQuestions = jQuery(".cjs-profile-question-section-" + sectionId + ":visible").find(".cjs_add_pq_at_program_level_button:visible").length;
+    ProfileConfigUI.handleEmptySectionAtProgramLevel(sectionId, addedQuestions);
+    jQuery(".cjs-pq-count").text("(" + addedQuestions + ")");
+    var displayText = "(" + addedQuestions + " <%= "display_string.added".translate %>, " + availableQuestions + " <%= "display_string.available".translate %>)";
+    jQuery(".cjs-pq-count-for-add-pq-at-prg-level").text(displayText);
+    ProfileConfigUI.updateConditionalQuestionButtons();
+  },
+
+  updateSectionMetaDataForAllSections: function() {
+    jQuery.each(jQuery(".cjs-section-container"), function(index, node) {
+      ProfileConfigUI.updateAndShowNumberOfProfileQuestionsUnderSection(jQuery(this).data('section-id'));
+    });
+  },
+
+  updateAndShowNumberOfProfileQuestionsUnderSection: function(sectionId, filterEnabled) {
+    filterEnabled = getDefaultVal(filterEnabled, ProfileConfigUI.isProgramFilterApplied());
+    sectionId = getDefaultVal(sectionId, jQuery(".cjs_active_section").data('section-id'));
+    var programId = jQuery(document).data('program-filter-id');
+    var profileQuestions = jQuery(".cjs-profile-question-section-" + sectionId);
+    var totalQuestions = profileQuestions.length;
+    var availableQuestions = 0;
+    if(filterEnabled) {
+      jQuery.each(profileQuestions, function(index, value){
+        if(jQuery.inArray(programId, jQuery(value).data('program-id')) == -1){
+          availableQuestions++;
+        }
+      });
+    }
+    jQuery(".cjs-section-count-" + sectionId).text("(" + (filterEnabled ? (totalQuestions - availableQuestions) : totalQuestions) + ")");
+    var displayText = "(" + (totalQuestions - availableQuestions) + " <%= "display_string.added".translate %>, " + availableQuestions + " <%= "display_string.available".translate %>)";
+    jQuery(".cjs-section-count-for-add-pq-at-prg-level-" + sectionId).text(displayText);
+  },
+
+  // may result in changing active section element (.cjs_active_section)
+  handleEmptySectionAtProgramLevel: function(sectionId, addedQuestionCount) {
+    if (ProfileConfigUI.programLevel) {
+      var className = jQuery(document).data('add-pq-at-program-level') ? "cjs-section-not-included" : "cjs-section-not-included hide";
+      (addedQuestionCount > 0) ? jQuery("#profile_section_" + sectionId).removeClass(className) : jQuery("#profile_section_" + sectionId).addClass(className);
+      ProfileConfigUI.updateAndShowNoOfSections();
+      if(jQuery("#profile_section_" + sectionId).is(':hidden')) { jQuery(".cjs-section-click-handle-element:visible").eq(0).click(); }
+    }
+  },
+
+  updateAndShowNoOfSections: function() {
+    var totalSections = jQuery(".cjs-section-container:visible").length;
+    var availableSections = jQuery(".cjs-section-not-included:visible").length;
+    jQuery(".cjs-section-total-count").html("(" + totalSections + ")");
+    var displayText = "(" + (totalSections - availableSections) + " <%= "display_string.added".translate %>, " + availableSections + " <%= "display_string.available".translate %>)";
+    jQuery(".cjs-section-total-count-including-hidden-sections").html(displayText);
+  },
+
+  handleEmptySectionPlaceholder: function() {
+    jQuery(".cjs-empty-section-placeholder").toggle(jQuery(".cjs-profile-question-container:visible").length == 0);
+  },
+
+  toggleAddProfileQuestionAtProgramLevel: function() {
+    ProfileConfigUI.filterProfileQuestionsByProgram(jQuery('.cjs_active_section').data('section-id'), false, jQuery(document).data('add-pq-at-program-level'));
+  },
+
+  hideIconOnDeselect: function() {
+    var pq_id = jQuery(".cjs_active_profile_question").data('profile-question-id');
+    jQuery(".icons-" + pq_id).addClass("cjs-profile-question-actions");
+    ProfileConfigUI.showHideActions(jQuery(".cjs_active_profile_question"), ".cjs-profile-question-actions", false);
+  },
+
+  showIconOnSelect: function() {
+    var pq_id = jQuery(".cjs_active_profile_question").data('profile-question-id');
+    ProfileConfigUI.showHideActions(jQuery(".cjs_active_profile_question"), ".cjs-profile-question-actions", true);
+    jQuery(".icons-" + pq_id).removeClass("cjs-profile-question-actions");
+  },
+
+  // 'show' is boolean
+  showProfileQuestionDetailsPanel: function(show) {
+    jQuery(".cjs-profile-question-details-panel").toggle(show);
+    if(show) {
+      jQuery(".cjs-main-panel").removeClass('col-xs-12').addClass('col-xs-8 b-r');
+    } else {
+      jQuery(".cjs-main-panel").addClass('col-xs-12').removeClass('col-xs-8 b-r');
+    }
+  },
+
+  adjustHeights: function() {
+    var profileUIHeight = jQuery(window).height() - (jQuery(".cjs-main-panel").offset().top + jQuery("#chronus_header").height() + 30); //30 is the padding top that we maintain for wrapper
+    var additionalTopHeightForSidePane = jQuery(".cjs_label_section_or_profile_question").height();
+    jQuery(".cjs-section-slim-scroll, .cjs-profile-question-slim-scroll, .cjs-side-panel-slim-scroll").each(function() {
+
+      // adding extra height for side pane
+      if (jQuery(this).hasClass("cjs-side-panel-slim-scroll")) { profileUIHeight += additionalTopHeightForSidePane; }
+      
+      if (jQuery(this).parent().hasClass("slimScrollDiv")) {jQuery(this).parent().height(profileUIHeight);}
+
+      jQuery(this).closest(".cjs-slim-scroll-parent").height(profileUIHeight);
+      jQuery(this).height(profileUIHeight);
+      jQuery(this).slimScroll({
+        height: profileUIHeight + 'px'
+      });
+      if(jQuery("body").hasClass('body-small')) {
+        jQuery('#page-wrapper').css("min-height", jQuery(window).height() - 60 + "px");
+      }
+    });
+  },
+
+  adjustUiCommon: function() {
+    ProfileConfigUI.handleEmptySectionPlaceholder();
+    ProfileConfigUI.adjustHeights();
+  },
+
+  setResetDraggableIndication: function(element, set) {
+    var jqueryElement = jQuery(element);
+    if(!jqueryElement.hasClass("cjs-no-drag")) {
+      if(set) jqueryElement.addClass("draggable");
+      else jqueryElement.removeClass("draggable");
+    }
+  },
+
+  showHideActions: function(element, className, show) {
+    var jqueryElement = jQuery(element);
+    if(!jqueryElement.hasClass("cjs-no-edit-destroy")) {
+      var sectionActionContainer = jqueryElement.find(className);
+      if(show) sectionActionContainer.removeClass("hide");
+      else sectionActionContainer.addClass("hide");
+    }
+    jqueryElement.find(".cjs-section-description").toggleClass('hide', !show);
+  },
+
+  filterProfileQuestionsByProgram: function(sectionIdIn, showProfileQuestionDetailsPanelFlag, addProfileQuestionAtProgramLevel) {
+    addProfileQuestionAtProgramLevel = getDefaultVal(addProfileQuestionAtProgramLevel, jQuery(document).data('add-pq-at-program-level'));
+    showProfileQuestionDetailsPanelFlag = getDefaultVal(showProfileQuestionDetailsPanelFlag, false);
+    var sectionId = getDefaultVal(sectionIdIn, jQuery('.cjs_active_section').data('section-id'));
+    var programId = jQuery(document).data('program-filter-id');
+    var profileQuestions = jQuery('.cjs-profile-question-section-' + sectionId);
+
+    jQuery(".cjs_add_section_or_profile_question").show();
+    jQuery(".cjs_no_of_programs").show();
+    jQuery(profileQuestions).show();
+
+    if(ProfileConfigUI.isProgramFilterApplied()) {
+
+      //hide add field and add section on applying program filter
+      jQuery(".cjs_add_section_or_profile_question").hide();
+      jQuery(".cjs_no_of_programs").hide();
+      
+      //Change page subtitle
+      jQuery(".cjs-sub-title-text").text(jQuery(document).data('program-filter-name'));
+
+      jQuery.each(profileQuestions, function(index, value){
+        if(jQuery.inArray(programId, jQuery(value).data('program-id')) == -1){
+          addProfileQuestionAtProgramLevel ? jQuery(value).find(".cjs_add_pq_at_program_level_button").show() : jQuery(value).hide();
+        }
+      });
+    }
+    ProfileConfigUI.showProfileQuestionDetailsPanel(showProfileQuestionDetailsPanelFlag);
+    ProfileConfigUI.updateAndShowNumberOfProfileQuestionsUnderSection(sectionIdIn);
+    ProfileConfigUI.updateAndShowNumberOfProfileQuestions();
+    ProfileConfigUI.adjustUiCommon();
+  },
+
+  isProgramFilterApplied: function() {
+    var programId = jQuery(document).data('program-filter-id');
+    return (typeof programId !== "undefined") && (programId != 0);
+  },
+
+  filterRoleSettingsByProgram: function(className) {
+    var programId = jQuery(document).data('program-filter-id');
+    if(ProfileConfigUI.isProgramFilterApplied()) {
+      jQuery(className).not(className + "-for-" + programId).hide(); 
+      jQuery(className + "-for-" + programId).removeClass('b-t');
+    }
+  },
+
+  setProgramFilterIdName: function(programId, programName) {
+    jQuery(document).data('program-filter-id', programId);
+    jQuery(document).data('program-filter-name', programName);
+  },
+
+  programFilterListener: function() {
+    jQuery(".cjs_filter_program").on('click', function(){
+      var highlighterClasses = 'light-gray-bg font-bold';
+      var programName = jQuery(this).data('program-name');
+      ProfileConfigUI.setProgramFilterIdName(jQuery(this).data('program-id'), programName);
+
+      // hide sub title for all programs
+      if(jQuery(document).data('program-filter-id') == 0) {
+        jQuery("#sub_title_navig").hide();
+      }
+      else {
+        jQuery("#sub_title_navig").show();
+      }
+
+      // update the dropdown text
+      jQuery.each(jQuery(".cjs-dropdown-container-title").contents(), function(index, node){ if(node.nodeType == Node.TEXT_NODE) node.nodeValue = programName + " " });
+
+      jQuery(".cjs_filter_program").removeClass(highlighterClasses);
+      jQuery(this).addClass(highlighterClasses);
+      ProfileConfigUI.updateSectionMetaDataForAllSections();
+      ProfileConfigUI.filterProfileQuestionsByProgram();
+    });
+  },
+
+  addProfileQuestionAtProgramLevel: function(element) {
+    jQuery.ajax({
+      url: jQuery(element).data('url'),
+      beforeSend: function(){
+        jQuery("#loading_results").show();
+      },
+      type: 'POST'
+    });
+  },
+
+  loadEditProfileQuestion: function(element, options) {
+    options = getDefaultVal(options, {});
+    var highlighterClasses = 'light-gray-bg font-bold';
+    var activeProfileQuestionClass = "cjs_active_profile_question";
+    (jQuery(".cjs-profile-question-click-handle-element").parent()).removeClass(highlighterClasses);
+    (jQuery(element).parent()).addClass(highlighterClasses);
+    jQuery(".cjs-profile-question-click-handle-element").removeClass(activeProfileQuestionClass);
+    jQuery(element).addClass(activeProfileQuestionClass);
+    var profile_question_id = jQuery(element).parent().data('question-id');
+    jQuery.ajax({
+      url: jQuery(element).data('url'),
+      beforeSend: function(){
+        jQuery("#loading_results").show();
+      },
+      type: 'GET',
+      success: function(response){
+        jQuery(".cjs-profile-question-details-container").html(response);
+        ProfileConfigUI.showProfileQuestionDetailsPanel(true);
+        ProfileConfigUI.filterRoleSettingsByProgram(".cjs-program-role-options");
+        if(options.activeTab) {
+          ProfileConfigUI.changeProfileQuestionTab(options.activeTab);
+        }
+        // set first form element to autofocus
+        jQuery(".cjs_first_form_element").focus();
+        ProfileConfigUI.adjustUiCommon();
+        jQuery("#loading_results").hide();
+      }
+    });
+  },
+
+  changeProfileQuestionTab: function(tabLink) {
+    jQuery('.nav-tabs a[href=' + tabLink + ']').tab('show');
+  }
+};

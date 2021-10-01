@@ -1,0 +1,28 @@
+<% logo_or_banner_url, asset_type = program_context.logo_or_banner_url([:banner, :logo], true) %>
+
+<% if asset_type == :banner %>
+  <div id='program_header' class="clearfix row <%= hidden_on_mobile %>">
+    <div id="header_wrapper" class="clearfix white-bg table-bordered">
+      <% anchor_ref = program_root_path %>
+      <% banner_style = "background: url(#{logo_or_banner_url}) no-repeat" %>
+      <a href="<%= anchor_ref %>" id='program_banner' class='clearfix col-md-12 no-padding' style="<%= banner_style %>">
+        <%= set_screen_reader_only_content("program_settings_strings.header.program_banner".translate(Program: _Program))%>
+      </a>
+    </div>
+  </div>
+<% else %>
+  <div id='program_header' class="clearfix <%= "#{hidden_on_mobile} #{local_assigns[:container_class]}" %>">
+    <div id="header_wrapper" class="clearfix row white-bg table-bordered p-xs p-l-lg">
+      <a href="<%= anchor_ref %>" id='name_logo' class='clearfix col-md-12 p-xxs'>
+        <% if asset_type == :logo %>
+          <%= image_tag logo_or_banner_url, class: 'pull-left m-r-sm', alt: "program_settings_strings.header.program_logo".translate(Program: _Program) %>
+        <% end %>
+        <span id="prog_name" class="pull-left text-default">
+          <div class="lead m-t-xl m-l">
+            <%= h program_context.name %>
+          </div>
+        </span>
+      </a>
+    </div>
+  </div>
+<% end %>

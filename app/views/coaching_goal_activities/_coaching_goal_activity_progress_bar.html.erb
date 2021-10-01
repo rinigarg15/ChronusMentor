@@ -1,0 +1,18 @@
+<% completed_percentage = coaching_goal.completed_percentage.to_i %>
+<%= control_group(:id => "cjs_slider_enclosure") do %>
+  <label class="control-label" for="progress_slider">
+    <% if is_update_progress_popup %>      
+      <%= "feature.coaching_goal.content.current_progress".translate(progress_percent: display_percentage(coaching_goal.completed_percentage)) %>
+    <% else %>  
+      <%= "feature.coaching_goal.header.Progress".translate %>
+    <% end %>
+  </label>
+  <%= controls do %>
+    <%= text_field_tag "progress_slider", completed_percentage, :class => 'slider form-control', :data => {:current_value => completed_percentage} %>
+  <% end %>
+<% end %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    CoachingGoals.initializeProgressBar(<%= completed_percentage %>);
+  });
+<% end %>

@@ -1,0 +1,52 @@
+<% facilitation_template_title_selector = "cjs-facilitation-template-title-#{facilitation_template.id}" %>
+<div class="cjs-facilitation-template-header" id="cjs-hover-well-<%= facilitation_template.id %>">
+  <% unless @read_only %>
+
+    <% dropdown_options = {
+      btn_class: "pull-right m-l-xs",
+      dropdown_title: "",
+      is_not_primary: true,
+      btn_group_btn_class: "btn-white btn-xs"
+    } %>
+
+    <div id="cjs-hover-actions-<%= facilitation_template.id %>">
+      <% dropdown_actions = [ {
+          label: append_text_to_icon("fa fa-pencil-square-o", "display_string.Edit".translate),
+          url: edit_mentoring_model_facilitation_template_path(@mentoring_model, facilitation_template),
+          class: "cjs-edit-task-template-link"
+        },
+        {
+          label: append_text_to_icon("fa fa-trash", "display_string.Delete".translate),
+          url: mentoring_model_facilitation_template_path(@mentoring_model, facilitation_template, format: :js),
+          data: {remote: true, method: :delete, confirm: "common_text.confirmation.sure_to_delete".translate}
+        }]
+       %>
+      <%= dropdown_buttons_or_button(dropdown_actions, dropdown_options) %>
+    </div>
+  <% end %>
+  <div class="pull-right">
+    <% if facilitation_template.specific_date.blank? %>
+      <% fm_duration_format, fm_duration = display_days_or_weeks_format(facilitation_template.send_on) %>
+      <% previous_title_text = "feature.mentoring_model.description.#{fm_duration_format}".translate(count: fm_duration, task_name: "feature.mentoring_model.description.start_of_connection".translate(connection: _mentoring_connection)) %>
+      <%= content_tag(:i, content_tag(:span, truncate(previous_title_text, length: MentoringModel::TaskTemplate::PREVIOUS_TITLE_TRUNCATE_LENGTH), title: previous_title_text)) %>
+    <% else %>
+      <%= content_tag(:span, DateTime.localize(facilitation_template.specific_date, format: :abbr_short), class: "#{"text-danger" if facilitation_template.specific_date < Date.today.at_beginning_of_day}") %>
+    <% end %>
+  </div>
+  <%= render partial: "mentoring_model/task_templates/facilitation_template_preblock", locals: {facilitation_template: facilitation_template, block_class: ""} %>
+  <div class="inline cjs-task-template-title <%= facilitation_template_title_selector %> pointer">
+    <a>
+      <%= content_tag(:span, truncate(facilitation_template.subject, length: MentoringModel::TaskTemplate::TITLE_TRUNCATE_LENGTH - 15), title: facilitation_template.subject) %>
+    </a>
+  </div>
+</div>
+<div class="hide cjs-task-template-description">
+  <div class="ckeditor_generated p-t-sm">
+    <%= raw(facilitation_template.message) %>
+  </div>
+</div>
+<div class="facilitation-template-<%= facilitation_template.id %>-form-container facilitation-template-edit-form-container"></div>
+<div class="cjs-action-item-response-container hide"></div>
+<%= javascript_tag do %>
+  TaskTemplates.descriptionToggler("<%= facilitation_template_title_selector %>");
+<% end %>

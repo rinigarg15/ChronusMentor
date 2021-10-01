@@ -1,0 +1,3 @@
+jQuery("#cjs_campaigns_state_<%= CampaignManagement::AbstractCampaign::STATE::ACTIVE %>").html("<%= j("feature.campaign.tabs.active".translate(count: @presenter.active)) %>");
+jQuery("#cjs_campaigns_state_<%= CampaignManagement::AbstractCampaign::STATE::STOPPED %>").html("<%= j("feature.campaign.tabs.inactive".translate(count: @presenter.disabled)) %>");
+jQuery("#cjs_campaigns_kendogrid").data('kendoGrid').dataSource.read();

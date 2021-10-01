@@ -1,0 +1,79 @@
+en:
+  feature:
+    multiple_templates:
+      header:
+        multiple_templates_title_v1: "%{Mentoring_Connection} Plan Templates"
+        connection_multiple_templates_title_v1: "%{Mentoring_Connection} Plan Template"
+        default_marker: "(Default)"
+        new_mentoring_model_template_v1: New %{Mentoring_Connection} Plan Template
+        new_hybrid_mentoring_model_template_v1: Create a New Hybrid %{Mentoring_Connection} Plan Template
+        Template_Features: Template Features
+      actions:
+        create_new_template_button: Create a New Template
+        create_new_hybrid_template_button: Create a New Hybrid Template
+        Duplicate: Duplicate
+        Make_Default: Make Default
+        Edit_Template: Edit
+        Duplicate_Template: Duplicate
+        Delete_Template: Delete
+      content:
+        features_enabled: 'Features Enabled:'
+        features_not_enabled: There are no Features Enabled
+        manage_mm_milestones-feature-enabled: Milestones
+        manage_mm_goals-feature-enabled: Goal Plans
+        manage_mm_tasks-feature-enabled: Tasks
+        manage_mm_meetings-feature-enabled: Meetings
+        manage_mm_messages-feature-enabled: Facilitation Messages
+        manage_mm_engagement_surveys-feature-enabled: Surveys
+        allow_messaging-feature-enabled: Messaging
+        allow_forum-feature-enabled: Discussion Board
+        Users: Users
+      labels:
+        mentoring_connections: "%{Mentoring_Connections}:"
+        active_mentoring_connections_html: Ongoing &raquo;
+        draft_mentoring_connections_html: Drafted &raquo;
+        Duration: 'Duration:'
+        Days:
+          one: Day
+          other: Days
+        Weeks:
+          one: Week
+          other: Weeks
+      help_text:
+        duration: 'Note: The total of the tasks can''t exceed this duration'
+        fixed_dates: Note that this template has tasks with fixed dates.
+        ongoing_connections: 'Note: The duration cannot be changed for the template as this is being used by ongoing %{mentoring_connections}'
+        ongoing_connections_v1: 'Note: The duration cannot be changed for the template as this is being used by ongoing %{mentoring_connections} or other templates'
+        duration_or_ongoing_last_part_enabled_html: The %{mentoring_connections} will be automatically closed after this duration and an %{email} will be sent to the members of the %{mentoring_connections}.
+        duration_or_ongoing_last_part_disabled_html: The %{mentoring_connections} will be automatically closed after this duration and an %{email} is usually sent to the members of the %{mentoring_connections}, but has been disabled. No email will be sent.
+      js_translations:
+        default_delete_alert: This template cannot be deleted as it is marked as default. If you want to delete this template, please make some other template as default.
+        active_connections_delete_alert: This template cannot be deleted, as it has already been applied to Ongoing %{Mentoring_Connections}
+        confirmationAlert: Are you sure you want to delete this template?
+        draftGroupsConfirmationAlert: There are drafted %{mentoring_connections} with this template applied, these drafted %{mentoring_connections} will be applied with the default template. Are you sure you want to delete the template?
+        titleTaken_v1: There is already a %{Mentoring_Connection} Plan Template with this title.
+        features_inconsistent: Features set are not consistent between templates
+        selected_more_than_once: Same template is selected more than once
+        syncToGroupConfirmation:
+          one: This change will be updated to the ongoing %{mentoring_connection}. Do you want to proceed with this change?
+          other: This change will be updated to all the %{count} ongoing %{mentoring_connections}. Do you want to proceed with this change?
+        milestoneOrderDestroyed:
+          zero: This action will place tasks out of chronological order. Do you still wish to proceed?
+          one: This action will place tasks out of chronological order. Do you still wish to proceed? This change will be applied to the ongoing %{mentoring_connection}.
+          other: This action will place tasks out of chronological order. Do you still wish to proceed? This change will be applied to all %{count} ongoing %{mentoring_connections}.
+        milestoneOrderDestroyedInReordering:
+          zero: Reordering these milestones will place tasks out of chronological order. Do you still wish to proceed?
+          one: Reordering these milestones will place tasks out of chronological order. Do you still wish to proceed? This change will be applied to the ongoing %{mentoring_connection}.
+          other: Reordering these milestones will place tasks out of chronological order. Do you still wish to proceed? This change will be applied to all %{count} %{mentoring_connections}.
+        syncToGroupOnDeleteConfirmation:
+          one: This change will also be applied to the ongoing %{mentoring_connections}.
+          other: This change will also be applied to all the %{count} ongoing %{mentoring_connections}.
+        applyConfirmationAlert: This will apply the template to all existing %{mentoring_connections} which do not have any template.
+      wizard_headers:
+        describe_template_v1: DESCRIBE PLAN
+        configure_template: CONFIGURE TEMPLATE
+        configure_template_settings: CONFIGURE FEATURES
+        add_template_content: ADD CONTENT
+      button_labels:
+        configure_features: Configure Features
+        add_content: Add Content

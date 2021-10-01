@@ -1,0 +1,22 @@
+en:
+  email_translations:
+    article_comment_notification:
+      title_v3: New comment notification to followers of %{_a_article}
+      description_v2: 'All participants who follow %{_a_article} receive this email when someone comments on the %{_article}. Along with a link to the %{_article}, the email includes the comment. '
+      subject_v1: New comment on "{{article_title}}"!
+      content_v1_html: "<a href='{{url_article_commenter}}'>{{article_commenter_name}}</a> left a new comment on the {{customized_article_term}}, <a href='{{url_article}}'><b>{{article_title}}</b></a>.<br/>{{read_article_button}}"
+      read_article: Read Now!
+      tags:
+        article_commenter_name:
+          description: Name of the commenter
+        url_article_commenter:
+          description: Url of the commenter profile
+        article_title:
+          description: Article title
+          example: Time Management
+        url_comment:
+          description: Url of the comment
+        url_article:
+          description: Url of the article
+        read_article_button:
+          description: Read article button

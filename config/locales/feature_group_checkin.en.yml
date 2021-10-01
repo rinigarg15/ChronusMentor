@@ -1,0 +1,24 @@
+en:
+  feature:
+    group_checkin:
+      error_message:
+        no_duration_error: Check-in duration should not be empty.
+        duration_range_error_v1: Check-in duration must be added in multiple of 15 minutes
+        blank_details_v1: Date cannot be blank.
+      placeholder:
+        type_your_message: Leave a comment for your check-in
+      label:
+        details: details
+        checked_in: checked in
+        minutes_on: minutes on
+        minutes: minutes
+        'on': 'on'
+      hours:
+        one: 1 hour
+        other: "%{count} hours"
+      hrs:
+        one: 1 hrs
+        other: "%{count} hrs"
+      total: Total
+      tasks: Tasks
+      add_checkin: Add Checkin

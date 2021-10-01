@@ -1,0 +1,80 @@
+<tbody id="mentor_records_{{mentor.id}}"
+  ng-repeat="mentor in mentors | orderBy:predicate:reverse | filter:mentorSearch | filter:menteeNameSearcher | filter:showUser | limitTo:display_limit " ng-init="mentor.highlight = false;" class="clearfix no-borders">
+  <tr>
+    <td>
+      <input type="checkbox" ng-init="mentor.highlight=mentor.selected_for_bulk" ng-disabled="mentor.selected_count == 0 || mentor.group_status==published_label" ng-hide="mentor.selected_count == 0 || mentor.group_status==published_label" ng-checked="master && mentor.group_status!=published_label && mentor.selected_count > 0" value="{{mentor.id}}" id="cjs_bulk_match_record_{{mentor.id}}" ng-click="updateSelectedRecord(mentor);" aria-label="<%= 'feature.bulk_match.label.select_this'.translate(Mentor: _Mentor, Mentee: _Mentee) %>">
+    </td>
+
+    <td class="col-xs-2" rowspan="{{mentor.selected_count}}">
+      <div class="media clearfix">
+        <div class="media-left" ng-bind-html-unsafe="mentor.picture_with_profile_url">
+          {{mentor.picture_with_profile_url}}
+        </div>
+        <div class='media-body'>
+          <h4 ng-bind-html-unsafe="mentor.name_with_profile_url">{{mentor.name_with_profile_url}}</h4>
+          <div class="small"><span ng-show="mentor.connected_student_id_group_id_list.length > 0"><%= "feature.bulk_match.content.connected_to".translate %> </span><span ng-bind-html-unsafe="mentor.connected_students_html">
+            {{mentor.connected_students_html}}
+          </span></div>
+          <div class="small">
+            <span ng-show="mentor.drafted_student_id_group_id_list.length > 0"><%= "feature.bulk_match.content.drafted_to".translate %> </span>
+            <span ng-bind-html-unsafe="mentor.drafted_students_html"></span>
+          </div>
+        </div>
+      </div>
+    </td>
+
+    <td class="col-xs-1 text-center available_slots">
+      <div class="m-t-xs">
+        {{mentor.pickable_slots}}
+      </div>
+    </td>
+
+    <td class="col-xs-2">
+      <div ng-show="mentor.selected_count > 0" class="media selected_student_box">
+        <div ng-bind-html-unsafe="students_hash[mentor.selected_students[0]].picture_with_profile_url" class="media-left">
+        </div>
+        <div class="media-body">
+          <h4 class="m-b-xs" ng-bind-html-unsafe="students_hash[mentor.selected_students[0]].name_with_profile_url"></h4>
+          <div class="small"><span ng-show="students_hash[mentor.selected_students[0]].connected_mentor_id_group_id_list.length > 0"><%= "feature.bulk_match.content.connected_to".translate %> </span><span ng-bind-html-unsafe="students_hash[mentor.selected_students[0]].connected_mentors_html">
+            {{students_hash[mentor.selected_students[0]].connected_mentors_html}}
+          </span></div>
+          <div class="small">
+            <span ng-show="students_hash[mentor.selected_students[0]].drafted_mentor_id_group_id_list.length > 0"><%= "feature.bulk_match.content.drafted_to".translate %> </span>
+            <span ng-bind-html-unsafe="students_hash[mentor.selected_students[0]].drafted_mentors_html"></span>
+          </div>
+        </div>
+      </div>
+      <%= render partial: "bulk_matches/quick_search_mentees" %> 
+    </td>
+
+    <td class="col-xs-1 text-center">
+      <div ng-show="mentor.selected_count > 0" class="clearfix m-t-xs">
+        <span class="label label-success match_score">
+          <big>{{mentorStudentMap[mentor.id][mentor.selected_students[0]].score}} % </big>
+        </span>
+        <div class="m-t-xs">
+          <div ng-click="showMatchConfigSummaryPopup(mentor, '', '<%= AbstractBulkMatch::Src::MENTOR_TO_MENTEE_BULK_MATCH %>')">
+            <a class="small" href="#" onclick="return false;"><%= "feature.bulk_match.label.show_details".translate %></a>
+          </div>
+        </div>
+      </div>
+    </td>
+
+    <td class="col-xs-2 cui-td-group-status">
+      <div class="cui_bulk_match_notes font-600 m-b-xs clearfix" ng-show="mentor.group_status != selected_label">
+        <% if request_notes %>
+          <span class="pointer pull-right m-l-xs" ng-show="mentor.group_status != unmatched_label && mentor.group_status != selected_label && mentor.group_status != unavailable_label" ng-click="fetchMentorToMenteeNotes(mentor);">
+            <%= embed_icon("fa fa-file-text-o") %>
+          </span>
+        <% end %>
+        <span class="pull-right" ng-class="getStudentClass(mentor);">{{mentor.group_status}}</span>
+      </div>
+      <div class="clearfix">
+        <div class="btn-group pull-right m-t-xs" ng-show="mentor.primary_action_label != '' && mentor.selected_count > 0">
+          <a class="btn btn-primary btn-outline btn-xs btn-block-xxs m-b-xs cjs-blur-on-click" href="#" ng-click="updateMentorToMenteePairStatus(mentor, 'primary');" onclick="return false;">{{mentor.primary_action_label}}</a>
+          <a href="#" class="btn btn-primary btn-outline btn-xs btn-block-xxs m-b-xs cjs-blur-on-click" ng-click="updateMentorToMenteePairStatus(mentor, 'secondary');" onclick="return false;" ng-show="mentor.secondary_action_label != ''">{{mentor.secondary_action_label}}</a>
+        </div>
+      </div>
+    </td>
+  </tr>
+</tbody>

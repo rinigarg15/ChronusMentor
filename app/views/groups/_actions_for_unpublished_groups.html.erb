@@ -1,0 +1,8 @@
+<% if @current_program.connection_profiles_enabled? && @viewable_or_updatable_questions.present? %>
+  <%= ibox "quick_links.header".translate, :content_class=> "p-xxs", :show_collapse_link => true do %>
+    <ul id="actions_for_unpublished_group" class="list-group">
+      <%= quick_link("quick_links.side_pane.view_mentoring_connection_profile".translate(mentoring_connection: _Mentoring_Connection), profile_group_path(@group), "fa fa-users") %>
+      <%= quick_link("quick_links.side_pane.edit_mentoring_connection_profile".translate(mentoring_connection: _Mentoring_Connection), edit_answers_group_path(@group), 'fa fa-pencil-square-o') if @user_edit_view && !current_user.is_owner_of?(@group) %>
+    </ul>
+  <% end %>
+<% end %>

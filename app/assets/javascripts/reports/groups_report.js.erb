@@ -1,0 +1,174 @@
+var GroupsReport = {
+
+  sortBoth: "sort_both",
+  sortAsc: "sort_asc",
+  sortDesc: "sort_desc",
+
+  getConnectionActivityStats: function(render_to, series_data){
+    new Highcharts.Chart({
+      credits: {
+        enabled: false
+      },
+      chart: {
+        renderTo: render_to,
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie',
+        width: "200",
+        height: "110",
+        marginRight: "50"
+      },
+      title: {
+        text: ""
+      },
+      tooltip: {
+        useHTML: true,
+        pointFormat: '<b>{point.y}%</b>'
+      },
+      plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              enabled: false
+            },
+           size: 100    
+        }
+      },
+      series:
+        [{  
+          data: series_data
+        }]   
+    });
+  },
+
+  getHighChartsDateFormat: function(interval, current_time, start_time, end_time){
+    var currentDate = new Date(current_time);
+    if(interval == 7){
+      var day = currentDate.getDay();
+      var firstDay = currentDate.getDate() - day + (day == 0 ? -6:1);
+      var firstDate = new Date(currentDate.setDate(firstDay));
+      var firstDateTime = firstDate.getTime();
+      var lastDay = firstDate.getDate() + 6;
+      var lastDate = new Date(firstDate.setDate(lastDay));
+      var lastDateTime = lastDate.getTime();
+      var highChartStartDate = Highcharts.dateFormat(jsReportTranslation.shortDateFormat, firstDateTime);
+      var highChartEndDate = Highcharts.dateFormat(jsReportTranslation.shortDateFormat, lastDateTime);
+
+      if (start_time < firstDateTime && end_time > lastDateTime){
+        return  highChartStartDate + '-' + highChartEndDate
+      }
+      else if(start_time >= firstDateTime && end_time <= lastDateTime){
+        return Highcharts.dateFormat(jsReportTranslation.shortDateFormat, start_time) + '-' + Highcharts.dateFormat(jsReportTranslation.shortDateFormat, end_time)
+      }
+      else if(start_time < firstDateTime && end_time <= lastDateTime){
+        return highChartStartDate + '-' + Highcharts.dateFormat(jsReportTranslation.shortDateFormat, end_time)
+      }
+      else if(start_time >= firstDateTime && end_time > lastDateTime){
+        return Highcharts.dateFormat(jsReportTranslation.shortDateFormat, start_time) + '-' + highChartEndDate
+      }
+    }else{
+      return Highcharts.dateFormat(jsReportTranslation.shortDateFormat, current_time)
+    }
+  },
+
+  initializeTableView: function(){
+    GroupsReport.inspectEditColumns();
+    GroupsReport.inspectSortableColumns();
+  },
+
+  inspectEditColumns: function(){
+    jQuery("#cjs_edit_columns_link").on("click", function(){
+      var url = jQuery(this).data("url");
+      var page = jQuery(this).data("page");
+      var startDate = jQuery(this).data("start-date");
+      var endDate = jQuery(this).data("end-date");
+      jQueryShowQtip("#cjs_groups_report_table_view", 565, url, {page: page, start_date: startDate, end_date: endDate}, {method: "post", modal: true});
+    });
+  },
+
+  inspectSortableColumns: function(){
+    var sortableColumns = jQuery("tr.cjs_groups_report_table_header th.cjs_sortable_column");
+    jQuery(sortableColumns).on("click", function(){
+      var startDate = jQuery(this).data("start-date");
+      var endDate = jQuery(this).data("end-date");
+      var sortParam = jQuery(this).data("sort-param");
+      var sortOrder = "";
+
+      GroupsReport.resetSortImages(sortableColumns.not(jQuery(this)));
+      if(jQuery(this).hasClass(GroupsReport.sortBoth)){
+        jQuery(this).removeClass(GroupsReport.sortBoth).addClass(GroupsReport.sortAsc);
+        sortOrder = "asc";
+      }
+      else if(jQuery(this).hasClass(GroupsReport.sortAsc)){
+        jQuery(this).removeClass(GroupsReport.sortAsc).addClass(GroupsReport.sortDesc);
+        sortOrder = "desc";
+      }
+      else if(jQuery(this).hasClass(GroupsReport.sortDesc)){
+        jQuery(this).removeClass(GroupsReport.sortDesc).addClass(GroupsReport.sortAsc);
+        sortOrder = "asc";
+      }
+      jQuery('#filter_sort_field').val(sortParam);
+      jQuery('#filter_sort_order').val(sortOrder);
+      commonReportFilters.submitData();
+    });
+  },
+
+  resetSortImages: function(headerElements){
+    headerElements.removeClass(GroupsReport.sortDesc).removeClass(GroupsReport.sortAsc).addClass(GroupsReport.sortBoth);
+  },
+
+  // Edit Columns Form
+  initializeMultiSelect: function(){
+    jQuery("#cjs_groups_report_multiselect").uixmultiselect({
+      availableListPosition: 'left',
+      splitRatio: 0.5,
+      sortable: true
+    });
+  },
+
+  validateEditColumnsForm: function(flash_message){
+    jQuery("#cjs_edit_columns_form").on("submit", function(){
+      if(!jQuery("#cjs_groups_report_multiselect").val()){
+        ChronusValidator.ErrorManager.ShowResponseFlash("cjs_edit_columns_popup_flash", flash_message);
+        return false;
+      }
+    });
+  },
+
+  getConnectionActivityReportFiltersData: function(){
+    var data = {};
+    jQuery.each(jQuery("#other_report_filters").serializeArray(), function(index, field) {
+
+      // Handling fields with multiple values
+      if (field.name.indexOf("[]") > -1){
+        var fieldName = field.name.split("[]")[0];
+        data[fieldName] = jQuery.makeArray(data[fieldName]);
+        data[fieldName].push(field.value);
+      }
+      else{
+        data[field.name] = field.value;
+      }
+    });
+    jQuery.each(ReportFilters.getAppliedFiltersData(true), function(index, obj) {
+      if(!obj['field'].blank()) {
+        var fieldName = obj.scope.split("[]")[0];
+        data[fieldName] = jQuery.makeArray(data[fieldName]);
+        data[fieldName].push(obj);
+      }
+    });
+    jQuery.each(Object.keys(data).filter(function(key){ return key.indexOf("member_profile_filters") > -1 }), function(idx, key) { data[key] = JSON.stringify(data[key]) });
+    data['date_range'] = jQuery("#report_time_filter_form .cjs_daterange_picker_value").val();
+    data['point_interval'] = jQuery(".point_interval_buttons #point_interval").val();
+    delete data['authenticity_token'];
+    return data;
+  },
+
+  updatePointInterval: function(){
+    jQuery(document).on("click", '.toggle_point_interval', function(){
+      jQuery('.point_interval_buttons #point_interval').val(jQuery(this).data("point-interval"));
+      commonReportFilters.submitData();
+    });
+  }
+}

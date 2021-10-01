@@ -1,0 +1,16 @@
+en:
+  email_translations:
+    circle_request_expired_notification_to_sender:
+      enabled_html: An %{email} will be sent to the user when a %{mentoring_connection} request gets autoclosed.
+      disabled_html: An %{email} is usually sent to the user when a %{mentoring_connection} request is autoclosed, but has been disabled. No email will be sent.
+      title: "%{_Mentoring_Connection} request expired notification to sender."
+      description: This email is sent to the sender of %{_a_mentoring_connection} request when it auto-expires. The number of days after which it auto-expires is specified by the %{_admin}.
+      subject: Your request to join {{project_name}} is closed now.
+      content_html: Unfortunately, we have to close your request to join the {{customized_mentoring_connection_term}}, {{project_name}} because it has not been responded.<br/><br/>We have many other great {{customized_mentoring_connection_term}} available who may align with some of your intended goals and objectives.<br/>{{visit_other_connections_button}}<br/>If you are having trouble finding a suitable {{customized_mentoring_connection_term}}, please <a href='{{url_contact_admin}}'>reach out</a> to one of the {{customized_admin_term_pluralized}} and we'd be happy to help you.<br/>
+      visit_other_connections_html: Visit other %{mentoring_connection_term}
+      tags:
+        project_name:
+          description: Name of the project
+          example: Develop TO-DO Android App
+        visit_other_connections_button:
+          description: Visit other %{_mentoring_connections} button

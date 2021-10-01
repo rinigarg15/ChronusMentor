@@ -1,0 +1,20 @@
+en:
+  email_translations:
+    admin_added_notification:
+      title_v3: "%{_Admin} invites new %{_admins} (at global level)"
+      description_v3: This email is generated when %{_a_admin} invites a new user as %{_admin} to manage all the %{_programs} (at the global level).
+      subject_v1: "{{sender_name}} invites you to be {{customized_admin_term_articleized}}!"
+      content_v2_html: "{{sender_name}} has invited you to join {{subprogram_or_program_name}} as {{customized_admin_term_articleized}}.<br/>{{invite_message_as_quote}}<br/>Please get started by reviewing the {{customized_subprogram_term}} and making adjustments/changes if needed.<br/>{{accept_and_signup_button}}"
+      accept_and_signup_text_html: Accept and sign up
+      tags:
+        url_invite:
+          description: Url with invite code for the user to click and accept the invitation
+        sender_name:
+          description: Name of the user who sent the invitation
+        invite_message:
+          description: Message from the user who sent the invitation
+          example: Please accept the invitation and join as an administrator.
+        accept_and_signup_button:
+          description: Accept and sign-up button
+        invite_message_as_quote:
+          description: Message from the user who sent the invitation with sender name

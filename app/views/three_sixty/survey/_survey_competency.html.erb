@@ -1,0 +1,15 @@
+<% competency = survey_competency.competency %>
+
+<div id="three_sixty_survey_competency_<%= survey_competency.id %>" class="well no-borders white-bg no-padding">
+  <% collapsible_content content_tag(:big, competency.title), [], false,
+    :render_panel => true,
+    :class => "no-vertical-margins",
+    :pane_content_class => "no-padding",
+    :additional_header_class => "b-l b-r b-b b-t gray-bg",
+    :collapsible => false do %>
+
+    <div class="cjs-alt-color-parent clearfix" id="three_sixty_survey_competency_questions_<%= survey_competency.id %>">
+      <%= render :partial => "three_sixty/survey/survey_question", :collection => survey_competency.survey_questions, :locals => {:survey => survey, :survey_competency => survey_competency, :answers => answers} %>
+    </div>
+  <% end %>
+</div>

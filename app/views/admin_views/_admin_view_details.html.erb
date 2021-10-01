@@ -1,0 +1,14 @@
+<% role_names.each do |role| %>
+  <% admin_view = instance_variable_get("@#{role}_view") %>
+  <% admin_view_filters = instance_variable_get("@#{role}_view_filters") %>
+  <% admin_view_users = instance_variable_get("@#{role}_view_users") %>
+  <% panel_title = role == RoleConstants::MENTOR_NAME ? "#{_Mentors}" : "#{_Mentees}" %>
+  <div class="pull-left <%= form.present? ? "col-sm-6" : "col-sm-12" %>" id="<%= role %>_view_container">
+    <% admin_view_content = render partial: "bulk_matches/admin_view_content", locals: {preview_view_url: preview_view_url, role: role, admin_view_filters: admin_view_filters, admin_view_users: admin_view_users, form: form, id_suffix: id_suffix, admin_view: admin_view} %>
+    <% if form.present? %>
+      <%= panel panel_title, panel_class: "panel-default" do %><%= admin_view_content %><% end %>
+    <% else %>
+      <%= admin_view_content %>
+    <% end %>
+  </div>
+<% end %>

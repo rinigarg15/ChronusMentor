@@ -1,0 +1,53 @@
+<% content = render(partial: "forums/show", locals: { forum: @forum, topics: @topics, show_title: (@forum.is_group_forum? && !@can_show_tabs), home_page: @home_page }) %>
+
+<% if @forum.is_program_forum? %>
+  <% @back_link = { label: "feature.forum.back_link.forums".translate, link: forums_path } if current_user.can_manage_forums? %>
+
+  <% @title = @forum.name %>
+  <% @title_description = @forum.description.present? ? content_tag(:div, chronus_auto_link(@forum.description)) : "" %>
+  <% @title_description << content_tag(:div, class: "#{'p-t-xs' if @forum.description.present?}") do
+    content_tag(:span, 'feature.forum.content.available_for'.translate, class: "text-muted") +
+    content_tag(:span, RoleConstants.human_role_string(@forum.access_role_names, program: current_program, pluralize: true), class: "font-bold p-l-xxs")
+  end %>
+  <% @title_description << content_tag(:div) do %>
+    <%= content_tag(:span, 'feature.forum.content.member'.translate(count: @forum.subscribers.count), class: "text-navy") %>
+    <%= circle_separator %>
+    <%= content_tag(:span, 'feature.forum.content.view'.translate(count: @forum.total_views), class: "text-navy") %>
+  <% end %>
+
+  <% @page_action = if @forum.subscribed_by?(current_user) %>
+    <% { label: append_text_to_icon("fa fa-sign-out", "feature.forum.action.leave_forum".translate), url: subscription_forum_path(@forum, subscribe: false), class: "btn btn-primary", data: { confirm: "feature.forum.content.sure_to_leave".translate(forum_name: @forum.name) }, method: :get } %>
+  <% else %>
+    <% { label: append_text_to_icon("fa fa-sign-in", "feature.forum.action.join_forum".translate), url: subscription_forum_path(@forum, subscribe: true), class: "btn btn-primary" } %>
+  <% end %>
+  <% @page_action2 = new_topic_action(@forum, false, false, class: "btn btn-primary") %>
+  <%= render partial: "topics/new", locals: { forum: @forum, home_page: false} %>
+  <%= content %>
+  <% content_for_sidebar do %>
+    <%= sidepane_assets_pane(@recent_topics,
+      pane_header: "feature.forum.title.recent_conversations".translate,
+      see_all_url: forum_path(@forum),
+      sidepane_asset_partial: "topics/recent_topic",
+      empty_pane_message: "feature.forum.content.no_other_conversations".translate,
+      user_method: :user) unless params[:search_view].to_s.to_boolean
+    %>
+  <% end %>
+
+  <%= javascript_tag do %>
+    if (<%= params[:search_view].to_s.to_boolean %>){
+      jQuery(document).ready(function(){
+        jQuery('.topic_'+'<%= params[:topic_ids].try(:first) %>').click();
+      });    
+    }
+  <% end %>  
+  
+<% else %>
+  <%= render layout: "groups/show_layout", locals: { show_tabs: @can_show_tabs, forum_tab: true, show_page_actions: true } do %>
+    <%= content %>
+    <% if @topic_id_to_view.present? %>
+      <%= javascript_tag do %>
+        Forum.openTopicInSidePane(<%= @topic_id_to_view %>);
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

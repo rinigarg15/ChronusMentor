@@ -1,0 +1,6 @@
+<% search_model = is_mentee_to_mentor_view?(orientation_type) ? "mentorNameSearch" : "mentorSearch.name" %>
+<div class="input-group font-noraml table-bordered">
+  <span class="input-group-addon no-borders p-r-xxs p-l-xxs"><i class="fa fa-search fa-fw"></i></span>
+  <label for="mentor-name-search" class="sr-only"><%= "feature.bulk_match.label.role_name_search".translate(role: _mentor) %></label>
+  <input id="mentor-name-search" ng-model="<%= search_model %>" type="text" class="p-l-0 form-control no-borders input-sm" placeholder="<%= 'display_string.Search'.translate %>"/>
+</div>

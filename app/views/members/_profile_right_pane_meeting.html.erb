@@ -1,0 +1,9 @@
+<% meeting = sidepane_asset[:meeting] %>
+<% current_occurrence_time = sidepane_asset[:current_occurrence_time] %>
+<div class="topic h5 no-margins m-b-xxs font-bold">
+  <%= link_to (meeting.topic),  meeting_path(meeting, current_occurrence_time: current_occurrence_time, ei_src: EngagementIndex::Src::AccessFlashMeetingArea::HOME_PAGE_SIDE_BAR) %>
+</div>
+<span class="m-t-xs inline small time <%= meeting.calendar_time_available? ? '' : 'text-danger' %>">
+  <%= append_text_to_icon("fa fa-clock-o", meeting_time_for_display(meeting, current_occurrence_time)) %>
+</span>
+<%= popover(".sidepane_asset_meeting_#{index_id}", meeting.topic, my_meeting_popover(meeting, current_occurrence_time), {placement: "top"}) %>

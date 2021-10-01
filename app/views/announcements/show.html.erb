@@ -1,0 +1,30 @@
+<% @page_action = {:label => "feature.announcements.action.create_new_announcement".translate, :url => new_announcement_path, :class => "btn btn-primary btn-large"} if current_user.can_manage_announcements? %>
+<% @title = @announcement.title.presence || "feature.announcements.label.no_title".translate %>
+<% @title_description = content_tag(:div, "display_string.Draft".translate, :class=> "label label-warning has-above") if @announcement.drafted? %>
+<% @back_link = {:label => "feature.announcements.label.announcements".translate, :link => announcements_path} %>
+
+<%= ibox nil do %>
+  <% if current_user.can_manage_announcements? %>
+    <div class="pull-right">
+      <% actions =  [{:label => get_icon_content("fa fa-pencil") + "display_string.Edit".translate,
+        :url => edit_announcement_path(@announcement)}] %>
+      <% actions << {:label => get_icon_content("fa fa-trash") + get_delete_or_discard_text(@announcement, :capitalize => true),
+        :url => announcement_path(@announcement),
+        :method => :delete,
+        data: {:confirm => "feature.announcements.content.delete_or_discard_warning".translate(:delete_or_discard => get_delete_or_discard_text(@announcement, :capitalize => false))} } %>
+
+      <%= build_dropdown_button("", actions, :dropdown_menu_class => "pull-right", is_not_primary: true, :btn_class => "btn-white", :btn_group_btn_class => "no-margins text-default") %>
+    </div>
+  <% end %>
+  <div class="pull-left col-xs-10 no-padding">
+    <%= embed_display_line_item("feature.announcements.label.for".translate, @announcement.recipient_roles_str.presence || "--", :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+    <% published_or_drafted_label = @announcement.published? ? "feature.announcements.label.published".translate : "feature.announcements.label.last_updated".translate %>
+    <%= embed_display_line_item(published_or_drafted_label, formatted_time_in_words(@announcement.updated_at), :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+    <%= embed_display_line_item("feature.announcements.label.expires_on".translate, @announcement.expiration_date ? formatted_date_in_words(@announcement.expiration_date) : "feature.announcements.label.expires_on_default".translate, heading_tag: :h4, class: "m-t-xs m-b-xs") if current_user.can_manage_announcements? %>
+    <%= embed_display_line_item("feature.announcements.label.attachment".translate, (@announcement.attachment? ? "#{@announcement.attachment_file_name} (#{link_to("display_string.Download".translate, @announcement.attachment.url, :target => "_blank", :id => 'download_link', :class => 'cjs_android_download_files', :data => {:filename => @announcement.attachment_file_name, :targeturl => @announcement.attachment.url})})" : "display_string.None".translate).html_safe , :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+
+    <div class="ckeditor_generated m-t-md word_break">
+      <%= chronus_sanitize_while_render(auto_link(@announcement.body.html_safe), :sanitization_version => @current_organization.security_setting.sanitization_version, :sanitization_options => {:attributes => %w[style dir href cellspacing cellpadding border width height alt src], :tags => %w[tbody table tr td th a q pre address small big var code tt cite h1 h2 h3 h4 h5 h6 em u span ul li ol br p strong blockquote img]}) %>
+    </div>
+  </div>
+<% end %>

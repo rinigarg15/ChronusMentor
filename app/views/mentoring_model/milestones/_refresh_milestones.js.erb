@@ -1,0 +1,13 @@
+<% if local_assigns[:all_tasks].present? %>
+  <% all_tasks.each do |milestone_id, tasks| %>
+    jQuery("#cjs_milestone_task_container_<%= milestone_id %>").html('<%= j(render partial: "mentoring_model/tasks/task", collection: tasks, locals: {group: @group}) %>');
+    <% if milestone_id == @task.milestone_id %>
+      var newTaskSelector = jQuery("#cjs_milestone_add_new_form_<%= milestone_id.to_s %>").find(".cjs-remove-merge-top");
+      <% if tasks.present? %>
+        newTaskSelector.addClass("merge-top");
+      <% else %>
+        newTaskSelector.removeClass("merge-top");
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

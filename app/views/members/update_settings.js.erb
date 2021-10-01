@@ -1,0 +1,60 @@
+<% member = @profile_member %>
+
+<% if params[:acc_settings] %>
+  <% if params[:user] %>
+    <% program_id = params[:user][:program_id] %>
+    <% program = @current_program || @current_organization.programs.find(program_id) %>
+    jQuery("#account_settings_<%= program_id %>").replaceWith('<%= j(render(partial: "program_settings", locals: { program: program, member: member, accordion_collapsed: false })) %>');
+  <% elsif (params[:member]) %>
+    jQuery("#org_settings").replaceWith('<%= j(render(partial: "org_settings", locals: { member: member })) %>');
+  <% end %>
+<% elsif params[:sign_out_of_all_other_sessions] %>
+  jQuery("#org_settings").replaceWith('<%= j render(partial: "org_settings", locals: { member: member }) %>');
+<% else %>
+  <% section_id = "#settings_section" %>
+  <% collapse_id = "settings_" %>
+  <% section_content = render_settings_section %>
+  jQuery("<%= section_id %>").replaceWith("<%= j(section_content) %>");
+<% end %>
+
+<% if params[:user] %>
+  <% program = @current_program || @current_organization.programs.find(program_id) %>
+  <% if !!@settings_error_case %>
+    ChronusValidator.ErrorManager.ShowResponseFlash("settings_errors_flash_<%= program.id %>", '<%= j @error_message.join("<br>") %>');
+  <% else %>
+    <% success_flash = "flash_message.program_flash.updated".translate %>
+    <% availability_flash, scroll_to_id = get_availability_flash_and_scroll_to_id(@profile_user, @is_connection_limit_zero, @is_meeting_limit_zero, @notify_user_if_unavailable) %>
+    <% success_flash << availability_flash if availability_flash.present? %>
+    ChronusValidator.ErrorManager.ClearResponseFlash("settings_errors_flash_<%= program.id %>");
+    ChronusValidator.ErrorManager.ShowResponseFlash("settings_errors_flash_<%= program.id %>", '<%= j success_flash %>', true);
+    <% unless params[:acc_settings] %>
+      <% if !params[:user] %>
+        ChronusEffect.ExpandSection("<%= collapse_id %>", []);
+      <% end %>
+      jQueryScrollTo('<%= scroll_to_id.presence || "#{section_id} .accordion" %>', true);
+    <% end %>
+  <% end %>
+<% elsif params[:sign_out_of_all_other_sessions] %>
+  <% if !!@settings_error_case %>
+    ChronusValidator.ErrorManager.ShowResponseFlash("settings_errors_flash", '<%= j @error_message.join("<br>") %>');
+  <% else %>
+    ChronusValidator.ErrorManager.ClearResponseFlash("settings_errors_flash");
+    ChronusValidator.ErrorManager.ShowResponseFlash("settings_errors_flash", '<%= j "flash_message.program_flash.sign_out_of_all_other_sessions".translate %>', true);
+  <% end %>
+<% else %>
+  <% if !!@settings_error_case %>
+    ChronusValidator.ErrorManager.ShowResponseFlash("settings_errors_flash", '<%= j @error_message.join("<br>") %>');
+  <% else %>
+    ChronusValidator.ErrorManager.ClearResponseFlash("settings_errors_flash");
+    ChronusValidator.ErrorManager.ShowResponseFlash("settings_errors_flash", '<%= j "flash_message.program_flash.updated".translate %>' , true);
+    <% unless params[:acc_settings] %>
+      ChronusEffect.ExpandSection("<%= collapse_id %>", []);
+      jQueryScrollTo('<%= "#{section_id} .accordion" %>', true);
+      <% if @alert_availability_setting %>
+          chronusConfirm('<%= j "feature.user.content.meeting_preferences_updated_v1".translate(meeting: _meeting) %>', function() {
+            window.location = '<%= j member_url(member, tab: MembersController::ShowTabs::AVAILABILITY) %>';
+          });
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

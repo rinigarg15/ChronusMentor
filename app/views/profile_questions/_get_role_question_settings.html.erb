@@ -1,0 +1,103 @@
+<% show_available_for = is_membership_form_enabled?(program) %>
+<% program_level = local_assigns[:program_level] %>
+<% is_conditional_question_set = profile_question.conditional_question_id.present? %>
+<% main_class = "col-sm-12" %>
+<% role_question = role_question.present? ?  role_question[0] : profile_question.role_questions.new(:role => role) %>
+<% role_id = role.id %>
+<% q_id = profile_question.id || 0 %>
+<% new_question = q_id == 0 %>
+<% display_choices = profile_question.choice_based? || profile_question.ordered_options_type? %>
+<% disabled_for_advanced_search = role_question.disable_for_advanced_search? %>
+<% form_id = "edit_profile_question_role_settings_#{profile_question.id}" %>
+<div class="cui_program_title p-l-xs p-t-sm">
+  <h4 class="inline"> <%= program.name %> </h4>
+  <%= append_text_to_icon("fa fa-angle-right p-l-xxs p-r-xxs hidden-xs") %>
+  <h4 class="inline"><%= role_question.role.customized_term.term %></h4>
+</div>
+<div class="cui_role_settings p-t-xxs">
+  <%= ibox nil, ibox_class: "m-sm", content_class: "light-gray-bg p-xs" do %>
+    <%= get_icon_content("fa fa-times cjs_close_role_settings", :container_class => "fa-circle text-muted", :stack_class => "pull-right p-t-md", stack_style: "left: 20px; top: -40px") %>
+    <%= simple_form_for profile_question, url: profile_question_path(profile_question, skip_other_roles: true), :remote => true, :html => { :class => "form-horizontal cjs_ckeditor_dont_register_for_insecure_content", :id => form_id} do |f| %>
+      <%= f.input_field :id, :as => :hidden, :id => "profile_question_id_#{q_id}", :class => "form-control" %>
+      <%= f.input_field "role_id", :as => :hidden, :id => "role_question_id_#{role_id}", :class => "form-control", value: role_id %>
+      <%= hidden_field_tag "available_for_flag", true, :id => "role_question_#{role_id}_available_for_flag", :class => "form-control" %>
+      <div id ="role_question_settings_<%= profile_question.section.id %>_<%= q_id %>_<%= role_id %>" class="p-l-0 p-r-0 m-t-n-md m-b-xs <%= main_class %> clearfix">
+
+        <% question_type = profile_question.question_type || 'undefined' %>
+        <div class="col-xs-12 b-b p-b-m">
+          <%= content_tag( :div, "feature.profile_customization.label.visibility".translate, :class=>'false-label font-bold')%>
+          <%= role_questions_visibility_settings(program, q_id, role_id, question_type, role_question, profile_question) %>
+        </div>
+
+        <% if show_available_for %>
+          <div class="cjs_available_for col-xs-12 b-b p-b-m p-t-xs">
+            <div class="false-label font-bold"><%= "feature.profile_customization.label.include_in".translate %></div>
+            <%= choices_wrapper("feature.profile_customization.label.include_in".translate) do %>
+              <label class="checkbox">
+                <%= check_box_tag("role_questions[#{role_id}][available_for][profile]", RoleQuestion::AVAILABLE_FOR::PROFILE_QUESTIONS, question_is_checked?(role_question, RoleQuestion::AVAILABLE_FOR::PROFILE_QUESTIONS),  :id => "role_questions_available_for_profile_#{q_id}_#{role_id}", :class => "cjs_available_for_profile  role_questions_available_for", :onclick => "CustomizeProfileQuestions.checkAvailableFor(this);", :disabled => profile_question.default_type?) %>
+                <%= "feature.profile_customization.label.profile".translate %>
+              </label>
+              <label class="checkbox">
+                <%= check_box_tag("role_questions[#{role_id}][available_for][membership_form]", RoleQuestion::AVAILABLE_FOR::MEMBERSHIP_QUESTIONS, question_is_checked?(role_question, RoleQuestion::AVAILABLE_FOR::MEMBERSHIP_QUESTIONS), :id => "role_questions_available_for_membership_#{q_id}_#{role_id}", :class => "role_questions_available_for", :onclick => "CustomizeProfileQuestions.checkAvailableFor(this);", :disabled => profile_question.default_type?) %>
+                <%= "feature.profile_customization.label.membership_form".translate %>
+              </label>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div class="col-xs-12 p-t-xs">
+          <div class="false-label font-bold"><%= "display_string.Options".translate %></div>
+          <%= choices_wrapper("display_string.Options".translate) do %>
+            <label class="checkbox m-t-xs">
+              <%= check_box_tag("role_questions[#{role_id}][required]", true, role_question.required, :id => "role_questions_required_#{q_id}_#{role_id}", :class => "role_questions_required", :disabled => profile_question.default_type?) %>
+              <%= "feature.profile_customization.label.mandatory".translate %>
+            </label>
+            <label class="checkbox <%= "text-muted" if role_question.disable_for_users_listing? %>">
+              <%= show_in_summary_check_box(role_question, name: "role_questions[#{role_id}][in_summary]", value: true, id: "role_questions_in_summary_#{q_id}_#{role_id}", class: "role_questions_in_summary ") %>
+              <%= "feature.profile_customization.label.show_in_profile_summary".translate %>
+            </label>
+            <label class="checkbox <%= "text-muted" if disabled_for_advanced_search %>">
+              <%= check_box_tag("role_questions[#{role_id}][filterable]", true, role_question.filterable, :id => "role_questions_filterable_#{q_id}_#{role_id}", :class => "role_questions_filterable ", :disabled => disabled_for_advanced_search) %>
+              <%= "feature.profile_customization.label.available_for_advanced_search".translate %>
+            </label>
+            <hr/>
+            <label class="checkbox  m-t-xs">
+              <%= check_box_tag("role_questions[#{role_id}][admin_only_editable]", true, role_question.admin_only_editable, id: "role_questions_admin_only_editable_#{q_id}_#{role_id}", class: "role_questions_admin_only_editable", disabled: profile_question.name_type? ) %>
+              <%= "feature.profile_customization.label.admin_only_edit".translate %>
+            </label>
+          <% end %>
+          <%= javascript_tag(%Q[jQuery(document).ready(function(){CustomizeProfileQuestions.initAdminOnlyEditableCheckbox('#{q_id}','#{role_id}', #{question_type})});CustomizeProfileQuestions.updateOptionsAndIncludeIn('#{q_id}', '#{role_id}', '#{question_type}', #{is_conditional_question_set});]) %>
+        </div>  
+      </div>
+       <% action_set(class: "col-xs-12 pull-right p-t-xs") do %>
+        <div class="pull-right">
+          <%= link_to_function "display_string.Cancel".translate, "CustomizeProfileQuestions.cancelQuestion('#{q_id}', '#{profile_question.section.id}', '#{new_question}')", :class => "btn btn-white cjs-cancel-role-settings" %>
+          <%= f.button :submit, "display_string.Save".translate %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    var updateConfirmations = {
+      dependencyConfirmation: "<%= j (dependency_confirmation = get_confirm_mesage_if_dependent_questions(@profile_questions, profile_question)).present? ? content_tag(:li, dependency_confirmation) : "" %>",
+      matchingConfirmation: "<%= j content_tag(:li, "feature.profile_customization.content.update_delete_confirmation.match_score".translate) %>",
+      choicesUpdatedConfirmation: "<%= j content_tag(:li, "feature.profile_customization.content.update_delete_confirmation.modified_choices".translate) %>"
+    }
+    var questionChoices = {};
+    <% profile_question.default_choice_records.each do |choice| %>
+      questionChoices[<%= choice.id %>] = '<%= choice.text %>';
+    <% end %>
+    CustomizeQuestionChoices.initialQuestionChoices[<%= q_id %>] = questionChoices;
+
+    CustomizeSelect.selectExpandContract();
+    CustomizeProfileQuestions.updateProfileQuestion("<%= q_id %>", "<%= profile_question.section_id %>", updateConfirmations, {formId: "<%= form_id %>", skip_ck_editor: true});
+    
+    jQuery(".cjs_close_role_settings, .cjs-cancel-role-settings").on('click', function(event){
+      var profileQuestion = jQuery(".cjs_active_profile_question");
+      ProfileConfigUI.loadEditProfileQuestion(profileQuestion, {activeTab: "<%= (program_level.to_s.to_boolean || @current_organization.standalone?) ? %Q[#tab_Roles] : %Q[#tab_#{_Programs}] %>"});
+      event.stopPropagation();
+    });
+  });
+<% end %>

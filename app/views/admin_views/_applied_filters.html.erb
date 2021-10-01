@@ -1,0 +1,8 @@
+<% admin_view_filters.each_pair do |label, filter_value| %>
+  <% if filter_value.is_a?(Array) %>
+    <% line_item_value = filter_value.map{|hsh| hsh.is_a?(Hash) ? ("<span class='font-600'>#{hsh[:question_text]}</span> #{hsh[:operator_text]} <span class='font-600'>#{hsh[:value]}</span>") : hsh }.join("<br />") %>
+  <% else %>
+    <% line_item_value = filter_value %>
+  <% end %>
+  <%= embed_display_line_item(label, line_item_value) %>
+<% end %>

@@ -1,0 +1,11 @@
+<div class="m-t-xs">
+  <%= header_for_profile_question_settings(section) %>
+</div>
+<% section_div = "role_questions_list_section_#{section.id}" %>
+<div class="profile_questions_list_section m-t-sm" id="<%= section_div %>">
+  <ul class="profile_section_questions unstyled list-group">
+    <% profile_questions.each do |profile_question| %>
+      <%= preview_and_edit_profile_question_settings(profile_question, all_questions) %>
+    <% end %>
+  </ul>
+</div>

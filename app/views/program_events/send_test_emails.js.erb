@@ -1,0 +1,5 @@
+<% if @email_list.present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("test_send_success", "<%= 'flash_message.program_event_flash.test_mail_sent'.translate(email_list: @email_list) %>", "true");
+  jQuery("#test_send_success").show();
+<% end %>
+jQuery('div.send_test_mail_popup_buttons input[type=submit]').attr({'disabled': false, 'value': '<%= j "display_string.Submit".translate %>'});

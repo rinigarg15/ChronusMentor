@@ -1,0 +1,41 @@
+<% admin_view_changed = admin_view_changed_events[program_event.id] %>
+<% meeting_header = get_program_event_link(program_event) %>
+<% meeting_sub_header = event_date_for_display(program_event) %>
+<li class="list-group-item clearfix p-sm">
+  <% attending_buttons_on_mobile = "".html_safe %>
+  <% attending_buttons_on_web = "".html_safe %>
+  <% if program_event.published_upcoming? && program_event.has_current_user_as_attendee?(current_user)%>
+    <% attending_buttons_on_mobile = content_tag(:div, (render :partial => "program_events/fetch_response_buttons", :locals => { :program_event => program_event, :src => "index", :btn_group_class => "col-xs-12 no-horizontal-padding text-center", :btn_class => "col-xs-4" } ), :class => "p-b-sm clearfix #{hidden_on_web}") %>
+    <% attending_buttons_on_web = content_tag(:div, (render :partial => "program_events/fetch_response_buttons", :locals => { :program_event => program_event, :src => "index", :btn_group_class => "" } ), :class => "col-lg-4 col-md-5 #{hidden_on_mobile}") %>
+  <% end %>
+  <div class="clearfix">
+    <%= meeting_content :flag_icon => "fa fa-calendar", :meeting_icon => "fa fa-calendar", :meeting_header => meeting_header, :meeting_sub_header => meeting_sub_header, :attending_buttons => attending_buttons_on_mobile + attending_buttons_on_web, :meeting_total_header_class => "col-lg-8 col-md-7 p-l-0 p-r-0" %>
+
+    <div class="ckeditor_generated <%= hidden_on_mobile %> clearfix col-md-7 col-lg-8 no-padding b-r m-r-n-xxs">
+      <div class="p-r-sm clearfix p-b-sm">
+        <%= program_event.description.present? ? render_more_less(auto_link(program_event.description.html_safe), 300) : content_tag(:div, "feature.program_event.label.no_details_available".translate) %>
+      </div>
+    </div>
+
+    <div class="ckeditor_generated <%= hidden_on_web %>">
+      <div class="p-r-sm clearfix p-b-sm">
+        <%= program_event.description.present? ? render_more_less(auto_link(program_event.description.html_safe), 80) : content_tag(:div, "feature.program_event.label.no_details_available".translate) %>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-md-5 clearfix b-l <%= hidden_on_mobile %>">
+      <%= render partial: "program_events/program_event_right_pane", locals: {program_event: program_event, :admin_view_changed => admin_view_changed } %>
+    </div>
+    <div class="col-lg-4 col-md-5 clearfix <%= hidden_on_web%>">
+      <%= render partial: "program_events/program_event_right_pane", locals: {program_event: program_event, :admin_view_changed => admin_view_changed } %>
+    </div>
+    <%= render :partial => "program_events/invite_response_popup", :locals => {:program_event => program_event, :src => "index"} %>
+  </div>
+  <div class="clearfix">
+    <% if admin_view_changed %>
+      <%= render partial: "program_events/admin_view_changed_alert", locals: {event: program_event, from: "index"} %>
+    <% end %>
+  </div>
+</li>
+
+<%= javascript_tag("jQuery(document).ready(function() {programEvent.viewMoreEventDetails();});") %>

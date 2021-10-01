@@ -1,0 +1,172 @@
+---
+- title: "General Overview"
+  # A program object is expected here to
+  content: "<!--Style Guide: https://app.frontify.com/d/sXZ1M2LmQvgw/chronus-app-overview-pages-style-guide-->
+<div id='container-custom'>
+  <div class='hero-unit'>
+    <div class='row-fluid'>
+      <h1>Welcome</h1><img alt='' class='thumbnail' src='https://s3.amazonaws.com/chronus-mentor-assets/global-assets/images/pages/content.jpg' style='width: 430px; height: 268px; float: right;'>
+      <p>Get ready to fuel your career with our employee mentoring program! Join us now to develop personal and professional relationships with others in our organization who can help you learn and
+      grow. Whether you&#39;re a mentor, a mentee, or both, you&#39;ll find mentoring to be a rewarding part of your experience here at our company.</p>
+    </div>
+  </div>
+  <div class='row-fluid'>
+    <div class='span4'>
+      <div class='well'>
+        <h3>Find a mentor today!</h3>
+        <p>Discover the perfect resource for your career growth here.</p>
+        <p><img alt='' src='https://s3.amazonaws.com/chronus-mentor-assets/global-assets/images/pages/content_758.png' style='width: 100px; height: 72px; float: right;'></p>
+        <p><a class='btn btn-primary' href='/p/p1/membership_requests/new'>Join Now</a></p>
+      </div>
+    </div>
+    <div class='span4'>
+      <div class='well'>
+        <h3>Connect with our mentees!</h3>
+        <p>Share your expertise with those willing and eager to learn.</p>
+        <p><img alt='' src='https://s3.amazonaws.com/chronus-mentor-assets/global-assets/images/pages/content_757.png' style='width: 100px; height: 75px; float: right;'></p>
+        <p><a class='btn btn-primary' href='/p/p1/membership_requests/new'>Apply Now</a></p>
+      </div>
+    </div>
+    <div class='span4'>
+      <h3>What participants say</h3>
+      <p>&ldquo;It&rsquo;s so inspiring to connect with someone in the same position you were in ten years ago, and you get motivated again because they have that energy..&rdquo;<br>
+      - A.L., Mentor, URS Corporation</p>
+      <div id='footer-social'>
+        <ul>
+          <li class='linkedin'>
+            <a href='https://www.linkedin.com/company/chronussoftware' target='_blank'>LinkedIn</a>
+          </li>
+          <li class='youtube'>
+            <a href='https://www.youtube.com/c/Chronus' target='_blank'>Youtube</a>
+          </li>
+          <li class='twitter'>
+            <a href='https://twitter.com/ChronusSoftware' target='_blank'>Twitter</a>
+          </li>
+          <li class='facebook'>
+            <a href='https://www.facebook.com/ChronusSoftware/' target='_blank'>Facebook</a>
+          </li>
+          <li class='googleplus'>
+            <a href='https://plus.google.com/+Chronus/posts' target='_blank'>Google Plus</a>
+          </li>
+          <li class='contactemail'>
+            <a href='mailto:info@chronus.com'>Contact Us</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class='text-center m-t-md row-fluid'>
+  <div class='col-xs-6 text-right no-padding'>
+    <a href='<%= APP_CONFIG[:ios_chronus_app_store_link] %>' target='_blank' id='cjs_ios_app_store_link'><img src='https://s3.amazonaws.com/chronus-mentor-assets/global-assets/images/chronus-app-ios-app-store.png' style='width: 145px; margin-right: 10px;' alt='Chronus IOS App' /></a>
+  </div>
+  <div class='col-xs-6 text-left no-padding'>
+    <a href='https://play.google.com/store/apps/details?id=com.chronus.mentorp&referrer=utm_source%3Dchronus.com%26utm_medium%3Doverview' target='_blank' id='cjs_android_play_store_link'><img src='https://s3.amazonaws.com/chronus-mentor-assets/global-assets/images/chronus-app-android-app-store.png' style='width: 145px;' alt='Chronus Android App' /></a>
+  </div>
+</div>"
+
+- title: For Mentors
+  content: "<div id='container-custom'>
+    <div class='row-fluid'>
+      <div class='span6'>
+        <h3>Overview</h3>
+        <p>A mentor is a guide. A friend. A resource who paves the way to success, and derives satisfaction from helping others succeed. Your role as mentor is to inspire, encourage, and&nbsp;support
+        your mentee, and to contribute to their professional and personal development.</p>
+        <h3>Frequently Asked Questions</h3>
+        <ul>
+          <li><em><strong>What am I expected to do?</strong></em> Mentors are expected to provide their mentee with about one hour of support and interaction per month. Most of this interaction will
+          take place via email and other web-related tools (for example, instant messaging) or face-to-face, as appropriate. Mentors should work with their mentee to determine what kind of support
+          will&nbsp;be most useful&mdash;specific feedback related to finding jobs, general career advice, information on higher studies, technical information, personal encouragement, and so on.</li>
+          <li><em><strong>How long will the commitment be?</strong></em> We ask our mentors to make commitments of at least six months to one year in order to ensure that the mentee is able to fully
+          benefit from the&nbsp;relationship. If a mentor must leave the relationship early, we request at least one month&#39;s notice in order to search for a replacement mentor with similar
+          background.</li>
+          <li><em><strong>Are there any potential risks to me or my company?</strong></em> No. It is not appropriate for mentors to engage in any business transactions with their mentees; instead, the
+          relationship&nbsp;should only involve the flow of general information and advice.</li>
+          <li><em><strong>Relationship is not going well or I am concerned about mentorship, what to do?</strong></em> We encourage letting the mentee know about the situation and contact the Admin
+          Immediately. We&nbsp;will provide our full support to resolve the situation in a positive and satisfactory manner.</li>
+        </ul>
+      </div>
+      <div class='span6'>
+        <div class='well'>
+          <h3 class='subhead'>Connect with Our Mentees!</h3>
+          <p><img alt='' src='https://s3.amazonaws.com/chronus-mentor-assets/global-assets/images/pages/content_758.png' style='width: 130px; height: 94px; float: right;'>Share your expertise with
+          those willing and eager to learn.</p>
+          <p><a class='btn btn-primary' href='/p/p1/membership_requests/new?roles=mentor'>Apply Now</a></p>
+        </div>
+        <h3>Mentor DO&#39;s</h3>
+        <ol>
+          <li>COMMIT AT LEAST ONE INTERACTION/HOUR OF SUPPORT per month.</li>
+          <li>Take responsibility to initiate the relationship.</li>
+          <li>Set aside time for the mentoring process and honour all appointments.</li>
+          <li>Invite the mentee to meetings or activities, as appropriate. Schedule meetings with planned topics.</li>
+          <li>Be flexible on meeting times and places.</li>
+          <li>Arrange frequent contacts through telephone, email, fax, face-to-face, etc., as appropriate</li>
+          <li>Respond to emails from your mentee within 2 days of receipt.</li>
+          <li>Keep information that your mentee has shared with you confidential. If something concerning the mentee needs to be discussed with others, it should first be discussed within
+          the&nbsp;mentoring relationship.</li>
+          <li>Establish open and honest communication and a forum for idea exchange.</li>
+          <li>Foster creativity and independence. Help build self-confidence and offer encouragement.</li>
+          <li>Provide honest and timely feedback to your mentee.</li>
+          <li>Provide opportunities for the mentee to talk about concerns and ask questions.</li>
+          <li>Above all, LISTEN.</li>
+        </ol>
+        <h3>Mentor DON&#39;Ts</h3>
+        <ol>
+          <li>Try to give advice on everything.</li>
+          <li>Encourage mentee to be totally dependent upon you.</li>
+          <li>Provide your personal history, problems, animosities, successes, failures, etc unless they are constructive contributions.</li>
+          <li>Be too busy when the mentee needs your friendship or your support. If you do not have time, give the mentee a heads up, so that they know when they can reach you.</li>
+          <li>Criticize.</li>
+        </ol>
+      </div>
+    </div>
+  </div>"
+
+- title: For Mentees
+  content: "<div id='container-custom'>
+    <div class='row-fluid'>
+      <div class='span6'>
+        <h3>Overview</h3>
+        <p>Mentors inspire, encourage, and support you, and contribute to your professional and personal development. You can expect to strengthen and build your network, and gain the&nbsp;skills and
+        confidence necessary to excel.</p>
+        <h3>Frequently Asked Questions</h3>
+        <ul>
+          <li><em><strong>How do I choose a Mentor?</strong></em> First complete your profile with information on what help you are looking for. Then browse through the list of mentors and create
+          mentoring request.</li>
+          <li><em><strong>How long will the mentors be available?</strong></em> We ask our mentors to make commitments of at least six months to one year in order to ensure that the mentee is able to
+          fully benefit&nbsp;from the relationship. If a mentor must leave the relationship early, we request at least one month&#39;s notice in order to search for a replacement mentor with similar
+          background.</li>
+          <li><em><strong>Relationship is not going well or I am concerned about membership, what to do?</strong></em> We encourage letting the mentor know about the situation and contact the Admin
+          Immediately. We&nbsp;will provide our full support to resolve the situation in a positive and satisfactory manner.</li>
+        </ul>
+      </div>
+      <div class='span6'>
+        <div class='well'>
+          <h3 class='subhead'>Find a Mentor Today!</h3>
+          <p><img alt='' src='https://s3.amazonaws.com/chronus-mentor-assets/global-assets/images/pages/content_757.png' style='width: 140px; height: 104px; float: right;'>Discover the perfect resource
+          for your career growth here.</p>
+          <p><a class='btn btn-primary' href='/p/p1/membership_requests/new?roles=student'>Join Now</a></p>
+        </div>
+        <h3>Mentee DO&#39;s</h3>
+        <ol>
+          <li>TAKE A PROACTIVE ROLE IN SHAPING UP THE RELATIONSHIP</li>
+          <li>Understand what you want from the mentoring relationship and communicate your goals and aspirations to your mentor. Balance personal and professional relationship with
+          your&nbsp;mentor.</li>
+          <li>Set aside time for the mentoring process and keep all scheduled appointments with your mentor and display professional behavior.</li>
+          <li>PUT THE TIME WITH MENTOR TO THE BEST USE. Come to meetings with mentor prepared with planned topics.</li>
+          <li>Respond in a timely manner to your mentor&#39;s feedback. Respond to emails from your mentor at most two days after receipt.</li>
+          <li>Be open and honest with your mentor about your challenges and weaknesses.&nbsp;</li>
+          <li>If something concerning the mentor needs to be discussed with others, it should first be discussed within the mentoring relationship.</li>
+        </ol>
+        <h3>Mentee DON&#39;Ts</h3>
+        <ol>
+          <li>Ask for advice on everything. Have a purpose in each request.</li>
+          <li>Blame the mentor if his or her advice doesn&#39;t work out.</li>
+          <li>Expect the mentor to know all the answers.</li>
+          <li>Commit yourself to obligations you cannot keep.</li>
+          <li>Cancel meetings/visits with your mentor at the last minute.</li>
+        </ol>
+      </div>
+    </div>
+  </div>"

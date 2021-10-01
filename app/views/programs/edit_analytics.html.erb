@@ -1,0 +1,15 @@
+<% @title = "feature.program.header.analytics".translate %>
+
+<%= ibox nil, :ibox_id => "analytics_script" do %>
+  <p>
+    <%= "feature.program.content.analytics_description_html".translate(:program => _program, :ga_link => link_to("feature.program.label.google_analytics".translate, "https://www.google.com/analytics/")) %>
+  </p>
+ <%= simple_form_for @current_program, :url => update_analytics_path do |f| %>
+    <%=  f.input :analytics_script, :as => :text, :label_html => {:class => 'sr-only'}, :input_html => {:class => "form-control col-md-12", :rows => 5}  %>
+
+    <% action_set(class: "pull-right m-t") do %>
+      <%= cancel_link manage_program_path %>
+      <%= f.button :submit, "display_string.Save".translate %>
+    <% end %>
+  <% end %>
+<% end %>

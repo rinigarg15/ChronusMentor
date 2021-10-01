@@ -1,0 +1,29 @@
+<div class="hide cjs_remove_member_handler m-t-sm cjs_remove_<%= user_id %>_<%= role.id %>">
+	<%= simple_form_for group, :url => remove_new_member_group_path(group), html: { id: nil }, :remote => true do |f| %>
+    <% @option_0 = content_tag(:span, "feature.group.action.remove_member_option_0_v1".translate(:name => name)) %>
+    <% @option_0 << content_tag(:span, get_icon_content("fa fa-info-circle"), :id => "cui-remove-member-#{user_id}-option-0", :class => "pointer") %>
+    <% @option_0 << tooltip("cui-remove-member-#{user_id}-option-0", "feature.group.label.remove_option_0_help_text_v1".translate(:name => name, circle: _mentoring_connection)) %>
+    <% @option_1 = content_tag(:span, "feature.group.action.remove_member_option_1_v1".translate(:name => name)) %>
+    <% @option_1 << content_tag(:span, get_icon_content("fa fa-info-circle"), :id => "cui-remove-member-#{user_id}-option-1", :class => "pointer") %>
+    <% @option_1 << tooltip("cui-remove-member-#{user_id}-option-1", "feature.group.label.remove_option_1_help_text_v1".translate(:name => name, circle: _mentoring_connection)) %>
+    <% if drafted_or_pending_group || newly_added_member %>
+      <%= f.hidden_field "remove_member_option", value: Group::RemoveOption::REMOVE_TASKS, id: nil %>
+    <% else %>
+      <%= get_remove_tasks_radio_button(f, remove_tasks: @option_0, leave_tasks: @option_1, id_suffix: user_id) %>
+    <% end %>
+
+    <%= hidden_field_tag "user_id", user_id, id: nil %>
+    <%= hidden_field_tag "role_name", role.name, id: nil %>
+    <%= hidden_field_tag "role_id", role.id, id: nil %>
+    <%= hidden_field_tag "group_id", group.id, id: nil %>
+    <% current_program.roles.for_mentoring.each do |role| %>
+      <%= hidden_field_tag "selected_user_ids[#{role.id}]", nil, id: nil, class: "selected_user_ids_#{role.id}" %>
+    <% end %>
+
+    <% role_id = role.id.to_s %>
+    <% action_set do %>
+      <%= f.button :submit, "display_string.remove_member.one".translate, class: "cjs_remove_member_submit btn-xs", onclick: %Q[jQuery(".cjs_display_member_handler_#{user_id}_#{role_id}").removeClass("well white-bg");jQuery(".cjs_add_member_#{role.name}").removeClass("hide");] %>
+      <%= button_tag "display_string.Cancel".translate, :type => 'button', :onclick => %Q[jQuery(".cjs_remove_#{user_id}_#{role_id}").addClass("hide");jQuery(".cjs_remove_replace_#{user_id}").removeClass("hide");jQuery(".cjs_display_member_handler_#{user_id}_#{role_id}").removeClass("well white-bg");], :class => "btn cancel btn-white btn-xs" %>
+    <% end %>
+  <% end %>
+</div>

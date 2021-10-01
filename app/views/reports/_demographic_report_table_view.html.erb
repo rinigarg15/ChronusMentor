@@ -1,0 +1,34 @@
+<%= ibox nil, ibox_id: "cjs_demographic_report_table_view" do %>
+  <div class="cjs_table_enclosure table-responsive">
+    <table class="table table-bordered" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr class="cui_table_sort cjs_demographic_report_table_header">
+          <%= get_demographic_report_table_header(report_view_columns, @sort_param, @sort_order) %>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="gray-bg">
+          <td></td>
+          <% if @show_for_all_roles %>
+            <td class="text-center"><h3><%= @all_locations.to_a.sum(&:all_users_count) %></h3></td>
+          <% end %>
+          <% @roles.each do |role_name| %>
+            <td class="text-center"><h3><%= @all_locations.to_a.sum(&ReportViewColumn::DemographicReport::Key::AGGREGATION[@role_column_mapping[role_name]]) %></h3></td>
+          <% end %>
+        </tr>
+        <% locations.each_with_index do |(country, city_locations), index| %>
+          <tr>
+            <%= get_demographic_report_table_row(country, @all_grouped_locations, report_view_columns, index, false) %>
+          </tr>
+          <% grouped_cities = city_locations.sort_by{|loc| loc.city.to_s}.group_by(&:city) %>
+          <% grouped_cities.each do |city, city_locations| %>
+            <tr class= "hide yellow-bg cjs_city_<%= index%>">
+              <%= get_demographic_report_table_row(city, grouped_cities, report_view_columns, index, true) %>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <%= bottom_bar_in_listing( { collection: locations, ajax: true } ) %>
+<% end %>

@@ -1,0 +1,37 @@
+<div class="m-t-sm">
+  <%= f.input :title, :wrapper => :horizontal_input, :required => false, :placeholder => "feature.campaigns.placeholder.campaign_title".translate(), :label => "feature.campaigns.label.Campaign_name".translate, :class => "campaign_title", :input_html => {:class => 'cui-campaign-title form-control'} %>
+  <%= hidden_field_tag "draft", false, id: "cjs_campaign_clone_draft_field" %>
+</div>
+
+<%= render :partial => "admin_views/add_admin_view_select2_auto_complete", locals: {ref_obj: campaign, source_info: source_info} %>
+
+<% action_set fields_required: :all, class: "pull-right m-b" do %>
+  <% if campaign.for_cloning  %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => "popup_closebox btn btn-white cancel", "data-dismiss" => "modal" %>
+    <% if campaign.campaign_messages.any? %>
+      <%=  f.submit "feature.campaigns.label.save_as_draft".translate, :class => "btn btn-white cjs_campaign_clone_draft cjs_ga_created_duplicate" %>
+      <%=  f.submit "feature.campaigns.label.start_campaign".translate, :class => "btn btn-primary cjs_campaign_clone_start cjs_ga_created_duplicate cjs_ga_start_from_duplicate" %>
+    <% else %>
+      <%=  f.submit "feature.campaigns.label.save_as_draft".translate, :class => "btn btn-primary cjs_campaign_clone_draft cjs_ga_created_duplicate" %>
+    <% end %>
+  <% elsif campaign.new_record?  %>
+    <%= link_to "feature.campaigns.label.Cancel".translate, campaign_management_user_campaigns_path, :class => "btn cancel btn-white" %>
+    <%=  f.submit "feature.campaigns.label.Create_campaign".translate, :class => "btn  btn-primary cjs_campaign_submit cjs_ga_created_directly" %>
+  <% else %>
+    <%= link_to "feature.campaigns.label.Cancel".translate, details_campaign_management_user_campaign_path(campaign), :class => "btn cancel btn-white" %>
+    <%= f.submit "feature.campaigns.label.Save".translate, :class => "btn  btn-primary cjs_campaign_submit" %>
+  <% end %>
+<% end %>
+
+<% admin_view_info = render_admin_view_info(campaign) %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    AdminViews.initalizeSelect2(false, true);
+    CampaignManagement.validateCampaign();
+    AdminViews.setAdminViewSelect2('<%= admin_view_info[:title] %>', '<%= admin_view_info[:id] %>', CampaignManagement.CAMPAIGN_ADMIN_VIEW_SELECTOR);
+    adminViewInitSelect2.initializeCreateAdminViewLink("#"+CampaignManagement.CAMPAIGN_ADMIN_VIEW_SELECTOR, "<%= j(render('admin_views/create_admin_view_link', source_info: source_info)) %>");
+    AdminViews.displayDetailAdminView('<%= source_info["action"] %>', '<%= source_info["controller"] %>', '<%= source_info["id"] %>', CampaignManagement.CAMPAIGN_ADMIN_VIEW_SELECTOR);
+    CampaignManagement.clonePopupSaveAsDraft();
+  });
+<% end %>

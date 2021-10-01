@@ -1,0 +1,19 @@
+en:
+  email_translations:
+    available_project_withdrawn:
+      title: "Withdrawn %{_Mentoring_Connection} notification to %{_Mentoring_Connection} members"
+      description: "%{_Admin} can withdraw a %{_Mentoring_Connection} before it gets published, in which case the %{_Mentoring_Connection} will be moved to a withdrawn state. This email goes out to members of the %{_Mentoring_Connection} when the %{_Mentoring_Connection} is withdrawn, along with a custom message from %{_admin}."
+      subject:  "Your open {{customized_mentoring_connection_term}}, {{project_name}} has been withdrawn"
+      content_html: "Unfortunately, we have to withdraw your open {{customized_mentoring_connection_term}}, {{project_name}}, in <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a>.<br/>{{message_from_admin}}<br/>{{visit_other_connections_button}}"
+      visit_other_connections_html: "Visit other %{mentoring_connection_term}"
+      tags:
+        project_name:
+          description: Name of the project
+          example: Develop TO-DO Android App
+        url_project:
+          description: Url to the project page
+        message_from_admin:
+          description: Optional reason provided by the admin when withdrawing an available project
+          example: Sorry. The owner is unavailable.
+        visit_other_connections_button:
+          description: "Visit other %{_mentoring_connections} button"

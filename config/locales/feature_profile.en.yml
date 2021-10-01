@@ -1,0 +1,343 @@
+en:
+  feature:
+    profile:
+      header:
+        my_Programs: My %{programs}
+        user_s_questions: "%{user_s} Questions"
+        personal_notes: Personal Notes
+        tags: Tags
+        suspend_membership: Suspend membership of %{name}
+        offer_mentoring_in_v1: Offer %{Mentoring} in
+        account_settings: Account Settings
+        activity_settings: Activity settings
+        working_on_behalf: You are currently working on behalf of %{user_name}
+        connections_and_activity: Activity Overview
+        account_activity: Account Activity
+        calender_availabilty_header_text: Set Availability From %{Meetings} Calendar
+        general_availabilty_header_text: Set General Availability Guidelines
+        login_settings: Login Settings
+        add_role_header: "Addition of role: confirm"
+      subtitle:
+        questions: Questions
+        answers: Answers
+        availability: Availability
+        my_meetings_v1: My %{Meetings}
+        schedule_a_meeting_v1: Schedule a %{Meeting}
+        my_mentoring_connections: My %{Mentoring_Connections}
+        program_event_invites: Program Event Invites
+      content:
+        mark_you_availability: 'Mark the times when you are available for mentoring. This can be done in the following ways:'
+        slots_unavailability_text_v1: You don't have any available timeslots for %{time_period}.
+        slots_unavailability_text_v2: You don't have any available time slots. Please provide your availability.
+        select_timeslot: Select a timeslot from the calendar below.
+        click_to_add_timeslot_html: "%{click_here} to add a timeslot."
+        appointment_reserve_desc_html: To schedule time, click on a timeslot marked as available in calendar below. Appointments must be reserved %{hours} in advance.
+        set_specific_date_and_time: I would like to set specific dates and times
+        set_specific_date_and_time_v1: I would like to set specific dates and times I am available
+        schedule_vary_set_appointment: My schedule varies; %{mentees} should contact me directly to schedule an appointment time and location
+        preferred_schedule_placeholder: Please indicate your preferred appointment days/time and location. eg. Do you prefer mornings, afternoons, weekdays or weekends?
+        preferred_schedule_placeholder_v1: If you have standard days/times of the week that work best for you, list them here. You can also specific mornings, afternoons, or evenings
+        preferred_schedule_placeholder_v2: Please indicate your preferred appointment days/time and location. You can also specify mornings, afternoons, or evenings
+        visit_set_availability_html: "%{click_here} to visit your calendar and set your availability."
+        add_wob_user_html: You do not have any users to work on behalf of you. %{click_here} to add a user
+        no_prog_events_awaiting_response: There are no program events waiting for response.
+        no_topics_provided: No Mentoring Topics provided by the %{admin} in the %{program}.
+        no_situations_from_user: No situations from %{user_name}.
+        no_situation_add_html: No Situations yet. %{click_here} to add one.
+        picture_viewing_prohibited: This profile is not visible to you due to privacy settings.
+        please_login_to_see_contributions_html: Please %{login} to view %{member_name}'s contributions.
+        profile_yet_to_published: This profile is yet to be published.
+        missing_required_fields_cannot_publish: This profile cannot be published as there are few required fields missing.
+        no_questions_from_user: No questions from %{user_name}.
+        max_conn_limit_reached: The user has reached the maximum connection limit set for %{mentees}
+        user_inactive: "%{user_name} is currently inactive"
+        user_inactive_v1: "%{user_name} is currently inactive"
+        wob_help_text_html: Click to work on behalf of %{user_name}.
+        respond_to_request: Respond to request
+        accept_request: Accept request
+        decline_request: Decline request
+        download_as_pdf: Download profile as PDF
+        add_timeslot: Add Timeslot
+        download_as_pdf_help_html: Click to download profile of %{user_name} as PDF.
+        delete_badge_confirm: Are you sure you want to delete the badge?
+        remove_badge_tooltip_html: Click to remove the badge given to %{user_name}.
+        add_badge_tooltip_html: Click to add a badge to %{user_name}.
+        badge_explain: The entered text will be displayed below the member's name.
+        suspend_membership_tooltip_html: Clicking here will suspend the membership of %{user_name} from the program and %{user_name} will no longer have access to the program.
+        suspend_membership_tooltip_v1_html: Clicking here will deactivate the membership of %{user_name} from the %{program} and %{user_name} will no longer have access to the %{program}.
+        suspend_membership_note: Please note that the user will be unable to participate in any more activities.
+        reactivate_confirm: Are you sure you want to reactivate?
+        reactivate_confirm_v1_html: "%{contextual_msg} Are you sure you want to reactivate?"
+        confirm_reactivate_membership: Are you sure you want to reactivate %{member}'s membership?
+        reactivate_tooltip_html: Click to reactivate %{user_name} in the program.
+        reactivate_tooltip_v1_html: Click to reactivate %{user_name} in the %{program}.
+        suspended_member_reactivation_tooltip_html: "%{user_name}'s profile was suspended for all %{programs}. The profile can only be reactivated at %{organization_name}."
+        suspended_member_reactivation_tooltip_v1_html: "%{user_name}'s profile was deactivated for all %{programs}. The profile can only be reactivated at %{organization_name}."
+        reactivate_organization_html: Click to reactivate %{member} in the organization.
+        remove_user_tooltip_html: Click to remove %{user_name} from the %{program} permanently.
+        remove_user_confirm: Are you sure you want to remove the user?
+        user_metoring_students_html: "%{user_name} is mentoring %{student_links}"
+        user_metoring_students_v1_html: "%{user_name} is %{a_mentor} to %{student_links}"
+        user_metored_by_html: "%{user_name} is being mentored by %{mentor_links}"
+        user_metored_by_v1_html: "%{Mentors} for %{user_name}: %{mentor_links}"
+        articles_by_user_html: "%{n_articles} contributed by %{user_name}"
+        questions_by_user_html: "%{n_questions} asked by %{user_name} including their answers"
+        answers_by_user_html: "%{n_answers}, answered by %{user_name}"
+        topics_and_posts_by_user: All the topics and posts created by %{user_name} in the forums
+        remove_user_conn_contirbutions_html: "%{user_name}'s profile, all their %{mentoring_connections} and %{contributions} will be removed from the program permanently."
+        remove_user_contirbutions_html: "%{user_name}'s profile and all their %{contributions} will be removed from the program permanently."
+        remove_user_conn_html: "%{user_name}'s profile, all their %{mentoring_connections} and activities will be removed from the program permanently."
+        remove_user: "%{user_name}'s profile and all their activities will be removed from the program permanently."
+        remove_user_v1: You are about to remove %{user_name} from the %{program}. Did you intend to suspend the membership instead?
+        remove_user_v2: You are about to remove %{user_name} from the %{program}. Did you intend to deactivate the membership instead?
+        remove_user_cannot_suspend: You are about to remove %{user_name} from the %{program}.
+        removal_is_irreversible_html: Removal of users is an %{irreversible} and will lead to loss of data. All their contributions in any %{mentoring_connections}, any activity in %{articles}, forums and profile data including reporting information will be removed from the %{program} permanently.
+        removal_is_irreversible_standalone_html: Removal of users is an %{irreversible} and will lead to deletion of user profile completely. All their contributions in any %{mentoring_connections}, any activity in %{articles}, forums and profile data including reporting information will be removed from the %{program} permanently.
+        suspending_users_instead: Suspending users revokes their access to the %{program}, without loss of information.
+        suspending_users_instead_v1: Deactivating users revokes their access to the %{program}, without loss of information.
+        remove_member_from_org_html: "%{user_name}'s profile and all their %{mentoring_connections} and %{contributions} will be removed permanently from the following %{programs}."
+        remove_member_from_org_v1_html: "%{user_name}'s profile and all their %{engagements} and %{contributions} will be removed permanently from the following %{programs}."
+        remove_member_from_org_v2_html:
+          one: You are about to remove %{user_name} from the %{program}. Did you intend to suspend the membership instead?
+          other: You are about to remove %{user_name} from all %{program}. Did you intend to suspend the membership instead?
+        remove_member_from_org_cannot_suspend_html: You are about to remove %{user_name} from the %{program}.
+        active_connections: "%{active_connections} active connections"
+        active_connections_v1:
+          one: "%{count} active %{mentoring_connection}"
+          other: "%{count} active %{mentoring_connections}"
+        closed_connections: "%{closed_connections} closed connections"
+        closed_connections_v1:
+          one: "%{count} closed %{mentoring_connection}"
+        personal_notes_describe: You can attach a personal note or description about %{name}.
+        personal_notes_hint: Type a few words about %{name}
+        not_yet_tagged: Not yet tagged.
+        add_user_tooltip: Click here to add user directly to %{program}.
+        add_to_program: Add to %{program}
+        allow_user_to_choose: Allow user to choose
+        invite_user_help_text: The invite URL will be appended to the message.
+        add_user_as_admin_tooltip: Click here to add user as %{admin}.
+        add_as_admin: Add as %{admin}
+        suspend_membership_org_tooltip_html: Clicking here will suspend the membership of %{name} from the organization and %{name} will no longer have access to the organization.
+        suspend_membership_org_note: Please note that the user will not be able to participate in any more activities.
+        removal_member_is_irreversible_html: Removal of members is an %{irreversible} and will lead to loss of data. All their contributions in any %{mentoring_connections}, any activity in %{articles}, forums and profile data including reporting information will be removed from all %{program} permanently.
+        suspending_members_instead: Suspending members revokes their access to all %{program}, without loss of information.
+        hide_box_for_session: Hide this box for the session
+        your_profile_is_x_complete_html: Your profile is %{score}% complete.
+        your_profile_is_x_complete_v1_html: Your profile is %{score_text}
+        complete_html: "%{score}% complete."
+        complete_your_profile: Complete your profile
+        no_activity_yet: No activity yet
+        time_since_last_activity: "%{time} since last activity"
+        upload_profile_pic: Upload your profile picture
+        rotate_left: Rotate-Left
+        rotate_right: Rotate-Right
+        complete_mentor_profile: Complete your %{mentor_name} profile
+        complete_mentee_profile: Complete your %{mentee_name} profile
+        complete_employee_profile: Complete your %{employee_name} profile
+        no_connection_for_user: No %{mentoring_connections} for %{user_name}.
+        no_articles_from_user: No %{article} from %{user_name}.
+        users_situations: "%{user_name_prefix} Situations"
+        users_answers: "%{user_name_prefix} Answers"
+        see_users_answers: See %{user_name_prefix} Answer
+        see_answers: See Answers
+        no_answers_from_user: No answers from %{user_name}.
+        users_meetings: "%{user_name_prefix} Meetings"
+        users_meetings_v1: "%{user_name_prefix} %{Meetings}"
+        no_meetings: No meetings.
+        no_meetings_v1: No %{meetings}.
+        new_mandatory_filed_html: The %{admin} has added a few mandatory fields to the profile. Click %{here} to update your profile.
+        your_mentoring_connections: Your %{mentoring_connection}
+        visit_your_mentoring_connection: Visit your %{mentoring_connection}
+        your_offer_is_pending: Your offer is pending
+        offer_mentoring: Offer Mentoring
+        offer_mentoring_v1: Offer %{Mentoring}
+        view_your_pending_request: View your pending request
+        request_mentoring: Request Mentoring
+        request_mentoring_v1: Request %{Mentoring_Connection}
+        request_meeting: Request Meeting
+        request_meeting_v1: Request %{Meeting}
+        not_available_for_mentoring: Not Available for Mentoring
+        not_available_for_mentoring_v1: Not Available for %{a_Mentoring_Connection}
+        profile_imported_on_date: Profile Imported on %{date}
+        member_since_date: Member since %{date}
+        offer_mentoring_to_student: Offer Mentoring for %{student_name}
+        offer_mentoring_to_student_v1: Offer %{Mentoring} for %{student_name}
+        offer_mentoring_to_student_v2: Offer %{mentoring} to %{student_name}
+        add_student_as_mentee: Add %{student_name} as %{mentee}
+        optional_msg_to_student: 'Type an optional message to %{student_name}:'
+        optional_message_to_mentee_when_needs_acceptance: Type an optional message to %{student_name}. Your offer would be sent to %{student_name} for acceptance.
+        optional_message_to_mentee_when_cannot_add_to_group: Type an optional message to %{student_name} and %{a_mentoring_connection} will be created with %{student_name}.
+        new_mentoring_connection: New %{mentoring_connection}
+        your_existing_mentoring_connection: Your existing %{mentoring_connection}
+        private_tooltip: This profile is visible only to the %{mentors} and %{mentees} you are connected to and the %{program} %{admins}
+        connections_limit_helptext: Maximum number of %{mentees} you wish to mentor in this %{program}
+        connections_limit_helptext_v1: Maximum number of %{mentees} you wish to connect with in this %{program}
+        connections_limit_helptext_v2: Maximum number of %{mentees} this %{mentor} wish to connect with in this %{program}.
+        connections_limit_helptext_v3: Maximum number of %{mentees} you wish to connect with in this program.
+        connections_limit_helptext_v4: Maximum number of %{mentees} you wish to connected with at any time.
+        connections_limit_helptext_v5: Maximum number of %{mentees} you can connect with at any time.
+        connections_limit_helptext_hint: " Please note that this setting is not visible to the user and the default limit for %{mentors} in this %{program} has been set to %{default_limit}"
+        connections_limit_help_text_first_time: " This can be adjusted later in your account settings."
+        notify_setting_all: Individual mails (One e-mail per %{message_or_activity})
+        notify_setting_daily: Daily digest (One e-mail per day summarizing all %{message_or_activity})
+        notify_setting_weekly: Weekly digest (One e-mail per week summarizing all %{message_or_activity})
+        notify_setting_none: No mails (No e-mails will be sent)
+        notify_setting_all_v1: Individual mails (One email per %{message_or_activity})
+        notify_setting_daily_v1: Daily digest (One email per day summarizing all %{message_or_activity})
+        notify_setting_weekly_v1: Weekly digest (One email per week summarizing all %{message_or_activity})
+        notify_setting_none_v1: No mails (No emails will be sent)
+        notification_setting_v2: Notification for %{program} activities
+        notification_settings: Notification Settings
+        digest_settings: Digest Settings
+        mentoring_connection_activities: Activities related to my %{mentoring_connections}
+        immediate: Get a notification each time there is activity
+        program_update_help_text: "%{program}-specific updates related to announcements, forums, Q&A and %{articles}"
+        other_notification_status: Communication related to messages, %{meetings}, requests, events and other updates will be sent each time there is activity
+        daily_digest: Get a notification as part of the daily digest
+        weekly_digest: Get a notification as part of the weekly digest
+        do_not_notify: Do not notify
+        not_recommended: (Not recommended)
+        group_update_help_text: Summary of activities and changes in my %{mentoring_connections}
+        program_updates: "%{program} updates and activities"
+        notification_setting_help_text: Notifications about the things that need your attention
+        meeting_request_reminder_label: Pending %{Meeting} Requests
+        meeting_request_reminder: Yes, I would like to receive reminders for pending %{meeting} requests
+        no_articlues_contributed: No %{articles} by %{member_name}
+        no_answers_contributed: No answers by %{member_name}.
+        asked_by_user_html: asked by %{user}
+        answered_by_user_html: answered by %{user}
+        more_answer_from_user_html: See %{more_answers} from %{member} &raquo;
+        more_answer:
+          one: more answer
+          other: more answers
+        no_mentorirng_topics_selected: No Mentoring Topics selected.
+        update_mentoring_topics_html: "%{click_here} to update the mentoring topics."
+        help_requested: Help Requested
+        in_prog_html: in %{program}
+        joined_on_html: joined on %{date}
+        change_in_profile_fields_html: The %{admin} recently changed the profile fields. Click %{here} to update your profile.
+        org_prog_settings: 'Settings: %{org_prog_name}'
+        change_password: Change password
+        current_password: Current password
+        new_password: New password
+        confirm_new_password: Confirm new password
+        enter_new_password: Please enter a new password and confirm it
+        six_chars_min: Minimum 6 characters
+        other_settings: Other settings
+        weekly_updates: Weekly Updates
+        weekly_updates_help_text: Notifications about the happenings in your %{program}
+        need_weekly_update_abt_program: Yes, I want weekly updates about my program
+        need_weekly_update_abt_program_v1: Yes, I want weekly updates about my %{program}
+        confirm_resend_signup: Are you sure you want to resend the sign up instructions?
+        user_already_signed_up_html: "%{User} has %{already_signed_up} in %{organization}."
+        already_signed_up: already signed up
+        n_articles:
+          one: "%{count} %{article}"
+          other: "%{count} %{articles}"
+        complete_questions_for_score: Complete the following profile fields to improve your score.
+        complete_sections_for_score: Sections %{sections_green} out of %{total_sections} completed.
+        hide_for_session: Hide for the session
+        hide_forever: Hide forever
+        See_more_html: See more &raquo;
+        response_rate: Response rate
+        requests_initiated: Requests initiated
+        accepted_requests:
+          one: "%{count} Accepted request"
+          other: "%{count} Accepted requests"
+        rejected_requests:
+          one: "%{count} Rejected request"
+          other: "%{count} Rejected requests"
+        pending_requests:
+          one: "%{count} Pending request"
+          other: "%{count} Pending requests"
+        past_meetings: Past %{meetings}
+        meetings_requests_initiated: "%{Meetings} requests initiated"
+        meetings_requests_initiated_v1: "%{Meeting} requests initiated"
+        average_request_response_time: Average request response time
+        hours_available: Hours available
+        hours_available_v1: "%{Meeting} hours available"
+        slots_available: "%{Meeting} slots available"
+        in_next_n_months: in next %{n_months}
+        in_current_and_next_month: in %{time_period}
+        average_meeting_response_time: Average %{meeting} response time
+        average_meeting_request_response_time: Average %{meeting} request response time
+        available_slots: Available slots
+        available_slots_v1: "%{Mentoring_Connection} availability slot"
+        profile_completeness_score: Profile completeness score
+        total_coaching_hours: Total %{mentoring} hours
+        hour:
+          one: hour
+          other: hours
+        week:
+          one: week
+          other: weeks
+        day:
+          one: day
+          other: days
+        minute:
+          one: minute
+          other: minutes
+        sign_out_of_all_other_sessions: Sign out of all other sessions
+        active_sessions: Click below to sign out of other sessions across devices that may not have been signed out
+        sign_out_confirmation_message: Are you sure you want to sign out of all other sessions?
+        request_pane_title: "%{user_name}'s Requests to You (%{size})"
+        end_user_notifications: Notifications sent when an end user sends a message to the %{admin}'s inbox (includes replies).
+        program_management_notifications: Notifications on membership requests, %{mentoring_connections} and content posted in the %{program}
+        program_digest_notifications: Configured dashboard report alerts and weekly %{admin} digests
+        enable_disable_switch: Notification enable-disable switch
+        link_account_to: Link your account with %{title}
+        after_successful_login: After successful authentication, you will be able to login into your %{programs} using %{title}.
+        add_other_role_without_approval: Would like to join the %{program} as %{to_add_role} as well?
+        add_other_role_confirmation: "Please confirm if you would like to join the %{program} as %{to_add_role} as well?"
+        add_other_role_without_approval_v1: Would you like to join the %{program} as %{to_add_role} as well?
+      actions:
+        find_a_mentor: Find %{a_mentor}
+        view_users_profile: View %{user_name}'s profile
+        view_profile: View Profile
+        edit_users_profile: Edit %{user_name}'s profile
+        edit_profile: Edit Profile
+        resend_signup_instructions: Resend Sign up Instructions
+        add_personal_note: Add a personal note
+        add_tags: Add tags for this member
+        invite_to_prog: Invite User To %{program}
+        add_to_prog: Add User To %{program}
+        add_user_as_admin: Add User as %{admin}
+        suspend_membership: Suspend Membership
+        deactivate_membership: Deactivate Membership
+        Edit_Profile: Edit Profile
+        view_your_profile: View your Profile
+        edit_your_profile: Edit your Profile
+        edit_availability: Edit your Availability Calendar
+        switch_back_from_wob: Switch back to %{member_name}
+        Reactivate_Membership: Reactivate Membership
+        become_role: Become %{to_add_role}
+      label:
+        mentoring_preferences: "%{Mentoring} Preferences"
+        settings: Settings
+        notifications: Notifications
+        profile: Profile
+        general_settings: General Settings
+        admin_notifications: "%{Admin} Notification Settings"
+        end_user_notifications: End user communications (%{admin} message)
+        program_management_notifications: "%{Program} management notifications"
+        program_digest_notifications: "%{Program} digest and alerts"
+        offer: Offer
+        my_activity: My Activity
+        all_activity: All Activity
+        activity_v1: Activity
+        wob: Work on Behalf
+        suspend_membership_of_user_v1: Deactivate membership of %{user_name}
+        remove_user: Remove %{user_name}
+        Contributions: Contributions
+        my_connections_activity: My %{mentoring_connections} Activity
+        retype_new_password: Re-type new password
+        retype_password: Re-type password
+        question:
+          one: 1 question
+          other: "%{count} questions"
+        answer:
+          one: 1 answer
+          other: "%{count} answers"
+        message:
+          one: message
+          other: messages

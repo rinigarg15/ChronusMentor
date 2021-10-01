@@ -1,0 +1,12 @@
+<% modal_v3_popup "feature.campaigns.header.duplicate_campaign".translate do %>
+  <% source_info = {
+      "action" => "details",
+      "controller" => "campaign_management/user_campaigns",
+      "id" => campaign.id
+     } %>
+  <div id="cm_clone_popup">
+    <%= simple_form_for(campaign, :url => clone_campaign_management_user_campaign_path(campaign), :method => :post, :html => {:class => "form-horizontal campaign_management_user_campaign_form"}) do |f| %>
+      <%= render :partial => "campaign_management/user_campaigns/form_details", :locals => {f: f, campaign: campaign, source_info: source_info} %>
+    <% end %>
+  </div>
+<% end %>

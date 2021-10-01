@@ -1,0 +1,65 @@
+<% select_box_base_name = "admin_view[program_role_state][filter_conditions][parent_filter_0][child_filter_0]" %>
+<% inclusion = @filter_params.try(:[], :program_role_state).try(:[], AdminView::ProgramRoleStateFilterObjectKey::INCLUSION) || AdminView::ProgramRoleStateFilterObjectKey::INCLUDE %>
+<% all_members = @filter_params.try(:[], :program_role_state).try(:[], AdminView::ProgramRoleStateFilterObjectKey::ALL_MEMBERS) %>
+<% all_members_checked = @filter_params.present? ? all_members.to_s.to_boolean : true %>
+<%= render "admin_views/program_role_state_actions", all_members_checked: all_members_checked, filter_params: @filter_params %>
+<div class="cjs-program-role-state-container p-t-xs m-t-sm b-t <%= 'hide' if all_members_checked %>">
+  <div class="row m-t-sm m-b-xs">
+    <div class="col-xs-5 col-sm-3 col-md-2">
+      <%= generate_program_role_state_filter_object_select("admin_view[program_role_state]", AdminView::ProgramRoleStateFilterObjectKey::INCLUSION, multiple: false, disabled: false, class: "form-control cjs-program-role-state-advanced-trigger", selected: inclusion) %>
+    </div>
+    <div class="col-xs-12 col-sm-9 col-md-10 pull-sm-right">
+      <%= get_organization_role_names_tooltip(@current_organization) %>
+    </div>
+    <div class="col-xs-12 p-l-md m-t-md">
+      <%= content_tag :span, "display_string.if_upcase".translate, class: "font-600" %>
+      <%= content_tag :span, "feature.admin_view.label.any_of_the_following_conditions_match".translate, class: "p-l-xs text-muted" %>
+    </div>
+  </div>
+  <div class="cjs-program-role-state-filter-parent-rows-container">
+    <div class="cjs-program-role-state-filter-parent-template cjs-program-role-state-filter-parent-row hide row m-t-sm m-b-xs">
+      <div class="cjs-program-role-state-filter-child-rows-container col-xs-12">
+        <div class="cjs-program-role-state-filter-child-template cjs-program-role-state-filter-child-row hide row m-l b-l dashed-left-border">
+          <div class="col-sm-10 m-t-sm">
+            <div class="row">
+              <%= content_tag :span, "display_string.OR".translate, class: "cjs-program-role-state-filter-or-text pull-left p-l-sm p-t-xs p-b-xs text-muted" %>
+              <div class="cjs-init-select2 col-xs-12 col-sm-4 m-t-xs">
+                <%= generate_program_role_state_filter_object_select(select_box_base_name, AdminView::ProgramRoleStateFilterObjectKey::STATE, class: "col-xs-9 no-padding cjs-program-role-state-advanced-trigger", data: {placeholder: "display_string.All".translate}) %>
+                <div class="small text-sm-center text-muted col-xs-3 no-margins cjs-program-role-state-filter-program-help-text p-r-0 p-t-xxs"> <%= "feature.admin_view.content.users_in".translate %> </div>
+                <div class="small text-sm-center text-muted col-xs-3 no-margins cjs-program-role-state-filter-program-help-text-v1 hide p-r-0  p-t-xxs"> <%= "feature.admin_view.content.users_in_any_of".translate %> </div>
+              </div>
+              <div class="cjs-init-select2 col-xs-12 col-sm-4 m-t-xs">
+                <%= generate_program_role_state_filter_object_select(select_box_base_name, AdminView::ProgramRoleStateFilterObjectKey::PROGRAM, organization: @current_organization, class: "col-xs-9 no-padding cjs-program-role-state-advanced-trigger", data: {placeholder: "display_string.Any_Program".translate(Program: _Program)}) %>
+                <div class="small text-sm-center text-muted col-xs-3 no-margins cjs-program-role-state-filter-role-help-text p-r-0 p-t-xxs"> <%= "feature.admin_view.content.having".translate %> </div>
+                <div class="small text-sm-center text-muted col-xs-3 no-margins cjs-program-role-state-filter-role-help-text-v1 p-r-0 p-t-xxs"> <%= "feature.admin_view.content.having_any_of".translate %> </div>
+              </div>
+              <div class="cjs-init-select2 col-xs-12 col-sm-3 m-t-xs">
+                <%= generate_program_role_state_filter_object_select(select_box_base_name, AdminView::ProgramRoleStateFilterObjectKey::ROLE, organization: @current_organization, class: "col-xs-9 no-padding cjs-program-role-state-advanced-trigger", data: {placeholder: "display_string.Any".translate}) %>
+                <div class="small text-muted col-xs-3 no-margins p-r-0 p-t-xxs"> <%= "display_string.one_or_many_roles".translate %> </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2 m-t-sm m-b-xs">
+            <div class="btn-group m-t-xs">
+              <%= button_tag("display_string.And".translate, class: "btn-sm btn btn-info btn-outline cjs-add-program-role-state-filter-parent-row cjs-program-role-state-advanced-trigger-button", type: 'button') %>
+              <%= button_tag("display_string.OR".translate, class: "btn-sm btn btn-info btn-outline cjs-add-program-role-state-filter-child-row cjs-program-role-state-advanced-trigger-button", type: 'button') %>
+              <%= button_tag((get_icon_content("fa fa-times-circle no-margins") + set_screen_reader_only_content("display_string.Delete".translate)).html_safe, class: "btn-sm btn btn-info btn-outline cjs-delete-program-role-state-filter-row cjs-program-role-state-advanced-trigger-button", type: 'button') %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 m-t-md cjs-program-role-state-filter-and-text-container cjs-program-role-state-category-dependent-visibility">
+        <%= content_tag :span, "display_string.And".translate, class: "cjs-program-role-state-filter-and-text font-600" %>
+        <%= content_tag :span, "feature.admin_view.label.any_of_the_following_conditions_match".translate, class: "p-l-xs text-muted" %>
+      </div>
+    </div>
+  </div>
+</div>
+<%= javascript_tag do %>
+  AdminViewsNewView.programRoleStateFilterData = { data: [], parent_index: 1, child_index: 1 };
+  <% program_role_state_filter_conditions = @filter_params.try(:[], :program_role_state).try(:[], :filter_conditions) || {} %>
+  AdminViewsNewView.initializeProgramRoleStateData("<%= j(program_role_state_filter_conditions.to_json.html_safe) %>");
+  jQuery(function(){
+    AdminViewsNewView.handleProgramRoleStateFilterChildElementsVisibility(".cjs-program-role-state-filter-program, .cjs-program-role-state-filter-role");
+  });
+<% end %>

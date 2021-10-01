@@ -1,0 +1,2 @@
+<% content = render(partial: "abstract_messages/get_detailed_section", locals: { msg: @message }) %>
+Messages.loadDetailed("<%= @message.id %>", "<%= j content %>", "<%= @message.root? %>");

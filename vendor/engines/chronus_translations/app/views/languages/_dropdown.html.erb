@@ -1,0 +1,22 @@
+<% available_languages = get_available_languages(local_assigns[:mobile_org_page]) %>
+<% current_language = available_languages[0] %>
+<% other_languages = available_languages[1..-1] %>
+<% display_text = local_assigns[:mobile_org_page] ? truncate_html(current_language[:title_for_display], { max_length: MobileV2Constants::LANGUAGE_TEXT_SIZE } ) : h(current_language[:title_for_display]) %>
+
+<% if local_assigns[:mobile_org_page] || (@current_organization.active? && @current_organization.language_settings_enabled? && available_languages.size > 1)  %>
+  <li class="<%= local_assigns[:mobile_org_page] ? 'mobile_dropdown' : 'dropdown' %> <%= local_assigns[:container_class] || "" %>">
+    <% icon_content = get_icon_content(local_assigns[:iconclass]) %>
+    <%= link_to (icon_content + display_text + content_tag(:span, "", :class => "#{local_assigns[:caret_class] || "caret"}")), "javascript:void(0)", class: "dropdown-toggle no-waves", data: { toggle: "dropdown" } %>
+    <ul class="<%= local_assigns[:ui_pattern] || "dropdown-menu" %>  animated fadeIn">
+      <% other_languages.each do |language| %>
+        <li>
+          <% link_title = h(language[:title_for_display]) %>
+          <% options = { locale: language[:language_name], redirect_to: (request.method.downcase.to_s == "get") ? request.fullpath : '' } %>
+          <% link_url = local_assigns[:mobile_org_page] ? set_current_non_org_languages_path(options) : set_current_languages_path(options) %>
+          <% link_options = { method: :patch, title: link_title } %>
+          <%= link_to(link_title, link_url, link_options) %>
+        </li>
+      <% end %>
+    </ul>
+  </li>
+<% end %>

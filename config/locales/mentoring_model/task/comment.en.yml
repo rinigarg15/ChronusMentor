@@ -1,0 +1,18 @@
+en:
+  feature:
+    mentoring_model_task_comment:
+      content:
+        no_comments_v1: No Comments Yet.
+        goal: Goal
+        comments: Comments
+      action:
+        add_comment: Add New %{comment}
+        add_comment_v1: Add comment
+        reg_title: 'Reg Task: %{title}'
+        send_message: Notify others in the %{mentoring_connection}
+        count_moderated: "%{comments_count} unmoderated"
+        view_all_comments:
+          zero: View all %{comments_count} comments
+          one: View all %{comments_count} comments  (1 unmoderated)
+          other: View all %{comments_count} comments (%{count} unmoderated)
+        view_less_comments: View less comments

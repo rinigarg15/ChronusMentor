@@ -1,0 +1,16 @@
+<%= control_group do %>
+  <% label = "program_settings_strings.content.sort_users_by".translate %>
+  <%= content_tag(:div, label, :class => 'false-label control-label') %>
+  <%= controls do %>
+    <%= choices_wrapper(label) do %>
+      <label class="radio inline">
+        <%= f.radio_button :sort_users_by, Program::SortUsersBy::FULL_NAME %> <%= "program_settings_strings.content.full_name".translate %>
+      </label>
+      <label class="radio inline">
+        <%= f.radio_button :sort_users_by, Program::SortUsersBy::LAST_NAME %> <%= "program_settings_strings.content.last_name".translate %>
+      </label>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= render partial: "programs/default_messages_notification", locals:{f: f, notification_setting: @current_program.notification_setting} %>

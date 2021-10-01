@@ -1,0 +1,15 @@
+<%= ibox nil, {content_class: "no-padding"} do %>
+  <%= top_bar_in_listing({collection: tab_data.messages_ids}, {show: true, applied_count: @my_filters.try(:size)}) %>
+  <% if tab_data.messages_ids.empty? %>
+    <div class="text-center p-sm">
+      <%= "feature.messaging.content.no_messages".translate %>
+    </div>
+  <% else %>
+    <ul class="list-group white-bg clearfix">
+      <%= render partial: "messages/message", collection: tab_data.messages_ids, as: :msg_id, locals: {is_inbox: is_inbox, tab_data: tab_data, tab_number: tab_number} %>
+    </ul>
+  <% end %>
+  <%= bottom_bar_in_listing( { collection: tab_data.messages_ids, ajax: true, params: { tab: tab_number } } ) %>
+<% end %>
+
+<%= javascript_tag %Q[MessageSearch.initializeActions();] %>

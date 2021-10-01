@@ -1,0 +1,29 @@
+<% @back_link = { label: "feature.reports.content.dashboard".translate, link: management_report_path } if @src_path == ReportConst::ManagementReport::SourcePage %>
+<% @title = set_view_title(@metric, "feature.membership_request.header.membership_requests".translate) %>
+
+<% filter_params = membership_requests_listing_filter_params(@filters_to_apply) %>
+<% non_filter_params = membership_requests_listing_non_filter_params(@filters_to_apply, @items_per_page) %>
+
+<% if current_user.can_approve_membership_request? %>
+  <% @report_actions = {
+    url: filter_membership_requests_path,
+    data_js: %Q[MembershipRequest.getReportFilterData();],
+    reset_js: %Q[commonUserProfileFilter.resetFilter();commonReportFilters.resetOtherFilters();],
+    ga_label: ReportsController::GoogleAnalytics::MEMBERSHIP_REQUESTS_REPORT_LABEL,
+    time_filter: { time: {start: @filters_to_apply[:filters][:start_date], end: @filters_to_apply[:filters][:end_date]}, date_range_preset: DateRangePresets::PROGRAM_TO_DATE, label: "feature.membership_request.label.sent_between".translate },
+    export: [{label: "feature.membership_request.label.export_as_csv".translate, url: export_membership_requests_path(format: :csv)},
+             {label: "feature.membership_request.label.export_as_pdf".translate, class: "cjs-common-reports-export-ajax", url: export_membership_requests_path(format: :js)}],
+    other_filters_partial: "membership_requests/filter_form",
+    pre_filter_js: %Q[MembershipRequest.resetMembershipSelectedIds();]
+  } %>
+<% end %>
+
+<div id="membership_requests">
+  <%= membership_requests_export_form %>
+  <div id="results_pane" class="clearfix">
+    <%= render partial: "membership_requests/index", locals: { membership_requests: @membership_requests, filter_params: filter_params, non_filter_params: non_filter_params, tab: @tab, tabs_data: @tabs_data, list_type: @list_type, filters_to_apply: @filters_to_apply, items_per_page: @items_per_page } %>
+  </div>
+</div>
+<%= javascript_tag do %>
+  commonReportFilters.initializeSwitchTab();
+<% end %>

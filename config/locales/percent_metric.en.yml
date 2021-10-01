@@ -1,0 +1,15 @@
+en:
+  percent_metric:
+    good: Good
+    average: Average
+    needs_attention: Needs Attention
+    unit:
+      day:
+        one: 1 day
+        other: "%{count} days"
+      post:
+        one: 1 post
+        other: "%{count} posts"
+      goal:
+        one: 1 goal
+        other: "%{count} goals"

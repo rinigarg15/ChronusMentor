@@ -1,0 +1,72 @@
+<% @title = "feature.match_config.label.play_with_matching".translate %>
+<% @skip_rounded_white_box_for_content = true %>
+<% @back_link = {:label => "feature.match_config.label.matching_customization".translate, :link => match_configs_path()} %>
+<% @page_action = {:label => "feature.match_config.label.new_config".translate, :url => new_match_config_path(@match_config), :class => 'btn btn-primary btn-large'} %>
+
+<script type="text/javascript">
+  var matchConfigs = <%= match_configs_to_json(@match_configs).html_safe %>;
+  var computeFscoreURL = "<%= compute_fscore_match_configs_path() %>";
+</script>
+
+<%= ibox nil, :ibox_id => "bulk_match" do %>
+  <div class="table-responsive">
+    <table class="table table-striped pane" cellpadding="0" cellspacing="0" ng-app="playMatch" ng-controller="PlayMatchCtrl">
+      <thead class="pane-header">
+        <tr class="cui_table_sort">
+          <th><%= "feature.match_config.table.mentee_answer".translate(:Mentee => _Mentee) %></th>
+          <th><%= "feature.match_config.table.mentor_answer".translate(:Mentor => _Mentor) %></th>
+          <th><%= "feature.match_config.table.field_score".translate %></th>
+          <th class="text-center" title="<%= 'feature.match_config.label.threshold'.translate(mentor: _mentor) %>">
+            <%= "feature.match_config.table.threshold".translate %> <i class="icon-info-sign"></i>
+          </th>
+          <th><%= "feature.match_config.table.consider_for_matching".translate %></th>
+          <th title="<%= 'activerecord.attributes.match_config.weight'.translate %>">
+            <%= "feature.match_config.table.weight".translate %> <i class="icon-info-sign"></i>
+          </th>
+          <th><%= "feature.match_config.table.contribution_to_total_score".translate %></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr ng-repeat="mc in configs" id="config_{{mc.id}}">
+          <td ng-repeat="question in mc.questions">
+            <b>{{question.text}}</b>
+            <hr class="no-margin" />
+            <div class="has-above-1" ng-include src="'/match_configs/question_template?type=' + question.type"></div>
+          </td>
+
+          <td class="cjs_fscore text-center">{{mc.fscore.toFixed(2)}}</td>
+          <td>
+            <select ng-model="mc.operator" class="form-control">
+              <option value="1"><%= "feature.match_config.label.lt".translate %></option>
+              <option value="-1"><%= "feature.match_config.label.gt".translate %></option>
+            </select>
+            <input class="form-control" max="1.0" min="0.0" ng-model="mc.threshold" step="0.1" type="number">
+          </td>
+          <td class="text-center" style="color: {{updateCanMatch(mc).color}};"><b>{{updateCanMatch(mc).value}}</b></td>
+          <td>
+            <input class="form-control" max="1.0" min="-1.0" ng-model="mc.weight" step="0.1" type="number">
+          </td>
+          <td class="text-center cjs_mscore">{{updatematchWeight(mc)}}</td>
+        </tr>
+      </tbody>
+
+      <thead class="pane-header">
+        <tr>
+          <td><h3><%= "feature.match_config.label.net_result".translate %></h3></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="text-center" style="color: {{updateTotalCanMatch().color}};">
+            <h3>{{updateTotalCanMatch().value}}</h3>
+          </td>
+          <td></td>
+          <td id="netscore" class="text-center">
+            <h3>{{updatematchTotalWeight()}}</h3>
+          </td>
+        </tr>
+      </thead>
+
+    </table>
+  </div>
+<% end %>

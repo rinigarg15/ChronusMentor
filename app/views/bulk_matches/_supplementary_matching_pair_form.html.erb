@@ -1,0 +1,28 @@
+<% student = local_assigns[:student] %>
+<% mentor = local_assigns[:mentor] %>
+<% student_supplementary_match_pair = label_tag("supplementary_matching_pair[student_role_question_id]", nil, class: "sr-only") + student_question_form_column(nil, label: "supplementary_matching_pair[student_role_question_id]", supplementary_scope: true) %>
+<% mentor_supplementary_match_pair = label_tag("supplementary_matching_pair[mentor_role_question_id]", nil, class: "sr-only") + mentor_question_form_column(nil, label: "supplementary_matching_pair[mentor_role_question_id]", supplementary_scope: true) %>
+<div class="b-t p-xs">
+  <div class="table-bordered">
+    <h4 class="p-xs gray-bg m-t-0 m-b-0">
+      <%= 'feature.bulk_match.label.add_other_fields_to_compare'.translate %>
+      <%= append_text_to_icon(TOOLTIP_IMAGE_CLASS, nil, id: "cjs-add-other-fields") %>    
+      <%= tooltip("cjs-add-other-fields", "feature.bulk_match.content.add_additional_fields_tooltip".translate, false, container: ".cui_match_config_summary") %>
+    </h4>
+    <div class="row p-sm m-l-sm">
+      <div class="col-xs-4">
+        <%= mentee_to_mentor_match ? student_supplementary_match_pair : mentor_supplementary_match_pair %>
+      </div>
+      <div class="col-xs-2 m-t-7">
+        <div class="smaller text-center"><%= "feature.bulk_match.content.with".translate %></div>
+      </div>
+      <div class="col-xs-4">
+        <%= mentee_to_mentor_match ? mentor_supplementary_match_pair : student_supplementary_match_pair %>
+      </div>
+      <div class="col-xs-2">
+        <%= link_to append_text_to_icon("fa fa-plus-circle", "display_string.Add".translate), "javascript:void(0)", class: "cjs-add-supplementary-match-pair btn btn-white", data: {url: fetch_summary_details_bulk_matches_path(mentor_id: mentor.id, student_id: student.id, orientation_type: mentee_to_mentor_match ? BulkMatch::OrientationType::MENTEE_TO_MENTOR : BulkMatch::OrientationType::MENTOR_TO_MENTEE)} %>
+      </div>
+    </div>
+  </div>
+</div>
+<%= javascript_tag %Q[BulkMatch.addSupplementaryMatchingPair("#{"feature.bulk_match.content.additional_field_pair_exists".translate}");] %>

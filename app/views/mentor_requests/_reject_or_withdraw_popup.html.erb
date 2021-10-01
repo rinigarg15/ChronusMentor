@@ -1,0 +1,37 @@
+<%
+  if reject == true
+    status = AbstractRequest::Status::REJECTED
+    placeholder_message = 'feature.meeting_request.content.close_request_popup.placeholder.message'.translate
+    message = ''
+    popup_title = 'feature.mentor_request.content.reject_popup.title_v1'.translate
+    mail_message = 'feature.mentor_request.content.reject_popup.mail_message_v3'.translate
+  else
+    status = AbstractRequest::Status::WITHDRAWN
+    placeholder_message = 'feature.mentor_request.content.withdraw_popup.message'.translate
+    message = 'feature.mentor_request.content.withdraw_popup.message'.translate
+    popup_title = 'feature.mentor_request.content.withdraw_popup.title'.translate
+    mail_message = 'feature.mentor_request.content.withdraw_popup.mail_message'.translate
+  end
+  form_id = "edit_mentor_request_#{mentor_request.id}"
+  modal_id = "modal_mentor_request_reject_or_withdraw_link_#{mentor_request.id}"
+%>
+<%- modal_container "#{popup_title}", :modal_id => modal_id  do -%>
+  <%= simple_form_for mentor_request, html: { id: form_id } do |f| %>
+    <%= response_flash "mentor_request_withdraw_flash" %>
+    <%= f.hidden_field :status, :value => status, id: "status_#{mentor_request.id}" %>
+    <% if reject %>
+      <%= f.hidden_field :src, :value => local_assigns[:source], id: "src_#{mentor_request.id}" %>
+      <%= f.input :rejection_type, label: "display_string.Reason".translate, required: true, collection: get_rejection_reason_collection(mentor_request.id), as: :radio_buttons, input_html: {id: nil, class: "cjs_mentor_request_rejection_type"} %>
+      <%= render_meeting_recommendation(f, form_id, mentor_request, modal_id) %>
+    <% end %>
+    <div class='<%= "cjs_action_set_response_text_container" if mentor_request.can_convert_to_meeting_request? %>'>
+      <%= f.input :response_text, label: "display_string.Message".translate, :as => :text, required: reject, :input_html => {:rows => "5", :placeholder => "#{placeholder_message}", :id => "mentor_request_response_text_#{mentor_request.id}", :class => "form-control"} %>
+      <%= hidden_field_tag "page", @page, id: "page_#{mentor_request.id}" %>
+      <div class="m-b-sm"><%= "#{mail_message}" %></div>
+      <% action_set(class: "pull-right") do %>
+        <%= link_to_function 'display_string.Cancel'.translate, "AbstractRequestRejectOrWithdraw.cancel(#{mentor_request.id}, #{reject}, 'mentor_request_withdraw_flash', 'mentor_request');", :class => 'popup_closebox btn btn-white', "data-dismiss" => "modal" %>
+        <%= f.button :submit, 'display_string.Submit'.translate, onclick: "return AbstractRequestRejectOrWithdraw.validateRejection(#{mentor_request.id}, '#{message}', 'mentor_request', #{reject});", :class => "cjs_reject_request btn btn-primary" %>
+      <% end %>
+    </div>
+  <%- end -%>
+<% end %>

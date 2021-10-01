@@ -1,0 +1,26 @@
+<% modal_popup "feature.facilitation_message.header.facilitation_messages_warnings".translate, id: "confirm_warnings_popup" do %>
+  <div class="well square-well no-border bg-dark attach-bottom">
+    <div class="no-margin-bottom">
+      <%= "feature.facilitation_message.content.messages_contains_link".translate(:messages => "feature.profile.label.message".translate(count: messages.size)) %>
+      <% messages.each do |message| %>
+        <div class="strong has-above-1 message">
+          <%= link_to(message.subject, edit_facilitation_message_path(message, root: message.program.root), target: "_blank") %>
+        </div>
+      <% end %>
+      <% if show_more > 0 %>
+        <div class="has-above-1">
+          <%= "feature.facilitation_message.content.and_show_more".translate(:show_more => show_more) %>
+        </div>
+      <% end %>
+      <div class="has-above-1">
+        <%= "common_text.confirmation.sure_to_continue".translate %>
+      </div>
+    </div>
+    <%= horizontal_line class: "has-below-1 has-above" %>
+    <% action_set do %>
+      <%= link_to_function("display_string.Yes".translate, "NewProgramForm.submitWithIgnoreCloneWarning()", class: "btn btn-primary has-next") %>
+      <%= cancel_link("NewProgramForm.closeWarningsPopup()", qtip: true) %>
+    <% end %>
+  </div>
+<% end %>
+<%= javascript_tag "jQuery(document).ready(NewProgramForm.initWarningsPopup);" %>

@@ -1,0 +1,15 @@
+<% if @profile_question.errors.blank? %>
+  jQuery("#profile_question_<%= @profile_question.id %>").replaceWith("<%= j(render partial: 'profile_questions/profile_question', locals: {profile_question: @profile_question, program_level: @program_level, active_element: true}) %>");
+  ProfileConfigUI.updateAndShowNumberOfProfileQuestionsUnderSection(jQuery(".cjs_active_section").data('section-id'));
+  jQuery(".cjs_no_of_programs").show();
+  if(ProfileConfigUI.isProgramFilterApplied()) {
+    jQuery(".cjs_no_of_programs").hide();
+  }
+  jQuery("#profile_question_<%= @profile_question.id %>").show();
+  jQuery(".cjs_profile_question_<%= @profile_question.id %>").data('set-this-tab-on-next-edit', '#tab_Roles').click();
+  ProfileConfigUI.showIconOnSelect();
+  ProfileConfigUI.updateAndShowNumberOfProfileQuestions();
+  jQueryHighlight(jQuery("#profile_question_<%= @profile_question.id %>"));
+  ChronusValidator.ErrorManager.ShowPageFlash(true, "<%= %Q[feature.profile_customization.content.added_new_field_at_program_level].translate(field_name: @profile_question.question_text) %>");
+<% end %>
+jQuery("#loading_results").hide();

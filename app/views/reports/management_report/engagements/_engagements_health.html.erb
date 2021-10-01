@@ -1,0 +1,18 @@
+<% engagements_with_good_survey_responses_count = data[:engagements_with_good_survey_responses_count] %>
+<% engagements_with_not_good_survey_responses_count = data[:engagements_with_not_good_survey_responses_count] %>
+<% engagements_without_survey_responses_count = data[:engagements_without_survey_responses_count] %>
+
+<div class="<%= current_program.is_report_enabled?(DashboardReportSubSection::Type::Engagements::ENGAGEMENTS_SURVEY_RESPONSES) ? "col-md-6" : "col-md-12" %> p-l-0">
+  <h4><%= engagement_type == Program::Dashboard::EngagementsReport::MEETINGS_ENGAGEMENT_TYPE ? "feature.reports.content.Completed_Meetings".translate(Meetings: _Meetings) : "feature.reports.content.engagements_health".translate(Mentoring_Connections: _Mentoring_Connections) %></h4>
+  <div class="clearfix">
+    <div class="clearfix m-t-sm m-b-sm" id="semi_donut"></div>
+    <%= render(partial: "reports/management_report/engagements/engagements_health_chart_legends", locals: {engagements_with_good_survey_responses_count: engagements_with_good_survey_responses_count,engagements_with_not_good_survey_responses_count: engagements_with_not_good_survey_responses_count, engagements_without_survey_responses_count: engagements_without_survey_responses_count, engagement_type: engagement_type, date_range: date_range}) %>
+  </div>
+</div>
+<% pie_chart_data = get_engagements_report_health_hash(engagements_with_good_survey_responses_count, engagements_with_not_good_survey_responses_count, engagements_without_survey_responses_count, engagement_type) %>
+ 
+<%= javascript_tag do %>
+  <% if pie_chart_data.present? %>
+    ManagementReport.getEngagementsHealthChart("semi_donut", <%= chr_json_escape(pie_chart_data.to_json) %>);
+  <% end %>
+<% end %>

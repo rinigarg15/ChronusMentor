@@ -1,0 +1,22 @@
+en:
+  email_translations:
+    three_sixty_survey_reviewer_notification:
+      title_v1: Request to reviewer to take 360 Survey
+      description_v1: This email is sent to the survey reviewers asking them to complete the assessee survey.
+      subject_v1: "{{survey_title}}: Invitation to assess {{assessee_name}}"
+      content_v1_html: You are requested to provide developmental feedback for {{assessee_name}} as part of a 360 degree feedback assessment.<br/><br/>Completing the review will take only a few minutes. Your individual responses are kept strictly confidential and will not be shared with anyone unless you are their Manager.<br/>{{assessee_name}} will only have access to aggregate scores.<br/>{{complete_survey_button}}<br/>Thank you for your participation.<br/>
+      complete_your_survey_html: Complete the survey
+      tags:
+        survey_title:
+          description: Title of the survey
+          example: Middle Manager Survey
+        survey_expiry_text:
+          tag_content_html: Please note that the survey expires on %{date} and will not be accessible after that.
+          description_v1: Survey expiration message if expiration date is set
+          example: Please note that the survey expires on October 30, 2013 and will not be accessible after that.
+        url_survey:
+          description: Url to access the survey
+        assessee_name:
+          description: Name of the assessee
+        complete_survey_button:
+          description: Complete survey button

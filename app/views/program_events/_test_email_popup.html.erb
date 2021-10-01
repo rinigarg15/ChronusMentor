@@ -1,0 +1,28 @@
+<div class="test_mail_popup_dialog">
+  <% modal_container("feature.program_event.header.test_email".translate, :modal_id => "modal_show_popup_link") do %>
+  <div class="m-b-xs"><%= "feature.program_event.content.notification_list_for_test_email".translate %></div>
+    <%= simple_fields_for program_event do |f| %>
+      <%= f.input :notification_list_for_test_email, :as => :text, :hint => example_email_list,
+        :label_html => {:class => 'sr-only'}, :input_html => {:class => 'form-control col-md-12', :rows => 5} -%>
+      <div class="send_test_mail_popup_buttons">
+        <%= form_tag send_test_emails_program_events_path(:src => src), :remote => true do %>
+          <%= hidden_field_tag :id, program_event.id, id: nil%>
+          <%= f.hidden_field :title, :id => "test_email_title", :name => "test_program_event[title]" %>
+          <%= f.hidden_field :location, :id => "test_email_location", :name => "test_program_event[location]" %>
+          <%= f.hidden_field :date, :id => "test_email_date", :name => "test_program_event[date]" %>
+          <%= f.hidden_field :start_time, :id => "test_email_start_time", :name => "test_program_event[start_time]" %>
+          <%= f.hidden_field :end_time, :id => "test_email_end_time", :name => "test_program_event[end_time]" %>
+          <%= f.hidden_field :time_zone, :id => "test_email_time_zone", :name => "test_program_event[time_zone]" %>
+          <%= f.hidden_field :description, :id => "test_email_description", :name => "test_program_event[description]" %>
+          <%= hidden_field_tag :id, program_event.id unless program_event.new_record? -%>
+          <%= f.hidden_field :notification_list_for_test_email, :id => "test_email_notification_list_for_test_email",
+            :name => "test_program_event[notification_list_for_test_email]" -%>
+          <% action_set class: "pull-right" do %>
+            <%= link_to_function "display_string.Cancel".translate, 'ProgramEventTestmail.clearNotificationList();', :class => "popup_closebox btn-white btn", "data-dismiss" => "modal" -%>
+            <%= f.button :submit, "display_string.Send".translate, :onclick => %Q[if(!ProgramEventTestmail.collectDetailsAndValidateForm('#{j(example_email_list)}', '#{j(src)}')){ return false;};], :id => "send_test_mail_button" %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <%- end -%>
+</div>

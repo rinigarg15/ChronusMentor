@@ -1,0 +1,35 @@
+<% modal_container "feature.survey.header.Edit_Survey".translate, :modal_id => "modal_edit_survey_#{@survey.id}", :modal_class => "modal_edit_survey" do %>
+  <%= simple_form_for(@survey, :remote => true, :html => {:id => 'edit', :class => 'form-horizontal'}) do |f| %>
+    <div id="update_errors" style="display:none"></div>
+    <%= f.input :name, :label => Survey.human_attribute_name(:name), :as => :string, :wrapper => :horizontal_input, :input_html => {:class => "form-control"} %>
+    <%= javascript_tag("RequiredFields.fieldIds.push('survey_name')") %>
+
+    <% if @survey.program_survey? %>
+      <%= f.input :due_date, :as => :string, :wrapper => :datepicker_input, :label => Survey.human_attribute_name(:due_date), input_html: { class: "form-control", :placeholder => "feature.survey.content.due_date_placeholder".translate, data: date_picker_options(min_date: Date.current), value: formatted_time_in_words(@survey.due_date, :no_time => true, :no_ago => true) } %>
+
+      <%= control_group do %>
+        <%= content_tag(:div, set_required_field_label(Survey.human_attribute_name(:recipient_role_names)), :class => "false-label control-label col-sm-3") %>
+        <%= controls(:id => 'survey_role_list', class: "col-sm-9") do %>
+          <%= choices_wrapper("display_string.Roles".translate) do %>
+            <% @current_program.roles_without_admin_role.includes({:customized_term => :translations}).each do |role| %>
+              <label class="checkbox inline">
+                <%= check_box_tag 'survey[recipient_role_names][]', role.name, @survey.recipient_role_names.include?(role.name) , :id => "survey_recipient_role_names_#{role.name}" %>
+                <%= role.customized_term.term %>
+              </label>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= javascript_tag("RequiredFields.fieldIds.push('survey_role_list')") %>
+    <% end %>
+
+    <% if @survey.engagement_survey? && @current_program.share_progress_reports_enabled? %>
+      <%= render_progress_report_checkbox(@survey, wrapper_class: "form-group form-group-sm") %>
+    <% end %>
+
+    <% action_set(class: "pull-right") do %>
+      <%= link_to_function "display_string.Cancel".translate, "jQueryResetForm('#edit');", :class => 'btn btn-white', "data-dismiss" => "modal" %>
+      <%= f.button :submit, "display_string.Save".translate , :onclick => "return RequiredFields.validate();"%>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,34 @@
+<div class = "col-md-5" id="applied_filters_data">
+  <div class="ibox">
+    <div class="ibox-content clearfix p-b-xxs">
+      <h4> 
+        <%= "feature.match_report.content.top_applied_filters".translate(mentee: _mentee) %>
+        <span id="applied_filters_info"><%= get_icon_content("fa fa-info-circle") %></span>
+        <%= tooltip("applied_filters_info", "feature.match_report.tooltips.applied_filters".translate(mentees: _mentees)) %>
+      </h4>
+      <div class="m-t-md">
+        <% filter_count = filter_data.count %>
+        <% if filter_count > 0 %>
+          <% top_filters = filter_data.first(MatchReport::MenteeActions::TOP_FILTERS_LIMIT) %>
+          <% top_filters.each do |profile_question, count| %>
+            <div class="m-t m-b clearfix" id="filter_activity_<%= profile_question.id %>">
+              <div class="col-xs-10 no-padding"><%= profile_question.question_text %></div>
+              <div class="col-xs-2 text-right p-r-lg"><%= count %></div>
+            </div>
+          <% end %>
+          <% if filter_count > MatchReport::MenteeActions::TOP_FILTERS_LIMIT %>
+            <div class="pull-right font-bold col-xs-4 text-right m-b p-r-lg">
+              <%= link_to("+ #{"display_string.more_with_count".translate(count: filter_count - MatchReport::MenteeActions::TOP_FILTERS_LIMIT)}", "javascript:void(0)", id: "cjs_applied_filters_more") %>
+            </div>
+            <%=  render partial: "match_reports/mentee_actions/applied_filters_popup", locals: { filter_data: filter_data } %>
+          <% end %>
+        <% else %>
+          <div class="m-t-xl m-b-xl p-b-xl p-t-xl text-center"><%= "feature.match_report.content.no_filters".translate(mentees: _mentees) %></div>
+        <% end %>  
+      </div>
+    </div>
+  </div>
+</div>
+<%= javascript_tag do %>
+  MatchReport.showAppliedFiltersPopup();
+<% end %>

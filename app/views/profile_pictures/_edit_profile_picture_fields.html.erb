@@ -1,0 +1,29 @@
+<%#
+Renders a file field and a text field (for uploading from url) for editing
+user picture.
+
+==== Locals
+picture  ::  the form helper handle.
+%>
+
+<%= member_picture member, :no_name => true, :size => :large, :dont_link => true if show_image %>
+<div id="local_image">
+  <p>
+    <%= "feature.user.content.upload_file_v1".translate %>
+  </p>
+  <%= picture.label :image, "feature.user.photo.upload_picture".translate, :class => "hide", :for => "profile_picture_image" %>
+  <%= picture.file_field :image, :size => 30, :class => 'browse_picture noshadow', :id => "profile_picture_image", :onchange => "EditPicture.togglePicUploadMethod(0)" %>
+  <div class="m-t-xs">
+    <span><%= "display_string.or".translate %></span> <%= link_to_function "feature.user.action.enter_link_to_picture_html".translate, "EditPicture.togglePicUploadMethod(1)" %>
+  </div>
+</div>
+<div id="remote_image" style="display: none;">
+  <p><%= "feature.user.content.picture_link".translate %></p>
+  <%= picture.label :image_url, "feature.user.photo.give_link_to_picture".translate, :class => "sr-only", :for => "profile_picture_image_url" %>
+  <%= picture.text_field :image_url, :size => 30, :id => "profile_picture_image_url",
+      :value => (member.profile_picture && member.profile_picture.image_remote_url), :class => 'form-control' %>
+
+  <div class="m-t-xs">
+    <%= link_to_function "feature.user.action.upload_picture_html".translate, "EditPicture.togglePicUploadMethod(0)" %>
+  </div>
+</div>

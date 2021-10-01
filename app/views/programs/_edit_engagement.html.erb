@@ -1,0 +1,11 @@
+<%= response_flash "engagement_setting_flash" %>
+<div id="cjs_edit_engagement_settings_form">
+  <%= render :partial => "programs/ongoing_engagement_settings", :locals => {:f => f} if @current_program.ongoing_mentoring_enabled? %>
+  <%= render :partial => "programs/one_time_engagement_settings", :locals => {:f => f} if @current_program.calendar_enabled? %>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(function(){
+   CalendarSettingForm.validateCalendarSettingForm('engagement_setting_flash', '<%= j("common_text.error_msg.required_missing".translate) %>', '<%= j("program_settings_strings.content.enter_a_valid_value".translate(:meeting => _meeting)) %>');
+  });  
+<% end %>

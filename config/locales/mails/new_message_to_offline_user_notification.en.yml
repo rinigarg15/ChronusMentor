@@ -1,0 +1,22 @@
+en:
+  email_translations:
+    new_message_to_offline_user_notification:
+      title_v2: New reply notification to a non-member who messaged the %{_admin}
+      description_v3: Users who are not participants of %{_program} can still contact the %{_admins}. This email is sent to them when %{_admins} respond to their messages.
+      subject: "{{message_subject}}"
+      content_v2_html: You have a message from {{sender_name}}:<br /> <br />{{message_content}}<br /><br/> To respond to {{sender_name}} click the button below or click reply to this email.<br />{{reply_button}}
+      tags:
+        message_subject:
+          description: Subject of the message
+          example: Reply from Administrator
+        message_content:
+          description: Content of the message
+          example: Please log in to the program to find more details. Thanks!
+        url_reply:
+          description: Url to reply to the message
+        text_for_inline_reply:
+          description: For cases where the member can reply from the email client, this instruction text will be appended
+          example: reply to this email (message will be sent to the user) or
+        reply_button:
+          description: Reply Button
+          reply: Reply

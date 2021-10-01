@@ -1,0 +1,12 @@
+en:
+  email_translations:
+    meeting_request_sent_notification:
+      title_v4: Confirmation to %{_mentee} of sent %{_meeting} request
+      description_v2: This email is sent to the %{_mentee} to confirm that they have requested %{_a_meeting} with %{_a_mentor}.
+      subject_v2: Your invitation for '{{meeting_topic}}' has been sent
+      content_v4_html: 'This is a confirmation email. Your invitation to {{meeting_request_recepient_name}} to attend {{customized_meeting_term_articleized}} in {{subprogram_or_program_name}} has been successfully sent! <br /> <br /> <div style=''padding-bottom: 10px''><span style=''color: #00AC77; font-size: 16px''>{{customized_meeting_term_capitalized}} Details</span> <br /> </div> <table style=''border-collapse:separate;border-spacing:10px 10px;'' border=''0'' bgcolor=''#eeeeee''><tr><td style=''vertical-align: top;color: #909090;''>Topic:</td><td style=''vertical-align: top;''>{{meeting_topic}}</td></tr><tr><td style=''vertical-align: top;color: #909090;''>When:</td><td style=''vertical-align: top;''>{{meeting_timings}} (<a href=''{{url_meeting_request_calendar_attachment}}''>download ICS</a>)</td></tr><tr><td style=''vertical-align: top;color: #909090;''>Where:</td><td style=''vertical-align: top;''>{{meeting_location}}</td></tr><tr><td style=''vertical-align: top;color: #909090;''>Attendees:</td><td style=''vertical-align: top;''>{{meeting_details}}</td></tr><tr><td style=''vertical-align: top;color: #909090;''>Description:</td><td style=''vertical-align: top;''>{{meeting_description}}</td></tr></table>'
+      tags:
+        meeting_request_creator_email:
+          description: Email of the creator of the meeting request. Note that the email will be displayed irrespective of the email privacy settings.
+        meeting_request_recepient_email:
+          description: Email of the recepient of the meeting request. Note that the email will be displayed irrespective of the email privacy settings.

@@ -1,0 +1,6 @@
+<!-- Here params hash is used in additional_params as the will_paginate gem's paginate method requires the hash to be scoped under params.  -->
+<div class="cjs-admin-views-actions clearfix m-b">
+  <%= get_bulk_actions_box(@admin_view, :member_tagging_enabled => @current_organization.has_feature?(FeatureName::MEMBER_TAGGING), member: wob_member) %>
+</div>
+
+<%= yield %>

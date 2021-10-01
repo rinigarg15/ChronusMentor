@@ -1,0 +1,74 @@
+<% show_preview = local_assigns[:show_preview] %>
+<% preview_role = local_assigns[:preview_role] %>
+<% tasks = local_assigns[:tasks] %>
+<% task_checkbox_disabled_status = task.role_id.nil? ? task.is_engagement_survey_action_item? : !(task.role_id == preview_role) %>
+<div class="cjs-edit-content-header">
+  <% if show_preview %>
+    <div class="awesome-bootstrap checkbox checkbox-primary inline pull-left m-t-n-xs p-r-xs">
+      <%= choices_wrapper("feature.mentoring_model.label.mark_complete".translate) do %>
+        <%= check_box_tag '', '', false, disabled: task_checkbox_disabled_status, id: "cjs-checkbox-#{task.id}", class: "cjs-checkbox-for-task cjs-checkbox-for-task-#{task.role_id} #{%Q[cjs-unassigned-available-for-checkbox] if (task.role_id.nil? && !task.is_engagement_survey_action_item?)}", title: "feature.mentoring_model.label.mark_complete".translate %>
+        <label for="cjs-checkbox-<%= task.id %>"></label>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="cjs_details_block media-left">
+    <div class="cjs_assignee_block">
+      <%= label_tag(:mentoring_model_task_status, "feature.mentoring_model.description.set_task_status".translate, class: 'sr-only', for: "cjs-mentoring-model-task-#{task.id.to_s}") %>
+      <% title = task.role.present? ? "feature.mentoring_model.information.assigned_to_role".translate(:role_name => RoleConstants.human_role_string([task.role.name], :program => task.role.program)) : "feature.mentoring_model.information.unassigned_task_in_profile".translate %>
+      <%= content_tag(:div, image_tag((show_preview && task.role && UserConstants::PREVIEW_PROFILE_PICTURE[task.role.name]) || UserConstants::DEFAULT_PICTURE[:small], class: "img-circle cjs_default_pic", title: title, size: "21x21"), class: "member_box cjs_pic_holder") %>
+    </div>
+  </div>
+  <div class="media-body cjs-task-title cjs-task-title-<%= task.id %>">
+    <div class="row cjs-task-title-container">
+      <div class=<%= show_preview ? "col-xs-8" : "col-xs-12" %>>
+        <%= content_tag(:span, truncate(task.title, length: MentoringModel::Task::TITLE_TRUNCATE_LENGTH), title: task.title, class: "") %>
+        <% class_name = task.role_id == preview_role ? "btn btn-primary btn-sm cjs_task_role_#{task.role_id} cjs_task_link cjs_dummy_link" : "cjs_task_role_#{task.role_id} cjs_task_link cjs_dummy_link" %>
+        <% if task.is_meeting_action_item? %>
+          <% content = show_preview ? content_tag(:a, "feature.mentoring_model.label.setup_meeting".translate(:Meeting => _a_meeting), class: class_name) : "feature.mentoring_model.label.setup_meeting".translate(:Meeting => _a_meeting) %>
+          <%= content_tag(:div, content, class: "#{hidden_on_web}") %>
+          <span class = "<%= hidden_on_mobile %>">
+            <%= vertical_separator %>
+            <%= content %>
+          </span>
+        <% elsif task.is_create_goal_action_item? %>
+         <% content = show_preview ? content_tag(:a, "feature.mentoring_model.label.create_goal_plan".translate, class: class_name) : "feature.mentoring_model.label.create_goal_plan".translate %>
+          <%= content_tag(:div, content, class: "#{hidden_on_web}") %>
+          <span class = "<%= hidden_on_mobile %>">
+            <%= vertical_separator %>
+            <%= content %>
+          </span>
+        <% elsif task.is_engagement_survey_action_item? %>
+          <% content = show_preview ? content_tag(:a, task.action_item.name, class: class_name) : task.action_item.name %>
+          <%= content_tag(:div, content, class: "#{hidden_on_web}") %>
+          <span class = "<%= hidden_on_mobile %>">
+            <%= vertical_separator %>
+            <%= content %>
+          </span>
+        <% end %>
+      </div>
+      <% if show_preview %>
+        <div class="col-xs-4 pull-right">
+          <span class="cjs_status_block pull-right">
+            <% if task.required? %>
+              <%= content_tag(:span, DateTime.localize(task.due_date, format: :abbr_short_no_year), class: "cjs_status p-r-xs truncate-with-ellipsis whitespace-nowrap") %>
+            <% end %>
+            <% dropdown_options = {
+                btn_class: "pull-right",
+                dropdown_title: "",
+                is_not_primary: true,
+                btn_group_btn_class: "btn-white btn-xs cjs_dummy_link"
+              } %>
+            <%= build_dropdown_button("", [], dropdown_options) %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<% if show_preview && task.description.present? %>
+  <div class="row cjs-task-description-container hide">
+    <div class="p-t-xs col-xs-12">
+      <%= render partial: "mentoring_model/tasks/details", locals: {task_has_description: task.description.present?, goal: nil, task: task} %>
+    </div>
+  </div>
+<% end %>

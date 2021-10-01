@@ -1,0 +1,14 @@
+<% if show_actions || competency.questions.any? %>
+  <div id="three_sixty_competency_<%= competency.id %>">
+    <% collapsible_content three_sixty_competency_heading_for_listing(competency, show_actions), [], (local_assigns[:should_collapse].nil? ? true : local_assigns[:should_collapse]),
+      :render_panel => true,
+      :class => "m-b-sm animated fadeInDown",
+      :pane_content_class => "no-padding",
+      :additional_header_class => "cjs_three_sixty_parent gray-bg b-t b-b b-r b-l" do %>
+        <div id="competency_questions_container_<%= competency.id%>" class="cjs-alt-color-parent">
+          <%= render :partial => "three_sixty/competencies/question", :collection => competency.questions, :locals => {:competency => competency, :show_actions => show_actions} %>
+        </div>
+        <%= add_new_three_sixty_competency_questions(competency) if show_actions %>
+    <% end %>
+  </div>
+<% end %>

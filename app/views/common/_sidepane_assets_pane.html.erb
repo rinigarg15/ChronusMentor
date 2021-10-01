@@ -1,0 +1,45 @@
+<%= ibox (options[:pane_header] || ""), :content_class => "p-xxs", :show_collapse_link => true, show_close_link: options[:show_close_link], ibox_class: (options[:ibox_class] || ""), collapse_link_class: (options[:collapse_link_class] || "") do %>
+  <% if sidepane_assets && sidepane_assets.any? %>
+    <ul class="list-group">
+      <% sidepane_assets.each_with_index do |sidepane_asset, index| %>
+        <% sidepane_asset_class = "sidepane_asset_#{options[:asset_type] || ''}_#{index}" %>
+        <li class="list-group-item clearfix <%= sidepane_asset_class %> <%= options[:item_class] %>">
+          <% if options[:logo_url_method].present? && sidepane_asset.send(options[:logo_url_method]).present? %>
+            <div class="media-left pull-left">
+              <%= image_tag(sidepane_asset.send(options[:logo_url_method]), :size => "35x35", :class => "img-circle") %>
+            </div>
+          <% elsif options[:asset_icon_class].present? %>
+            <div class="media-left pull-left">
+              <%= get_icon_content("fa fa-fw #{options[:asset_icon_class]}", :container_class => "fa-circle") %>
+            </div>
+          <% elsif options[:user_method].present? %>
+            <div class="media-left pull-left">
+              <% user = options[:user_method] == :self ? sidepane_asset : sidepane_asset.send(options[:user_method]) %>
+              <%= user_picture user, { :no_name => true, size: :small }, { class: "img-circle" } %>
+            </div>
+          <% end %>
+          <div class="media-middle overflow-hidden word_break">
+            <% if options[:sidepane_asset_partial] %>
+              <%= render :partial => options[:sidepane_asset_partial], :locals => {:sidepane_asset => sidepane_asset, :index_id => index, show_page: options[:show_page].to_s.to_boolean} %>
+            <% else %>
+              <%= sidepane_asset %>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+      <% if options[:see_all_url] %>
+        <li class="list-group-item text-center">
+          <% unless options[:additional_left_links].blank? %>
+            <%= (options[:additional_left_links] || "").html_safe %>
+            <%= circle_separator %>
+          <% end %>
+          <%= link_to "display_string.See_all_raquo_html".translate, options[:see_all_url], class: "font-bold" %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="text-center p-sm">
+      <%= options[:empty_pane_message] %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,6 @@
+<% if @error_flash.present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('', '<%= @error_flash %>', false);
+<% else %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('', '<%= "#{'flash_message.program_flash.created_using_profile_question_pack'.translate}" %>', true);
+  jQuery("#profile_questions_import_modal").modal("hide");
+<% end %>

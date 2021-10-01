@@ -1,0 +1,187 @@
+AbstractView:
+  filter_params:
+    profile:
+      questions:
+        questions_%:
+          question: ''
+          operator: ''
+          scope: ''
+          value: ''
+          choice: ''
+          number_of_days: ''
+          date_value: ''
+          date_operator: ''
+      score:
+        operator: ''
+        value: ''
+      mandatory_filter: ''
+    language: ''
+    roles_and_status:
+      signup_state:
+        accepted_not_signed_up_users: ''
+        added_not_signed_up_users: ''
+        signed_up_users: ''
+      state:
+        active: ''
+        pending: ''
+        suspended: ''
+        draft: ''
+      role_filter_%:
+        type: ''
+        roles: ''
+      roles: ''
+    connection_status:
+      status: ''
+      draft_status: ''
+      availability:
+        operator: ''
+        value: ''
+      mentoring_model_preference: ''
+      rating:
+        operator: ''
+        greater_than: ''
+        equal_to: ''
+        less_than: ''
+      meeting_requests:
+        mentees: ''
+        mentors: ''
+        request_%:
+          question: ''
+          operator: ''
+          value: ''
+          start_value: ''
+          end_value: ''
+      mentor_requests:
+        mentors: ''
+        mentees: ''
+      meetingconnection_status: ''
+      mentoring_requests:
+        mentees: ''
+        mentors: ''
+      mentor_recommendations:
+        mentees: ''
+      advanced_options:
+        meeting_requests:
+          mentees:
+            "%": ''
+            request_duration: ''
+          mentors:
+            "%": ''
+            request_duration: ''
+        meetingconnection_status:
+          both:
+            "%": ''
+            request_duration: ''
+        mentoring_requests:
+          mentees:
+            "%": ''
+            request_duration: ''
+          mentors:
+            "%": ''
+            request_duration: ''
+        mentor_recommendations:
+          mentees:
+            "%": ''
+            request_duration: ''
+      last_closed_connection:
+        type: ''
+        days: ''
+        date: ''
+        date_range: ''
+      status_filters:
+        status_filter_%:
+          category: ''
+          type: ''
+          operator: ''
+          countvalue: ''
+    others:
+      tags: ''
+    timeline:
+      timeline_questions:
+        questions_%:
+          question: ''
+          type: ''
+          value: ''
+    survey:
+      user:
+        users_status: ''
+        survey_id: ''
+      survey_questions:
+        questions_%:
+          survey_id: ''
+          question: ''
+          operator: ''
+          value: ''
+          choice: ''
+    member_status:
+      user_state: ''
+      state:
+        "%": ''
+      connection_status:
+        status_filter_%:
+          category: ''
+          type: ''
+          operator: ''
+          countvalue: ''
+    program_role_state:
+      all_members: ''
+      inclusion: ''
+      filter_conditions:
+        parent_filter_%:
+          child_filter_%:
+            state: ''
+            program: ''
+            role: ''
+    status: ''
+    search_filters:
+      search_content: ''
+      status:
+        unread: ''
+      sender: ''
+      receiver: ''
+      date_range: ''
+    tab: ''
+    include_system_generated: ''
+    unresolved: ''
+    list: ''
+    params:
+      search_filters:
+        v2_tasks_status: ''
+      sub_filter:
+        inactive: ''
+        not_started: ''
+        active: ''
+      tab: ''
+    search_filter_key: ''
+UserStateChange:
+  info:
+    state:
+      from: ''
+      to: ''
+    role:
+      from: ''
+      to: ''
+  connection_membership_info:
+    role:
+      from_role: ''
+      to_role: ''
+UserCsvImport:
+  info:
+    roles: ''
+    csv_dropdown_choices:
+      "%": ''
+    profile_dropdown_choices:
+      "%": ''
+    processed_params:
+      "%": ''
+    processed_csv_import_params:
+      SKIP_KEYS: true
+CampaignManagement::AbstractCampaign:
+  trigger_params:
+    "%": ''
+Report::Alert:
+  filter_params:
+    cjs_alert_filter_params_%:
+      name: ''
+      operator: ''
+      value: ''

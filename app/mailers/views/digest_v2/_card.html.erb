@@ -1,0 +1,33 @@
+<% target_url = send(*(call_to_action_url << url_options)) %>
+<table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left; width: 100% !important;' width='100%'>
+  <tbody><tr>
+    <td width='100%' style='width: 100% !important; padding: 0 10px 10px 10px;'>
+
+      <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left; width: 100% !important;' width='100%'>
+        <tbody><tr>
+          <td bgcolor='#FFFFFF' width='100%' style='padding: 10px; width: 100% !important;'>
+            <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left; width: 100% !important;' width='100%'>
+              <tbody><tr>
+                <td valign="top" width='50' style='width: 50px !important; vertical-align: top;'>
+                  <%= link_to target_url do %>
+                    <img src="<%= icon_src %>" />
+                  <% end %>
+                </td>
+                <td valign="top">
+                  <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left; width: 100% !important;' width='100%'>
+                    <tbody>
+                      <tr><td valign="top" width='100%' style='width: 100% !important; vertical-align: top; color: #6E6C70; font-size: 12px; line-height: 20px;'><%= link_to card_heading, target_url %></td></tr>
+                      <tr><td valign="top" width='100%' style='width: 100% !important; vertical-align: top; color: #628F98 !important; font-size: 13px; line-height: 22px;'><%= link_to card_content, target_url %></td></tr>
+                      <tr><td valign="top" width='100%' style='width: 100% !important; vertical-align: top; color: #9EAEB1; font-size: 11px; line-height: 17px;'><%= card_footer %></td></tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr></tbody>
+            </table>
+          </td>
+        </tr></tbody>
+      </table>
+
+    </td>
+  </tr></tbody>
+</table>

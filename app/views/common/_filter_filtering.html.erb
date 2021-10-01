@@ -1,0 +1,13 @@
+<div class="text-center p-sm cjs_filter_less_more">
+  <% more_link = content_tag(:strong, "display_string.more_filters_v1".translate) + get_icon_content("fa fa-angle-right") %>
+  <%= link_to more_link, "javascript:void(0)" %>
+</div>
+<div class="text-center p-sm b-t cjs_filter_less_more hide">
+  <% less_link = get_icon_content("fa fa-angle-left") + content_tag(:strong, "display_string.fewer_filters".translate) %>
+  <%= link_to less_link, "javascript:void(0)" %>
+</div>
+<%= javascript_tag do %>
+  jQuery(".cjs_filter_less_more").on("click", function(){
+    jQuery(".cjs_hidden_filters, .cjs_filter_less_more").toggle();
+  });
+<% end %>

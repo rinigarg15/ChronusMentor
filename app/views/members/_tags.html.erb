@@ -1,0 +1,32 @@
+<% member_tags = @profile_user.tags.all %>
+<% all_tags_names = @current_program.get_all_tags.join(COMMON_SEPARATOR) %>
+
+<%= ibox "feature.profile.header.tags".translate, content_class: "p-xxs" do %>
+  <div id="member_tags" class="clearfix">
+    <ul class="list-group">
+      <% if member_tags.empty? %>
+        <li class="list-group-item text-center">
+          <%= "feature.profile.content.not_yet_tagged".translate %><br/>
+          <%= link_to_function append_text_to_icon("fa fa-plus-circle", "feature.profile.actions.add_tags".translate), "jQuery('#member_tags').hide(); jQuery('#edit_member_tags').fadeIn();" %>
+        </li>
+      <% else %>
+        <% labels = [] %>
+        <% member_tags.each do |tag| %>
+          <% labels << { label_class: "label-default", content: tag.name } %>
+        <% end %>
+        <%= labels_container(labels, tag: "li", class: "list-group-item") %>
+        <li class="list-group-item text-center">
+          <%= link_to_function append_text_to_icon("fa fa-pencil", "display_string.Edit".translate), "jQuery('#member_tags').hide(); jQuery('#edit_member_tags').fadeIn();", class: "font-bold" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <%= simple_form_for @profile_user, :url => update_tags_user_path(@profile_user), :remote => true, :html => { :class => "edit_tags p-l-md p-r-md", :id => "edit_member_tags", :style => 'display:none;'} do |f| %>
+    <%= f.input :tag_list, :as => :string, :label_html => {:class => 'sr-only'}, :input_html => {:class => "tag_list_input col-xs-12 no-padding", :input_tags => all_tags_names, :title => "feature.profile.actions.add_tags".translate, value: f.object.tag_list.to_s, data: {:placeholder => "feature.profile.actions.add_tags".translate}}, :input_wrapper_html => {:class => "clearfix m-t-sm"} %>
+    <% action_set(class: "clearfix p-b-md") do %>
+      <%= f.button :submit, "display_string.Save".translate, class: "pull-right btn btn-sm btn-primary m-l-xs"  %>
+      <%= link_to_function "display_string.Cancel".translate, "jQuery('#member_tags').fadeIn(); jQuery('#edit_member_tags').hide();", class: 'btn btn-white btn-sm pull-right m-l-xs' %>
+    <% end %>
+  <% end %>
+<% end %>

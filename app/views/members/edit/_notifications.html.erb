@@ -1,0 +1,20 @@
+<% if @profile_user.is_admin? %>
+  <%= ibox "feature.profile.label.admin_notifications".translate(Admin: _Admin), {show_collapse_link: true, collapse_link_class: "pull-right", ibox_id: "admin_notification_section_box", ibox_content_id: "admin_notification_settings"} do %>
+    <%= render :partial => "members/edit/user_notifications" %>
+  <% end %>
+<% end %>
+
+<% digest_settings_title = @profile_user.is_admin? ? "feature.profile.content.digest_settings".translate : "" %>
+<%= ibox digest_settings_title, {show_collapse_link: true, collapse_link_class: "pull-right", ibox_id: NOTIFICATION_SECTION_HTML_ID, ibox_content_id: "notifications"} do %>
+  <div>
+    <%= form_for @profile_user, :remote => true, :url => update_settings_member_path(@profile_member), :html => {:class => 'form-horizontal'} do |f| %>
+      <%= render partial: "members/edit/user_notification_setting", locals: { user_form: f, program: @current_program } %>
+      <% action_set do %>
+        <div class="pull-right">
+          <%= link_to('display_string.Cancel'.translate, "javascript:void(0)", :class => 'cjs-cancel-ibox btn btn-white') %>
+          <%= f.submit "display_string.Save".translate, :id => "submit_notitfication_settings", :class => "btn btn-primary", data: {disable_with: "display_string.Please_Wait".translate} %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>      
+<% end %>

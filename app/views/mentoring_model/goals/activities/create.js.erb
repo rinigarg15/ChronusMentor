@@ -1,0 +1,8 @@
+var goalId = '#<%= "manual_progress_goal_#{@goal.id}" %>';
+<% goal_content = render(:partial => "mentoring_model/goals/display_manual_progress_goal_progress", locals: {goal: @goal, goal_status: @goal.completion_percentage, group: @group}) %>
+<% goal_activity_feed_content = render(:partial => "mentoring_model/goals/activities/goal_activity_feed", locals: {group: @group, goal: @goal}) %>
+jQuery(goalId).replaceWith("<%= j goal_content %>");
+
+closeQtip();
+jQueryScrollTo('#<%= "cjs_display_goal_info_#{@goal.id}" %>', true);
+jQuery('#<%= "cjs-goals-activity-container-#{@goal.id.to_s}" %>').replaceWith("<%= j goal_activity_feed_content %>");

@@ -1,0 +1,36 @@
+<% coaching_goal_show_page_path = group_coaching_goal_path(@group, coaching_goal) %>
+<% coaching_goal_title = is_show_page ? coaching_goal.title : link_to(coaching_goal.title, coaching_goal_show_page_path) %>
+<% item_class = is_show_page ? "well-large bg-highlight" : "merge-top attach-bottom" %>
+
+<div class="well <%= item_class %>" id="<%= get_coaching_goal_scoping_id(coaching_goal) %>">
+  <span class="cjs_goal_content">
+    <%= render_coaching_goal_status_icon(coaching_goal) %>
+    <% if is_show_page %>
+      <% if @page_controls_allowed %>
+        <span class="pull-right">
+          <%= link_to embed_icon('icon-pencil'), edit_group_coaching_goal_path(@group, coaching_goal), :title => "display_string.Edit".translate,
+            :remote => true, :class => "cjs_coaching_goal_edit" %>
+          <%= link_to embed_icon('icon-trash'), group_coaching_goal_path(@group, coaching_goal),
+            :method => :delete, :title => "display_string.Delete".translate, data: {:confirm => "feature.coaching_goal.content.delete_confirm".translate } %>
+        </span>
+      <% end %>  
+    <% end %>
+    <h3><%= coaching_goal_title %></h3>
+    <div id="goal_content" class="has-above-1">
+      <dl class="dl-horizontal dl-left dl-cozy">
+        <% if coaching_goal.due_date.present? %>
+          <%= embed_display_line_item("feature.coaching_goal.header.Due_Date".translate, DateTime.localize( coaching_goal.due_date, format: :full_display_no_time)) %>
+        <% end %>
+        <%= embed_display_line_item("feature.coaching_goal.header.Progress".translate, coaching_goal_progress_bar(@group, coaching_goal, :is_show_page => is_show_page, :no_update => !@page_controls_allowed)) %>
+        <% if coaching_goal.description.present? %>
+          <% description = get_formatted_goal_description(coaching_goal.description, is_show_page, coaching_goal_show_page_path) %>
+          <%= embed_display_line_item("feature.coaching_goal.header.Description".translate, description) %>
+        <% end %>
+      </dl>
+      <div class="small dim">
+        <%= "feature.coaching_goal.content.added_on".translate(date: DateTime.localize(coaching_goal.created_at, format: :full_display_no_time)) %>
+        <%= content_tag(:span, last_update_on(coaching_goal), :class => "divider-vertical") %>
+      </div>
+    </div>
+  </span>
+</div>

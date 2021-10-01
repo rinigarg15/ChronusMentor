@@ -1,0 +1,12 @@
+<%= ibox nil, content_class: "no-padding" do %>
+  <% all_articles =  (@user_articles.presence || []) + (@drafts.presence || []) %>
+  <% if all_articles.present? %>
+    <div id='articles' class='clearfix'>
+      <%= listing_page(all_articles.flatten, partial: 'articles/article', collection_key: :article) %>
+    </div>
+  <% else %>
+    <div class="p-sm text-center">
+      <%= "feature.profile.content.no_articlues_contributed".translate(articles: _articles, member_name: @profile_member.name) %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,14 @@
+<% modal_v3_popup "feature.flag.header.flag_popup_title".translate do %>
+  <%= simple_form_for @flag, :html => { :id => "new_flag_popup" } do |f| %>
+    <%= response_flash("flag_popup_flash_" + @content.class.to_s + '_'+ @content.id.to_s, { class: "m-b-sm" }) %>
+    <%= f.input :reason, :input_html => { :rows => 5 , :class => "form-control" }, label_html: { class: "sr-only" }, :placeholder => "feature.flag.content.reason_for_reporting".translate %>
+    <%= f.input :content_type, :as => :hidden  %>
+    <%= f.input :content_id, :as => :hidden  %>
+
+    <% action_set class: "pull-right" do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "feature.flag.action.Report".translate, :class => 'cjs_popup_flag_content_button' %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= javascript_tag %Q[Flags.newFlagValidation('#{j("feature.flag.content.reason_required".translate)}');] %>

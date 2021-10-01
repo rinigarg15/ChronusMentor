@@ -1,0 +1,141 @@
+---
+- en: "<div class=\"clearfix text-center row-fluid\">
+    <div class=\"clearfix\">
+      <p>You are currently using a browser that appears to be out of date. We are continuously trying to make your experience on the website faster and better. Please use the links below to upgrade your existing browser or download a new browser and you’ll be on your way. For any questions, please contact your administrator.</p>
+    </div>
+
+    <div class=\"clearfix\">
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.google.com/chrome\" target=\"_blank\">
+          <img src=\"/browser_warning/chrome.png\" alt=\"Google Chrome\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Google  Chrome</span>
+      </div>
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.firefox.com\" target=\"_blank\">
+          <img src=\"/browser_warning/firefox.png\" alt=\"Firefox\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Firefox</span>
+      </div>
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.browserforthebetter.com/download.html\" target=\"_blank\">
+          <img src=\"/browser_warning/ie.png\" alt=\"Internet Explorer\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Internet Explorer</span>
+      </div>
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.apple.com/safari/download/\" target=\"_blank\">
+          <img src=\"/browser_warning/safari.png\" alt=\"Safari\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Safari</span>
+      </div>
+    </div></div>"
+- fr-FR: "<div class=\"clearfix text-center row-fluid\">
+    <div class=\"clearfix\">
+      <p>Vous utilisez actuellement un navigateur qui semble être obsolète. Nous essayons constamment d’améliorer votre expérience et de la rendre plus rapide sur le site web. Veuillez utiliser les liens suivants pour actualiser votre navigateur ou télécharger un nouveau navigateur, ainsi vous serez sur la bonne voie. Pour toute question, veuillez contacter votre administrateur.</p>
+    </div>
+
+    <div class=\"clearfix\">
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.google.com/chrome\" target=\"_blank\">
+          <img src=\"/browser_warning/chrome.png\" alt=\"Google Chrome\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Google  Chrome</span>
+      </div>
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.firefox.com\" target=\"_blank\">
+          <img src=\"/browser_warning/firefox.png\" alt=\"Firefox\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Firefox</span>
+      </div>
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.browserforthebetter.com/download.html\" target=\"_blank\">
+          <img src=\"/browser_warning/ie.png\" alt=\"Internet Explorer\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Internet Explorer</span>
+      </div>
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.apple.com/safari/download/\" target=\"_blank\">
+          <img src=\"/browser_warning/safari.png\" alt=\"Safari\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Safari</span>
+      </div>
+    </div></div>"
+- es-ES: "<div class=\"clearfix text-center row-fluid\">
+    <div class=\"clearfix\">
+      <p>Usted está actualmente usando un navegador que parece estar desactualizado. Nosotros estamos continuamente tratando de hacer que su experiencia en el sitio web sea más rápida y mejor.Por favor use los enlaces debajo para actualizar su navegador existente o descargue un navegador nuevo y estará listo. Para cualquier pregunta, por favor contacte a su administrador.</p>
+    </div>
+
+    <div class=\"clearfix\">
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.google.com/chrome\" target=\"_blank\">
+          <img src=\"/browser_warning/chrome.png\" alt=\"Google Chrome\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Google  Chrome</span>
+      </div>
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.firefox.com\" target=\"_blank\">
+          <img src=\"/browser_warning/firefox.png\" alt=\"Firefox\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Firefox</span>
+      </div>
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.browserforthebetter.com/download.html\" target=\"_blank\">
+          <img src=\"/browser_warning/ie.png\" alt=\"Internet Explorer\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Internet Explorer</span>
+      </div>
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.apple.com/safari/download/\" target=\"_blank\">
+          <img src=\"/browser_warning/safari.png\" alt=\"Safari\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Safari</span>
+      </div>
+    </div></div>"
+- de-DE: "<div class=\"clearfix text-center row-fluid\">
+    <div class=\"clearfix\">
+      <p>Sie benutzen zur Zeit einen Browser, der veraltet zu sein scheint. Wir sind laufend dabei zu versuchen Ihre Erfahrungen auf der Website zu beschleunigen und zu verbessern. Bitte benutzen Sie die Links weiter unten, um Ihren momentanen Browser zu aktualisieren oder laden Sie sich einen neuen Browser runter und Sie werden in null-Komma-nichts auf Ihrem Weg sein. Bei Fragen wenden Sie sich bitte an Ihren Administrator.</p>
+    </div>
+
+    <div class=\"clearfix\">
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.google.com/chrome\" target=\"_blank\">
+          <img src=\"/browser_warning/chrome.png\" alt=\"Google Chrome\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Google  Chrome</span>
+      </div>
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.firefox.com\" target=\"_blank\">
+          <img src=\"/browser_warning/firefox.png\" alt=\"Firefox\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Firefox</span>
+      </div>
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.browserforthebetter.com/download.html\" target=\"_blank\">
+          <img src=\"/browser_warning/ie.png\" alt=\"Internet Explorer\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Internet Explorer</span>
+      </div>
+      <div class=\"well col-sm-3 text-center\">
+        <a href=\"http://www.apple.com/safari/download/\" target=\"_blank\">
+          <img src=\"/browser_warning/safari.png\" alt=\"Safari\">
+        </a>
+        <br/>
+        <span style=\"margin-top: 5px; display: block; color: inherit\">Safari</span>
+      </div>
+    </div></div>"

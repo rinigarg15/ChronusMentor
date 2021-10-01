@@ -1,0 +1,24 @@
+<div id="program_invitations_filter_pane" class="filter_pane">
+  <div class="filter_content">
+    <%= form_tag program_invitations_path, :remote => true, :method => :get, :id => 'search_filter_form' do %>
+      <% profile_filter_wrapper "feature.program_invitations.label.expired_invitations".translate, !@filter_hash[:include_expired_invitations].present?, false, true, {:modern_filter => true} do %>
+        <%= label_tag(:cjs_include_expired_invitations, "feature.program_invitations.label.include_expired_invitations".translate, class: 'sr-only') %>
+        <label class="checkbox">
+          <%= check_box_tag :include_expired_invitations, true, @filter_hash[:include_expired_invitations], :id => "cjs_include_expired_invitations" %> <%= 'feature.program_invitations.action.include_expired_invitations_html'.translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS + " cjs-tool-tip", '', "data-desc" => "feature.program_invitations.content.include_expired_invitations_tooltip".translate(count: ProgramInvitation::VALIDITY_IN_DAYS))) %>
+        </label>
+        <%= link_to("feature.connection.action.reset".translate, "javascript:void(0)", class: 'hide', :id => "reset_filter_expired_invitations") %>
+      <% end %>
+      <% profile_filter_wrapper "feature.program_invitations.label.sent_between".translate, !@filter_hash[:sent_between].present?, false, false, {:modern_filter => true} do %>
+        <div class="fields">
+          <% initial_date_range = "#{DateTime.localize(@filter_hash[:sent_between_start_time].to_date, format: :date_range)} - #{DateTime.localize(@filter_hash[:sent_between_end_time].to_date, format: :date_range)}" if @filter_hash[:sent_between].present? %>
+          <%= label_tag(:cjs_sent_between, "feature.program_invitations.label.sent_between".translate, class: 'sr-only') %>
+          <%= text_field_tag(:sent_between, @filter_hash[:sent_between].present? ? initial_date_range : "", autocomplete: :off, class: "filter_text_field", placeholder: "common_text.filter.placeholder.date_range".translate, id: "cjs_sent_between") %>
+        </div>
+        <div class="filter_actions clearfix">
+          <%= submit_tag("display_string.Apply".translate, class: 'btn btn-primary btn-xs', id: 'cjs-sent-between-submit') %>
+          <%= link_to("display_string.Clear".translate, "javascript:void(0)", class: 'btn btn-xs', id: 'reset_filter_sent_between') %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

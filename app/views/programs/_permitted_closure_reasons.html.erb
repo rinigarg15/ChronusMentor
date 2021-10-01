@@ -1,0 +1,21 @@
+<% closed_groups_count = closure_reason.groups.closed.size %>
+<% closure_reason_deleted_msg = (closed_groups_count == 0) ? "program_settings_strings.label.remove_closure_reason_confirmation".translate : "program_settings_strings.label.remove_closure_reason_confirmation_with_count".translate(:count => closed_groups_count, :mentoring_connection => _mentoring_connection, :mentoring_connections => _mentoring_connections) %>
+<% closure_msg_on_focus_out = (closed_groups_count == 0) ? "" : "program_settings_strings.label.closure_msg_on_focus_out".translate(:count => closed_groups_count, :mentoring_connection => _mentoring_connection, :mentoring_connections => _mentoring_connections) %>
+<% closure_reason_id = closure_reason.id %>
+<%= content_tag :div, :class => "has-above-1", :id => "cjs_group_closure_reason_#{closure_reason.id}" do %>
+  <label class="sr-only" for="cjs_closure_reason_<%= closure_reason.id %>"><%= "program_settings_strings.label.specify_group_closure_reason".translate(:mentoring_connection => _mentoring_connection) %> </label>
+  <%= content_tag(:div, class: "col-sm-8 no-padding m-r") do %>
+    <% fa.text_field :reason, :class => "form-control cjs_group_closure_reason_text", :readonly => closure_reason.is_default && !super_console?, :name => "group_closure_reasons[#{closure_reason.id}][reason]", :id => "cjs_closure_reason_#{closure_reason.id}", :input_html => {:id => "cjs_text_field_input_#{closure_reason.id}"}, :data => {:value => closure_reason.reason, :message => closure_msg_on_focus_out }, :placeholder => "program_settings_strings.label.specify_group_closure_reason".translate(:mentoring_connection => _mentoring_connection) %>
+  <% end %>
+  <label class="checkbox dim inline">
+    <%= fa.check_box :is_completed, :name => "group_closure_reasons[#{closure_reason.id}][is_completed]", :disabled => closure_reason.is_default, id: "group_closure_reasons_#{closure_reason.id}_is_completed" %>
+    <%= content_tag :span, "program_settings_strings.label.consider_completed".translate, :class => "has-next-1" %>
+    <% if closure_reason.is_default %>
+        <%= embed_icon(TOOLTIP_IMAGE_CLASS, '', :id => "default_closure_reason_#{closure_reason.id}") %>
+        <%= tooltip("default_closure_reason_#{closure_reason_id}", "program_settings_strings.content.default_closure_reason".translate) -%>
+    <% else %>
+      <%= link_to get_icon_content("fa fa-trash text-default") + set_screen_reader_only_content("display_string.Remove".translate), 'javascript:void(0);', :onclick => %Q[ProgramSettings.handleSoftDeleteOnClosureReasons("#{closure_reason_id}", "#{closure_reason_deleted_msg}")] %>
+    <% end %>
+  </label>
+<% end %>
+<%= fa.hidden_field :is_deleted, :name => "group_closure_reasons[#{closure_reason.id}][is_deleted]", :id => "cjs_group_closure_reason_is_deleted_#{closure_reason.id}" %>

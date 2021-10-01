@@ -1,0 +1,58 @@
+<% @title = @profile_member.name(:name_only => true) %>
+<% @title_url = member_path(@profile_member) %>
+<% @title_logo = @profile_member.picture_url(:small, true) %>
+<% @page_action = { label: append_text_to_icon("fa fa-users", "feature.connection.action.create_new_v1".translate(Mentoring_Connection: _Mentoring_Connection)), url: groups_path(:show_new => true, :create_connection_member => @profile_member.id), class: "btn btn-primary" } if @profile_tab == MembersController::ShowTabs::MANAGE_CONNECTIONS && @show_connections && !current_program.project_based? %>
+<% @loading_results_message = "display_string.Loading".translate %>
+
+<%= render :layout => 'members/profile_wrapper' do %>
+  <%= update_profile_message(current_user) if program_view? && @is_self_view %>
+  <% if @profile_tab == MembersController::ShowTabs::ARTICLES %>
+    <% @sub_title = _Articles %>
+    <% if logged_in_program? && program_view? && current_user.can_write_article? && @is_self_view %>
+      <% @page_action =  {:label => 'feature.article.action.write_new'.translate(:Article => _Article), :url =>  new_article_path, :class => 'btn btn-primary btn-large' } %>
+    <% end %>
+    <%= render :partial => "members/profile_articles" if @show_articles %>
+
+  <%- elsif @profile_tab == MembersController::ShowTabs::QA_QUESTIONS -%>
+    <% @sub_title = "feature.profile.subtitle.questions".translate %>
+    <%= render :partial => "members/profile_qa_questions" if @show_answers -%>
+
+  <%- elsif @profile_tab == MembersController::ShowTabs::QA_ANSWERS -%>
+    <% @sub_title = "feature.profile.subtitle.answers".translate %>
+    <%= render :partial => "members/profile_qa_answers" if @show_answers -%>
+
+  <% elsif @profile_tab == MembersController::ShowTabs::PROFILE %>
+    <% @page_title = @title %>
+    <% @title = nil %>
+    <%= render :partial => "members/profile_left_pane", :locals => {:pdf_name => @pdf_name, open_connect_popup: @open_connect_popup, show_favorite_ignore_links: @show_favorite_ignore_links, favorite_preferences_hash: @favorite_preferences_hash, ignore_preferences_hash: @ignore_preferences_hash} %>
+
+  <%- elsif @profile_tab == MembersController::ShowTabs::AVAILABILITY -%>
+    <% scope = program_view? ? @current_program : @current_organization %>
+    <% @sub_title = @is_self_view ? (@profile_member.ask_to_set_availability? && scope.calendar_enabled? ? "feature.profile.subtitle.availability".translate : "feature.profile.subtitle.my_meetings_v1".translate(:Meetings => _Meetings)) : "feature.profile.subtitle.schedule_a_meeting_v1".translate(:Meeting => _Meeting) %>
+    <%= render :partial => "members/profile_availability" %>
+
+  <% elsif @profile_tab == MembersController::ShowTabs::MANAGE_CONNECTIONS %>
+    <%= render :partial => "members/manage_connections", :locals => {:show_connections => @show_connections, :status_filter => @status_filter, :groups_scope => @groups_scope, :groups => @groups } %>    
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+  <% if @favorite_user_ids.present? %>
+    FavoritePreference.showDelayedPopup("<%= favorite_mentors_user_path(current_user.id, {favorite_user_ids: @favorite_user_ids, request_type: UserPreferenceService::RequestType::GROUP}) %>");
+  <% end %>
+</script>
+
+<% if program_view? && @is_student_view %>
+  <% [ProgramAbTest::Experiment::GUIDANCE_POPUP, ProgramAbTest::Experiment::POPULAR_CATEGORIES].each do |experiment_id| %>
+    <% experiment = chronus_ab_test_get_experiment(experiment_id) %>
+    <% if experiment.running? %>
+      <% if params[:mentor_request_sent].present? %>
+        <%= javascript_tag(%Q[chrGoogleAnalytics.addEvent(PreferenceBasedMentorLists.abTestGetGaCategory("#{experiment_id}"), chrGoogleAnalytics.action.GA_SENT_MENTOR_REQUEST, "#{experiment.alternative}", "#{experiment.event_label_id_for_ga}");]) %>
+      <% elsif params[:meeting_request_sent].present? %>
+        <%= javascript_tag(%Q[chrGoogleAnalytics.addEvent(PreferenceBasedMentorLists.abTestGetGaCategory("#{experiment_id}"), chrGoogleAnalytics.action.GA_SENT_MEETING_REQUEST, "#{experiment.alternative}", "#{experiment.event_label_id_for_ga}");]) %>
+      <% else %>
+        <%= javascript_tag(%Q[chrGoogleAnalytics.addEvent(PreferenceBasedMentorLists.abTestGetGaCategory("#{experiment_id}"), chrGoogleAnalytics.action.GA_PROFILE_VIEW, "#{experiment.alternative}", "#{experiment.event_label_id_for_ga}");]) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

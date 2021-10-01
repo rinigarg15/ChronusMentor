@@ -1,0 +1,4 @@
+<% @urls.each do |link| %>
+  <%= link_to link[:text], link[:url], :method => link[:method] %>
+  <br/>
+<% end %>

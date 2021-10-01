@@ -1,0 +1,54 @@
+<% track_activity_url = engagement_index_track_activity_path %>
+<% mobile_footer_actions = { see_n_results: { results_count: @users.total_entries },
+  reset_filters: { js: "BBQPlugin.applySavedFilters(this, '');", class: "#{'hide' if @my_filters.blank?}" } } %>
+<%= filter_container_wrapper(mobile_footer_actions) do %>
+  <%= form_tag request.url, :remote => true, :method => :get, :id => 'search_filter_form', :class => "uninitplaceholder" do %>
+    <%= hidden_field_tag :page, @pagination_options[:page], class: :page %>
+    <%= hidden_field_tag :reset_page, true, class: :reset_page %>
+    <%= hidden_field_tag :items_per_page, @pagination_options[:per_page], class: :items_per_page %>
+    <%= hidden_field_tag :sort, @sort_field, class: :sort %>
+    <%= hidden_field_tag :order, @sort_order, class: :order %>
+    <%= hidden_field_tag :src, EngagementIndex::Src::BrowseMentors::MENTOR_LISTING_PAGE %>
+    <%= hidden_field_tag :ajax_filters %>
+    <%# EI tracking class and activity. Add it whenever u introduce a new filter%>
+    <% ei_class = (role == RoleConstants::MENTOR_NAME ? "cjs_track_js_ei_activity" : "")%>
+    <% activity = (role == RoleConstants::MENTOR_NAME ? EngagementIndex::Activity::APPLY_MENTOR_LIST_FILTERS : "")%>
+
+    <% if @session_filters.present? %>
+      <div class="text-center p-xs b-b" id="apply_last_search">
+        <%= link_to_function append_text_to_icon("fa fa-undo","feature.user.filter.apply_last_search".translate), "BBQPlugin.applySavedFilters(this, '#{escape_javascript(@session_filters)}')", class: "font-bold #{ei_class}", data: {activity: activity} %>
+      </div>
+    <% end %>
+    <%= render :partial => "users/unique_filters", locals: {ei_class: ei_class, activity: activity} %>
+
+    <div class="panel-group no-margins">
+      <% if @show_filters %>
+        <% filter_fields = get_availablility_status_filter_fields(role) %>
+        <% hide_status_filter = filter_fields.nil? || @current_program.project_based? %>
+        <% unless hide_status_filter %>
+          <%= render partial: "users/render_status_filters", locals: { :status_filter_label => @status_filter_label, :filter_fields => filter_fields, :filter_param => @filter_param, ei_class: ei_class, activity: activity } %>
+        <% end %>
+      <% end %>
+
+      <% cache(CacheConstants::Programs::USER_FILTERS.call(@current_program.id, role)) do %>
+        <%= render :partial => "users/question", :collection => @profile_filterable_questions, locals: { show_first_filter: hide_status_filter, expand: true, ei_class: ei_class, activity: activity } %>
+        <div class="panel-group no-margins hide cjs_hidden_filters">
+          <%= render :partial => "users/question", :collection => @non_profile_filterable_questions, locals: { ei_class: ei_class, activity: activity }%>
+        </div>
+      <% end %>
+
+      <%= render partial: "users/zero_match_score_filter", locals: { ei_class: ei_class, activity: activity } if @show_no_match_filter_visible %>
+    </div>
+
+    <%= render :partial => "common/filter_filtering" if @non_profile_filterable_questions.present? %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function() {
+    Placeholder.init(jQuery("#search_filter_form").find("input[type='text']"));
+    <% if local_assigns[:current_user_is_student] %>
+      EngagementIndex.trackActivity("<%= track_activity_url %>");
+    <% end %>
+  });
+<% end %>

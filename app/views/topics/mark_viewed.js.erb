@@ -1,0 +1,3 @@
+var discussionsCount = Discussions.getMessageTabCount(<%= @home_page %>) + <%= @unviewed_discussions_board_count %>;
+Discussions.updateElementCount(discussionsCount, jQuery(".cjs_discussions_badge"));
+Discussions.updateElementCount('<%= @unviewed_discussions_board_count %>', jQuery(".cjs_unread_posts_count"))

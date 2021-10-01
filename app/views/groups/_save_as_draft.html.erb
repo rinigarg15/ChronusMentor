@@ -1,0 +1,22 @@
+<% modal_v3_popup "feature.connection.header.save_as_draft".translate do %>
+  <%= existing_groups_alert([], [[[@student.id], [@mentor.id]]], Group::Status::DRAFTED) %>
+  <div id="select_connection_<%= @mentor.id %>">
+    <div id="create_wrapper_<%= @mentor.id %>">
+      <%= form_tag assign_from_match_groups_path, :id => 'save_draft_form' do %>
+        <%= control_group do %>
+          <%= content_tag(:label, "feature.bulk_match.content.default_value_for_notes".translate(:mentoring_connection => _mentoring_connection, :admins => _admins), for: "group_notes", class: "sr-only") %>
+          <%= controls do %>
+            <%= text_area_tag :notes, "", :rows => "5", :id => "group_notes", :placeholder => "feature.bulk_match.content.default_value_for_notes".translate(:mentoring_connection => _mentoring_connection, :admins => _admins), class: "form-control" %>
+          <% end %>
+        <% end %>
+        <%= hidden_field_tag :mentor_id, @mentor.id %>
+        <%= hidden_field_tag :student_id, @student.id %>
+        <%= hidden_field_tag :group_status, "draft" %>
+        <% action_set(class: "pull-right") do %>
+          <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", data: { dismiss: "modal" } %>
+          <%= submit_tag "display_string.Save_as_Draft".translate, :class => "btn btn-primary", data: {:disable_with => "display_string.Please_Wait".translate} %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

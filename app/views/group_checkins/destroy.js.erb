@@ -1,0 +1,15 @@
+jQuery("#task_checkin_<%= @checkin.id %>_container").fadeOut();
+<% task_checkin_icon = @task.group_checkins_duration > 0 ? get_icon_content("fa fa-clock-o no-margins") : ""  %>
+jQuery('.cjs-task-<%= @task.id %>-checkin-duration').html("<%= j task_checkin_icon %>");
+<% if @task.milestone.present? %>
+  jQuery('.cjs-milestone-<%= @task.milestone_id %>-checkin-duration').html("<%= j display_checkin_duration(@task.milestone.group_checkins_duration, :hour_format => true) %>");
+<% end %>
+<% total_duration, total_hour_string = display_checkin_duration(@group.group_checkins_duration, hour_format: true, hide_clock: true) %>
+<% task_duration, task_hour_string = display_checkin_duration(@group.group_checkins_duration(MentoringModel::Task.name), hour_format: true, hide_clock: true) %>
+jQuery('#cjs-group-sidepane-total-checkin-duration').html("<%= j display_stats(total_duration, 'feature.connection.header.total_time'.translate, :right_small_label => total_hour_string, :in_listing => true ) %>");
+jQuery('#cjs-group-sidepane-tasks-checkin-duration').html("<%= j display_stats(task_duration, 'feature.connection.header.all_tasks'.translate, :right_small_label => task_hour_string, :in_listing => true ) %>");
+
+<% if @comments_and_checkins.blank? %>
+  jQuery(".cjs_comments_container").hide();
+  jQuery(".cjs_no_comments_container").show();
+<% end %>

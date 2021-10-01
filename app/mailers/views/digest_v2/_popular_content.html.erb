@@ -1,0 +1,28 @@
+<table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%'>
+  <tbody><tr>
+    <td bgcolor='#DDECEF' width='100%' style='padding: 0px;'>
+
+      <table cellspacing='0' cellpadding='0' border='0' style='table-layout: fixed; text-align: left;' width='100%'>
+        <tbody>
+        
+          <tr>
+            <td width='100%' style='width: 100% !important; padding: 10px;'>
+              <%= "email_translations.digest_v2.content.popular_caps".translate %>
+            </td>
+          </tr>
+
+
+          <% popular_content_card_details.each do |card_detail_hsh| %>
+            <tr>
+              <td align="center" style="padding:0px;margin:0px; text-align: center; width: 100%;" width="100%">
+                <%= render partial: 'digest_v2/card', locals: card_detail_hsh.merge(url_options: url_options.merge(src1: :popular_content)) %>
+              </td>
+            </tr>
+          <% end %>
+        
+        </tbody>
+      </table>
+
+    </td>
+  </tr></tbody>
+</table>

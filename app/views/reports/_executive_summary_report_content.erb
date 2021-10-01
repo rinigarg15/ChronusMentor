@@ -1,0 +1,147 @@
+<% @page_action = get_executive_summary_report_dropdown_options %>
+<% @page_action_options = {:dropdown_title => "feature.reports.label.export_to".translate, :embed_icon => true } %>
+
+<%= render :partial => "reports/high_charts", formats: FORMAT::HTML %>
+<% @title = "feature.reports.header.executive_summary_report".translate %>
+<% @back_link = back_to_reports_options(@category) %>
+<% role_term_hash = RoleConstants.program_roles_mapping(@current_program, pluralize: true)%>
+<% @skip_rounded_white_box_for_content = true %>
+<% col = (format == FORMAT::HTML) ? "col-sm" : "col-xs" %>
+<%= ibox "feature.reports.label.membership".translate, {ibox_id: "members_info"} do %>
+  <div class="row">
+    <div class="<%= col %>-4 m-t-sm">
+      <table class="table table-bordered m-b-xs">
+        <tr>
+          <th><%= "feature.reports.label.role".translate %></th>
+          <th><%= "feature.reports.label.count".translate %></th>
+        </tr>
+        <% @users_count_hash.each do |role_name, count| %>
+          <tr>
+            <td><%= role_term_hash[role_name] %></td>
+            <td><%= count %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td><%= "feature.reports.label.total_unique_users".translate %>
+          </td>
+          <td>
+            <%= @total_users_count %>
+            <% if @multi_roles_users_count > 0 %>
+              <% sub_text = "feature.reports.label.users_have_multiple_roles".translate(count: @multi_roles_users_count) %>
+              <%= "(#{sub_text})" %>
+            <% end %>
+          </td>
+        </tr>
+      </table>
+      <span class="text-muted small"><%= "feature.reports.content.count_includes_active_users".translate %></span>
+    </div>
+    <div class="graph_column <%= col %>-8 m-t-sm">
+      <% if @total_users_count == 0 %>
+        <div class="no_graph text-muted text-center">
+          <%= "common_text.info.No_data_available".translate %>
+        </div>
+      <% else %>
+        <div id='membership_pie_chart'></div>
+        <%= javascript_tag do %>
+          <% options = {
+            render_to: 'membership_pie_chart',
+            data: [@users_count_hash.keys.map{|k| role_term_hash[k]}, @users_count_hash.values].transpose,
+            height: 250
+          } %>
+          <%= render :partial => 'reports/column_chart.js.erb', :locals => {:options => options, :format => format} %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<% if @current_program.ongoing_mentoring_enabled? %>
+  <%= ibox _Mentoring_Connections, {ibox_id: "connections_info"} do %>
+    <div class="row">
+      <div class="<%= col %>-4 m-t-sm">
+        <table class="table table-bordered">
+          <tr>
+            <th><%= "feature.reports.label.connection_status_v1".translate(Mentoring_Connection: _Mentoring_Connection) %></th>
+            <th><%= "feature.reports.label.count".translate %></th>
+          </tr>
+          <% if @pending_requests_cnt %>
+            <tr>
+              <td><%= "feature.reports.label.Pending_mentor_requests".translate(mentor: _mentor) %></td>
+              <td><%=  @pending_requests_cnt %></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td><%= "feature.reports.label.active_connections_v1".translate(Mentoring_Connections: _Mentoring_Connections) %></td>
+            <td><%= @active_groups_cnt %></td>
+          </tr>
+          <tr>
+            <td><%= "feature.reports.label.closed_connections_v1".translate(Mentoring_Connections: _Mentoring_Connections) %></td>
+            <td><%= @closed_groups_cnt %></td>
+          </tr>
+        </table>
+      </div>
+      <div  class="graph_column <%= col %>-8 m-t-sm">
+        <% if @pending_requests_cnt.to_i + @active_groups_cnt.to_i + @closed_groups_cnt.to_i == 0 %>
+          <div class="no_graph dim text-center">
+            <%= "common_text.info.No_data_available".translate %>
+          </div>
+        <% else %>
+          <div id='mentoring_connections_pie_chart'></div>
+          <%= javascript_tag do %>
+            <% ary = (@pending_requests_cnt ? [[j("feature.reports.label.pending".translate), @pending_requests_cnt],[j("feature.reports.label.active".translate), @active_groups_cnt],[j("feature.reports.label.closed".translate), @closed_groups_cnt]] : [[j("feature.reports.label.active".translate), @active_groups_cnt],[j("feature.reports.label.closed".translate), @closed_groups_cnt]] ) %>
+            <% options = {
+              render_to: 'mentoring_connections_pie_chart',
+              data: ary,
+              height: 250
+            } %>
+            <%= render :partial => 'executive_summary_pie_chart.js.erb', :locals => {:options => options, :format => format} %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<% if @current_program.calendar_enabled? %>
+  <%= ibox _Meetings, {ibox_id: "meetings_info"} do %>
+    <div class="row">
+      <div class="<%= col %>-4 m-t-sm">
+        <table class="table table-bordered">
+          <tr>
+            <th><%= "feature.reports.label.time_line".translate %></th>
+            <th><%= "feature.reports.label.hours_available".translate %></th>
+            <th><%= "feature.reports.label.hours_engaged".translate %></th>
+          </tr>
+          <tr>
+            <td><%= "feature.reports.label.last_x_to_y_days".translate(x: 30, y: 60) %></td>
+            <td><%= @last_month_session_stats[:hours_available] %></td>
+            <td><%= @last_month_session_stats[:hours_blocked] %></td>
+          </tr>
+          <tr>
+            <td><%= "feature.reports.label.last_x_days".translate(x: 30) %></td>
+            <td><%= @this_month_session_stats[:hours_available] %></td>
+            <td><%= @this_month_session_stats[:hours_blocked] %></td>
+          </tr>
+          <tr>
+            <td><%= "feature.reports.label.next_x_days".translate(x: 30) %></td>
+            <td><%= @next_month_session_stats[:hours_available] %></td>
+            <td><%= @next_month_session_stats[:hours_blocked] %></td>
+          </tr>
+        </table>
+      </div>
+      <div class="graph_column <%= col %>-8 m-t-sm">
+        <div id='mentoring_sessions_chart'></div>
+        <%= javascript_tag do %>
+          <% options = {
+            render_to: 'mentoring_sessions_chart',
+            data: [@users_count_hash.keys.map{|k| role_term_hash[k]}, @users_count_hash.values].transpose,
+            height: 250,
+            mentor_availablities: [@last_month_session_stats[:hours_available], @this_month_session_stats[:hours_available], @next_month_session_stats[:hours_available]],
+            meting_schedules: [@last_month_session_stats[:hours_blocked], @this_month_session_stats[:hours_blocked], @next_month_session_stats[:hours_blocked]]
+          } %>
+          <%= render :partial => 'executive_summary_mentoring_sessions_chart.js.erb', :locals => {:options => options, :format => format} %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

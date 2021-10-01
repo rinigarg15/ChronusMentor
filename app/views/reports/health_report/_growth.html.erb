@@ -1,0 +1,43 @@
+<table class='table table-condensed table-bordered has-below'>
+  <thead>
+    <tr>
+      <th><%= "feature.reports.label.growth_information".translate %></th>
+      <th><%= "feature.reports.label.count".translate %></th>
+      <th><%= "feature.reports.label.Last_Month".translate %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% growth.role_map.keys.each do |role_name| %>
+      <tr>
+        <td>
+          <%= RoleConstants.human_role_string([role_name], :program => growth.program, :pluralize => true) %>
+        </td>
+        <td><%= growth.history_data[role_name].value %></td>
+        <td><%= growth.history_data[role_name].last_month %> 
+            <span class='change'><%= "feature.reports.content.percent_change".translate(percent: growth.history_data[role_name].last_change) %>
+            </span>
+        </td>
+      </tr>
+    <% end %>
+    <% if @current_program.ongoing_mentoring_enabled? %>
+      <tr>
+        <td> <%= "feature.reports.label.connections_v1".translate(Mentoring_Connections: _Mentoring_Connections) %> </td>
+        <td>
+          <%= growth.history_data[:connection].value %>
+        </td>
+        <td>
+          <%= growth.history_data[:connection].last_month %>
+          <span class='change'><%= "feature.reports.content.percent_change".translate(percent: growth.history_data[:connection].last_change) %>
+          </span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span class="dim small has-below-3"><%= "feature.reports.content.count_includes_active_users".translate %></span>
+<% if @current_program.allow_join_now? %>
+  <div class='bars has-above-3'>
+    <%= render :partial => 'reports/metric_item', :locals => {:name => "feature.reports.content.average_membership_request_wait_time".translate, :percent_metric => growth.membership_request_wait_time, :opts => {:format => format}} %>
+  </div>
+<% end %>

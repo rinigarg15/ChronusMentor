@@ -1,0 +1,24 @@
+<%= include_kendo %>
+
+<% @back_link = {:label => "feature.survey.header.Surveys".translate, :link => surveys_path} %>
+<% @title = @survey.name %>
+
+<div>
+  <%= render :partial => 'surveys/survey_tabs', locals: {reminders_count: @survey.reminders_count, questions_count: @questions_count} %>
+
+  <%= ibox "", :ibox_class => "campaign_emails_title no-margins" do %>
+    <div class="clearfix m-b-xs">
+      <%= link_to "feature.program_invitations.label.add_email".translate, new_campaign_management_survey_campaign_abstract_campaign_message_path(@campaign), :class => "btn btn-white btn-xs pull-right cjs_new_reminder_button", data: {type: get_survey_type_for_ga(@survey)} %>
+    </div>
+    <div id="campaign-messages-result" class="campaign-management-kendo-result">
+      <div id="cjs_campaign_messages_result" class="k-content table-responsive">
+        <%= content_tag :div, "", id: "cjs_campaign_messages_kendogrid"%>
+        <%= initialize_campaign_messages_kendo_script(@campaign, true, @less_than_ie9) %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  SurveysGoogleAnalytics.handleAddRerminder();
+<% end %>

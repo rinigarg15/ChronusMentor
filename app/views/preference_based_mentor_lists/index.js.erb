@@ -1,0 +1,6 @@
+<% if @pbml_recommendations_service.has_recommendations? %>
+  <% content = escape_javascript(render(partial: "preference_based_mentor_lists/index", locals: {lists: @pbml_recommendations_service.get_ordered_lists})) %>
+  jQuery(".cjs_preference_based_mentor_lists_container .preference_based_mentor_lists").html('<%= content %>');
+<% else %>
+  Meetings.QuickConnect.showNoRecommendationsExperience(".cjs_preference_based_mentor_lists_container");
+<% end %>

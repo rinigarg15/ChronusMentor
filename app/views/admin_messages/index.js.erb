@@ -1,0 +1,22 @@
+jQuery('#loading_results').hide();
+
+<% if @messages_presenter.search_params_hash[:search_content].present? %>
+  jQuery('.cancel-search').removeClass('hidden');
+<% else %>
+  jQuery('.cancel-search').addClass('hidden');
+<% end %>
+
+<% @messages_presenter.tabs_data.each do |tab_number, tab_data| %>
+  <% tab_id = "#cjs_#{tab_number}_messages_tab" %>
+  <% is_inbox = tab_number == MessageConstants::Tabs::INBOX %>
+  <% content = render "admin_messages/admin_messages_list", {tab_number: tab_number, tab_data: tab_data, is_inbox: is_inbox, include_system_generated: @messages_presenter.include_system_generated} %>
+  jQuery("#cjs_<%= tab_number %>_messages_list").html("<%= j(content) %>");
+  jQuery("<%= tab_id %> .cjs_messages_count").html(" (<%= tab_data.total_messages_count %>)");
+<% end %>
+jQuery("#cjs_<%= @messages_presenter.active_tab %>_messages_tab").click();
+jQuery('#messages_filter').removeClass('open');
+initialize.setDatePicker();
+initialize.initializeTooltip();
+initialize.initializeStopFilterPropogation();
+<% content = render('common/your_filters', onclick_function: "MessageSearch.clearFilter", new_filter: true, label_class: 'label-filter attach-left merge-right no-margin', item_class: 'has-above') %>
+jQuery('#your_filters').replaceWith("<%= j(content) %>");

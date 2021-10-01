@@ -1,0 +1,7 @@
+<% modal_v3_popup "feature.survey.action.delete".translate do %>
+  <% mentoring_model_names = [] %>
+  <% @mentoring_models.each do |mm| %>
+    <% mentoring_model_names << link_to(mm.title, mentoring_model_path(mm)) %>
+  <% end %>
+  <%= "feature.survey.content.deletion_warning_for_survey_html".translate(templates_title: mentoring_model_names.to_sentence.html_safe) %>
+<% end %>

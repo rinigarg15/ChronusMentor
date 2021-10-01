@@ -1,0 +1,23 @@
+<% unless @read_only %>
+  <% dropdown_options = {
+    btn_class: "pull-right m-l-xs",
+    dropdown_title: "",
+    is_not_primary: true,
+    btn_group_btn_class: "btn-white btn-xs"
+  } %>
+  <div class="cjs-hover-actions-<%= goal_template.id %>">
+    <% dropdown_actions = [ {
+        label: append_text_to_icon("fa fa-pencil-square-o", "display_string.Edit".translate),
+        url: "javascript:void(0)",
+        data: {remote: true, url: edit_mentoring_model_goal_template_path(@mentoring_model, goal_template, format: :js)},
+        class: "cjs_edit_goal_template"
+      },
+      {
+        label: append_text_to_icon("fa fa-trash", "display_string.Delete".translate),
+        url: mentoring_model_goal_template_path(@mentoring_model, goal_template, format: :js),
+        data: {remote: true, method: :delete, confirm: ((@mentoring_model.manual_progress_goals? ? "feature.mentoring_model.description.delete_template_message_for_manual_progress_goals" : "feature.mentoring_model.description.delete_template_message").translate({title: h(goal_template.title), should_sync_text: @should_sync_warn ? "feature.multiple_templates.js_translations.syncToGroupOnDeleteConfirmation".translate(mentoring_connections: h(_mentoring_connections), mentoring_connection: h(_mentoring_connection), count: (@ongoing_connections_count || 0)) : ""}))}
+      }]
+     %>
+    <%= dropdown_buttons_or_button(dropdown_actions, dropdown_options) %>
+  </div>
+<% end %>

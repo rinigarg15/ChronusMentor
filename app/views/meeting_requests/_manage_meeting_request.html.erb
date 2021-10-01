@@ -1,0 +1,31 @@
+<% if @with_bulk_actions %>
+  <div class="actions_box pull-right hidden-xs">
+    <%= meeting_request_actions(meeting_request, :dropdown_menu_class => "pull-right", is_manage_view: @is_manage_view) %>
+  </div>
+<% end %>
+
+<div class="media no-margins">
+  <% if @with_bulk_actions %>
+      <div class='media-left'>
+        <label for="ct_meeting_request_checkbox_<%=meeting_request.id%>" class="sr-only"><%= "feature.meeting_request.content.select_this_label_v1".translate %></label>
+        <%= check_box_tag nil, meeting_request.id, false,
+                          :class               => "cjs_meeting_request_record",
+                          :id                  => "ct_meeting_request_checkbox_#{meeting_request.id}",
+                          :'data-sender-id'    => meeting_request.student.id,
+                          :'data-recipient-id' => meeting_request.mentor.try(:id) %>
+      </div>
+  <% end %>
+
+  <div class='media-body p-l-m list_content admin_list'>
+    <%= profile_field_container_wrapper("#{'feature.meeting_request.label.sender'.translate}", link_to_user(meeting_request.student), :answer_class => "font-bold", :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+    <%= profile_field_container_wrapper("feature.meeting_request.content.sent".translate, formatted_time_in_words(meeting_request.created_at, absolute: true), heading_tag: :h4, class: "m-t-xs m-b-xs") %>
+    <%= profile_field_container_wrapper("#{'feature.meeting_request.label.recipient'.translate}", link_to_user(meeting_request.mentor), :answer_class => "font-bold", :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+    <%= render partial: "meeting_requests/embed_meeting_details", locals: { meeting_request: meeting_request, is_mentor_action: @filter_field == MeetingRequest::Filter::TO_ME, filter_field: @filter_field } %>
+  </div>
+
+  <% if @with_bulk_actions %>
+    <div class="actions_box visible-xs">
+      <%= meeting_request_actions(meeting_request, :btn_class => "btn-block m-t-sm", :class => "btn-block", :dropdown_menu_class => "col-xs-12 pull-right  table-bordered", is_manage_view: @is_manage_view) %>
+    </div>
+  <% end %>
+</div>

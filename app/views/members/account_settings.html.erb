@@ -1,0 +1,11 @@
+<% @title = "feature.profile.header.account_settings".translate %>
+
+<%= render partial: "members/org_settings", locals: { member: @member } %>
+<% unless @current_organization.standalone? %>
+  <% if program_view? %>
+    <%= render partial: "members/program_settings", locals: { program: @current_program, member: @member } %>
+  <% else %>
+    <% programs = @member.programs.ordered %>
+    <%= render partial: "members/program_settings", collection: programs, locals: { member: @member } %>
+  <% end %>
+<% end %>

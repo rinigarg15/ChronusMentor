@@ -1,0 +1,31 @@
+<% if groups.total_entries > groups.size %>
+  <%= render :partial => "groups/select_all_groups" , :locals => { :group_size => groups.size, :total_size => groups.total_entries, :list_view => true, :filter_field => @filter_field } %>
+<% end %>
+<%= ibox nil, ibox_class: "no-margins", content_class: "p-sm" do %>
+  <div class="cjs_table_enclosure table-bordered">
+    <table id="cjs_group_record" class="table table-striped table-vertical-centered table-text-centered" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr class="cjs_list_view_header cui_table_sort">
+          <th class="cjs_group_record_checkbox">
+            <label for ="cjs_groups_primary_checkbox" class="sr-only">
+              <%= "feature.group.label.select_all".translate(mentoring_connections: _mentoring_connections) %>
+            </label>
+            <input id="cjs_groups_primary_checkbox" type="checkbox"/>
+          </th>
+          <%= group_view_sortable_actions(columns_to_show, @sort_field, @sort_order) %>
+        </tr>
+      </thead>
+
+      <tbody>
+        <%= get_group_list_result_values(groups, columns_to_show, tab_number, {:program_root => @current_program.root}) %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    handleDoubleScroll("#cjs_group_record", ".cjs_table_enclosure");
+    GroupSearch.inspectSortableElements();
+  });
+<% end %>

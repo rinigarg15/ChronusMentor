@@ -1,0 +1,12 @@
+<%= javascript_tag do %>
+  //Use these with caution. Controller validations MUST
+  var UserInfo = {
+    userId: '<%= @current_user.try(:id) %>',
+    memberId: '<%= wob_member.try(:id) %>',
+    isProgramAdmin: '<%= !!(@current_user && @current_user.is_admin?) %>',
+    isOrganizationAdmin: '<%= !!wob_member.try(:admin?) %>',
+    programId: '<%= @current_program.try(:id) %>',
+    organizationId: '<%= @current_organization.try(:id) %>',
+    isMobileApp: '<%= is_mobile_app? %>'
+  };
+<% end %>

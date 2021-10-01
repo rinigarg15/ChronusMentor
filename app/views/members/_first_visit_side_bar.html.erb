@@ -1,0 +1,5 @@
+<% profile_score = profile_user.profile_score %>
+<% sections_green, sections_gray = get_green_and_gray_profile_sections(all_profile_section_ids, program_questions_for_user, sections_filled) %>
+<% profile_completion_content = render("members/profile_status_box_header", profile_score: profile_score, home_page: false, first_visit: true, sections_green: sections_green.size, total_sections: all_profile_section_ids.size) %>
+<% profile_completion_content += render("members/filled_and_unfilled_sections", all_profile_section_titles_hash: all_profile_section_titles_hash, sections_green: sections_green, sections_gray: sections_gray) %>
+<%= render partial: "members/profile_status_box", locals: {home_page: false, profile_completion_content: profile_completion_content, additional_right_links: "", collapse_link_class: "pull-right p-t-0"} %>

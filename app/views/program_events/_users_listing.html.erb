@@ -1,0 +1,16 @@
+<%= ibox nil, :content_class => "no-padding" do %>
+  <% if users.present? || search_content.present? %>
+    <% right_most_content = capture do %>
+        <%= render("program_events/search_users_box", tab: tab, program_event: @program_event, all_users_for_listing_ids: all_users_for_listing_ids) %>
+    <% end %>
+    <div class='pagination_box clearfix b-b'>
+      <%= top_bar_in_listing({:collection => users}, {}, {}, {:right_most_content => right_most_content}) %>
+    </div>
+  <% end %>
+  <% if users.empty? %>
+    <%= get_empty_users_message(search_content.present?) %>
+  <% else %>
+    <%= listing_page(users, :partial => "program_events/user_listing", :collection_key => :user, :locals => {:tab => tab}) %>
+    <%= bottom_bar_in_listing( { :collection => users, ajax: true } ) if users.any? %>
+  <% end %>
+<% end %>

@@ -1,0 +1,27 @@
+<% role_term_hash = RoleConstants.program_roles_mapping(@current_program, pluralize: true) %>
+<%= render partial: "reports/activity_report_applied_filters", locals: {role_term_hash: role_term_hash} %>
+<%= form_tag({:controller => "reports", :action => "activity_report"}, :method => "get", :id => "program_health_report_filter_form") do %>
+  <div id="filters" class="clearfix">
+    <% profile_filter_wrapper "feature.reports.label.role".translate, false, false, false do %>
+      <% @current_program.roles_without_admin_role.each do |role| %>
+        <label class="checkbox">
+          <%= check_box_tag "role_filters[]", role.name, @role_filters.include?(role.name), :id => "#{role.name}_filter" %>
+          <%= role_term_hash[role.name] %>
+        </label>
+      <% end %>
+    <% end %>
+    <% profile_filter_wrapper "feature.reports.label.date_range".translate, false, false, true, id: "date_range" do %>
+      <% daterange_presets = [DateRangePresets::PROGRAM_TO_DATE, DateRangePresets::MONTH_TO_DATE, DateRangePresets::QUARTER_TO_DATE, DateRangePresets::YEAR_TO_DATE, DateRangePresets::LAST_MONTH, DateRangePresets::LAST_QUARTER, DateRangePresets::LAST_YEAR, DateRangePresets::CUSTOM] %>
+      <% daterange_values = { start: @start_time, end: @end_time } %>
+      <div class="fields">
+        <%= construct_daterange_picker("date_range_filter", daterange_values, presets: daterange_presets, max_date: Date.current, date_range_preset: @date_range_preset) %>
+      </div>
+    <% end %>
+    <% action_set(class: "col-xs-12 m-t-xs p-sm") do %>
+      <div class="pull-right">
+        <%= submit_tag "display_string.Go".translate, :class => 'btn btn-primary'%>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+<%= render partial: "reports/activity_report_js_translations" %>

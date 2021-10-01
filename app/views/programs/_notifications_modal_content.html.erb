@@ -1,0 +1,18 @@
+<div id="pending_notifications_dropdown" class="list-group no-margins">
+  <% messages_condn = (@current_organization.active? && logged_in_organization? && (!working_on_behalf? && !(current_user && current_user.profile_pending?)) || (working_on_behalf? && current_member && current_member.admin?))%>
+  <% admin_messages_condn = (organization_view? ? !@current_organization.standalone? && logged_in_organization? && wob_member.admin?  : logged_in_program? && @current_user.view_management_console?) %>
+  <% if messages_condn %>
+    <% message_count = wob_member.inbox_unread_count %>
+    <%= mobile_footer_dropup_quick_link("app_layout.label.messages".translate, messages_path(:organization_level => true, src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), "fa fa-envelope fa-fw", message_count, {class: "normal-white-space break-word-all list-group-item cjs_my_messages"}) %>
+  <% end %>
+  <% if admin_messages_condn %>
+    <% admin_message_count = current_program_or_organization.admin_messages_unread_count %>
+    <%= mobile_footer_dropup_quick_link("feature.org_home_page.program_tile.admin_content.admin_messages".translate(admin: _Admin), admin_messages_path(root: current_program_or_organization.root, src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), "fa fa-envelope fa-fw", admin_message_count, {class: "normal-white-space break-word-all list-group-item"}) %>
+  <% end %>
+
+  <%= mobile_footer_dropup_quick_link("quick_links.program.project_requests".translate(mentoring_connection: _Mentoring_Connections), project_requests_path(from_quick_link: true, src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), "fa fa-user-plus fa-fw", @new_project_requests_count, {class: "normal-white-space break-word-all list-group-item" }) if current_program_or_organization.try(:project_based?) && current_user.try(:can_be_shown_project_request_quick_link?) %>
+
+  <%= mobile_footer_dropup_quick_link("quick_links.program.upcoming_meetings".translate(:Meetings => _Meetings), member_path(wob_member, :tab => MembersController::ShowTabs::AVAILABILITY, src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), "fa-fw fa fa-calendar", @upcoming_meetings_count, {class: "normal-white-space break-word-all list-group-item cjs_footer_upcoming_meetings"}) if @upcoming_meetings_count %>
+
+  <%= mobile_footer_dropup_quick_link("quick_links.program.program_events".translate, program_events_path(src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), "fa-fw fa fa-calendar", @unanswered_program_events_count, {class: "normal-white-space break-word-all list-group-item"}) if @unanswered_program_events_count %>
+</div>

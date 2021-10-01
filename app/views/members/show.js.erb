@@ -1,0 +1,6 @@
+<% if params[:archived_page].present? %>
+  jQuery('#archived_meetings').html("<%= j(render(:partial => 'meetings/archived_meetings')) %>");
+<% else %>
+  jQuery('#upcoming_meetings').html("<%= j(render(:partial => 'meetings/upcoming_meetings')) %>");
+<% end %>
+jQuery('#loading_results').hide();

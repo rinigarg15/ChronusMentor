@@ -1,0 +1,21 @@
+en:
+  email_translations:
+    demotion_notification:
+      title_v3: Role removal notification to user with multiple roles
+      description_v3: One of the roles of an existing user may be removed. When that happens, this email is sent to the user with a descriptive message from the %{_admin}.
+      subject_v1: Your role as {{role_name}} has been updated
+      content_v1_html: "{{role_changer_name}} has removed your role as {{role_name}} in <a href='{{url_subprogram}}'>{{subprogram_name}}</a>.<br/>{{message_content}}<br/> Please contact the <a href='{{url_contact_admin}}'>{{customized_admin_term}}</a> if you have any questions or wish to continue as {{role_name}}.<br/>"
+      tags:
+        role_name:
+          description_v2: Role of the member added to the program appended with (a/an)
+        role_changer_name:
+          description: Name of the person who is performing the role update action
+        url_contact_admin:
+          description: Url for the user to contact administrator
+        administrator_message:
+          description: 'Admin Message: Message from the administrator'
+          example: I have removed your role as per your request.
+          content: "%{Admin} Message: %{message}"
+        message_content:
+          description: Message from the administrator with the administrator's name
+          example: I have removed your role as per your request.

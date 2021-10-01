@@ -1,0 +1,39 @@
+<%= javascript_include_tag "highcharts.js" %>
+
+<% @title = @campaign.title %>
+<% @sub_title = get_safe_string %>
+<% if !@campaign.campaign_messages.empty? %>
+  <% @sub_title << content_tag(:span, get_page_subtitle("cui-campaign-take-tour", "feature.campaign.tour.take_tour".translate), class: "cjs-tool-tip", data: {desc: "feature.campaign.tour.tip".translate}) %>
+<% end %>
+<% @sub_title << content_tag(:span, "feature.campaign.tag.stopped".translate, :class => "cui_campaign_disabled_tag label label-default m-l-xs") if @campaign.stopped? %>
+<% @sub_title << content_tag(:span, "feature.campaign.tag.drafted".translate, :class => "cui_campaign_disabled_tag label label-default m-l-xs") if @campaign.drafted? %>
+<% @hide_sub_title_arrow = true %>
+
+<div class="campaign_message_container">
+  <% @page_action = get_drop_down_array(@campaign) %>
+  <% if @campaign.drafted? %>
+    <% @page_action2 = [get_start_link(@campaign)] %>
+    <%= tooltip("action_2", "feature.campaigns.content.add_email_tooltip".translate, false, placement: 'bottom') if @campaign.campaign_messages.empty? %>
+  <% end %>
+
+  <% if @campaign.campaign_messages.empty? %>
+    <%= render(:partial => "campaign_management/user_campaigns/details_with_no_message", :locals => {:campaign => @campaign}) %>
+  <% else %>
+    <%= include_kendo %>
+    <%= render :template => 'campaign_management/abstract_campaign_messages/index', :formats => [:html], :locals => {:is_invitation => false} %>
+
+    <% unless @campaign.drafted? %>
+      <%= render "analytics", sent: @analytic_stats[:sent], delivered: @analytic_stats[:delivered], clicked: @analytic_stats[:clicked], opened: @analytic_stats[:opened], month_names: "date.abbr_month_names_array".translate.values_at(*@analytic_stats[:month_numbers].map { |x| x - 1 }) %>
+    <% end %>
+  <% end %>
+  <!-- Ideally the below should go to the campaign message index.html  -->
+  <%= render "delete_user_campaign" %>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    CampaignManagement.clonePopup();
+    CampaignManagement.handleGA();
+    CampaignManagement.stopConfirmation('<%= j("feature.campaign.kendo.disable_confirmation_v1".translate)  %>');
+  });
+<% end %>

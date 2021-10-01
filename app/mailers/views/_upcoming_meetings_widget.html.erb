@@ -1,0 +1,34 @@
+<% if @upcoming_meetings.present? %>
+  <div style="padding-bottom: 10px;">
+    <%= content_tag(:span, "feature.email.content.upcoming_meetings_widget_heading".translate(Meetings: @program.term_for(CustomizedTerm::TermType::MEETING_TERM).pluralized_term), style: "font-weight: bold;") %>
+    <%= content_tag(:span, "feature.email.content.upcoming_meetings_widget_duration".translate, style: "color: #888888;") %>
+  </div>
+
+
+  <% @upcoming_meetings.each_with_index do |meeting_hash, index| %>
+    <% meeting = meeting_hash[:meeting] %>
+    <table cellspacing="0" border = "0" cellpadding = "0">
+	  	<tbody>
+		    <tr>
+	        <td valign="top" align="left" style="padding-left: 15px;">
+		      	<%= link_to("#{meeting.topic}", meeting_url(meeting, ei_src: EngagementIndex::Src::AccessFlashMeetingArea::EMAIL, sub_src: SubSource::Meeting::UPCOMING_MEETINGS_WIDGET, subdomain: @program.organization.subdomain, root: @program.root, current_occurrence_time: meeting_hash[:current_occurrence_time]) , style: "text-decoration: none;") %>
+		      </td>
+		 		</tr>
+		 		<tr>
+	        <td valign="top" align="left" style="padding-left: 15px; font-size: 0.8em;">
+	          <% if meeting.calendar_time_available? %>
+	            <%= content_tag(:span, DateTime.localize(meeting_hash[:current_occurrence_time].in_time_zone(@member.get_valid_time_zone), format: :full_display_with_zone), style: "color: #888888;") %>
+		      	<% else %>
+		      	  <%= content_tag(:span, 'feature.email.tags.meeting_request_tags.meeting_details_with_action.not_set'.translate, style: "color: #FF0000;") %>
+		      	  <%= link_to "(#{'feature.email.tags.meeting_request_tags.meeting_details_with_action.set_meeting_time'.translate(meeting: @_Meeting_string)})", meeting_url(meeting, current_occurrence_time: meeting_hash[:current_occurrence_time], subdomain: @program.organization.subdomain, root: @program.root, setup_meeting_time: true) %>
+		      	<% end %>
+		      </td>
+		 		</tr>
+		 	</tbody>
+		</table>
+
+		<%= horizontal_line unless index == @upcoming_meetings.size - 1 %> 
+  <% end %>
+
+  <br/>
+<% end %>

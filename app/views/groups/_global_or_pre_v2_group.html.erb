@@ -1,0 +1,33 @@
+<% data = [] %>
+
+<%= get_icon_content("fa fa-spinner fa-spin m-r-0", id: "loading_group_member_update_#{group.id}", style: "display: none;") %>
+<div class="group-content">
+  <div id="cjs_notes_container_<%= group.id %>">
+    <%= get_group_notes_content(group, false) %>
+  </div>
+  <% if group.drafted? %>
+    <% data << { label: "feature.connection.header.Created_by".translate, content: group.created_by.nil? ? "-" : link_to_user(group.created_by) } %>
+    <% data << { label: "feature.connection.header.Drafted_since".translate, content: append_text_to_icon("fa fa-clock-o", formatted_time_in_words(group.created_at, no_ago: false, no_time: true)) } %>
+  <% else %>
+    <% if is_global_connections_view || is_manage_connections_view || (profile_user && current_user.can_manage_connections?) %>
+      <% data << { label: "feature.connection.content.Active_since".translate, content: append_text_to_icon("fa fa-clock-o", formatted_time_in_words(group.published_at, no_ago: false, no_time: true)) } %>
+    <% end %>
+    <% unless is_global_connections_view %>
+      <% last_activity_time = is_my_connections_view ? group.last_activity_at : group.last_member_activity_at %>
+      <% data << { label: "feature.connection.content.Last_activity".translate, content: last_activity_time ? append_text_to_icon("fa fa-clock-o", formatted_time_in_words(last_activity_time, no_ago: false)) : "feature.connection.content.No_activity_yet".translate } %>
+    <% end %>
+    <% if group.active? %>
+      <% expiry_label, expiry_content = get_group_expiry_content(group, false, only_values: true) %>
+      <% data << { label: expiry_label, content: expiry_content, wrapper_options: { container_id: "cjs_expiry_#{group.id}" } } %>
+    <% end %>
+    <% data << group_status_rows(group) unless is_global_connections_view %>
+
+    <% data.flatten.reject(&:nil?).each do |data_hash| %>
+      <%= embed_display_line_item(data_hash[:label], data_hash[:content], (data_hash[:wrapper_options] || {})) %>
+    <% end %>
+
+    <% if is_manage_connections_view %>
+      <%= render partial: "groups/group_activity", locals: { group: group, group_roles: group_roles } %>
+    <% end %>
+  <% end %>
+</div>

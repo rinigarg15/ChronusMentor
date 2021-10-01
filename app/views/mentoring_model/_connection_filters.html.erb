@@ -1,0 +1,23 @@
+<% modal_container "feature.mentoring_model.label.view_tasks".translate, { modal_id: "cjs_group_filter_modal", modal_class: "cui-non-full-page-modal" } do %>
+  <div class="clearfix b-b">
+    <div class="cjs-mentoring-model-view-mode-filter-block cjs-mentoring-model-task-and-meetings-filter-block" data-target-url='<%= update_view_mode_filter_group_path(group) %>'>
+      <% if manage_mm_milestones_at_admin_level?(@group) || manage_mm_milestones_at_end_user_level? %>
+        <div class="b-b">
+          <%= render_view_mode_filter %>
+        </div>
+      <% end %>
+      <% scroll_required = (group.members.size > 4) %>
+      <div class="p-r-xs" data-slim-scroll="<%= scroll_required %>" data-slim-scroll-height="150">
+        <%= render_tasks_filter(group.members, group) %>
+      </div>
+      <% if manage_mm_milestones_at_admin_level?(@group) || manage_mm_milestones_at_end_user_level? || manage_mm_tasks_at_admin_level?(group) || manage_mm_tasks_at_end_user_level?(group) || manage_mm_meetings_at_end_user_level?(group) %>
+        <div class="b-t">
+          <%= render_completed_view_mode_filter %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <%= link_to "display_string.Apply".translate, "javascript:void(0)", :class => 'pull-right cjs_filter_submit_btn btn btn-primary m-t-sm' %>
+<% end %>
+<%= javascript_tag "MentoringModels.applyTaskFilter(#{@view_mode || MentoringModelUtils::ViewMode::SORT_BY_MILESTONES});" %>
+<%= javascript_tag("initialize.setSlimScroll()") %>

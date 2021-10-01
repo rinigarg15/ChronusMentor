@@ -1,0 +1,10 @@
+<% placeholder_eligibility_message =  "program_settings_strings.content.eligibility_message_placeholder".translate(role_name: RoleConstants.human_role_string([@role.name], program: @current_program)) %>
+
+<div id="cjs_membership_eligibility_advanced_setting" class="animated fadeInDown">
+  <%= control_group do %>
+    <%= content_tag(:label, "program_settings_strings.content.eligibility_message".translate, :class => "control-label col-sm-2", :id => "#{@role.name}_eligibility_message_label", :for => "admin_view_#{@role.name}_eligibility_message") %>
+    <%= controls(class: "cjs_controls_enclosure col-sm-10") do %>
+      <%= text_area_tag "admin_view[#{@role.name}_eligibility_message]", @role.eligibility_message, :placeholder => placeholder_eligibility_message, :class => "form-control", :rows => 5 %>
+    <% end %>
+  <% end %>
+</div>

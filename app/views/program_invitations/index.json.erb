@@ -1,0 +1,6 @@
+<% program_invitations_list = @program_invitations.map  { |program_invitation| render(partial: "program_invitations/program_invitation.json.erb", locals: { program_invitation: program_invitation }) } %>
+
+{
+  "data": [<%= safe_join(program_invitations_list, ',') %>],
+  "total": <%= @total_count %>
+}

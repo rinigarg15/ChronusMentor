@@ -1,0 +1,4 @@
+jQuery("#loading_results").hide();
+<% @survey_questions = [] unless @survey_questions.present? %>
+jQuery('#admin_view_survey_survey_questions_questions_<%= @prefix_id %>_question_container').remove();
+jQuery("#admin_view_survey_survey_questions_questions_<%= @prefix_id %>_survey_container").after('<%= j(render :partial => "admin_views/filter_questions_container_survey_response_list", locals: {filter_params: {} , prefix_id: @prefix_id , rows_size: @rows_size, survey_questions: @survey_questions}) %>');

@@ -1,0 +1,85 @@
+<% info = diversity_report.get_info_hash(start_date.in_time_zone(wob_member.get_valid_time_zone).beginning_of_day, end_date.in_time_zone(wob_member.get_valid_time_zone).end_of_day) %>
+
+<div class="cjs-diversity-report-chart cjs-diversity-report-chart-<%= diversity_report.id %>">
+</div>
+<% unless info[:engagement_diversity].nil? %>
+  <div class="cjs-diversity-report-engagement-diversity m-b table-bordered p-xxs text-center">
+    <%= get_engagement_diversity_text(info[:engagement_diversity], diversity_report.profile_question.question_text) %>
+  </div>
+<% end %>
+
+<% file_name = [get_display_name(diversity_report), Date.current.to_s].join("-") %>
+<% hide_previous_time_period_in_chart = diversity_report.time_period_type_comparison? && hide_previous_period %>
+<% question_choice_details = diversity_report.profile_question.question_choices.map{ |choice| {text: choice.text, id: choice.id} } %>
+<% segments = info.pick(:segment_1, :segment_2) %>
+<% shortlisted_non_zero_choices = question_choice_details.reject{ |choice_detail| segments.all?{ |key, value| value[:choices][choice_detail[:id]][:count] == 0}} %>
+<% question_choice_texts = shortlisted_non_zero_choices.map{ |choice_detail| choice_detail[:text] } %>
+
+<% segment_1_series = shortlisted_non_zero_choices.map{ |choice_detail| info[:segment_1][:choices][choice_detail[:id]][:percentage].try(:round).to_i  } %>
+<% segment_1_color = diversity_report.organization.theme_vars["$button-bg-color"] || ThemeBuilder::THEME_VARIABLES["button-bg-color"]["default"][0] %>
+<% segment_1_labels = shortlisted_non_zero_choices.map{ |choice_detail| info[:segment_1][:choices][choice_detail[:id]][:count]  } %>
+
+<% segment_2_series = shortlisted_non_zero_choices.map{ |choice_detail| info[:segment_2][:choices][choice_detail[:id]][:percentage].try(:round).to_i  } %>
+<% segment_2_color = diversity_report.organization.theme_vars["$header-bg-color"] || ThemeBuilder::THEME_VARIABLES["header-bg-color"]["default"][0] %>
+<% segment_2_labels = shortlisted_non_zero_choices.map{ |choice_detail| info[:segment_2][:choices][choice_detail[:id]][:count]  } %>
+
+<%# target_line = ((question_choice_texts.size == 0) ? 50 : (100.0 / question_choice_texts.size)).round %>
+<%# target_series = segment_2_series.map { target_line } %>
+
+<%= javascript_tag do %>
+  jQuery(function(){
+    var segment1Labels = <%= segment_1_labels %>;
+    var segment2Labels = <%= segment_2_labels %>;
+    jQuery('.cjs-diversity-report-chart-<%= diversity_report.id %>').highcharts({
+      exporting: {
+        enabled: true,
+        filename: "<%= file_name %>"
+      },
+      credits: { enabled: false },
+      chart: { height: 300 },
+      title: { text: '' },
+      tooltip: {
+        formatter: function() { return (this.x + '<br><p style = "color:' + this.series.color +';">' + this.series.name + ': '+'<b>' + this.y + '%</b> '); }
+      },
+      xAxis: { categories: <%= chr_json_escape(question_choice_texts.to_json) %> },
+      yAxis: {
+        title: { text: '<%= "feature.diversity_reports.percentage_of_users".translate %>'},
+        min: 0
+      },
+      plotOptions: {
+        column: {
+          events: { afterAnimate: function(event) { jQuery(window).resize(); } },
+        } 
+      },
+      series: [
+        <% unless hide_previous_time_period_in_chart %>
+          {
+            type: 'column',
+            name: '<%= info[:segment_1][:translate_key].translate %>',
+            data: <%= chr_json_escape(segment_1_series.to_json) %>,
+            color: '<%= segment_1_color %>',
+            dataLabels: {
+              enabled: true,
+              formatter: function(){
+                return DiversityReports.getHighChartDataLabel(segment1Labels, this.point.index);
+              }
+            }
+          }, 
+        <% end %>
+        {
+          type: 'column',
+          name: '<%= info[:segment_2][:translate_key].translate %>',
+          showInLegend: <%= !hide_previous_time_period_in_chart %>,
+          data: <%= chr_json_escape(segment_2_series.to_json) %>,
+          color: '<%= segment_2_color %>',
+          dataLabels: {
+            enabled: true,
+            formatter: function(){
+              return DiversityReports.getHighChartDataLabel(segment2Labels, this.point.index);
+            }
+          }
+        }
+      ]
+    });
+  });
+<% end %>

@@ -1,0 +1,62 @@
+<% task_has_description = task.description.present? %>
+<% goal = task.mentoring_model_goal %>
+<% task_has_hyperlink = task_has_description || goal.present? %>
+<% action_item_classes = get_action_item_classes(@page_controls_allowed, task.is_owned_by?(current_user), task.done?) %>
+<div class="cjs_expand_mentoring_model_task cjs-task-title-handler pointer p-sm cjs-edit-content-header cjs-hover-well" id="cjs-hover-well-<%= task.id %>" data-url = "<%= group_mentoring_model_task_path(group, task, home_page_view: @home_page_view, format: :js) %>">
+  <div class="cjs_status_<%= task.id %> pull-right p-l-xxs p-r-0 <%= hidden_on_web %> small">
+    <%= render :partial => "mentoring_model/tasks/task_right_content", locals: {:task => task, :group => group, goal_id: local_assigns[:goal_id], from_goal: local_assigns[:from_goal], mobile_only_content: true} %>
+  </div>
+  <div class="cjs_status_<%= task.id %> pull-right p-r-0 <%= hidden_on_mobile %>">
+    <%= render :partial => "mentoring_model/tasks/task_right_content", locals: {:task => task, :group => group, goal_id: local_assigns[:goal_id], from_goal: local_assigns[:from_goal], mobile_only_content: false} %>
+  </div>
+  <div>
+    <%= render partial: "mentoring_model/tasks/task_preblock", locals: {task: task, block_class: "", group: group, goal_id: local_assigns[:goal_id], from_goal: local_assigns[:from_goal]} %>
+    <div class="media-body cjs-task-title cjs-task-title-<%= task.id %>">
+      <%= content_tag(:span, task.title, title: task.title, :class => " hide cjs_untruncated_task_title") + content_tag(:span, truncate(task.title, length: MentoringModel::Task::TITLE_TRUNCATE_LENGTH), title: task.title, :class => " cjs_truncated_task_title") %>
+      <% if task.is_meeting_action_item? && manage_mm_meetings_at_end_user_level?(group) %>
+        <% options = task.milestone_id ? {milestone_id: task.milestone_id} : {} %>
+        <% setup_meeting = @page_controls_allowed ? link_to_function("feature.mentoring_model.label.setup_meeting".translate(:Meeting => _a_meeting), %Q[jQueryShowQtip('', 600, '#{setup_meeting_group_mentoring_model_task_path(group.id, task.id, {format: :js}.merge!(options))}','',{modal: true, successCallback: function(){CalendarAvailabilityInfo.initialize()}})], :id => "setup_meeting_task_#{task.id}", :class => action_item_classes) : "feature.mentoring_model.label.setup_meeting".translate(:Meeting => _a_meeting) %>
+        <% setup_meeting_mobile = @page_controls_allowed ? link_to_function("feature.mentoring_model.label.setup_meeting".translate(:Meeting => _a_meeting), %Q[jQueryShowQtip('', 600, '#{setup_meeting_group_mentoring_model_task_path(group.id, task.id, {format: :js}.merge!(options))}','',{modal: true, successCallback: function(){CalendarAvailabilityInfo.initialize()}})], :id => "setup_meeting_task_mobile_#{task.id}", :class => action_item_classes) : "feature.mentoring_model.label.setup_meeting".translate(:Meeting => _a_meeting) %>
+        <%= content_tag(:span, horizontal_separator + setup_meeting_mobile, :class => hidden_on_mobile) %>
+        <%= content_tag(:div, setup_meeting, :class => "m-t-xs m-b-xs #{hidden_on_web}" ) %>
+      <% elsif task.is_goal_action_item? %>
+          <% create_goal_plan = link_to_if(@page_controls_allowed, "feature.mentoring_model.label.create_goal_plan".translate, group_mentoring_model_goals_path(group), class: action_item_classes) %>
+          <%= content_tag(:span,horizontal_separator + create_goal_plan, :class => hidden_on_mobile) %>
+          <%= content_tag(:div, create_goal_plan, :class => "m-t-xs m-b-xs #{hidden_on_web}" ) %>
+      <% elsif task.is_engagement_survey_action_item? %>
+        <% if @surveys_controls_allowed && task.connection_membership && task.connection_membership.user_id == @current_user.id %>
+          <% action_item_classes = get_action_item_classes(@surveys_controls_allowed, task.is_owned_by?(current_user), task.done?) %>
+          <% options = {:task_id => task.id, :src => Survey::SurveySource::TASK} %>
+          <% response_id = task.survey_answers.drafted.for_user(@current_user).pluck(:response_id).first %>
+          <% if response_id.present? %>
+            <div class="label <%= hidden_on_web %>"><%= "display_string.Draft".translate %></div>
+            <span class="label <%= hidden_on_mobile %>">
+              <%= horizontal_separator %>
+              <%= "display_string.Draft".translate %>
+            </span>
+            <% options.merge!(response_id: response_id) %>
+          <% end %>
+          <% edit_survey_answer = link_to(task.action_item.name, edit_answers_survey_path(task.action_item_id, options), class: action_item_classes)%>
+          <div class="m-t-xs m-b-xs <%= hidden_on_web %>"><%= edit_survey_answer %></div>
+          <span class="<%= hidden_on_mobile %>">
+            <%= horizontal_separator %>
+            <%= edit_survey_answer %>
+          </span>
+        <% else %>
+          <div class="<%= hidden_on_web %>"><%= task.action_item.name %></div>
+          <span class="<%= hidden_on_mobile %>">
+            <%= horizontal_separator %>
+            <%= task.action_item.name %>
+          </span>
+        <% end %>
+      <% end %>
+      <div class ="cjs_status_<%= task.id %> <%= hidden_on_web %>">
+        <div class="cjs_status_block">
+          <% if task.required? %>
+            <%= content_tag(:span, DateTime.localize(task.due_date, format: :abbr_short_no_year), class: "small #{"text-danger" if task.overdue?} cjs_status") %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

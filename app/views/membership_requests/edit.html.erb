@@ -1,0 +1,2 @@
+<% @title = "feature.membership_request.header.edit_member_application".translate(member_name: @member.name(name_only: true)) %>
+<%= render partial: "membership_requests/membership_request_form", locals: { new_request: false, membership_request: @membership_request, empty_form: @empty_form, from_enrollment: @from_enrollment, program: @program, password: @password, answer_map: @answer_map, display_terms_and_conditions: @display_terms_and_conditions, organization: @current_organization, is_checkbox: @is_checkbox, invalid_answer_details: @invalid_answer_details } %>

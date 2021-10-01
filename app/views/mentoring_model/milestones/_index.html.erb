@@ -1,0 +1,27 @@
+<% header_content = "".html_safe %>
+<% header_content << link_to(append_text_to_icon("fa fa-plus-circle", "feature.mentoring_model.button.add_milestone_v1".translate), new_group_mentoring_model_milestone_path(group_id: @group.id, format: :js), class: "cjs_add_new_custom_milestone btn btn-primary btn-sm pull-right m-b-xs") if (@page_controls_allowed && manage_mm_milestones_at_end_user_level?) %>
+<% header_content << content_tag(:div, link_to(get_task_filter_title, "javascript:void(0)", data: { target: "#cjs_group_filter_modal", toggle: "modal" }, id: "connection_filter"), class: "pull-right p-t-xxs p-r-xs") %>
+
+<%= ibox nil, header_content: header_content, collapse_link_class: "hide", content_class: "p-sm p-t-0", ibox_content_id: "cjs_connection_milestones_container" do %>
+  <%= javascript_tag do %>
+    jQuery(document).ready(function(){
+      MentoringModelMilestones.showCompletedMilestones();
+      MentoringModelMilestones.descriptionHandler();
+      MentoringModelTask.tasksListHandler(<%= MentoringModel::Task::Section::UPCOMING %>, <%=  MentoringModel::Task::Section::REMAINING %>);
+      MentoringModelTask.showTasksHandler(<%= zero_upcoming_tasks %>);
+    });
+  <% end %>
+
+  <%= render partial: "mentoring_model/connection_filters", locals: { group: @group } %>
+  <div class="cjs-connection-plan-container">
+    <% if view_by_due_date? %>
+      <%= render partial: "mentoring_model/tasks/task_sections", locals: { group: @group, target_user_id: @target_user.try(:id), target_user_type: target_user_type, zero_upcoming_tasks: zero_upcoming_tasks } %>
+    <% else %>
+      <%= render partial: "mentoring_model/milestones/milestone_bar", locals: { milestones: milestones, completed_mentoring_model_milestone_ids_to_hide: completed_mentoring_model_milestone_ids_to_hide, mentoring_model_milestone_ids_to_expand: mentoring_model_milestone_ids_to_expand, completed_mentoring_model_milestone_ids:completed_mentoring_model_milestone_ids, target_user_id: target_user_id, target_user_type: target_user_type } %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  MentoringModelMilestones.initialize();
+<% end %>

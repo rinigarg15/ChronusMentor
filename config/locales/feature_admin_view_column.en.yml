@@ -1,0 +1,10 @@
+en:
+  feature:
+    admin_view_column:
+      content:
+        terms_and_conditions_not_accepted: Not accepted
+        never_deactivated: Never deactivated
+      scoped_question:
+        city: City
+        state: State
+        country: Country

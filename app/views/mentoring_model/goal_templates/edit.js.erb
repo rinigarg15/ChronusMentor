@@ -1,0 +1,15 @@
+<% content = render partial: "mentoring_model/goal_templates/goal_template_form", locals: {
+      :goal_template => @goal_template,
+      :url => mentoring_model_goal_template_path(@mentoring_model, @goal_template, :format => :js),
+      :method => :patch,
+      :text_size => "form-control"
+} %>
+
+<% modal_v3_popup "feature.mentoring_model.label.edit_goal".translate do %>
+  <%= content %>
+<% end %>
+
+<%= javascript_tag do %>
+  GoalTemplates.handleProgressiveFormOnCloseActions();
+  initialize.autoResizeTextAreas();
+<% end %>

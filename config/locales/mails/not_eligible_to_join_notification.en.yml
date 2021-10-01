@@ -1,0 +1,13 @@
+en:
+  email_translations:
+    not_eligible_to_join_notification:
+      title_v1: Ineligibility notification to user applying to join the %{_program}
+      description_v1: This email is sent to a user who fills in a Captcha and applies to join the %{_program} but does not meet the eligibility requirements of the %{_program}.
+      subject: Your membership request cannot be processed
+      content_html: Thank you for your interest in joining <a href='{{url_subprogram_or_program}}'>{{subprogram_or_program_name}}</a> as {{roles_applied_for}}. Unfortunately, based on available information, it appears you do not meet the required entry criteria. We are therefore unable to process your request at this time.<br/><br/>If you have any questions, please feel free to <a href='{{url_contact_admin}}'>contact the {{customized_admin_term}}</a>.
+      tags:
+        roles_applied_for:
+          description: Roles, the user applied for
+          example_v1: "%{role}"
+        url_contact_admin:
+          description: Url for the user to contact administrator

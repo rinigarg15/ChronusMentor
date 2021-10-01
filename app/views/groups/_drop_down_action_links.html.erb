@@ -1,0 +1,179 @@
+<% actions = [] %>
+<% source = (@from_member_profile) ? "member_groups" : "" %>
+<% can_admin_enter_mentoring_connection = group.admin_enter_mentoring_connection?(current_user, super_console?) %>
+<% can_manage_groups = @is_manage_connections_view || (@profile_user && current_user.can_manage_connections?) %>
+
+<% unless group.rejected? || group.withdrawn? %>
+  <% if (@is_manage_connections_view || @from_member_profile) && (group.drafted? || group.pending? || group.proposed?) %>
+    <% if @current_program.project_based? && group.drafted? %>
+      <% actions << {
+        label: append_text_to_icon("fa fa-check", "feature.connection.action.Make_Available".translate(Mentoring_Connection: _Mentoring_Connection)),
+        js: %Q[jQueryShowQtip("#group_#{group.id}", 600, "#{fetch_bulk_actions_groups_path(individual_action: true, src: source, bulk_action: { group_ids: [group.id], action_type: Group::BulkAction::MAKE_AVAILABLE})}", {}, {modal: true})]
+      } %>
+    <% else %>
+      <% if group.proposed? %>
+        <% actions << {
+          label: append_text_to_icon("fa fa-check", "feature.connection.action.accept_and_mark_available".translate),
+          js: %Q[jQueryShowQtip("#group_#{group.id}", 600, "#{fetch_bulk_actions_groups_path(individual_action: true, src: source, bulk_action: { group_ids: [group.id], action_type: Group::BulkAction::ACCEPT_PROPOSAL})}", {}, {modal: true})], :id => "accept_and_mark_available_#{group.id}"
+        } %>
+      <% else %>
+        <% actions << get_publish_action(group, {src: source, ga_src: local_assigns[:ga_src]}) %>
+      <% end %>
+    <% end %>
+    <% if @current_program.connection_profiles_enabled? %>
+      <% actions << {
+        label: append_text_to_icon("fa fa-eye", "quick_links.side_pane.view_mentoring_connection_profile".translate(mentoring_connection: _Mentoring_Connection)),
+        url: profile_group_path(group)
+      } %>
+      <% actions << {
+        label: append_text_to_icon("fa fa-pencil", "quick_links.side_pane.edit_mentoring_connection_profile".translate(mentoring_connection: _Mentoring_Connection)),
+        url: edit_answers_group_path(group)
+      } %>
+    <% end %>
+    <% actions << {
+      label: append_text_to_icon("fa fa-file-text-o", "feature.connection.action.Add_or_Update_Notes".translate),
+      js: %Q[jQueryShowQtip('#group_#{group.id}', 470, '#{fetch_notes_group_path(group, src: source, :view => Group::View::DETAILED)}','',{modal: true})],
+      id: "update_notes_link_#{group.id}"
+    } %>
+    <% unless group.proposed? %>
+      <% actions << {
+        label: append_text_to_icon("fa fa-users", "feature.connection.action.manage_members_v1".translate),
+        js: %Q[jQueryShowQtip('#group_pane_#{group.id}', 600, '#{edit_group_path(group, src: source, :tab => Group::Status::DRAFTED, :is_table_view => is_table_view, :view => Group::View::DETAILED, :profile_user => @profile_user)}','',{modal: true})],
+        id: "update_members_link_#{group.id}"
+      } %>
+    <% end %>
+    <% actions << add_remove_owners_panel_action(group, { view: Group::View::DETAILED, from_index: true }) %>
+    <% if !group.proposed? && @current_program.mentoring_connections_v2_enabled? %>
+      <% actions << {
+        label: append_text_to_icon("fa fa-check", "feature.connection.action.Assign_Template_v1".translate(Mentoring_Connection: _Mentoring_Connection)),
+        js: %Q[jQueryShowQtip("#group_#{group.id}", 600, "#{fetch_bulk_actions_groups_path(individual_action: true, src: source, bulk_action: { group_ids: [group.id], action_type: Group::BulkAction::ASSIGN_TEMPLATE})}", {}, {modal: true})]
+      } %>
+    <% end %>
+      <% actions << get_discard_connection_action(group, source) if group.drafted? %>
+    <% if group.proposed? %>
+      <% actions << {
+        label: append_text_to_icon("fa fa-ban", "feature.connection.action.reject".translate(Mentoring_Connection: _Mentoring_Connection)),
+        js: %Q[jQueryShowQtip("#group_#{group.id}", 600, "#{fetch_bulk_actions_groups_path(src: source, bulk_action: { group_ids: [group.id], action_type: Group::BulkAction::REJECT_PROPOSAL})}", {}, {modal: true})],
+        id: "reject_project_proposal_#{group.id}"
+      } %>
+    <% end %>
+    <% if group.pending? %>
+      <% actions << {
+          label: append_text_to_icon("fa fa-undo", "feature.connection.action.Withdraw_Connection_v1".translate(Mentoring_Connection: _Mentoring_Connection)),
+          js: %Q[jQueryShowQtip("#group_#{group.id}", 600, "#{fetch_bulk_actions_groups_path(src: source, ga_src: local_assigns[:ga_src], bulk_action: { group_ids: [group.id], action_type: Group::BulkAction::WITHDRAW_PROPOSAL})}", {}, {modal: true})],
+          id: "withdraw_project_proposal_#{group.id}"
+      } %>
+    <% end %>
+
+  <% else %>
+    <% if find_new || @is_open_connections_view %>
+      <% if current_user.can_apply_for_join?(group) %>
+        <% actions << {
+          label: append_text_to_icon("fa fa-sign-in", "feature.connection.action.Join".translate(Mentoring_Connection: _Mentoring_Connection)),
+          js: %Q[jQueryShowQtip('#group_#{group.id}', 600, '#{new_project_request_path(group_id: group.id, format: :js, project_request: {from_page: :find_new}, src: @src_path)}','',{modal: true})],
+          btn_class_name: "cjs_request_group_#{group.id}"
+        } %>
+      <% end %>
+      <% if group.published? && can_access_groups_show?(group, current_user) && can_admin_enter_mentoring_connection %>
+        <% actions << {
+          label: "feature.connection.action.Visit_Mentoring_Area_v1".translate(:Mentoring_Area => _Mentoring_Connection),
+          url: group_path(group, :root => group.program.root)
+        } %>
+      <% end %>
+    <% elsif @is_global_connections_view %>
+      <% actions << {
+        label: "feature.connection.action.View_Profile".translate,
+        url: profile_group_path(group)
+      } %>
+    <% elsif can_admin_enter_mentoring_connection %>
+      <% actions << {
+        label: "feature.connection.action.Visit_Mentoring_Area_v1".translate(:Mentoring_Area => _Mentoring_Connection),
+        url: group_path(group, :root => group.program.root)
+      } %>
+    <% end %>
+    <% if group.published? %>
+      <% if (can_admin_enter_mentoring_connection || @is_global_connections_view) && (current_user.is_admin? || group.has_member?(current_user)) %>
+        <% actions << {
+          label: append_text_to_icon("fa fa-download", "quick_links.side_pane.export_mentoring_area_v1".translate(:Mentoring_Area => _Mentoring_Connection)),
+          remote: export_group_path(group, format: :js)
+        } %>
+      <% elsif current_user.is_admin? || group.has_member?(current_user) %>
+        <% actions << {
+          label: append_text_to_icon("fa fa-download", "quick_links.side_pane.export_mentoring_area_v1".translate(:Mentoring_Area => _Mentoring_Connection)),
+          remote: export_group_path(group, format: :js)
+        } %>
+      <% end %>
+    <% end %>
+    <% if @profile_user && current_user.can_manage_connections? %>
+      <% actions << {
+        label: append_text_to_icon("fa fa-envelope", "display_string.Send_Message".translate),
+        js: %Q[jQueryShowQtip('#group_#{group.id}', 600, '#{new_admin_message_path(:for_groups => true, :recepient_group_id => group.id)}','',{modal: true})],
+        id: "send_message_link_#{group.id}"
+      } %>
+    <% end %>
+    <% if can_manage_groups %>
+      <% actions << {
+        label: append_text_to_icon("fa fa-file-text-o", "feature.connection.action.Add_or_Update_Notes".translate),
+        js: %Q[jQueryShowQtip('#group_#{group.id}', 470, '#{fetch_notes_group_path(group, :view => Group::View::DETAILED)}','',{modal: true})],
+        id: "update_notes_link_#{group.id}"
+      } %>
+      <% if @current_program.connection_profiles_enabled? %>
+        <% actions << {
+          label: append_text_to_icon("fa fa-eye", "quick_links.side_pane.view_mentoring_connection_profile".translate(mentoring_connection: _Mentoring_Connection)),
+          url: profile_group_path(group)
+        } %>
+        <% unless group.closed? %>
+          <% actions << {
+            label: append_text_to_icon("fa fa-pencil", "quick_links.side_pane.edit_mentoring_connection_profile".translate(mentoring_connection: _Mentoring_Connection)),
+            url: edit_answers_group_path(group)
+          } %>
+        <% end %>
+      <% end %>
+      <% if group.active? %>
+        <% actions << {
+          label: append_text_to_icon("fa fa-users", "feature.connection.action.manage_members_v1".translate),
+          js: %Q[jQueryShowQtip('#group_pane_#{group.id}', 600, '#{edit_group_path(group, src: source, :tab => Group::Status::ACTIVE, :is_table_view => is_table_view, :view => Group::View::DETAILED, :profile_user => @profile_user)}','',{modal: true})],
+          id: "update_members_link_#{group.id}"
+        } %>
+      <% end %>
+    <% end %>
+    <% if @is_manage_connections_view || @from_member_profile %>
+      <% actions << add_remove_owners_panel_action(group, { view: Group::View::DETAILED, from_index: true }) %>
+    <% end %>
+    <% if can_manage_groups && group.active?%>
+      <% actions << {
+        label: append_text_to_icon("fa fa-calendar", "feature.connection.action.Set_Expiration_Date".translate),
+        js: %Q[jQueryShowQtip('#group_#{group.id}', 600, '#{set_expiry_date_group_path(group, :view => Group::View::DETAILED)}','',{modal: true})],
+        id: "set_expiry_date_#{group.id}"
+      } %>
+      <% actions << allow_stop_user_requests_panel_action(group) %>
+      <% actions << close_group_panel_action(group, source: source) %>
+    <% elsif group.closed? %>
+      <% if can_manage_groups || group.can_be_reactivated_by_user?(current_user) %>
+        <% source = GroupsController::ReactivationSrc::LISTING_PAGE  unless source.present? || can_manage_groups %>
+        <% actions << {
+          label: append_text_to_icon("fa fa-undo", "feature.connection.action.Reactivate_Connection_v1".translate(Mentoring_Connection: _Mentoring_Connection)),
+          js: %Q[jQueryShowQtip('#group_#{group.id}', 600, '#{fetch_reactivate_group_path(group, src: source)}','',{modal: true})],
+          id: "reactivate_link_#{group.id}"
+        }  %>
+      <% end %>
+
+      <% actions << {
+        label: append_text_to_icon("fa fa-copy", "feature.connection.action.duplicate_connection".translate(Mentoring_Connection: _Mentoring_Connection)),
+        url: clone_group_path(group),
+        data: {remote: !@from_member_profile},
+        id: "clone_link_#{group.id}"
+      }  if can_manage_groups && !@current_program.project_based? %>
+
+      <% actions << get_discard_connection_action(group, source) if super_console? && @is_manage_connections_view %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% actions.select!(&:present?) %>
+
+<% @group_actions = dropdown_buttons_or_button(Marshal.load(Marshal.dump(actions)), btn_class: "cjs_group_actions_#{group.id} actions_box hidden-xs pull-right") %>
+<% actions.each do |action| %>
+  <% action[:id] = action[:id]+"_mobile" if action[:id].present? %>
+<% end %>
+<% @group_actions_block = dropdown_buttons_or_button(actions, btn_class: "cjs_group_action_block_#{group.id} actions_box col-xs-12 visible-xs btn-block", dropdown_menu_class: "col-xs-12 pull-right table-bordered", responsive_primary_btn_class: "col-xs-10", responsive_caret_class: "col-xs-2") %>

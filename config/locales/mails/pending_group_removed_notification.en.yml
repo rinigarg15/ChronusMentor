@@ -1,0 +1,27 @@
+en:
+  email_translations:
+    pending_group_removed_notification:
+      title_v2: Notification to users who are removed from available %{_mentoring_connections}
+      description_v3: "%{_Admins} or owners can remove members from %{_a_mentoring_connection} which is in available state. This email goes out to the users when they are removed."
+      subject_v1: "{{administrator_or_owner_name_capitalized}} has removed you from {{group_name}}"
+      content_v1_html: "{{administrator_or_owner_name_capitalized}} has removed you from the {{customized_mentoring_connection_term}}, {{group_name}}.<br/>{{message_from_admin}}<br/>However, there are other {{customized_mentoring_connections_term}} that you may find more suitable!<br/>{{visit_other_connections_button}}<br/>If you have any questions, please contact {{administrator_or_owner_name}} <a href='{{url_contact_admin}}'>here</a>.<br/>"
+      visit_other_connections_html: Visit other %{mentoring_connection_term}
+      tags:
+        url_find_new_projects:
+          description_v1: Url of find new %{_mentoring_connections}
+        group_name:
+          description: Name of the mentoring area
+          example: Smith and Doe
+        administrator_or_owner_name:
+          description: "'the program administrator'/name of the Owner who removed the user"
+          content: the %{program} %{administrator}
+        message_from_admin:
+          description: Optional message sent by the administrator
+          example: Please connect.
+        visit_other_connections_button:
+          description_v1: Visit other %{_mentoring_connections} button
+        url_contact_admin:
+          description: Url for the user to contact administrator
+        administrator_or_owner_name_capitalized:
+          description: "'The program administrator'/name of the owner who removed the user"
+          content: The %{program} %{administrator}

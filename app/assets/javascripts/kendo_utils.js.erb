@@ -1,0 +1,196 @@
+var kendoUtils = {
+
+  findMultiFilterableFields: function(gridSelector) {
+    var columns = jQuery(gridSelector).data("kendoGrid").columns;
+    var multiFilterableFields = [];
+
+    jQuery.each(columns, function(i, column) {
+      if(column.filterable && column.filterable.multi) {
+        multiFilterableFields.push(column.field);
+      }
+    });
+    return multiFilterableFields;
+  },
+
+  refineColumns: function(columns) {
+    jQuery.each(columns, function(i, column) {
+      if(column.filterable) {
+        if(column.filterable.multi) {
+          column.filterable.itemTemplate = function(e) {
+            if(e.field == "all") {
+              return "<li class='k-item'><label class='k-label'><strong><input type='checkbox' />#= all#</strong></label></li>";
+            } else {
+              return "<li class='k-item'><label class='k-label'><input type='checkbox' value='#= data.value #'/>#= data.title #</label></li>";
+            }
+          }
+        }
+      }
+    });
+  },
+
+  getFilterableFieldTitleMap: function(grid) {
+    var fieldTitleMap = {};
+
+    jQuery.each(grid.columns, function(i, column) {
+      if(column.filterable) {
+        fieldTitleMap[column.field] = column.title;
+      }
+    });
+    return fieldTitleMap;
+  },
+
+  getFilterByText: function(field, options) {
+    return (options.customAccessibilityMessages.filterBy + " " + options.fieldTitleMap[field]);
+  },
+
+  setAccessibilityContentForFilterIconLinks: function(options) {
+    var filterIconLinks = jQuery("a.k-grid-filter");
+
+    jQuery.each(filterIconLinks, function(i, filterIconLink) {
+      var field = jQuery(filterIconLink).closest("th[role='columnheader']").data("field");
+      addAccessibilityContentToEmptyLinks(filterIconLink, kendoUtils.getFilterByText(field, options));
+    });
+  },
+
+  initializeFilterMenu: function(grid, options) {
+    options.fieldTitleMap = kendoUtils.getFilterableFieldTitleMap(grid);
+    kendoUtils.setAccessibilityContentForFilterIconLinks(options);
+
+    grid.bind("filterMenuInit", function(e) {
+      var container = jQuery(e.container);
+      var input = container.find(".k-textbox");
+      var operatorDropdown = container.find("span.k-dropdown");
+
+      // Accessibility
+      var id = e.field + (Math.floor(Math.random() * 999999));
+      var operatorId = id + "_operator";
+      var toDateId = id + "_to_date";
+      var numericId = id + "_numeric";
+
+      input.attr("id", id);
+      addAccessibilityLabelForInputs(input[0], id, kendoUtils.getFilterByText(e.field, options));
+
+      if(options.numericFields && (jQuery.inArray(e.field, options.numericFields) != -1)) {
+        var operatorSelect = operatorDropdown.find("select");
+        operatorSelect.attr("id", operatorId);
+        addAccessibilityLabelForInputs(operatorSelect, operatorId, options.customAccessibilityMessages.selectOperator);
+      } else {
+        operatorDropdown.hide();
+      }
+
+      kendoUtils.initializeAutoCompleteFields(e, options, input);
+      kendoUtils.initializeDateFields(e, options, input, toDateId);
+      kendoUtils.initializeNumericFields(e, options, input, numericId);
+    });
+  },
+
+  initializeAutoCompleteFields: function(e, options, input) {
+    if(options.autoCompleteFields && (jQuery.inArray(e.field, options.autoCompleteFields) != -1)) {
+      input.kendoAutoComplete({
+        dataTextField: e.field,
+        noDataTemplate: "",
+        minLength: 3,
+        dataSource: {
+          serverFiltering: true,
+          transport: {
+            read: {
+              url: options.autoCompleteUrl,
+              dataType: "json"
+            }
+          }
+        }
+      });
+    }
+  },
+
+  initializeDateFields: function(e, options, input, toDateId) {
+    if(options.dateFields && (jQuery.inArray(e.field, options.dateFields) != -1)) {
+      input.removeClass("k-textbox").kendoDatePicker();
+      jQuery(input[0]).attr({
+        placeholder: options.fromPlaceholder,
+        readonly: true
+      });
+      jQuery(input[1]).attr({
+        placeholder: options.toPlaceholder,
+        id: toDateId,
+        readonly: true
+      });
+      addAccessibilityLabelForInputs(input[1], toDateId, options.toPlaceholder);
+    }
+  },
+
+  initializeNumericFields: function(e, options, input, numericId) {
+    if(options.numericFields && (jQuery.inArray(e.field, options.numericFields) != -1)) {
+      input.removeClass("k-textbox").kendoNumericTextBox({
+        format: "#",
+        decimals: 0
+      });
+
+      var formattedInput = jQuery(e.container).find(".k-formatted-value");
+      formattedInput.attr("id", numericId);
+      addAccessibilityLabelForInputs(formattedInput, numericId, kendoUtils.getFilterByText(e.field, options));
+    }
+  },
+
+  formatFilterData: function(filterData, gridSelector) {
+    if(filterData && filterData.filters) {
+      var multiFilters = {};
+      var formattedFilters = [];
+      var filters = kendoUtils.flattenFilters(filterData.filters);
+      var multiFilterableFields = kendoUtils.findMultiFilterableFields(gridSelector);
+
+      // Input:
+      // filterData.filters = [
+      //   { field: "roles", operator: "eq", value: "mentor" },
+      //   { field: "roles", operator: "eq", value: "admin" },
+      //   { field: "name", operator: "eq", value: "raja" }
+      // ]
+      // => [
+      //   { field: "roles", operator: "eq", value: "mentor,admin" },
+      //   { field: "name", operator: "eq", value: "raja" }
+      // ]
+      jQuery.each(filters, function(i, filter) {
+        if(jQuery.inArray(filter.field, multiFilterableFields) != -1) {
+          multiFilters[filter.field] = multiFilters[filter.field] || [];
+          multiFilters[filter.field].push(filter.value);
+        } else {
+          formattedFilters.push(filter);
+        }
+      });
+      jQuery.each(multiFilters, function(field, values) {
+        formattedFilters.push( { field: field, operator: "eq", value: values.join("<%= ProfileQuestion::SEPERATOR %>") } );
+      });
+      filterData.filters = formattedFilters;
+    }
+    return filterData;
+  },
+
+  // Input:
+  // [
+  //   filters: [
+  //     { field: "state", operator: "eq", value: "pending" },
+  //     { field: "state", operator: "eq", value: "active" }
+  //   ],
+  //   filters: [
+  //     { field: "roles", operator: "eq", value: "mentor" }
+  //   ],
+  //   { field: "name", operator: "eq", value: "raja" }
+  // ]
+  // => [
+  //   { field: "state", operator: "eq", value: "pending" },
+  //   { field: "state", operator: "eq", value: "active" },
+  //   { field: "roles", operator: "eq", value: "mentor" },
+  //   { field: "name", operator: "eq", value: "raja" }
+  // ]
+  flattenFilters: function(filters) {
+    var flattenedFilters = [];
+    jQuery.each(filters, function(i, filter) {
+      if(filter.filters) {
+        jQuery.merge(flattenedFilters, kendoUtils.flattenFilters(filter.filters));
+      } else {
+        flattenedFilters.push(filter);
+      }
+    });
+    return flattenedFilters;
+  }
+}

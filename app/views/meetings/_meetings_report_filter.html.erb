@@ -1,0 +1,32 @@
+<%= ibox "", header_content: content_tag(:b, "feature.reports.label.attendees".translate), content_class: "p-t-0" do %>
+  <label class="sr-only" for="meeting_session_attendee">
+    <%= Member.model_name.human %>
+  </label>
+  <%= text_field_with_auto_complete(:meeting_session, "attendee", {
+      :value => nil,
+      :name => "meeting_session[attendee]",
+      :class => "form-control",
+      :autocomplete => "off",
+      :placeholder => "feature.reports.content.meeting_calendar_report_attendee_filter_placeholder".translate
+    }, {
+      :min_chars => 1,
+      :url => auto_complete_for_name_users_path(:format => :json, :show_all_users => false, :for_autocomplete => true),
+      :param_name => 'search',
+      :highlight => true
+    }
+  ) %>
+<% end %>
+
+<%= render :partial => 'reports/attendee_profile_filter' %>
+
+<%= ibox "", header_content: content_tag(:b, "feature.reports.label.survey_status".translate), content_class: "p-t-0" do %>
+  <label class="sr-only" for="meeting_session_survey">
+    <%= "feature.reports.content.survey".translate %>
+  </label>
+  <%= select_tag 'meeting_session[survey]', options_for_select([["feature.reports.label.select_survey".translate, ""]] + current_program.surveys.of_meeting_feedback_type.map{|s| [s.name, s.id]}), class: "form-control" %>
+
+  <label class="sr-only" for="meeting_session_survey_status">
+    <%= "feature.reports.content.survey_status".translate %>
+  </label>
+  <%= select_tag 'meeting_session[survey_status]', options_for_select([["feature.reports.label.select_status".translate, ""], ["feature.reports.content.completed".translate, Survey::Status::COMPLETED], ["feature.reports.content.overdue".translate, Survey::Status::OVERDUE]]), class: "form-control m-t-sm" %>
+<% end %>

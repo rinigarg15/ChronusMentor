@@ -1,0 +1,22 @@
+jQuery("#import_loading").hide();
+
+<% unless @error_flash %>
+  jQuery("#ajax_success_flash_<%= @section.id %>").attr("class", 'm-t-xs alert alert-success');
+  <% @questions.each do |question| %>
+    <% if question.education? %>
+      jQuery("#edit_education_<%= question.id %>").replaceWith('<%= j(render(partial: "users/education_form_fieldset", locals: { question: question, answer: @answer_map[question.id] } )) %>');
+    <% elsif question.experience? %>
+      jQuery("#edit_experience_<%= question.id %>").replaceWith('<%= j(render(partial: "users/experience_form_fieldset", locals: { question: question, answer: @answer_map[question.id] } )) %>');
+    <% elsif question.publication? %>
+      jQuery("#edit_publication_<%= question.id %>").replaceWith('<%= j(render(partial: "users/publication_form_fieldset", locals: { question: question, answer: @answer_map[question.id] } )) %>');
+    <% end %>
+  <% end %>
+  jQuery("#ajax_success_flash_<%= @section.id %>").html("<%= 'flash_message.user_flash.import_profile_success_v2'.translate %>").show();
+<% else %>
+  jQuery("#ajax_success_flash_<%= @section.id %>").attr("class", 'm-t-xs alert alert-danger').html("<%= @error_flash %>").show();
+<% end %>
+jQuery("#import_profile_link_login_<%= @section.id %>").prop("disabled", false);
+
+setTimeout(function() {
+  jQuery("#ajax_success_flash_<%= @section.id %>").hide().attr("class", 'm-t-xs alert');
+}, 10000);

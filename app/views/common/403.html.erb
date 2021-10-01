@@ -1,0 +1,10 @@
+<div id='app_exception'>
+  <div class="auth_denied">
+    <h2><%= image_tag "/assets/auth_denied.png" %><%= "feature.common_errors.header.no_permissions".translate %></h2>
+    <p><%= "feature.common_errors.content.login_as_different_user_html".translate(:user => link_to_user(current_user), :click_here => link_to("display_string.click_here".translate, logout_path(:goto => "login"), get_logout_options)) %></p>
+  </div>
+
+  <div id='exit_link'>
+    <%= "feature.common_errors.content.go_to_previous_page_html".translate(:click_here => link_to("display_string.Click_here".translate, :back)) %>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<% other_mentor_offers = mentor_offer_hash[:rejected_mentor_offers].count + mentor_offer_hash[:withdrawn_mentor_offers].count + mentor_offer_hash[:closed_mentor_offers].count %>
+
+<%= render :layout => 'common/report_tiles' do %>
+  <%= render_report_tiles(mentor_offer_hash[:all_mentor_offers].count, "fa fa-user-plus", "feature.mentor_request.label.Received".translate, "") %>
+  <%= render_report_tiles(mentor_offer_hash[:pending_mentor_offers].count, "fa fa-exclamation-triangle ", "feature.meeting_request.label.pending".translate, "") %>
+  <%= render_report_tiles(mentor_offer_hash[:accepted_mentor_offers].count, "fa fa-check", "feature.meeting_request.label.accepted".translate, "") %>
+  <%= render_report_tiles(other_mentor_offers, "fa fa-close", "feature.admin_view.label.Others_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS,'', :id => 'others_desc')),"" ) %>
+  <%= tooltip("others_desc", "feature.mentor_offer.content.mentor_offers_dropped".translate(Mentor: _Mentor)) %>
+<% end %>

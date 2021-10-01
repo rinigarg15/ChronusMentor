@@ -1,0 +1,14 @@
+<%= render :partial => "reports/high_charts" %>
+<% @title = "feature.reports.content.dashboard".translate %>
+<% @display_time_zone_check = true %>
+
+<% @skip_rounded_white_box_for_content = true %>
+
+<% @page_action = {:label => "feature.recent_activity.content.activity".translate, :url => program_root_path(hide_side_bar: true, src: EngagementIndex::Activity::ACTIVITY_BUTTON_MANAGMENT_REPORT), class: "btn btn-primary btn-large"} %>
+<% if current_program.report_sections.any? %>
+  <%= render :partial => "reports/management_report/new_dashboard", locals: {date_range: @date_range, date_range_preset: @date_range_preset} %>
+<% else %>
+  <%= ibox nil, :ibox_class => "text-center text-muted" do %>
+    <%= content_tag :div, "feature.reports.content.no_program_management_reports_exists".translate(program: _program) %>
+  <% end %>
+<% end %>

@@ -1,0 +1,6 @@
+<% question_followers_stats = "feature.question_answers.content.n_followers".translate(count: @qa_question.followers.count) %>
+<% message = @qa_question.follow?(current_user) ? "feature.question_answers.content.started_following".translate : "feature.question_answers.content.stopped_following".translate %>
+
+ChronusValidator.ErrorManager.ShowResponseFlash("", "<%= j message %>", true);
+jQuery(".qa_question_stats_followers").html("<%= j question_followers_stats %>");
+jQueryHighlight(".qa_question_stats_followers");

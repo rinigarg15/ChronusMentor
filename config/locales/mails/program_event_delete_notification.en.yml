@@ -1,0 +1,22 @@
+en:
+  email_translations:
+    program_event_delete_notification:
+      enabled_html: An %{email} will be sent to all invited users on deleting the event.
+      disabled_html: An %{email} is usually sent to all invited users on deleting the event, but has been disabled. No email will be sent.
+      title_v1: "%{_Program} event delete notification"
+      description_v2: This email is sent to all invitees when the %{_admin} deletes a program event.
+      subject: 'Cancelled Invitation: {{program_event_title}}'
+      content_v2_html: 'The event, {{program_event_title}}, has been cancelled by {{program_event_owner_name}}. <br/><br /><div><span style=''color:#00AC77; font-size: 16px''> Event Details </span></div><table style=''border-collapse:separate;border-spacing:10px 10px;'' border=''0'' bgcolor=''#eeeeee''><tr><td style=''vertical-align: top;color: #909090;''>When:</td><td style=''vertical-align: top;''>{{event_time}}</td></tr><tr><td style=''vertical-align: top;color: #909090;''>Where:</td><td style=''vertical-align: top;''>{{program_event_location}}</td></tr></table><br/>If you have any questions, please contact {{program_event_owner_name}} for more information.<br/>'
+      content_v3_html: 'The event, {{program_event_title}}, has been cancelled by {{program_event_owner_name}}. <br/><br /><div><span style=''color:#00AC77; font-size: 16px''> Event Details </span></div><table style=''border-collapse:separate;border-spacing:10px 10px;'' border=''0'' bgcolor=''#eeeeee''><tr><td style=''vertical-align: top;color: #909090;''>When:</td><td style=''vertical-align: top;''>{{event_time}}(<a href=''{{url_program_event_request_calendar_attachment}}''>download ICS</a>)</td></tr><tr><td style=''vertical-align: top;color: #909090;''>Where:</td><td style=''vertical-align: top;''>{{program_event_location}}</td></tr></table><br/>If you have any questions, please contact {{program_event_owner_name}} for more information.<br/>'
+      tags:
+        program_event_owner_name:
+          description: Owner of the program_event
+        program_event_title:
+          description: Title of the program_event
+          example: Welcome meet for all users at the Cafeteria
+        program_event_location:
+          description: Location of the program event
+          example: Times Square
+        event_time:
+          description: Time of the program_event
+          example: December 24, 2013 11:00 am to 11:30 am UTC

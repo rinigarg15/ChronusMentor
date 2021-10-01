@@ -1,0 +1,8 @@
+<% content = render(partial: 'mentor_offers/mentor_offer_sidebar') %>
+jQuery('#mentor_offer_sidebar').html("<%= j(content) %>");
+
+<% content = render(partial: 'mentor_offers/index', locals: {mentor_offers: @mentor_offers, is_manage_view: false, filter_params: @filter_params} ) %>
+jQuery('#results_pane').html("<%= j(content) %>");
+
+MentorOffers.hideLoading();
+MentorOffers.maintainTriStateCheckbox(true);

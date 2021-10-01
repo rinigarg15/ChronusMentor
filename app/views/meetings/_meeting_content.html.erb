@@ -1,0 +1,31 @@
+<div <%= options[:meeting_content_id] ? "id=#{options[:meeting_content_id]}" : "" %> class="clearfix <%= options[:meeting_content_class] %>">
+  <% if options[:meeting_header] %>
+    <div class="p-b-sm <%= options[:meeting_total_header_class] %>">
+      <div class="media-left">
+        <% if options[:meeting_icon] %>
+          <%= get_icon_content(options[:meeting_icon], :container_class => "fa-circle") %>
+        <% else %>
+          <% owner_image, owner_name = get_user_image_and_name(meeting: options[:meeting], meeting_area: true) %>
+          <%= owner_image %>
+        <% end %>
+      </div>
+      <div class="media-body clearfix">
+        <div class="font-bold <%= options[:meeting_header_class]%>">
+        <% if options[:show_meeting_hyperlink] && options[:meeting_header] %>
+          <%= link_to(options[:meeting_header].html_safe, meeting_path(options[:meeting], :current_occurrence_time => options[:current_occurrence_time], :ei_src => EngagementIndex::Src::AccessFlashMeetingArea::MEETING_LISTING, src: options[:src])) %>
+        <% else %>
+          <%= (options[:meeting_header] || "").html_safe %>
+        <% end %>
+        </div>
+        <% if options[:meeting_sub_header] %>
+          <div class="small m-t-xxs <%= options[:meeting_sub_header_class]%>">
+            <%= (options[:meeting_sub_header] || "").html_safe %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <% if options[:attending_buttons] %>
+    <%= (options[:attending_buttons] || "").html_safe %>
+  <% end %>
+</div>

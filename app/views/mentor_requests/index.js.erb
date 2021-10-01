@@ -1,0 +1,3 @@
+jQuery('#results_pane').html("<%= j(render(:partial => 'mentor_requests/index', :locals => {filter_params: @filter_params, action_params: @action_params, is_request_manager_view_of_all_requests: @is_request_manager_view_of_all_requests, mentor_requests: @mentor_requests, mentor_request_partial: @mentor_request_partial, match_results_per_mentor: @match_results_per_mentor})) %>");
+jQuery('#loading_results').hide();
+MentorRequests.maintainTriStateCheckbox(true);

@@ -1,0 +1,45 @@
+<% form_url, form_method = get_url_and_method_for_signup_form(program_invitation, password) %>
+<% common_input_options = {
+  input_html: { class: "form-control" },
+  label_html: { class: "sr-only" },
+  error_html: { class: "pull-left" },
+  wrapper_html: { class: "clearfix" }
+} %>
+
+<%= simple_form_for member, url: form_url, method: form_method, remote: true, html: { class: "cjs-signup-form" } do |f| %>
+  <%= f.input :first_name, common_input_options.merge(placeholder: Member.human_attribute_name(:first_name)) %>
+  <%= f.input :last_name, common_input_options.merge(placeholder: Member.human_attribute_name(:last_name), hint:  @current_organization.name_question&.help_text.try(:html_safe)) %>
+  <%= f.input :email, input_html: { class: "form-control", disabled: true }, label_html: { class: "sr-only" }, hint: @current_organization.email_question_help_text %>
+
+  <% if !logged_in_organization? && auth_config.try(:indigenous?) %>
+    <%= f.input :password, common_input_options.merge(error: false, input_html: { autocomplete: :off, class: "form-control" }, placeholder: Member.human_attribute_name(:password)) %>
+    <%= f.input :password_confirmation, common_input_options.merge(input_html: { autocomplete: :off, class: "form-control" }, wrapper_html: { class: "m-b-xs clearfix" }, placeholder: Member.human_attribute_name(:password_confirmation)) %>
+    <div class="text-left small text-muted m-l-xxs">
+      <%= password_instructions %>
+    </div>
+  <% end %>
+
+  <%= f.hidden_field(:time_zone, class: "cjs_time_zone") %>
+  <% if program_invitation.present? %>
+    <%= render partial: "users/display_roles", locals: { program_invitation: program_invitation } %>
+    <%= hidden_field_tag :invite_code, program_invitation.code %>
+  <% elsif password.present? %>
+    <%= hidden_field_tag :reset_code, password.reset_code %>
+  <% end %>
+  <% if profile_answers_map.present? %>
+    <% profile_answers_map.each do |question_id, answer_value| %>
+      <%= hidden_field_tag "profile_answers[#{question_id}]", answer_value %>
+    <% end %>
+  <% end %>
+
+  <%= render partial: "users/signup_terms" unless member.terms_and_conditions_accepted? %>
+  <% action_set(class: "m-t-md") do %>
+    <%= button_tag "registration_page.action.sign_up_next_html".translate, type: "button", class: "cjs-signup-btn btn btn-primary btn-block" %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    Signup.validateForm("<%= j 'display_string.Please_Wait'.translate %>", <%= chr_json_escape "#{TimezoneConstants::VALID_TIMEZONE_IDENTIFIERS.to_json}" %>, <%= chr_json_escape "#{TimezoneConstants::OBSOLETE_TIMEZONES_HASH.to_json}" %>, '<%= "#{notify_new_timezone_path}" %>');
+  });
+<% end %>

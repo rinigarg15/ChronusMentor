@@ -1,0 +1,4 @@
+<% if group.notes.present? %>
+  <%= content_tag(:dt, "feature.connection.header.Notes".translate,:class => "dim") %>
+  <dd> <%= group.notes %></dd>
+<% end %>

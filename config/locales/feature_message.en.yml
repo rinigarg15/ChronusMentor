@@ -1,0 +1,52 @@
+en:
+  feature:
+    messaging:
+      title:
+        reply: Reply
+        new_message_from_admin: New Message from %{Admin}
+        send_message_to_admin_v1: Send Message to %{Admin}
+        send_message: Send Message
+        messages: Messages
+        new_message: New Message
+        admin_messages_v2: "%{Admin} Inbox"
+      content:
+        request_for_change: Request for Change
+        expiry_message: I am a member of the %{mentoring_connection} %{connection_name} which is going to expire in %{remaining_time} %{expiry_time}.
+        extend_message_v2: 'Please click on the link below to change this expiration date: %{group_url}'
+        message_receiver_removed_user: Removed User
+        no_messages: There are no messages.
+        subject_and_message_required: Both subject and message content are required
+        Me: Me
+        me: me
+        message_written_by: "%{time}, %{sender} wrote:"
+        message: message
+        filter_system_generated_messages: Include system generated messages
+        filter_example_tooltip: Facilitation Messages etc.
+        include_suspended_users: Include suspended users
+        include_deactivated_users: Include deactivated users
+        search_placeholder: Search messages
+      label:
+        to: To
+        from: From
+        the_message: the message
+        admin_message_subject_v1: 'Request for change in expiration date: %{connection_name}'
+        send_message_to_members: Send Message to Members
+        send_message_to_mentoring_connections: Send Message to %{mentoring_connections}
+        status: Status
+        search: Search
+        statuses:
+          read: Read
+          unread: Unread
+      action:
+        send_message: Send Message
+      back_link:
+        inbox: inbox
+        sent_items: sent items
+      tab:
+        Inbox: Inbox
+        Sent_Items_v1: Sent
+      manage:
+        customize_contact_admin_setting: Customize Contact Admin Settings
+        customize_contact_admin_setting_v1: Customize Contact %{Admin} Settings
+      placeholder:
+        type_your_message: Please enter your message here...

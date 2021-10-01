@@ -1,0 +1,52 @@
+<% @title = "feature.org_admins.header.administrators_v1".translate(Admins: _Admins) %>
+<% @page_action = [{:label => "feature.org_admins.action.new_admin".translate(admin: _admin), :js => "OrganizationAdmins.show('new_user_to_admin')"}, {:label => "feature.org_admins.action.promote_user_as_admin".translate(admin: _admin), :js => "OrganizationAdmins.show('exisiting_user_to_admin')"}] %>
+<% @page_action_options = {:dropdown_title => "feature.org_admins.action.add_admin".translate(admin: _admin), :large => true} %>
+
+<% @title_description = "feature.org_admins.content.list_of_admins".translate(admins: _admins, organization_name: @current_organization.name) %>
+<% @skip_rounded_white_box_for_content = true %>
+
+
+<%= ibox "feature.org_admins.header.add_new_admin".translate(admin: _Admin), :ibox_class => "hide", :ibox_id => "new_admin" do %>
+  <%= simple_form_for @new_admin, :url => organization_admins_path, :html => {:class => 'form-horizontal', :id => "new_user_to_admin"} do |f| %>
+
+    <%= render_user_name_with_label(f, false, horizontal_input_class: "col-sm-9", horizontal_input_label_class: "col-sm-3", question: @current_organization.name_question) %>
+    <%= f.input :email, :wrapper => :horizontal_input, :input_html => {:class => "form-control"}, :hint => @current_organization.email_question_help_text, :hint_html => { :class => 'small text-muted' } %>
+
+    <%= control_group do %>
+      <%= label_tag :message, "feature.org_admins.label.message".translate, :class => 'control-label col-sm-3', :for => 'optional_message' %>
+      <%= controls(class: "col-sm-9") do %>
+        <%= text_area_tag :message, nil, :rows => 2, :class => "form-control", :id => "optional_message" %>
+      <% end %>
+    <% end %>
+
+    <% action_set(class: "pull-right") do %>
+      <%= link_to_function "display_string.Cancel".translate, "Admins.hideNewForm()", :class => 'btn btn-white' %>
+      <%= f.button :submit, "display_string.Add".translate, :onclick => "return NewUser.validate()" %>
+    <% end %>
+  <% end %>
+
+  <%= form_tag organization_admins_path, :id => "exisiting_user_to_admin" do %>
+    <p> <%= "feature.org_admins.content.existing_user_name".translate %> </p>
+    <%= label_tag(:member_name_with_email, "feature.org_admins.content.existing_user_name".translate, :class => "sr-only") %>
+    <%= text_field_with_auto_complete :member, :name_with_email, {:class => "form-control", :autocomplete => "off"},
+      {:min_chars => 1, :url => auto_complete_for_name_members_path(:format => :json, :for_autocomplete => true), :param_name => 'search'} %>
+    <%= email_notification_consequences_on_action_html(UserPromotedToAdminNotification, organization_or_program: @current_organization, div_class: "m-t-sm") %>
+
+    <% action_set class: "m-t-xs pull-right", :dont_indent => true do %>
+      <%= link_to_function "display_string.Cancel".translate, "Admins.hideNewForm()", :class => 'btn btn-white' %>
+      <%= submit_tag "display_string.Add".translate, :class => "btn btn-primary", data: {:disable_with => "display_string.Please_Wait".translate} %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= ibox nil, :ibox_id => "administrators", :content_class => "no-padding" do %>
+  <%= listing_page(@admins, :partial => "organization_admins/admin", :collection_key => :admin, :list_group_item_class => "animation-fill-mode-none z-index-5") %>
+<% end %>
+
+<script>
+<% if @new_admin.errors.any? %>
+    jQuery(document).ready(function(){
+      OrganizationAdmins.show('new_user_to_admin');
+    });
+<% end %>
+</script>

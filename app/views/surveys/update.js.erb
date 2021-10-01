@@ -1,0 +1,8 @@
+<% if @survey.errors.blank? %>
+  jQuery("#modal_edit_survey_<%= @survey.id %>").modal("hide");
+  <% dropdown_actions, modal_content = render_survey_header_bar(@survey) %>
+  jQuery(".title_description").html("<%= j(render(:partial => 'surveys/survey') + modal_content) %>");
+  jQuery(".cjs_title_text").html('<%= @survey.name %>');
+<% else %>
+//escape_javascript content_tag(:div, error_messages_for(:survey), :class => 'nav-list')
+<% end %>

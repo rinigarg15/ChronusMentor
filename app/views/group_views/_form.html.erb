@@ -1,0 +1,41 @@
+<% group_view_columns = @group_view.group_view_columns %>
+<div id="cjs_update_view">
+  <%= response_flash("cjs_group_view_flash") %>
+  <%= render :partial => 'layouts/translations/multiselect' %>
+  <%= simple_form_for @group_view do |f| %>
+    <div>
+      <label for="cjs_group_view_uixmultiselect" class="sr-only">
+        <%= "feature.group.action.select_fields".translate %>
+      </label>
+      <select id="cjs_group_view_uixmultiselect" class="cjs_group_view_uixmultiselect multiselect" multiple="multiple" name="group_view[group_view_columns][]">
+        <optgroup label="<%= "feature.connection.header.default_fields_v1".translate(Mentoring_Connection: _Mentoring_Connection) %>">
+          <%= populate_group_view_default_options(@group_view, tab) %>
+        </optgroup>
+        <% if @current_program.connection_profiles_enabled? %>
+          <optgroup label="<%= "feature.connection.header.connection_profile_fields".translate(Mentoring_Connection: _Mentoring_Connection) %>">
+            <%= populate_group_view_connection_options(group_view_columns, connection_questions) %>
+          </optgroup>
+        <% end %>
+        <% profile_questions_hash.each_pair do |role, profile_questions| %>
+          <optgroup label="<%= "feature.connection.header.user_profile_fields".translate(Role: role.customized_term.term) %>">
+            <%= populate_group_view_user_options(group_view_columns, role, profile_questions) %>
+          </optgroup>
+        <% end %>
+      </select>
+    </div>
+    <%= f.input :view, :as => :hidden, :input_html => { :value => params[:view] } %>
+    <%= f.input :tab, :as => :hidden, :input_html => { :value => params[:tab] } %>
+
+    <% action_set class: "pull-right" do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", data: { dismiss: "modal" } %>
+      <%= f.button :submit, "feature.connection.action.Update_View".translate %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    GroupSearch.multiSelect('<%= current_locale %>');
+    GroupSearch.groupViewUpdateValidations("<%= j('feature.admin_view.content.select_at_least_one_field'.translate) %>");
+  });
+<% end %>

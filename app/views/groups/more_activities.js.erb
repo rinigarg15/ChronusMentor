@@ -1,0 +1,2 @@
+<% content = render :partial => "groups/activity_feed", :locals => {:more_url => more_activities_group_path(@group, format: :js, :offset_id => @new_offset_id)} %>
+jQuery("#show_more_activities").replaceWith("<%= j(content) %>");        

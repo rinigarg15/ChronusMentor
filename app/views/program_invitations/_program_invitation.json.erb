@@ -1,0 +1,13 @@
+<% program_invitation_id = program_invitation.id %>
+
+<%= {
+  "id" => program_invitation_id,
+  "sent_to" => program_invitation_recipient(program_invitation),
+  "sent_on" => program_invitation.sent_on,
+  "expires_on" => program_invitation.expires_on,
+  "roles_name" => invitation_role(program_invitation),
+  "sender" => program_invitation.user.nil? ? program_invitation_sender(program_invitation) : program_invitation.user.name(name_only: true),
+  "statuses" => invitation_status(program_invitation),
+  "check_box" => program_invitation_checkbox(program_invitation_id)
+}.to_json.html_safe %>
+

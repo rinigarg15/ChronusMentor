@@ -1,0 +1,106 @@
+<% current_occurrence_time = meeting[:current_occurrence_time] %>
+<% meeting_id = get_meeting_html_id(meeting) %>
+<% meeting = meeting[:meeting] %>
+<% group = meeting.group %>
+<% show_recurring_options = meeting.recurrent? %>
+<% can_show_popups = local_assigns[:src_path].present? ? (src_path != EngagementIndex::Src::AccessFlashMeetingArea::MEETING_REQUEST_ACCEPTANCE) : true %>
+
+<%= render partial: "meetings/rsvp_popup", locals: { meeting: meeting, current_occurrence_time: current_occurrence_time }%> 
+<% unless is_admin_view || meeting.group_meeting?%>
+  <% member_meeting = meeting.member_meetings.find { |mm| mm.member_id == wob_member.id } %>
+  <% edit_state_meeting_url = edit_state_meeting_path(meeting.id, {:current_occurrence_time => current_occurrence_time, :src => src}) %>
+  <% survey_options = {:member_meeting_id => member_meeting.id, :meeting_occurrence_time => current_occurrence_time, :meeting_area => true, src: Survey::SurveySource::MEETING_AREA, ei_src:  EngagementIndex::Src::AccessFlashMeetingArea::PROVIDE_FEEDBACK_MEETING_AREA} %>
+  <% survey_answer_url = participate_survey_path(meeting_feedback_survey, survey_options) %>
+<% end %>
+<% show_actions = true %>
+<div>
+  <div class="col-lg-12 clearfix p-t-xxs b-b m-t-sm p-b-sm">
+    <div class= "m-b-sm <%='hide' if meeting.future_or_group_meeting?(current_occurrence_time) %>">
+      <strong class="col-md-2 col-xxs-2 p-l-0">
+        <%= "feature.meetings.header.state".translate %>
+      </strong>
+      <div class="col-md-offset-2 col-xxs-offset-2">
+        <strong class="label label-default">
+          <%= get_meeting_text(meeting) %>
+        </strong>
+      </div>
+    </div>
+    <div >
+      <strong class = "col-md-2 col-xxs-2 p-l-0">
+        <%= "feature.meetings.content.meeting_description".translate %>
+      </strong>
+      <% description = meeting.description.present? ? meeting.description : "feature.meetings.content.no_description_provided".translate %>
+      <div class = "col-md-offset-2 col-xxs-offset-2 word_break <%= hidden_on_mobile %>">
+        <%= render_more_less(chronus_auto_link(h(description)), 800) %>
+      </div>
+      <div class = "col-md-offset-2 col-xxs-offset-2 word_break <%= hidden_on_web %>">
+        <%= render_more_less(chronus_auto_link(h(description)), 300) %>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-12 clearfix p-t-xxs b-b">
+    <%= render :partial => "meetings/meeting_area_data_and_time_pane", :locals => {meeting: meeting, current_occurrence_time: current_occurrence_time, meeting_id: meeting_id, is_admin_view: is_admin_view} %>
+  </div>
+  <% unless is_admin_view %>
+    <div class="col-lg-12 clearfix p-t-xxs b-b m-t-sm">
+      <div class= "m-b-sm">
+        <strong class = "col-md-2 col-xxs-2 p-l-0">
+          <%= "feature.meetings.header.rsvp".translate %>
+        </strong>
+        <%= content_tag(:div, (render :partial => "meetings/fetch_response_buttons", :locals => { :meeting => meeting, :wob_member => wob_member, :current_occurrence_time => current_occurrence_time, :group => group, :show_actions => show_actions, is_admin_view: is_admin_view, :src => MemberMeeting::RSVP_SOURCE::MEETING_AREA, from_connection_home_page_widget: false }), :class => "col-md-4 p-l-0", :id => "cjs_response_buttons_#{meeting.id}") %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="col-lg-12 clearfix p-t-xxs b-b m-t-sm">
+    <div class="clearfix">
+      <div id="<%= "cjs_attendees_list_#{meeting.id}" %>">
+        <%= meeting_attendees_for_display(meeting, current_occurrence_time, meeting_area: true, attendees_label_class: "col-md-2 p-l-0") %>
+      </div>
+    </div>
+  </div>
+
+  <div class = "col-lg-12 clearfix p-t-xxs m-t-sm m-b-sm">
+    <% unless is_admin_view %>
+      <%= get_meeting_actions(meeting_id, meeting, wob_member, current_occurrence_time) if show_actions %>
+
+      <% if meeting.archived?(current_occurrence_time) && !meeting.group_meeting? %>
+        <% meeting_feedback_provided = member_meeting.get_feedback_answers(current_occurrence_time) %>
+        <% feedback_survey = @current_program.get_meeting_feedback_survey_for_user_in_meeting(current_user, meeting) %>
+        <% if meeting_feedback_provided.present? %>
+          <%= link_to(append_text_to_icon("fa fa-comments", "feature.meetings.action.view_feedback".translate), participate_survey_path(feedback_survey, member_meeting_id: member_meeting.id, meeting_occurrence_time: current_occurrence_time, :src => Survey::SurveySource::MEETING_AREA, ei_src:  EngagementIndex::Src::AccessFlashMeetingArea::PROVIDE_FEEDBACK_MEETING_AREA), :class => "edit btn-sm btn btn-white m-r-xs cjs_meeting_view_feedback_survey cjs_meeting_area cjs_meeting_area_listing_event btn-block-xxs m-b-xs btn-block-xxs pull-right") %>
+        <% else %>
+          <%= link_to(append_text_to_icon("fa fa-comments", "feature.meetings.action.provide_feedback".translate), participate_survey_path(feedback_survey, member_meeting_id: member_meeting.id, meeting_occurrence_time: current_occurrence_time, :src => Survey::SurveySource::MEETING_AREA, ei_src:  EngagementIndex::Src::AccessFlashMeetingArea::PROVIDE_FEEDBACK_MEETING_AREA), :class => "edit btn btn-sm btn-primary m-r-xs cjs_meeting_provide_feedback_survey cjs_meeting_area cjs_meeting_area_listing_event btn-block-xxs m-b-xs btn-block-xxs pull-right") %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  <% unless is_admin_view %>
+    MeetingForm.showEditMeetingForm("<%= meeting_id %>", "<%= raw edit_meeting_path(meeting, current_occurrence_time: current_occurrence_time, show_recurring_options: show_recurring_options, meeting_area: true, ei_src: EngagementIndex::Src::UpdateMeeting::MEETING_AREA)%>", <%= false %>);
+    MeetingForm.setMeetingTimePopup(".cjs_set_meeting_time_<%=meeting_id%>", "<%= meeting_id %>", "<%= edit_meeting_path(meeting, current_occurrence_time: current_occurrence_time, show_recurring_options: show_recurring_options, set_meeting_time: true, meeting_area: true, ei_src: EngagementIndex::Src::UpdateMeeting::MEETING_AREA) %>");
+
+    <% if params[:edit_time] && can_show_popups %>
+      jQuery(document).ready(function(){
+        jQueryShowQtip('#inner_content', 850, "<%= edit_meeting_path(meeting, {show_recurring_options: meeting.recurrent?, current_occurrence_time: current_occurrence_time, edit_time_only: true, meeting_area: true, ei_src: EngagementIndex::Src::UpdateMeeting::MEETING_AREA}) %>",'',{modal: true, successCallback: function(){CalendarAvailabilityInfo.initialize()}});
+      });
+    <% elsif !meeting.group_meeting? && meeting.state.blank? && meeting.archived? && can_show_popups %>
+      jQuery(document).ready(function(){
+        jQueryShowQtip('#inner_content', 850, "<%= edit_state_meeting_url %>",'',{modal: true, successCallback: function(){CalendarAvailabilityInfo.initialize()}});
+      });
+    <% elsif !meeting.group_meeting? && meeting.state.present? && member_meeting.get_feedback_answers(current_occurrence_time).blank? && can_show_popups %>
+      MeetingForm.showDelayedPopup("<%= survey_answer_url %>");
+    <% end %>
+
+    jQuery(document).ready(function() {
+      Meetings.handleRsvpChange();
+      Meetings.gaTrackSkypeCall();
+    });
+  <% end %>
+  Meetings.trackMeetingListingEvents();
+  Meetings.handleRsvpPopup();
+</script>
+
+<%= javascript_tag('jQuery(function(){jQuery(".edit_meeting_popup").click();});') if @open_edit_popup %>

@@ -1,0 +1,56 @@
+<div class="proposed_slots_container cjs_proposed_slots_dummy m-t-xs hide">
+  <%= hidden_field_tag :slot_index, slot_index, id: "", class: "cjs_proposed_slot_index" %>
+  <div class="clearfix cjs_proposed_slot_details_header">
+    <%= construct_input_group([], [{type: "addon", icon_class: "fa fa-times m-r-0 fa-fw m-r-xs cjs_remove_slot pointer", :class => "white-bg"}, {type: "addon", icon_class: "fa fa-pencil m-r-0 fa-fw m-r-xs cjs_edit_slot pointer", :class => "white-bg"}], :input_group_class => "input-group-sm gray-bg") do %>
+      <div class="p-l-xs cjs_edit_slot col-sm-12 col-xs-12">
+        <div class="p-t-xxs cjs_slot_placeholder text-muted">
+          <%= "feature.meetings.content.propose_slot_detail_header_placeholder".translate %>
+        </div>
+        <div class="p-t-xs cjs_proposed_slot_detail hide h6 m-t-0 m-b-0">
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <% unlimited_slot = current_program.calendar_setting.slot_time_in_minutes.zero? %>
+  <div class="p-sm clearfix table-bordered cjs_meeting_slot_form hide light-gray-bg">
+    <div class="clearfix">
+      
+      <div class="clearfix form-group form-group-sm col-xs-12 no-horizontal-padding <%= 'hide' if @current_program.enhanced_meeting_scheduler_enabled? %>">
+        <div class="m-b-xs control-label false-label"><%= set_required_field_label("feature.meeting_request.label.pick_a_date".translate) %> </div>
+        <%= construct_input_group([ { type: "addon", icon_class: "fa fa-calendar" } ], [], :input_group_class => "input-group-sm") do %>
+          <%= label_tag("meeting_date", "feature.meeting_request.label.select_a_date".translate, for: "meeting_date", class: "sr-only cjs_meeting_slot_date_label") %>
+          <%= text_field_tag("meeting[date]", "", class: "cjs_meeting_slot_date cjs_no_clear_selection form-control cjs_calendar_sync_v2_date", data: {date_picker: true, min_date: Date.current.strftime("%b %d, %Y"), url: valid_free_slots_meetings_path(mentor_id: member.id, propose_slots: true, partial_options: {unlimited_slot: unlimited_slot}, slot_time_in_minutes: @current_program.get_calendar_slot_time)}, placeholder: "feature.meetings.form.date".translate) %>
+        <% end %>
+      </div>
+      <%= render partial: "meetings/propose_slot_date_form", locals: {target_url: valid_free_slots_for_range_meetings_path(mentor_id: member.id, propose_slots: true, partial_options: {unlimited_slot: unlimited_slot}, slot_time_in_minutes: @current_program.get_calendar_slot_time), target_input_class: "cjs_calendar_sync_v2_date", input_field_container_class: "cjs_meeting_slot_form"} if @current_program.enhanced_meeting_scheduler_enabled? %>
+
+      <div class="clearfix form-group form-group-sm col-xs-12 no-horizontal-padding">
+        <div class="m-b-xs control-label false-label"><%= "feature.meeting_request.label.#{get_choose_time_label_key}".translate(time_zone: wob_member.short_time_zone) %> </div>
+        <div class="cjs_propose_slot_time_form">
+          <%= render partial: "meetings/propose_slot_time_form", locals: {disable_start_end_times: false, unlimited_slot: unlimited_slot} %>
+        </div>
+      </div>
+    </div>
+
+      <div class="form-group form-group-sm text optional">
+        <div class="m-b-xs control-label false-label"><%= "feature.mentoring_slot.label.Where".translate %> </div>
+        <%= construct_input_group([ { type: "addon", icon_class: "fa fa-map-marker" } ], [], :input_group_class => "input-group-sm") do %>
+          <%= label_tag("meeting_location", "feature.meeting_request.label.location".translate, for: "meeting_location", class: "sr-only cjs_meeting_slot_location_label") %>
+          <%= text_field_tag "meeting[location]", "", {class: "form-control cjs_meeting_slot_location", placeholder: "feature.meetings.content.propose_location_placeholder".translate} %>
+        <% end %>
+      </div>
+
+      <div class="pull-right">
+        <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: 'btn btn-white btn-sm m-r-xs cjs_cancel_slot_form' %>
+        <%= link_to "display_string.Save".translate, "javascript:void(0)", class: 'btn btn-primary btn-sm m-r-xs cjs_save_slot', data: {url: validate_propose_slot_meetings_path(mentor_id: member.id)} %>
+      </div>
+    
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    initialize.setDatePicker();
+  });
+<% end %>

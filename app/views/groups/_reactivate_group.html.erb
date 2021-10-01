@@ -1,0 +1,41 @@
+<% error_reactivate_connection_flash_id = "error_reactivate_connection_flash" %>
+<%= existing_groups_alert([@group.id], [], nil, :group) %>
+<% if @inconsistent_roles.values.flatten.present? %>
+  <%= get_group_cannot_be_reactivated_text(@current_program, @inconsistent_roles) %>
+  <a class='popup_closebox btn-white cancel btn' data-dismiss="modal"><%= "display_string.Cancel".translate %></a>
+<% else %>
+  <% url = get_url_for_group_actions_form(@source, :reactivate, {id: @group.id}) %>
+  <%= simple_form_for @group, :url => url, :remote => !@source.in?(GroupsController::ReactivationSrc::REDIRECTION_ALLOWED) do %>
+    <%= response_flash(error_reactivate_connection_flash_id + @group.id.to_s) %>
+    <p><%= "feature.connection.content.help_text.reactivate_connection".translate(mentoring_connection: _mentoring_connection) %></p>
+
+    <%= control_group do %>
+      <%= label_tag :mentoring_period, set_required_field_label("feature.connection.header.Expires_on".translate), :class => "control-label", :for => "set_new_expiry_date_#{@group.id}" %>
+      <%= controls :id => "expiry_date_select_#{@group.id}", :class => "expiry_date_select calendar" do %>
+        <%= construct_input_group([ { type: "addon", icon_class: "fa fa-calendar" } ], []) do %>
+          <%= text_field_tag :mentoring_period, formatted_time_in_words(@group.expiry_time, :no_time => true), :id => "set_new_expiry_date_#{@group.id}", :class => "form-control", data: date_picker_options(min_date: Date.current), autocomplete: :off %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= control_group do %>
+      <%= label_tag :revoking_reason, set_required_field_label(Group.human_attribute_name(:revoking_reason)), :class => "control-label", :for => "group_reactivation_reason_#{@group.id}" %>
+      <%= controls do %>
+        <%= text_area_tag  :revoking_reason, nil, :id => "group_reactivation_reason_#{@group.id}", :class => "form-control", :rows => 5 %>
+      <% end %>
+    <% end %>
+
+    <% if @profile_tab == MembersController::ShowTabs::MANAGE_CONNECTIONS %>
+      <%= hidden_field_tag(:manage_connections_member, @profile_member.id) %>
+      <%= hidden_field_tag(:filter, @filter_field) %>
+    <% end %>
+
+    <%= email_notification_consequences_on_action_html(GroupReactivationNotification, div_enclose: true, div_class: "m-b-sm") if current_user.is_admin? %>
+
+    <% action_set(class: "pull-right") do %>
+      <%= link_to_function "display_string.Cancel".translate, %Q[RenewalMentoringPeriod.clear("group_reactivation_reason_#{@group.id}", "set_new_expiry_date_#{@group.id}", "#{formatted_time_in_words(@group.expiry_time, :no_time => true)}","#{error_reactivate_connection_flash_id + @group.id.to_s}")], :class => "btn btn-white cancel", "data-dismiss" => "modal" %>
+      <%= submit_tag "feature.connection.action.Reactivate".translate, :id => "reactivate_button_#{@group.id}", :class => "btn btn-primary",  :onclick => %Q[return RenewalMentoringPeriod.validate("group_reactivation_reason_#{@group.id}", "set_new_expiry_date_#{@group.id}", "#{'flash_message.group_flash.mentoring_period'.translate}","#{error_reactivate_connection_flash_id + @group.id.to_s}")], data: {:disable_with => "display_string.Please_Wait".translate} %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= javascript_tag %Q[initialize.setDatePicker();] %>

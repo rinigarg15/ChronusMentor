@@ -1,0 +1,50 @@
+<div id="mem_req_<%= membership_request.id %>">
+  <div id='request_<%= membership_request.id %>' class="p-l-0 col-xs-7 col-sm-9 membership_request_details">
+    <div class='media-left'>
+      <%= get_checkbox_data_for_membership_request(membership_request) %>
+    </div>
+    <div class='media-body p-l-m'>
+      <%= profile_field_container_wrapper("display_string.From".translate, listing_display_name(membership_request, wob_member), :answer_class => "font-bold", :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+      <% if membership_request.user.present? %>
+        <% role_names = membership_request.user.roles.includes([customized_term: :translations]).collect{|role| RoleConstants.human_role_string([role.name], program: membership_request.program)} %>
+          <%= profile_field_container_wrapper("feature.membership_request.label.current_user_status".translate, "feature.membership_request.content.user_status_with_roles".translate(state: UsersHelper.state_to_string_map[membership_request.user.state], count: role_names.count, role_names: role_names.join(", ")), :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+      <% end %>
+      <%= profile_field_container_wrapper("feature.membership_request.label.request_to_join_as".translate, membership_request.formatted_role_names, :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+      <%= profile_field_container_wrapper("display_string.Sent".translate, formatted_time_in_words(membership_request.created_at), :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+
+      <% if membership_request.rejected? %>
+        <%= profile_field_container_wrapper("feature.membership_request.label.reason_for_rejection".translate, chronus_auto_link(membership_request.response_text), :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+        <%= membership_request_status(membership_request, current_user) %>
+      <% elsif membership_request.accepted?%>
+        <% accepted_response_content = membership_request.response_text.blank? ? content_tag(:i, 'display_string.Not_specified'.translate, :class => "text-muted") : chronus_auto_link(membership_request.response_text) %>
+        <%= profile_field_container_wrapper("feature.membership_request.label.message_sent".translate, accepted_response_content, :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+        <%= membership_request_status(membership_request, current_user) %>
+      <% end %>
+      <% membership_request_questions = [] %>
+      <% membership_request.role_names.each do |role_name|%>
+        <% membership_request_questions += @membership_questions_for_roles[role_name] %>
+      <% end %>
+
+      <% if membership_request_questions.any?(&:non_default_type?) %>
+        <% more_link = content_tag(:strong, "display_string.Show_more".translate) + get_icon_content("fa fa-angle-right") %>
+        <% less_link = get_icon_content("fa fa-angle-left") + content_tag(:strong, "display_string.Show_less".translate) %>
+        <%= link_to(more_link, "javascript:void(0)", :class => 'font-600 show_hide_pane', "data-show-pane" => "#cjs_membership_request_answers_#{membership_request.id}", "data-hide-pane" => "#cjs_membership_request_show_more_link_#{membership_request.id}", :id => "cjs_membership_request_show_more_link_#{membership_request.id}") %>
+        <%= content_tag(:div, :class => "hide show_hide_pane", :id => "cjs_membership_request_answers_#{membership_request.id}") do %>
+          <% all_answers = membership_request.profile_answers.group_by(&:profile_question_id) %>
+          <% membership_request_questions.uniq.each do |question| %>
+            <% next unless question.conditional_text_matches?(all_answers) %>
+              <% unless question.default_type? %>
+                <%= profile_field_container_wrapper(question.question_text, fetch_formatted_profile_answers(membership_request.member, question, all_answers, false), :heading_tag => :h4, :class=>"m-t-xs m-b-xs") %>
+              <% end %>
+          <% end %>
+          <%= link_to less_link, "javascript:void(0)", :class => 'font-600 show_hide_pane p-t-m', "data-show-pane" => "#cjs_membership_request_show_more_link_#{membership_request.id}", "data-hide-pane" => "#cjs_membership_request_answers_#{membership_request.id}"  %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <div class='col-xs-5 col-sm-3'>
+    <div class="pull-right">
+      <%= response_actions(membership_request, current_user) %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<% @title = "search.header.Search_results".translate %>
+
+<div id="search_results">
+  <% search_results_wrapper(@search_query) do %>
+    <%= ibox nil, :ibox_id => "all_results", :content_class => "no-padding" do %>
+      <% if @results.empty? %>
+        <div class="p-sm">
+          <%= content_tag(:p, "search.content.no_results_found".translate(query: @search_query)) %>
+          <ul>
+            <%= content_tag(:li, "search.content.help_text.check_spelling".translate) %>
+            <%= content_tag(:li, "search.content.help_text.try_general_search".translate) %>
+          </ul>
+        </div>
+      <% else %>
+        <%= top_bar_in_listing( { collection: @results }, { show: true } ) %>
+        <div class="list-group">
+          <% @results.each do |result_hash| %>
+            <% result = result_hash[:active_record] %>
+            <div class="list-group-item clearfix p-m">
+              <% if result.is_a?(User) %>
+                <% if result.is_mentor? %>
+                  <%= render 'users/mentor', {:mentor => result, consider_user_as_student: true, show_favorite_ignore_links: false, skip_ignore_links: true}  %> <%# Rails 3 %>
+                <% elsif result.is_student? %>
+                  <%= render 'users/user', {:user => result, consider_user_as_mentor: true} %><%# Rails 3 %>
+                <% else %>
+                  <%= render 'users/other_non_administrative_user', { :user => result, :role => result.roles.first.name } %>
+                <% end %>
+              <% elsif result.is_a?(Group) %>
+                <%= render 'groups/group', { :group => result, :is_table_view => false, skip_ibox: true } %>
+              <% elsif result.is_a?(Article) %>
+                <%= render 'articles/article', {:article => result, no_comments_info: true} %><%# Rails 3 %>
+              <% elsif result.is_a?(QaQuestion) %>
+                <%= render 'qa_questions/qa_question', {:qa_question => result} %><%# Rails 3 %>
+              <% elsif result.is_a?(Resource) %>
+                <%= render 'resources/resource', {resource: result} %>
+              <% elsif result.is_a?(Topic) %>
+                <%= render 'forums/topic', {topic: result, home_page: false, topics_badge_count_hash: {}, from_global_search: true } %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+        <%= bottom_bar_in_listing( { collection: @results } ) %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  MentorRequests.showRequestConnectionPopup();
+  GroupSearch.initializeTruncateActions();
+<% end %>

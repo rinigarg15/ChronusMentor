@@ -1,0 +1,21 @@
+en:
+  email_translations:
+    project_request_accepted:
+      enabled_with_count_html:
+        one: An %{email} will be sent to the user if you complete this action.
+        other: An %{email} will be sent to the users if you complete this action.
+      disabled_with_count_html:
+        one: An %{email} is usually sent to the user as part of completing this action, but has been disabled. No email will be sent.
+        other: An %{email} is usually sent to the users as part of completing this action, but has been disabled. No email will be sent.
+      title_v3: "%{_Mentoring_Connection} request accepted notification to sender"
+      description_v3: This email is sent to a user when the %{_admin} accepts their request to join the %{_mentoring_connection}.
+      subject_v1: Your request to join {{project_name}} has been accepted!
+      content_v1_html: Congratulations! We have accepted your request to join {{project_name}}. We will notify you when the {{customized_mentoring_connection_term}} starts.<br/><br/> Meanwhile, you can visit the {{customized_subprogram_term}} to see your other available activities.<br/>{{visit_program_button}}
+      visit_program_html: Visit %{program_name}
+      tags:
+        project_name:
+          description: Name of the project
+        url_project:
+          description: Url to the project page
+        visit_program_button:
+          description: Visit program button

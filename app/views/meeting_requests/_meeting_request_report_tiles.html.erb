@@ -1,0 +1,9 @@
+<% other_meeting_requests = meeting_request_hash[:rejected_meeting_requests].count + meeting_request_hash[:withdrawn_meeting_requests].count + meeting_request_hash[:closed_meeting_requests].count %>
+
+<%= render :layout => 'common/report_tiles' do %>
+  <%= render_report_tiles(meeting_request_hash[:all_meeting_requests].count, "fa fa-calendar", "feature.mentor_request.label.Received".translate, "", {percentage: percentage, prev_periods_count: prev_periods_count}) %>
+  <%= render_report_tiles(meeting_request_hash[:active_meeting_requests].count, "fa fa-exclamation-triangle ", "feature.meeting_request.label.pending".translate,"") %>
+  <%= render_report_tiles(meeting_request_hash[:accepted_meeting_requests].count, "fa fa-check", "feature.meeting_request.label.accepted".translate,"") %>
+  <%= render_report_tiles(other_meeting_requests, "fa fa-close", "feature.admin_view.label.Others_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS,'', :id => 'others_desc')),"" ) %>
+  <%= tooltip("others_desc", "feature.admin_view.program_defaults.title.meeting_requests_dropped".translate(Meeting: _Meeting)) %>
+<% end %>

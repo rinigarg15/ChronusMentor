@@ -1,0 +1,108 @@
+<div class="cjs_confirmation_dialog modal confirmationDialog fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close cjs-web-modal-cancel" data-dismiss="modal" aria-label="<%= close %>">
+          <span class="p-sm pull-left" aria-hidden="true">&times;</span>
+        </button>
+          <h4 class="modal-title"">
+            <i class="fa fa-exclamation-triangle text-danger fa-fw m-r-xs"></i>
+            <%= warning_header %>
+          </h4>
+      </div>
+      <div class="modal-body clearfix">
+        <div>
+          <%= insecure_warning_text %>
+        </div>
+        <br/>
+        <% if(isAdmin && allowVulnerableContentByAdmin) { %>
+          <div class="well white-bg">
+            <div><%= ask_approach %></div>
+            <div class="controls">
+              <div role="group" aria-label="<%= ask_approach %>">
+                <% if(has_insecure_content && !has_insecure_urls) { %>
+                <label class="radio">
+                  <input type="radio" name="cjs_insecure_warnings_approach" value="autoclean" checked="checked">
+                  <%= system_clean %>
+                </label>
+                <% } %>
+                <label class="radio">
+                  <% if(has_insecure_content && !has_insecure_urls) { %>
+                    <input type="radio" name="cjs_insecure_warnings_approach" value="selfclean">
+                  <% } else { %>
+                    <input type="radio" name="cjs_insecure_warnings_approach" value="selfclean" checked="checked">
+                  <% } %>
+                  <%= self_clean %>
+                </label>
+                <label class="radio">
+                  <input type="radio" name="cjs_insecure_warnings_approach" value="noclean">
+                  <%= dont_clean %>
+                </label>
+              </div>
+            </div>
+          </div>
+        <% } else { %>
+          <% if(has_insecure_urls) { %>
+          <div class="well white-bg red">
+            <% if(has_insecure_content) { %>
+            <%= rm_content_and_link %>
+            <% } else { %>
+            <%= rm_links %>
+            <% } %>
+          </div>
+          <% } else { %>
+          <div class="well white-bg">
+            <div><%= prompt_to_clean %></div>
+            <div class=" controls">
+              <div role="group" aria-label="<%= prompt_to_clean %>">
+                <label class="radio">
+                  <input type="radio" name="cjs_insecure_warnings_approach" value="autoclean" checked="checked">
+                  <%= system_clean_short %>
+                </label>
+                <label class="radio">
+                  <input type="radio" name="cjs_insecure_warnings_approach" value="selfclean">
+                  <%= self_clean %>
+                </label>
+              </div>
+            </div>
+          </div>
+          <% } %>
+        <% } %>
+        <% if(has_insecure_urls) { %>
+          <div class="cjs_insecure_warning_links_show_hide_container">
+            <a class="cjs_insecure_warning_links_show_hide_subselector cjs_show_and_hide_toggle_show pointer" >
+              <%= show_insecure_links%> &raquo;
+            </a>
+            <div class="cjs_insecure_warning_links_show_hide_subselector cjs_show_and_hide_toggle_content hide">
+              <a class="cjs_insecure_warning_links_show_hide_subselector cjs_show_and_hide_toggle_hide pointer" > &laquo; <%= hide_insecure_links %>  </a>
+              <br>
+              <div class="cjs_ckeditor_http_links"></div>
+            </div>
+          </div>
+        <% } %>
+        <% if(has_insecure_content) { %>
+          <div class="cjs_insecure_warning_content_show_hide_container">
+            <a class="cjs_insecure_warning_content_show_hide_subselector cjs_show_and_hide_toggle_show pointer" >
+              <%= show_insecure_content%> &raquo;
+            </a>
+            <div class="cjs_insecure_warning_content_show_hide_subselector word_break cjs_show_and_hide_toggle_content hide">
+              <a class="cjs_insecure_warning_content_show_hide_subselector cjs_show_and_hide_toggle_hide pointer" > &laquo; <%= hide_insecure_content %>  </a>
+              <br>
+              <div class="cjs_ckeditor_insecure_content"></div>
+              <br>
+            </div>
+          </div>
+        <% } %>
+      </div>
+      <div class='modal-footer'>
+        <a data-dismiss='modal' class='btn btn-primary cjs_insecure_content_proceed_actions'>
+        <% if(!isAdmin && has_insecure_urls) { %>
+        <%= ok %>
+        <% } else { %>
+        <%= proceed %>
+        <% } %>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+First Name,Last Name,Email,Phone,About Me,Gender,Language,Current Education,Entire Education,Current Experience,Work Experience,Current Publication,New Publication,Current Manager
+Tony,Stark,tony.stark@marvel.com,1234-123-001,Iron Man,Male,English,"Harvard,BS,Engineering,1996--MIT,MS,Robotics,2000",,"Iron Man,Avengers,5,2008,,,true--CEO,Stark Industries,3,2001,4,2008,",,"How to build Iron Suite,Stark Publishing,stark.com/build_suite,'Tony Stark, Dr. Bruce Banner',--How to kick ass,Marvel Comics,marvel.com/kick-ass,Stan Lee,",,",,"
+Steve,Rogers,steve.rogers@marvel.com,1234-123-002,Captain America,Male,English,,,"Captain|US Army,7,1940,,",,"Stay Alive Under Ice,Marvel,Cap",,"Nick,Fury,nick.fury@marvel.com"
+Bruce,Banner,bruce.banner@marvel.com,1234-123-003,Hulk,Male,English,,"Harvard,BS,1996--Stanford,MS,Particle Phisics,2000",,,,,"Nick,nick.fury@marvel.com"
+Natasha,Romanoff,natasha.romanoff@marvel.com,1234-123-004,Black Widow,Female,Russian,,,,,,,"Nick,Fury,nick.fury@marvel.com"
+Freakin,Admin,ram@example.com,1234-999-001,I am the admin!,Male,English,,,,,,,

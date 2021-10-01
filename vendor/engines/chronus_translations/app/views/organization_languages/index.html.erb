@@ -1,0 +1,47 @@
+<% @title = 'feature.language.manage_page.header.manage_languages'.translate %>
+<% show_enabled_programs_list = can_show_enabled_programs_list? %>
+<% @title_description = "feature.language.manage_page.content.listing_page_description_html".translate(program: _program, checkbox_tick_image: content_tag(:i, image_tag('icons/checkbox_tick.gif'), class: "icon-all"), checkbox_blank_image: content_tag(:i, image_tag('icons/checkbox_blank.gif'), class: "icon-all")) %>
+<%= response_flash("cjs_language_flash") %>
+<%= ibox nil, :ibox_id => "languages_page" do %>
+  <% if @languages.empty? %>
+    <%= content_tag(:div, "feature.language.manage_page.content.no_additional_languages".translate, :class => 'p-sm text-muted text-center') %>
+  <% else %>
+    <table class="table table-striped pane has-above-2" cellpadding="0" cellspacing="0">
+      <thead class="pane-header">
+        <tr>
+          <th><%= "feature.program_invitations.label.language".translate %></th>
+          <th><%= "feature.language.manage_page.header.Display_Title".translate %></th>
+          <th><%= OrganizationLanguage.human_attribute_name(:enabled) %></th>
+          <% if show_enabled_programs_list %>
+            <th><%= "feature.language.manage_page.header.Programs_Enabled_For".translate(Programs: _Programs) %></th>
+          <% end %>
+          <th><span class="pull-right"><%= 'display_string.Actions'.translate %></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @languages.each do |language| %>
+          <% organization_language = @organization_languages.find { |organization_language| organization_language.language_id == language.id } %>
+          <tr id="language_<%= language.id %>">
+            <td><%= language.to_display %></td>
+            <td><%= (organization_language || language).to_display %></td>
+            <td >
+              <span id="status_icon_<%= language.id %>">
+                <%= fetch_availability_status(organization_language) %>
+              </span>
+            </td>
+            <% if show_enabled_programs_list %>
+              <td><%= get_enabled_programs_details(organization_language) %></td>
+            <% end %>
+            <td>
+              <span class="pull-right">
+                <% common_actions = [] %>
+                <% common_actions << (link_to_function get_icon_content("fa fa-pencil") + 'display_string.Edit'.translate, get_edit_link(organization_language, language), :class => "btn btn-white btn-xs btn-block-xxs") %>
+                <%= render_button_group(common_actions) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>

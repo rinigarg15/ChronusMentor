@@ -1,0 +1,17 @@
+<% if @profile_question.errors.blank? %>
+  jQuery('#profile_questions_for_section_<%= @profile_question.section.id %>').append("<%= j(render partial: 'profile_questions/profile_question', locals: {profile_question: @profile_question, program_level: @program_level}) %>");
+  jQuery(".cjs_profile_question_<%= @profile_question.id %>").click();
+  jQuery("#profile_question_<%= @profile_question.id %>").show();
+  <% success_flash = ["flash_message.successfully_saved".translate] %>
+  <% success_flash << "feature.profile_customization.content.added_new_field".translate(field_name: @profile_question.question_text, programs: (@current_organization.standalone? ? "display_string.Roles".translate : _Programs)) %>
+  ChronusValidator.ErrorManager.ShowPageFlash(true, "<%= success_flash.join(". ") %>");
+  ProfileConfigUI.updateAndShowNumberOfProfileQuestions();
+  ProfileConfigUI.updateAndShowNumberOfProfileQuestionsUnderSection(<%= @profile_question.section_id %>);
+  ProfileConfigUI.adjustUiCommon();
+  ProfileConfigUI.loadEditProfileQuestion(jQuery(".cjs_profile_question_<%= @profile_question.id %>"), {activeTab: "<%= (@program_level || @current_organization.standalone?) ? %Q[#tab_Roles] : %Q[#tab_#{_Programs}] %>"});
+  <%= render "profile_questions/update_question_choices", locals: {profile_question: @profile_question, disabled_for_editing: @disabled_for_editing} %>
+<% elsif @profile_question.errors[:question_text].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('<%= "flash_new_#{@profile_question.section.id}" %>', '<%= "feature.profile_customization.content.field_name_cant_be_blank".translate %>');
+<% elsif @profile_question.errors[:question_choices].present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('<%= "flash_new_#{@profile_question.section.id}" %>', '<%= @profile_question.errors[:question_choices].to_sentence %>');
+<% end %>

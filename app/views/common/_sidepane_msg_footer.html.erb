@@ -1,0 +1,14 @@
+<div class="clearfix <%= footer_class %>">
+  <div class="table-bordered white-bg col-xs-12 p-xs pointer cui-comment-footer cui-comment-fixed-bottom <%= hidden_on_mobile %>">
+    <%= content_tag(:div, footer_content, class: "pull-left m-t-xs text-muted font-default") + content_tag(:span, link_to(get_icon_content("fa fa-comment no-margins") + set_screen_reader_only_content("display_string.Reply".translate), "#", class: "btn btn-sm btn-primary"), class: "pull-right") + content_tag(:div, get_icon_content("fa fa-paperclip fa-lg m-r-0 fa-fw"), class: "m-t-xs m-r-sm pull-right")%>
+  </div>
+  <div class="table-bordered white-bg col-xs-12 p-xs pointer navbar cui-comment-footer navbar-fixed-bottom <%= hidden_on_web %>">
+    <%= content_tag(:div, footer_content, class: "pull-left m-t-xs text-muted font-default") + content_tag(:span, link_to(get_icon_content("fa fa-comment no-margins") + set_screen_reader_only_content("display_string.Reply".translate), "#", class: "btn btn-sm btn-primary"), class: "pull-right") + content_tag(:div, get_icon_content("fa fa-paperclip fa-lg m-r-0 fa-fw"), class: "m-t-xs m-r-sm pull-right")%>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    jQuery('.mobile_footer').hide();
+  });
+<% end %>

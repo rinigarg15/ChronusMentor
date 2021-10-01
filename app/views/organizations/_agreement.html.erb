@@ -1,0 +1,32 @@
+<%= control_group do %>
+  <%= f.label :agreement, "program_settings_strings.label.tnc_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS,'', :id => 'agreement_label', )), :class => "control-label", :for => "program_organization_agreement" %>
+  <%= tooltip("agreement_label", "program_settings_strings.content.tnc_tooltip_html".translate(accept: content_tag(:b, "display_string.accept".translate))) %>
+  <%= controls do %>
+    <% has_agreement = !@current_organization.agreement.blank? %>
+    <% active_style = has_agreement ? 'display:none' : '' %>
+    <% inactive_style = has_agreement ? '' : 'display:none' %>
+    <div id="no_agreement" class="has-next pull-left" style="<%= active_style %>"><%= "display_string.None".translate %> - </div>
+    <div id="cur_agreement" class="well square-well scroll-1 no-margin <%= 'input-class-disabled' if @current_organization.display_custom_terms_only %>" style="<%= inactive_style %>">
+      <%= @current_organization.agreement.to_s.html_safe %>
+    </div>
+    <% unless @current_organization.display_custom_terms_only %>
+      <div id="agreement_actions" class="has-above">
+        <%= link_to_function has_agreement ? 'display_string.Edit'.translate : 'display_string.Add'.translate, "ProgramAgreement.discardChanges()", :id => 'add_agreement_link', :class => "btn btn-white btn-xs", :onclick => "CkeditorConfig.agreementTextInitialize();", "data-toggle" => "modal", "data-target" => "#modal_add_agreement_link" %>
+        <%= link_to_function "display_string.Remove".translate, "ProgramAgreement.remove('#{j("program_settings_strings.content.agreement_delete_confirmation".translate)}', '#{j("display_string.Add".translate)}')", :id => 'remove_agreement_link',
+          :style => "#{inactive_style}", :class => " btn btn-xs btn-danger" %>
+      </div>
+      <%= f.hidden_field :agreement, :id => "program_organization_agreement" %>
+
+      <%- modal_container "program_settings_strings.header.tnc".translate, :modal_id => "modal_add_agreement_link" do -%>
+        <p><%= "program_settings_strings.content.tnc_desc_html".translate(line_break: get_safe_string("<br/>"), accept: content_tag(:b, "display_string.accept".translate)) %></p>
+        <%= label_tag(:agreement_text, "program_settings_strings.header.tnc".translate, :class => "sr-only") %>
+        <%= text_area_tag :agreement_text, "", :class => "form-control" %>
+        <div class="m-t-sm pull-right">
+
+          <%= link_to_function 'display_string.Cancel'.translate, 'ProgramAgreement.discardChanges(); ', :class => 'btn btn-white cancel', "data-dismiss" => "modal" %>
+          <%= link_to_function 'display_string.Done'.translate, "ProgramAgreement.update('#{j("display_string.Edit".translate)}')", :class => 'btn btn-primary' %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,22 @@
+en:
+  email_translations:
+    group_member_removal_notification_to_removed_member:
+      title_v2: User removed from %{_mentoring_connection} notification to the user
+      description_v4: When a user is removed from %{_a_mentoring_connection}, the system generates this email to notify the user
+      subject_v1: You have been removed from {{group_name}} by {{administrator_or_owner_name}}
+      content_v3_html: You have been removed from {{group_name}} by {{administrator_or_owner_name}}.<br/><br/>If you think this is a mistake or you have any questions, please contact me <a href='{{url_contact_admin}}'>here</a>.<br/>
+      tags:
+        list_of_mentors:
+          description_v1: Names of all the mentors in the %{_mentoring_connection}
+        list_of_mentees:
+          description_v1: Names of all the mentees in the %{_mentoring_connection}
+        list_of_members:
+          description: Names of all the members by role
+        group_name:
+          description_v1: Name of the %{_mentoring_connection}
+          example: Smith and Doe
+        administrator_or_owner_name:
+          description: "'the program administrator'/name of the Owner who removed the user"
+          content: the %{program} %{administrator}
+        url_contact_admin:
+          description: Url for the user to contact administrator

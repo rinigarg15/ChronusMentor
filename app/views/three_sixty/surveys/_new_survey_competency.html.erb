@@ -1,0 +1,21 @@
+<div class="well well-sm">
+  <div align="center">
+    <%= form_tag(three_sixty_survey_competencies_path(survey), :remote => true, :methos => :post, :class => "no-margin no-padding cjs_add_three_sixty_survey_competency_or_question", :id =>"new_three_sixty_survey_competency") do %>
+      <div class="clearfix">
+        <label class="sr-only" for="select_competency"><%= "feature.three_sixty.survey.select_a_competency".translate %></label>
+        <div class="col-xs-12 no-padding">
+          <% right = { type: "btn",
+            btn_options: {
+              class:'cjs_new_three_sixty_survey_submit btn btn-primary',
+              data: {:disable_with => "display_string.Please_Wait".translate}
+            },
+            content: "feature.three_sixty.survey.add_to_survey".translate
+          } %>
+          <%= construct_input_group({}, right) do %>
+            <%= select_tag("competency_id", options_for_select(available_competencies.collect{|c| [c.title, c.id]}.unshift(["feature.three_sixty.survey.select_a_competency".translate, ""])), :id => "select_competency", :class => "form-control cjs_new_three_sixty_survey_select_box") %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

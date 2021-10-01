@@ -1,0 +1,39 @@
+<% select_box_base_name = "admin_view[roles_and_status][role_filter_0][roles]" %>
+<div class="cjs-role-filter-rows-container">
+  <div class="cjs-roles-filter-template cjs-roles-filter-row row m-b-sm hide">
+    <div class="col-sm-3">
+      <%= generate_filter_role_type("admin_view[roles_and_status][role_filter_0][type]") %>
+    </div>
+    <div class="col-sm-5 cjs-roles-filter-select2-container">
+      <%= generate_roles_list(select_box_base_name, program) %>
+    </div>
+    <div class="col-sm-2 m-t-sm cjs-roles-filter-and-text-container">
+      <%= content_tag :span, "display_string.AND".translate, class: "cjs-roles-filter-and-text" %>
+      <%= get_icon_content("fa fa-trash cjs-delete-roles-filter-row") %>
+    </div>
+    <div class="col-sm-2 cjs-add-roles-filter-row-container">
+      <%= link_to "javascript:void(0)", class: "btn-sm btn btn-white waves-effect m-t-xxs cjs-add-roles-filter-row" do %>
+        <%= get_icon_content("fa", class: "fa fa-plus-circle fa-lg") %>
+        <%= set_screen_reader_only_content("display_string.Add".translate) %>
+      <% end %>
+      <%= get_icon_content("fa fa-trash cjs-delete-roles-filter-row") %>
+    </div>
+  </div>
+</div>
+<%= javascript_tag do %>
+  AdminViewsNewView.rolesAndStatusData = { baseName: "<%= select_box_base_name %>", data: [], index: 1 };
+  <% (filter_params.try(:[], :roles_and_status) || {}).select{|key, value| key.match(/role_filter/)}.each do |key, value| %>
+    var tmpHsh = {};
+    <% value.each do |hsh_key, hsh_val| %>
+      <% if hsh_val.is_a?(Array) %>
+        tmpHsh["<%= hsh_key %>"] = [];
+        <% hsh_val.each do |val| %>
+          tmpHsh["<%= hsh_key %>"].push("<%= val %>");
+        <% end %>
+      <% else %>
+        tmpHsh["<%= hsh_key %>"] = "<%= hsh_val %>";
+      <% end %>
+    <% end %>
+    AdminViewsNewView.rolesAndStatusData.data.push(tmpHsh);
+  <% end %>
+<% end %>

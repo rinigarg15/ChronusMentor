@@ -1,0 +1,61 @@
+solano:
+  ruby_version: ruby-2.3.3
+  java:
+    java_version: java-8-openjdk
+  tests:
+    - type: junit
+      mode: parallel
+      output: exit-status
+      files:
+      - test/functional/**_test.rb
+      - test/unit/**_test.rb
+      - vendor/engines/*/test/**/*_test.rb
+      command: ./script/test/solano-runner
+      report_files:
+      - test/reports/*.xml
+  scheduler:
+    scheduler: unconstrained
+  test_pattern:
+    - none
+  bundler_version: 1.9.4
+  hooks:
+    worker_setup: RAILS_ENV=test bundle exec rake db:generate_fixtures matching:clear_and_full_index_and_refresh es_indexes:full_indexing;mongodump -d $TDDIUM_MONGOID_DB -o tmp/;mv tmp/$TDDIUM_MONGOID_DB tmp/matching_test;
+    pre_setup: ./script/test/codeclimate-test-reporter/pre_setup.sh
+    post_worker: ./script/test/codeclimate-test-reporter/post_worker.sh
+    post_build: ./script/test/codeclimate-test-reporter/post_build.sh
+  timeout_hook: 1200
+  timeout: 3600
+  environment:
+    TZ: Asia/Kolkata
+  mysql:
+    version: '5.7.19'
+    adapter: 'mysql2'
+    config:
+      pool: 20
+      reconnect: true
+      encoding: utf8mb4
+      charset: utf8mb4
+      collation: utf8mb4_unicode_ci
+      strict: false
+    # Previous to Rails 5, MySQL 5.7's default mode was being overriden to empty string with strict: false and group_by was working fine(only_full_group_by was not included).
+    # With Rails 5, the handling of mysql mode changed to appending/replaced the existing sql mode instead of overriding them completely. 
+    # The only_full_group_by mode was not removed in this code. With this change, we are going back to Rails 4.2/MySQL 5.6 setup
+    custom_config: |
+      optimizer_switch = derived_merge=off
+      sql_mode = 
+  firefox: '58.0.2'
+  mongodb:
+    version: '3.4.14'
+  attachments:
+    'cities.txt':
+      url: 'https://s3.amazonaws.com/chronus-mentor-staging/public_assets/cities.txt'
+      hash: 'd582f273947509d2a6be4620900286d0b3979f67'
+    'countries.txt':
+      url: 'https://s3.amazonaws.com/chronus-mentor-staging/public_assets/countries.txt'
+      hash: 'f947d828a18eb0f15bcb845381896ee6e4520c22'
+    'states.txt':
+      url: 'https://s3.amazonaws.com/chronus-mentor-staging/public_assets/states.txt'
+      hash: '2d3fa681c2bfe264d5504d8507d60c837a40f972'
+  elasticsearch:
+    version: '6.2.4'
+    merge: true

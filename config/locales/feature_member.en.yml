@@ -1,0 +1,24 @@
+en:
+  feature:
+    member:
+      content:
+        welcome_terms_v4: Welcome, %{member_name}!
+        welcome_terms_v5: Welcome, %{member_name}
+        update_your_profile: Update Your Profile
+        complete_mandatory_fields_desc_v1_html: New mandatory fields have been added to the <b>%{section_name}</b> section of the profile. Please fill them out to complete your profile.
+        name_with_admin_term: "%{name} (%{Administrator})"
+        add_from_program:
+          column_title:
+            first_name: First name
+            last_name: Last name
+            email: Email
+            state: Status
+        search_placeholder: Search list by name or email
+        member_id: Member Id
+        not_eligible_v1_html: Based on available information, it appears you can not join the %{program} as %{role_names}. Please %{contact_admin} for further assistance.
+        joined_on_date: Joined on Date
+        active_connections_count: Number of connections (Current)
+      action:
+        Add_to_Program: Add to %{program}
+      label:
+        role: Role

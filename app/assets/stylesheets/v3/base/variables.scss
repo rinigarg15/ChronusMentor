@@ -1,0 +1,61 @@
+// Font
+$font-stack: 'Roboto', sans-serif;
+
+// Basic Colors
+$navy: #1ab394;           // Primary color -- Success Color for the theme
+$dark-gray: #c2c2c2;      // Default color
+$blue: #1c84c6;           // Success/Info color -- Info Color for the theme
+$lazur: $blue;          // Success/Info color
+$yellow: #f8ac59;         // Warrning color -- Warning Color for the theme
+$red: #EF5632;            // Danger color -- Danger Color for the theme
+
+// Various colors
+$text-color: #676a6c;           // Body text
+$gray: #f3f3f4;                 // Background wrapper color
+$light-gray: #d1dade;           // Default label, badget
+$label-badget-color: #5e5e5e;
+$light-blue: #EBF4FA;
+$light-green: #79d2c0;
+
+// Spiner color and margin
+$spin-color: $navy;
+$spin-margin: 0 auto;
+
+// IBOX colors ( default panel colors)
+$border-color: #e7eaec;   // IBox border
+$ibox-title-bg: white;    // IBox Background header
+$ibox-content-bg: white;  // IBox Background content
+
+//Sidebar width
+$sidebar-width: 220px;
+
+//Border width for error inputs
+$error-border-width: 2px;
+
+// Boxed layout width
+$boxed-width: 980px;
+$boxed-backgound: image-url("patterns/shattered.png");
+
+//Border radius for buttons
+$btn-border-radius: 3px;
+
+//Navigation
+$nav-bg: $navy;
+$nav-profil-pattern: image-url("patterns/header-profile.png") no-repeat;
+$nav-text-color: #FFF;
+
+// #TODO Import from Chronus Theme/ Manifest
+$tab-bgcolor: #1eaa79;
+$tab-color: #FFF;
+
+// Bootstrap variables
+$link-color: #1c84c6;
+$state-warning-bg: $yellow;
+$state-warning-text: white;
+$state-danger-bg: $red;
+$state-danger-text: white;
+$state-info-bg: $blue;
+$state-info-text: white;
+$state-success-bg: $navy;
+$state-success-text: white;
+$brand-primary: $navy;

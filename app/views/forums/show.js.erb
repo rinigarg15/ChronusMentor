@@ -1,0 +1,9 @@
+<% wrapper_scraps = render :partial => 'forums/forums_connection_widget', locals: { scraps_count: @topics.count, group_id: @group.id } %>
+jQuery("#mentoring_area_tabs_content_<%= @group.id %>").html("<%= j wrapper_scraps %>")
+<% if @topics.count > 0 %>
+  <% topics_badge_count_hash = current_user.get_unviewed_posts_count_by_topic(@group, @topics.collect(&:id)) %>
+  <% content =  content_tag(:div, listing_page(@topics, partial: "forums/topic", collection_key: :topic, list_group_item_class: "pointer", locals: { home_page: @home_page, topics_badge_count_hash: topics_badge_count_hash}), id: "cjs_topics_list") %>
+  jQuery('.cjs_tabs_group_<%= @group.id %>').find('.display-scraps').html("<%= j content %>");
+<% end %>
+jQuery(".cjs_tabs_group_<%= @group.id %>").removeClass('hide');
+GroupTabs.adjustSlickSlideHeight(".connections-slick", 100);

@@ -1,0 +1,191 @@
+.pointer {
+  cursor: pointer;
+}
+
+.cursor-default {
+  cursor: default;
+}
+
+// Custom Toast Styles
+
+.toast-top-full-width {
+  margin-top: 70px !important;
+
+  > div {
+    width: 96% !important;
+    margin: auto;
+    min-height: 60px;
+  }
+}
+
+.no-background {
+  background: transparent !important;
+}
+
+.alert {
+  a {
+    color: white;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+}
+
+.toast-message{
+  line-height: 24px;
+  width: calc(100% - 50px);
+
+  a {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  .alert.alert-danger {
+    border: 0;
+    margin-bottom: 0;
+    padding: 0;
+    background-color: inherit;
+    color: inherit;
+  }
+}
+
+button.toast-close-button {
+  padding: 0 15px 5px;
+}
+
+#toast-container > .toast-info:before {
+  content: "\f05a";
+}
+
+.elements-list a {
+  color: $link-color;
+}
+
+.elements-list .btn-white {
+  color: inherit;
+}
+
+.elements-list .btn-primary {
+  color: #ffffff;
+}
+
+.has-error {
+  .error-block {
+    color: $red;
+  }
+  .help-block {
+    @extend .text-muted;
+  }
+}
+// Media Heading Bootstrap Pattern
+.media {
+  margin-top: 15px;
+}
+.media:first-child {
+  margin-top: 0;
+}
+.media,
+.media-body {
+  zoom: 1;
+  overflow: visible;
+}
+.media-body {
+  width: 10000px;
+  @extend .break-word;
+}
+.media-object {
+  display: block;
+}
+.media-object.img-thumbnail {
+  max-width: none;
+}
+.media-right,
+.media > .pull-right {
+  padding-left: 10px;
+}
+.media-left,
+.media > .pull-left {
+  padding-right: 10px;
+}
+.media-left,
+.media-right,
+.media-body {
+  display: table-cell;
+  vertical-align: top;
+}
+.media-middle {
+  vertical-align: middle;
+}
+.media-bottom {
+  vertical-align: bottom;
+}
+.media-heading {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.media-list {
+  padding-left: 0;
+  list-style: none;
+}
+.media-collage{
+  width: 46px;
+}
+.list-group-item.selected {
+  background-color: #1c84c6;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(20%, #1c84c6), color-stop(90%, #0e71ab));
+  background-image: -webkit-linear-gradient(#1c84c6 20%, #0e71ab 90%);
+  background-image: -moz-linear-gradient(#1c84c6 20%, #0e71ab 90%);
+  background-image: -o-linear-gradient(#1c84c6 20%, #0e71ab 90%);
+  background-image: linear-gradient(#1c84c6 20%, #0e71ab 90%);
+  color: #fff;
+
+  .text-muted {
+    color: #CCCCCC;
+  }
+  .text-navy {
+    color: white;
+  }
+}
+
+.list-group {
+ @extend .no-padding;
+ @extend .no-margins;
+}
+
+.height-54 {
+  height: 34px;
+}
+
+.height-65 {
+  height: 60px;
+}
+
+.height-94 {
+  height: 94px;
+}
+
+.height-189 {
+  height: 189px;
+}
+
+.height-239 {
+  height: 239px;
+}
+
+.height-307 {
+  height: 307px;
+}
+
+.maxheight-30{
+  max-height: 30px;
+}
+
+.overflowy-ellipsis {
+  overflow-y: hidden;
+  text-overflow: ellipsis;
+}
+
+.table {
+  &.table-fixed {
+    table-layout: fixed;
+  }
+}

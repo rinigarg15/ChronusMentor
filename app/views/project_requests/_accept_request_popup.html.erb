@@ -1,0 +1,18 @@
+<% project_request_count = project_request_ids.size %>
+<% modal_v3_popup "feature.project_request.content.bulk_accept_request_popup.title".translate(count: project_request_count) do %>
+  <%= simple_form_for @project_request, url: update_actions_project_requests_path(src: ga_src, is_manage_view: is_manage_view), remote: true, html: { id: "bulk_accept_project_requests", class: "form-horizontal form-inline no-margin" } do |f| %>
+    <div>
+      <%= "feature.project_request.content.bulk_accept_request_popup.help_text".translate(count: project_request_count, mentoring_connection: _mentoring_connection) %>
+      <%= render_add_tasks_for_project_requests(f, project_request_ids) %>
+      <% if current_user.is_admin? %>
+      	<%= content_tag(:p, email_notification_consequences_on_action_html(ProjectRequestAccepted, div_enclose: false, with_count: true, count: project_request_count), class: "help-block small") %>
+      <% end %>
+    </div>
+    <%= hidden_field_tag "request_type", AbstractRequest::Status::ACCEPTED %>
+    <%= hidden_field_tag "project_request_ids", project_request_ids.join(ProjectRequestsController::SEPARATOR) %>
+    <div class="pull-right">
+      <%= cancel_link nil, qtip: true, additional_class: "popup_closebox btn-white" %>
+      <%= f.button :submit, "feature.project_request.content.bulk_accept_request_popup.action.accept_request".translate(count: project_request_count) %>
+    </div>
+  <% end %>
+<% end %>

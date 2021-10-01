@@ -1,0 +1,12 @@
+<%= render :partial => 'meetings/meeting_report_tiles', :locals => {:meeting_hash => meeting_hash, :percentage => percentage, :prev_periods_count => prev_periods_count} %>
+<%= ibox nil, content_class: "no-padding" do %>
+  <% @loading_results_message = "common_text.prompt_text.filtering_results".translate %>
+  <%= render(:partial => 'meetings/meeting_report_tabs', :locals => {:tab => tab}) %>
+  <% if @meetings.blank? %>
+    <%= render :partial => "meetings/meeting_sessions_no_results" %>
+  <% else %>
+    <div class="tab-content no-padding clearfix">
+      <%= render :partial => "meetings/render_meeting_sessions_data" %>
+    </div>
+  <% end %>
+<% end %>

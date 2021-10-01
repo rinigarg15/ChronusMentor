@@ -1,0 +1,18 @@
+<%= ibox nil, content_class: "no-padding", ibox_id: "qa_questions_pane"  do %>
+  <% search_results_wrapper(@search_query) do %>
+    <% if @qa_questions.blank? %>
+      <% unless search_view? %>
+        <div class="p-sm text-center">
+          <%= "feature.question_answers.content.no_questions_message".translate %>
+          <span class="m-l-xxs">
+            <%= link_to "feature.question_answers.content.add_a_question".translate, "javascript:void(0)", data: { toggle: "modal", target: "#cjs_new_qa_question_modal" } %>
+          </span>
+        </div>
+      <% end %>
+    <% else %>
+      <%= render :partial => "pagination" %>
+      <%= listing_page(@qa_questions, partial: "qa_questions/qa_question", collection_key: :qa_question) %>
+      <%= bottom_bar_in_listing( { collection: @qa_questions, params: { format: nil } } ) %>
+    <% end %>
+  <% end %>
+<% end %>

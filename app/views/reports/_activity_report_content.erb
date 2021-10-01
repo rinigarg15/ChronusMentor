@@ -1,0 +1,111 @@
+<% @skip_rounded_white_box_for_content = true %>
+<% @page_action = get_activity_report_dropdown_options(@role_filters, @start_time, @end_time) %>
+<% @page_action_options = {:dropdown_title => "feature.reports.label.export_to".translate, :embed_icon => true} %>
+<% @title = "feature.reports.header.activity_report".translate %>
+<% @back_link = back_to_reports_options(@category) %>
+<% col = (format == FORMAT::HTML) ? "col-sm" : "col-xs" %>
+
+<div id='health_report'>
+  <%= ibox "feature.reports.header.program_activity".translate, ibox_id: "health_report_program_activity" do %>
+    <div id="health_report_program_activity_header" class="m-b-sm">
+      <div class="clearfix">
+        <i class="text-muted">
+          <%= "feature.reports.content.program_activity_description_v1".translate(:program => _program, count: @program_health_report.active_user_interval_in_days) %>
+        </i>
+      </div>
+    </div>
+    <div class="m-t-xs clearfix">
+      <div id="health_report_program_activity_trend_chart" class="trend_chart <%= col %>-8 ">
+      </div>
+      <div id="health_report_program_activity_summary" class="<%= col %>-4">
+        <div id="health_report_program_activity_summary_details" class="clearfix">
+          <%=  health_report_label_box_with_help_text("label_box font-600", "health_report_program_activity_summary_label", "feature.reports.label.summary".translate, "feature.reports.content.program_activity_summary_description".translate) %>
+          <div id="health_report_program_activity_summary_chart" class="summary_chart m-b-xs"></div>
+          <table id="health_report_program_activity_summary_table" class="table table-bordered table-condensed m-b-xs">
+            <thead>
+              <%= activity_report_metric_label_with_help_text(program_activity_metric[:registered][:summary_name], program_activity_metric[:registered][:summary_help_text], @program_health_report.registered_users_summary_count) %>
+            </thead>
+            <tbody>
+              <%= activity_report_metric_label_with_help_text(program_activity_metric[:active][:summary_name], program_activity_metric[:active][:summary_help_text], @program_health_report.active_users_summary_count, "summary_chart_legend active_count") %>
+              <%= activity_report_metric_label_with_help_text(program_activity_metric[:inactive][:summary_name], program_activity_metric[:inactive][:summary_help_text], @program_health_report.registered_users_summary_count - @program_health_report.active_users_summary_count, "summary_chart_legend inactive_count") %>
+            </tbody>
+          </table>
+          <span class="text-muted small"><%= "feature.reports.content.count_includes_active_users".translate %></span>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @current_program.ongoing_mentoring_enabled? %>
+    <%= ibox "feature.reports.header.mentoring_activity_v1".translate, ibox_id: "health_report_mentoring_activity" do %>
+      <div id="health_report_mentoring_activity_header" class="m-b-sm">
+        <i class="text-muted">
+          <%= "feature.reports.content.mentoring_activity_description_v1".translate(count: @program_health_report.active_user_interval_in_days,:mentoring_connection => _mentoring_connection, :mentoring_connections => _mentoring_connections, :a_mentoring_connection => _a_mentoring_connection) %>
+        </i>
+      </div>
+      <div class="m-t-sm clearfix">
+        <div id="health_report_mentoring_activity_trend_chart" class="trend_chart <%= col %>-8">
+        </div>
+        <div id="health_report_mentoring_activity_summary" class="<%= col %>-4">
+          <div id="health_report_mentoring_activity_summary_details" class="clearfix">
+            <div id="health_report_ongoing_mentoring_activity_summary" class="clearfix">
+              <%=  health_report_label_box_with_help_text("label_box font-600", "health_report_ongoing_mentoring_activity_summary_label", "feature.reports.label.summary".translate, "feature.reports.content.mentoring_activity_summary_description_v1".translate) %>
+              <div id="health_report_ongoing_mentoring_activity_summary_chart" class="summary_chart m-b-xs"></div>
+              <table id="health_report_mentoring_activity_summary_table" class="table table-bordered table-condensed">
+                <thead>
+                  <%= activity_report_metric_label_with_help_text(mentoring_activity_metric[:mentoring][:summary_name], mentoring_activity_metric[:mentoring][:summary_help_text], @program_health_report.ongoing_mentoring_activity_users_summary_count) %>
+                </thead>
+                <tbody>
+                  <%= activity_report_metric_label_with_help_text(mentoring_activity_metric[:active][:summary_name], mentoring_activity_metric[:active][:summary_help_text], @program_health_report.active_mentoring_activity_users_summary_count, "summary_chart_legend active_count") %>
+                  <%= activity_report_metric_label_with_help_text(mentoring_activity_metric[:inactive][:summary_name], mentoring_activity_metric[:inactive][:summary_help_text], @program_health_report.ongoing_mentoring_activity_users_summary_count - @program_health_report.active_mentoring_activity_users_summary_count, "summary_chart_legend inactive_count") %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% scope = @current_program || wob_member %>
+  <% if @current_program.community_features_enabled? %>
+    <%= ibox "feature.reports.header.community_activity".translate, ibox_id: "health_report_community_activity" do %>
+      <div id="health_report_community_activity_header" class="m-b-sm">
+        <i class="text-muted">
+          <%= "feature.reports.content.community_activity_description_v2".translate(articles: _articles, resources: _resources, :program => _program) %>
+        </i>
+      </div>
+      <div class="m-t-xs clearfix">
+        <div id="health_report_community_activity_trend_chart" class="trend_chart <%= col %>-8">
+        </div>
+        <div id="health_report_community_activity_summary" class="<%= col %>-4">
+          <div id="health_report_community_activity_summary_details" class="clearfix">
+            <div class="font-600"><%=  health_report_label_box_with_help_text("label_box font-600", "health_report_community_activity_summary_label", "feature.reports.label.summary".translate, "feature.reports.content.community_activity_summary_description".translate) %></div>
+            <% com_activity_metric = community_activity_metric(_Article) %>
+            <table id="health_report_community_activity_summary_table" class="table table-bordered table-condensed m-t-xs">
+              <thead>
+                <%= activity_report_metric_label_with_help_text(com_activity_metric[:community][:summary_name], com_activity_metric[:community][:summary_help_text], @program_health_report.community_activity_users_summary_count) %>
+              </thead>
+              <tbody>
+                <%= activity_report_metric_label_with_help_text(com_activity_metric[:resource][:summary_name], com_activity_metric[:resource][:summary_help_text], @program_health_report.resource_activity_users_summary_count) if scope.resources_enabled? %>
+                <%= activity_report_metric_label_with_help_text(com_activity_metric[:article][:summary_name], com_activity_metric[:article][:summary_help_text], @program_health_report.article_activity_users_summary_count) if scope.articles_enabled? %>
+                <%= activity_report_metric_label_with_help_text(com_activity_metric[:forum][:summary_name], com_activity_metric[:forum][:summary_help_text], @program_health_report.forum_activity_users_summary_count) if scope.forums_enabled? %>
+                <%= activity_report_metric_label_with_help_text(com_activity_metric[:qa][:summary_name], com_activity_metric[:qa][:summary_help_text], @program_health_report.qa_activity_users_summary_count) if scope.qa_enabled? %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+<%= javascript_tag do %>
+  jQuery(function() {
+  <%= render :partial => 'reports/trend_chart.js', :locals => {:render_to => "health_report_program_activity_trend_chart", :chart_series_data => program_activity_trend_chart_data(@program_health_report), :start_time => @start_time, :format => format} %>
+  <%= render :partial => 'reports/summary_chart.js', :locals => {:render_to => "health_report_program_activity_summary_chart", :chart_summary_data => program_activity_summary_chart_data(@program_health_report), :name => "feature.reports.header.program_activity".translate, :format => format} %>
+  <%= render :partial => 'reports/trend_chart.js', :locals => {:render_to => "health_report_mentoring_activity_trend_chart", :chart_series_data => mentoring_activity_trend_chart_data(@program_health_report), :start_time => @start_time, :format => format} if @current_program.ongoing_mentoring_enabled? %>
+  <%= render :partial => 'reports/summary_chart.js', :locals => {:render_to => "health_report_ongoing_mentoring_activity_summary_chart", :chart_summary_data => ongoing_mentoring_activity_summary_chart_data(@program_health_report), :name => "feature.reports.label.ongoing_mentoring_v1".translate(:Mentoring_Connection => _Mentoring_Connection), :format => format} if @current_program.ongoing_mentoring_enabled? %>
+  <%= render :partial => 'reports/trend_chart.js', :locals => {:render_to => "health_report_community_activity_trend_chart", :chart_series_data => community_activity_trend_chart_data(@program_health_report, scope), :start_time => @start_time, :format => format} if @current_program.community_features_enabled? %>
+
+  });
+<% end %>

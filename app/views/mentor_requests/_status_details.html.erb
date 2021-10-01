@@ -1,0 +1,16 @@
+<% if mentor_request.rejected? || mentor_request.withdrawn? || mentor_request.closed? %>
+  <% reason = mentor_request.rejected? ? 'feature.mentor_request.content.rejection_reason_v1'.translate : mentor_request.withdrawn? ? 'feature.mentor_request.content.withdrawal_reason'.translate : 'feature.mentor_request.content.closing_reason'.translate %>
+  <%= profile_field_container_wrapper("#{reason}", mentor_request.response_text.present? ? mentor_request.response_text : content_tag(:i, "common_text.Not_specified".translate, :class => "text-muted"), :heading_id => "mentor_request_state_change_reason_#{mentor_request.id}", :heading_tag => :h4, :class => "m-t-xs m-b-xs" ) %>
+<% end %>
+
+<% if mentor_request.closed? %>
+  <% closed_by = mentor_request.closed_by %>
+  <% if current_user.can_manage_mentor_requests? && closed_by.present? %>
+    <%= profile_field_container_wrapper("#{MentorRequest.human_attribute_name("closed_by_id")}", link_to_user(closed_by), :answer_class => "font-bold", :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+  <% end %>
+  <% closed_at = mentor_request.closed_at %>
+  <% if closed_at.present? %>
+    <%= profile_field_container_wrapper("#{ MentorRequest.human_attribute_name("closed_at")}", formatted_time_in_words(closed_at, :absolute => true), :heading_tag => :h4, :class => "m-t-xs m-b-xs") %>
+  <% end %>
+<% end %>
+<%=  tooltip("mentor_request_state_change_reason_#{mentor_request.id}", reason) %>

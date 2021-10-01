@@ -1,0 +1,28 @@
+<% if defined?(login_page) && (local_assigns[:render_form] || !auth_config.remote_login?) %>
+  <% modal_id = "cjs-login-modal-#{auth_config.id}" %>
+  <% modal_header = "feature.login_management.header.sign_in_with".translate(title: auth_config.title) %>
+  <% modal_partial = "sessions/login_form" %>
+  <% modal_partial_locals = { modal_id: modal_id, login_id: login_id, auth_config: auth_config, security_setting: security_setting } %>
+<% elsif auth_config.indigenous? %>
+  <% if defined?(signup_page) %>
+    <% modal_id = "cjs-signup-modal-#{auth_config.id}" %>
+    <% modal_header = get_title_for_signup_form(auth_config) %>
+    <% modal_partial = "users/signup_form" %>
+    <% modal_partial_locals = { auth_config: auth_config, member: member, program_invitation: program_invitation, password: password, profile_answers_map: profile_answers_map } %>
+  <% elsif defined?(join_now_page) %>
+    <% modal_id = "cjs-join-now-modal-#{auth_config.id}" %>
+    <% modal_header = get_title_for_signup_form(auth_config, true) %>
+    <% modal_partial = "membership_requests/signup_options_form" %>
+    <% modal_partial_locals = { auth_config: auth_config } %>
+  <% end %>
+<% end %>
+
+<% if modal_id.present? %>
+  <% modal_container modal_header, { modal_id: modal_id, modal_dialog_class: "cui-login-modal" } do %>
+    <%= render partial: modal_partial, locals: modal_partial_locals %>
+  <% end %>
+<% end %>
+
+<div class="<%= 'm-b' if (auth_config_counter + 1) != total_count %>">
+  <%= get_auth_config_button(auth_config, modal_id) %>
+</div>

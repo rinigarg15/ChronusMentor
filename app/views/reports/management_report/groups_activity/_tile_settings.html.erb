@@ -1,0 +1,16 @@
+<%= form_tag(update_tile_settings_dashboard_report_sub_sections_path(tile: tile), remote: true) do %>
+  <div class="row">
+    <div class="col-sm-6">
+      <%= hidden_field_tag('dashboard_reports[]', DashboardReportSubSection::Type::GroupsActivity::GROUPS_ACTIVITY) %>
+      <%= render(partial: "reports/management_report/tile_settings_metrics", locals: {metrics: current_program.get_metrics(Report::Section::DefaultSections::ENGAGEMENT), section: current_program.report_sections.find_by(default_section: Report::Section::DefaultSections::ENGAGEMENT), tile: tile}) %>
+    </div>
+  </div>
+
+  <%= hidden_field_tag('filters[date_range]', options[:date_range]) %>
+  <%= hidden_field_tag('filters[date_range_preset]', options[:date_range_preset]) %>
+
+  <% action_set(class: "pull-right m-t-md") do %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", "data-dismiss" => "modal" %>
+    <%= submit_tag("display_string.Save".translate, class: 'btn btn-primary', data: {disable_with: "display_string.Please_Wait".translate}) %>
+  <% end %>
+<% end %>

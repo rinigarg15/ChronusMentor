@@ -1,0 +1,30 @@
+<%= hidden_field_tag(:map_filter, true) %>
+<% if @show_for_all_roles %>
+  <% label =  "feature.reports.label.role".translate %>
+  <%= ibox "", header_content: content_tag(:b, label), content_class: "p-t-0" do %>
+    <%= choices_wrapper(label) do %>
+      <%= content_tag(:label, :class => 'radio font-noraml') do %>
+        <%= radio_button_tag(:role, ReportsController::ALL, false) + "display_string.Any".translate %>
+      <% end %>
+      <% role_name_to_term_map = RoleConstants.program_roles_mapping(@current_program, pluralize: true) %>
+      <% @roles.each do |role_name| %>
+        <%= content_tag(:label, :class => 'radio font-noraml') do %>
+          <%= radio_button_tag(:role, role_name, false) + role_name_to_term_map[role_name] %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% label = "feature.reports.label.country".translate %>
+<%= ibox "", header_content: content_tag(:b, label), content_class: "p-t-0" do %>
+  <%= choices_wrapper(label) do %>
+    <% @sorted_locations.each do |country, locations| %>
+      <% country_id = country.gsub(ReportsController::COUNTRY_REGEXP, '_')%>
+      <label class="choice_item clearfix checkbox">
+        <%= check_box_tag "countries", country, false, {:class => 'cjs_country_checkbox', :id => "country_#{country_id}"} %>
+        <div><%= country %></div>
+      </label>
+    <% end %>
+  <% end %>
+<% end %>

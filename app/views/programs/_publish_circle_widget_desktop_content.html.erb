@@ -1,0 +1,64 @@
+<div class="row <%= hidden_on_mobile %>">
+  <div class="publish-circle-slick">
+    <% publishable_groups.each do |group| %>
+      <% member_container_class = group.custom_users.present? ? 'col-md-4' : 'col-md-6' %>
+      <div class="col-lg-4 col-xs-12 col-sm-6 m-b-xs">
+        <%= ibox nil, ibox_class: "no-margins slick_box", content_class: "no-padding" do %>
+          <div class="contact-box center-version no-margins clearfix">
+            <%= content_tag(:span, content_tag(:i, "", :class => "fa fa-lg fa-close"), class: "pointer pull-right cjs_remove_circle_from_widget m-t-sm m-r-sm", data: {url: remove_circle_from_publish_circle_widget_path(group_id: group.id, format: :js)}) %>
+            <div class=" m-b m-t col-md-3 text-center">
+              <div class="gray-bg media large p-sm table-bordered">
+                <div class="media-middle">
+                  <%= link_to(home_page_widget_group_logo(group), profile_group_url(group)) %>
+                </div>
+                <div class="p-t-xs p-b-xxs whitespace-nowrap truncate-with-ellipsis h4 no-margins"><%= link_to(group.name, profile_group_url(group), title: group.name) %></div>
+                <%= content_tag(:span, "feature.connection.content.project_available_for_text".translate(number_of_days: (Date.today - group.pending_at.to_date).to_i), class: "text-muted font-bold") %>
+              </div>
+            </div>
+            <div class="p-sm p-l-0 clearfix col-md-7 height-189 b-r text-center">
+              <div class="<%= member_container_class %> m-t-xl">
+                <%= content_tag(:div, _Mentors, class: "h6") %>
+                <%= group_members_for_users_listing(group, max_project_members_in_home_page_widget_for(), {mentors_only: true}) %>
+                <%= content_tag(:div, get_circle_remaining_slot_info_for_role(group, RoleConstants::MENTOR_NAME), class: "m-t-sm") %>
+              </div>
+              <div class="<%= member_container_class %> m-t-xl">
+                <%= content_tag(:div, _Mentees, class: "h6") %>
+                <%= group_members_for_users_listing(group, max_project_members_in_home_page_widget_for(), {students_only: true}) %>
+                <%= content_tag(:div, get_circle_remaining_slot_info_for_role(group, RoleConstants::STUDENT_NAME), class: "m-t-sm") %>
+              </div>
+              <% if group.custom_users.present? %>
+                <div class="<%= member_container_class %> m-t-xl">
+                  <%= content_tag(:div, group.program.get_role(RoleConstants::TEACHER_NAME).customized_term.pluralized_term, class: "h6") %>
+                  <%= group_members_for_users_listing(group, max_project_members_in_home_page_widget_for(), {teachers_only: true}) %>
+                  <%= content_tag(:div, get_circle_remaining_slot_info_for_role(group, RoleConstants::TEACHER_NAME), class: "m-t-sm") %>
+                </div>
+              <% end %>
+            </div>
+            <div class="m-t-lg p-t-xxs clearfix col-md-2">
+              <div class="m-t-xs">
+                <div class="text-center">
+                  <%= render_page_action(get_publish_action(group, {src: EngagementIndex::Src::PUBLISH_CIRCLE_WIDGET, ga_src: EngagementIndex::Src::PUBLISH_CIRCLE_WIDGET, btn_text: "display_string.Publish".translate, btn_class: "btn-block btn-sm p-l-xxs p-r-xxs truncate-with-ellipsis"}), { small: true }) %>
+                </div>
+                <div class="text-center">
+                  <%= link_to(append_text_to_icon("fa fa-group", "feature.connection.content.view_project".translate(mentoring_connection: _mentoring_connection)), profile_group_url(group), class: "btn btn-default btn-outline btn-block btn-sm p-l-xxs p-r-xxs truncate-with-ellipsis m-t-sm") %>
+                </div>
+              </div>
+            </div>
+          </div> 
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% if publishable_groups.size > 1 %>
+  <div class="text-center listing_bottom_bar clearfix p-t-sm <%= hidden_on_mobile %>">
+    <%= slick_carousel_navigation_buttons(prev_button_class: "publish-circle-slick-prev", next_button_class: "publish-circle-slick-next") %>
+  </div>
+<% end %>
+
+<%= javascript_tag do  %>
+  jQuery(document).ready(function(){
+    carousel.addCarousel('.publish-circle-slick', {dots: false, slidesToShow: 1, slidesToScroll: 1, prevArrow: jQuery('.publish-circle-slick-prev'), nextArrow: jQuery('.publish-circle-slick-next')});
+  });
+<% end %>

@@ -1,0 +1,7 @@
+<% modal_container nil, :modal_id => "progress_bar_container", :no_modal_header => true do %>
+  <h3 class="text-center"><%= text %><%= get_icon_content("fa fa-spinner fa-pulse m-l-sm") %></h3>
+  <div id='<%= id %>' class="cui_progress_bar m-lg">
+    <div class="cui_progress_status"></div>
+  </div>
+  <%= link_to("", data_url, class: "hide progress_data_url") %>
+<% end %>

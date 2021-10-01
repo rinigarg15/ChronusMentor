@@ -1,0 +1,108 @@
+/* line 1825, ../../../app/assets/stylesheets/grid/bootstrap.scss */
+[class^="icon-"],
+[class*=" icon-"] {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  *margin-right: .3em;
+  line-height: 18px;
+  vertical-align: text-top;
+  background-image: image-url("glyphicons-halflings.png");
+  background-position: 16px 16px;
+  background-repeat: no-repeat;
+  margin-top: 1px;
+}
+/* line 1836, ../../../app/assets/stylesheets/grid/bootstrap.scss */
+[class^="icon-"] img,
+[class*=" icon-"] img {
+  vertical-align: baseline;
+}
+
+/* line 1842, ../../../app/assets/stylesheets/grid/bootstrap.scss */
+[class^="manage-icon-"],
+[class*=" manage-icon-"] {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  *margin-right: .3em;
+  line-height: 18px;
+  vertical-align: text-top;
+  background-image: image-url("manage-sprite.png");  
+  background-repeat: no-repeat;
+  margin-top: 1px;
+}
+/* line 1853, ../../../app/assets/stylesheets/grid/bootstrap.scss */
+[class^="manage-icon-"] img,
+[class*=" manage-icon-"] img {
+  vertical-align: baseline;
+}
+
+/* line 1858, ../../../app/assets/stylesheets/grid/bootstrap.scss */
+[class^="icon-mentoring-model-v2"], [class*=" icon-mentoring-model-v2"] {
+  background-image: asset-url("mentor-sprite.png");
+}
+
+/* line 1862, ../../../app/assets/stylesheets/grid/bootstrap.scss */
+.icon-mentoring-model-v2-manage_mm_engagement_surveys {
+  background-image: asset-url("mentoring_model/engagement_survey_mm_setup.png");
+}
+
+/* line 1866, ../../../app/assets/stylesheets/grid/bootstrap.scss */
+.icon-mentoring-model-v2-manage_mm_engagement_surveys-feature-enabled {
+  background-image: asset-url("mentoring_model/engagement_survey_mm_list.png");
+}
+
+/* line 1871, ../../../app/assets/stylesheets/grid/bootstrap.scss */
+[class^="icon-"]:last-child,
+[class*=" icon-"]:last-child {
+  *margin-left: 0;
+}
+
+div.v2_pages {
+  .row-fluid {
+    width: 100%;
+  }
+  .row-fluid:before,
+  .row-fluid:after {
+    display: table;
+    content: "";
+  }
+  .row-fluid:after {
+    clear: both;
+  }
+
+  .well:before,
+  .well:after {
+    display: table;
+    content: "";
+  }
+  .well:after {
+    clear: both;
+  }
+
+  .row-fluid [class*="col-md-"] {
+  display: block;
+  min-height: 28px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  }
+
+  .form-horizontal .control-label {
+    @extend .pull-left;
+  }
+
+  .form-horizontal .control-label.col-sm-2 {
+    width: 16.6666666667%;
+  }
+
+  .form-horizontal .control-group {
+      margin-bottom: 20px;
+      margin-left: -15px;
+      margin-right: -15px;
+  }
+
+
+}

@@ -1,0 +1,15 @@
+<%= ac.input :type, :as => :hidden %>
+<%= ac.input :status, :as => :hidden, :input_html => {:id => 'article_content_status'} %>
+
+<% update_label = (@article.real_status == ArticleContent::Status::PUBLISHED ? "display_string.Update".translate : "display_string.Post".translate) %>
+
+<% action_set(class: "pull-right") do %>
+  <%= link_to "display_string.Cancel".translate, articles_path, :class => "m-t-xs btn btn-white" %>
+  <% if @article.real_status == ArticleContent::Status::DRAFT %>
+    <% unless @article.new_record? %>
+      <%= link_to("display_string.Discard_Draft".translate, @article, :method => :delete, :class => "m-t-xs discard_draft btn btn-white", data: {:confirm => "feature.article.content.discard_warning".translate(article: _article)}) %>
+    <% end %>
+    <%= ac.submit "display_string.Save_as_draft".translate, :onclick => "Article.setStatus(#{ArticleContent::Status::DRAFT})", class: "btn btn-white m-t-xs" %>
+  <% end %>
+  <%= ac.submit update_label, :onclick => "Article.setStatus(#{ArticleContent::Status::PUBLISHED})", class: "btn btn-primary m-t-xs" %>
+<% end %>

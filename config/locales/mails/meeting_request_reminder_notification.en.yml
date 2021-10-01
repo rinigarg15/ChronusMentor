@@ -1,0 +1,33 @@
+en:
+  email_translations:
+    meeting_request_reminder_notification:
+      enabled_html: A reminder %{email} will be sent to the user when %{meeting} requests are pending.
+      disabled_html: A reminder %{email} is usually sent to the user when %{meeting} requests are pending, but has been disabled. No email will be sent.
+      title_v4: Reminder to %{_mentor} of pending %{_meeting} request
+      description_v3: If %{_a_admin} chooses to do so, they can send this email to the %{_mentor} if %{_a_meeting} request has been pending acceptance for (%{_admin}-specified) days but the %{_mentor} has not accepted or declined the %{_meeting}.
+      subject_v1: 'Reminder: You have a pending request from {{mentee_name}}'
+      content_v3_html: "{{mentee_name}} sent you {{customized_meeting_term_articleized}} request on {{sent_time}} and is waiting for your response.<br /> <br /> {{meeting_request_reminder_notification_content}} {{meeting_description_as_quote}} <br />Tips: <br /><ul><li>View <a href='{{mentee_url}}'>{{mentee_name}}</a>'s profile to learn more about them.</li><li>If you think the {{customized_meeting_term}} would be a good idea, please accept their request as soon as possible.</li><li>If you must decline, please do so in a timely manner and be tactful.</li></ul>{{view_request_button}} {{pending_meeting_request}}"
+      pending_content_html:
+        one: "<br/>There is <a href='%{url_meeting_request_pending_link}'>one more %{meeting} request</a> pending for your approval.<br />"
+        other: "<br/>There are <a href='%{url_meeting_request_pending_link}'>%{count} more %{meeting} requests</a> pending your approval.<br />"
+      tags:
+        meeting_request_reminder_notification_content:
+          description: Image of the sender and description of the meeting
+          example_v2_html: "<table cellspacing='0' cellpadding='0' border='0'><tbody><tr><td style='padding-left: 5px; padding-right: 5px'><a href='http://www.chronus.com'><img src='https://chronus-mentor-assets.s3.amazonaws.com/global-assets/images/user_large.jpg' alt='profile picture' style='border: none; border-radius: 50%' height='50px;' width='50px;'></a></td><td style='padding-left: 5px; line-height: 5px'><a href='http://www.chronus.com'>William Smith</a></td></tr></table>"
+        pending_meeting_request:
+          description: Meeting request pending approval
+          example_v1_html: "<br />There are <a href='www.chronus.com'>3 more %{meeting} requests</a> pending your approval."
+        sent_time:
+          description: Meeting request sent time
+          example: Feb 18, 2014 at 12:42 AM
+        view_request_button:
+          description: View Meeting Request button
+          view_request: View Request
+        mentee_name:
+          description: Name of the mentee
+          example: William Smith
+        mentee_url:
+          description: Url of the mentee's profile
+        meeting_description_as_quote:
+          description: Meeting request description as quoted by mentee.
+          example: This meeting is about discussing my career plan.

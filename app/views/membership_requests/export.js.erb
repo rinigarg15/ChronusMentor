@@ -1,0 +1,5 @@
+<% if @membership_requests.any? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", "<%= @success_message %>", true);
+<% else %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", '<%= "flash_message.membership.no_data_to_export".translate %>', false);
+<% end %>

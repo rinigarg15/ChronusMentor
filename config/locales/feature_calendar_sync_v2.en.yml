@@ -1,0 +1,23 @@
+en:
+  feature:
+    calendar_sync_v2:
+      content:
+        calendar_synced: Your %{calendar_provider} calendar is connected.
+        calendar_not_synced: Your calendar is not connected.
+        no_free_slots_available: There are no available timeslots on %{picked_date}. Please choose another date.
+        connection_error: We are unable to connect with the calendar at the moment. Please try again later.
+        invalid_slots_error_html: Following errors occurred<br>%{error_list}
+        disconnect_confirm_alert: Users scheduling %{a_meeting} will no longer have visibility into your busy times. Do you want to go ahead?
+        disconnect_success: You have successfully disconnected your calendar
+        shortlist_help_text: Showing times based on the availability of the attendees
+        organization_calendar_synced: Your scheduling assistant calendar account has been setup successfully
+      action:
+        connect_your_calendar: Connect your calendar
+        disconnect: Disconnect
+      prompt:
+        prompt_text_html: "%{connect_calendar_link} to enable the scheduling assistant to suggest available times when scheduling %{meetings}"
+      label:
+        google: Google
+        outlook: Outlook.com
+        office365: Office 365
+

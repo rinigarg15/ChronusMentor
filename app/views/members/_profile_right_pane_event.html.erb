@@ -1,0 +1,9 @@
+<div class="m-b-xxs font-bold h5 no-margins truncate-with-ellipsis whitespace-nowrap">
+  <%= link_to truncate(sidepane_asset.title.gsub(/([\n\t])/, " "), :length => 50), program_event_path(sidepane_asset) %>
+</div>
+<div class="m-b-xxs small"><%= event_date_for_display(sidepane_asset) %></div>
+<div class="m-b-xxs small"><%= event_time_for_display(sidepane_asset) %></div>
+<div class="clearfix m-t-sm small">
+  <%= render :partial => "program_events/fetch_response_buttons", :locals => {:program_event => sidepane_asset, :src => "home"}  %>
+</div>
+<%= render :partial => "program_events/invite_response_popup", :locals => {:program_event => sidepane_asset, :src => "home"} %>

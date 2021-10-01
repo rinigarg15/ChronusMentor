@@ -1,0 +1,23 @@
+<div class='text-center m-t-xs'>
+  <span class="fa-3x fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x text-success"></i>
+    <i class="fa fa-users fa-stack-1x fa-inverse"></i>
+  </span>
+  <div class="m-b-lg">
+    <p class="m-t-xs">
+      <%= "feature.connection.header.no_connections".translate(mentoring: _mentoring, mentoring_connection: _mentoring_connections) %>
+    </p>
+    <% show_resources = (current_user.accessible_resources({admin_view: current_user.is_admin?}).exists? && @current_program.resources_enabled?) %>
+    <% browse_mentor = link_to "feature.connection.header.browse_mentor".translate(Mentors: _Mentors), users_path(src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), class: "font-bold" %>
+    <% browse_resources = (link_to "feature.connection.header.browse_resources".translate(Resources: _Resources), resources_path(src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), class: "font-bold") %>
+    <% if show_resources && current_user.can_connect_with_a_mentor? %>
+      <%= browse_mentor %>
+      <%= content_tag(:span, "|", class: "text-muted p-l-xxs p-r-xxs") %>
+      <%= browse_resources %>
+    <% elsif show_resources %>
+      <%= browse_resources %>
+    <% elsif current_user.can_connect_with_a_mentor? %>
+      <%= browse_mentor %>
+    <% end %>
+  </div>
+</div>

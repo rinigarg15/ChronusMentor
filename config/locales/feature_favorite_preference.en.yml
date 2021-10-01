@@ -1,0 +1,37 @@
+en:
+  feature:
+    favorite_preference:
+      header:
+        favorite: "Mark this %{mentor} as favorite"
+        unfavorite: "Unmark this %{mentor} as favorite"
+        favorite_users: Favorite users
+        favorite_users_v1: Favorite %{mentors}
+        request_sent: "Congratulations! Request successfully sent"
+        sidebar_header: How to Find %{a_Mentor}
+        sidebar_tips1: Review Recommendations
+        sidebar_tips2: Connect with your %{Mentors}
+        sidebar_tips3: Build your Favorite %{Mentors} List
+      content:
+        favorite_user: Favorite User 
+        no_favorite: You don't have any favorite users
+        browse_profile: Browse Profiles
+        request_bookmarked_mentors: Your settings allow you to connect with more %{mentors}. Consider connecting with your favorite %{mentors}.
+        view_favorites: View Favorites
+        sidebar_tips_content1: Learn more about potential %{mentors} by reviewing their profiles. Check if they are compatible with your match preferences.
+        sidebar_tips_content1_v1: Learn more about potential %{mentors} by reviewing their profiles for compatibility with your preferences. Check out detailed profiles for as many %{mentors} as you can to understand the options available to you. Around 10 to 15 is a good start.
+        sidebar_tips_content2: Reach out to %{mentors} you like by sending a request with a personalized greeting and a description of your needs and how they might be able to help.
+        sidebar_tips_content3: Add a few %{mentors} to favorites list that you can come back to incase the %{mentors} cannot accept your requests. Only you can see this list and %{mentors} are not notified when you add them.
+        sidebar_tips_content3_v1: Add a few %{mentors} to your favorites list that you can come back to in case the %{mentors} cannot accept your requests. Only you can see this list and %{mentors} are not notified when you add them.
+        sidebar_tips_content3_v2: Add a few %{mentors} to your favorites list in case your first choice of %{mentors} cannot accept your requests. Only you can see this list and %{mentors} are not notified when you add them.
+        sidebar_tips_content_show_connection: "%{Mentees} are 78% more likely to find the right %{mentor} by sending out 3 or more requests. Reach out to atleast 3 %{mentors} with a personalized greeting and a description of your needs and how they might be able to help."
+        popup_tooltip_text: "Click here for more information on finding a %{mentor}"
+        popup_screen_reader_text: "More information on finding a %{mentor}"
+        guidance_popup_flash_message: Congratulations! You are just a few steps away from finding your %{mentor}.
+    ignore_preference:
+      label:
+        Reconsider: Reconsider
+      tooltip:
+        ignore_profile: "Ignore this %{mentor}'s profile"
+        reconsider_profile: "Reconsider this %{mentor}'s profile"
+      content:
+        reconsider: reconsider

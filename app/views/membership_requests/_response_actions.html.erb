@@ -1,0 +1,12 @@
+<% mreq_id = membership_request.id %>
+<% date_range = "#{DateTime.localize(membership_request.created_at, format: :date_range)} - #{DateTime.localize(Time.current, format: :date_range)}" %>
+<% view_sent_messages_options = { url: admin_messages_path(tab: MessageConstants::Tabs::SENT, search_filters: { receiver: membership_request.member.name_with_email, date_range: date_range }) } %>
+<% actions = [] %>
+
+<% actions << { icon: 'fa fa-check m-r-xxs', label: "feature.membership_request.label.accept".translate, class: "btn btn-primary cjs_membership_request_individual_update", data: { url: new_bulk_action_membership_requests_path(membership_request_ids: mreq_id, status: MembershipRequest::Status::ACCEPTED)}, url: "javascript:void(0);"} %>
+<% actions << { icon: 'fa fa-pencil m-r-xxs', label: "feature.membership_request.label.edit_request".translate, url: edit_membership_request_path(membership_request) } %>
+<% actions << { icon: 'fa fa-envelope m-r-xxs', label: "display_string.Send_Message".translate, class: "cjs_send_message", data: { url: new_bulk_admin_message_admin_messages_path(bulk_action: { members: [membership_request.member_id]}, src: MembershipRequest.name) } } %>
+<% actions << { icon: 'fa fa-comments m-r-xxs', label: "feature.membership_request.label.view_sent_messages".translate }.merge(view_sent_messages_options) %>
+<% actions << { icon: 'fa fa-times m-r-xxs', label: "feature.membership_request.label.reject".translate, class: "cjs_membership_request_individual_update", data: { url: new_bulk_action_membership_requests_path(membership_request_ids: mreq_id, status: MembershipRequest::Status::REJECTED)}, url: "javascript:void(0);"} %>
+<% actions << { icon: 'fa fa-trash m-r-xxs', label: "feature.membership_request.label.ignore".translate, class: "cjs_membership_request_individual_update", data: { url: new_bulk_action_membership_requests_path(membership_request_ids: mreq_id)}, url: "javascript:void(0);"} %>
+<%= dropdown_buttons_or_button(actions, embed_icon: true) %>

@@ -1,0 +1,44 @@
+<%= javascript_include_tag "//cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js" %>
+<%= javascript_include_tag "//cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js" %>
+<%= stylesheet_link_tag "//cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css" %>
+
+<% @title = get_icon_content("fa fa-user-secret") + "Administrators" %>
+<% @page_action = {:label => get_icon_content('fa fa-download') + "Export admins to CSV", :url => export_admins_path(:format => :csv), class: "btn btn-primary btn-large", :id => "admin_csv_export_link"} %>
+
+<%= ibox nil do %>
+  <table id="admins" datatable class="boxshadow-sm table table-striped table-responsive table-bordered table-hover dataTable">
+    <thead>
+      <tr>
+        <th>Account Name</th>
+        <th>Organization</th>
+        <th>Organization URL</th>
+        <th>Program</th>
+        <th>Last Active Program URL</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Joining Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @admins.flatten.each do |display_hash| %>
+        <tr>
+          <td><%= display_hash[:account_name] %></td>
+          <td><%= display_hash[:org_name] %></td>
+          <td><%= link_to(display_hash[:org_url], display_hash[:org_url], :target => "_blank")  %></td>
+          <td><%= display_hash[:program_name] %></td>
+          <td><%= link_to(display_hash[:program_url], display_hash[:program_url], :target => "_blank") if display_hash[:program_url].present? %></td>
+          <td><%= display_hash[:first_name] %></td>
+          <td><%= display_hash[:last_name] %></td>
+          <td><%= display_hash[:email] %></td>
+          <td><%= display_hash[:created_at] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+
+  </table>
+<% end %>
+
+<script type="text/javascript">
+  homeTableSearch.searchTable('#admins')
+</script>

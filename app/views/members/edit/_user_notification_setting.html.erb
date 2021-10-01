@@ -1,0 +1,65 @@
+<div>
+  <% if local_assigns[:show_heading] %>
+    <h4 class="m-b"><%= "feature.profile.content.notification_settings".translate %></h4>
+  <% end %>
+
+  <% if program.ongoing_mentoring_enabled? %>
+    <%= choices_wrapper("feature.profile.content.mentoring_connection_activities".translate(mentoring_connections: _mentoring_connections)) do %>
+      <%= control_group do %>
+        <%= content_tag(:div, "feature.profile.content.mentoring_connection_activities".translate(mentoring_connections: _mentoring_connections), class: 'false-label control-label col-sm-2') %>
+        <%= controls(class: "col-sm-10") do %>
+          <div class="well white-bg col-xs-12 m-b-xs">
+            <label class="col-xs-12">
+              <%= user_form.radio_button :group_notification_setting, UserConstants::DigestV2Setting::GroupUpdates::DAILY, class: "vertical-align-top", id: "user_group_notification_setting_#{UserConstants::DigestV2Setting::GroupUpdates::DAILY}_#{program.id}" %>
+              <%= "feature.profile.content.daily_digest".translate %>
+            </label>
+            <label class="col-xs-12">
+              <%= user_form.radio_button :group_notification_setting, UserConstants::DigestV2Setting::GroupUpdates::WEEKLY, class: "vertical-align-top", id: "user_group_notification_setting_#{UserConstants::DigestV2Setting::GroupUpdates::WEEKLY}_#{program.id}" %>
+              <%= "feature.profile.content.weekly_digest".translate %>
+            </label>
+            <label class="col-xs-12">
+              <%= user_form.radio_button :group_notification_setting, UserConstants::DigestV2Setting::GroupUpdates::NONE, class: "vertical-align-top", id: "user_group_notification_setting_#{UserConstants::DigestV2Setting::GroupUpdates::NONE}_#{program.id}" %>
+              <%= "feature.profile.content.do_not_notify".translate %>
+              <%= content_tag(:span, "feature.profile.content.not_recommended".translate, class: "text-muted small font-normal") %>
+            </label>
+          </div>
+          <%= content_tag(:div, "feature.profile.content.group_update_help_text".translate(mentoring_connections: _mentoring_connections), class: "help-block small") %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= control_group(class: "m-b-xs") do %>
+    <%= content_tag(:div, "feature.profile.content.program_updates".translate(program: _Program), class: 'false-label control-label col-sm-2') %>
+    <%= choices_wrapper("feature.profile.content.program_updates".translate(program: _Program)) do %>
+      <%= controls(class: "col-sm-10") do %>
+        <div class="well white-bg col-xs-12 m-b-xs">
+          <label class="col-xs-12">
+            <%= user_form.radio_button :program_notification_setting, UserConstants::DigestV2Setting::ProgramUpdates::IMMEDIATE, class: "vertical-align-top", id: "user_program_notification_setting_#{UserConstants::DigestV2Setting::ProgramUpdates::IMMEDIATE}_#{program.id}" %>
+            <%= "feature.profile.content.immediate".translate %>
+          </label>
+          <label class="col-xs-12">
+            <%= user_form.radio_button :program_notification_setting, UserConstants::DigestV2Setting::ProgramUpdates::DAILY, class: "vertical-align-top", id: "user_program_notification_setting_#{UserConstants::DigestV2Setting::ProgramUpdates::DAILY}_#{program.id}" %>
+            <%= "feature.profile.content.daily_digest".translate %>
+          </label>
+          <label class="col-xs-12">
+            <%= user_form.radio_button :program_notification_setting, UserConstants::DigestV2Setting::ProgramUpdates::WEEKLY, class: "vertical-align-top", id: "user_program_notification_setting_#{UserConstants::DigestV2Setting::ProgramUpdates::WEEKLY}_#{program.id}" %>
+            <%= "feature.profile.content.weekly_digest".translate %>
+          </label>
+          <label class="col-xs-12">
+            <%= user_form.radio_button :program_notification_setting, UserConstants::DigestV2Setting::ProgramUpdates::NONE, class: "vertical-align-top", id: "user_program_notification_setting_#{UserConstants::DigestV2Setting::ProgramUpdates::NONE}_#{program.id}" %>
+            <%= "feature.profile.content.do_not_notify".translate %>
+            <%= content_tag(:span, "feature.profile.content.not_recommended".translate, class: "text-muted small font-normal") %>
+          </label>
+        </div>
+        <%= content_tag(:div, "feature.profile.content.program_update_help_text".translate(program: _Program, articles: _articles), class: "help-block small") %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <div class="m-b text-muted well well-sm">
+    <%= get_icon_content("fa fa-info-circle") %>
+    <%= "feature.profile.content.other_notification_status".translate(meetings: _meetings) %>
+  </div>
+
+</div>

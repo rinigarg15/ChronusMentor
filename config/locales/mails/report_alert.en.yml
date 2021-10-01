@@ -1,0 +1,28 @@
+en:
+  email_translations:
+    report_alert:
+      title_v3: "%{_Program} management alert email"
+      description_v2: "%{_Admins} can subscribe to receive email alerts for certain conditions (such as 'Membership Requests pending more than 15 days') through the home-page dashboard. This is the email that sends the alert information."
+      subject_v1: "{{alerts_count}} {{need}} your attention"
+      content_v1_html: 'The following alerts require your attention: <br /> <br /> {{alert_details}}'
+      alert_count:
+        one: 1 alert
+        other: "%{count} alerts"
+      dashboard_alert_count:
+        one: 1 dashboard alert
+        other: "%{count} dashboard alerts"
+      need:
+        one: needs
+        other: need
+      program_link_html: "<a href='%{link}'>here</a>"
+      tags:
+        alert_details:
+          description: Alert details with link to program management report metric
+          example_v2_html: "<table border='0' cellpadding='0' cellspacing='0' width='100%' style='table-layout: fixed;line-height: 21px; color:#333333;'><tr><td style='border-top: 3px solid #eeeeee; padding-top: 10px'><div style='font-size:1.3em;margin-bottom:5px;font-weight:bold;color:#1eaa79'>Pending Membership Requests</div><table cellspacing='0' border = '0' cellpadding = '0'><tr><td valign='top' align='left' style='padding-top: 10px; padding-bottom: 10px'><a href='http://www.chronus.com' style='text-decoration: none;'>3 Membership Requests are pending more than 15 days</a></td></tr></table></td></tr></table>"
+        alerts_count:
+          description: Number of alerts which needs attention
+        need:
+          description: word 'need(s)'
+        program_link:
+          description: Link to dashboard
+          example_html: "<a href='http://chronus.com'>here</a>"

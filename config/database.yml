@@ -1,0 +1,99 @@
+common: &common
+  adapter: mysql2
+  encoding: utf8mb4
+  charset: utf8mb4
+  collation: utf8mb4_unicode_ci
+  pool: 5
+  reconnect: true
+  username: groups_user
+  password: <%= ENV['DATABASE_PWD'] %>
+  strict: false
+  variables:
+    # Previous to Rails 5, MySQL 5.7's default mode was being overriden to empty string with strict: false and group_by was working fine(only_full_group_by was not included).
+    # With Rails 5, the handling of mysql mode changed to appending/replaced the existing sql mode instead of overriding them completely.
+    # The only_full_group_by mode was not removed in this code. With this change, we are going back to Rails 4.2/MySQL 5.6 setup
+    sql_mode: ""
+
+development:
+  <<: *common
+  host: <%= ENV['MY_HOST'] || "localhost" %>
+  database: <%= ENV['MY_DATABASE'] || "groups_development" %>
+  username: <%= ENV['MY_USERNAME'] || "root" %>
+  password: <%= ENV['MY_DATABASE_PWD'] %>
+  sslca: <%= File.expand_path("config/database/rds_ssl_certificate.pem") if ENV['MY_HOST'] %>
+
+test: &test
+  <<: *common
+  database: groups_test<%= ENV['TEST_ENV_NUMBER'] %>
+  username: root
+  password:
+
+production:
+  <<: *common
+  host: groups-vpc-production.cpcsotaxif7b.us-east-1.rds.amazonaws.com
+  database: groups_production
+
+productioneu:
+  <<: *common
+  host: groups-vpc-productioneu.cvllbrmjjxic.eu-central-1.rds.amazonaws.com
+  database: groups_productioneu
+
+generalelectric:
+  <<: *common
+  host: groups-vpc-generalelectric.cpcsotaxif7b.us-east-1.rds.amazonaws.com
+  database: groups_generalelectric
+
+veteransadmin:
+  <<: *common
+  host: groups-vpc-veteransadmin.cpcsotaxif7b.us-east-1.rds.amazonaws.com
+  database: groups_veteransadmin
+
+nch:
+  <<: *common
+  host: groups-vpc-nch.cpcsotaxif7b.us-east-1.rds.amazonaws.com
+  database: groups_nch
+
+demo:
+  <<: *common
+  host: groups-vpc-demo.cpcsotaxif7b.us-east-1.rds.amazonaws.com
+  database: groups_demo
+
+staging:
+  <<: *common
+  host: groups-vpc-staging.cpcsotaxif7b.us-east-1.rds.amazonaws.com
+  database: groups_staging
+
+standby:
+  <<: *common
+  host: groups-vpc-standby.cpcsotaxif7b.us-east-1.rds.amazonaws.com
+  database: groups_standby
+
+performance:
+  <<: *common
+  host: groups-vpc-performance.cpcsotaxif7b.us-east-1.rds.amazonaws.com
+  database: groups_performance
+
+opstesting:
+  <<: *common
+  host: groups-vpc-opstesting.cpcsotaxif7b.us-east-1.rds.amazonaws.com
+  database: groups_opstesting
+
+scanner:
+  <<: *common
+  host: groups-vpc-scanner.cpcsotaxif7b.us-east-1.rds.amazonaws.com
+  database: groups_scanner
+
+training:
+  <<: *common
+  host: groups-vpc-training.cpcsotaxif7b.us-east-1.rds.amazonaws.com
+  database: groups_training
+
+releasestaging1:
+  <<: *common
+  host: groups-vpc-releasestaging1.cpcsotaxif7b.us-east-1.rds.amazonaws.com
+  database: groups_releasestaging1
+
+releasestaging2:
+  <<: *common
+  host: groups-vpc-releasestaging2.cpcsotaxif7b.us-east-1.rds.amazonaws.com
+  database: groups_releasestaging2

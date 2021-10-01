@@ -1,0 +1,18 @@
+<% if @error_message.present? %>
+   ChronusValidator.ErrorManager.ShowPageFlash(false, "<%= j @error_message %>");
+<% else %>
+  <% success_flash_message = "flash_message.program_flash.updated".translate %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("", "<%= j(success_flash_message) %>", true);
+  <% if @unanswered_mandatory_profile_qs.blank? %>
+    closeQtip();
+    window.location = "<%= @back_url %>";
+  <% else %>
+    jQuery("#loading_results").show();
+    <% profile_section = get_first_profile_section(@unanswered_mandatory_profile_qs) %>
+    <% popup_desc = "feature.member.content.complete_mandatory_fields_desc_v1_html".translate(section_name: profile_section[:section].title) %>
+    jQuery(".cjs_unanswered_profile_section").text("<%= j popup_desc %>");
+    <% content = render(:partial => "members/edit_first_visit", :locals => {pending_profile_questions: @unanswered_mandatory_profile_qs, profile_user: @profile_user, program: @current_program, profile_member: @profile_member, grouped_role_questions: @grouped_role_questions, answer_mandatory_qs: true, last_section: true, section: MembersController::EditSection::PROFILE}) %>
+    jQuery('#profile_completion').html('<%= j content %>');
+    jQuery("#loading_results").hide();
+  <% end %>
+<% end %>

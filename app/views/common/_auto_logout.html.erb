@@ -1,0 +1,24 @@
+<% modal_container nil, :modal_id => "modal_auto_logout_dialog", :no_modal_header => true do %>
+  <div class="logoutmsg">
+    <div class="content clearfix">
+      <h3 id="auto_logout_dialog"><%= "autologout.header.session_expiry_warning".translate %></h3>
+      <p id="to_expire_warning">
+        <%= "autologout.content.logout_in".translate %> <span id='logout_time'> </span>
+          <span id="to_expire_warning_seconds" style="display:none"><%= "autologout.content.seconds".translate %></span>
+          <span id="to_expire_warning_minutes" style="display:none"><%= "autologout.content.minutes".translate %></span>
+      </p>
+      <p id="session_refresh_message" style="display:none"><%= "autologout.content.trying_session_refresh".translate %> </p>
+      <p id="logging_out_warning" style="display:none"> <%= "autologout.content.session_expired_redirecting".translate %> </p>
+
+      <div class="pull-right actions clearfix">
+        <%= link_to_function "autologout.action.logout_now".translate, "AutoLogout.logoutClick()", :class => "btn btn-white", :id => 'logout_link' %>
+        <%= link_to "autologout.action.continue_work".translate, refresh_session_path, :remote => true, :class => 'btn btn-primary', :id => 'refresh_session_link',
+        :onclick => 'AutoLogout.beforeRefreshSession()' %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  AutoLogout.initAutoLogout(<%= AutoLogout::TimeInterval::CHECK_SESSION%>, '<%= request.host %>', <%= APP_CONFIG[:session_expiry_warning_time].to_i %>,'<%= AutoLogout::Cookie::SESSION_ACTIVE %>','<%= AutoLogout::Cookie::CLIENT_TIME_DIFFERENCE %>',<%= Time.now.to_i %>, '<%= logout_path() %>');
+</script>

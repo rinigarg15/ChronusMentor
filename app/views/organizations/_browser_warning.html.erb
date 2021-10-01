@@ -1,0 +1,27 @@
+<%= control_group do %>
+  <%= f.label :browser_warning, "program_settings_strings.label.browser_warning_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS,'', :id => 'browser_warning_label', )), :class => "control-label", :for => "program_organization_browser_warning" %>
+  <%= tooltip("browser_warning_label", "program_settings_strings.content.browser_warning_tooltip_html".translate(program: _Program)) %>
+  <%= controls do %>
+    <% has_browser_warning = !@current_organization.browser_warning.blank? %>
+    <% active_style = has_browser_warning ? 'display:none' : '' %>
+    <% inactive_style = has_browser_warning ? '' : 'display:none' %>
+    <div id="no_browser_warning" class="pull-left p-r-xs" style="<%= active_style %>"><%= "display_string.None".translate %> - </div>
+    <div id="cur_browser_warning" class="well white-bg no-margins" style="<%= inactive_style %>">
+      <%= @current_organization.browser_warning.to_s.html_safe %>
+    </div>
+    <div id="browser_warning_actions" class="m-t-xs">
+      <%= link_to(has_browser_warning ? 'display_string.Edit'.translate : 'display_string.Add'.translate, "javascript:void(0)" , :id => 'add_browser_warning_link', :class => "btn btn-xs btn-white", data: { toggle: "modal", target: "#cjs_add_browser_warning_link_popup" } ) %>
+    </div>
+    <%= f.hidden_field :browser_warning, :id => "program_organization_browser_warning" %>
+    <% modal_container "program_settings_strings.header.browser_warning".translate, modal_id: "cjs_add_browser_warning_link_popup" do %>
+      <p><%= "program_settings_strings.content.browser_warning_tooltip_html".translate(program: _Program) %></p>
+      <%= label_tag(:browser_warning_text, "program_settings_strings.header.browser_warning".translate, :clss => "sr-only") %>
+      <%= text_area_tag :browser_warning_text, "" %>
+      <div class="pull-right p-t-sm">
+        <%= link_to_function 'display_string.Cancel'.translate, 'BrowserWarning.discardChanges(); ', :class => 'btn cancel btn-white' %>
+        <%= link_to_function 'display_string.Done'.translate, "BrowserWarning.update('#{j("display_string.Edit".translate)}')", :class => 'btn btn-primary' %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+<%= javascript_tag %Q[CkeditorConfig.browserWarningTextInitialize();] %>

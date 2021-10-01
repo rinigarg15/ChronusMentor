@@ -1,0 +1,9 @@
+<% question = survey_question.question %>
+<div class="well noshadow flat-border no-vertical-margins clearfix cjs-alt-color-actions" id="cjs_three_sixty_survey_question_<%= survey_question.id %>">
+  <div class="col-md-6">
+    <%= question.title %>
+  </div>
+  <div class="col-md-6">
+    <%= three_sixty_survey_answer_field(survey_question, answers.find{|a| a.three_sixty_survey_question_id == survey_question.id}, question) %>
+  </div>
+</div>

@@ -1,0 +1,463 @@
+---
+ sections:
+  - title: "Basic Information"
+    position: 1
+    default_field: true    
+
+  - title: "Work and Education"
+    position: 2    
+
+  - title: "Mentoring Profile"
+    position: 3    
+
+ profile_questions:
+  - basic_information:
+    - question_type: <%= ProfileQuestion::Type::NAME %>
+      question_text: "Name"
+
+    - question_type: <%= ProfileQuestion::Type::EMAIL %>
+      question_text: "Email"
+
+    - question_type: <%= ProfileQuestion::Type::LOCATION %>
+      question_text: Location      
+      
+    - question_type: <%= ProfileQuestion::Type::STRING %>
+      question_text: "Phone"
+
+    - question_type: <%= ProfileQuestion::Type::SKYPE_ID %>
+      question_text: "Skype ID"
+      help_text: <%= ProfileQuestion.skype_text %>
+
+  - work_and_education:
+
+    - question_type: <%= ProfileQuestion::Type::MULTI_EDUCATION %>
+      question_text: Education      
+
+    - question_type: <%= ProfileQuestion::Type::MULTI_EXPERIENCE %>
+      question_text: Work      
+
+  - mentoring_profile:
+    - question_type: <%= ProfileQuestion::Type::TEXT %>
+      question_text: "About Me"
+
+    - question_type: <%= ProfileQuestion::Type::SINGLE_CHOICE %>
+      question_text: Gender
+      question_choices: 
+        - Male
+        - Female
+
+    - question_type: <%= ProfileQuestion::Type::SINGLE_CHOICE %>
+      question_text: Industry
+      question_choices: 
+        - Accounting 
+        - Airlines/Aviation 
+        - Alternative Dispute Resolution 
+        - Alternative Medicine 
+        - Animation 
+        - Apparel & Fashion 
+        - Architecture & Planning 
+        - Arts and Crafts 
+        - Automotive 
+        - Aviation & Aerospace 
+        - Banking 
+        - Biotechnology 
+        - Broadcast Media 
+        - Building Materials 
+        - Business Supplies and Equipment 
+        - Capital Markets 
+        - Chemicals 
+        - Civic & Social Organization 
+        - Civil Engineering 
+        - Commercial Real Estate 
+        - Computer & Network Security 
+        - Computer Games 
+        - Computer Hardware 
+        - Computer Networking 
+        - Computer Software 
+        - Construction 
+        - Consumer Electronics 
+        - Consumer Goods 
+        - Consumer Services 
+        - Cosmetics 
+        - Dairy 
+        - Defense & Space 
+        - Design 
+        - Education Management 
+        - E-Learning 
+        - Electrical/Electronic Manufacturing 
+        - Entertainment 
+        - Environmental Services 
+        - Events Services 
+        - Executive Office 
+        - Facilities Services 
+        - Farming 
+        - Financial Services 
+        - Fine Art 
+        - Fishery 
+        - Food & Beverages 
+        - Food Production 
+        - Fund-Raising 
+        - Furniture 
+        - Gambling & Casinos 
+        - Glass Ceramics & Concrete 
+        - Government Administration 
+        - Government Relations 
+        - Graphic Design 
+        - Health Wellness & Fitness 
+        - Higher Education 
+        - Hospital & Health Care 
+        - Hospitality 
+        - Human Resources 
+        - Import and Export 
+        - Individual & Family Services 
+        - Industrial Automation 
+        - Information Services 
+        - Information Technology and Services 
+        - Insurance 
+        - International Affairs 
+        - International Trade and Development 
+        - Internet 
+        - Investment Banking 
+        - Investment Management 
+        - Judiciary 
+        - Law Enforcement 
+        - Law Practice 
+        - Legal Services 
+        - Legislative Office 
+        - Leisure Travel & Tourism 
+        - Libraries 
+        - Logistics and Supply Chain
+        - Luxury Goods & Jewelry
+        - Machinery
+        - Management Consulting
+        - Maritime
+        - Marketing and Advertising
+        - Market Research
+        - Mechanical or Industrial Engineering
+        - Media Production
+        - Medical Devices
+        - Medical Practice
+        - Mental Health Care
+        - Military
+        - Mining & Metals
+        - Motion Pictures and Film
+        - Museums and Institutions
+        - Music
+        - Nanotechnology
+        - Newspapers
+        - Non-Profit Organization Management
+        - Oil & Energy
+        - Online Media
+        - Outsourcing/Offshoring
+        - Package/Freight Delivery
+        - Packaging and Containers
+        - Paper & Forest Products
+        - Performing Arts
+        - Pharmaceuticals
+        - Philanthropy
+        - Photography
+        - Plastics
+        - Political Organization
+        - Primary/Secondary Education
+        - Printing
+        - Professional Training & Coaching
+        - Program Development
+        - Public Policy
+        - Public Relations and Communications
+        - Public Safety
+        - Publishing
+        - Railroad Manufacture
+        - Ranching
+        - Real Estate
+        - Recreational Facilities and Services
+        - Religious Institutions
+        - Renewables & Environment
+        - Research
+        - Restaurants
+        - Retail
+        - Security and Investigations
+        - Semiconductors
+        - Shipbuilding
+        - Sporting Goods
+        - Sports
+        - Staffing and Recruiting
+        - Supermarkets
+        - Telecommunications
+        - Textiles
+        - Think Tanks
+        - Tobacco
+        - Translation and Localization
+        - Transportation/Trucking/Railroad
+        - Utilities
+        - Venture Capital & Private Equity
+        - Veterinary
+        - Warehousing
+        - Wholesale
+        - Wine and Spirits
+        - Wireless
+        - Writing and Editing
+
+    - question_type: <%= ProfileQuestion::Type::MULTI_CHOICE %>
+      question_text: "Career path/Specializations"
+      help_text: "Please specify the areas in which you want to mentor"
+      question_choices: 
+        -  Any Job Function
+        -  Accounting/Auditing
+        -  Administrative
+        -  Advertising
+        -  Analyst
+        -  Art/Creative
+        -  Business Development
+        -  Consulting
+        -  Customer Service
+        -  Design
+        -  Distribution
+        -  Education
+        -  Engineering
+        -  Finance
+        -  General Business
+        -  Human Resources
+        -  Information Technology
+        -  Legal
+        -  Management
+        -  Manufacturing
+        -  Marketing
+        -  Production
+        -  Product Management
+        -  Project Management
+        -  Public Relations
+        -  Purchasing
+        -  Quality Assurance
+        -  Research
+        -  Sales
+        -  Science
+        -  Strategy/Planning
+        -  Supply Chain
+        -  Training
+        -  Writing/Editing
+        -  Other
+
+    - question_type: <%= ProfileQuestion::Type::TEXT %>
+      question_text: "Expertise"
+      help_text: "Please tell more about your experience"
+
+    - question_type: <%= ProfileQuestion::Type::MULTI_CHOICE %>
+      question_text: Career path interests
+      help_text: "Please specify the areas in which you want to get mentored"
+      question_choices: 
+        -  Any Job Function
+        -  Accounting/Auditing
+        -  Administrative
+        -  Advertising
+        -  Analyst
+        -  Art/Creative
+        -  Business Development
+        -  Consulting
+        -  Customer Service
+        -  Design
+        -  Distribution
+        -  Education
+        -  Engineering
+        -  Finance
+        -  General Business
+        -  Human Resources
+        -  Information Technology
+        -  Legal
+        -  Management
+        -  Manufacturing
+        -  Marketing
+        -  Production
+        -  Product Management
+        -  Project Management
+        -  Public Relations
+        -  Purchasing
+        -  Quality Assurance
+        -  Research
+        -  Sales
+        -  Science
+        -  Strategy/Planning
+        -  Supply Chain
+        -  Training
+        -  Writing/Editing
+        -  Other
+      
+    - question_type: <%= ProfileQuestion::Type::MULTI_CHOICE %>
+      question_text: Industry interests
+      question_choices: 
+        - Accounting
+        - Airlines/Aviation
+        - Alternative Dispute Resolution
+        - Alternative Medicine
+        - Animation
+        - Apparel & Fashion
+        - Architecture & Planning
+        - Arts and Crafts
+        - Automotive
+        - Aviation & Aerospace
+        - Banking
+        - Biotechnology
+        - Broadcast Media
+        - Building Materials
+        - Business Supplies and Equipment
+        - Capital Markets
+        - Chemicals
+        - Civic & Social Organization
+        - Civil Engineering
+        - Commercial Real Estate
+        - Computer & Network Security
+        - Computer Games
+        - Computer Hardware
+        - Computer Networking
+        - Computer Software
+        - Construction
+        - Consumer Electronics
+        - Consumer Goods
+        - Consumer Services
+        - Cosmetics
+        - Dairy
+        - Defense & Space
+        - Design
+        - Education Management
+        - E-Learning
+        - Electrical/Electronic Manufacturing
+        - Entertainment
+        - Environmental Services
+        - Events Services
+        - Executive Office
+        - Facilities Services
+        - Farming
+        - Financial Services
+        - Fine Art
+        - Fishery
+        - Food & Beverages
+        - Food Production
+        - Fund-Raising
+        - Furniture
+        - Gambling & Casinos
+        - Glass Ceramics & Concrete
+        - Government Administration
+        - Government Relations
+        - Graphic Design
+        - Health Wellness and Fitness
+        - Higher Education
+        - Hospital & Health Care
+        - Hospitality
+        - Human Resources
+        - Import and Export
+        - Individual & Family Services
+        - Industrial Automation
+        - Information Services
+        - Information Technology and Services
+        - Insurance
+        - International Affairs
+        - International Trade and Development
+        - Internet
+        - Investment Banking
+        - Investment Management
+        - Judiciary
+        - Law Enforcement
+        - Law Practice
+        - Legal Services
+        - Legislative Office
+        - Leisure Travel & Tourism
+        - Libraries
+        - Logistics and Supply Chain
+        - Luxury Goods & Jewelry
+        - Machinery
+        - Management Consulting
+        - Maritime
+        - Marketing and Advertising
+        - Market Research
+        - Mechanical or Industrial Engineering
+        - Media Production
+        - Medical Devices
+        - Medical Practice
+        - Mental Health Care
+        - Military
+        - Mining & Metals
+        - Motion Pictures and Film
+        - Museums and Institutions
+        - Music
+        - Nanotechnology
+        - Newspapers
+        - Non-Profit Organization Management
+        - Oil & Energy
+        - Online Media
+        - Outsourcing/Offshoring
+        - Package/Freight Delivery
+        - Packaging and Containers
+        - Paper & Forest Products
+        - Performing Arts
+        - Pharmaceuticals
+        - Philanthropy
+        - Photography
+        - Plastics
+        - Political Organization
+        - Primary/Secondary Education
+        - Printing
+        - Professional Training & Coaching
+        - Program Development
+        - Public Policy
+        - Public Relations and Communications
+        - Public Safety
+        - Publishing
+        - Railroad Manufacture
+        - Ranching
+        - Real Estate
+        - Recreational Facilities and Services
+        - Religious Institutions
+        - Renewables & Environment
+        - Research
+        - Restaurants
+        - Retail
+        - Security and Investigations
+        - Semiconductors
+        - Shipbuilding
+        - Sporting Goods
+        - Sports
+        - Staffing and Recruiting
+        - Supermarkets
+        - Telecommunications
+        - Textiles
+        - Think Tanks
+        - Tobacco
+        - Translation and Localization
+        - Transportation/Trucking/Railroad
+        - Utilities
+        - Venture Capital & Private Equity
+        - Veterinary
+        - Warehousing
+        - Wholesale
+        - Wine and Spirits
+        - Wireless
+        - Writing and Editing
+
+    - question_type: <%= ProfileQuestion::Type::SINGLE_CHOICE %>
+      question_text: "Total work experience"
+      question_choices: 
+        - 0-2 years
+        - 3-5 years
+        - 6-10 years
+        - 11-20 years
+        - 20+ years
+
+    - question_type: <%= ProfileQuestion::Type::MULTI_CHOICE %>
+      question_text: Language
+      question_choices: 
+        - English
+        - Hindi
+        - French
+        - Spanish
+
+    - question_type: <%= ProfileQuestion::Type::MULTI_CHOICE %>
+      question_text: Ethnicity
+      question_choices: 
+        - African American
+        - American Indian or Alaska Native
+        - Asian
+        - Asian Indian
+        - Caucasian/White
+        - Hispanic
+        - Japanese
+        - Korean
+        - Other

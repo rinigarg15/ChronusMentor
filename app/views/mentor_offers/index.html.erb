@@ -1,0 +1,9 @@
+<%= response_flash("cjs_mentor_offers_flash") %>
+
+<div id="mentor_offers">
+  <%= render partial: "mentor_offers/index", locals: {mentor_offers: @mentor_offers, filter_params: @filter_params, mentor_offer_hash: @mentor_offer_hash, is_manage_view: false} %>
+</div>
+
+<%= javascript_tag do %>
+  MentorOffers.inspectActions("<%= j('feature.mentor_offer.content.select_atleast_one_offer_v1'.translate) %>");
+<% end %>

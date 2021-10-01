@@ -1,0 +1,39 @@
+<h2 class="has-below"> <%= "program_settings_strings.label.mentoring_mode.title".translate(:Mentoring => _Mentoring) %> </h2>
+<hr class="no-margin"/>
+<%= response_flash "matching_setting_flash" %>
+<%= control_group(class: "has-above-2") do %>
+  <% label = "program_settings_strings.label.matching_settings.select_mentoring_mode".translate(:mentoring => _mentoring, :program => _program) %>
+  <%= content_tag(:label, label, :class => "control-label", :for => "program_engagement_type" ) %>
+  <%= controls(class: "has-above") do %>
+    <%= choices_wrapper(label) do %>
+      <%= check_box_tag("program[engagement_type]", Program::EngagementType::CAREER_BASED_WITH_ONGOING, @program.ongoing_mentoring_enabled?, :class => "vertical-align-text-bottom has-next-important cjs_mentoring_mode_possibilities cjs_matching_setting_ongoing_mentoring_mode", disabled:  @program.ongoing_mentoring_enabled? ) %><%= "program_settings_strings.label.mentoring_mode.ongoing.title".translate(:Mentoring => _Mentoring) %>
+      <p class="dim"><%= "program_settings_strings.label.mentoring_mode.ongoing.description_v1".translate(:mentoring => _mentoring, mentoring_connection: _mentoring_connection) %></p>
+      <span>
+        <label class="checkbox inline">
+          <%= check_box_tag("program[enabled_features][]", FeatureName::CALENDAR, @program.calendar_enabled?, :class => "vertical-align-text-bottom has-next-important cjs_mentoring_mode_possibilities cjs_matching_setting_one_time_mentoring_mode", disabled: prevent_disabling_one_time_mentoring?(@program), :"data-initially-enabled" =>  @program.calendar_enabled?) %>
+          <%= "program_settings_strings.label.mentoring_mode.one_time.title_v1".translate(:Mentoring => _Mentoring) %>
+        </label>
+        <p class="dim"><%= "program_settings_strings.label.mentoring_mode.one_time.description_v1".translate(:meetings => _meetings) %></p>
+      </span>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= control_group(class: "#{'hide' unless (@program.ongoing_mentoring_enabled? && @program.calendar_enabled?)} cjs_matching_allow_mentoring_mode_change") do %>
+  <%= content_tag(:label, "program_settings_strings.content.allow_choose_mentoring_mode".translate(mentors: _mentors, mentoring: _mentoring), :class => "control-label", :for => "program_allow_mentoring_mode_change" ) %>
+  <%= controls(class: "has-above") do %>
+    <%= f.check_box :allow_mentoring_mode_change, :class => "vertical-align-text-bottom" %> <%= "display_string.Yes".translate %>
+  <% end %>
+<% end %>
+
+<%= control_group do %>
+  <%= content_tag(:label, "program_settings_strings.content.allow_end_users_to_see_match_scores".translate, :class => "control-label", :for => "program_allow_end_users_to_see_match_scores" ) %>
+  <%= controls(class: "has-above") do %>
+    <%= f.check_box :allow_end_users_to_see_match_scores, :class => "vertical-align-text-bottom" %> <%= "display_string.Yes".translate %>
+  <% end %>
+<% end %>
+
+<%= render partial: '/programs/matching_ongoing_setting', locals: {f: f} %>
+<%= render partial: 'programs/non_match_settings', locals: { f: f } if super_console? %>
+<%= render partial: '/programs/matching_one_time_setting', locals: {f: f} %>
+<%= javascript_tag %Q[MatchingSettings.handleAllowMentoringModeChange();MatchingSettings.showOngoingMentoringSettings();MatchingSettings.showOneTimeMentoringSettings('#{content_tag(:div, j("feature.calendar.action.disabling_calendar_warn_message_html".translate(mentoring: _mentoring, meetings: _meetings, mentors: _mentors, mentoring_caps: _Mentoring)), class: "small")}');] %>

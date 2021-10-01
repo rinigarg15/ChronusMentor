@@ -1,0 +1,70 @@
+<div id="left_list_pane">
+  <% if @current_organization.standalone? || !program_view? %>
+    <% collapsible_content(get_icon_content("fa fa-th-large") + _Programs, [], false, { render_panel: true, additional_header_class: "p-sm", pane_content_class: "p-t-0" }) do %>
+      <ul class="list-group table-bordered">
+        <% progs.first(TranslationsController::No_OF_PROGRAMS).each do |prog| %>
+          <li id="cjs_program_name_<%= prog.id%>" class="list-group-item pointer no-margins cjs_change_program <%=  level_obj == prog ? 'light-gray-bg font-bold cjs_selected_program' : 'font-noraml' %>" data-url="<%= translations_path(format: :js) %>", data-id="<%= prog.id %>", data-name="<%= prog.name %>", data-score-numerator="<%= @programs_score[prog.id].first %>", data-score-denominator="<%= @programs_score[prog.id].second %>" >
+            <% score = calculate_program_score(@programs_score, prog) %>
+            <%= "#{prog.name} (#{score}%)" %>
+          </li>
+        <% end %>
+      </ul>
+      <% if progs.length > TranslationsController::No_OF_PROGRAMS %>
+        <%= control_group do %>
+          <%= label_tag :abstract_program_id, "feature.translations.label.more_programs.".translate(:Programs => _Programs), :class => "sr-only", :for => "cjs_translations_program_id" %>
+          <%= controls do %>
+            <% prog_drop_down = [["feature.translations.label.more_programs".translate(:Programs => _Programs), "", {'id'=>"cjs_more_programs"}]] + progs[TranslationsController::No_OF_PROGRAMS..-1].collect do |p|
+              score = calculate_program_score(@programs_score, p)
+              ["#{p.name} (#{score}%)", p.id, {"id" => "cjs_program_name_#{p.id}", "data-name" => p.name, "data-score-numerator" => @programs_score[p.id].first, "data-score-denominator" => @programs_score[p.id].second}]
+              end 
+            %>
+            <%= select_tag 'abstract_program_id', options_for_select(prog_drop_down, level_obj.id), :id => "cjs_translations_program_id", :class => "no-top-border form-control font-default subheader #{'font-bold gray-bg' if progs[TranslationsController::No_OF_PROGRAMS..-1].include?(level_obj)}", data: {url: translations_path(format: :js)} %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% collapsible_content(get_icon_content("fa fa-file") + "display_string.pages".translate, [], false, { render_panel: true, additional_header_class: "p-sm", pane_content_class: "p-t-0" }) do %>
+    <ul class="list-group table-bordered">
+      <% category_with_scores.each do |category, category_score| %>
+        <% expandable = (LocalizableContent.expands_to.include?(category) || LocalizableContent.is_program_asset?(category)) %>
+        <% url = expandable ? expand_category_translations_path(format: :js, category: category) : show_category_content_translations_path(format: :js, category: category) %>
+        <li class="list-group-item" id="cjs_left_pane_<%= category %>">
+          <div class="p-r-xs cjs_category_header <%= expandable ? 'cjs_expand_left_pane_headers' : 'cjs_show_translatable_details cjs_non_expand_header' %> <%= 'light-gray-bg font-bold cjs_select_content' if (category == chosen_category && !expandable) %>" data-url="<%= url %>" data-category="<%= category %>">
+            <% percent = category_score.second.zero? ? 100 :  category_score.first*100/category_score.second %>
+            <span class="pull-right text-muted" id="cjs_percent_completed_<%= category %>">
+              <%= "display_string.percent".translate(percent: percent) %>
+            </span>
+            <% if has_children = LocalizableContent.expands_to.include?(category) || LocalizableContent.is_program_asset?(category) %>
+              <span>
+                <i class="pull-left cjs_show_detail_<%= category %> <%=
+              'hide' if category == chosen_category %>">
+                  <%= get_icon_content("fa fa-caret-right") %>
+                </i>
+                <i class="small-icon pull-left cjs_hide_detail_<%= category %> <%= 'hide' unless category == chosen_category%>">
+                  <%= get_icon_content("fa fa-caret-down") %>
+                </i>
+              </span>
+            <% end %>
+            <% scope_obj = level_obj.standalone? ? level_obj.programs.first : level_obj %>
+            <span class="subheader word_break <%= 'm-l-sm' if has_children %> pointer">
+              <%= "feature.translations.categories.#{category}".translate(:Mentoring_Connection => scope_obj.term_for(CustomizedTerm::TermType::MENTORING_CONNECTION_TERM).term, :Resources => scope_obj.term_for(CustomizedTerm::TermType::RESOURCE_TERM).term, :Program => _Program) %>
+            </span>
+          </div>
+          <div id="cjs_expanded_<%= category %>_content" class="p-t-xs <%= 'hide' unless category == chosen_category %>" data-items-loaded="<%= (category == chosen_category) ? true : false %>">
+            <%= render(:partial => "category_details", :locals => {category_items: chosen_category_detail, category: category, chosen_category: chosen_category}) if category == chosen_category %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    Localization.change_level();
+    Localization.expandCategory();
+    Localization.renderTranslations();
+  });
+<% end %>

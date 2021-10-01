@@ -1,0 +1,17 @@
+en:
+  email_translations:
+    forum_notification:
+      title_v3: New post notification to forum conversation followers
+      description_v2: This email is sent to forum conversation followers notifying them that there is a new post.
+      subject_v2: New Post in '{{conversation_title}}'
+      content_v2_html: "<a href='{{link_to_posted_member}}'>{{posted_member_name}}</a> posted in the conversation <b>'{{conversation_title}}'</b> in the forum <b>'{{forum_name}}'</b>.<br/>{{read_post_button}}"
+      read_post: Read Post
+      tags:
+        posted_member_name:
+          description: Name of the member who made the new entry
+        forum_name:
+          example_v1: "%{role} FAQs"
+        read_post_button:
+          description: Read post button
+        link_to_posted_member:
+          description: Link to profile of the member who made the new entry

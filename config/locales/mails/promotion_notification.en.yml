@@ -1,0 +1,27 @@
+en:
+  email_translations:
+    promotion_notification:
+      title_v2: Role addition notification to user
+      description_v4: An existing user may be given an additional role (as an example, %{_a_mentor} may also be asked to be %{_a_admin}). When that happens, this email is sent to the user with a descriptive message from the %{_admin}.
+      subject_v1: You are now {{promoted_role_articleized}}!
+      content_v1_html: "{{role_changer_name}} has added you as {{promoted_role_articleized}} in {{subprogram_name}}.<br/>{{administrator_message}}{{update_profile_button}}<br/>Please contact the {{customized_admin_term}} <a href='{{url_contact_admin}}'>here</a> if you have any questions.<br/>"
+      update_your_profile: Update Your Profile
+      tags:
+        administrator_name:
+          description: Name of the administrator who made the change
+        promoted_role_articleized:
+          description: Role with article appended(a/an)
+        promoted_role:
+          description: Role of the member
+          example_v1: "%{role}"
+        administrator_message:
+          description: Message from the administrator
+          example: I have promoted your role as per your request.
+        url_profile_completion:
+          description: Url to update the profile
+        role_changer_name:
+          description: Name of the person who made the change
+        update_profile_button:
+          description: Update your profile button
+        url_contact_admin:
+          description: Url for the user to contact administrator

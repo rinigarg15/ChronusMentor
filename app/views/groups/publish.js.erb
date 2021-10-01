@@ -1,0 +1,16 @@
+closeQtip();
+<% if @error_flash.present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('cjs_groups_flash', '<%= j(@error_flash) %>', false);
+<% else %>
+  <% content = render :partial => "groups/no_groups", :locals => {:view => @view} %>
+  var activeTabSelector = jQuery("#tab-box").find(".active a span");
+  GroupSearch.publishCallback('<%= @group.id %>');
+  GroupSearch.updateNoGroupText(activeTabSelector.attr("id"), "<%= escape_javascript content %>");
+  <% flash_message = "#{'flash_message.group_flash.draft_actions'.translate(mentoring_connection: _mentoring_connection, action: 'display_string.published'.translate)}" %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('cjs_groups_flash', "<%= j(flash_message) %>", true);
+  
+  <% if @ga_src == EngagementIndex::Src::GROUP_LISTING %>
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.CIRCLES, chrGoogleAnalytics.action.GA_PUBLISH_CIRCLE, chrGoogleAnalytics.eventLabel.GA_CIRCLES_LISTING, chrGoogleAnalytics.eventLabelId.GA_CIRCLES_LISTING_LABEL_ID);
+  <% end %>
+<% end %>
+<%= render :partial => "groups/update_member_group_tabs_counts" %>

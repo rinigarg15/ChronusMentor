@@ -1,0 +1,5 @@
+<%= render :partial => "reports/high_charts", :formats => FORMAT::HTML %>
+<%= render :partial => "three_sixty/survey_assessees/report", :locals => { :pdf => true , :survey => @survey, :survey_assessee => @survey_assessee, :question_infos => @question_infos, :reviewers => @reviewers, :survey_reviewer_groups => @survey_reviewer_groups, :survey_competencies => @survey_competencies, :competency_infos => @competency_infos, :competency_percentiles => @competency_percentiles, :rating_answers_for_self => @rating_answers_for_self, :average_reviewer_group_answer_values => @average_reviewer_group_answer_values, :average_competency_reviewer_group_answer_values => @average_competency_reviewer_group_answer_values, :question_percentiles => @question_percentiles, :text_answers_for_self => @text_answers_for_self, :survey_oeqs => @survey_oeqs, :reviewer_group_for_self => @reviewer_group_for_self } %>
+<%= javascript_tag do %>
+  ThreeSixtyReport.generateSurveyReportGraphs();
+<% end %>

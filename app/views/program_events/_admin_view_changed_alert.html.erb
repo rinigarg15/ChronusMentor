@@ -1,0 +1,22 @@
+<%= content_tag(:div, id: "admin_view_change_event_#{event.id}", :class => "alert alert-warning") do %>
+  <%= content_tag(:div, class: "font-bold") do %>
+    <%= content_tag(:div, :class=>"media-body") do %>
+      <%= "feature.program_event.content.admin_view_changed_text".translate(program_event_title: event.title) %>
+      <%= simple_form_for event, url: add_new_invitees_program_event_path(event), html: {method: :post, id: "form_admin_view_change_event_#{event.id}", class: "m-t-sm"} do |f| %>
+        <%= hidden_field_tag :from, from %>
+        <%= button_tag class: "btn-sm btn btn-white text-default cjs-admin_view_change_event", data: { disable_with: "display_string.Please_Wait".translate } do %>
+          <%= get_icon_content("fa fa-envelope text-default") %>
+          <%= content_tag(:span, class: "new-invite-button-text text-default") do %>
+            <%= "feature.program_event.content.send_new_invite_button".translate %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    programEvent.initializeAdminViewChangeForm("<%= event.id %>", "<%= j get_confirm_message_for_event_guest_list_update(event) %>");
+  });
+<% end %>

@@ -1,0 +1,36 @@
+<% @title = @profile_member.name(:name_only => true) %>
+<% @title_url = member_path(@profile_member) %>
+<% @title_logo = @profile_member.picture_url(:small, true) %>
+<% @page_action = { label: append_text_to_icon("fa fa-users", "feature.profile.actions.find_a_mentor".translate(a_mentor: _a_Mentor)), url: matches_for_student_users_path(student_name: @profile_member.name_with_email, manage_connections_member: @profile_member.id), class: "btn btn-primary" } if @profile_tab == MembersController::ShowTabs::MANAGE_CONNECTIONS && @show_connections && !current_program.project_based? %>
+
+<%= render :layout => 'members/profile_wrapper' do %>
+  <%= update_profile_message(current_user) if program_view? && @is_self_view %>
+  <% if @profile_tab == MembersController::ShowTabs::ARTICLES %>
+    <% @sub_title = _Articles %>
+    <%= render :partial => "members/profile_articles" if @show_articles %>
+
+  <%- elsif @profile_tab == MembersController::ShowTabs::QA_QUESTIONS -%>
+    <% @sub_title = "feature.profile.subtitle.questions".translate %>
+    <%= render :partial => "members/profile_qa_questions" if @show_answers -%>
+
+  <%- elsif @profile_tab == MembersController::ShowTabs::QA_ANSWERS -%>
+    <% @sub_title = "feature.profile.subtitle.answers".translate %>
+    <%= render :partial => "members/profile_qa_answers" if @show_answers -%>
+
+  <% elsif @profile_tab == MembersController::ShowTabs::PROFILE %>
+    <% @page_title = @title %>
+    <% @title = nil %>
+    <%= render :partial => "members/profile_left_pane", :locals => {pdf_name: @pdf_name, show_favorite_ignore_links: false, favorite_preferences_hash: {}, ignore_preferences_hash: {}} %>
+  <%- elsif @profile_tab == MembersController::ShowTabs::AVAILABILITY -%>
+    <% scope = program_view? ? @current_program : @current_organization %>
+    <% if @profile_member.ask_to_set_availability? && scope.calendar_enabled? %>
+      <% @sub_title = "feature.profile.subtitle.availability".translate %>
+    <% else %>
+      <% @sub_title = "feature.profile.subtitle.my_meetings_v1".translate(:Meetings => _Meetings) %>
+    <% end %>
+    <%= render :partial => "members/profile_availability" %>
+
+  <% elsif @profile_tab == MembersController::ShowTabs::MANAGE_CONNECTIONS %>
+    <%= render :partial => "members/manage_connections", :locals => {:show_connections => @show_connections, :status_filter => @status_filter, :groups_scope => @groups_scope, :groups => @groups } %> 
+  <% end %>
+<% end %>

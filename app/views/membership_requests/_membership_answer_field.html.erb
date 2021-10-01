@@ -1,0 +1,85 @@
+<% membership_profile_question = membership_answer_field %>
+<% unless membership_profile_question.default_type? %>
+  <% answer = (answer_map.present? && answer_map[membership_profile_question.id.to_s]) || membership_profile_question.profile_answers.new(ref_obj: @member) %>
+  <% required = @required_question_ids.present? ? @required_question_ids.include?(membership_profile_question.id) : membership_profile_question.required_for(@program, @roles) %>
+
+  <% if membership_profile_question.conditional_question_id.present? && membership_profile_question.conditional_text_choices.present? %>
+    <% is_conditional_question_set = true %>
+    <% parent_answer = answer_map.present? && answer_map[membership_profile_question.conditional_question_id.to_s] %>
+    <% hide_question = (parent_answer.present? ? !membership_profile_question.conditional_answer_matches_any_of_conditional_choices?(parent_answer) : true) %>
+  <% end %>
+
+  <div class='<%= "hide" if hide_question %> <%= "cjs_experience" if membership_profile_question.experience? %> membership_profile_question clearfix cjs_question_<%= membership_profile_question.id %> <%= "cjs_dependent_#{membership_profile_question.conditional_question_id}" if is_conditional_question_set %>' id=<%= "membership_profile_question_#{membership_profile_question.id}" %> >
+    <% if membership_profile_question.education? || membership_profile_question.experience? || membership_profile_question.publication? || membership_profile_question.manager? %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="row m-t-n-xs">
+            <%= profile_answer_label(membership_profile_question, @membership_request, class: "pull-left p-l-xs", skip_visibility_info: true) %>
+          </div>
+        </div>
+        <% partial_name = if membership_profile_question.education? %>
+          <% "users/education_form_fieldset" %>
+        <% elsif membership_profile_question.experience? %>
+          <% "users/experience_form_fieldset" %>
+        <% elsif membership_profile_question.publication? %>
+          <% "users/publication_form_fieldset" %>
+        <% elsif membership_profile_question.manager? %>
+          <% "users/manager_form_fieldset" %>
+        <% end %>
+        <%= render partial: partial_name, :locals => { question: membership_profile_question, answer: answer, required: required } %>
+      </div>
+    <% else %>
+      <%= control_group do %>
+        <%= profile_answer_label(membership_profile_question, @membership_request, class: "col-sm-2", skip_visibility_info: true) %>
+        <%= controls(class: "col-sm-10") do %>
+          <% if membership_profile_question.email_type? %>
+            <%= hidden_field_tag("profile_answers[#{answer.profile_question.id}]", @membership_request.email, id: "profile_answers_#{answer.profile_question.id}") %>
+          <% else %>
+            <% answer_field_options = { program: @program } %>
+            <% answer_field_options.merge!(delete_allowed: true) if @is_admin_view %>
+            <%= edit_profile_answer_field(answer, membership_profile_question, answer_field_options) %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if is_conditional_question_set %>
+      <% membership_profile_question.conditional_text_choices.each do |text| %>
+        <%= hidden_field_tag :match_text, text, class: "match_text_#{membership_profile_question.id}", id: nil%>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if required && (new_request || (@is_edit_action && !@is_admin_editing)) %>
+    <%= javascript_tag do %>
+      <% if membership_profile_question.education? %>
+        RequiredFields.fieldIds.push("edu_cur_list_<%= membership_profile_question.id %>");
+      <% elsif membership_profile_question.experience? %>
+        RequiredFields.fieldIds.push("exp_cur_list_<%= membership_profile_question.id %>");
+      <% elsif membership_profile_question.publication? %>
+        RequiredFields.fieldIds.push("publication_cur_list_<%= membership_profile_question.id %>");
+      <% elsif membership_profile_question.manager? %>
+        RequiredFields.fieldIds.push("manager_cur_list_<%= membership_profile_question.id %>");
+      <% elsif membership_profile_question.ordered_options_type? %>
+        RequiredFields.fieldIds.push("profile_answers_<%= membership_profile_question.id %>_0");
+      <% elsif membership_profile_question.file_type? && answer.present? && !answer.valid? %>
+        RequiredFields.fieldIds.push("profile_answers_<%= membership_profile_question.id %>");
+      <% else %>
+        <% unless (membership_profile_question.file_type? || membership_profile_question.default_type?) && !answer.unanswered? %>
+          RequiredFields.fieldIds.push("profile_answers_<%= membership_profile_question.id %>");
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <% if membership_profile_question.text_only_allowed? %>
+    <%= javascript_tag(%Q[ProfileFields.fieldIds.push("profile_answers_#{membership_profile_question.id}");]) %>
+  <% end %>
+  <% if membership_profile_question.file_type? && answer.temp_file_name.present? && answer.temp_file_code.present? %>
+    <% file_field_id = "file-field-wrapper-#{membership_profile_question.id}".to_html_id %>
+    <%= javascript_tag do %>
+      jQuery(document).ready(function() {
+        jQuery("#<%= file_field_id %>").simulateFileUploadSuccess("<%= j answer.temp_file_name %>", "<%= j answer.temp_file_code %>");
+      });
+    <% end %>
+  <% end %>
+<% end %>

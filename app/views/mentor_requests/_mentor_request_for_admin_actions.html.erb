@@ -1,0 +1,16 @@
+<% actions = [] %>
+<% if preferred_mentoring %>
+  <% actions << {:label => get_icon_content("fa fa-check") + "display_string.Assign".translate, :js => "jQuery('#modal_preferred_mentors_for_#{mentor_request.id}').modal('show')"} %>
+<% end %>
+
+<% if @current_program.matching_by_mentee_and_admin? && mentor_request.active? %>
+  <% actions << {:label => get_icon_content("fa fa-times") + "#{'feature.mentor_request.action.reject_request_v2'.translate}", :js => "jQuery('#modal_mentor_request_reject_or_withdraw_link_#{mentor_request.id}').modal('show')"} %>
+<% end %>
+
+<% actions << {label: get_icon_content("fa fa-envelope") + "feature.mentor_request.action.send_message_to_sender".translate(count: 1), url: '#', data: {url: new_bulk_admin_message_admin_messages_path, user: mentor_request.student.id}, class: "cjs_send_message_to_sender cjs_individual_action_mentor_requests"} %>
+<% actions << {label: get_icon_content("fa fa-envelope") + "feature.mentor_request.action.send_message_to_recipient".translate(count: 1), url: '#', data: {url: new_bulk_admin_message_admin_messages_path, user: mentor_request.mentor.id}, class: "cjs_send_message_to_recipient cjs_individual_action_mentor_requests"} if mentor_request.mentor.present? %>
+<% if current_user.can_manage_mentor_requests? && mentor_request.active? && mentor_request.program.matching_by_mentee_alone? %>
+  <% actions << {label: get_icon_content("fa fa-ban") + "#{'feature.mentor_request.action.close_request'.translate}", class: "cjs_close_request cjs_individual_action_mentor_requests", url: 'javascript:void(0)', data: {url: fetch_bulk_actions_mentor_requests_path, request_type: AbstractRequest::Status::CLOSED, mentor_request: mentor_request.id}} %>
+<% end %>
+
+<%= dropdown_buttons_or_button(actions, dropdown_title: (preferred_mentoring ? nil : 'display_string.Actions'.translate), :btn_class => local_assigns[:btn_class], :btn_group_btn_class => local_assigns[:btn_group_btn_class], :dropdown_menu_class => local_assigns[:dropdown_menu_class], :responsive_primary_btn_class => local_assigns[:responsive_primary_btn_class], :responsive_caret_class => local_assigns[:responsive_caret_class], :is_not_primary => local_assigns[:is_not_primary], :primary_btn_class => local_assigns[:primary_btn_class]) %>

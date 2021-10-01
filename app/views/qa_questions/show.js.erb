@@ -1,0 +1,9 @@
+jQuery("#qa_answers_list").replaceWith("<%= j render partial: 'qa_answers/qa_answers' %>");
+<% if params[:answer_deleted] %>
+  jQuery("#remoteModal").modal('hide');
+<% end %>
+<% if params[:answer_created] %>
+  jQuery("#new_qa_answer_modal").modal("hide");
+  jQuery(".cjs_new_qa_answer_form").replaceWith("<%= j render partial: 'qa_answers/qa_answer_form', :locals => { full_qa_question: @qa_question } %>");
+  jQueryHighlight("#qa_answer_<%= @qa_answers.first.id %>");
+<% end %>

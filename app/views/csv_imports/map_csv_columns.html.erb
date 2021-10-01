@@ -1,0 +1,74 @@
+<% @title = "csv_import.header.add_bulk_users_v1".translate %>
+<% @skip_rounded_white_box_for_content = true %>
+<% cancel_button_link = edit_csv_import_path(@user_csv_import, :organization_level => @standalone_dormant_import) %>
+<%= wizard_headers(map_user_columns_wizard(@user_csv_import, @standalone_dormant_import), CsvImportsHelper::Headers::MAP_CONTENT, :content_ibox_content_class => "p-l-0 p-r-0") do %>
+  <div>
+    <%= content_tag(:div, "csv_import.content.instructions_html".translate, :class => 'h4 p-l-sm') %>
+    <%= content_tag(:div, @user_csv_import.instruction_message_for_map_column(@selected_roles), :class => "p-l-sm") %>
+
+    <%= simple_form_for :csv_users_fields, url: create_mapping_csv_import_path(@user_csv_import, :organization_level => @standalone_dormant_import), html: {class: "form-horizontal clearfix", multipart: true} do |f| %>
+
+      <div>
+        <div class="clearfix boxshadow-sm m-b-xxs">
+          <%= content_tag(:div, "csv_import.header.imported_fields".translate, :class => "pull-left h4 col-sm-5") %>
+          <%= content_tag(:div, "csv_import.header.track_fields".translate, :class => "pull-right h4 cjs_track_field_column_header col-sm-5") %>
+        </div>
+        <%= content_tag(:div, "csv_import.content.required_for_import".translate, :class => 'h5 p-l-sm') %>
+
+        <% @mandatory_column_keys.each_with_index do |column_key, index| %>
+          <div class = "clearfix p-sm b-b">
+            <%= content_tag(:div, :class => "current_column_content clearfix") do %>
+              <div class="pull-left col-sm-5">
+                <label class="sr-only" for="_csv_dropdown_<%= index %>"><%= "csv_import.label.select_a_column_from_csv".translate %></label>
+                <%= render_dropdown_for_csv_headers(index, @csv_column_headers, @saved_mapping, column_key) %>
+              </div>
+              <div class="pull-right cjs_mandatory_fields col-sm-5 font-600" id="cjs_mandatory_field_<%= index %>">
+                <%= "csv_import.content.required_program_fields".translate(:field_name => "csv_import.import_user_csv_headers.#{column_key}".translate) %>
+              </div>
+            <% end %>
+            <%= content_tag(:div, "", :class => "text-muted small example_text_for_dropdown_#{index} hide p-l-sm p-t-xs") %>
+          </div>
+        <% end %>
+
+        <div class="cjs_optional_import_options clearfix hide">
+          <%= content_tag(:div, "csv_import.content.optional_for_import".translate, :class => 'h5 p-l-sm') if (@csv_column_headers.size - @mandatory_column_keys.size) > 0 %>
+          <% (@csv_column_headers.size - @mandatory_column_keys.size).times do |index| %>
+            <div class = "clearfix p-sm b-b">
+              <%= content_tag(:div, :class => "current_column_content clearfix") do %>
+                <div class="pull-left col-sm-5">
+                  <label class="sr-only" for="_csv_dropdown_<%= index + @mandatory_column_keys.size %>"><%= "csv_import.label.select_a_column_from_csv".translate %></label>
+                  <%= render_dropdown_for_csv_headers(index + @mandatory_column_keys.size, @csv_column_headers, @saved_mapping) %>
+                </div>
+                <div class="pull-right col-sm-5">
+                  <label class="sr-only" for="_profile_dropdown_<%= index + @mandatory_column_keys.size %>"><%= "csv_import.label.select_a_profile_column".translate %></label>
+                  <%= render_dropdown_for_column_options(index + @mandatory_column_keys.size, @csv_column_headers, @profile_column_keys, @saved_mapping) %>
+                </div>
+              <% end %>
+              <%= content_tag(:div, "", :class => "text-muted small example_text_for_dropdown_#{index + @mandatory_column_keys.size} hide p-l-sm p-t-xs") %>
+            </div>
+          <% end %>
+          
+          <%= hidden_field_tag :user_csv_import_id, @user_csv_import.id %>
+
+          <% action_set(class: "pull-right p-r-md p-t-sm") do %>
+            <%= link_to "display_string.Cancel".translate, cancel_button_link, :class => 'btn btn-cancel btn-white' %>
+            <%= f.button :submit, "display_string.Continue".translate, class: 'btn btn-primary cjs_submit_columns_mapping', :disable_with => "display_string.Please_Wait".translate, :id => "submit_columns_mapping_button" %>
+          <% end %>
+        </div>
+
+      </div>
+    <% end %>
+  </div>
+<% end %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    CsvImport.initializeDropDownValuesAndText();
+    CsvImport.hideSelectedDropDownChoices(<%= @example_column_values.to_json.html_safe %>);
+    CsvImport.capturePreviousSelectedOption();
+    CsvImport.alignTrackFieldsText();
+    CsvImport.trackMandatoryFields(<%= @example_column_values.to_json.html_safe %>);
+    <% if @showing_saved_mapping %>
+      CsvImport.initializePreSelectedMapping(<%= @example_column_values.to_json.html_safe %>);
+    <% end %>
+  });
+<% end %>

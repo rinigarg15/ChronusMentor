@@ -1,0 +1,13 @@
+<%= person.fields_for @member do |memf| %>
+  <% basic_section = @current_organization.sections.default_section.first %>
+  <%= ibox basic_section.title do %>
+    <% section_info = get_basic_section_questions(program_questions_for_user) %>
+    <%= get_section_description(basic_section, tag: :div, class: "m-b") %>
+    <% ques = section_info[:questions] %>
+    <% has_edu_exp_ques = has_importable_question?(ques) %>
+    <%= render :partial => "users/edu_exp_form", :locals => {:profile_user => @user, :section => section_info[:section]} if has_edu_exp_ques %>
+    <%= render_user_name_with_label(memf, !@user.new_record?, question: @current_organization.name_question) %>
+    <%= member_photo_select(memf, @member) %>
+    <%= render :partial => 'programs/question', :collection => ques, :locals => {:profile_user => @user, :role => @role, :answers => @answers, grouped_role_questions: @grouped_role_questions, is_profile_completion: @is_profile_completion} %>
+  <% end %>
+<% end %>

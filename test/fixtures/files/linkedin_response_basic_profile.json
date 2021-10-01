@@ -1,0 +1,45 @@
+{
+  "firstName": "Sundar",
+  "lastName": "Raja",
+  "id": "12345",
+  "positions": {
+    "_total": 3,
+    "values": [
+      {
+        "company": {"name": "Chronus LLC"},
+        "isCurrent": true,
+        "startDate": {
+          "month": 7,
+          "year": 2017
+        },
+        "title": "SSDE II"
+      },
+      {
+        "company": {"name": "Chronus LLC"},
+        "isCurrent": false,
+        "startDate": {
+          "month": 7,
+          "year": 2016
+        },
+        "endDate": {
+          "month": 6,
+          "year": 2017
+        },
+        "title": "SSDE"
+      },
+      {
+        "company": {"name": "Chronus Corporation"},
+        "endDate": {
+          "month": 6,
+          "year": 2016
+        },
+        "isCurrent": false,
+        "startDate": {
+          "month": 7,
+          "year": 2014
+        },
+        "title": "SDE II"
+      }
+    ]
+  }
+}

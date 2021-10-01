@@ -1,0 +1,6 @@
+soap_header:
+  "tns:AuthorizationToken":
+    "tns:Token": <%= Psych.to_json("#{params['base_authorization_username']};#{params['base_authorization_password']}").chomp %>
+message_tag: "GetIndividualInformation"
+message:
+  IndividualKey: <%= Psych.to_json(params["uid"]).chomp %>

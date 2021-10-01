@@ -1,0 +1,15 @@
+<% export_options = [{label: "feature.survey.label.export_pdf_v1".translate, url: report_survey_path(@survey, :format => :pdf)}] %>
+<% unless (@report_data.empty? || @show_tabs) %>
+  <% export_options << {label: "feature.survey.action.export_to_xls".translate, url: survey_path(@survey, :format => :xls)} %>
+<% end %>
+
+<% report_actions = {
+  url: report_survey_path(@survey),
+  data_js: %Q[ReportFilters.getfiltersData();],
+  reset_js: %Q[ReportFilters.clearFilters();commonReportFilters.resetOtherFilters();],
+  ga_label: ReportsController::GoogleAnalytics::SURVEY_REPORT,
+  time_filter: { time: {start: @start_date, end: @end_date}, date_range_preset: DateRangePresets::PROGRAM_TO_DATE, label: "feature.survey.label.answered_between".translate},
+  other_filters_partial: "surveys/report_filters",
+  export: export_options
+} %>
+<%= render :partial => "surveys/report_content", :locals => {:format => FORMAT::HTML, report_actions: report_actions} %>

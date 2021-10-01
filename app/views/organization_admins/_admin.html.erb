@@ -1,0 +1,24 @@
+<% subprogram_view = true if defined?(subprogram_view) && subprogram_view %>
+  <div class="media-left"><%= member_picture_v3(admin, {:no_name => true, :size => :large}, {:class => "img-circle"}) %></div>
+  <div class="media-body">
+    <% if wob_member!= admin %>
+      <div class='pull-right hidden-xs'>
+        <%= dropdown_buttons_or_button(get_organization_admin_actions(admin)) %>
+      </div>
+    <% end %>
+
+    <h3>
+      <%= link_to_user admin, :content_text => admin.name(:name_only => true) %>
+      <div class="small m-t-xs"><%= get_icon_content("fa fa-user") + content_tag(:span, "#{"feature.org_admins.label.member_since".translate} #{DateTime.localize(admin.created_at, format: :full_month_year)}") %></div>
+      <div class="small m-t-xs"><%= get_icon_content("fa fa-envelope") + content_tag(:span, admin.email) %></div>
+    </h3>
+  </div>
+  <% if wob_member!= admin %>
+    <div class='pull-right visible-xs col-xs-12 no-padding'>
+      <% actions = get_organization_admin_actions(admin) %>
+      <%= dropdown_buttons_or_button(actions, :btn_class => "col-xs-12 visible-xs btn-block m-t-sm",
+        :dropdown_menu_class => "col-xs-12 pull-right table-bordered",
+        :responsive_primary_btn_class => (actions.size <= 1 ? "col-xs-12" : "col-xs-10 col-md-11"),
+        :responsive_caret_class => "col-xs-2 col-md-1" ) %>
+    </div>
+  <% end %>

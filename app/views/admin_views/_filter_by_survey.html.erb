@@ -1,0 +1,16 @@
+<%= field_set_wrapper("feature.admin_view.label.survey".translate, true) do %>
+  <%= control_group do %>
+    <div class = "col-md-12">
+      <div class="false-label control-label col-sm-2">
+        <%= "feature.admin_view.label.users_who_have".translate %>
+      </div>
+      <%= render :partial => "admin_views/filter_by_survey_users_response_status_list" , :locals => {:program => @current_program, :filter_params => @filter_params} %>
+    </div>
+    <div class = "col-md-12">
+      <strong class="false-label text-right col-sm-2 m-t-lg">
+        <%= "feature.admin_view.label.survey_questions".translate %>
+      </strong>
+      <%= render :partial => "admin_views/filter_by_survey_response_list" , :locals => {:program => @current_program, :filter_params => @filter_params} %>
+    </div>
+  <% end %>
+<% end %>

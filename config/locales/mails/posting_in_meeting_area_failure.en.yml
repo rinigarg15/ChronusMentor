@@ -1,0 +1,16 @@
+en:
+  email_translations:
+    posting_in_meeting_area_failure:
+      title: "Email reply failure notification for cancelled/completed/deleted %{_meeting}."
+      description: "Sent to a member when his/her email reply to a %{_meeting} area message fails."
+      subject: "Unable to post message: {{subject}}"
+      content_html: "We're sorry, but we could not post your message because your {{customized_meeting_term}} - {{meeting_topic}} has got completed/cancelled/deleted or the user you are trying to contact is not part of the {{customized_subprogram_term}}. For more details please <a href='{{url_program_login}}'>login</a> to the program or contact the <a href='{{url_contact_admin}}'>{{customized_admin_term}}</a><br/>"
+      tags:
+        subject:
+          description: Subject of the email
+          example: Reviewing my resume
+        content:
+          description: Content of the email
+          example: Hello John Smith! Can you please review my resume?
+        url_contact_admin:
+          description: Url for contacting the administrator

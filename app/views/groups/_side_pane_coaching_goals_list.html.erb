@@ -1,0 +1,29 @@
+<% coaching_goals_index_path =  group_coaching_goals_path(@group) %>
+<% coaching_goals_index_path_with_expand =  group_coaching_goals_path(@group, :expand_add_form => true) %>
+<div class="cjs_side_pane_coaching_goals">
+  <hr class='in-sidecol'/>
+  <div class="has-below-1 clearfix">
+    <h3 class="pull-left">
+      <i class="iconbig"><%= image_tag("v4/c_situation_big.png") %> </i>
+      <%= link_to("feature.connection.header.Goals".translate, coaching_goals_index_path) %>
+    </h3>
+    <%= mentoring_area_right_pane_see_all(coaching_goals_index_path, @side_pane_coaching_goals.size) if @side_pane_coaching_goals.present? %>
+    <%= mentoring_area_right_pane_add_new(coaching_goals_index_path_with_expand, "feature.connection.header.Goal".translate) if @page_controls_allowed %>
+  </div>
+
+  <% if @side_pane_coaching_goals.present? %>
+    <% @side_pane_coaching_goals.first(CoachingGoalsHelper::SIDE_PANE_LIMIT).each do |coaching_goal| %>
+      <div class="has-below-1 clearfix">
+        <div class="has-below"> 
+          <%= render_coaching_goal_status_icon(coaching_goal) %>
+          <%= link_to coaching_goal.title, group_coaching_goal_path(@group, coaching_goal) %>
+        </div>
+        <div>
+          <%= coaching_goal_progress_bar(@group, coaching_goal, :width => "width12", :no_update => true, :tooltip => true) %>
+        </div>
+      </div>  
+    <% end %>  
+  <% else %>
+    <%= content_tag(:div, "feature.connection.content.No_Goals_yet".translate, :class => "has-above well well-small dim text-center no-border") %>
+  <% end %>
+</div>  

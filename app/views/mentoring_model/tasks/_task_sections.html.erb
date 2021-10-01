@@ -1,0 +1,115 @@
+<div class="cjs_task_section_container">
+  <% complete_ibox_options = {
+    :ibox_class => "collapsed no-margins noshadow table-bordered",
+    :title_class => "gray-bg",
+    :content_class => "hide word_break no-padding",
+    :show_collapse_link => true,
+    :collapse_html_options => { :data => {
+      :remote => true,
+      :url => fetch_section_tasks_group_mentoring_model_tasks_path(@group, format: :js, section_type: MentoringModel::Task::Section::COMPLETE, list_id: "#cjs_task_list_3", empty_list_id: "#cjs_section_task_empty_list_3", target_user_id: target_user_id, target_user_type: target_user_type, view_mode: @view_mode),
+      :section_type => MentoringModel::Task::Section::COMPLETE }},
+    :collapse_link_class => "cjs_tasks_list_handler cjs_tasks_list_handler_#{MentoringModel::Task::Section::COMPLETE.to_s}",
+    :header_content => content_tag(:div, "feature.milestones.label.tasks.complete".translate, :class => "font-600 word_break h5 m-t-0")
+    } %>
+  <%= ibox nil, complete_ibox_options do %>
+    <div class="cjs_section_task_list elements-list" id ="<%= "cjs_task_list_" + MentoringModel::Task::Section::COMPLETE.to_s %>">
+    </div>
+    <div class="hide cjs_section_task_empty_list" id = "<%= "cjs_section_task_empty_list_" + MentoringModel::Task::Section::COMPLETE.to_s %>">
+        <%= no_mentoring_model_entities("feature.mentoring_model.description.no_completed_tasks".translate) %>
+    </div>
+    <div id="loading_results_<%= MentoringModel::Task::Section::COMPLETE.to_s %>" class="filter_loading_results text-center hide p-sm">
+      <span><%= "feature.milestones.label.tasks.loading".translate %></span>
+        <i class="fa fa-spinner fa-pulse fa-fw"></i>
+    </div>
+  <% end %>
+</div>
+
+<div class="cjs_task_section_container">
+  <% overdue_ibox_options = {
+    :ibox_class => "collapsed no-margins noshadow table-bordered",
+    :title_class => "gray-bg",
+    :content_class => "hide word_break no-padding",
+    :ibox_content_id => "cjs_task_container_#{MentoringModel::Task::Section::OVERDUE.to_s}",
+    :show_collapse_link => true,
+    :collapse_html_options => {:data => {
+      :remote => true,
+      :url => fetch_section_tasks_group_mentoring_model_tasks_path(@group, format: :js, section_type: MentoringModel::Task::Section::OVERDUE, list_id: "#cjs_task_list_0", empty_list_id: "#cjs_section_task_empty_list_0", target_user_id: target_user_id, target_user_type: target_user_type, view_mode: @view_mode),
+      :section_type => MentoringModel::Task::Section::OVERDUE }},
+    :collapse_link_class => "cjs_tasks_list_handler cjs_tasks_list_handler_#{MentoringModel::Task::Section::OVERDUE.to_s}",
+    :header_content => content_tag(:div, "feature.milestones.label.tasks.overdue".translate, :class => "font-600 word_break h5 m-t-0")
+    } %>
+  <%= ibox nil, overdue_ibox_options do %>
+    <div class="cjs_section_task_list elements-list" id ="<%= "cjs_task_list_" + MentoringModel::Task::Section::OVERDUE.to_s %>">
+    </div>
+    <% zero_upcoming_tasks = zero_upcoming_tasks.nil? ? false : zero_upcoming_tasks%>
+    <div class="hide cjs_section_task_empty_list" id = "<%= "cjs_section_task_empty_list_" + MentoringModel::Task::Section::OVERDUE.to_s %>">
+      <%= no_mentoring_model_entities("feature.mentoring_model.description.no_overdue_tasks".translate) %>
+    </div>
+    <div id="loading_results_<%= MentoringModel::Task::Section::OVERDUE.to_s %>" class="text-center filter_loading_results p-sm" style="display: none;">
+      <span><%= "feature.milestones.label.tasks.loading".translate %></span>
+      <i class="fa fa-spinner fa-pulse fa-fw"></i>
+    </div>
+  <% end %>
+</div>
+
+<div class="cjs_task_section_container">
+  <% upcoming_ibox_options = {
+    :ibox_class => "collapsed no-margins noshadow table-bordered",
+    :title_class => "gray-bg",
+    :content_class => "hide word_break no-padding",
+    :show_collapse_link => true,
+    :collapse_html_options => {:data => {:url => fetch_section_tasks_group_mentoring_model_tasks_path(@group, section_type: MentoringModel::Task::Section::UPCOMING, list_id: "#cjs_task_list_1", empty_list_id: "#cjs_section_task_empty_list_1", target_user_id: target_user_id, target_user_type: target_user_type, view_mode: @view_mode), :remote => true, :section_type => MentoringModel::Task::Section::UPCOMING}},
+    :collapse_link_class => "cjs_tasks_list_handler cjs_tasks_list_handler_#{MentoringModel::Task::Section::UPCOMING.to_s}",
+    :header_content => content_tag(:div, "feature.milestones.label.tasks.upcoming".translate, :class => "font-600 word_break h5 m-t-0")
+    } %>
+  <%= ibox nil, upcoming_ibox_options do %>
+    <div class="cjs_section_task_list elements-list" id ="<%= "cjs_task_list_" + MentoringModel::Task::Section::UPCOMING.to_s %>">
+  </div>
+    <div class="hide cjs_section_task_empty_list" id = "<%= "cjs_section_task_empty_list_" + MentoringModel::Task::Section::UPCOMING.to_s %>">
+      <%= no_mentoring_model_entities("feature.mentoring_model.description.no_upcoming_tasks".translate) %>
+    </div>
+    <div class="hide cjs_add_section_task p-sm b-t clearfix" id = "<%= "cjs_add_section_task_" + MentoringModel::Task::Section::UPCOMING.to_s %>">
+      <%= render partial: "mentoring_model/tasks/add_action_item", locals: {tasks: [], group: @group, task_options: {task_section_id: MentoringModel::Task::Section::UPCOMING}} %>
+    </div>
+    <div id="loading_results_<%= MentoringModel::Task::Section::UPCOMING.to_s %>" class="text-center filter_loading_results p-sm">
+      <span><%= "feature.milestones.label.tasks.loading".translate %></span>
+      <i class="fa fa-spinner fa-pulse fa-fw"></i>
+    </div>
+  <% end %>
+</div>
+
+<div class="cjs_task_section_container b-b">
+  <% remaining_ibox_options = {
+    :ibox_class => "collapsed no-margins noshadow table-bordered",
+    :title_class => "gray-bg",
+    :content_class => "hide word_break no-padding",
+    :show_collapse_link => true,
+    :collapse_html_options => {:data => {
+      :remote => true,
+      :url => fetch_section_tasks_group_mentoring_model_tasks_path(@group, format: :js, section_type: MentoringModel::Task::Section::REMAINING, list_id: "#cjs_task_list_2", empty_list_id: "#cjs_section_task_empty_list_2", target_user_id: target_user_id, target_user_type: target_user_type, view_mode: @view_mode),
+      :section_type => MentoringModel::Task::Section::REMAINING }},
+    :collapse_link_class => "cjs_tasks_list_handler cjs_tasks_list_handler_#{MentoringModel::Task::Section::REMAINING.to_s}",
+    :header_content => content_tag(:div, "feature.milestones.label.tasks.pending".translate, :class => "font-600 word_break h5 m-t-0")
+    } %>
+  <%= ibox nil, remaining_ibox_options do %>
+    <div class="cjs_section_task_list elements-list" id ="<%= "cjs_task_list_" + MentoringModel::Task::Section::REMAINING.to_s %>"></div>
+    <div class="hide cjs_section_task_empty_list" id = "<%= "cjs_section_task_empty_list_" + MentoringModel::Task::Section::REMAINING.to_s %>">
+        <%= no_mentoring_model_entities("feature.mentoring_model.description.no_other_pending_tasks".translate) %>
+    </div> 
+    <div class="hide cjs_add_section_task p-sm b-t clearfix" id = "<%= "cjs_add_section_task_" + MentoringModel::Task::Section::REMAINING.to_s %>">
+      <%= render partial: "mentoring_model/tasks/add_action_item", locals: {tasks: [], group: @group, task_options: {task_section_id: MentoringModel::Task::Section::REMAINING}} %>
+    </div>
+    <div id="loading_results_<%= MentoringModel::Task::Section::REMAINING.to_s %>" class="text-center filter_loading_results p-sm" style="display: none;">
+       <span><%= "feature.milestones.label.tasks.loading".translate %></span>
+        <i class="fa fa-spinner fa-pulse fa-fw"></i>
+    </div>
+  <% end %>
+</div>
+
+
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    MentoringModelTask.showTasksHandler(<%= zero_upcoming_tasks %>);
+  });
+<% end %> 

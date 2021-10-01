@@ -1,0 +1,12 @@
+[ req ]
+distinguished_name     = req_distinguished_name
+prompt                 = no
+
+[ req_distinguished_name ]
+C                      = US
+ST                     = Arizona
+L                      = Scottsdale
+O                      = Chronus Corp
+OU                     = Mentor
+CN                     = *.realizegoal.com
+emailAddress           = ops@chronus.com

@@ -1,0 +1,36 @@
+<% option_proc = Proc.new{|program| {"data-follow_link" => invite_users_path(:root => program.root)}}%>
+<% modal_container  "feature.profile.actions.invite_to_prog".translate(program: @_Program || "display_string.Program".translate),
+                    :modal_id => "modal_invite_user_to_program" do %>
+  <%= form_tag invite_to_program_members_path, :id => "form_invite_users_to_program" do %>
+
+    <%= control_group do %>
+      <%= label_tag 'Program', set_required_field_label(@_Program), :class => "control-label", :for => "invite_users_to_program_program_id" %>
+      <%= controls do %>
+        <%= select_tag 'program_id', get_programs_and_portals_select_box(self, options_proc: option_proc), :id => "invite_users_to_program_program_id", :class => "form-control" %>
+      <% end %>
+    <% end %>
+    <%= control_group do %>
+      <%= content_tag(:div, "feature.user.content.select_a_role".translate, :class => "false-label control-label") %>
+      <%= controls(id: "role_btn_group_invite", data: {url: get_invite_to_program_roles_member_path(member, format: :js)}) do %>
+      <% end %>
+    <% end %>
+    <p>
+      <% current_program_link = (link_to "click here", "", :target => "_blank", :id => "cjs_invite_to_program_mails_link") %>
+      <%= "feature.admin_view.content.send_invitations_customized_for_selected_program_html".translate(:click_here => current_program_link) %>
+    </p>
+    <%= hidden_field_tag 'member_id', member.id %>
+    <hr/>
+    <% action_set class: "pull-right" do %>
+      <a class='btn btn-white' data-dismiss="modal"><%= "display_string.Cancel".translate %></a>
+      <%= submit_tag "display_string.Submit".translate, :class => 'btn btn-primary disabled_button', :id => "cjs_send_invites", data: {:disable_with => "display_string.Please_Wait".translate} %>
+    <% end %>
+  <% end %>
+  <%= javascript_tag do %>
+    jQuery(document).ready(function(){
+      ProgramInvitation.initializeProgramChange('#invite_users_to_program_program_id', '#cjs_invite_to_program_mails_link', 'invite');
+      ProgramInvitation.handleProgramChange('#invite_users_to_program_program_id', '#cjs_invite_to_program_mails_link', 'invite');
+      NestedShowHideRadioToggle('.cjs_nested_show_hide_container', '.cjs_show_hide_sub_selector', '.cjs_toggle_radio', '.cjs_toggle_content');
+      ProgramInvitation.validateInviteWithRecipients();
+    });
+  <% end %>
+<% end %>

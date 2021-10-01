@@ -1,0 +1,25 @@
+<% @title = "feature.reports.header.demographic_report_v1".translate %>
+<% @back_link = back_to_reports_options(@category) %>
+<% @skip_rounded_white_box_for_content = true %>
+<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{APP_CONFIG[:google_maps_api_key]}" %>
+
+<div id='demographic_report'>
+  <% if @most_users_country.present? && @roles.any?{|role_name| @most_role_country[role_name].present? } %>
+    <% @report_actions = {
+      url: demographic_report_path,
+      ga_label: ReportsController::GoogleAnalytics::DEMOGRAPHIC_REPORT_LABEL,
+      other_filters_partial: "reports/demographic_report_filter_pane"
+    } %>
+    <%= render :partial => "reports/demographic_report_map", :locals => {:locations => @locations} %>
+    <%= render :partial => "reports/demographic_report_table_view", :locals => {:locations => @locations_for_table, :report_view_columns => @report_view_columns} %>
+  <% elsif @roles.present? %>
+    <div class='well text-center'>
+      <%= "feature.reports.content.no_locations_available".translate(:program => _program) %>
+    </div>
+  <% else %>
+    <div class='well text-center'>
+      <%= "feature.reports.content.location_not_enabled".translate(:program => _program) %>
+    </div>
+  <% end %>
+</div>
+<%= javascript_tag %Q[DemographicReport.initializeTableView();] %>

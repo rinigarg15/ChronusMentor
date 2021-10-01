@@ -1,0 +1,169 @@
+<% q_id = profile_question.new_record? ? 0 : profile_question.id %>
+<% display_choices = profile_question.choice_or_select_type? %>
+<% new_question = q_id == 0 %>
+
+<%= get_info_alert_for_matching_fields if @disabled_for_editing %>
+
+<div id="pq_<%=q_id%>">
+  <% question_type = profile_question.question_type %>
+  <%= control_group do %>
+    <%= f.label :question_text, :for => "profile_question_text_#{q_id}", :class => "col-xs-12 text-left-imp" %>
+    <%= controls(class: "col-xs-12") do %>
+      <%= f.input_field :question_text, :as => :string, :id => "profile_question_text_#{q_id}", :class => "form-control cjs_first_form_element", :disabled => profile_question.default_type? %>
+    <% end %>
+  <% end %>
+  <% location_exists = @current_organization.profile_questions.location_questions.any? %>
+  <% manager_exists = @current_organization.profile_questions.manager_questions.any? %>
+  <%= control_group do %>
+    <%= f.label :question_type, :for => "profile_question_question_type_#{q_id}", :class => "col-xs-12 text-left-imp" %>
+    <%= controls(class: "col-xs-12") do %>
+      <%= f.select :question_type, get_profile_question_type_options_array(!location_exists || profile_question.location?, profile_question.email_type?, profile_question.name_type?, @current_organization.manager_enabled? && (!manager_exists || profile_question.manager?)),
+        {:selected => get_question_type(question_type)}, {:onchange => %Q[CustomizeProfileQuestions.fieldTypeOnChangeHandler(this, "#{section.id}", "#{q_id}", #{PROFILE_MERGED_QUESTIONS.values.to_json}, #{new_question}, #{new_question || !(profile_question.profile_answers.exists?)})],
+        :id => "profile_question_question_type_#{q_id}", :class => "form-control #{ 'pull-left-imp' if @disabled_for_editing } cjs_profile_question_type", :disabled => (profile_question.default_type? || @disabled_for_editing), "data-original-type" => get_question_type(question_type)} %>
+        <label class="checkbox m-t-xs <%= "hide" unless show_allow_multiple_field?(question_type) %>">
+          <%= check_box_tag "allow_multiple", true, check_allow_multiple?(question_type), :class => "allow_multiple_checkbox" %>
+          <%= "feature.profile_customization.content.allow_multiple_response".translate %>
+          <%= get_tooltip_images(profile_question, get_question_type(question_type)) %>
+        </label>
+        <%= content_tag(:span, get_multi_tool_tip(type: ProfileQuestion::Type::MULTI_EDUCATION), class: "cjs_multi_tooltip #{'hide' unless profile_question.multi_education?}", data: {question_type: ProfileQuestion::Type::MULTI_EDUCATION}) %>
+        <%= content_tag(:span, get_multi_tool_tip(type: ProfileQuestion::Type::MULTI_EXPERIENCE), class: "cjs_multi_tooltip #{'hide' unless profile_question.multi_experience?}", data: {question_type: ProfileQuestion::Type::MULTI_EXPERIENCE}) %>
+        <%= content_tag(:span, get_multi_tool_tip(type: ProfileQuestion::Type::MULTI_PUBLICATION), class: "cjs_multi_tooltip #{'hide' unless profile_question.multi_publication?}", data: {question_type: ProfileQuestion::Type::MULTI_PUBLICATION}) %>
+        <% if super_console? %>
+          <label class="checkbox m-t-xs <%= "hide" unless new_question || profile_question.text_type? %>">
+            <%= f.check_box :text_only_option, :class => 'cjs_text_only_checkbox' %>
+            <%= "feature.profile_customization.content.text_only".translate %>
+          </label>
+        <% end %>
+    <% end %>
+  <% end %>
+
+  <div id="choices_<%= q_id %>" class="choices" style="display:<%= display_choices ? '' : 'none' %>">
+    <% info_label = profile_question.ordered_options_type? ? "display_string.Options".translate : "display_string.Choices".translate %>
+    <%= control_group do %>
+      <%= f.label :question_info, info_label, :class => "control-label p-l-sm text-left-imp", :for => "profile_question_info_#{q_id}" %>
+      <span class="cjs-qc-count small">(<%= profile_question.default_choice_records.size %>)</span>
+      <%= get_bulk_add_choices_link(profile_question.id || 0, @disabled_for_editing) %>
+      <%= controls(class: "col-xs-12") do %>
+        <%= show_profile_question_multi_choice(profile_question, @disabled_for_editing) %>
+        <label class="checkbox">
+          <%= f.check_box :allow_other_option, :disabled => @disabled_for_editing %>
+          <%= "feature.profile_customization.content.allow_different_answer".translate %>
+        </label>
+      <% end %>
+    <% end %>
+    <% collection = 1..2 %>
+    <% if profile_question.new_record? %>
+      <% selected = 2 %>
+    <% elsif profile_question.ordered_options_type? %>
+      <% collection = 1..profile_question.default_choices.size %>
+      <% selected = profile_question.options_count %>
+    <% end %>
+    <% display_options = profile_question.ordered_options_type? ? "" : "none" %>
+    <div style="display:<%= display_options %>" id="options_count_<%=  q_id %>">
+      <%= control_group do %>
+        <%= f.label :options_count, :for => "profile_question_options_count_#{q_id}", :class => "col-xs-12 text-left-imp" %>
+        <%= controls(class: "col-xs-12") do %>
+          <%= f.select :options_count, collection, {:selected => selected, :include_blank => false}, {:id => "profile_question_options_count_#{q_id}", :class => "form-control", :onfocus => "CustomizeProfileQuestions.calculateOptionsRange('#{q_id}')"} %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <%= control_group do %>
+    <%= f.label :help_text, :for => "help_text_#{section.id}_#{q_id}", :class => "col-xs-12 text-left-imp" %>
+    <%= controls(class: "col-xs-12") do %>
+      <%= f.input_field :help_text, :as => :text, :id => "help_text_#{section.id}_#{q_id}", :rows => 4, :class => "form-control q_ck_editor col-sm-12" %>
+    <% end %>
+  <% end %>
+  <% conditional_visibility = profile_question.default_type? ? "hide" : "" %>
+  <%= control_group(class: "m-b-none #{conditional_visibility}") do %>
+    <%= controls(:class => "col-xs-12") do %>
+      <label class="checkbox">
+        <%= f.check_box :conditional?, :class => 'cjs_show_conditional_checkbox' %>
+        <%= "feature.profile_customization.label.show_only_if".translate %>
+        <% conditional_tool_tip = "feature.profile_customization.content.profile_question_conditional_tooltip_text".translate %>
+        <span>
+          <%= embed_icon(TOOLTIP_IMAGE_CLASS, '', :id => "conditional_help_icon_#{profile_question.id}") %>
+          <%= tooltip("conditional_help_icon_#{profile_question.id}", conditional_tool_tip, true, {placement: "bottom"}) %>
+        </span>
+      </label>
+    <% end %>
+  <% end %>
+  
+  <div id ="conditional_settings_<%= profile_question.section.id %>_<%= profile_question.id||0 %>" style=<%='display:none' if profile_question.default_type? || profile_question.conditional_question_id.blank? %>>
+    <%= control_group do %>
+      <%= content_tag(:div, nil, :class => "false-label control-label col-xs-12 text-left-imp") %>
+      <%= controls(:class => "col-xs-12 m-b-xs") do %>
+        <% profile_questions_choice_or_select_type = @profile_questions.select{|q| q.choice_or_select_type? } %>
+        <%= condition_profile_questions_container_box(profile_question, profile_questions_choice_or_select_type) %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <%= hidden_field_tag :section_id, section.id if profile_question.new_record? %>
+  <% action_set(class: "clearfix") do %>
+    <div class="pull-right">
+      <%= link_to_function "display_string.Cancel".translate, "CustomizeProfileQuestions.cancelQuestion('#{q_id}', '#{section.id}', '#{new_question}')", :class => "btn btn-white cjs-cancel-edit-description" %>
+      <%= f.button :submit, "display_string.Save".translate %>
+    </div>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    var updateConfirmations = {
+      dependencyConfirmation: "<%= j (dependency_confirmation = get_confirm_mesage_if_dependent_questions(@profile_questions, profile_question)).present? ? content_tag(:li, dependency_confirmation) : "" %>",
+      matchingConfirmation: "<%= j content_tag(:li, "feature.profile_customization.content.update_delete_confirmation.match_score".translate) %>",
+      choicesUpdatedConfirmation: "<%= j content_tag(:li, "feature.profile_customization.content.update_delete_confirmation.modified_choices".translate) %>"
+    }
+    var questionChoices = {};
+    <% profile_question.default_choice_records.each do |choice| %>
+      questionChoices[<%= choice.id %>] = '<%= choice.text %>';
+    <% end if display_choices %>
+    <% unless @disabled_for_editing %>
+      CustomizeQuestionChoices.enableChoiceBasedActions("<%= profile_question.id || 0 %>", questionChoices);
+    <% end %>
+    CustomizeSelect.selectExpandContract();
+    CkeditorConfig.initCkeditor("#help_text_<%= section.id %>_<%= q_id %>", { height: "100px" }, CkeditorConfig.minimalCkOptions());
+    CustomizeProfileQuestions.updateProfileQuestion("<%= q_id %>", "<%= profile_question.section_id %>", updateConfirmations);
+
+    jQuery(".cjs-cancel-edit-description").click(function(event) {
+      ProfileConfigUI.showProfileQuestionDetailsPanel(false);
+      event.stopPropagation();
+    });
+
+    jQuery('.cjs_show_conditional_checkbox').change(function(){
+      CustomizeProfileQuestions.toggleConditionalSettingsDisplay(<%= profile_question.id || 0 %>, <%= profile_question.section_id %>);
+    });
+
+    if((jQuery('.cjs_show_conditional_checkbox').is(':checked'))){
+      handleConditionalSelect();
+    }   
+
+    jQuery('.cjs_select_conditional_question').change(function(){
+      handleConditionalSelect();
+    });
+
+    function handleConditionalSelect() {
+      if ((jQuery('.cjs_select_conditional_question').val()).trim().length > 0) {
+        populateConditionalSelect();
+      }
+      else {
+        jQuery(".cjs_conditional_question_select_container").hide();
+        jQuery(".cjs_conditional_response_text").hide();
+      }
+    }
+
+    function populateConditionalSelect() {
+      jQuery.ajax({
+        url: '<%= get_conditional_options_profile_question_path(id: profile_question.id) %>',
+        type: 'GET',
+        data: {question_id: jQuery('.cjs_select_conditional_question').val()},
+        success: function(response){
+          jQuery(".cjs_conditional_question_select_options").select2();
+          jQuery(".cjs_conditional_question_select_container").show();
+          jQuery(".cjs_conditional_response_text").show();
+        }
+      });
+    }
+  });
+<% end %>

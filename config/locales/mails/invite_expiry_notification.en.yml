@@ -1,0 +1,7 @@
+en:
+  email_translations:
+    invite_expiry_notification:
+      tags:
+        invitation_expiry_date:
+          description: Invitation expiry date
+          example: December 24, 2013

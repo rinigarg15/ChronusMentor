@@ -1,0 +1,6 @@
+closeQtip();
+<% if @message.present? %>
+  ChronusValidator.ErrorManager.ShowResponseFlash("cjs_program_invitations_error_message", '<%= j(@message) %>', true);
+  jQuery("#cjs_program_invitation_listing_kendogrid").data('kendoGrid').dataSource.read();
+  jQuery(CommonSelectAll.primaryCheckBoxSelector).click();
+<% end %>

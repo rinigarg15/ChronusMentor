@@ -1,0 +1,32 @@
+<div class="clearfix p-l-0 no-border">
+  <div class="cjs_campaign_block ">
+    <div class="clearfix">
+      <h3 class="pull-left"><%= "feature.connection.export_pdf.header.summary".translate %></h3>
+    </div>
+    <div class="stat-list m-t-sm m-b-sm clearfix">
+      <div class="m-b-md col-sm-12 p-l-0">
+        <h2 class="no-margins"><%= groups_report.group_ids.count %></h2>
+        <small><%= "feature.reports.label.ongoing_connections_period".translate(Connections: _Mentoring_Connections) %>
+        </small>  
+      </div>
+      <div class="m-b-md col-sm-6 p-l-0">
+        <h2 class="no-margins"><%= groups_report.totals[ReportViewColumn::GroupsReport::Key::TOTAL_ACTIVITIES] %></h2>
+        <small><%= "feature.reports.label.total_activities_period".translate %></small>
+      </div>
+      <div class="col-sm-6 p-l-0 p-r-0">
+        <%= render :partial => "reports/groups_report_totals", :locals => {:groups_report => groups_report} %>
+      </div>
+    </div>
+    <% if groups_report.group_ids.size != 0 %>
+      <div class="cjs_campaign_block p-t-sm b-t">
+        <div class="clearfix">
+          <h3 class="pull-left"><%= _Mentoring_Connections %></h3>
+        </div>
+        <div class="row" >
+          <div class="stat-list clearfix m-t-sm col-sm-5" id="cjs_connections_activity_stats"></div>
+          <%= render :partial => "reports/groups_report_pie_chart_legends", :locals => {:groups_report => groups_report} %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

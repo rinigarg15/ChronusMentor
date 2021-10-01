@@ -1,0 +1,4 @@
+<div class="clearfix">
+  <% favourite_mentors = mentor_request.request_favorites %>
+  <%= link_to "#{favourite_mentors.collect(&:favorite).collect(&:member).collect(&:name).join(", ")}", "#", class: "pointer", "data-toggle" => "modal", "data-target" => "#modal_preferred_mentors_for_#{mentor_request.id}"  %>
+</div>

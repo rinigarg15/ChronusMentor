@@ -1,0 +1,12 @@
+<% site_list_item.id ||= SecureRandom.random_number(MAX_INT32) %>
+
+<%= fields_for_listitem(site_list_item) do |list_item_form| %>
+  <%= panel "feature.article.header.website".translate, { panel_class: "panel-default article_list_item", panel_id: site_list_item.new_record? ? 'new_list_item' : 'list_item_#{site_list_item.id}', icon_class: "fa fa-globe", show_close_link: true } do %>
+    <%= list_item_form.input :type_string, :as => :hidden %>
+    <%= control_group do %>
+      <% site_list_item.content ||= "http://" %>
+      <%= list_item_form.input :content, :as => :string, :input_html => {:class => 'form-control'}, :label => site_list_item.label_for_content %>
+    <% end %>
+    <%= list_item_form.input :description, :as => :text, :input_html => {:class => 'form-control', :rows => 5}, :label => ArticleListItem.human_attribute_name(:description) %>
+  <% end %>
+<% end %>

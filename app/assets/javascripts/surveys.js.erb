@@ -1,0 +1,620 @@
+var ProgressReports = {
+
+  initializeKendo: function(options) {
+    jQuery(document).ready(function(){
+      ProgressReports.initializeGrid(options);
+    });
+  },
+
+  initializeGrid: function(options) {
+    kendoUtils.refineColumns(options.columns);
+    var gridSelector = "#" + options.grid_id;
+    var gridDiv = jQuery(gridSelector);
+    var grid = gridDiv.kendoGrid({
+      dataSource: {
+        type: "json",
+        transport: {
+          read: options.dataSource,
+          parameterMap: function(data, type) {
+            kendoUtils.formatFilterData(data.filter, gridSelector);
+            return data;
+          }
+        },
+        schema: {
+          model: {
+            fields: options.fields
+          },
+          parse: function(response) {
+            data = response.data;
+            data.total = response.total;
+            return data;
+          },
+          total: function (response) {
+            return data.total
+          }
+        },
+        pageSize: options.pageSize,
+        serverPaging: options.serverPaging,
+        serverFiltering: options.serverFiltering,
+        serverSorting: options.serverSorting,
+        sort: {
+          field: options.sortField,
+          dir: options.sortDir
+        }
+      },
+      columns: options.columns,
+      sortable: options.sortable,
+      pageable: options.pageable,
+      filterable: options.filterable,
+      selectable: options.selectable,
+      width: '100%',
+      scrollable: true,
+      dataBound: function(event) {
+        ProgressReports.updateSortParamsForXLSDownload(event.sender.dataSource);
+        ProgressReports.onDataBound();
+      }
+    }).data("kendoGrid");
+    kendoUtils.initializeFilterMenu(grid, options);
+  },
+
+  initializeTooltips: function(){
+    jQuery(".cjs_sr_header").each(function(){
+      jQuery(this).parent().tooltip({title: jQuery(this).text(), container: 'body'});
+    });
+  },
+
+  updateSortParamsForXLSDownload: function(dataSource) {
+    jQuery('#responses_sort_field').val(dataSource.sort()[0].field);
+    jQuery('#responses_sort_dir').val(dataSource.sort()[0].dir);
+  },
+
+  onDataBound: function(){
+    handleDoubleScroll("#cjs_survey_resposnes_content table", "#cjs_survey_responses_listing_kendogrid", ".k-grid-content", "#cjs_survey_responses_listing_kendogrid", { contentElement: "table" });
+    ProgressReports.initializeTooltips();
+    CommonSelectAll.maintainTriStateCheckbox(true);
+  },
+
+  initializeBulkActions: function(errorMessage){
+    jQuery('.cjs_bulk_action').on('click', function (event) {
+      event.preventDefault();
+      if(CommonSelectAll.validateSelection(errorMessage)){
+        eval(jQuery(this).data('js'));
+      }
+    });
+  },
+
+  xlsBulkAction: function(){
+    var hiddenForm = jQuery("#cjs_export_xls_form");
+    hiddenForm.find("input.cjs_xls_response_ids").val(CommonSelectAll.selectedIds.join(','));
+    hiddenForm.submit();
+  },
+
+  emailReportBulkAction: function(){
+    url = jQuery('#email_report_popup').data('url');
+    jQueryShowQtip('#email_report_popup', 600, url,'',{modal: true})
+  },
+
+  emailIndividualReport: function(url){
+    jQuery('.email_survey_report').on('click', function (event) {
+      event.preventDefault();
+      jQueryShowQtip('.email_survey_report', 600, url,'',{modal: true})
+    });
+  },
+
+  multiSelect: function(currentLocale){
+    jQuery("#cjs_survey_response_view_uixmultiselect").uixmultiselect({
+      availableListPosition: 'left',
+      locale: currentLocale,
+      splitRatio: 0.48,
+      sortable: true
+    });
+  },
+
+  UpdateColumnValidations: function(selectFieldMsg){
+    jQuery("form input[type=submit]").on("click", function(){
+      if(!jQuery("#cjs_survey_response_view_uixmultiselect").val()) {
+        ProgressReports.addFlash(selectFieldMsg);
+        return false;
+      }
+    });
+  },
+
+  addFlash: function(message){
+    ChronusValidator.ErrorManager.ShowResponseFlash("cjs_survey_response_view_flash", message);
+    jQuery("#cjs_update_survey_response_column").animate({ scrollTop: 0 }, 800);
+     jQueryScrollTo("#cjs_survey_response_view_flash", false);
+  },
+
+  initializeEditColumns: function(){
+    var editColumn = jQuery("#survey_response_columns_update_link");
+
+    editColumn.on('click', function(event){
+      event.preventDefault();
+      var url = jQuery(this).data("url");
+      jQueryShowQtip('#cjs_survey_response_view', 900, url, "", {modal: true, largeModal: true});
+    });
+  },
+
+  addDateFilter: function(start_time, end_time){
+    var gridDiv = jQuery("#cjs_survey_responses_listing_kendogrid");
+    var grid = gridDiv.data('kendoGrid');
+
+    var dateFilter1 = {
+       "field" : "date",
+       "operator" : "eq",
+       "value" : start_time
+    }
+    var dateFilter2 = {
+       "field" : "date",
+       "operator" : "eq",
+       "value" : end_time
+    }
+    var filters = [dateFilter1, dateFilter2]
+    grid.dataSource.filter({
+      logic: "and",
+      filters: filters
+    });
+  }
+}
+
+var EmailReport = {
+  sampleEmailLabelSelector: ".cjs_email_label_sample_container .tag-label",
+
+  initialize: function(){
+    EmailReport.initializeAddEmail();
+    EmailReport.initializeRemoveLabel();
+    EmailReport.validateAllFieldsPresent();
+  },
+
+  setResponseFilterSortParams: function(){
+    jQuery("input.cjs_email_report_response_ids").val(CommonSelectAll.selectedIds.join(','));
+    jQuery("#email_responses_sort_field").val(jQuery("#responses_sort_field").val());
+    jQuery("#email_responses_sort_dir").val(jQuery("#responses_sort_dir").val());
+  },
+
+  initializeAddEmail: function(){
+    jQuery(document).on('click', '.cjs_email_report_add', function(event){
+      event.preventDefault();
+      var newVal = jQuery('.cjs_email_report_recipient').val();
+      if(EmailReport.validateAddressAndSetLable(newVal)){
+        jQuery('.cjs_email_report_recipient').val('');
+        jQuery(".cjs_email_error").hide();
+        jQuery(".cjs_email_help_text").show();
+        jQuery(".cjs_email_recipients_container").removeClass("has-error");
+      }
+      else{
+        jQuery(".cjs_email_error").show();
+        jQuery(".cjs_email_help_text").hide();
+        jQuery(".cjs_email_recipients_container").addClass("has-error");
+      }
+    });
+  },
+
+  validateAddressAndSetLable: function(val){
+    var stringArray = val.split(" ");
+    var isNameEmail = (stringArray.length > 1)
+    var email = stringArray.last()
+    var lableDisplayString = email
+    if(isNameEmail){
+      email = email.slice(1, -1)
+      stringArray.splice(-1,1)
+      lableDisplayString = stringArray.join(" ")
+    }
+    if(EmailReport.emailIsValid(email)){
+      EmailReport.addEmailAddressLable(lableDisplayString, email);
+      return true;
+    }
+    return false;
+  },
+
+  addEmailAddressLable: function(name, val){
+    var newLabel = jQuery(EmailReport.sampleEmailLabelSelector).clone();
+    newLabel.find('.cjs_tab_name').text(name);
+    newLabel.find('.cjs_email_recipients_label_input').val(val);
+    newLabel.appendTo('.cjs_email_label_container');
+  },
+
+  emailIsValid: function(emailAddress){
+    var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
+    return pattern.test(emailAddress);
+  },
+
+  initializeRemoveLabel: function(){
+    jQuery(document).on('click', '.close-tag', function(event){
+      event.preventDefault();
+      jQuery(this).closest('.tag-label').remove();
+    });
+  },
+
+  validateAllFieldsPresent: function(){
+    jQuery(document).on('click', '.cjs_submit', function(){
+      var returnVal = true
+      jQuery.each(['#cjs_email_report_body', '#cjs_email_report_subject'], function(index, selector) {
+        if(jQuery(selector).val().blank()){
+          jQuery(selector).closest('.controls').addClass("has-error");
+          returnVal = false
+        }
+        else{
+          jQuery(selector).closest('.controls').removeClass("has-error");
+        }
+      });
+
+      if(jQuery('input[name="recipients[]"]').length <= 1){
+        jQuery('.cjs_email_report_recipient').closest('.controls').addClass("has-error");
+        returnVal = false
+      }
+      else{
+        jQuery('.cjs_email_report_recipient').closest('.controls').removeClass("has-error");
+      }
+      return returnVal;
+    });
+  }
+}
+
+
+var ReportFilters = {
+
+  resetQuestionSelector: function(selector){
+    selector.find(".cjs_question_selector").val("");
+    selector.find(".cjs_show_input_field").closest(".input-group").hide();
+    selector.find(".cjs_show_input_field").val("");
+    selector.find(".cjs_input_hidden").closest(".input-group").hide();
+    selector.find(".cjs_input_hidden").val("");
+    selector.find(".cjs_choices_hidden").val("");
+    selector.find("div.cjs_choices_hidden").remove();
+    selector.find(".cjs_add_one_more_filter").attr('class', 'cjs_add_one_more_filter btn-md btn btn-white m-t-sm border-bottom hide');
+    selector.find(".cjs-delete-button-container").hide();
+    selector.find(".cjs-and-seperator").hide();
+    selector.find(".cjs_question_divider").remove();
+  },
+
+  clearFilters: function(remainingFilterClass){
+    remainingFilterClass = getDefaultVal(remainingFilterClass, ".cjs_survey_report_filter_container");
+    var allFilterExceptFirst = jQuery(".cjs_controls_enclosure").find(remainingFilterClass + ":not(:first)");
+    allFilterExceptFirst.remove();
+    var dateRangePickerContainer = jQuery(".cjs_controls_enclosure").find(remainingFilterClass).find('.cjs_date_range_picker_container');
+    initialize.reInitializeDateRangePicker(dateRangePickerContainer);
+    dateRangePickerContainer.hide();
+    var remainingFilter = jQuery(".cjs_controls_enclosure").find(remainingFilterClass);
+    ReportFilters.resetQuestionSelector(remainingFilter);
+    jQuery('#role_choice').val("").trigger("change");
+  },
+
+  resetAddOneMoreFilterButtonClasses: function(){
+    jQuery(document).find(".cjs_add_one_more_filter").not(".hide").attr('class', 'cjs_add_one_more_filter btn-md btn btn-white m-t-sm border-bottom');
+    jQuery(document).find(".cjs_add_one_more_filter.hide").attr('class', 'cjs_add_one_more_filter btn-md btn btn-white m-t-sm border-bottom hide');
+  },
+
+  getfiltersData: function(){
+    var dateArray = jQuery("#report_time_filter_form .cjs_daterange_picker_value").val().split(datePickerTranslations.dateRangeSeparator);
+    var startDate = {"field" : "date", "operator" : "eq", "value" : Date.parse(dateArray[0]).toDateString()};
+    var endDate = {"field" : "date", "operator" : "eq", "value" : Date.parse(dateArray[1]).toDateString()};
+    var role = {"field" : "roles", "value" : jQuery("#role_choice").val()};
+    var appliedFilters = ReportFilters.getAppliedFiltersData();
+    appliedFilters.push(startDate);
+    appliedFilters.push(endDate);
+    appliedFilters.push(role);
+    return {newparams: appliedFilters}
+  },
+
+  getAppliedFiltersData: function(includeScope){
+    includeScope = getDefaultVal(includeScope, false);
+    var appliedFilters = [];
+    jQuery(".cjs_question_selector").each(function(){
+      var questionField = jQuery(this).val();
+      var operatorField = jQuery(this).closest(".form-group").find(".cjs_show_input_field").val();
+      var valueField = jQuery(this).closest(".form-group").find(".cjs_input_hidden").val();
+
+      if(jQuery(this).find("option:selected").attr("class") == "cjs_choice_based_question"){
+        valueField = jQuery(this).closest(".form-group").find("input.cjs_choices_hidden").val();
+      }
+
+      if(jQuery(this).find("option:selected").attr("class") == "cjs_date_question"){
+        var datePickerHiddenElement = jQuery(this).closest("div.cjs_survey_report_filter_container").find(DateRangePicker.hiddenField);
+        valueField = datePickerHiddenElement.val();
+        operatorField = "<%= SurveyResponsesDataService::Operators::DATE_TYPE %>";
+      }
+
+      var filter = {"field" : questionField, "operator" : operatorField, "value" : valueField};
+      if(includeScope) filter['scope'] = jQuery(this).data('scope');
+      appliedFilters.push(filter);
+    });
+    return appliedFilters;
+  },
+
+  displaySelect2Choices: function(choicesIdsString, choicesTextsString, separator, elementId){
+    var choicesIds = choicesIdsString.split(separator);
+    var choicesTexts = choicesTextsString.split(separator);
+    var choicesArray = [];
+    var length = choicesIds.length;
+    for(var i = 0; i < length; i++) {
+      choicesArray.push({id: choicesIds[i], text: choicesTexts[i]})
+    }
+    var ans_div = jQuery("#" + elementId);
+    ans_div.select2({
+      allowClear: true,
+      placeholder: ans_div.data('placeholder'),
+      multiple: true,
+      createSearchChoice: false,
+      tags: choicesArray,
+      formatResult: function(result, container, query, escapeMarkup){
+        removeFastClickForSelect2(container);
+        return result.text;
+      }
+    });
+  },
+
+  showInputField: function(questionChoicesIds, questionChoicesTexts, separator){
+    jQuery(document).on("focus", "select.cjs_show_input_field", function(){
+      jQuery(this).data('had-val', jQuery(this).val()!='');
+    });
+    jQuery(document).on("change", "select.cjs_show_input_field", function(){
+      jQuery(this).closest(".form-group").find(".cjs_choices_hidden").val("");
+      jQuery(this).closest(".form-group").find("div.cjs_choices_hidden").remove();
+      ReportFilters.toggleAdditionalInputBox(jQuery(this), questionChoicesIds, questionChoicesTexts, separator);
+      if (!jQuery(this).data('had-val') && jQuery(this).val()!=''){
+        jQuery(this).closest(".form-group").find(".cjs_add_one_more_filter").show();
+      }
+    });
+  },
+
+  toggleAdditionalInputBox: function(selectBoxObj, questionChoicesIds, questionChoicesTexts, separator){
+    var additionalBoxObj = ReportFilters.getAdditionalBox(selectBoxObj, questionChoicesIds, questionChoicesTexts, separator);
+    if(ReportFilters.customSelectBoxHasClass(selectBoxObj, "cjs_additional_text_box")){
+      additionalBoxObj.closest(".input-group").show();
+    }
+    else{
+      additionalBoxObj.closest(".input-group").hide();
+    }
+  },
+
+  customSelectBoxHasClass: function(selectBoxObj, selectorClass){
+    return (selectBoxObj.find("option[value='" + selectBoxObj.val() + "']").hasClass(selectorClass));
+  },
+
+  showSelect2QuestionChoices: function(selector, questionChoicesIds, questionChoicesTexts, separator){
+    var selectedQuestionValue = selector.closest("div.cjs_hidden_input_box_container").find(".cjs_question_selector").val();
+    var select2BoxId = selector.closest("div.cjs_hidden_input_box_container").find(".cjs_choices_hidden").attr("id");
+    selector.closest("div.cjs_hidden_input_box_container").find(".cjs_input_hidden").hide();
+    ReportFilters.displaySelect2Choices(questionChoicesIds[selectedQuestionValue], questionChoicesTexts[selectedQuestionValue], separator, select2BoxId);
+  },
+
+  getAdditionalBox: function(selectBoxObj, questionChoicesIds, questionChoicesTexts, separator){
+    var selectedQuestion = selectBoxObj.closest("div.cjs_hidden_input_box_container").find(".cjs_question_selector option:selected");
+    var inputBox = selectBoxObj.closest("div.cjs_hidden_input_box_container").find(".cjs_input_hidden");
+    if(selectedQuestion.attr("class") == "cjs_choice_based_question"){
+      inputBox = selectBoxObj.closest("div.cjs_hidden_input_box_container").find(".cjs_choices_hidden");
+      ReportFilters.showSelect2QuestionChoices(selectBoxObj, questionChoicesIds, questionChoicesTexts, separator);
+    }
+    return inputBox;
+  },
+
+  addOneMore: function(equal, notEqual, doesNotContain){
+    jQuery(document).on("click", "a.cjs_add_one_more_filter", function(event){
+      event.preventDefault();
+      var elementFilterType = jQuery(this).data("prefix");
+      var elementCount = jQuery(this).data("id");
+      jQuery(this).attr("data-id", parseInt(elementCount) + 1);
+      var controlBlock = jQuery(this).closest(".filter_box");
+      controlBlock.find(".cjs_delete_question").show();
+      var oldComponent = jQuery(this).closest("div.cjs_survey_report_filter_container");
+      jQuery(this).addClass("hide");
+      jQuery(this).closest(".cjs-add-delete-buttons-container").find(".cjs-delete-button-container").show();
+      var newComponent = oldComponent.clone();
+      jQuery(this).closest(".form-group").find(".cjs-and-seperator").show();
+      ReportFilters.resetComponents(newComponent, elementCount, elementFilterType, equal, notEqual, doesNotContain);
+      oldComponent.closest("div.cjs_controls_enclosure .cjs_add_one_more_div").append(newComponent);
+      initialize.reInitializeDateRangePicker(newComponent);
+    });
+  },
+
+  resetComponents: function(component, elementCount, elementFilterType, equal, notEqual, doesNotContain){
+    var selectObj = component.find("select");
+    var labelObj = component.find("label");
+    var idNameQuestion = ReportFilters.constructNameAndIdAttrs(elementFilterType, "question", elementCount);
+    var idNameOperator = ReportFilters.constructNameAndIdAttrs(elementFilterType, "operator", elementCount);
+    var idNameValue = ReportFilters.constructNameAndIdAttrs(elementFilterType, "value", elementCount);
+    var idNameChoices = ReportFilters.constructNameAndIdAttrs(elementFilterType, "choices", elementCount);
+    var idNameDateValue = ReportFilters.constructNameAndIdAttrs(elementFilterType, "<%= ProfileQuestionsHelper::DATE_VALUE %>", elementCount);
+
+    component.find("div.cjs_choices_hidden").remove();
+    component.find('.cjs-add-delete-buttons-container').toggleClass('m-t-xl', false);
+
+    jQuery(selectObj[0]).attr({value: "", name: idNameQuestion, id: idNameQuestion});
+    jQuery(selectObj[1]).attr({value: "", name: idNameOperator, id: idNameOperator});
+    component.find(".cjs_input_hidden").val('').attr({name: idNameValue, id: idNameValue});
+    component.find(".cjs_choices_hidden").val('').attr({name: idNameChoices, id: idNameChoices});
+    component.find(".cjs_daterange_picker_value").val('').attr({name: idNameDateValue, id: idNameDateValue});
+
+    jQuery(labelObj[0]).prop({"for": idNameQuestion});
+    jQuery(labelObj[1]).prop({"for": idNameOperator});
+    jQuery(labelObj[2]).prop({"for": idNameValue});
+    jQuery(labelObj[3]).prop({"for": idNameChoices});
+
+    ReportFilters.addNotContainsDropOption(component, equal, notEqual, doesNotContain);
+
+    component.find(".cjs_show_input_field").closest(".input-group").hide();
+    component.find(".cjs_date_range_picker_container").hide();
+    component.find(".cjs_input_hidden").show();
+    component.find(".cjs_input_hidden").closest(".input-group").hide();
+    component.find(".cjs_add_one_more_filter").attr('class', 'cjs_add_one_more_filter btn-md btn btn-white m-t-sm border-bottom hide');
+    component.find(".cjs-delete-button-container").hide();
+  },
+
+  constructNameAndIdAttrs: function(elementFilterType, elementType, elementCount){
+    return (elementFilterType + "_" + elementType + "_" + elementCount);
+  },
+
+  removeQuestion: function(){
+    jQuery(document).on("click", ".cjs_delete_question", function(){
+      jQuery(this).closest("div.cjs_survey_report_filter_container").remove();
+    });
+  },
+
+  addNotContainsDropOption: function(selector, equal, notEqual, doesNotContain){
+    if(selector.find("option[value='" + notEqual + "']").length == 0){
+      selector.find("option[value='" + equal + "']").after("<option value='" + notEqual + "' class='cjs_additional_text_box cjs_choice_based_operator'>" + doesNotContain + "</option>");
+    }
+  },
+
+  showHideOperatorDropdown: function(equal, notEqual, doesNotContain){
+    jQuery(document).on("change", ".cjs_question_selector", function(){
+      var closestFormGroup = jQuery(this).closest(".form-group");
+      if(jQuery(this).val() != ""){
+        var operatorDropdown = closestFormGroup.find(".cjs_show_input_field");
+        var selectedOptionClass = jQuery("#" + jQuery(this).attr('id') + " option:selected").attr("class");
+        if(selectedOptionClass == "cjs_text_question"){
+          operatorDropdown.find("option.cjs_choice_based_operator").remove();
+        }
+        else{
+          ReportFilters.addNotContainsDropOption(operatorDropdown, equal, notEqual, doesNotContain);
+        }
+        ReportFilters.handleDateTypeQuestion(closestFormGroup);
+        closestFormGroup.find(".cjs_show_input_field").val("");
+        closestFormGroup.find(".cjs_choices_hidden").val("");
+        closestFormGroup.find("div.cjs_choices_hidden").remove();
+        if(selectedOptionClass != "cjs_date_question") operatorDropdown.closest(".input-group").show();
+      }
+      else{
+        closestFormGroup.find(".cjs_show_input_field").closest(".input-group").hide();
+        closestFormGroup.find(".cjs_add_one_more_filter").hide();
+        closestFormGroup.find(".cjs_date_range_picker_container").hide();
+      }
+      closestFormGroup.find(".cjs_input_hidden").show();
+      closestFormGroup.find(".cjs_input_hidden").closest(".input-group").hide();
+    });
+  },
+
+  handleDateTypeQuestion: function(container, options){
+    options = getDefaultVal(options, {});
+    options.dateRangePickerContainer = getDefaultVal(options.dateRangePickerContainer, ".cjs_date_range_picker_container");
+    options.parentContainer = getDefaultVal(options.parentContainer, "div.cjs_hidden_input_box_container");
+    options.selectedQuestion = getDefaultVal(options.selectedQuestion, ".cjs_question_selector");
+    options.otherInputFields = getDefaultVal(options.otherInputFields, ".cjs_show_input_field, .cjs_input_hidden");
+    options.addOneMoreFilter = getDefaultVal(options.addOneMoreFilter, ".cjs_add_one_more_filter");
+    options.hasInputGroup = getDefaultVal(options.hasInputGroup, true);
+
+    var dateRangePicker = container.find(options.dateRangePickerContainer);
+    var parentContainer = container.closest(options.parentContainer);
+    var selectedQuestion = parentContainer.find(options.selectedQuestion + " option:selected");
+    var isDateQuestion = selectedQuestion.hasClass("cjs_date_question");
+    dateRangePicker.toggle(isDateQuestion);
+    options.hasInputGroup ? parentContainer.find(options.otherInputFields).closest(".input-group").toggle(!isDateQuestion) : parentContainer.find(options.otherInputFields).toggle(!isDateQuestion);
+    parentContainer.find('.cjs-add-delete-buttons-container').toggleClass('m-t-xl', isDateQuestion);
+    parentContainer.find('.cjs_delete_question_container').toggleClass('m-t-md', isDateQuestion);
+    parentContainer.find(options.addOneMoreFilter).toggle(isDateQuestion);
+  },
+
+  showAllResponses: function(){
+    jQuery(".cjs_show_all_responses").on('click', function(){
+      url = jQuery(this).data('url');
+      var allFilterParamsList = JSON.parse(jQuery("#last_filter_params").val());
+      jQueryShowQtip('#inner_content', 800, url, {newparams: allFilterParamsList},{modal: true, largeModal: true});
+    });
+  }
+}
+
+var GALabelValueMap = {};
+
+var SurveysGoogleAnalytics = {
+  GA_CATEGORY: "Survey",
+  GA_ACTION_NEW: "New",
+  GA_ACTION_CREATE_WITH_IMPORT: "Create With Import",
+  GA_ACTION_CREATE_WITHOUT_IMPORT: "Create Without Import",
+  GA_ACTION_MAKE_A_COPY: "Make A Copy",
+  GA_ACTION_EXPORT: "Export",
+  GA_ACTION_ADD_REMINDER: "Add Reminder",
+  GA_ACTION_CREATE_REMINDER: "Create Reminder",
+  GA_ACTION_UPDATE_REMINDER: "Update Reminder",
+  GA_ACTION_REMOVE_REMINDER: "Remove Reminder",
+  GA_ACTION_TEST_REMINDER: "Test Reminder",
+  GA_LABEL_PROGRAM_SURVEY: "ProgramSurvey",
+  GA_LABEL_CONNECTION_SURVEY: "EngagementSurvey",
+  GA_LABEL_MEETING_FEEDBACK_SURVEY: "MeetingFeedbackSurvey",
+  GA_LABEL_MENTOR_MEETING_FEEDBACK_SURVEY: "MentorMeetingFeedbackSurvey",
+  GA_LABEL_MENTEE_MEETING_FEEDBACK_SURVEY: "StudentMeetingFeedbackSurvey",
+  GA_VALUE_PROGRAM_SURVEY: 0,
+  GA_VALUE_CONNECTION_SURVEY: 1,
+  GA_VALUE_MEETING_FEEDBACK_SURVEY: 2,
+  GA_VALUE_MENTOR_MEETING_FEEDBACK_SURVEY: 3,
+  GA_VALUE_MENTEE_MEETING_FEEDBACK_SURVEY: 4,
+
+  handleNewSurvey: function(){
+    jQuery(document).on("click", ".cjs_new_survey_button", function(){
+      chrGoogleAnalytics.addEvent(SurveysGoogleAnalytics.GA_CATEGORY, SurveysGoogleAnalytics.GA_ACTION_NEW);
+      return true;
+    });
+  },
+
+  handleCreateSurvey: function(){
+    jQuery(document).on("click", ".cjs_survey_create", function(e){
+      // survey type will be ProgramSurvey | EngagementSurvey
+      var label = jQuery("#survey_type").val();
+      var value = GALabelValueMap[label];
+      if(jQuery("#survey_questions_file").val()){
+        chrGoogleAnalytics.addEvent(SurveysGoogleAnalytics.GA_CATEGORY, SurveysGoogleAnalytics.GA_ACTION_CREATE_WITH_IMPORT, label, value);
+      }
+      else{
+        chrGoogleAnalytics.addEvent(SurveysGoogleAnalytics.GA_CATEGORY, SurveysGoogleAnalytics.GA_ACTION_CREATE_WITHOUT_IMPORT, label, value);
+      }
+      return true;
+    });
+  },
+
+  handleCopySurvey: function(){
+    // survey type will be ProgramSurvey | EngagementSurvey
+    var label = jQuery("#survey_type_clone_popup").val();
+    var value = GALabelValueMap[label];
+    chrGoogleAnalytics.addEvent(SurveysGoogleAnalytics.GA_CATEGORY, SurveysGoogleAnalytics.GA_ACTION_MAKE_A_COPY, label, value);
+  },
+
+  handleExportSurvey: function(){
+    jQuery(document).on("click", ".export_survey_questions", function(){
+      // survey type will be ProgramSurvey | EngagementSurvey
+      var label = jQuery(this).data('type')
+      var value = GALabelValueMap[label];
+      chrGoogleAnalytics.addEvent(SurveysGoogleAnalytics.GA_CATEGORY, SurveysGoogleAnalytics.GA_ACTION_EXPORT, label, value);
+      return true;
+    });
+  },
+
+  handleAddRerminder: function() {
+    jQuery(document).on("click", ".cjs_new_reminder_button", function(){
+      // survey type will be EngagementSurvey | MentorMeetingFeedbackSurvey | StudentMeetingFeedbackSurvey
+      var label = jQuery(this).data('type')
+      var value = GALabelValueMap[label];
+      chrGoogleAnalytics.addEvent(SurveysGoogleAnalytics.GA_CATEGORY, SurveysGoogleAnalytics.GA_ACTION_ADD_REMINDER, label, value);
+      return true;
+    });
+  },
+
+  handleCreateRerminder: function(action) {
+    jQuery(document).on("click", ".cjs_campaign_message_submit", function(){
+      // survey type will be EngagementSurvey | MentorMeetingFeedbackSurvey | StudentMeetingFeedbackSurvey
+      var label = jQuery(this).data('type')
+      var value = GALabelValueMap[label];
+      chrGoogleAnalytics.addEvent(SurveysGoogleAnalytics.GA_CATEGORY, action, label, value);
+      return true;
+    });
+  },
+
+  handleRemoveRerminder: function(label) {
+    // survey type will be EngagementSurvey | MentorMeetingFeedbackSurvey | StudentMeetingFeedbackSurvey
+    var value = GALabelValueMap[label];
+    chrGoogleAnalytics.addEvent(SurveysGoogleAnalytics.GA_CATEGORY, SurveysGoogleAnalytics.GA_ACTION_REMOVE_REMINDER, label, value);
+    return true;
+  },
+
+  handleTestRerminder: function(label) {
+    // survey type will be EngagementSurvey | MentorMeetingFeedbackSurvey | StudentMeetingFeedbackSurvey
+    var value = GALabelValueMap[label];
+    chrGoogleAnalytics.addEvent(SurveysGoogleAnalytics.GA_CATEGORY, SurveysGoogleAnalytics.GA_ACTION_TEST_REMINDER, label, value);
+    return true;
+  }
+}
+
+GALabelValueMap[SurveysGoogleAnalytics.GA_LABEL_PROGRAM_SURVEY] = SurveysGoogleAnalytics.GA_VALUE_PROGRAM_SURVEY;
+GALabelValueMap[SurveysGoogleAnalytics.GA_LABEL_CONNECTION_SURVEY] = SurveysGoogleAnalytics.GA_VALUE_CONNECTION_SURVEY;
+GALabelValueMap[SurveysGoogleAnalytics.GA_LABEL_MEETING_FEEDBACK_SURVEY] = SurveysGoogleAnalytics.GA_VALUE_MEETING_FEEDBACK_SURVEY;
+GALabelValueMap[SurveysGoogleAnalytics.GA_LABEL_MENTOR_MEETING_FEEDBACK_SURVEY] = SurveysGoogleAnalytics.GA_VALUE_MENTOR_MEETING_FEEDBACK_SURVEY;
+GALabelValueMap[SurveysGoogleAnalytics.GA_LABEL_MENTEE_MEETING_FEEDBACK_SURVEY] = SurveysGoogleAnalytics.GA_VALUE_MENTEE_MEETING_FEEDBACK_SURVEY;

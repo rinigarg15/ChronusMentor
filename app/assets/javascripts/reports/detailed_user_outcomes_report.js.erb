@@ -1,0 +1,194 @@
+var detailedUserOutcomesReportApp = angular.module('detailedUserOutcomesReportApp', ['highcharts-ng', 'outcomesReportApp']);
+detailedUserOutcomesReportApp.controller('detailedUserOutcomesReportCtrl', ['$scope', '$http', function($scope, $http){
+  // Common items
+  outcomesReportCommon.call(this, $scope, $http);
+
+  var ASC = 'asc'
+  var DESC = 'desc'
+  var BOTH = 'both'
+  var SORT_ASC = 'sort_asc'
+  var SORT_DESC = 'sort_desc'
+  var SORT_BOTH = 'sort_both'
+  var PAGE = 1
+  var PER_PAGE = 10
+
+  $scope.usersTableHeader = [
+      {key: "first_name", value: jsDetailedReportUserTable.first_name},
+      {key: "last_name", value: jsDetailedReportUserTable.last_name},
+      {key: "roles", value: jsDetailedReportUserTable.role},
+      {key: "created_at", value: jsDetailedReportUserTable.created_at},
+      {key: "email", value: jsDetailedReportUserTable.email}
+    ];
+  $scope.sortIndex = 0;
+  $scope.usersTableSortOrder = [ASC, BOTH, BOTH, BOTH, BOTH];
+  $scope.applyFilter = function(forceRefreshCache) {
+    $scope.loadingData = true;
+    forceRefreshCache = getDefaultVal(forceRefreshCache, false);
+    if (forceRefreshCache) {
+      $scope.$apply(function(){
+        $scope.showProfileFilterBox = false;
+        $scope.showDateRangeBox = false;
+        // $scope.Loading.setAllLoadingVariables(true);
+      });
+    } else {
+      $scope.showProfileFilterBox = false;
+      $scope.showDateRangeBox = false;
+      // $scope.Loading.setAllLoadingVariables(true);
+    };
+
+    if(!forceRefreshCache && $scope.ProfileFilterCache.isValid()){
+      $scope.updateDateRange();
+      $scope.refreshAllPageData();
+      jQuery(".highcharts-button").click(); //manually triggering Reset Zoom button provided by highcharts
+    } else {
+      $scope.applyProfileFilters();
+    }
+  }
+  applyProfileFiltersOnOutcomesReport = $scope.applyFilter;
+
+  $scope.applyProfileFilters = function(){
+    $scope.ProfileFilterCache.dismissCache();
+    var profileFiltersData = getProfileFilterFormData();
+    jQuery.ajax({
+      url: outcomesReportRoutes.filterUsersOnProfileQuestionsPath,
+      data: profileFiltersData,
+      success: function(response) {
+        $scope.setErrorMessagesForLocationFilter(response["location"]);
+        if (response["location"]["invalid_location_filter"]) {
+          $scope.ProfileFilterCache.dismissCache();
+          $scope.$apply(function(){
+            $scope.toggleProfileFilterBox();
+            // $scope.Loading.setAllLoadingVariables(false);
+          });
+          return false;
+        }
+        $scope.ProfileFilterCache.setCache(response["cache_key"], response["time_to_live"]);
+        $scope.AppliedProfileFilters.myFilters = response["my_filters"];
+        $scope.updateDateRange();
+        $scope.refreshAllPageData();
+        jQuery(".highcharts-button").click(); //manually triggering Reset Zoom button provided by highcharts
+      }
+    });
+  }
+
+  $scope.applySorting = function(sortField, index){
+    if(sortField == 'roles')
+      return;
+    $scope.sortField = sortField;
+    $scope.sortIndex = index;
+    $scope.sortOrder = ($scope.usersTableSortOrder[$scope.sortIndex] == BOTH) ? ASC: ($scope.usersTableSortOrder[$scope.sortIndex] == ASC) ? DESC : ASC;
+    $scope.usersTableSortOrder[$scope.sortIndex] = $scope.sortOrder;
+    $scope.loadingData = true;
+    $scope.refreshDetailedUsersData();
+  }
+
+  $scope.order = function(index, sortField){
+    if (sortField == 'roles')
+      return ;
+    if(index == $scope.sortIndex){
+      if($scope.usersTableSortOrder[$scope.sortIndex] == ASC)
+        return SORT_ASC;
+      else
+        return SORT_DESC;
+    }
+    else
+      return SORT_BOTH
+  }
+
+  $scope.addUrl = function(urlField){
+  return (urlField == 'first_name' || urlField == 'last_name') ? true: false;
+  }
+
+  $scope.refreshAllPageData = function() {
+    $scope.refreshRegisteredUsersNonGraphData();
+    $scope.refreshRoleWiseSummary();
+    $scope.refreshRegisteredUsersGraphData();
+    $scope.refreshDetailedUsersData();
+  }
+
+  // Registered Users chart related
+
+  var convertUserPaginationLinkToAjax = function(){
+    jQuery('#detailed_report_pagination_links a').bind('click', function(event){
+      $scope.loadingData = true;
+      $scope.$apply();
+      event.preventDefault();
+      jQuery.ajax({
+          url : jQuery(this).attr('href'),
+          success: function(response){
+            jQuery('#detailed_report_pagination_links').html(response["paginationHTML"]);
+            $scope.detailedUsersData = response["user_data"];
+            $scope.loadingData = false;
+            $scope.$apply();
+
+            convertUserPaginationLinkToAjax();
+          }
+      });
+    });
+  }
+
+  $scope.refreshRegisteredUsersNonGraphData = function() {
+    $http.get(outcomesReportRoutes.userOutcomesReportPath, {params: {date_range: $scope.dateRange, user_ids_cache_key: $scope.ProfileFilterCache.key, data_side: '<%= OutcomesReportUtils::DataType::NON_GRAPH_DATA %>', fetch_user_state: true}}).success(function(data){
+      $scope.registeredUsersData = data;
+      $scope.daysCount = $scope.registeredUsersData.intervalInDays;
+      $scope.prevWindow.valid = $scope.registeredUsersData.prevWindowValid;
+      if ($scope.prevWindow.valid) $scope.setDaysCountText();
+      $scope.dateRangeAlert = $scope.registeredUsersData.prevWindowValid;
+      $scope.spanClassForSectionOne = $scope.getSpanClassForSectionOne;
+    });
+  };
+
+  $scope.refreshRoleWiseSummary = function() {
+    $http.get(outcomesReportRoutes.userOutcomesReportPath, { params: { date_range: $scope.dateRange, user_ids_cache_key: $scope.ProfileFilterCache.key, data_side: '<%= OutcomesReportUtils::DataType::NON_GRAPH_DATA %>', fetch_user_state: true, only_rolewise_summary: true } } ).success(function(data){
+      $scope.rolewiseSummary = data.rolewiseSummary;
+    });
+  };
+
+ // Registered Users chart related
+  $scope.refreshRegisteredUsersGraphData = function() {
+    $http.get(outcomesReportRoutes.userOutcomesReportPath, {params: {date_range: $scope.dateRange, user_ids_cache_key: $scope.ProfileFilterCache.key, data_side: '<%= OutcomesReportUtils::DataType::GRAPH_DATA %>'}}).success(function(data){
+      $scope.graphStartDate = data.startDateForGraph;
+      $scope.registeredUsersChartConfig.series = data.graphData.map(function(obj) {
+        return {
+          'name': obj.name,
+          'pointInterval': $scope.defaultPointInterval,
+          'pointStart': $scope.graphStartDate,
+          'data': obj.data,
+          'color': obj.color
+        };
+      });
+    });
+  };
+
+
+  $scope.refreshDetailedUsersData = function() {
+    $http.get(outcomesReportRoutes.detailedUserDataPath, {params: {date_range: $scope.dateRange, user_ids_cache_key: $scope.ProfileFilterCache.key, page_size: $scope.pageSize, page: $scope.currentPage, sort_field: $scope.sortField, sort_order: $scope.sortOrder }}).success(function(data){
+      $scope.detailedUsersData = data["user_data"];
+      jQuery('#detailed_report_pagination_links').html(data["paginationHTML"]);
+      $scope.loadingData = false;
+      convertUserPaginationLinkToAjax();
+
+    });
+  };
+
+  $scope.getSpanClassForSectionOne = function(){
+    var partitionsCount = $scope.registeredUsersData.nMentoringRoles + 1;
+    return 'col-sm-' + Math.floor(12 / partitionsCount);
+  }
+
+  // general
+  $scope.initialize = function() {
+    $scope.registeredUsersChartConfig = jQuery.extend({}, $scope.commonChartOptions);
+    $scope.updateDateRange();
+    $scope.currentPage = PAGE;
+    $scope.pageSize = PER_PAGE;
+    $scope.refreshAllPageData();
+    $scope.showDateRangeBox = false;
+    $scope.showDateRangeBoxDatepickers = true;
+    $scope.prevWindow = {valid: null};
+    $scope.dateRangeAlert = false;
+    $scope.loadingData = true;
+  }
+  $scope.initialize();
+
+}]);

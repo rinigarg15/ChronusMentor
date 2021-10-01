@@ -1,0 +1,11 @@
+<%= form_tag(bulk_update_program_invitations_path, remote: true) do %>
+  <%= hidden_field_tag("selected_ids", @selected_ids.join(COMMON_SEPARATOR), id: nil) %>
+  <%= content_tag(:p, "feature.program_invitations.content.resend_pop_up_description_v2_html".translate(sent_to: render_invitation_emails(@resend_emails)), class: "m-b-md") %>
+  <%= horizontal_line(class: "m-b-sm m-t-xs") %>
+  <% action_set(class: "form-group") do %>
+    <div class="pull-right">
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", data: { dismiss: "modal" } %>
+      <%= submit_tag("feature.program_invitations.action.resend".translate, class: 'btn btn-primary', data: { disable_with: "display_string.Please_Wait".translate }) %>
+    </div>
+  <% end %>
+<% end %>

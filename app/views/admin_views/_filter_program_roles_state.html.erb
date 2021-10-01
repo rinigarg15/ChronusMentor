@@ -1,0 +1,7 @@
+<%= field_set_wrapper("feature.admin_view.label.program_and_roles".translate(program: _Program), false, @filter_params.present? && member_status_accordion_collapse?(@filter_params[:member_status])) do %>
+  <%= control_group(class: "m-t-xs m-b-xs") do %>
+    <%= controls(class: "col-sm-12") do %>
+      <%= render :partial => "admin_views/program_roles_state_template" , :locals => {filter_params: @filter_params} %>
+    <% end %>
+  <% end %>
+<% end %>

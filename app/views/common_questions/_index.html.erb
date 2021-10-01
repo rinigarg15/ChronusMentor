@@ -1,0 +1,50 @@
+<div class="common_questions" class="unstyled">
+
+  <% if common_questions.empty? %>
+      <div id="no_questions" class="text-center text-muted m-b-sm">
+        <% if @survey %>
+          <%= "feature.common_questions.content.no_questions_survey".translate %>
+        <% else %>
+          <%= "feature.common_questions.content.no_questions_form".translate %>
+        <% end %>
+      </div>
+  <% else %>
+    <% common_questions.each do |common_question| %>
+      <%= preview_and_edit_common_question(common_question) %>
+    <% end %>
+  <% end %>
+
+  <div id="add_new_common_question" class="clearfix">
+      <div id="add_new_text" class="pull-right">
+        <%= link_to(get_icon_content('fa fa-plus-circle') + "feature.common_questions.action.add_new_question".translate, new_question_form_url,
+        :remote => true, :method => :get, :onclick => "jQuery('#add_new_loading').show()", :class => "btn btn-primary") %>
+      </div>
+  </div>
+
+</div>
+<% if !local_assigns[:profile_ques] %>
+    <%= javascript_tag %Q[jQuerySortable.makeSortable('', '', '#{sort_url}', '', '#add_new_common_question,#common_question_new', '', 'ui-state-highlight', '.common_questions')] %>
+<% end %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    jQuery(document).on('click', '.cjs_destroy_choice', function() {
+      CustomizeQuestionChoices.destroyChoice(jQuery(this), "common");
+    });
+    jQuery(document).on('click', '.cjs_add_choice', function() {
+      CustomizeQuestionChoices.addChoiceInPosition(jQuery(this), "common");
+    });
+    jQuery(document).on('blur', 'ul li input[type=text]', function() {
+      CustomizeQuestionChoices.refreshQuickSearch(jQuery(this), "common");
+    });
+
+    jQuery(document).on('click', '.cjs_destroy_row', function() {
+      CustomizeQuestionChoices.destroyChoice(jQuery(this), "matrix");
+    });
+    jQuery(document).on('click', '.cjs_add_row', function() {
+      CustomizeQuestionChoices.addChoiceInPosition(jQuery(this), "matrix");
+    });
+    jQuery(document).on('blur', 'ul li input[type=text]', function() {
+      CustomizeQuestionChoices.refreshQuickSearch(jQuery(this), "matrix");
+    });
+  });
+<% end %>

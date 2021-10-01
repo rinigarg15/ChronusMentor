@@ -1,0 +1,6 @@
+<% if path.present? %>
+  <% leave_page_icon_hover_text = "feature.outcomes_report.title.go_to_detailed_report".translate %>
+  <%= link_to (get_safe_string + title + " ") +  get_icon_content('fa fa-external-link text-default glyphicons-fullpath',:title => leave_page_icon_hover_text), path %>
+<% else %>
+  <%= title %>
+<% end %>

@@ -1,0 +1,49 @@
+<div class="well p-lg p-b-0 p-t-sm clearfix">
+  <%= form_tag saml_auth_config_setup_authconfig_path, method: :post, id: "cjs_setup_authconfig", class: "form-horizontal" do %>
+    <div class="text-center">
+      <% if @current_organization.has_saml_auth? %>
+        <% submit_tag_text = "program_settings_strings.label.reconfigure_saml_sso".translate %>
+        <% help_text = "feature.program.content.saml_authconfig_reconfigure_helptext".translate %>
+        <% data_options = { confirm: "program_settings_strings.label.reconfigure_saml_sso_confirmation".translate } %>
+      <% else %>
+        <% submit_tag_text = "program_settings_strings.label.enable_saml_sso".translate %>
+        <% help_text = "feature.program.content.saml_authconfig_helptext".translate %>
+        <% data_options = {} %>
+      <% end %>
+      <%= content_tag(:div, get_icon_content("fa fa-info-circle") + help_text, class: "m-b h5") %>
+      <hr class="m-b-md m-t-xs" />
+      <% action_set(class: "pull-right m-b") do %>
+        <%= submit_tag(submit_tag_text, class: "btn btn-primary", data: data_options.merge(disable_with: "display_string.Please_Wait".translate), disabled: !@files_present) %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<% if @current_organization.has_saml_auth? %>
+  <%= horizontal_or_separator("m-t-xl m-b-xl") %>
+  <div class="well p-lg p-b-0 p-t-sm clearfix">
+    <%= form_tag saml_auth_config_update_certificate_path, method: :post, class: "form-horizontal", multipart: true do %>
+      <div class="text-center">
+        <% submit_tag_text = "feature.program.content.idp_certificate_update_text".translate %>
+        <% help_text = "feature.program.content.idp_certificate_update_helptext".translate %>
+        <%= content_tag(:div, get_icon_content("fa fa-info-circle") + help_text, class: "m-b h5") %>
+        <hr class="m-b-md m-t-xs" />
+        <label for="idp_certificate" class="control-label col-sm-3"><%= "feature.program.content.idp_certificate_upload_text".translate %></label>
+        <%= controls(class: "col-sm-9 m-b-md") do %>
+          <%= file_field_tag "idp_certificate" %>
+          <p class="help-block text-left">
+            <%= "feature.program.content.idp_certificate_update_allow_files".translate %>
+          </p>
+        <% end %>
+      </div>
+      <% if @idp_certificate_present %>
+        <%= link_to saml_auth_config_download_idp_certificate_path, class: "btn btn-primary" do %>
+          <span><%= "display_string.Download".translate %></span>
+          <span data-toggle="tooltip" data-title='<%= "feature.program.content.idp_certificate_download_helptext".translate %>'><%= get_icon_content("fa fa-info-circle") %></span>
+        <% end %>
+      <% end %>
+      <% action_set(class: "pull-right m-b") do %>
+        <%= submit_tag(submit_tag_text, class: "btn btn-primary", data: { disable_with: "display_string.Please_Wait".translate }) %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,18 @@
+<%= ibox nil, {content_class: "no-padding"} do %>
+  <% pagination_params = {tab: tab_number} %>
+  <% opts_hash = ((is_inbox || !program_view?) ? {params: pagination_params} : {params: pagination_params.merge(include_system_generated: include_system_generated)}) %>
+
+  <%= top_bar_in_listing({collection: tab_data.messages_ids}, {show: true, applied_count: @my_filters.try(:size)}, {}, {right_most_content: ((is_inbox || !program_view?)) ? "" : render_system_generated_filter(include_system_generated)}) %>
+  <% if tab_data.messages_ids.empty? %>
+    <div class="text-center p-sm">
+      <%= "feature.messaging.content.no_messages".translate %>
+    </div>
+  <% else %>
+    <ul class="list-group white-bg clearfix">
+      <%= render partial: "admin_messages/admin_message", collection: tab_data.messages_ids, as: :msg_id, locals: {is_inbox: is_inbox, tab_data: tab_data} %>
+    </ul>
+  <% end %>
+  <%= bottom_bar_in_listing( { collection: tab_data.messages_ids, params: opts_hash, ajax: true } ) %>
+<% end %>
+
+<%= javascript_tag %Q[MessageSearch.initializeActions();] %>

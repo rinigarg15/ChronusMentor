@@ -1,0 +1,37 @@
+<% @title_url = member_path(@profile_member) %>
+
+<div id="edit_picture" class="clearfix">
+  <%= render layout: 'members/profile_left_pane_wrapper', locals: { is_edit: true, no_top_header: true, show_favorite_ignore_links: false, favorite_preferences_hash: {}, ignore_preferences_hash: {}} do %>
+    <%= ibox "feature.user.photo.edit_picture".translate do %>
+      <div class="col-md-4 col-sm-12 <%= hidden_on_mobile %>">
+        <h3><%= "display_string.Preview".translate %></h3>
+        <div class="img-preview preview-sm">
+          <%= image_tag(@profile_member.profile_picture.image.url(:original), style: "visibility: hidden") %>
+        </div>
+      </div>
+
+      <div class="col-md-8 col-sm-12">
+        <div class="img-container" style="max-width:600px;">
+          <%= panel "feature.user.photo.crop_and_upload".translate, panel_class: "panel-default" do %>
+            <%= render_button_group(get_rotate_buttons, grid_class: "text-center m-t") %>
+            <%= image_tag @profile_member.profile_picture.image.url(:original), id: "cropbox", class: "img-responsive", alt: @profile_member.name %>
+            <%= simple_form_for [@profile_member, @profile_picture], url: member_profile_picture_path(@profile_member), html: { method: :patch, multipart: true, class: " text-center" } do |f| %>
+              <% for attribute in [:crop_x, :crop_y, :crop_w, :crop_h, :rotate] %>
+                <%= f.hidden_field attribute, id: attribute %>
+              <% end %>
+
+              <% action_set(class: "pull-right") do %>
+                <%= cancel_link edit_member_profile_picture_path(@profile_member), use_default: true %>
+                <%= f.button :submit, "display_string.Save".translate %>
+              <% end %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  ProfilePicture.cropImage("<%= @profile_member.name %>");
+</script>

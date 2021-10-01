@@ -1,0 +1,49 @@
+<!-- Multiselect javascript files -->
+<%= javascript_include_tag "jquery.tmpl.1.1.1.js" %>
+<%= javascript_include_tag "jquery.blockUI.js" %>
+<%= javascript_include_tag "ui.multiselect" %>
+
+<% @back_link = {label: "feature.reports.content.dashboard".translate, link: management_report_path} if @src_path == ReportConst::ManagementReport::SourcePage %>
+
+<% @title = set_view_title(@metric, _Mentoring_Connections) %>
+<% @skip_rounded_white_box_for_content = true %>
+
+<% show_new = (@filter_field == Group::Status::ACTIVE || @filter_field == [Group::Status::ACTIVE, Group::Status::INACTIVE]) && (@group || (@is_clone && @inconsistent_roles.present?)) %>
+
+<% if @is_my_connections_view || @is_global_connections_view %>
+  <% if current_user.can_manage_connections? %>
+    <% @page_action = {label: "feature.connection.action.manage".translate(Mentoring_Connections: _Mentoring_Connections), url:  groups_path, class: "btn btn-primary btn-large"} %>
+  <% else %>
+    <% @page_action = group_end_users_actions_dropdown(current_user) %>
+  <% end %>
+<% else %>
+  <% drop_down_array = [{label: "feature.connection.action.create_new_v1".translate(Mentoring_Connection: _Mentoring_Connection)}.merge!(@current_program.project_based? ? {url: new_group_path} : {url: new_group_path, data: {remote: true}})] %>
+  <% drop_down_array << {label: "feature.connection.action.find_a_mentor".translate(a_Mentor: _a_Mentor), url: matches_for_student_users_path} unless @current_program.project_based? %>
+  <% drop_down_array << {label: "feature.connection.action.pending_mentor_requests".translate(Mentor: _Mentor), url: mentor_requests_path} if @current_program.matching_by_mentee_and_admin? %>
+  <% @page_action = drop_down_array %>
+<% end %>
+<%= response_flash("cjs_groups_flash") %>
+<div id="mentor_groups">
+  <%= render partial: "groups/new", locals: { show_new: true, view: @view, is_clone: @is_clone, inconsistent_roles: @inconsistent_roles } if show_new %>
+  <%= render partial: "groups/reactivation_from_mail" if @reactivate_group.present? %>
+  <div>
+    <div id="cjs_groups_listing">
+      <%= render partial: "groups/groups_listing", locals: { view: @view, dashboard_flash: {count: @dashboard_filtered_groups_count, filters: group_params.to_unsafe_h[:dashboard]}, groups: @groups } %>
+    </div>
+    <div class="col-md-4 no-padding">
+      <%= render partial: "groups/filter_pane"%>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  <% if show_new %>
+    jQuery("#group_new").modal('show');
+  <% end %>
+  <% if @reactivate_group.present? %>
+    jQuery("#reactivate_group_<%= @group.id %>").modal('show');
+  <% end %>
+  jQuery(document).ready(function() {
+    Groups.handleSetChangeStartDate();
+  });
+<% end %>

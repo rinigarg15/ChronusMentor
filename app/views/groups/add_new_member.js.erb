@@ -1,0 +1,33 @@
+<% if @error_flash %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('', '<%= @error_flash %>', false);
+<% else %>
+  var countElement = jQuery(".list_<%= @role.name %>").find(".cjs_count");
+  var currentCount = parseInt(countElement.text());
+  jQuery(".cjs_add_<%= @role.name %>").addClass("hide");
+  if(!(jQuery(".cjs_display_member_handler_<%= @new_user.id %>_<%= @role.id %>").length > 0)) {
+    jQuery(".cjs_add_<%= @role.name %>").after("<%= j(render partial: 'groups/display_member', locals: { role: @role, user: @new_user, group: @group, modified: Group::MemberUpdateAction::ADD } ) %>");
+    jQuery(".cjs_add_<%= @role.name %>").addClass("hide");
+
+    <% content = hidden_field_tag("connection[users][#{@new_user.id}][#{@role.id}]['id']", @new_user.id) %>
+    <% content += hidden_field_tag("connection[users][#{@new_user.id}][#{@role.id}]['role_id']", @role.id) %>
+    <% content += hidden_field_tag("connection[users][#{@new_user.id}][#{@role.id}]['action_type']", Group::MemberUpdateAction::ADD) %>
+    <% content += hidden_field_tag("connection[users][#{@new_user.id}][#{@role.id}]['option']", group_params[:group][:add_member_option]) %>
+    <% content += hidden_field_tag("connection[users][#{@new_user.id}][#{@role.id}]['replacement_id']") %>
+    jQuery(".group_update_form").append("<%= j(content) %>");
+    countElement.text(currentCount + 1);
+  } else {
+    jQuery('#connection_users_<%= @new_user.id %>_<%= @role.id %>__id_').val("<%= @new_user.id %>");
+    jQuery('#connection_users_<%= @new_user.id %>_<%= @role.id %>__role_id_').val("<%= @role.id %>");
+    jQuery('#connection_users_<%= @new_user.id %>_<%= @role.id %>__action_type_').val("<%= Group::MemberUpdateAction::ADD %>");
+    jQuery('#connection_users_<%= @new_user.id %>_<%= @role.id %>__option_').val("<%= group_params[:group][:add_member_option] %>");
+    var existingMember = jQuery(".cjs_display_member_handler_<%= @new_user.id %>_<%= @role.id %>");
+    if(existingMember.hasClass("hide")) {
+      existingMember.removeClass("hide");
+      existingMember.find(".cjs_remove_replace_" + "<%= @new_user.id %>").removeClass("hide");
+      countElement.text(currentCount + 1);
+    }
+  }
+  jQuery(".cjs_member_update_info").removeClass("hide");
+  jQuery(".cjs_existing_groups_alert").html("<%= j existing_groups_alert([@group.id], [@student_ids_mentor_ids], Group::Status::DRAFTED, :user) %>");
+  jQueryHighlight(".cjs_display_member_handler_<%= @new_user.id %>_<%= @role.id %>");
+<% end %>

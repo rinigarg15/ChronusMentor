@@ -1,0 +1,21 @@
+en:
+  email_translations:
+    group_proposed_notification_to_admins:
+      title_v2: "%{_Mentoring_Connection} proposed notification to %{_admins}"
+      description_v2: When a participant proposes a new %{_mentoring_connection}, this email is sent to the %{_admins} so they can choose to accept or reject the proposition.
+      subject: New {{customized_mentoring_connection_term}} proposal
+      content_v1_html: "<a href='{{proposer_url}}'>{{proposer_name}}</a> has proposed a new {{customized_mentoring_connection_term}} called <a href='{{project_url}}'>{{project_name}}</a>.<br/><br/>The {{customized_mentoring_connection_term}} is pending for your review - you can choose to either accept or reject the {{customized_mentoring_connection_term}}.<br/>{{view_project_button}}"
+      view_project_text_html: View %{mentoring_connection_term}
+      tags:
+        project_name:
+          description: Name of the proposed project
+          example: To Do Application
+        project_url:
+          description: Url of the proposed project
+        proposer_name:
+          description: Name of the proposer
+          example: Willam Smith
+        proposer_url:
+          description: Url of the proposer
+        view_project_button:
+          description: View project button

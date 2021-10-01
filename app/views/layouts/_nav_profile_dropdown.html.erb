@@ -1,0 +1,25 @@
+<ul class="cjs-profile-actions animated fadeIn <%= local_assigns[:ui_pattern] || "dropdown-menu" %>">
+  <% unless wob_member.dormant? %>
+    <li><%= link_to get_icon_content("fa fa-fw fa-user p-r-md") + "app_layout.label.view_profile".translate, member_path(wob_member), class: local_assigns[:link_class] %></li>
+  <% end %>
+
+  <% if program_view? %>
+    <li><%= link_to get_icon_content("fa fa-fw fa-edit p-r-md") + "app_layout.label.edit_profile".translate, edit_member_path(wob_member, ei_src: EngagementIndex::Src::EditProfile::NAV_DROPDOWN), class: local_assigns[:link_class] %></li>
+  <% end %>
+
+  <% unless working_on_behalf? %>
+    <li><%= link_to get_icon_content("fa fa-fw fa-gear p-r-md") + "app_layout.label.account_settings".translate, account_settings_path, class: local_assigns[:link_class] %></li>
+  <% end %>
+
+  <% if logged_in_organization? && !working_on_behalf? && ((current_member && current_member.admin?) || (current_user && current_user.is_admin?)) %>
+    <li class="<%= hidden_on_mobile %>"><%= link_to get_icon_content("fa fa-fw fa-life-ring p-r-md") + "app_layout.label.support".translate, get_support_url, target: "_blank", class: "cjs_external_link" %></li>
+  <% end %>
+
+  <% if logged_in_organization? && program_view? && !current_user.try(&:is_admin?) %>
+    <li class="<%= hidden_on_mobile %>"><%= get_contact_admin_path(current_program, iconclass: get_icon_content("fa fa-fw fa-life-ring p-r-md")) %></li>
+  <% end %>
+
+  <li class="<%= hidden_on_mobile %>">
+    <%= link_to get_icon_content("fa fa-fw fa-sign-out p-r-md") + "display_string.Sign_out".translate, logout_path, get_logout_options(local_assigns[:link_class]) %>
+  </li>
+</ul>

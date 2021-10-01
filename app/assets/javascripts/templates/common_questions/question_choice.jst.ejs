@@ -1,0 +1,8 @@
+<li class="draggable cjs_quicksearch_item list-group-item p-r-xs clearfix no-border" id="common_question_<%= common_question_id %>_<%= choice_id %>_container" data-choice-id="<%= choice_id %>">
+  <div class="col-xs-11 p-l-0 p-r-0">
+    <label for="common_question_<%= common_question_id %>_<%= choice_id %>_text" class="sr-only"><%= choice_text ||  placeholder_text %></label>
+    <input type="text" name="common_question[existing_question_choices_attributes][][<%= choice_id %>][text]" id="common_question_<%= common_question_id %>_<%= choice_id %>_text" placeholder="<%= placeholder_text %>" value="<%= choice_text %>" class="form-control input-sm"/>
+  </div>
+  <div class="fa fa-plus-circle p-t-xs p-l-sm cjs_add_choice cursor-pointer" data-choice-id="<%= choice_id %>" data-common-question-id="<%= common_question_id %>"></div>
+  <div class="fa fa-trash p-t-xs p-l-sm cjs_destroy_choice cursor-pointer" data-choice-id="<%= choice_id %>" data-common-question-id="<%= common_question_id %>"></div>
+</li>

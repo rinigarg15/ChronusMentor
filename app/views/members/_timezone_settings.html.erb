@@ -1,0 +1,11 @@
+<% collapsible_content "feature.profile.content.other_settings".translate, [], false, container_options do %>
+  <%= simple_form_for member, remote: true, url: update_settings_member_path(member), html: { class: 'form-horizontal clearfix', id: "update_timezone_form" } do |f| %>
+    <%= hidden_field_tag "acc_settings", "true", id: nil %>
+    <%= render partial: "common/timezone_select", locals: { object: member, tz_identifier_element_name: "member[time_zone]" } %>
+
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, program_root_path, class: "btn btn-white" %>
+      <%= f.submit "display_string.Save_Settings".translate, class: "btn btn-primary" %>
+    <% end %>
+  <% end %>
+<% end %>

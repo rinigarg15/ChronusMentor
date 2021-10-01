@@ -1,0 +1,16 @@
+<div class="clearfix new_section_question b-b p-xs m-b" id=<%=  "add_new_question_#{section.id}" %>>
+  <% loading_id = "add_new_question_loading_section_#{section.id}" %>
+  <%= link_to "feature.profile_customization.action.add_new_field".translate, new_profile_question_url(:section_id => section.id, :role => @role), :remote => true, 
+  :class => 'button btn btn-primary pull-right m-b-xs', :onclick => "jQuery('##{loading_id}').show()" %>
+  <%= loc_loading({:id => loading_id, :class => "m-r"}) %>
+</div>
+<%= header_for_profile_questions(section) %>
+<% section_div = "profile_questions_list_section_#{section.id}" %>
+<div class="profile_questions_list_section" id="<%= section_div %>">
+  <ul class="profile_section_questions list-group unstyled h-10">
+    <% profile_questions.each do |profile_question| %>
+      <%= preview_and_edit_profile_question(profile_question, all_questions) %>
+    <% end %>
+  </ul>
+</div>
+<%= javascript_tag %Q[jQuerySortable.makeSortable('#{section_div} ul', '#{section.id}', '#{profile_question_url(section)}', 'ul.profile_section_questions', '.disabled_no_drop')] %>

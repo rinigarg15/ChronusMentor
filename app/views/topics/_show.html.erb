@@ -1,0 +1,38 @@
+<% forum = topic.forum %>
+
+<% modal_container "display_string.Reply".translate, modal_id: post_modal_id do %>
+  <%= render partial: "posts/new", locals: { topic: topic } %>
+<% end %>
+<% ibox_title = "feature.mentoring_model.label.discussion_board".translate if show_title %>
+<%= ibox ibox_title, content_class: "no-padding" do %>
+  <% if forum.is_group_forum? %>
+    <% back_to_topics_label = get_icon_content("fa fa-arrow-left fa-lg m-t-xs") + set_screen_reader_only_content("display_string.Back".translate) %>
+    <div class="p-sm b-b clearfix word_break">
+      <%= link_to(back_to_topics_label, forum_path(forum), class: "text-default pull-left", id: "back_to_conversations") %>
+      <span class="h5 p-l-xl m-t-xs m-b-xs block">
+        <%= topic.title %>
+        <%= display_group_topic_follow_icon(topic) %>
+      </span>
+    </div>
+  <% end %>
+  <%= user_media_container(topic.user, topic.created_at) do %>
+    <%= content_tag(:div, class: "word_break") do %>
+      <%= formatted_topic_body(topic) %>
+    <% end %>
+    <%= content_tag(:div, class: "clearfix m-t-md") do %>
+      <%= new_post_action(topic, false, class: "btn btn-primary pull-right #{hidden_on_mobile} cjs_show_post_modal") %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= render partial: "topics/show_posts_listing_mainpage", locals: { topic: topic, posts: posts } %>
+<% if request.xhr? %>
+  <%= render_mobile_floating_action_inline(new_post_action(topic, true)) %>
+<% else %>
+  <% @mobile_floating_action = new_post_action(topic, true) %>
+<% end %>
+
+<%= javascript_tag do %>
+  <% error_message = "#{'feature.forum.label.Post'.translate} #{'activerecord.errors.models.post.attributes.body.blank'.translate}" %>
+  Discussions.showReplyPopup();
+  Comment.initializeForm("<%= error_message %>");
+<% end %>

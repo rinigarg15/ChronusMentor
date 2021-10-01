@@ -1,0 +1,16 @@
+<% viewer_info = { organization_admin: wob_member.admin?, program_admin: current_user && current_user.is_admin? } %>
+<div class="font-600 m-t-xs" id="cjs_first_five_users">
+  <%= bulk_action_users_or_members_list(users_or_members.first(BulkActionConstants::DEFAULT_USER_COUNT), viewer_info) %>
+  <% if users_or_members.size > BulkActionConstants::DEFAULT_USER_COUNT %>
+    <% remaining_users_count = users_or_members.size - BulkActionConstants::DEFAULT_USER_COUNT %>
+    <% object_text = users_or_members.first.is_a?(User) ? "feature.admin_view.content.user".translate(count: remaining_users_count) : "feature.admin_view.content.member".translate(count: remaining_users_count) %>
+    <% more_link = link_to "javascript:void(0);", id: "cjs_show_more_link" do %>
+      <% "#{remaining_users_count} #{'display_string.more'.translate} #{object_text}" %>
+    <% end %>
+    <%= 'common_text.and_more_html'.translate(more_link: more_link) %>
+  <% end %>
+</div>
+<div class="font-600 m-t-xs hide" id="cjs_all_users_list">
+  <%= bulk_action_users_or_members_list(users_or_members, viewer_info) %>
+</div>
+<%= javascript_tag "BulkAction.showMoreUsers();" %>

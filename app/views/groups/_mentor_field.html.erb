@@ -1,0 +1,13 @@
+<% entry_id = "new_#{Time.now.to_i}" %>
+<div id="mentor_container_<%= entry_id %>" class="<%= 'help-block' unless defined?(no_delete) %> ">
+  <%= label_tag(:group, "#{_Mentor}", :class => "sr-only", :for => "group_mentors_#{entry_id}") %>
+  <%= text_field_with_auto_complete(:group, "mentors_#{entry_id}",
+    {:class => 'required-field form-control', :value => (@create_connection_member ? @create_connection_member.name_with_email : ""), :name => "group[mentor_names][]", :autocomplete => "off"},
+    {:min_chars => 3,
+      :url => auto_complete_for_name_users_path(format: :json, role: RoleConstants::MENTOR_NAME, show_all_users: true, for_autocomplete: true),
+      :param_name => 'search', :highlight => true}) %>
+
+  <% unless defined?(no_delete) %>
+    <%= link_to_function embed_icon("icon-trash"), "jQuery('#mentor_container_#{entry_id}').remove();", :id => 'mentor_master_remove_link' %>
+  <% end %>
+</div>

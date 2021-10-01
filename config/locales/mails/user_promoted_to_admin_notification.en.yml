@@ -1,0 +1,20 @@
+en:
+  email_translations:
+    user_promoted_to_admin_notification:
+      enabled_html: An %{email} will be sent to the user if you complete this action.
+      disabled_html: An %{email} is usually sent to the user as part of completing this action, but has been disabled. No email will be sent.
+      title_v2: Notification to existing user when given additional role of global %{_admin}
+      description: This email is generated when an existing participant is given an additional role as %{_a_admin} to manage all the %{_programs} (at the global level).
+      subject: You are now {{customized_admin_term_articleized}}!
+      content_v1_html: "{{invitor_name}} has added you as {{customized_admin_term_articleized}} to {{subprogram_or_program_name}}. <br /> You can get started by reviewing the {{customized_subprograms_term}} and making any updates, if necessary. <br />{{visit_organization_button}}"
+      tags:
+        invitor_name:
+          description: Name of the invitor
+        receiver_name:
+          description: Name of the receiver
+        organization_login_url:
+          description: Organization login link
+        visit_organization_button:
+          description: Visit Organization Button
+          example: Visit Mentoring Organization
+          visit_org: Visit %{subprogram_or_program_name}

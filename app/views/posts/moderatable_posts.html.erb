@@ -1,0 +1,30 @@
+<% @title = "feature.moderate.header.Moderation".translate %>
+
+<%= ibox nil, content_class: "no-padding" do %>
+  <% if @unpublished_posts.empty? %>
+    <div class="p-sm text-center">
+      <%= "common_text.empty_list".translate %>
+    </div>
+  <% else %>
+    <%= top_bar_in_listing( { collection: @unpublished_posts } ) %>
+    <div class="p-sm">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th class="col-xs-3"><%= "feature.forum.content.n_conversations".translate(count: 1) %></th>
+              <th class="col-xs-6"><%= "feature.moderate.table_header.content".translate %></th>
+              <th class="col-xs-3"><%= "feature.moderate.table_header.action".translate %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= render partial: "posts/tabulate_unpublished_posts", collection: @unpublished_posts, as: :post %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <%= bottom_bar_in_listing( { collection: @unpublished_posts } ) %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[Posts.declinePost();] %>

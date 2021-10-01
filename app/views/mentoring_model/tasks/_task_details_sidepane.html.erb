@@ -1,0 +1,29 @@
+<% task_has_description = task.description.present? %>
+<% goal = task.mentoring_model_goal %>
+<% milestone = task.milestone %>
+<div class="m-b">
+  <% if task_has_description %>
+    <%= content_tag(:div, append_text_to_icon("fa fa-info-circle fa-lg", render_more_less(object_description_content(task), 300), media_padding_with_icon: true), class: "m-b") %>
+  <% end %>
+  <div>
+    <% if can_show_task_user?(task) %>
+      <div class="media-left">
+        <%= user_picture(task.user, {size: :small, no_name: true, new_size: :tiny}, {:class => "img-circle m-r-xs", :size => "21x21"}) %>
+      </div>
+      <div class="media-body">       
+        <%= task.user.name(name_only: true) %>
+      </div>
+    <% end %>
+  </div>
+  <% if task.required? %>
+    <%= content_tag(:div, append_text_to_icon("fa fa-calendar fa-lg", DateTime.localize(task.due_date, format: :full_display_no_time_with_day_short), media_padding_with_icon: true), class: "m-t") %>
+  <% end %>
+
+  <% if milestone.present? && (manage_mm_milestones_at_admin_level?(@group) || manage_mm_milestones_at_end_user_level?) %>
+    <%= content_tag(:div, append_text_to_icon("fa fa-tasks fa-lg", milestone.title, media_padding_with_icon: true), class: "m-t") %>
+  <% end %>
+
+  <% if goal.present? && (manage_mm_goals_at_admin_level?(@group) || manage_mm_goals_at_end_user_level?) %>
+    <%= content_tag(:div, append_text_to_icon("fa fa-bullseye fa-lg", goal.title, media_padding_with_icon: true), class: "m-t") %>
+  <% end %>
+</div>

@@ -1,0 +1,43 @@
+<div class="ibox-content clearfix" style="display: block;">
+  <div class="row">
+    <% reports = current_program.get_matching_reports_to_display %>
+    <% if reports.any? %>
+      <div class="col-sm-5">
+        <% reports.each_with_index do |report, i| %>
+          <%= render_dashboard_report(current_program, report) %>
+          <% unless i == reports.size - 1 %>
+            <hr>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+    <div class='<%= reports.any? ? "col-sm-6 col-sm-offset-1" : "col-sm-6" %>'>
+      <table class="m-t-md cjs_tile_metrics">
+        <% current_program.get_metrics(Report::Section::DefaultSections::CONNECTION).each do |metric| %>
+          <%= get_metric_tr_element(metric) %>
+        <% end %>
+      </table>
+    </div>
+  </div>
+  <% tips = get_matching_tips(current_program, current_user) %>
+  <% if tips.any? %>
+    <div class="clearfix small m-t-xs cjs_dashboard_tips_container">
+      <div class="text-center"><%= link_to("feature.reports.content.view_matching_tips_html".translate, "javascript:void(0);", class: "cjs_dashboard_tips_button btn inherit-color btn-xs")%></div>
+      <ul class="no-margins p-l-sm unstyled cjs_dashboard_tips hide">
+        <% tips.each do |tip| %>
+          <li class="m-b-sm">
+            <i class="fa fa-lightbulb-o m-r-xs"></i><%= tip %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</div>
+<% if current_program.can_show_match_report? %>
+  <div class="ibox no-margins">
+    <div class="clearfix small p-xs light-gray-bg">
+      <%= content_tag(:span, "feature.reports.header.New".translate, class: "label rounded pull-right m-r-xs label-info") %>
+      <%= link_to "feature.reports.content.view_match_report_html".translate, match_reports_path(category: Report::Customization::Category::HEALTH, report: true, src: EngagementIndex::Src::MatchReport::DASHBOARD), class: "m-b-0 m-r-xs btn btn-xs btn-primary pull-right" %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,63 @@
+<link rel="stylesheet" type="text/css" href="<%= Rails.root.to_s + '/app/assets/stylesheets/profile_picture.css' %>">
+<table border="0" cellpadding="0" cellspacing="0" class="responsive-table" width="100%">
+  <tbody>
+    <tr>
+      <td class="padding-copy">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+          <tbody>
+            <%- row_users.each do |user| -%>
+              <tr>
+                <td valign="top" style="padding-bottom:20px">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td valign="top">
+                          <table cellspacing="0" cellpadding="0" border="0">
+                            <tbody>
+                              <tr>
+                                <% if local_assigns[:show_roles] %>
+                                  <td style="padding-right: 5px">
+                                <% else %>
+                                  <td style="padding-left: 5px; padding-right: 5px">
+                                <% end %>
+                                  <%= user_picture_in_email(user, {:item_link => member_url(user.member, :subdomain => @program.organization.subdomain, :root => @program.root, :src => :mail), :no_name => true, :size => :medium}, :style => "border: none; border-radius: 50%") -%>
+                                </td>
+                                <% unless local_assigns[:show_roles] %>
+                                  <td style="padding-left: 5px; line-height: 5px" >
+                                    <%= link_to user.name, member_url(user.member, :subdomain => @program.organization.subdomain, :root => @program.root, :src => :mail) -%>
+                                  </td>
+                                <% end %>
+                                <% if local_assigns[:show_roles] %>
+                                  <td>
+                                    <table cellspacing="0" cellpadding="0" border="0">
+                                      <tbody>
+                                        <tr>
+                                          <td style="padding-left: 5px; line-height: 5px;padding-bottom:7px;" >
+                                            <%= link_to user.name, member_url(user.member, :subdomain => @program.organization.subdomain, :root => @program.root, :src => :mail) -%>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td style="padding-left: 5px; line-height: 5px;padding-top:7px;"" >
+                                            <%= RoleConstants.human_role_string(user.role_names, :program => @program) %>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </td>
+                                <% end %>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>          
+      </td>
+    </tr>
+  </tbody>
+</table>

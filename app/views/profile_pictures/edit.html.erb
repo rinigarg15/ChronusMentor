@@ -1,0 +1,27 @@
+<% @title_url = member_path(@profile_member) %>
+<%= render :layout => 'members/profile_left_pane_wrapper', :locals => {:is_edit => true, :no_top_header => true, show_favorite_ignore_links: false, favorite_preferences_hash: {}, ignore_preferences_hash: {}} do %>
+  <%= ibox "feature.user.photo.edit_picture".translate do %>
+    <div id='current_picture' class="text-xs-center pull-sm-left p-r-sm p-l-sm">
+      <h4><%= "feature.user.photo.current_photo".translate %></h4>
+      <%= member_picture @profile_member, {:size => :large, :auto_width => true, :no_name => true}, {class: "img-circle"} %>
+      <% if !@profile_picture.new_record? && @profile_picture.valid? %>
+        <div class="m-t-xs">
+          <%= link_to "feature.user.photo.edit_this_photo".translate, crop_member_profile_picture_path(@profile_member) %>
+        </div>
+      <% end %>
+    </div>
+    <div id="prompt" class="col-sm-10 col-xs-12">
+      <h4><%= "feature.user.photo.select_another_photo".translate %></h4>
+      <%= simple_form_for [@profile_member, @profile_picture], :url => member_profile_picture_path(@profile_member),
+        :html => {:method => :patch, :multipart => true} do |f| -%>
+        <div class="m-b">
+          <%= edit_picture_field(@profile_member, f) %>
+        </div>
+        <div class="pull-right">
+          <%= cancel_link edit_member_path(@profile_member, ei_src: EngagementIndex::Src::EditProfile::PROFILE_PICTURE), :use_default => true %>
+          <%= f.button :submit, "display_string.Upload".translate, :onclick => "return EditPicture.validate('#{"feature.user.photo.upload_picture_or_link".translate}');" %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

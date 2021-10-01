@@ -1,0 +1,17 @@
+<% confirmation_message = (@mentoring_slot.repeats.to_i != 0) ? "feature.mentoring_slot.content.delete_recurrent_slot_confirm".translate : "feature.mentoring_slot.content.delete_event_confirm".translate %>
+
+<% modal_v3_popup "feature.mentoring_slot.content.availability_slot".translate, additional_class: "mentoring_slot_show" do %>
+  <div class="clearfix">
+    <div class="pull-right btn-group">
+      <%= link_to append_text_to_icon("fa fa-pencil", "display_string.Edit".translate), edit_member_mentoring_slot_path(mentoring_slot: params.to_unsafe_h[:mentoring_slot]), remote: true, class: "btn btn-xs btn-white", id: "mentoring_slot_edit" %>
+      <%= link_to append_text_to_icon("fa fa-trash", "display_string.Delete".translate), member_mentoring_slot_path, remote: true, class: "btn btn-xs btn-white", id: "mentoring_slot_delete", method: :delete, data: { confirm: confirmation_message } %>
+    </div>
+  </div>
+
+  <%= embed_display_line_item("feature.mentoring_slot.label.When".translate, append_text_to_icon("fa fa-clock-o", "feature.mentoring_slot.label.from_to".translate(from: DateTime.localize(@mentoring_slot.start_time, format: :short_time), to: DateTime.localize(@mentoring_slot.end_time, format: :short_time)))) %>
+  <% repeats_data = get_safe_string %>
+  <% repeats_data += options_for_avialability[@mentoring_slot.repeats_every_option].first %>
+  <% repeats_data += (content_tag(:span, "feature.mentoring_slot.label.till".translate, class: 'm-l-xs m-r-xs') + @mentoring_slot.repeats_end_date_view) if @mentoring_slot.repeats_end_date %>
+  <%= embed_display_line_item("feature.mentoring_slot.label.Repeats".translate, append_text_to_icon("fa fa-repeat", repeats_data)) %>
+  <%= embed_display_line_item("feature.mentoring_slot.label.Where".translate, location_text(@mentoring_slot)) %>
+<% end %>

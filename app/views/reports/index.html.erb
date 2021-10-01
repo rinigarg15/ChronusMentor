@@ -1,0 +1,12 @@
+<% @title = "feature.reports.header.reports".translate %>
+<% @skip_rounded_white_box_for_content = true %>
+
+<div class="tiles-container">
+  <%= render partial: "tile", collection: @categories, as: :category %>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function() {
+    setSameHeightOnResize(".tiles-container", ".cjs-same-heignt");
+  })
+<% end %>

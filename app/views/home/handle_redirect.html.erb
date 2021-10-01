@@ -1,0 +1,16 @@
+<% if @use_browsertab %>
+  <%= javascript_tag do %>
+    document.addEventListener("deviceready", function() {
+      browserTab.open("<%= raw @redirect_path %>", InAppBrowserHelper.inAppBrowserOptions());
+      setTimeout(function(){ window.history.back(); }, 50);
+    });
+  <% end %>
+<% else %>
+  <%= link_to("", root_path , class: "hidden cjs_iab_handle_redirect") %>
+  <script type="text/javascript">
+    document.addEventListener("deviceready", function(){
+      jQuery(".cjs_iab_handle_redirect").addClass("cjs_iab_handle_redirect_clicked");
+      IAB.open("<%= raw @redirect_path %>", '_blank', InAppBrowserHelper.inAppBrowserOptions());
+    });
+  </script>
+<% end %>

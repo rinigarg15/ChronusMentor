@@ -1,0 +1,10 @@
+ExplicitPreference.resetCreationForm();
+<% content = render :partial => "explicit_user_preferences/edit_preference", locals: { explicit_preference: @explicit_preference, src: @src} %>
+jQuery(".cjs-explicit-preference-rows-show-container").prepend("<%= j(content) %>");
+ExplicitPreference.hidePreferencePopupActions();
+jQueryHighlight('.cjs_explicit_preference_<%= @explicit_preference.id %>', 3000);
+ExplicitPreference.configureExistingPreferences();
+ExplicitPreference.handleWcag('.cjs_explicit_preference_<%= @explicit_preference.id %>');
+var eventDetails = ExplicitPreference.getGaEventDetails("<%= @ga_src %>");
+chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.EXPLICIT_PREFERENCES, chrGoogleAnalytics.action.GA_ADDED_NEW_PREFERENCE, eventDetails[0], eventDetails[1]);
+ExplicitPreference.preferencesChanged = true;

@@ -1,0 +1,20 @@
+<% @title = @group.name %>
+<% @back_link = { :label => _Mentoring_Connections, :link => groups_path(tab: Group::Status::DRAFTED) } %>
+
+<%= wizard_wrapper(get_wizard_view_headers, GroupsHelper::Headers::ADD_MEMBERS, { disable_unselected: true } ) do %>
+  <div id="group_add_members">
+    <%= simple_form_for @group, :url => update_members_group_path(@group), :html => { :class => "add_members_form form-horizontal" }, wrapper: :horizontal_input_group do |f| %>
+      <%= render :partial => "groups/add_users_select2_auto_complete", locals: { group: @group, label_class: "col-sm-3", input_class: "col-sm-9" } %>
+      <%= f.input :message, as: :hidden, input_html: { class: "cjs_make_available_message" } %>
+
+      <% action_set class: "pull-right" do %>
+        <%= f.submit "display_string.Save_and_Continue_Later".translate, class: "m-t-xs btn btn-primary", name: "save_and_continue_later", disable_with: "display_string.Please_Wait".translate %>
+        <%= f.submit "feature.connection.action.Save_and_Mark_Available".translate(:Mentoring_Connection => _Mentoring_Connection), :class => "m-t-xs mark_avaialable_btn btn btn-primary", :name => "save_and_mark_available", :disable_with => "display_string.Please_Wait".translate, data: {"qtip-url" => fetch_bulk_actions_groups_path(individual_action: true, bulk_action: { group_ids: [@group.id], action_type: Group::BulkAction::MAKE_AVAILABLE } ) } %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  Groups.addMembers.submitWithQtip();
+<% end %>

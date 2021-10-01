@@ -1,0 +1,55 @@
+---
+ role_questions:
+    - question_text: "Name"
+      question_type: <%= ProfileQuestion::Type::NAME %>
+      required: true
+      private: <%= RoleQuestion::PRIVACY_SETTING::ALL %>
+      available_for: <%= RoleQuestion::AVAILABLE_FOR::BOTH %>
+      filterable: true
+      in_summary: true
+
+    - question_text: "Email"
+      question_type: <%= ProfileQuestion::Type::EMAIL %>
+      required: true
+      private: <%= RoleQuestion::PRIVACY_SETTING::RESTRICTED %>
+      privacy_settings:
+        - setting_type: <%= RoleQuestionPrivacySetting::SettingType::CONNECTED_MEMBERS %>
+      available_for: <%= RoleQuestion::AVAILABLE_FOR::BOTH %>
+      filterable: false
+
+    - question_text: Location      
+      in_summary: true
+      
+    - question_text: "Phone"
+      filterable: false
+      private: <%= RoleQuestion::PRIVACY_SETTING::RESTRICTED %>
+      privacy_settings:
+        - setting_type: <%= RoleQuestionPrivacySetting::SettingType::CONNECTED_MEMBERS %>
+
+    - question_text: "Skype ID"
+      filterable: false
+      private: <%= RoleQuestion::PRIVACY_SETTING::RESTRICTED %>
+      privacy_settings:
+        - setting_type: <%= RoleQuestionPrivacySetting::SettingType::CONNECTED_MEMBERS %>
+
+    - question_text: "Education"            
+      in_summary: true
+
+    - question_text: "Work"
+      in_summary: true
+
+    - question_text: "About Me"      
+
+    - question_text: Gender      
+      
+    - question_text: Industry
+
+    - question_text: "Career path/Specializations"
+      
+    - question_text: "Expertise"
+      
+    - question_text: "Total work experience"
+      
+    - question_text: Language
+      
+    - question_text: Ethnicity

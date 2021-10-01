@@ -1,0 +1,5 @@
+<% modal_v3_popup "feature.meetings.content.meeting_with_v1".translate(user: @mentor.name, Meeting: _Meeting) do %>
+  <div id="new_meeting">
+    <%= render partial: "meetings/meeting_form", locals: { from_calendar: true, direct_meeting_outside_group: false, src: local_assigns[:src], from_mentoring_calendar: local_assigns[:from_mentoring_calendar] } %>
+  </div>
+<% end %>

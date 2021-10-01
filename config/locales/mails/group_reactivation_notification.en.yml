@@ -1,0 +1,28 @@
+en:
+  email_translations:
+    group_reactivation_notification:
+      title_v3: "%{_Mentoring_Connection} reactivation notification to members"
+      description_v3: If %{_mentoring_connections} get closed, %{_a_admin} can choose to reactivate them. This email (containing the reason for the reactivation) goes out to the member when %{_a_admin} reactivates a closed %{_mentoring_connection}.
+      subject_v1: Your {{customized_mentoring_connection_term}} has been reactivated
+      content_v3_html: We have reactivated your {{customized_mentoring_connection_term}}, <a href='{{url_mentoring_connection}}'>{{group_name}}</a>. <br/><br/>Reason for reactivation:<br/>'{{reason_for_reactiviation}}'<br/><br/>Your {{customized_mentoring_connection_term}} end date has also been changed to {{mentoring_connection_expiry_date}}.<br/>{{mentoring_connection_button}}<br/>If you have any questions, please contact me <a href='{{url_contact_admin}}'>here</a>.<br/>
+      content_v4_html: We have reactivated your {{customized_mentoring_connection_term}}, <a href='{{url_mentoring_connection}}'>{{group_name}}</a>. <br/><br/>Reason for reactivation:<br/>'{{reason_for_reactiviation}}'<br/><br/>Your {{customized_mentoring_connection_term}} end date has also been changed to {{mentoring_connection_expiry_date}}.<br/>{{mentoring_connection_button}}<br/>
+      visit_your_connection_text: Visit %{mentoring_connection_term} area
+      tags:
+        url_mentoring_connection:
+          description_v1: Url of the %{_mentoring_connection}
+        group_name:
+          description_v1: Name of the %{_mentoring_connection}
+          example: Smith and Doe
+        reason_for_reactiviation:
+          description: Reason for reactivation from the program administrator
+          example: After the telephonic conversation with the members.
+        mentoring_connection_expiry_date:
+          description_v2: Expiration date of the %{_mentoring_connection}
+          example: December 24, 2013
+        administrator_or_owner_name:
+          description_v1: "'the program administrator'/name of the Owner who reactivated the %{_Mentoring_Connection}"
+          content: the %{program} %{administrator}
+        url_contact_admin:
+          description: Url for the user to contact administrator
+        mentoring_connection_button:
+          description_v1: Visit %{_Mentoring_Connection} Button

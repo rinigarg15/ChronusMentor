@@ -1,0 +1,16 @@
+<% meeting_request_selector = "meeting_request_#{meeting[:meeting].meeting_request.id}" %>
+<% current_time =  meeting[:current_occurrence_time] %>
+<%# For max meeting slot and meeting count %>
+<% meeting_count = current_user.get_meeting_slots_booked_in_the_month(current_time) %>
+<%# Here we are passing the modal footer based on limit count%>
+<% modal_container h("feature.meetings.header.accept_meeting_request".translate(meeting: _meeting)), { modal_id: "modal_"+meeting_request_selector, modal_footer_content: get_meeting_accept_message(meeting[:meeting], meeting_count, current_time, true, current_user) } do %>
+  <div class="text-center"><i class="fa fa-check-circle fa-2x text-navy"></i></div>
+  <h3 class="text-center">
+    <%= "feature.meetings.content.successful_connect".translate %> 
+  </h3>
+  <% if is_meeting_notification_enabled(meeting[:meeting]) %>
+    <div class="text-center text-muted">
+      <%= "feature.meetings.content.successful_connect_msg".translate(meeting: _meeting, mentee_name: meeting[:meeting].mentee.name(name_only: true))%>
+    </div>
+  <% end %>
+<% end %>

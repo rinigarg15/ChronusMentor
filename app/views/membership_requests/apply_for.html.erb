@@ -1,0 +1,36 @@
+<% single_role = @roles && @roles.length == 1 %>
+
+<%= ibox nil, ibox_id: "fc-apply-for-container", ibox_class: "no-vertical-margins col-sm-offset-3 col-sm-6" do %>
+  <% if current_program.description.present? %>
+    <div id="program-overview" class="m-b-sm">
+      <%= "#{h(current_program.description)} #{link_to('display_string.learn_more_raquo_html'.translate, about_path)}".html_safe %>
+    </div>
+  <% end %>
+
+  <%= content_tag :div, class: "m-t-sm" do %>
+    <p class="lead m-b-xs"><%= "feature.connection.content.join_as".translate %></p>
+    <%= horizontal_line(class: "m-t-sm m-b-md") %>
+    <%= construct_role_options(@roles, @is_checkbox) %>
+
+    <p class="lead m-b-xs m-t-sm cjs_signup_options_header" style="<%= 'display: none;' unless single_role %>">
+      <%= "feature.membership_request.header.signup_options".translate %>
+      <%= image_tag("ajax-loader-small.gif", class: "cjs_signup_options_loader") unless single_role %>
+    </p>
+    <%= horizontal_line(class: "m-t-sm m-b-lg cjs_signup_options_header", style: "#{'display: none;' unless single_role}") %>
+    <div id="cjs_signup_options" class="clearfix m-b-sm">
+    </div>
+  <% end %>
+
+  <%= horizontal_line(class: "no-margins") %>
+  <div class="p-sm p-b-xxs text-center">
+    <%= "feature.membership_request.content.already_have_account_html".translate(sign_in: link_to("feature.user.action.sign_in".translate, login_path(mode: SessionsController::LoginMode::STRICT))) %>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  <% if single_role %>
+    MembershipRequest.initialSignUpAjaxCall("<%= signup_options_membership_requests_path(format: :js) %>", "<%= @roles.first.name %>");
+  <% else %>
+     MembershipRequest.initializeSignUpOptions("<%= signup_options_membership_requests_path(format: :js) %>");
+  <% end %>
+<% end %>

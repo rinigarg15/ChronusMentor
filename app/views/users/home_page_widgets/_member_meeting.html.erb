@@ -1,0 +1,35 @@
+<% meeting = member_meeting.meeting %>
+<% options = {member_meeting_id: member_meeting.id, meeting_occurrence_time: meeting.first_occurrence, src: Survey::SurveySource::HOME_PAGE_WIDGET, ei_src: EngagementIndex::Src::AccessFlashMeetingArea::PROVIDE_FEEDBACK_HOME_PAGE} %>
+<% survey = current_program.get_meeting_feedback_survey_for_user_in_meeting(current_user, meeting) %>
+<div class="well well-sm clearfix gray-bg">
+  <div class="col-sm-7 col-xs-12 no-horizontal-padding p-b-xxs">
+    <div class="media">
+      <div class="media-left">
+        <% if (other_member = member_meeting.other_members.first).present? %>
+          <%= member_picture_v3 other_member, {:size => :medium, :no_name => true}, {:class => "photo img-circle"} %>
+        <% else %>
+          <%= non_existing_user_picture %>
+        <% end %>
+      </div>
+      <div class="media-body">
+        <h4 class="m-b-xs"><%= link_to(meeting.topic, meeting_path(meeting, current_occurrence_time: meeting.first_occurrence, ei_src: EngagementIndex::Src::AccessFlashMeetingArea::HOME_PAGE_WIDGET)) %></h4>
+        <div class="text-muted small">
+          <%= get_icon_content("fa fa-clock-o") + "feature.meetings.content.accepted_on".translate(time: formatted_time_in_words(get_meeting_creation_date(meeting), :no_time => true, :no_ago => true)) %>
+        </div>
+        <div class="text-muted small">
+          <%= get_icon_content("fa fa-clock-o") + "feature.meetings.content.meeting_was_on".translate(meeting: _Meeting, time: formatted_time_in_words(meeting.start_time, :no_time => true, :no_ago => true)) %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-5 col-xs-12 no-horizontal-padding">
+    <div class="col-sm-12 col-xs-12 no-horizontal-padding text-center">
+      <%= link_to(get_icon_content("fa fa-comments") + "feature.meetings.action.provide_feedback".translate, participate_survey_path(survey, options), class: "btn btn-primary btn-sm btn-block-xs waves-effect pull-sm-right") %>
+    </div>
+    <% unless meeting.state.present? %>
+      <div class="m-t-sm text-sm-right text-xs-center col-sm-12 col-xs-12 no-horizontal-padding">
+        <b><span class="text-muted"><%= "feature.meetings.content.meeting_yet_to_happen".translate(meeting: _Meeting) %></span> <%= link_to("feature.meetings.content.update_meeting".translate(meeting: _meeting), meeting_url(meeting, edit_time: true, current_occurrence_time: meeting.first_occurrence, ei_src: EngagementIndex::Src::AccessFlashMeetingArea::HOME_PAGE_WIDGET)) %></b>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,3 @@
+class FavoritePreference < AbstractPreference
+  
+end

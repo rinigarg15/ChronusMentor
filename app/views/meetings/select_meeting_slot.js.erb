@@ -1,0 +1,4 @@
+jQuery(".cjs_selected_meeting_slot_info").html('<%= j(render :partial => "meetings/selected_meeting_slot_detail_form", :locals => {:mentor => @mentor, :group => @group, src: @src}) %>');
+jQuery("#cjs_new_meeting_topic").val(jQuery("#new_meeting_title").val());
+jQuery("#cjs_new_meeting_description").val(jQuery("#new_meeting_description").val());
+jQuery(".cjs_propose_slot_button_container").hide();

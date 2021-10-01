@@ -1,0 +1,7 @@
+main_translation_key = "email_translations.#{mail_klass.name.underscore}"
+      main_translation_key = 'email_translations.#{mail_klass.name.underscore}'
+            main_translation_key = 'email_translations.#{mail_klass.name.underscore}'
+      main_translation_key = 'email_translations.#{mail_klass.name.underscore}'
+main_translation_key = 'email_translations.#{mail_klass.name.underscore}'.translate
+        "email_translations.announcement.email"
+feature.email.header.emails_v1

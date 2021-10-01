@@ -1,0 +1,18 @@
+<%= ibox nil, content_class: "p-t-0" do %>
+  <div id="no_favorite_users" class="text-center">
+    <div class="p-sm clearfix">
+      <span class="fa-stack fa-lg fa-3x text-warning">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-star fa-stack-1x fa-inverse"></i>
+      </span>
+    </div>
+    <div>
+      <%= 'feature.favorite_preference.content.no_favorite'.translate %>
+    </div>
+    <% if @current_user.can_view_mentors? && @current_user.can_send_mentor_request? %>
+      <div class="m-t-md">
+        <%= link_to 'feature.favorite_preference.content.browse_profile'.translate, users_path(src: src), class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

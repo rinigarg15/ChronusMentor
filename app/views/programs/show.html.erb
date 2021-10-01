@@ -1,0 +1,114 @@
+<% @skip_rounded_white_box_for_content = true if @hide_side_bar %>
+<% @back_link = {:label => "feature.reports.content.dashboard".translate, :link => program_root_path} if @hide_side_bar %>
+<% @title = "feature.profile.label.activity_v1".translate if @current_user.is_admin? %>
+<% answer_mandatory_qs_members_url = answer_mandatory_qs_members_path if @unanswered_mandatory_prof_qs%>
+<% can_render_flash_widget = @meetings_to_show.present? %>
+<% can_render_publish_circles_widget = @publishable_groups.present? %>
+<% can_render_availability_box = current_user.is_mentor_or_student? && @notify_availability %>
+
+<% can_render_system_reco_box = current_user.is_mentor_or_student? && (!@notify_availability && @render_quick_connect_box) %>
+<% can_render_connection_widget = current_user.can_be_shown_connection_widget? %>
+<% show_ra_in_side_pane = (can_render_connection_widget || can_render_flash_widget || can_render_publish_circles_widget) %>
+
+<% admin_activity_page_view = (@hide_side_bar && @src == EngagementIndex::Activity::ACTIVITY_BUTTON_MANAGMENT_REPORT) %>
+<% show_announcements = @announcements_badge_count && @announcements_badge_count > 0 %>
+<% can_see_guidance_popup = @from_first_visit && current_user.can_see_guidance_popup? && !@unanswered_mandatory_prof_qs && !show_announcements && !working_on_behalf? %>
+
+<div id="program_home" class="cui-homepage">
+  <%= render partial: 'common/connect_calendar_prompt' if @connect_calendar_prompt %>
+  <%= render partial: 'common/time_zone_check' if !working_on_behalf? %>
+
+  <%= update_profile_message(current_user) %>
+
+  <% if current_user.can_render_meeting_feedback_widget? %>
+    <div id="cjs_meeting_feedback_widget"></div>
+    <%= javascript_tag(%Q[HomePageWidget.getHomePageWidgetData("#{meeting_feedback_widget_path(format: :js)}");]) %>
+  <% end %>
+
+  <% if can_render_availability_box %>
+    <% path = member_path(wob_member, :tab => MembersController::ShowTabs::AVAILABILITY, :src => "home_page_availability_notification", :scroll_to => "set_availability") %>
+    <% set_availability_link = link_to("feature.calendar.action.set_availability".translate, path, onclick: %Q[jQuery.ajax({url: "#{hide_item_users_path(item_key: UsersController::SessionHidingKey::SET_AVAILABILITY_PROMPT)}"});]) %>
+    <div class="alert alert-info text-xs-center text-sm-left">
+      <%= append_text_to_icon("fa fa-calendar text-info", "flash_message.user_flash.availability_message_html".translate(set_your_availablity: set_availability_link), {container_class: "fa-circle", stack_class: "fa-1x m-r-sm hidden-xs"}) %>
+    </div>
+  <% end %>
+
+  <% if current_user.show_drafted_surveys_widget? %>
+    <%= render :partial => "programs/drafted_survey_responses_widget" %>
+  <% end %>
+
+  <% if can_render_publish_circles_widget %>
+    <%= render :partial => "programs/publish_circles_widget", locals: {publishable_groups: @publishable_groups} %>
+  <% end %>
+
+  <% if !admin_activity_page_view %>
+    <% if !(can_render_connection_widget || can_render_flash_widget) %>
+      <%= render :partial => "programs/home_page_widget", locals: {connection_question: @connection_question} if current_user.can_render_home_page_widget? %>
+
+      <%= render partial: "programs/recommendations", locals: {recommendation_preferences_hash: @recommendation_preferences_hash, show_favorite_ignore_links: @show_favorite_ignore_links, favorite_preferences_hash: @favorite_preferences_hash, ignore_preferences_hash: @ignore_preferences_hash, program: @current_program, can_render_system_reco_box: can_render_system_reco_box, user: @current_user, mentors_score: @mentors_score} %>
+
+      <% if @current_program.resources_enabled? && !admin_activity_page_view %>
+        <% user_accessible_resources = @current_user.accessible_resources(only_quick_links: true, resources_widget: true) %>
+        <% if user_accessible_resources.present? %>
+          <%= render :partial => "programs/home_page_resources_widget" , locals: {quick_link_resources: user_accessible_resources} %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <%= render :partial => "programs/mentoring_connections_widget" if can_render_connection_widget %>
+      <%= render :partial => "programs/home_page_widget" if current_user.can_render_home_page_widget? %>
+      <%= render :partial => "programs/flash_meetings_widget", locals: {meetings_to_show: @meetings_to_show, show_view_all: @show_view_all, upcoming_meetings_count: @total_upcoming_meetings} if can_render_flash_widget %>
+
+      <% if @current_program.resources_enabled? %>
+        <% user_accessible_resources = @current_user.accessible_resources(only_quick_links: true, resources_widget: true) %>
+        <% if user_accessible_resources.present? %>
+          <%= render :partial => "programs/home_page_resources_widget" , locals: {quick_link_resources: user_accessible_resources} %>
+        <% end %>
+      <% end %>
+
+      <%= render partial: "programs/recommendations", locals: {recommendation_preferences_hash: @recommendation_preferences_hash, show_favorite_ignore_links: @show_favorite_ignore_links, favorite_preferences_hash: @favorite_preferences_hash, ignore_preferences_hash: @ignore_preferences_hash, program: @current_program, can_render_system_reco_box: can_render_system_reco_box, user: @current_user, mentors_score: @mentors_score} %>
+    <% end %>
+  <% end %>
+
+  <%= render :partial => "programs/unconnected_user_widget" %>
+
+  <% if @is_recent_activities_present && (@src == EngagementIndex::Activity::ACTIVITY_BUTTON_MANAGMENT_REPORT || !show_ra_in_side_pane) %>
+    <%= render :partial => 'programs/activity_feed_box',
+      :locals => {:tabs => get_program_tabs(@current_program, @my_all_connections_count, @src, { per_page: RecentActivityConstants::PER_PAGE }),
+      :update_url => update_prog_home_tab_order_path} %>
+    <%= javascript_tag %Q[RecentActivities.repeatCheckScroll(500)] %>
+  <% end %>
+
+  <% unless @hide_side_bar %>
+    <% content_for_sidebar do %>
+      <%= render :partial => 'programs/home_side_bar', locals: { is_recent_activities_present: @is_recent_activities_present, show_ra_in_side_pane: show_ra_in_side_pane}  %>
+    <% end %>
+  <% end %>
+</div>
+
+<% if @can_be_shown_announcements_icon %>
+  <div id="cjs_announcement_icon">
+    <div class="cui_announcements_icon">
+      <% if @announcements_badge_count > 0 %>
+        <span class="cui_announcements_badge label label-danger "><%= @announcements_badge_count %></span>
+      <% end %>
+      <a class="btn-lg btn-circle boxshadow-md btn btn-primary waves-effect " href="javascript:void(0)" aria-disabled="true" style="display: block;"><i class="fa fa-bullhorn no-margins fa-fw m-r p-r-m p-t-xxs"></i><span class="sr-only"><%= "feature.announcements.label.announcements".translate %></span></a>
+    </div>
+  </div>
+<% end %>
+
+<%= render :partial => 'programs/guidance_popup_experiment' if can_see_guidance_popup %>
+
+<%= javascript_tag do %>
+  Meetings.QuickConnect.initializeMentorPreferenceBoxElements();
+  jQuery(document).ready(function(){
+    <% if @unanswered_mandatory_prof_qs %>
+      jQueryShowQtip('#inner_content', 850, "<%= raw answer_mandatory_qs_members_url %>",'',{modal: true, largeModal: true});
+    <% end %>
+    Announcements.initializeAnnouncementsPopup("<%= announcements_widget_path(cjs_skip_mobile_prompt: true) %>");
+  });
+  jQuery(window).load(function() {
+    <% if show_announcements %>
+      jQuery('#cjs_announcement_icon').click();
+    <% end %>
+  });
+<% end %>

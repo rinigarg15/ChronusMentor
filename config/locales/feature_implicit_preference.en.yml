@@ -1,0 +1,7 @@
+en:
+  feature:
+    implicit_preference:
+      mentors_lists:
+        popular_categories: Popular Categories
+        no_recommendations_available: Looks like there are no profile categories available.
+        dont_show_again: Don't show this category again

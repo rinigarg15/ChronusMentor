@@ -1,0 +1,96 @@
+// Using the previous version Highstock 1.3.x default colors. Taken from http://api.highcharts.com/highstock#colors
+<% unless request.xhr? %>
+  jQuery(document).on("ready", function(){
+<% end %>
+
+Highcharts.setOptions({
+  colors: ['#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'],
+  global: {
+            useUTC: false
+        }
+});
+new Highcharts.Chart({
+  credits: {
+    enabled: false
+  },
+  chart: {
+    renderTo: "<%= render_to %>",
+    zoomType: 'x',
+    <% if local_assigns.has_key?(:height) && height.present? %>
+      height: "<%= height %>",
+    <% end %>
+    <% if local_assigns.has_key?(:width) && width.present? %>
+      width: "<%= width %>"
+    <% end %>
+  },
+  title: {
+    text: ""
+  },
+  xAxis: {
+    type: "datetime",
+    <% if local_assigns.has_key?(:group_report_categories) && group_report_categories.present? %>
+      categories: <%= chr_json_escape(group_report_categories.to_json) %>
+    <% end %>
+  },
+  yAxis: {
+    min: 0,
+    title: {
+      text: ""
+    }
+  },
+  tooltip: {
+    <% if local_assigns.has_key?(:group_report_categories) && group_report_categories.present? %>
+      pointFormat: '<span>{series.name}</span>: <b>{point.y}</b><br/>'
+    <% else %>
+      formatter: function() {
+        <% interval = local_assigns.has_key?(:point_interval) ? point_interval : 0 %>
+        return jsReportTranslation.date + ' : <b>' + GroupsReport.getHighChartsDateFormat(<%= interval %>, this.x, <%= start_time.to_i * 1000 %>, <%= local_assigns[:end_time].to_i * 1000 %>) + '</b><br>' +
+          this.series.name+' ' + "<% highchart_string_sanitize('feature.reports.label.users'.translate) if !defined?(is_groups_report) %>" + ' : <b>'+Highcharts.numberFormat(this.y, 0) + '</b>';
+      }
+    <% end %>
+  },
+  plotOptions: {
+    series: {
+      animation: {
+        duration: <%= (format == FORMAT::HTML) ? 1500 : 0 %>
+      },
+      shadow: <%= (format == FORMAT::HTML) %>,
+      enableMouseTracking: <%= (format == FORMAT::HTML) %>,
+      marker: {
+        enabled: false,
+        states: {
+          hover: {
+            enabled: true,
+            radius: 5
+          }
+        }
+      }
+    }
+  },
+  series:
+    [
+      <% first_elem = true %>
+      <% chart_series_data.each do |name, series| %>
+        <%= ',' unless first_elem  %>
+        {
+          name: "<%= highchart_string_sanitize(series[:name]) %>",
+          <% unless local_assigns.has_key?(:group_report_categories) && group_report_categories.present? %>
+            pointInterval: <%= local_assigns.has_key?(:point_interval) ? 24*3600*1000*point_interval : 1.day.to_i * 1000 %>,
+            pointStart: <%= start_time.to_i * 1000 %>,
+          <% end  %>
+          data: <% if series[:data].size == 1 %>
+            [{y: <%= series[:data].first %>, marker: {enabled: true}}]
+            <% else %>
+            <%= series[:data].inspect %>
+            <% end %>,
+          visible: <%= series[:visible] %>,
+          color: "<%= j(series[:color]) %>"
+        }
+        <% first_elem = false %>
+      <% end  %>
+    ]
+});
+
+<% unless request.xhr? %>
+  });
+<% end %>

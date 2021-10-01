@@ -1,0 +1,21 @@
+<%
+  form = local_assigns[:form]
+  mentor_request = local_assigns[:mentor_request]
+  accept_recommendation_path = new_meeting_request_path(params.to_unsafe_h.merge(mentor_request_id: mentor_request.id))
+  modal_id = local_assigns[:modal_id]
+%>
+<%= control_group class: "cjs_recommend_meeting_container hide" do %>
+  <% label_1 = "feature.mentor_request.content.not_available_for_connection".translate(mentoring_connection: _mentoring_connection) %>
+  <%=label_tag(nil, "#{label_1} #{'feature.mentor_request.content.recommend_meeting_text_v1'.translate(meeting: _meeting, mentee_name: mentor_request.student.name, meeting_duration: get_x_minute_meeting_text(program))}") %>
+  <%= controls class: "m-t-xs" do %>
+    <%= link_to "display_string.Yes".translate, "javascript:void(0);", onclick: %Q[MentorRequests.acceptMeetingRecommendation('#{accept_recommendation_path}', '#{modal_id}', '#{"display_string.Yes".translate}', '#{"display_string.Please_Wait".translate}');], class: "btn btn-primary btn-outline btn-sm p-r-lg p-l-lg cjs_accept_meeting_recommendation" %>
+    <%= link_to "display_string.No".translate, "javascript:void(0);", class: "btn btn-danger btn-outline btn-sm p-r-lg p-l-lg m-l-xs cjs_reject_meeting_recommendation" %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function() {
+    MentorRequests.initializeDualRequestMode('<%= local_assigns[:form_id] %>', '<%= AbstractRequest::Rejection_type::MATCHING %>');
+  });
+<% end %>
+

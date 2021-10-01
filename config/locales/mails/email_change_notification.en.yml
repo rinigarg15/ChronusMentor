@@ -1,0 +1,14 @@
+en:
+  email_translations:
+    email_change_notification:
+      title_v1: Address change acknowledgment email
+      description_v1: Members can change their profile email address. This confirmation email is sent to a member when their email address is updated.
+      subject_v1: Email address successfully updated
+      content_v1_html: Your <a href='{{url_program}}'>{{program_name}}</a> email address has been successfully updated from {{old_email_address}} to {{current_email_address}}.<br/><br/>Please use the new email address and the existing password to login to {{subprogram_or_program_name}}.<br/><br/>If you have received this message in error and this is not your current email address, please contact the {{customized_admin_term}} <a href='{{url_contact_admin}}'>here</a>.<br/>
+      tags:
+        url_contact_admin:
+          description: Url for the user to contact administrator
+        old_email_address:
+          description: Old email address of the member
+        current_email_address:
+          description: Current email address of the user

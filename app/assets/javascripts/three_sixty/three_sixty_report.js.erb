@@ -1,0 +1,152 @@
+var ThreeSixtyReport = {
+  generateSurveyReportGraphs: function(){
+    var self = categoriesTranslations.self;
+    var allEvaluators = categoriesTranslations.allEvaluators
+    var distribution = categoriesTranslations.distribution
+    var noData = categoriesTranslations.noData
+    var percentile = categoriesTranslations.percentile
+    var yAxisTitleHelpText = categoriesTranslations.yAxisTitleHelpText
+    var categoriesListDefaultCompetency = ['', self, '', allEvaluators,''];
+    var categoriesListDefault = categoriesListDefaultCompetency;
+    categoriesListDefault.push(distribution);
+    var data = [];
+    // Iterating through all the elments with the below class
+    jQuery.each(jQuery('.cjs-three-sixty-report-bar-chart'),function(index){
+      data = jQuery(this).data();
+  
+      categoriesList  = jQuery.merge(jQuery.merge([], categoriesListDefault), data['reviewerGroupNames']);
+      chartHeight = data['height']||250
+      data_values = [];
+      // Displaying first two thicker bars
+      for(var i = 0; i < 2; i++)
+      {
+        //Having null datapoints for proper spacing
+        data_values.push("null");
+        default_data = new Object;
+        default_data['y'] = data['data'][i]
+        default_data['additionalDataLabel'] = '('+ data['additionalDataLabel'][i] +')'
+        default_data['color'] = data['color'][i]
+        data_values.push(default_data);
+      }
+      data_values.push("null");
+      // Displaying remaining bars
+      if ( jQuery(data['data']).size() > 2 ){
+        data_values.push("null");
+        for(var i = 0; i < jQuery(data['data']).size() - 2; i++)
+        {
+          default_data = new Object;
+          default_data['y'] = data['data'][i + 2];
+          default_data['additionalDataLabel'] = '('+ data['additionalDataLabel'][i+2] +')'
+          default_data['color'] = data['color'][2];
+          data_values.push(default_data);
+        }
+      }
+      title = data['title'] != undefined ? data['title'] : '';
+      new Highcharts.Chart(
+        {
+          credits: {
+            enabled: false
+          },
+
+          chart: {
+            renderTo: jQuery(this)[0].id,
+            type: 'bar',
+            backgroundColor: null,
+            height: chartHeight,
+            width: 400
+          },
+
+          title: {
+            text: title,
+            style: {
+                    fontWeight: 'bold',
+                    padding: 10
+                  },
+            borderColor: "#BBBBBB"
+          },
+          
+          xAxis: {
+            categories: categoriesList,
+            title: {
+              enabled: false  
+            },
+            labels: {
+              style: {
+                fontSize:'12px'
+              },
+              useHTML: true,
+              formatter: function() {
+                if(this.value == distribution)
+                  return '<b>'+this.value+'</b>';
+                else if(this.value == self || this.value == allEvaluators)
+                  return this.value;
+                else {
+                  return '<span style="font-size:9px" class="pull-right text-right">'+this.value+'</span>';
+                }
+              }
+            },
+            LineWidth: 0,
+            minorGridLineWidth: 0,
+            minorTickLength: 0,
+            tickLength: 0
+          },
+
+          yAxis: {
+            min: 0,
+            max: 100,
+            title: {
+              useHTML: true,
+              text: '<div class="text-center">' +percentile+ '<div class="grayed" style="font-size:9px">' + yAxisTitleHelpText + '</div></div>',
+              style:{
+                width:'200px'
+              }
+            }
+          },
+
+          plotOptions: {
+            bar: {
+              groupPadding:0.01,
+              dataLabels: {
+                enabled: true,
+                style: {  
+                  fontSize: '10px'
+                 },
+                color: '#000000',
+                x: 0,
+                formatter: function() {
+                  var additionalDataLabel = this.point.additionalDataLabel;
+                  if(this.y != 0)
+                    return "<b>"+(Math.round(this.y*100)/100).toFixed(2)+"</b> " + additionalDataLabel;
+                  else{
+                    return '<span style="fill: grey;">'+ noData +'</span>';
+                  }
+                }
+              }
+            }
+          },
+          series: [{
+            shadow: false,
+            animation: false,
+            showInLegend: false,
+            data: data_values
+          }]
+        },
+        
+        function(chartObj) {
+          jQuery.each(chartObj.series[0].data, function(i, point) {
+            if(point.y == 0) {
+              point.dataLabel.attr({x: point.dataLabel.attr('x') + 35});
+            }
+          });
+        }
+      );
+
+      //Having wider bars for self and average values
+      jQuery.each(jQuery('#' + jQuery(this)[0].id).find('.highcharts-series').children().splice(0,2), function() {    
+        var bar = jQuery(this);
+        bar.attr('width',parseInt(bar.attr('width')) + 20);
+        bar.attr('x',parseInt(bar.attr('x'))- 10);
+      });
+    });
+  }
+}

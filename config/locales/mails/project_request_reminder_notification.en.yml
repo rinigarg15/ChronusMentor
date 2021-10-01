@@ -1,0 +1,29 @@
+en:
+  email_translations:
+    project_request_reminder_notification:
+      title_v3: Reminder to owners of pending %{_mentoring_connection} request
+      description_v3: When a participant's request to join %{_mentoring_connection} is pending acceptance, this email is sent to the owners of the %{_mentoring_connection}.
+      subject_v1: Reminder! {{project_requester_name}}'s {{customized_mentoring_connection_term}} request is pending your approval
+      content_v1_html: "{{project_requester_name}} asked to join <a href='{{url_project}}'>{{project_name}}</a> on {{date_of_sending}} and is still waiting for your response.<br/><ul><li>You can view <a href='{{url_project_requester}}'>{{project_requester_name}}</a>'s profile to learn more about them and determine if it is a good fit.</li><li>If the {{customized_mentoring_connection_term}} is a good fit, please accept their request as soon as possible.</li><li>If you must decline, please do so in a timely manner and be tactful.</li></ul>{{view_request_button}}"
+      button_text: View Request
+      tags:
+        project_requester_name:
+          description: Name of project requester
+          example: John Peter
+        url_project_request_list:
+          description: Url to project request listing page
+        url_project_requester:
+          description: Link to the profile of project requester
+        sent_time:
+          description: Request sent time
+          example: Feb 18, 2014
+        url_project:
+          description: Url to the project page
+        project_name:
+          description: Name of the project
+          example: Develop TO-DO Android App
+        date_of_sending:
+          description: Request sent date
+          example: Feb 26, 2014
+        view_request_button:
+          description: View Request Button

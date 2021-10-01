@@ -1,0 +1,75 @@
+<% can_edit_template_task = task.unassigned_from_template? || (task.from_template? && allow_due_date_edit?(group) && task.required?) %>
+<% task_has_comments = (task.comments.size > 0) %>
+<div>
+  <span class="cjs-task-<%= task.id %>-checkin-duration">
+    <%= get_icon_content("fa fa-clock-o no-margins") if task.group_checkins_duration > 0 %>
+  </span>
+  <%= content_tag(:span, get_icon_content("fa fa-comment text-default no-margins") + set_screen_reader_only_content("display_string.comments".translate), :class => "task_#{task.id}_edit_icon #{task_has_comments ? '' : 'hide'}", :id => "") %>
+  <span class="cjs_status_block <%= hidden_on_mobile %>">
+    <% if task.required? %>
+      <%= content_tag(:span, DateTime.localize(task.due_date, format: :abbr_short_no_year), class: "#{"text-danger" if task.overdue?} cjs_status") %>
+    <% end %>
+  </span>
+  <div class="pull-right m-l-xs ">
+    <% dropdown_actions = [] %>
+    <% dropdown_options = {
+        btn_class: "pull-right",
+        dropdown_title: "",
+        is_not_primary: true,
+        btn_group_btn_class: "btn-white btn-xs"
+      } %>
+
+    <% if group.active? && (@is_member_view || group.has_member?(current_user)) %>
+
+      <% dropdown_actions << {
+          label: get_icon_content("fa fa-comments") + "feature.mentoring_model_task_comment.action.add_comment".translate(comment: MentoringModel::Task::Comment.model_name.human),
+          js: "javascript:void(0)",
+          class: "cjs-toggle-new-comment-form",
+          id: "cjs-add-new-comment-container-#{task.id}",
+          data: { task_id: task.id, url: group_mentoring_model_task_path(group, task, home_page_view: @home_page_view, format: :js) }
+        } %>
+
+      <% dropdown_actions << {
+          label: get_icon_content("fa fa-plus-circle") + "feature.common_tasks.content.add_checkin".translate,
+          js: "javascript:void(0)",
+          class: "cjs-toggle-checkin-form",
+          id: "cjs-add-new-checkin-button-#{task.id}",
+          data: { task_id: task.id, url: group_mentoring_model_task_path(group, task, format: :js) }
+        } if @checkin_base_permission && task.allow_checkin?(current_user) %>
+
+    <% end %>
+
+    <% if ((can_edit_template_task || manage_mm_tasks_at_end_user_level?(group) && !task.from_template?) && @page_controls_allowed && !@home_page_view) %>
+
+      <% dropdown_actions << {
+        label: append_text_to_icon("fa fa-pencil-square-o text-default", "display_string.Edit".translate),
+        class: 'edit_task',
+        url: edit_group_mentoring_model_task_path(group, task, format: :js, goal_id: local_assigns[:goal_id], view_mode: @view_mode),
+        data: {remote: true}
+      } unless can_edit_template_task %>
+
+      <% dropdown_actions << {
+        label: append_text_to_icon("fa fa-pencil-square-o text-default", "display_string.Edit".translate),
+        class: 'edit_task',
+        url: edit_assignee_or_due_date_group_mentoring_model_task_path(group, task, format: :js, goal_id: local_assigns[:goal_id], view_mode: @view_mode),
+        data: {remote: true}
+      } if can_edit_template_task %>
+
+      <% dropdown_actions << {
+        label: append_text_to_icon("fa fa-trash text-default","display_string.Delete".translate),
+        class: "delete_task #{'hide' if can_edit_template_task}",
+        url: group_mentoring_model_task_path(group, task, format: :js, from_goal: local_assigns[:from_goal], view_mode: @view_mode, target_user_id: @target_user.try(:id), target_user_type: @target_user_type),
+        data: {remote: true, method: :delete, confirm: "common_text.confirmation.sure_to_delete".translate}
+      } %>
+    <% end %>
+
+    <% if mobile_only_content %>
+      <% dropdown_actions.each do |action| %>
+        <% action[:id] = action[:id]+"_mobile" if action[:id].present? %>
+      <% end %>
+    <% end %>
+
+    <%= dropdown_buttons_or_button(dropdown_actions, dropdown_options) %>
+  </div>
+</div>
+

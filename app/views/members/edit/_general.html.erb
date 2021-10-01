@@ -1,0 +1,15 @@
+<div id="general_profile" class="has-above-2">
+  <% ajax_form = !@is_first_visit %>
+  <% locals = { section: section, has_edu_exp_ques: has_edu_exp_ques, basic_questions: basic_questions, profile_member: profile_member, profile_user: profile_user, grouped_role_questions: grouped_role_questions } %>
+  <% if ajax_form && !file_present %>
+    <%= hidden_field_tag :section_id, section.id %>
+    <%= simple_form_for profile_member, :remote => true, :html => {:multipart => true, :class => 'form-horizontal'} do |form| %>
+      <%= render partial: "members/edit/basic_information_form_content", locals: locals.merge(ajax_form: true, form: form) %>
+    <% end %>
+  <% else %>
+    <%= simple_form_for profile_member, :html => {:multipart => true, :class => 'form-horizontal'} do |form| %>
+      <%= hidden_field_tag(:ab_test, 1) if experiment && experiment.running? %>
+      <%= render partial: "members/edit/basic_information_form_content", locals: locals.merge(last_section: last_section, form: form) %>
+    <% end %>
+  <% end %>
+</div>

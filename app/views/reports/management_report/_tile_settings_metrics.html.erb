@@ -1,0 +1,21 @@
+<div class="cjs_tile_settings_metrics">
+  <h4 class="m-b-md"><%= "feature.reports.content.metrics_to_be_displayed".translate %></h4>
+  <% metrics.each do |metric| %>
+    <% alert = metric.alerts.first %>
+    <% alert_path = alert.present? ? edit_report_section_metric_alert_path(section, metric, alert) : new_report_section_metric_alert_path(section, metric) %>
+    <div class="cjs_settings_metric_<%= metric.id %>">
+      <div>
+        <%= metric.title %>
+        <span class="pull-right">
+          <%= link_to(get_icon_content("fa fa-cog"), "javascript:void(0);", data: {url: alert_path}, class: "cjs_management_report_link", 'aria-label' => "display_string.Configure".translate) %>
+          <%= link_to(get_icon_content("fa fa-pencil"), "javascript:void(0);", data: {url: edit_report_section_metric_path(section, metric, tile: tile)}, class: "cjs_management_report_link", 'aria-label' => "display_string.Edit".translate) %>
+          <%= link_to(get_icon_content("fa fa-trash"), report_section_metric_path(section, metric), remote: true, method: "delete", data: {confirm: "feature.reports.actions.confirm_metric_deletion_v1".translate}, class: "cjs_delete_metric", 'aria-label' => "display_string.Delete".translate) %>
+        </span>
+      </div>
+      <hr class="m-t-xs m-b">
+    </div>
+  <% end %>
+  <div class="m-t-md">
+    <%= link_to(get_icon_content("fa fa-plus") + "feature.reports.content.add_new_metric".translate, "javascript:void(0);", class: "cjs_management_report_link btn btn-xs", data: {url: new_report_section_metric_path(section, tile: tile)}) %>
+  </div>
+</div>

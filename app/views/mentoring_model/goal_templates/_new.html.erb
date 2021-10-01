@@ -1,0 +1,3 @@
+<% modal_v3_popup "feature.mentoring_model.button.add_new_goal".translate do %>
+  <%= render :partial => "mentoring_model/goal_templates/goal_template_form", :locals => {goal_template: @new_goal_template, method: :post, show_option: "", text_size: "form-control", class_options: "", url: mentoring_model_goal_templates_path(@mentoring_model, :format => :js)} %>  
+<% end %>

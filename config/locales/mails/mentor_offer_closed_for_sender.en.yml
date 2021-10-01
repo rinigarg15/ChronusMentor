@@ -1,0 +1,17 @@
+en:
+  email_translations:
+    mentor_offer_closed_for_sender:
+      title_v2: "%{_Mentoring} offer closed notification to %{_mentor}"
+      description_v2: "%{_Mentors} can directly offer %{_mentoring} to %{_mentees}. This email (including a reason) is sent to %{_a_mentor} when %{_a_admin} closes the %{_mentoring} offer."
+      subject_v1: "{{customized_admin_term_capitalized}} has closed your offer for {{customized_mentoring_term}} {{recipient_name}}"
+      content_v1_html: "{{customized_admin_term_capitalized}} closed your offer for {{customized_mentoring_term}} {{recipient_name}} in {{subprogram_or_program_name}}. <br />{{message_from_admin_as_quote}} <br />If you would like, you can <a href={{url_mentees_listing}}> click here </a> to find other suitable {{customized_mentees_term}}. <br /><br/>If you have any questions, please contact the {{customized_admin_term}} <a href='{{url_contact_admin}}'>here</a>.<br/>"
+      tags:
+        recipient_name:
+          description: Name of the mentee to whom the closed offer was sent
+        url_mentees_listing:
+          description: Url to the mentee listing page
+        message_from_admin:
+          description: Reason provided by the admin when closing the mentor offer
+        message_from_admin_as_quote:
+          description: Optional message sent by the administrator
+          example: Please connect.

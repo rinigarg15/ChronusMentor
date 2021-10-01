@@ -1,0 +1,41 @@
+<% profile_question = @profile_question %>
+<% q_id = profile_question.id %>
+<% form_id = "edit_profile_question_#{q_id}" %>
+
+<%= simple_form_for profile_question, :remote => true, :url => role_question_path(profile_question), :html => {:id => form_id, :class => "form-horizontal"} do |f| %>
+  <div class="inline_form_header">
+    <h3><%= "feature.profile_customization.label.edit_settings".translate %></h3>
+    <hr class="attach-top" />
+  </div>
+  <div id="flash_<%= profile_question.id %>" class="error_flash" style="display:none"></div>
+  <%= hidden_field_tag "help_text_orginal_#{profile_question.id}", profile_question.help_text %>
+
+  <%= control_group do %>
+    <%= content_tag(:div, ProfileQuestion.human_attribute_name(:question_text), :class => "false-label control-label col-sm-2") %>
+    <%= controls(class: "col-sm-10") do  %>
+      <div id = "profile_question_text_<%= q_id%>" class="control-label font-bold pull-left">
+        <%= profile_question.question_text %>
+      </div>
+    <% end %>
+  <% end %>
+  <%= control_group do %>
+    <%= content_tag(:div, "feature.profile_customization.label.include_for".translate, :class => "false-label control-label col-sm-2") %>
+    <%= controls(class: "col-sm-10") do  %>
+      <div id="mentoring_connections_select_options">
+        <%= render :partial => "profile_questions/program_roles_listing", :locals => {:profile_question => profile_question, :all_programs_with_roles => [@current_program]} %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% action_set(class: "clearfix") do %>
+    <div class="pull-right">
+      <% cancel_call = "CustomizeProfileQuestions.cancelRoleQuestion(#{q_id})" %>
+      <%= link_to_function "display_string.Cancel".translate, cancel_call, :class => "btn btn-white"  %>
+      <%= f.button :submit, "display_string.Save".translate %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  CustomizeProfileQuestions.updateRoleQuestion('<%= q_id %>');
+<% end %>

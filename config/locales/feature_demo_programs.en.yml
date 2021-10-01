@@ -1,0 +1,16 @@
+en:
+  feature:
+    demo_programs:
+      title:
+        setup_demo_program: Setup your demo program
+      label:
+        organization_name: Organization name
+        web_address: Web Address
+        setup_program: Setup Program
+        error_message: An error occured while creating program. Please contact administrator.
+        organization_name_error_message: Organization name cannot be empty
+        web_address_empty_error_message: Web address cannot be empty
+        creating_program: Creating the Program. Please wait... This will take around 5 minutes.
+      information:
+        already_creating: Another program is being created currently. Please wait for sometime and refresh the page to create new program.
+        please_wait: Please wait while your program is being created

@@ -1,0 +1,66 @@
+<% target_program = @program || @current_program %>
+<% target_roles = get_target_roles(@filter_role, @role, @roles, @profile_user) %>
+<% required = local_assigns[:required].nil? ? target_program && target_roles && question.required_for(target_program, target_roles) : local_assigns[:required] %>
+
+<div class="cjs_add_show inner_rounded_section cjs_inner_rounded_section publication m-l-sm m-r-sm list-group-item <%= 'cjs_required' if required %>">
+  <%= fields_for_publication(question, new_publication) do |publication_form| %>
+    <% if question.question_type==ProfileQuestion::Type::MULTI_PUBLICATION %>
+      <div class="form-group form-group-sm">
+        <button type="button" class="close" onclick="CustomizeQuestions.removeEduExpFields(this, '.publication', '<%= j("feature.education_and_experience.content.one_required_v1".translate) %>', '<%= j("common_text.confirmation.sure_to_delete".translate) %>')"><span class="sr-only"><%= "feature.education_and_experience.action.remove_publication".translate %></span><%= embed_icon("fa fa-trash m-r-xxs") %></button>
+      </div>
+    <% end %>
+
+    <div class="publication row" id="<%= (new_publication.new_record?) ? "" : "publication_#{new_publication.id}" %>">
+      <%= control_group do %>
+        <% title_label_text = Publication.human_attribute_name(:title) %>
+        <label class="col-sm-2 control-label false-label"><%= title_label_text %></label>
+        <%= controls(class: "col-sm-10") do %>
+          <%= publication_form.text_field :title, :class => 'title form-control', id: nil, aria: { label: title_label_text }  %>
+        <% end %>
+      <% end %>
+      <%= control_group do %>
+        <% publisher_label_text = Publication.human_attribute_name(:publisher) %>
+        <label class="col-sm-2 control-label false-label"><%= publisher_label_text %></label>
+        <%= controls(class: "col-sm-10") do %>
+          <%= publication_form.text_field :publisher, :class => 'publisher form-control', id: nil, aria: { label: publisher_label_text } %>
+        <% end %>
+      <% end %>
+      <%= control_group do %>
+        <div class="false-label control-label col-sm-2"><%= Publication.human_attribute_name(:date) %></div>
+        <%= controls :class => 'm-t-xs col-sm-10' do %>
+          <% day_label_text = "display_string.Day".translate %>
+          <label class="sr-only"><%= day_label_text %></label>
+          <%= publication_form.select :day, day_options_for_select, {}, :class => "publication_day form-control m-b-sm", id: nil, aria: { label: day_label_text } %>
+          <% month_label_text = "display_string.Month".translate %>
+          <label class="sr-only"><%= month_label_text %></label>
+          <%= publication_form.select :month, month_options_for_select, {}, :class => "publication_month form-control m-b-sm", id: nil, aria: { label: month_label_text } %>
+          <% year_label_text = "display_string.Year".translate %>
+          <label class="sr-only"><%= year_label_text %></label>
+          <%= publication_form.select :year, year_options_for_select, {}, :class => "publication_year form-control m-b-sm", id: nil, aria: { label: year_label_text } %>
+        <% end %>
+      <% end %>
+      <%= control_group do %>
+        <% url_label_text = Publication.human_attribute_name(:url) %>
+        <label class="col-sm-2 control-label false-label"><%= url_label_text %></label>
+        <%= controls(class: "col-sm-10") do %>
+          <%= publication_form.text_field :url, :class => 'url form-control', id: nil, aria: { label: url_label_text } %>
+        <% end %>
+      <% end %>
+      <%= control_group do %>
+        <% authors_label_text = Publication.human_attribute_name(:authors) %>
+        <label class="col-sm-2 control-label false-label"><%= authors_label_text %></label>
+        <%= controls(class: "col-sm-10") do %>
+          <%= publication_form.text_field :authors, :class => 'authors form-control', id: nil, aria: { label: authors_label_text } %>
+          <p class="help-block small m-t-0"><%= "feature.education_and_experience.content.authors_desc".translate %></p>
+        <% end %>
+      <% end %>
+      <%= control_group do %>
+        <% description_label_text = Publication.human_attribute_name(:description) %>
+        <label class="col-sm-2 control-label false-label"><%= description_label_text %></label>
+        <%= controls(class: "col-sm-10") do %>
+          <%= publication_form.text_area :description, :class => 'description form-control', id: nil, aria: { label: description_label_text }, :rows => 5 %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

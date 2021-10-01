@@ -1,0 +1,28 @@
+<div>
+  <h2 class="m-b-xs"><%= "feature.program.label.match_config_setting".translate %></h2>
+  <hr class="no-margins">
+  <%= render_zero_match_score_settings(f) %>
+
+  <%= control_group do %>
+    <% label = "program_settings_strings.content.allow_zero_match_score_connect".translate(mentors: _mentors, mentees: _mentees ) %>
+    <%= content_tag(:div, label, :class => "false-label control-label") %>
+    <%= controls do %>
+      <%= choices_wrapper(label) do %>
+        <label class="radio inline">
+          <%= f.radio_button :allow_non_match_connection, true, :class => 'button_allow_non_match_connection' %> <%= "display_string.Yes".translate %>
+        </label>
+        <label class="radio inline">
+          <%= f.radio_button :allow_non_match_connection, false, :class => 'button_allow_non_match_connection' %> <%= "display_string.No".translate %>
+        </label>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= control_group(:class => 'box_program_zero_match_score_message') do %>
+    <%= f.label "", zero_match_score_message_label, :class => "control-label", :for => "program_non_match_text" %>
+    <%= tooltip("not_a_match_help_text", "program_settings_strings.content.not_a_match_help_text".translate) %>
+    <%= controls do %>
+      <%= f.text_area  :zero_match_score_message, :rows => 2, :cols => 40, :skip_title => true, :wrapper => 'none', :placeholder => "program_settings_strings.content.zero_match_score_message_placeholder".translate, :id => "program_non_match_text" %>
+    <% end %>
+  <% end %>
+</div>

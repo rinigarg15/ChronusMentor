@@ -1,0 +1,28 @@
+<% modal_v3_popup "feature.connection.header.bulk_publish_connections".translate(Mentoring_Connections: _Mentoring_Connections) do %>
+  <%= existing_groups_alert(@group_ids, [], Group::Status::DRAFTED, :group, true) %>
+  <p><%= "feature.connection.content.help_text.bulk_publish_v2".translate(mentoring_connections: _mentoring_connections, mentoring_connection: _mentoring_connection, count: @group_ids.size) %></p>
+
+  <%= form_tag update_bulk_actions_groups_path, :remote => true, :id => "bulk_groups_publish" do %>
+    <%= control_group do %>
+      <label class="control-label sr-only" for="bulk_actions_message">
+        <%= "feature.connection.content.message".translate %>
+      </label>
+      <%= controls do %>
+        <%= text_area_tag("bulk_actions[message]", nil, id: "bulk_actions_message", rows: "5", placeholder: "feature.connection.content.message".translate, class: "form-control") %>
+      <% end %>
+    <% end %>
+    <%= hidden_field_tag "bulk_actions[action_type]", Group::BulkAction::PUBLISH %>
+    <%= hidden_field_tag "bulk_actions[group_ids]", @group_ids %>
+    <%= render_allow_to_join(@groups, true) %>
+
+    <%= horizontal_line(class: "m-t-xs m-b-sm") %>
+    <div class="m-b-sm">
+      <%= group_creation_email_notification_consequences_html(count: @group_ids.size) %>
+    </div>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => "btn btn-white", data: { dismiss: "modal" } %>
+      <%= submit_tag "display_string.Publish".translate, :class => "btn btn-primary", data: {:disable_with => "display_string.Please_Wait".translate}, :onclick => "ProjectRequests.gaTrackProjectPublishWithdraw(true, false, false);" %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= render(partial: "progress_statuses/modal_progress_status", locals: { text: "feature.connection.header.bulk_publish_connections_message".translate(Mentoring_Connection: _Mentoring_Connection), id: "cjs_bulk_group_publish_progress", data_url: update_bulk_actions_groups_path }) %>

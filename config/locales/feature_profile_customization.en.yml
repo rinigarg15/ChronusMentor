@@ -1,0 +1,160 @@
+en:
+  feature:
+    profile_customization:
+      header:
+        customize_user_form_fields: Customize User Form Fields
+        customize_user_profile_fields: Customize User Profile Fields
+        customize_user_profile_summary: Customize User Profile Summary Fields
+        preview_user_forms: Preview User Forms
+        preview_membership_form: Preview Membership Form
+        customize_membership_form_fields: Customize Membership Form Fields
+        customize_membership_form: Customize Membership Form
+        edit_section: Edit Section
+      action:
+        add_new_section: Add new section
+        add_section: Add section
+        add_new_field: Add new field
+        add_fields: Add fields
+        customize_profile_fields: Customize Profile Fields
+        show_only_program_fields: Show only added fields
+      content:
+        no_fields: No fields added for this section
+        user_profile_form: User Profile Form
+        user_profile: User Profile
+        membership_request_form: Membership Request Form
+        select_preview_form_type: Select preview form type
+        preview_for_program: Preview for %{program}
+        role_of_the_viewer: Role of the viewer
+        role_of_the_viewer_v1: Role of user who is viewing the profile
+        role_of_the_viewed_user: Role of the viewed user
+        role_of_the_viewed_user_v1: Role of the user whose profile is being viewed
+        are_they_connected: Are they connected?
+        preview_form_type: Preview form type
+        preview_type: Preview type
+        add_field_page_description: Below are the list of available profile fields. To add a profile field please check the corresponding checkbox. Profile fields which are already part of the %{program} are checked and disabled.
+        new_field_added: new field added
+        new_fields_added: new fields added
+        blocked_for_matching_html: This field is locked for editing as it is used for matching users. Please contact Chronus support for assistance
+        blocked_for_matching_html_v1: Please note only parts of the field can be edited as this field is used for matching users. Please contact Chronus support for assistance
+        fill_required_fields: Please fill all the required fields. Fields marked * are required
+        allow_multiple_response: Allow multiple responses
+        enter_comma_separated_choices: Enter comma separated choices
+        enter_comma_separated_choices_v1: Separate each response by a comma
+        enter_comma_separated_choices_extn: in increasing order, with last choice being the highest rank.
+        allow_different_answer: Allow user to specify a different answer
+        edit_advanced_options: Edit Advanced Options
+        conditional_list_contains_reponse_html: "%{conditional_select_list} response contains one of %{conditional_match_text}"
+        conditional_list_contains_reponse_html_v1: response contains one of
+        field_name_cant_be_blank: Field name cannot be blank
+        choices_blank: Choices can't be blank for choice based questions
+        choices_blank_ordered: Options can't be blank for ordered options type questions
+        delete_section_confirmation: Are you sure you want to delete this section? This will also delete all the questions in the section.
+        delete_section_confirmation_v1: Are you sure you want to delete this section? This will also delete all the fields in the section.
+        remove_question_confirmation_line1: Are you sure you want to remove this question for this program?
+        remove_question_confirmation_line1_v2: Are you sure you want to remove this question for this %{program}?
+        remove_question_confirmation_line2: All user responses for this question, if any, will be lost.
+        remove_question_confirmation_line3: This field is associated to matching. Deleting this will affect match scores. Are you sure you want to proceed?
+        delete_field_confirm_line1: Are you sure you want to delete this field?
+        delete_field_confirm_line2: The field will be removed from all programs and all user responses for this field, if any, will be lost.
+        delete_field_confirm_line2_v2: The field will be removed from all %{programs} and all user responses for this field, if any, will be lost.
+        customize_fields_description_html: The profile form includes the following fields. To reorder the fields, simply %{drag_drop} them to their new position and the position will be %{automatically_saved}.
+        drag_drop: drag and drop
+        automatically_saved: automatically saved
+        customize_profile_summary_fields_html: "%{click_here} to customize profile summary fields for %{mentors} and %{mentees}."
+        delete_conditional_warning:
+          one: 'The following question will be affected on removal of this question:'
+          other: 'The following questions will be affected on removal of this question:'
+        edit_conditional_warning:
+          one: 'The following question may be affected on edit of this question:'
+          other: 'The following questions may be affected on edit of this question:'
+        delete_conditional_suggestion_html:
+          one: It is suggested that you remove this question too or remove the %{show_only_if} condition for above mentioned question in %{advanced_options}.
+          other: It is suggested that you remove these questions too or remove the %{show_only_if} condition for above mentioned questions in %{advanced_options}.
+        edit_conditional_suggestion_html:
+          one: It is suggested that you confirm the %{show_only_if} settings for above mentioned question in %{advanced_options}.
+          other: It is suggested that you confirm the %{show_only_if} settings for above mentioned questions in %{advanced_options}.
+        common_question_string_type_tooltip_text: Enable users to specify more than one answer
+        common_question_single_choice_type_tooltip_text: Enable users to choose more than one answer from the choices
+        profile_question_education_type_tooltip_text: Enable users to fill in more than one education field
+        profile_question_experience_type_tooltip_text: Enable users to fill in more than one experience field
+        profile_question_publication_type_tooltip_text: Enable users to fill in more than one publication field
+        customize_role_q_description_html: The User profile form includes the following fields. The Field can be customized to set the private, required and visibility options.%{line_break}%{click_here} to customize profile summary fields for %{mentors} and %{mentees}.
+        customize_role_q_description_v1_html: The User profile form includes the following fields. The Field can be customized to set the private, required and visibility options.%{line_break}%{click_here} to customize profile summary fields for %{roles}.
+        customize_summary_description: Select the fields that you want to be displayed in the profile summary.
+        limited_visibility: " - Visibility is Limited (Change the visibility option for that Role to make it available)"
+        not_available: NA - Not Available for that Role (Select the field for that Role to make it available)
+        membership_customize_description_html: Customize the fields that you want to be present in the membership request form. Please note that %{name_and_email} are mandatory fields and cannot be customized. NA represents that the field is not available for that role in the profile. Fields marked * are mandatory.
+        name_and_email: Name and Email
+        select_one_of_the_role: Please select one of the role for the 'Role' option
+        select_one_of_the_role_v1: Please select one of the role for the 'Role of the viewed user' option
+        select_one_of_the_role_v2: Please select one of the role for the '%{role}' option
+        description_preview_profile_with_connection: Below is preview of how a profile looks to a user with %{viewer_roles} when they view a user with %{roles} with whom they are connected.
+        description_preview_profile: Below is preview of how a profile looks to a user with %{viewer_roles} when they view a user with %{roles}.
+        description_preview_membership: Below is preview of how a membership form looks to a user with %{roles}.
+        user_profile_preview_description: Preview is generated as if the users are yet to fill any of their profile fields.
+        program_join_intructions: Instructions to be given when someone requests to join the program
+        program_join_instructions: Instructions to be given when someone requests to join the %{program}
+        intruction_help_text: Instructions will be displayed above the Membership Request form
+        no_instruction_and_add_html: No instructions present - %{add_instruction}
+        add_instructions: Add Instructions
+        edit_instructions: Edit Instructions
+        update_join_instructions: Update Join Instructions
+        join_instructions_updated_success: Join Instructions has been updated successfully.
+        text_only: Don't allow digits to be entered
+        update_delete_confirmation:
+          base_update_text: The following item(s) may get impacted on editing or removing this profile field for any role in any %{program}.
+          base_delete_text: The following item(s) may get impacted on removing this profile field.
+          show_only_if: "'Show only if' setting of the following field(s):"
+          match_score: Match score as this is associated to matching.
+          modified_choices: User response for this field, as it will become empty if any user has previously selected the removed/modified choice(s).
+          confirm_text: It is suggested that you check the above item(s) before you proceed. Do you still want to proceed?
+          user_responses_lost: User responses for this field will be lost.
+        response_contains_one_of: Response contains one of
+        profile_question_conditional_tooltip_text: Enabling this will only show this profile field on certain conditions
+        profile_question_advanced_settings: Please use 'Advanced' options to configure the settings for the role.
+        added_new_field: The field %{field_name} has been created successfully. Use %{programs} tab to add this field for available %{programs}.
+        moved_field_to_another_section: The profile field '%{field_name}' is moved to '%{section_name}' section.
+        added_new_field_at_program_level: The field %{field_name} has been added.
+        no_of_fields_added:
+          one: 1 field
+          other: "%{count} fields"
+        no_of_fields_added_out_of_total_fields: "%{actual_count} out of %{total_count} fields added"
+        add_pq_at_program_level_instruction: Below are the list of available profile fields. To add a available profile field, please click on the '%{add}' button.
+      label:
+        select_roles_for_preview: Select roles for preview
+        users_connections: User's %{mentoring_connections}
+        user: User
+        admins: "%{admins}"
+        include_in: Include in
+        membership_form: Membership Form
+        profile: Profile
+        visibility: Visibility
+        admin_only_edit: Editable by administrators only
+        admin_only_edit_v1: Only admin can edit
+        enable_question: Add '%{question}'
+        mandatory: Mandatory
+        mandatory_all_rows_must_be_rated: Mandatory (All rows must be rated)
+        show_in_profile_summary: Show in profile summary
+        available_for_advanced_search: Available for advanced search
+        include_for: Include for
+        show_only_if: Show only if
+        user_profile_form: User Profile Form
+        membership_request_form: Membership Request Form
+        field_name: Field Name
+        field_type: Field Type
+        confirgured_for: Configured For
+        n_programs:
+          one: 1 Program
+          other: "%{count} Programs"
+        n_programs_v1:
+          one: 1 %{program}
+          other: "%{count} %{programs}"
+        edit_settings: Edit Settings
+        fields: Fields
+        na: NA
+        include_this_question_membership: Include this question for %{role_name} role in membership form
+        include_this_question_profile: Include this question for %{role_name} role in profile
+        field_description: Description
+        conditional: Conditional
+        Section: Sections
+        Profile_Question: Profile Fields

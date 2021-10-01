@@ -1,0 +1,31 @@
+en:
+  email_translations:
+    group_creation_notification_to_mentor:
+      title_v2: "%{_Mentoring_Connection} creation notification to %{_mentor}"
+      description_v2: When %{_a_admin} creates %{_a_mentoring_connection}, this email goes out to the %{_mentor}.
+      subject_v1: Connect with your {{mentee_or_mentees_term}}!
+      content_v4_html: We've assigned {{mentees_list_with_profile_link}} as your {{mentee_or_mentees_term}}.<br /><br />{{message_from_admin}}<ul><li>Please review your profile and verify all the information there is still correct. Update your profile information if anything is wrong or no longer valid. This will help your {{customized_mentee_term}} learn more about you and your common interests.</li><li>Connect with your {{mentee_or_mentees_term}} today in the {{customized_mentoring_connection_term}} area.</li><li>Start by reviewing initial tasks for both you and your {{mentee_or_mentees_term}}.</li><li>Your {{customized_mentoring_connection_term}} will end as of {{mentoring_connection_expiry_date}}.</li></ul>{{mentoring_area_button}}<br />If you have any questions, please contact me <a href='{{url_contact_admin}}'>here</a>.<br/>
+      visit_your_connection: Visit your %{mentoring_connection} area
+      tags:
+        mentee_or_mentees_term:
+          description: Customized mentee or mentees term based on the number of mentees assigned
+          example_v1: mentees
+        url_mentoring_connection:
+          description_v1: Url of the %{_mentoring_connection} created
+        mentoring_connection_expiry_date:
+          description_v2: "%{_Mentoring_Connection} expiration date"
+          example: December 24, 2013
+        message_from_admin:
+          description: Optional message send by the admin
+          example: Please connect.
+        mentees_list_with_mentor_requests:
+          description: List of all mentees along with their mentor request content if it exists
+        url_signup:
+          description: Url to the sign up page. Use this only when the mentors have not already signed up in the program.
+        mentoring_area_button:
+          description_v1: "%{_Mentoring_Connection} button"
+        mentees_list_with_profile_link:
+          description: List of mentors with link to their profiles
+          example_html: "<a href='http://www.chronus.com'>John Doe</a>, <a href='http://www.chronus.com'>Cherry Lane</a>"
+        url_contact_admin:
+          description: Url for the user to contact administrators

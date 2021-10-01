@@ -1,0 +1,6 @@
+<%= ibox nil, ibox_class: "middle-box no-vertical-margins text-center" do %>
+  <div class="lead m-b-xl">
+    <%= "feature_password.title.forgot".translate %>
+  </div>
+  <%= render partial: "passwords/form", locals: { password: @password } %>
+<% end %>

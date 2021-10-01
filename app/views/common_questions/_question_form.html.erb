@@ -1,0 +1,145 @@
+<% q_id = common_question.new_record? ? "new" : common_question.id %>
+<% no_confirmation_on_change = (common_question.new_record? || !common_question.common_answers.exists?) %>
+<% show_summary_option = @current_program.project_based? && common_question.is_a?(Connection::Question) %>
+<% if show_summary_option %>
+  <% summary = @current_program.connection_summary_question.try(:summary) %>
+  <% summary_option_checked, summary_option_disabled = get_checked_and_disabled_summary_question_values(common_question, summary) %>
+  <% option_already_enabled_text = 'feature.connection_questions.tooltip.option_already_enabled'.translate %>
+  <% uncheck_option_text = 'feature.connection_questions.tooltip.uncheck_option'.translate %>
+  <% type_change_options = {summary_option_checked: summary_option_checked, summary_option_disabled: summary_option_disabled, optionAlreadyEnabledText: option_already_enabled_text, uncheckOptionText: uncheck_option_text, questionType: common_question.question_type, connectionQuestion: true}.to_json %>
+<% else %>
+  <% type_change_options = {connectionQuestion: false}.to_json %>
+<% end %>
+<div class="type name_type clearfix">
+  <%= f.input :question_text, :wrapper => :horizontal_input, :as => :string, label: "#{CommonQuestion.human_attribute_name(:question_text)}", :required => true, :id => "common_question_text_#{q_id}", :input_html => {:class => "form-control", :id => "survey_question_question_text_#{q_id}"} %>
+  <%= f.input :question_type, :wrapper => :horizontal_input, :label => CommonQuestion.human_attribute_name(:question_type), :collection => get_question_type_options_array(common_question.class.name),
+    :input_html => {:selected => common_question.question_type, :onchange => "CustomizeQuestions.handleOnChangeType(this, '#{q_id}', #{no_confirmation_on_change}, #{type_change_options})", :id => "common_question_type_#{q_id}", "data-original-type" => common_question.question_type.to_s, :class => "form-control"}, :include_blank => false %>
+</div>
+
+
+<% if common_question.is_a?(SurveyQuestion) %>
+  <% display_rating_rows = (common_question.matrix_question_type? ? "":"none") %>
+  <div id="columns_<%= q_id %>" style="display:<%= display_rating_rows %>">
+    <%= control_group do %>
+      <label class="control-label col-sm-3" for=<%="common_question_columns_info_#{q_id}" %>>
+        <%= "feature.common_questions.label.rows".translate %>
+        <span class="cjs-row-count small">(<%= common_question.rating_questions.size %>)</span>
+      </label>
+      <%= controls(class: "col-sm-9", id: "common_question_columns_info_#{q_id}") do %>
+        <%= show_matrix_question_rows(common_question) %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+<% display_choices = (common_question.choice_based? ? "" : "none") %>
+<% display_other = (common_question.select_type? ? "" : "none") %>
+<div id="choices_<%= q_id %>" style="display:<%= display_choices %>">
+  <%= control_group do %>
+    <%= f.label :question_info, :class => "control-label col-sm-3", :for => "common_question_info_#{q_id}" do %>
+      <%= CommonQuestion.human_attribute_name(:question_info) %>
+      <span class="cjs-qc-count small">(<%= common_question.default_choice_records.size %>)</span>
+    <% end %>
+    <%= controls(class: "col-sm-9", id: "common_question_info_#{q_id}") do %>
+      <%= get_bulk_add_common_choices_link(q_id) %>
+      <%= show_profile_question_multi_choice(common_question) %>
+      <% label = CommonQuestion.human_attribute_name(:allow_other_option) %>
+      <%= choices_wrapper(label, id: "other_option_edit_#{q_id}", style: "display:#{display_other}")  do%>
+        <label class="checkbox">
+          <%= f.check_box :allow_other_option, id: "allow_other_option_#{q_id}" %>
+          <%= label %>
+        </label>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= f.input :help_text, :wrapper => :horizontal_input, :as => :text, :label => CommonQuestion.human_attribute_name(:help_text), :input_html => {:class => "form-control", :id => "help_text_#{q_id}", :rows => 3} %>
+<%= javascript_tag "jQuery(document).ready(function() {initialize.autoResizeTextAreas();});" %>
+<%= hidden_field_tag :section_id, section.id if local_assigns[:section] %>
+
+<% if common_question.is_a?(SurveyQuestion) && common_question.survey.meeting_feedback_survey? %>
+  <%= f.input :condition, :wrapper => :horizontal_input, collection: get_survey_question_condition_options, input_html: {class: "form-control", id: "condition_#{q_id}"}, include_blank: false %>
+<% end %>
+
+<div class="type name_type clearfix">
+  <%= control_group do %>
+    <% if show_summary_option %>
+      <%= render partial: "common_questions/summary_option", locals: {f: f, common_question: common_question, q_id: q_id, summary: summary, summary_option_disabled: summary_option_disabled, summary_option_checked: summary_option_checked} %>
+    <% end %>
+
+    <% if not @survey %>
+      <%= controls(class: "col-sm-offset-3 col-sm-9", role: "group", aria: { label: "program_settings_strings.content.is_admin_only_html".translate(admins: _Admins, tooltip: nil)}) do %>
+        <label class="checkbox inline">
+          <%= f.check_box :is_admin_only, id: "is_admin_only_#{q_id}" %>
+          <% is_admin_only_label = "is_admin_only_label_#{q_id}" %>
+          <%= "program_settings_strings.content.is_admin_only_html".translate(admins: _Admins, tooltip: embed_icon(TOOLTIP_IMAGE_CLASS,'', :id => is_admin_only_label)) -%>
+          <%= tooltip(is_admin_only_label, "program_settings_strings.content.is_admin_only_tooltip_html".translate(admins: _Admins)) %>
+        </label>
+      <% end %>
+    <% end %>
+
+    <% label = common_question.matrix_question_type? ? "feature.profile_customization.label.mandatory_all_rows_must_be_rated".translate : "feature.profile_customization.label.mandatory".translate %>
+    <%= controls(class: "col-sm-offset-3 col-sm-4 mandatory_controls", role: "group", aria: { label: label }) do %>
+      <label class="checkbox inline">
+        <%= f.check_box :required, id: "required_#{q_id}" %>
+        <div class="mandatory_setting">
+        <%= label %>
+        </div>
+      </label>
+    <% end %>
+
+    <% display_question_setting = common_question.matrix_question_type? ? "":"none" %>
+    <%= controls(class: "col-sm-5 cjs_question_setting", style: "display:#{display_question_setting}", role: "group", aria: { label: "feature.survey.label.forced_ranking_html".translate(tooltip: nil) }) do %>
+      <label class="checkbox inline">
+        <%= f.check_box :matrix_setting, id: "matrix_setting_#{q_id}" %>
+        <%= "feature.survey.label.forced_ranking_html".translate(tooltip: embed_icon(TOOLTIP_IMAGE_CLASS,'', :id => "forced_ranking_label_help_text_#{common_question.id}")) %>
+        <%= tooltip("forced_ranking_label_help_text_#{common_question.id}","feature.survey.tooltip.forced_ranking".translate()) %>
+      </label>
+    <% end %>
+  <% end %>
+</div>
+
+<% action_set(class: "pull-right") do %>
+  <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => 'btn btn-white', id: "cjs_common_question_cancel_#{q_id}" %>
+  <%= f.button :submit, q_id== "new" ? "display_string.Add".translate : "display_string.Save".translate %>
+<% end %>
+
+<%= javascript_tag do %>
+  CustomizeQuestions.editingDataOfChoiceBasedQuestions('<%= q_id %>');
+  jQuery(document).ready(function(){
+    var questionChoices = {};
+    var partialHash = {};
+    var resetHash = {};
+    <% if common_question.choice_or_select_type? %>
+      <% common_question.default_choice_records.each do |choice| %>
+        questionChoices[<%= choice.id %>] = '<%= choice.text %>';
+      <% end %>
+      partialHash["#common_question_multi_choice_<%= common_question.id %>"] = "<%= j(show_profile_question_multi_choice(common_question)) %>";
+      resetHash["common"] = questionChoices;
+    <% end %>
+    CustomizeQuestions.showOrHideBulkAdd("<%= q_id %>");
+    var rowTexts = {};
+    <% if common_question.matrix_question_type? %>
+      <% common_question.matrix_rating_question_records.each do |row| %>
+        rowTexts[<%= row.id %>] = '<%= row.question_text %>';
+      <% end %>
+      resetHash["matrix"] = rowTexts;
+      partialHash["#matrix_question_multi_rows_<%= common_question.id %>"] = "<%= j(show_matrix_question_rows(common_question)) %>";
+    <% end %>
+    CustomizeQuestionChoices.enableChoiceBasedActions("<%= q_id %>", rowTexts, "matrix");
+    CustomizeQuestionChoices.enableChoiceBasedActions("<%= q_id %>", questionChoices, "common");
+    jQuery("#cjs_common_question_cancel_<%= q_id %>").on("click", function(){
+      <% if q_id== "new" %>
+        jQuery('#common_question_new').remove();
+        jQuery('#add_new_common_question').show();
+      <% else %>
+        CustomizeQuestions.cancelQuestion(jQuery(this), "<%= q_id %>", resetHash, partialHash);
+      <% end %>
+      <% if local_assigns[:section] %>
+        jQuery(<%= "#add_new_question_#{section.id}" %>).show();
+      <% end %>
+    });
+
+  });
+<% end %>

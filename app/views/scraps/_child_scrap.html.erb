@@ -1,0 +1,14 @@
+<% viewing_member = current_user.nil? ? wob_member : current_user.member %>
+<% preloaded_options = { preloaded: true, has_receiver: @viewable_scraps_hash[scrap.id].present?, is_deleted: @deleted_scraps_hash[scrap.id].present? } if @preloaded %>
+<% if scrap.can_be_viewed?(viewing_member, preloaded_options) %>
+  <div class="list-group-item p-xxs p-t-sm p-b-0 no-border" id="scrap_sibling_<%= scrap.id %>">
+    <div class="clearfix">
+      <%= render :partial => 'scraps/child_scrap_info', :locals => {:scrap => scrap, :member => viewing_member, preloaded_options: preloaded_options} %>
+    </div>
+    <div class="clearfix" id="scrap_reply_box_<%=scrap.id%>">
+      <!-- Reply text box will be rendered here on clicking Reply button -->
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag %Q[initialize.autoResizeTextAreas();] %>

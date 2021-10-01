@@ -1,0 +1,25 @@
+<%= include_ckeditor_tag %>
+<% @back_link = {:label => "feature.translations.label.localization".translate, :link => translations_path(locale: @second_locale, abstract_program_id: @level_obj.id, category: @object_details[:category], id: @base_id, examined_object: [@object_details[:klass], @object_details[:id], @object_details[:attribute]])} %>
+<%= response_flash("cjs_update_rich_content") %>
+<% @title = @object_details[:heading] %>
+
+<%= ibox "feature.translations.label.language_version".translate(language_name: "feature.translations.label.english_lang".translate), :ibox_class => "clearfix" do %>
+  <div class="cjs_show_content_on_edit">
+    <div class="clearfix">
+      <%= display_ckeditor_content(@object_details[:en], LocalizableContent.ckeditor_tags[:full_display]) %>
+    </div>
+  </div>
+<% end %>
+
+<% language = @enabled_languages.find_by(language_name: @second_locale) %>
+<%= ibox "feature.translations.label.language_version".translate(language_name: (language.for_organization(@current_organization) || language).to_display) do %>
+  <%= form_tag(update_content_translations_path(id: @base_id, locale: @second_locale, abstract_program_id: @level_obj.id ,category: @object_details[:category], object: @object_details.pick(:id, :attribute, :higher_hierarchy).to_json), :method => :post, :id => "cjs_ckeditor_form", class: "#{get_ckeditor_type_class_for_inline_tool(@object_details)}") do %>
+    <label for="cjs_ckeditor_content" class="sr-only"><%= "feature.translations.label.content_in_lang".translate(second_locale: @second_locale) %></label>
+    <textarea name="object_content" id="cjs_ckeditor_content"><%= @object_details[@second_locale] %></textarea>
+    <% action_set(class: "pull-right m-t") do %>
+      <%= link_to "display_string.Cancel".translate, translations_path(locale: @second_locale, abstract_program_id: @level_obj.id, category: @object_details[:category], id: @base_id, examined_object: [@object_details[:klass], @object_details[:id], @object_details[:attribute]]) , :class => "list_action btn btn-white cjs_show_content_on_edit" %>
+      <%= submit_tag "display_string.Save".translate, :class => 'list_action btn btn-large btn-primary', data: {:disable_with => "display_string.Please_Wait".translate}, :id => 'submit_translated_ck_content' %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= javascript_tag %Q[Localization.initializeCkEditor("#{@object_details[:ckeditor_type]}", "#{j(@object_details[:strinsert])}", "#{@object_details[:label]}");Localization.triggerCheckOnSave('#submit_translated_ck_content', 'cjs_ckeditor_content', false, "#{'feature.translations.errors.invalid_tags'.translate}");] %>

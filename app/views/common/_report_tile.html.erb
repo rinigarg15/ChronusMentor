@@ -1,0 +1,20 @@
+<div class="col-md-3 col-sm-6">
+  <div class="ibox">
+    <div class="ibox-content clearfix">
+      <h4>
+        <%= tile_title %>
+      </h4>
+      <div class="col-md-12 p-l-0">
+        <h1 class="m-b-sm col-md-8 p-l-0">
+          <i class=" fa-fw m-r-sm <%=icon_content %>"></i>
+          <%= current_count %>
+        </h1>
+        <%= render partial: "common/report_tile_percentage_change", locals: {percentage: percentage, prev_periods_count: prev_periods_count} if percentage.present? && !tile_text.present? %>
+      </div>
+      <div>
+        <%= tile_text %>
+        <%= render partial: "common/report_tile_percentage_change", locals: {percentage: percentage, prev_periods_count: prev_periods_count, tile_text: tile_text} if percentage.present? && tile_text.present? %>
+      </div>
+    </div>
+  </div>
+</div>

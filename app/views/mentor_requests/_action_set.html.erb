@@ -1,0 +1,9 @@
+<% min_preferred_mentors = local_assigns[:min_preferred_mentors] %>
+<% action_set class: "pull-right" do %>
+  <% if as_popup %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", "data-dismiss" => "modal" %>
+  <% else %>
+    <%= cancel_link cancel_link_value %>
+  <% end %>
+  <%= f.button :submit, 'feature.preferred_mentoring.action.send_request'.translate, onclick: "return MentorRequests.validateRequiredFields('#{j('common_text.error_msg.required_field_msg'.translate)}', '#{j('feature.preferred_mentoring.content.min_preference_flash_v2'.translate(mentors: _mentors, min_preferred_mentors: min_preferred_mentors))}', #{min_preferred_mentors});" %>
+<% end %>

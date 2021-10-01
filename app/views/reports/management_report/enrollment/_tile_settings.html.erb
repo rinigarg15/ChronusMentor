@@ -1,0 +1,15 @@
+<%= form_tag(update_tile_settings_dashboard_report_sub_sections_path(tile: tile), remote: true) do %>
+  <div class="row">
+    <div class="col-sm-6">
+      <%= render(partial: "reports/management_report/tile_settings_metrics", locals: {metrics: current_program.get_metrics(Report::Section::DefaultSections::RECRUITMENT), section: current_program.report_sections.find_by(default_section: Report::Section::DefaultSections::RECRUITMENT), tile: tile}) %>
+    </div>
+    <div class="col-md-5 col-sm-offset-1">
+      <%= render(partial: "reports/management_report/reports_to_show_in_tile_settings", locals: {tile: tile}) %>
+    </div>
+  </div>
+
+  <% action_set(class: "pull-right m-t-md") do %>
+    <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "btn btn-white", "data-dismiss" => "modal" %>
+    <%= submit_tag("display_string.Save".translate, class: 'btn btn-primary', data: {disable_with: "display_string.Please_Wait".translate}) %>
+  <% end %>
+<% end %>

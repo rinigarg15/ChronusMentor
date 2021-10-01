@@ -1,0 +1,8 @@
+jQuery("#loading_results").hide();
+jQuery('#filter_survey_question_container').remove();
+jQuery('#filter_survey_answer_container').remove();
+<% if @engagement_survey && @survey_questions %>
+  jQuery("#filter_survey_name_container").after("<%= j(get_survey_questions(@survey_questions, {}, @is_reports_view)) %>");
+<% else %>
+  GroupSearch.applyFilters();
+<% end %>

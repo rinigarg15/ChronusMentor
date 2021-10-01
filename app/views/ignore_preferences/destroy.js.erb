@@ -1,0 +1,49 @@
+<% mentor_id = @mentor.id %>
+jQuery('<%= ".ignore_preference_undo_link_#{mentor_id}" %>').closest(".toast").hide();
+<% if @slide_down && @recommendations_view == AbstractPreference::Source::LISTING %>
+  jQuery('<%= ".user_#{mentor_id}" %>').slideDown();
+<% elsif not_recommendations_view(@recommendations_view) %>
+  <% content = render partial: "users/show_ignore_links", locals: {mentor_id: mentor_id, ignore_preferences_hash: @ignore_preferences_hash, recommendations_view: @recommendations_view, show_match_config_matches: false} %>
+  <% if current_user.explicit_preferences_configured?  %>
+    <% _match_details_content, _tags_count, matched_configs_or_preferences_count, total_match_configs_or_preferences_count = get_match_details_for_display(current_user, @mentor, nil) %>
+    <% match_score = get_matched_preferences_label(matched_configs_or_preferences_count, total_match_configs_or_preferences_count, false, {show_no_match_label: get_show_match_lable_value(@match_score)}) %>
+  <% else %>
+    <% match_score = display_match_score(@match_score, in_listing: true, mentor_id: mentor_id) %>
+  <% end %>
+  jQuery('.tooltip').hide();
+  jQuery('<%= ".mentor_match_score_#{mentor_id}" %>').html('<%= j match_score %>');
+  <% if @show_compatibility_link %>
+    <% if @recommendations_view == AbstractPreference::Source::PROFILE %>
+      <% compatibility_link_content = link_to(('feature.match_config.content.show_compatibility'.translate + get_icon_content("fa fa-angle-right")).html_safe, "javascript:void(0);", class: "cjs_show_match_details h6 link-color hide_in_affixed_container", id: "show_compatibility_link_#{mentor_id}", data: {url: match_details_user_path(id: mentor_id, src: EngagementIndex::Src::MatchDetails::PROFILE_PAGE)}) %>
+      jQuery('.cjs_profile_other_summary_inner_container').append('<%= j compatibility_link_content %>');
+      initialize.initializeMatchDetailsPopupFor('<%= "#show_compatibility_link_#{mentor_id}" %>');
+    <% elsif @recommendations_view == AbstractPreference::Source::LISTING %>
+      <% compatibility_link_content = content_tag(:div, link_to(('feature.match_config.content.show_compatibility'.translate + get_icon_content("fa fa-angle-right")).html_safe, "javascript:void(0);", class: "cjs_show_match_details h6 link-color", data: {url: match_details_user_path(id: mentor_id, src: EngagementIndex::Src::MatchDetails::MENTOR_LISTING_PAGE)}), class: "m-t-xs", id: "show_compatibility_link_#{mentor_id}") %>
+      jQuery('<%= "#mentor_#{mentor_id}" %>').find('.media-body').append('<%= j compatibility_link_content %>')
+      initialize.initializeMatchDetailsPopupFor('<%= "#show_compatibility_link_#{mentor_id} .cjs_show_match_details" %>');
+    <% end %>
+  <% end %>
+  jQuery('<%= ".mentor_ignore_#{mentor_id}" %>').html('<%= j content %>');
+  <% student_can_connect_to_mentor = logged_in_program? && current_user.can_connect_to_mentor?(@mentor) %>
+  <% actions, dropdown_title = actions_for_mentor_listing(current_user, @mentor, {student_can_connect_to_mentor: student_can_connect_to_mentor}) %>
+  <% actions_in_web = dropdown_buttons_or_button(Marshal.load(Marshal.dump(actions)), { dropdown_title: dropdown_title }.merge( { btn_class: "cjs_mentor_actions hidden-xs pull-right" } )) %>
+  <% actions_in_mobile = dropdown_buttons_or_button(Marshal.load(Marshal.dump(actions)), { dropdown_title: dropdown_title }.merge( { btn_class: 'cjs_mentor_actions_block col-xs-12 no-padding visible-xs btn-block m-t-sm', dropdown_menu_class: 'col-xs-12 pull-right table-bordered', btn_group_btn_class: 'col-xs-12' } )) %>
+  jQuery('#mentor_<%= mentor_id %> .cjs_mentor_actions').replaceWith("<%= j actions_in_web %>");
+  jQuery('#mentor_<%= mentor_id %> .cjs_mentor_actions_block').replaceWith("<%= j actions_in_mobile %>");
+  jQuery('#mentor_profile .cjs_mentor_actions').replaceWith("<%= j actions_in_web %>");
+  jQuery('#mentor_profile .cjs_mentor_actions_block').replaceWith("<%= j actions_in_mobile %>");
+  MentorRequests.showRequestConnectionPopup();
+<% else %>
+  <% if @mentors_list.present? %>
+    <% if @recommendations_view == AbstractPreference::Source::SYSTEM_RECOMMENDATIONS %>
+      jQuery(".system_recommendations").show();
+    <% else %>
+      jQuery(".explicit_preference_recommendations").show();
+    <%end%>
+    <%= render partial: "programs/quick_connect_box", locals: {mentors_list: @mentors_list, show_favorite_ignore_links: true, favorite_preferences_hash: @favorite_preferences_hash, program: @current_program, show_match_config_matches: @show_match_config_matches, recommendations_view: @recommendations_view, mentors_score: nil} %>
+  <% else %>
+    jQuery(".admin_recommendations").show();
+    jQuery(".admin_recommendations").find('<%= "#user_#{mentor_id}" %>').show();
+  <% end %>
+  Meetings.QuickConnect.hideOrShowYouMayAlsoBox();
+<% end %>

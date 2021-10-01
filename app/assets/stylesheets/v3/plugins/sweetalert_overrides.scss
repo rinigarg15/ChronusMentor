@@ -1,0 +1,38 @@
+.sweet-alert .sa-button-container .sa-confirm-button-container button {
+  @extend .btn-primary;
+}
+
+.sweet-alert .sa-button-container .sa-confirm-button-container button:focus {
+  @extend .btn-primary:focus;
+}
+
+.sweet-alert .sa-button-container .sa-confirm-button-container button:hover {
+  @extend .btn-primary:hover;
+}
+
+.sweet-alert .sa-button-container .sa-confirm-button-container button:active {
+  @extend .btn-primary:active;
+}
+
+.sweet-alert .sa-button-container button.cancel {
+  @extend .btn-white;
+  border-bottom: 1px solid $border-color;
+}
+
+.sweet-alert .sa-button-container button.cancel:focus {
+  background: white;
+  @extend .btn-white:focus;
+  border-bottom: 1px solid #d2d2d2;
+}
+
+.sweet-alert .sa-button-container button.cancel:hover {
+  background: white;
+  @extend .btn-white:hover;
+  border-bottom: 1px solid #d2d2d2;
+}
+
+.sweet-alert .sa-button-container button.cancel:active {
+  background: white;
+  @extend .btn-white:active;
+  border-bottom: 1px solid #d2d2d2;
+}

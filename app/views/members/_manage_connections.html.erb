@@ -1,0 +1,8 @@
+<% @sub_title = _Mentoring_Connections %>
+<% if show_connections %>
+  <%= response_flash("cjs_groups_flash") %>
+  <%= ibox nil, ibox_class: "no-margins", content_class: "no-padding" do %>
+    <%= inner_tabs(get_member_groups_tab_details(@current_program, @profile_user, groups_scope, status_filter)) %>
+  <% end %>
+  <%= render :partial => "groups/groups_listing", :locals => {view: @view, dashboard_flash: {}, groups: groups} %>
+<% end %>

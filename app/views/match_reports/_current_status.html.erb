@@ -1,0 +1,28 @@
+<% subsections = get_current_status_subsections(current_program, data) %>
+<div id="cjs_current_status_container" class="clearfix">
+  <h3 class="font-normal"><%= "feature.match_report.header.current_status".translate %></h3>
+  <% subsections.each_with_index do |s, i| %>
+    <div class="col-sm-4 no-padding">
+      <div class="ibox">
+        <div class="ibox-content p-b-xxs">
+          <h4 class="truncate-with-ellipsis whitespace-nowrap m-b-xs">
+            <%= s[0] %>
+            <span id="<%= i %>"><%= get_icon_content("fa fa-info-circle") %></span>
+            <%= tooltip(i, s[1], false, container: 'body') %>
+          </h4>
+          <div class="clearfix row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+              <div class="no-padding cjs_current_status_graph_container" id="<%= s[2] %>"></div>
+            </div>
+            <div class="col-xs-1"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  MatchReport.initializeCurrentStatus(<%= data.graphData[:first] %>, <%= data.graphData[:second] %>, <%= data.graphData[:third] %>, <%= program.is_ongoing_carrer_based_matching_by_admin_alone? %>);
+<% end %>

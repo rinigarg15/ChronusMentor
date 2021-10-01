@@ -1,0 +1,41 @@
+<% target_value = (alert.new_record? || alert.target.nil?) ? 0 : alert.target %>
+<% can_show_addition_filters =  !(AbstractView::DefaultViewsCommons.no_filter_for_alert_classes.include?(metric.abstract_view.class) || metric.new_record?) %>
+<div class="m-b-xs text-muted"><%= "feature.reports.content.alert_me".translate %><%= configure_alert_tooltip %></div>
+<div class="clearfix">
+  <%= control_group(class: "col-md-5 p-l-0") do %>
+    <%= controls do %>
+      <span class="input form-control has_background truncate-with-ellipsis">
+        <span class="has-before" id="cjs_metric_title_in_alert"><%= metric.title %></span>
+      </span>
+    <% end %>
+  <% end %>
+  <%= control_group(class: "col-md-2  p-l-0") do %>
+    <%= controls do %>
+      <%= alert_form.label :operator, "feature.reports.content.operator".translate, :class => 'sr-only' %>
+      <%= alert_form.select :operator, options_for_select([["feature.reports.content.greater".translate, Report::Alert::OperatorType::GREATER_THAN], ["feature.reports.content.less".translate, Report::Alert::OperatorType::LESS_THAN], ["feature.reports.content.equal".translate, Report::Alert::OperatorType::EQUAL]], alert.operator), {}, class: "form-control has_background" -%>
+    <% end %>
+  <% end %>
+
+  <%= control_group(class: "col-md-3 p-l-0") do %>
+    <%= controls do %>
+      <%= alert_form.input :target, :label_html => {:class => 'sr-only'}, required: true, input_html: {value: target_value, class: "form-control"} -%>
+    <% end %>
+  <% end %>
+  <%  if can_show_addition_filters  %>
+    <div class="col-md-2 clearfix col-xs-12 no-padding">
+      <%= link_to(content_tag(:span, append_text_to_icon("fa fa-plus-circle text-default", set_screen_reader_only_content("display_string.Add_one_more".translate)), class: "icon-cui-report-add"), "javascript:void(0)", id: "cjs_add_more_filter_in_alert", class: "pull-left m-sm m-l-0")%>
+    </div>
+  <% end %>
+</div>
+<% if can_show_addition_filters %>
+  <div id="alert_additional_filters_container" class="<%= 'hide' unless alert.filter_params_hash.present? %>">
+    <% if alert.filter_params_hash.present? %>
+      <% alert.filter_params_hash.each_pair do |index, filter_params| %>
+        <%= render partial: "report/alerts/additional_filters", locals: {alert_form: alert_form, metric: metric, alert: alert, filter_params_hash: filter_params, index: index} %>
+      <% end %>
+    <% else %>
+      <%= render partial: "report/alerts/additional_filters", locals: {alert_form: alert_form, metric: metric, alert: alert, filter_params_hash: alert.filter_params_hash, index: "cjs_alert_filter_params_0"} %>
+    <% end %>
+  </div>
+<% end %>
+<%= alert_form.input :description, as: :text, :label_html => {:class => 'sr-only'}, required: true, input_html: {class: "form-control", :rows => 5}, placeholder: "feature.reports.content.alert_placeholder".translate %>

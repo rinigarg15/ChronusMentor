@@ -1,0 +1,33 @@
+<%
+  filter = get_filters
+  is_hybrid_view = filter.count{|x| x[1] == true } > 1
+  params_to_h = params.to_unsafe_h
+%>
+<div class="panel-group filters-panel no-margins">
+  <%= render :partial => 'common/your_filters', :locals => {:onclick_function => "MentorRequestsListing.clearFilter", :reset_url_options => {:url => url_for(params_to_h.merge(:search_filters => {}, :filter => nil, :view_id => nil, daterange: {}))}} %>
+  <div id="filter_request_pane">
+    <%= form_tag url_for(params_to_h.merge(page: 1)), :method => :get, :id => 'search_filter_form', :class => 'clearfix' do %>
+    <% options = { js_action: %Q[jQuery(this).closest('form').submit();] } %>
+      <%= include_common_sort_by_id_fields(@action_params.merge(suffix_id: "mentor_requests")) %>
+      <% if is_hybrid_view %>
+        <%= collapsible_filter_view_field_filter(@filter_field, filter, options) %>
+      <% end %>
+
+      <% profile_filter_wrapper 'feature.mentor_request.content.filter.status_label'.translate, false, false, !is_hybrid_view do %>
+        <%= radio_button_filter 'feature.mentor_request.status.Pending'.translate, @list_field, 'active', :list, options %>
+        <%= radio_button_filter 'feature.mentor_request.status.Accepted'.translate, @list_field, 'accepted',:list, options %>
+        <%= radio_button_filter 'feature.mentor_request.status.Declined'.translate, @list_field, 'rejected', :list, options %>
+        <%= radio_button_filter 'feature.mentor_request.status.Withdrawn'.translate, @list_field, 'withdrawn', :list, options if (@current_program.allow_mentee_withdraw_mentor_request? && (@filter_field == AbstractRequest::Filter::BY_ME || @current_user.can_manage_mentor_requests?)) %>
+        <%= radio_button_filter 'feature.mentor_request.status.closed'.translate, @list_field, 'closed', :list, options if @current_program.matching_by_mentee_alone? %>
+      <% end %>
+
+      <% if current_user.is_admin? %>
+        <%= collapsible_mentor_search_filter(@action_params[:search_filters], "feature.mentor_request.label.Sender".translate, :sender) %>
+        <% if !@current_program.matching_by_mentee_and_admin? %>
+          <%= collapsible_mentor_search_filter(@action_params[:search_filters], "feature.mentor_request.label.Receiver".translate, :receiver) %>
+        <% end %>
+        <%= render partial: "mentor_requests/side_pane_sent_between_filter_common", locals: {params_to_use: @action_params} %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

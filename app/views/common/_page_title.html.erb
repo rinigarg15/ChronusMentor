@@ -1,0 +1,44 @@
+<% page_actions = @page_action.present? || @page_action2.present? || @page_action3.present? %>
+<% title_content = [@title, @title_block, @back_link, page_actions].any? %>
+<% padding_options = { :logo_padding_class => @title_logo ? "m-l-xl p-l-xxs" : "",
+                      :back_link_padding_class_mobile => @back_link ? "p-l-xl" : "", 
+                      :back_link_padding_class_web => @back_link ? "p-l-xl" : ""}  %>
+
+<% if title_content %>
+  <%= ibox nil, :content_class => "clearfix p-sm p-t-md", :ibox_id => "title_box", :ibox_class => "row no-vertical-margins boxshadow-bottom" do %>
+    <div class="clearfix">
+      <% if @title_block %>
+        <%= @title_block %>
+      <% elsif (@title.present? || @back_link) %>
+        <div id="title_navig" class="clearfix">
+          <div id="title_div" class="clearfix">
+            <% if @back_link && !@title.present? && @unanswered_mandatory_prof_qs.blank? %>
+              <%= link_to "app_layout.label.back_to_backlink_html".translate(back_link: h(@back_link[:label])), @back_link[:link], :class => 'back_link' %>
+            <% end %>
+            <% if @title.present? %>
+              <div id="page_heading">
+                <div class="clearfix">
+                  <% if @report_actions.present? %>
+                    <%= render :partial => "common/report_actions", locals: {report_actions: @report_actions} %>
+                  <% elsif page_actions.present? %>
+                    <%= render :partial => "common/title_actions" %>
+                  <% end %>
+                  <div class="m-t-0">
+                    <div class="clearfix word_break" id="main_title_content">
+                      <%= render :partial => "common/title_content", :locals => {:padding_options => padding_options} %>
+		                  <%= (render :partial => "common/page_sub_title", :locals => {:padding_options => padding_options})  if @sub_title.present? %>
+                      <% if @title_description.present? %>
+                        <div class="title_description m-t <%= padding_options[:logo_padding_class] %> <%= padding_options[:back_link_padding_class_mobile] %> visible-xs"><%= @title_description.html_safe %></div>
+                        <div class="title_description <%= padding_options[:logo_padding_class] %> <%= padding_options[:back_link_padding_class_web] %> m-t-sm hidden-xs m-r-sm"><%= @title_description.html_safe %></div>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

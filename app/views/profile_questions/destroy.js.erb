@@ -1,0 +1,8 @@
+<% if @profile_question.errors.blank? %>
+  ProfileConfigUI.showProfileQuestionDetailsPanel(false);
+  jQuery("#profile_question_<%= @profile_question.id %>").remove();
+  ProfileConfigUI.updateAndShowNumberOfProfileQuestionsUnderSection(<%= @profile_question.section_id %>);
+  ProfileConfigUI.updateAndShowNumberOfProfileQuestions();
+  ProfileConfigUI.adjustUiCommon();
+  jQuery("#loading_results").hide();
+<% end %>

@@ -1,0 +1,75 @@
+<% invite_for_user = program_event.event_invites.for_user(current_user) %>
+<% event_invite = invite_for_user.present? ? invite_for_user.first : program_event.event_invites.new %>
+<%- modal_container "#{"feature.program_event.header.rsvp_yes".translate}" + content_tag(:span, "(#{program_event.title})", :class => "m-l-xs"), :modal_id => "modal_invite_response_attending_#{src}_#{program_event.id}"  do -%>
+  <%= simple_form_for program_event, :url => update_invite_program_event_path(program_event), :html => {:method => :get, :id => "attending_response_form_#{program_event.id}"} do %>
+    <%= control_group do %>
+      <%= controls do %>
+        <%= choices_wrapper("feature.program_event.header.set_reminder".translate) do %>
+          <label class="checkbox inline">
+            <%= check_box_tag 'event_invite[reminder]', true, event_invite.reminder, id: nil %>
+            <%= "feature.program_event.label.remind_one_day_before_event".translate %>
+          </label>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= hidden_field_tag "status", EventInvite::Status::YES, id: nil %>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => 'popup_closebox btn btn-white', "data-dismiss" => "modal" %>
+      <%= submit_tag "display_string.Confirm".translate, :class => "btn btn-primary", data: {:disable_with => 'display_string.Please_Wait'.translate} %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%- modal_container "#{"feature.program_event.header.rsvp_no".translate}" + content_tag(:span, "(#{program_event.title})", :class => "m-l-xs"), :modal_id => "modal_invite_response_not_attending_#{src}_#{program_event.id}"  do -%>
+  <%= simple_form_for program_event, :url => update_invite_program_event_path(program_event), :html => {:method => :get, :id => "not_attending_response_form_#{program_event.id}"} do %>
+    <%= control_group do %>
+      <%= controls do %>
+        <label><%= "feature.program_event.label.not_attend_confirm".translate %></label>
+      <% end %>
+    <% end %>
+    <%= hidden_field_tag "status", EventInvite::Status::NO, id: nil %>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => 'popup_closebox btn btn-white', "data-dismiss" => "modal" %>
+      <%= submit_tag "display_string.Confirm".translate, :class => "btn btn-primary", data: {:disable_with => 'display_string.Please_Wait'.translate} %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%- modal_container "#{"feature.program_event.header.rsvp_maybe".translate}" + content_tag(:span, "(#{program_event.title})", :class => "m-l-xs"), :modal_id => "modal_invite_response_maybe_attending_#{src}_#{program_event.id}"  do -%>
+  <%= simple_form_for program_event, :url => update_invite_program_event_path(program_event), :html => {:method => :get, :id => "maybe_attending_response_form_#{program_event.id}"} do %>
+    <%= control_group do %>
+      <%= controls do %>
+        <%= choices_wrapper("feature.program_event.header.set_reminder".translate) do %>
+          <label class="checkbox inline">
+            <%= check_box_tag 'event_invite[reminder]', true, event_invite.reminder, id: nil %>
+            <%= "feature.program_event.label.remind_one_day_before_event".translate %>
+          </label>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= hidden_field_tag "status", EventInvite::Status::MAYBE, id: nil %>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => 'popup_closebox btn btn-white', "data-dismiss" => "modal" %>
+      <%= submit_tag "display_string.Confirm".translate, :class => "btn btn-primary", data: {:disable_with => 'display_string.Please_Wait'.translate} %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%- modal_container "#{"feature.program_event.header.set_reminder".translate}" + content_tag(:span, "(#{program_event.title})", :class => "m-l-xs"), :modal_id => "modal_invite_response_from_email"  do -%>
+  <%= simple_form_for program_event, :url => update_reminder_program_event_path(program_event), :html => {:method => :get, :id => "reminder_response_form"} do %>
+    <%= control_group do %>
+      <%= controls do %>
+        <%= choices_wrapper("feature.program_event.header.set_reminder".translate) do %>
+          <label class="checkbox inline">
+            <%= check_box_tag 'event_invite[reminder]', true, event_invite.reminder, id: nil %>
+            <%= "feature.program_event.label.remind_one_day_before_event".translate %>
+          </label>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% action_set(class: "pull-right") do %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0);", :class => 'popup_closebox btn btn-white', "data-dismiss" => "modal" %>
+      <%= submit_tag "display_string.Confirm".translate, :class => "btn btn-primary", data: {:disable_with => 'display_string.Please_Wait'.translate} %>
+    <% end %>
+  <% end %>
+<% end %>

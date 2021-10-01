@@ -1,0 +1,8 @@
+<% if @is_save_view %>
+  <% show_path  = group_coaching_goal_path(@group, @coaching_goal) %>
+    window.location = "<%= show_path %>";
+<% else %>
+  <% content = render(:partial => 'coaching_goals/coaching_goal_with_pagination', :locals => {:is_show_page => false}) %>
+  CoachingGoals.prependGoalToListing("<%= j content %>");
+<% end %>
+

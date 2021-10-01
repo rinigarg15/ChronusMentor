@@ -1,0 +1,3 @@
+jQuery("<%= @milestone_link_id%>").html("<%= escape_javascript(render partial: 'mentoring_model/milestones/milestone_tasks', locals: {milestone: @milestone, mentoring_model_tasks: @mentoring_model_tasks, home_page_view: @home_page_view} ) %>");
+MentoringModels.refreshTasksAndMeetingsView();
+GroupTabs.adjustSlickSlideHeight(".connections-slick", 100);

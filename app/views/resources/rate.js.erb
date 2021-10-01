@@ -1,0 +1,13 @@
+<% marked_helpful_text = "feature.resources.content.thank_you".translate %>
+<% marked_unhelpful_text = "feature.resources.content.sorry_about_that".translate %>
+var markedHelpfulText = "<%= marked_helpful_text %>";
+var markedUnHelpfulText = "<%= marked_unhelpful_text %>";
+jQuery(".yes_no_button_group").hide();
+<% if @resource.rating_helpful?(@resource.find_user_rating(wob_member)) %>
+  jQuery(".resource_helpful").html("<span class='bold'>"+markedHelpfulText+"</span>");
+<% else %>
+  jQuery(".resource_helpful").html("<span class='bold'>"+markedUnHelpfulText+"</span>");
+  <% content = render(:partial => 'resources/rate_partial', :locals => {admin_message: @admin_message, resource: @resource}) %>
+  jQuery(".cjs_resource_question_button_container").after('<%= j content %>');
+  Resources.initializeCommentForm();
+<% end %>

@@ -1,0 +1,12 @@
+<% home_page = local_assigns[:home_page] %>
+<% hide_actions = [] %>
+<% hide_actions << {:label => "feature.profile.content.hide_for_session".translate, :remote => hide_item_users_path(:item_key => UsersController::SessionHidingKey::PROFILE_COMPLETE_SIDEBAR), :class => "cjs_hide_complete_profile"} %>
+<% hide_actions << {:label => "feature.profile.content.hide_forever".translate, :remote => hide_item_users_path(:item_key => UsersController::SessionHidingKey::PROFILE_COMPLETE_SIDEBAR, :hide_forever => true), :class => "cjs_hide_complete_profile"} %>
+
+<% additional_right_links = build_dropdown_filters_without_button(get_icon_content("fa fa-eye-slash fa-lg") + set_screen_reader_only_content("display_string.Hide".translate), hide_actions, embed_image: true, btn_group_class: 'm-l-xs pull-right p-xxs p-t-0', without_caret: true) %>
+
+<% profile_score = profile_user.profile_score %>
+<% profile_completion_content = render("members/profile_status_box_header", :profile_score => profile_score, :home_page => home_page) %>
+<% profile_completion_content += render("members/profile_status_box_body", :profile_score => profile_score, :home_page => home_page)  if profile_score.sum < 100 && (@unanswered_questions.present? || profile_score.image.zero?) %>
+<%= render partial: "members/profile_status_box", locals: {home_page: home_page, profile_completion_content: profile_completion_content, additional_right_links: additional_right_links, collapse_link_class: ""} %>
+<%= javascript_tag("CustomizeQuestions.initNotApplicableQuestionsSidebar();") %>

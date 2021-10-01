@@ -1,0 +1,31 @@
+<%= include_kendo %>
+<%= javascript_include_tag "ui.multiselect" %>
+
+<% @back_link = {:label => "feature.survey.header.Surveys".translate, :link => surveys_path} %>
+<% @title = @survey.name %>
+
+<% @page_action =
+  if @survey.program_survey?
+    {:label => "feature.survey.action.Share_Survey".translate, :url => publish_survey_path(@survey), :class => "btn btn-primary btn-large"}
+  elsif @survey.engagement_survey? && @survey.program.mentoring_connections_v2_enabled?
+    {:label => "feature.survey.action.Add_to_engagement_plan_v1".translate(:Mentoring_Connection => _Mentoring_Connection), :url => add_to_engagement_plan_link(@survey), :class => "btn btn-primary btn-large"}
+  end
+%>
+<%= render :partial => 'surveys/survey_tabs', locals: {reminders_count: @survey.reminders_count, questions_count: @survey_questions.count} %>
+<%= ibox nil, :ibox_class => " cjs_select_all_result", :ibox_id => "cjs_survey_response_view" do %>
+  <%= response_flash("cjs_select_all_flash") %>
+  <div class="clearfix">
+    <%= render :partial => 'survey_responses/bulk_actions', locals: {survey: @survey} %>
+    <%= link_to("feature.survey.responses.action.edit_columns".translate, "javascript:void(0)", :id => "survey_response_columns_update_link", :data => {url: edit_columns_survey_path(@survey)}, :class => "btn btn-white m-b pull-right") %>
+  </div>
+  <%= render :partial => 'survey_responses/responses' %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    ProgressReports.initializeEditColumns();
+    <% if params[:last_week_response].present? %>
+      ProgressReports.addDateFilter("<%= Date.current - 1.week %>", "<%= Date.current + 1.day %>");
+    <% end %>
+  });
+<% end %>

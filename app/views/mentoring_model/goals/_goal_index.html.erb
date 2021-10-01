@@ -1,0 +1,21 @@
+<% add_new_goal_action = @edit_goal_plan ? link_to(get_icon_content("fa fa-dot-circle-o") + "feature.mentoring_model.button.add_new_goal".translate, "javascript:void(0)", :data => {:url => new_group_mentoring_model_goal_path}, :class => "btn btn-primary btn-sm pull-right cjs_add_new_goal m-b-sm") : "" %>
+
+<%= ibox nil, :content_class => "p-sm", :collapse_link_class => "hide" do %>
+  <div class="cjs_display_all_goals">
+    <%= content_tag(:div, add_new_goal_action, :class => "clearfix") if add_new_goal_action.present? %>
+    <% if goals.present? %>
+      <%= render partial: "mentoring_model/goals/goal", collection: goals, locals: {update_task: true, required_tasks: required_tasks} %>
+    <% else %>
+      <%= display_no_goals %>
+    <% end %>
+  </div>
+<% end %>
+<% if current_user.can_update_goal_progress?(@group) %>
+  <%= javascript_tag do %>
+    jQuery(document).ready(function(){
+      GoalActivity.inspectUpdateLink();
+    });
+  <% end %>
+<% end %>
+<%= javascript_tag %Q[MentoringModelTask.truncateTaskTitle();] %>
+<%= javascript_tag %Q[MentoringModelTask.expandMentoringModelTask();] %>

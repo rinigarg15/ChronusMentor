@@ -1,0 +1,91 @@
+<% form_options = @quick_connect_popup ? {} : { :remote => true } %>
+<% form_id = local_assigns[:past_meeting] ? "past_meeting_form" : "new_meeting_form" %>
+<% modal_id = local_assigns[:past_meeting] ? "cjs_past_meeting_modal" : "cjs_new_meeting_modal" %>
+
+<%= simple_form_for @new_meeting, { :html => { :id => form_id } }.merge(form_options) do |f| %>
+  <%= response_flash "meeting_create_flash" %>
+  <%= hidden_field_tag(Meeting::AnalyticsParams::QUICK_MEETING, true) if @request_meeting_popup || @quick_meeting_popup %>
+  <%= hidden_field_tag(:from_goal, local_assigns[:from_goal], id: nil) %>
+  <%= hidden_field_tag(:common_form, local_assigns[:common_form], id: nil) %>
+  <%= hidden_field_tag(:past_meeting, local_assigns[:past_meeting], id: nil) if local_assigns[:past_meeting].present? %>
+  <%= hidden_field_tag(:outside_group, true, id: nil) if from_calendar && direct_meeting_outside_group %>
+  <%= hidden_field_tag(:auto_update_task_id, local_assigns[:task_id] || 0, id: nil, class: "cjs_auto_update_task_id") %>
+  <%= hidden_field_tag(:ei_src, local_assigns[:ei_src]) %>
+  <%= hidden_field_tag(:src, local_assigns[:src], id: nil) %>
+  <%= hidden_field_tag(:from_mentoring_calendar, true, id: nil) if local_assigns[:from_mentoring_calendar] %>
+  <%= hidden_field_tag(:from_connection_home_page_widget, true, id: nil) if local_assigns[:from_connection_home_page_widget] %>
+  <%= f.input :topic, :input_html => { :id => "new_meeting_title", class: "form-control" }, required: true %>
+  <%= f.input :description, input_html: { rows: 5, placeholder: ((direct_meeting_outside_group || @group) ? "" : "feature.meetings.content.description_help_text_v2".translate(meeting: _meeting)), class: "form-control" } %>
+  <% if from_calendar && direct_meeting_outside_group %>
+    <%= control_group do %>
+      <label class="control-label required" for="student_name_auto_complete_for_meeting">
+        <%= set_required_field_label("feature.meetings.form.mentee_name".translate(Mentee: _Mentee)) %>
+      </label>
+      <%= controls do %>
+        <% tag_options = {
+          name: "student_name",
+          value: "",
+          class: "form-control",
+          id: "student_name_auto_complete_for_meeting",
+          onchange: "calendarSlot.setAutoCompleteValue();",
+          right_addon: {},
+          autocomplete: "off"
+        } %>
+        <% completion_options = {
+          url: auto_complete_user_name_for_meeting_users_path(format: :json, role: RoleConstants::STUDENT_NAME),
+          min_chars: 1,
+          param_name: "search",
+          highlight: true
+        } %>
+        <%= text_field_with_auto_complete nil, nil, tag_options, completion_options %>
+      <% end %>
+    <% end %>
+    <%= hidden_field_tag "meeting[attendee_ids][]", nil, id: nil, class: "cjs_auto_complete_meeting_attendee_ids" %>
+    <%= f.input :location, :input_html => { rows: "3", class: "form-control", placeholder: 'feature.meetings.content.location_help_text'.translate } %>
+    <%= f.input :date, as: :hidden %>
+  <% end %>
+
+  <%= render partial: "meetings/meeting_date_form", :locals => {:group => @group, :from_calendar => from_calendar, :direct_meeting_outside_group => direct_meeting_outside_group, :meeting => @new_meeting, :f => f, :form_id => form_id, :past_meeting => local_assigns[:past_meeting]} %>
+  <% if !local_assigns[:past_meeting] && !from_calendar && !direct_meeting_outside_group %>
+    <%= render partial: "meetings/meeting_repeat_section", locals: { group: @group, f: f, as_popup: true } %>
+  <% end %>
+
+  <% if from_calendar && !direct_meeting_outside_group %>
+    <%= f.input :date, as: :hidden %>
+    <%= hidden_field_tag "meeting[attendee_ids][]", @mentor.id, id: nil %>
+    <%= f.input :location, as: :string, input_html: { class: "form-control", disabled: true } %>
+  <% elsif !from_calendar && !direct_meeting_outside_group %>
+    <%= render partial: "meetings/attendees_form", locals: { id: "attendees_list", meeting: @new_meeting, group: @group, label: "feature.meetings.form.Invite".translate, is_new_meeting: true, checkbox_class: "cjs_meeting_form_checkbox" } %>
+    <%= f.input :group_id, as: :hidden if @new_meeting.group %>
+    <%= f.input :location, input_html: { rows: "3", class: "form-control", :placeholder => 'feature.meetings.content.location_help_text'.translate } %>
+  <% end %>
+
+  <% action_set(class: "pull-right") do %>
+    <% if !from_calendar %>
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: 'btn btn-white', data: { dismiss: "modal" } %>
+    <% end %>
+    <% date_id = (from_calendar && direct_meeting_outside_group) ? 'meeting_date_for_mentor' : 'new_meeting_form_date' %>
+    <%= f.button :submit, "display_string.Create".translate, :id => "meeting_form_submit", :onclick => "return MeetingForm.validateTitleAndDate('#{form_id}', 'new_meeting_title', '#{date_id}' ,'meeting_description','meeting_location', 'attendees_list', #{!!from_calendar}, 'meeting_create_flash');" %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do  %>
+  jQuery(document).ready(function() {
+    initialize.autoResizeTextAreas();
+    initialize.setDatePicker();
+    MeetingForm.updateMeetingRepeatSection('#new_meeting_form_date', '#meeting_schedule_rule');
+    jQuery(document).on("autocompleteselect", "#student_name_auto_complete_for_meeting", function(event, ui){
+      calendarSlot.updateAttendees("#student_name_auto_complete_for_meeting", ui.item);
+    });
+    jQuery(document).on("autocompleteclose", "#student_name_auto_complete_for_meeting", function( event, ui ){
+      MeetingRequest.initializeChangeForDate(jQuery(this).closest("form").find(".cjs-meeting-date-input"));
+      MeetingRequest.initializeChangeForDateRange(jQuery(this).closest("form").find(".cjs-meeting-strip-container"), jQuery(this).closest("form").find(".cjs-meeting-date-input"));
+    });
+    <% if local_assigns[:common_form] %>
+      MeetingForm.submitMeetingForm('<%= form_id %>', '<%= modal_id %>');
+    <% end %>
+    <% if local_assigns[:past_meeting] %>
+      MeetingForm.hideShortlistTimesHelpText("#cjs_past_meeting_modal");
+    <% end %>
+  });
+<% end %>

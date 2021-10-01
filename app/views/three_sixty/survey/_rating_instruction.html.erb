@@ -1,0 +1,18 @@
+<div class="three-sixty-scale-instruction-rating-container">
+  <% left = [
+    { type: "addon",
+      content: content_tag(:span, 1) + content_tag(:br) + content_tag(:span, "feature.three_sixty.rating.very_poor".translate, :class => "small text-muted")
+    },{ type: "addon",
+      content: content_tag(:span, 2) + content_tag(:br) + content_tag(:span, "feature.three_sixty.rating.poor".translate, :class => "small text-muted")
+    },{ type: "addon",
+      content: content_tag(:span, 3) + content_tag(:br) + content_tag(:span, "feature.three_sixty.rating.ok".translate, :class => "small text-muted")
+    },{ type: "addon",
+      content: content_tag(:span, 4) + content_tag(:br) + content_tag(:span, "feature.three_sixty.rating.good".translate, :class => "small text-muted")
+    },{ type: "addon",
+      content: content_tag(:span, 5) + content_tag(:br) + content_tag(:span, "feature.three_sixty.rating.exceptional_v1".translate, :class => "small text-muted")
+    }
+  ] %>
+  <%= construct_input_group(left, []) do %>
+    <%= get_safe_string %>
+  <% end %>
+</div>

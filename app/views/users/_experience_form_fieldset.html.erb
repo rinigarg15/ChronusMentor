@@ -1,0 +1,33 @@
+<div id="edit_experience_<%=question.id%>" class="edit_experience clearfix cjs_question_#{question.id}">
+  <div class="experiences">
+    <%= hidden_field_tag "profile_answers[#{question.id}][hidden]" %>
+    <% if question.question_type == ProfileQuestion::Type::MULTI_EXPERIENCE %>
+      <div class = "text-center hide cjs_empty_message p-sm"><%= "feature.education_and_experience.label.no_experience_specified".translate %></div>
+      <div id="exp_cur_list_<%=question.id%>" class="clearfix panel-body list-group p-l-xs p-r-xs">
+        <% experiences = answer.experiences.empty? ? [Experience.new] : answer.experiences %>
+        <%= render :partial => "experiences/new_experience", :collection => experiences, :locals => {:question => question, :required => local_assigns[:required]} %>
+      </div>
+      <% unless question.help_text.blank? %>
+        <div class="m-t-xs b-t p-l-sm">
+          <%= help_text_content(question.help_text.html_safe, question.id) %>
+        </div>
+      <% end %>
+
+      <div class="add_new m-t-sm panel-footer clearfix">
+        <span class="pull-right">
+          <%= add_experience_link(question, embed_icon('fa fa-plus-circle m-r-xs',"feature.education_and_experience.action.add_position_v1".translate), :required => local_assigns[:required]) %>
+        </span>
+      </div>
+
+    <% elsif question.question_type == ProfileQuestion::Type::EXPERIENCE %>
+      <div id="exp_cur_list_<%=question.id%>" class="clearfix panel-body">
+        <%= render :partial => "experiences/new_experience", :object => answer.experiences.first || Experience.new, :locals => {:question => question, :required => local_assigns[:required]} %>
+        <% unless question.help_text.blank? %>
+          <div class="m-t-xs b-t p-l-sm">
+            <%= help_text_content(question.help_text.html_safe, question.id) %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<% @page_action = {:label => 'feature.mentor_request.action.batch_assignment_v1_html'.translate(mentors: _mentors), :url =>  groups_path(:show_new => true), :class => "btn btn-primary btn-large"} if @current_program.matching_by_mentee_and_admin? && current_user.can_manage_mentor_requests? %>
+<%= error_messages_for :failed_mentor_request %>
+<%= response_flash("cjs_mentor_requests_flash") %>
+<% @filters_in_sidebar = true %>
+<% params_to_h = params.to_unsafe_h %>
+
+<div id='mentor_requests'>
+  <% content_for_sidebar do %>
+    <% mobile_footer_actions = { see_n_results: { results_count: @mentor_requests.total_entries },
+      reset_filters: { url: url_for(params_to_h.merge(:search_filters => {}, :filter => nil, :view_id => nil, daterange: {})), class: "#{'hide' if @my_filters.blank?}" } } %>
+    <div id='mentor_requests_filter_pane'>
+      <%= filter_container_wrapper(mobile_footer_actions) do %>
+        <%= render partial: "mentor_requests/filter_request_pane" %>
+      <% end %>
+      <% if @current_program.matching_by_mentee_and_admin? && current_user.can_manage_mentor_requests? %>
+        <%= ibox nil, :content_class => "p-m", :ibox_id => "print_requests"  do %>
+          <span class="p-r-xs"><%= get_icon_content("fa fa-download") + 'feature.mentor_request.action.export'.translate %></span>
+          <%= link_to 'display_string.pdf'.translate, url_for(params_to_h.merge(format: :pdf)), :class => "font-600" %>
+          <%= vertical_separator %>
+          <%= link_to 'display_string.csv'.translate, url_for(params_to_h.merge(format: :csv)), :class => "font-600" %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div id="results_pane" class="clearfix">
+    <%= render :partial => "mentor_requests/index", :locals => {filter_params: @filter_params, action_params: @action_params, is_request_manager_view_of_all_requests: @is_request_manager_view_of_all_requests, mentor_requests: @mentor_requests, mentor_request_partial: @mentor_request_partial, match_results_per_mentor: @match_results_per_mentor} %>
+  </div>
+</div>

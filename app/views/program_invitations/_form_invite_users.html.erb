@@ -1,0 +1,72 @@
+<%= form_tag send_invites_path, :id => 'invite_form', :class => 'form-horizontal' do %>
+  <%= ibox title, :ibox_class => "no-margins" do %>
+    <div id="errorExplanation" class="alert alert-danger hide control-group"></div>
+    <%= control_group do %>
+
+      <%= content_tag(:div, "feature.program_invitations.label.select_role".translate, :class => 'false-label control-label col-sm-2') %>
+      <%= controls :id => 'role_btn_group', :class => "col-sm-10" do %>
+        <%= render partial: "program_invitations/invite_users_role_options", locals: {user: current_user, program: @current_program, options: {container_class: "well white-bg"}} %>
+      <% end %>
+    <% end %>
+    <%= control_group do %>
+      <% label_text = set_required_field_label("feature.program_invitations.label.recipients_v1".translate) %>
+      <% label_text += get_icon_content("fa fa-info-circle m-r-0 ", id: "recipient_email_tooltip", data: { toggle: "tooltip", title: "feature.program_invitations.content.recipients_tooltip_email_domain".translate(email_domains: allowed_email_domains.downcase) }) if allowed_email_domains.present? %>
+      <%= label_tag :recipients, label_text.html_safe, :class => "control-label col-sm-2", :for => "cjs_recipients" %>
+
+      <%= controls(class: "col-sm-10") do %>
+        <%= text_area_tag :recipients, @recipient_email, :rows => 5, :class => "form-control", :id => 'cjs_recipients', :placeholder => "feature.program_invitations.content.recipients_tooltip".translate %>
+        <p class='help-block medium'>
+          <%= "feature.program_invitations.content.invitation_expiry_notification".translate %>
+          <% if can_invite_in_other_languages?(current_user) %>
+            <%= content_tag(:span, "feature.program_invitations.content.invitation_language_notification_html".translate(language_name: (@current_program.get_enabled_organization_language(current_locale) || OrganizationLanguage.for_english).to_display, click_here: link_to("display_string.click_here".translate, "javascript:void(0)", class: "cjs_language_options_show_link")), class: "cjs_language_options_available_notifier") %>
+            <%= javascript_tag "ProgramInvitation.handleLanguageSelectOptions();" %>
+          <% end %>
+        </p>
+      <% end %>
+    <% end %>
+
+    <% if can_invite_in_other_languages?(current_user) %>
+      <%= control_group class: "cjs_language_options_for_invitations_select hide" do %>
+        <%= content_tag(:div, "feature.program_invitations.label.language".translate, class: 'control-label col-sm-2') %>
+        <%= controls class: "col-sm-10" do %>
+          <%= select_tag :locale, options_for_select(@current_program.enabled_organization_languages_including_english.map{|language| [language.to_display, language.language_name]}, selected: current_locale), class: "form-control" %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% unless current_user.is_admin? %>
+      <%= control_group do %>
+      <%= label_tag :message, "feature.program_invitations.label.message".translate, :class => "control-label col-sm-2" %>
+        <%= controls(class: "col-sm-10") do %>
+          <%= text_area_tag :message, "feature.program_invitations.content.general_message".translate(program_name: @current_program.name), :class => 'form-control', :rows => 5 %>
+          <p class='help-block'>
+            <%= "feature.program_invitations.content.invite_url_help_text".translate %>
+          </p>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if current_user.is_admin? %>
+    <%= include_kendo %>
+    <%= render :template => 'campaign_management/abstract_campaign_messages/index', :formats => [:html], :locals => {:is_invitation => true} %>
+  <% end %>
+
+  <%= ibox nil do %>
+    <% action_set do %>
+      <div class="pull-right">
+        <%= submit_tag "feature.program_invitations.label.send_invites".translate, :class => 'btn btn-primary', :id => "cjs_send_invites", data: {:disable_with => "display_string.Please_Wait".translate} %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[jQuery(document).ready(function(){NestedShowHideRadioToggle('.cjs_nested_show_hide_container', '.cjs_show_hide_sub_selector', '.cjs_toggle_radio', '.cjs_toggle_content');ProgramInvitation.validateInviteWithRecipients();});] %>
+
+<% if @recipient_email && @invite_for_roles %>
+  <%= javascript_tag do %>
+    jQuery(document).ready(function(){
+      ProgramInvitation.prefillRecipientAndRoles(<%= @invite_for_roles.to_json.html_safe %>, "<%= @recipient_email %>");
+    });
+  <% end %>
+<% end %>

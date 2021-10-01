@@ -1,0 +1,44 @@
+<%= include_ckeditor_tag %>
+<%= stylesheet_link_tag "v3/overview_pages.css" %>
+<% @title = "feature.page.header.edit_program_overview_pages".translate(:program => _Program) %>
+<%- publish = @page.new_record? || !@page.published? -%>
+<%- update_label = publish ? 'display_string.Publish'.translate : 'display_string.Update'.translate -%>
+
+<% @page_action = {:label => update_label, :js => 'PageForm.publishSubmit()', class: 'btn btn-large btn-primary'} %>
+<% @page_action2 =  {:label => 'display_string.Save_as_draft'.translate, :js => 'PageForm.draftSubmit()', class: 'btn btn-large btn-white'} if publish %>
+
+<% @pane_tabs = true %>
+
+<%= ibox nil do %>
+  <%= simple_form_for @page, :html => { :class => 'edit_page', :id => "page_form" } do |page| %>
+    <%= page.input :title, :as => :string, :input_html => {:class => "form-control"} %>
+    <%= page.input :content, :as => :text, :input_html => {:id => 'program_overview_content'}, :label_html => {:class => 'sr-only'}, :hint => "feature.page.content.content_hint".translate %>
+    <%- if (@current_program || @current_organization).logged_in_pages_enabled? -%>
+      <%= page.input :visibility, collection: visibilities_for_select, prompt: nil, :input_html => {:class => "form-control"} %>
+      <%= content_tag(:div, Page.human_attribute_name(:use_in_sub_programs_v1), :class => "false-label control-label") %>
+      <%= page.input :use_in_sub_programs, :label => false, input_wrapper_html: {role: "group", "aria-label" => Page.human_attribute_name(:use_in_sub_programs_v1)} do %>
+        <label class="radio inline">
+          <%= page.radio_button(:use_in_sub_programs, true) %>
+          <%= "simple_form.yes".translate %>
+        </label>
+        <label class="radio inline">
+          <%= page.radio_button(:use_in_sub_programs, false) %>
+          <%= "simple_form.no".translate %>
+        </label>
+      <% end %>
+    <%- end -%>
+    <%= page.hidden_field :published -%>
+
+    <% action_set do %>
+      <div class="pull-right">
+        <%= cancel_link pages_path %>
+        <% if publish %>
+          <%= page.submit "display_string.Save_as_draft".translate, class: 'btn btn-white page-submit', 'data-state' => 0 %>
+        <% end %>
+        <%= page.submit update_label, 'data-state' => 1, class: 'btn btn-primary page-submit' %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag 'jQuery(document).ready(function () { PageForm.initialize(); });' %>

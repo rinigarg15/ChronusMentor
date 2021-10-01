@@ -1,0 +1,560 @@
+var ExplicitPreference = {
+  questionsData: "",
+  questionChoicesHash: {},
+  questionTypeHash: {},
+  initialized: false,
+  priorityValues: {},
+  sliderColors: {1: "#676a6c", 2: "#5E7D75", 3: "#3B8370", 4: "#28856D", 5: "#108670"},
+  preferencesChanged: false,
+  isListingPage: false,
+  preferencesAutoPopulated: false,
+  locationAutocompleteUrl: "",
+  locationQuestionType: "",
+  gaSrc: '',
+  isIosApp: false,
+
+  loadExplicitUserPreferencesContent: function(priorityValues, locationAutocompleteUrl, locationQuestionType){
+    ExplicitPreference.priorityValues = priorityValues;
+    ExplicitPreference.locationAutocompleteUrl = locationAutocompleteUrl;
+    ExplicitPreference.locationQuestionType = locationQuestionType;
+    ExplicitPreference.setChoicesDataForQuestions();
+    ExplicitPreference.configureNewPreference();
+    ExplicitPreference.configureExistingPreferences();
+    ExplicitPreference.showExplicitUserPreferenceFields();
+    ExplicitPreference.hidePreferencePopupActions();
+    ExplicitPreference.handleWcag(".explicit_preferences_popup");
+    ExplicitPreference.setMaxHeightOfPopup();
+    if(!ExplicitPreference.initialized){
+      ExplicitPreference.handleNewQuestionSelectorChange();
+      ExplicitPreference.handleQuestionSelectorChange();
+      ExplicitPreference.handleOpenUpdateExplicitPreference();
+      ExplicitPreference.handleExplicitPreferenceChoicesClick();
+      ExplicitPreference.handleCloseUpdateExplicitPreference();
+      ExplicitPreference.handleStartOver();
+      ExplicitPreference.handleExplicitPreferenceValidation();
+      ExplicitPreference.handleCreateExplicitPreferenceInMobile();
+      ExplicitPreference.handlePreferenceWeightChange();
+      ExplicitPreference.handleFocusOnQuestionSelector();
+      ExplicitPreference.trackGaDismissedPopupAndHandleClosePopupExperience();
+      ExplicitPreference.trackGaShowRecommendationsAndHandleExperience();
+      ExplicitPreference.initialized = true;
+    }
+  },
+
+  handleWcag: function(container){
+    ExplicitPreference.assignUniqueId(container, "div.cjs_explicit_preference_question_selector", "s2id_explicit_user_preference_role_question_id_");
+    ExplicitPreference.assignUniqueId(container, "input.cjs_explicit_preference_question_selector", "explicit_user_preference_role_question_id_");
+    ExplicitPreference.assignUniqueId(container, "div.cjs_explicit_preference_option_selector", "s2id_explicit_user_preference_question_choice_ids_");
+    ExplicitPreference.assignUniqueId(container, "input.cjs_explicit_preference_option_selector", "explicit_user_preference_question_choice_ids_");
+    ExplicitPreference.assignUniqueId(container, "div.cjs_explicit_preference_string_selector", "s2id_explicit_user_preference_question_choice_ids_");
+    ExplicitPreference.assignUniqueId(container, "input.cjs_explicit_preference_string_selector", "explicit_user_preference_question_choice_ids_");
+    ExplicitPreference.assignUniqueId(container, "textarea.cjs_explicit_preference_string_selector", "explicit_user_preference_question_choice_ids_");
+    ExplicitPreference.assignUniqueId(container, "input.cjs_hidden_preference_weight", "explicit_user_preference_preference_weight_");
+    ExplicitPreference.assignLabel(container, ".ui-slider-handle", "slider handle");
+    ExplicitPreference.bindAccessibilityAttributes(container);
+  },
+
+  setMaxHeightOfPopup: function(){
+    jQuery(".cjs_explicitpreferences_content_mobile").css('max-height', (jQuery(window).height() - 150)+"px");
+  },
+
+  bindAccessibilityAttributes: function(inputContainer){
+    jQuery(inputContainer).find(".select2-container").each(function(){
+      var container = jQuery(this);
+      var bubbleInput = container.find("ul input.select2-input");
+      var regularDropDownSearch = container.find("div.select2-search input.select2-input");
+      var controlLabel = container.closest(".cjs_explicit_preference_question_selector_row, .cjs_explicit_preference_option_selector_row").find("label.control-label.sr-only");
+      var select2Id;
+      if(bubbleInput.length > 0){
+        select2Id = bubbleInput.attr("id");
+        controlLabel.attr("for", select2Id);
+        selectorId = container.closest(".cjs_explicit_preference_option_selector_row").find("input.cjs_explicit_preference_option_selector").hide();
+        container.closest(".cjs_explicit_preference_option_selector_row").prepend(jQuery("<label>", {
+          "for": selectorId,
+          "html": jsCommonTranslations.searchUsers,
+          "class": "sr-only"
+        }));
+      }
+      else if(regularDropDownSearch.length > 0){
+        select2Id = container.find(".select2-focusser.select2-offscreen").attr("id");
+        controlLabel.attr("for", select2Id);
+        var select2SearchId  = "chronus-select2-dropdown-input-search-custom-" + Math.floor(Math.random()*100000);
+        regularDropDownSearch.attr("id", select2SearchId);
+        container.append(jQuery("<label>", {
+          "for": select2SearchId,
+          "html": jsCommonTranslations.searchUsers,
+          "class": "sr-only"
+        }));
+        selectorId = container.closest(".cjs_explicit_preference_question_selector_row").find("input.cjs_explicit_preference_question_selector").attr("id");
+        container.closest(".cjs_explicit_preference_question_selector_row").prepend(jQuery("<label>", {
+          "for": selectorId,
+          "html": jsCommonTranslations.searchUsers,
+          "class": "sr-only"
+        }));
+      }
+    });
+  },
+
+  assignUniqueId: function(container, selector, idPrefix){
+    var formElements = jQuery(container).find(selector);
+    var rand_id = 1;
+    for(i = 0; i < formElements.length; i++){
+      formElement = formElements.eq(i);
+      rand_id = Math.floor(Math.random()*100000);
+      formElement.attr("id", idPrefix + rand_id);
+    }
+  },
+
+  assignLabel: function(container, selector, label){
+    var formElements = jQuery(container).find(selector);
+    var rand_id = 1;
+    for(i = 0; i < formElements.length; i++){
+      formElement = formElements.eq(i);
+      formElement.html("<span class='sr-only'>" +  label + "</span>");
+    }
+  },
+
+  trackGa: function(gaSrc){
+    ExplicitPreference.gaSrc = gaSrc;
+    ExplicitPreference.trackGaOpenedPopup();
+  },
+
+  handleCreateExplicitPreferenceInMobile: function(){
+    jQuery(document).on("click", ".cjs_open_preference_creator", function(){
+      ExplicitPreference.showCreateContainerInMobile(this);
+    });
+    jQuery(document).on("click", ".cjs_close_preference_creator", function(){
+      jQuery(".cjs-explicit-preference-rows-creation-container").addClass("hidden-xs");
+      jQuery(".cjs_open_preference_creator").removeClass("hidden-xs");
+    });
+  },
+
+  showCreateContainerInMobile: function(selector){
+    jQuery(".cjs-explicit-preference-rows-creation-container").removeClass("hidden-xs");
+    jQuery(selector).addClass("hidden-xs");
+  },
+
+  hidePreferencePopupActions: function(){
+    var savedPreferences = jQuery(".cjs-explicit-preference-rows-show-container").find(".cjs_explicit_preference_row");
+    var alertContainer = jQuery(".cjs_preference_popup_alert_actions");
+    var preferenceActionContainer = jQuery(".cjs_preference_popup_actions");
+    if(savedPreferences.length == 0){
+      alertContainer.show();
+      preferenceActionContainer.hide();
+      jQuery(".cjs_default_preference_text").hide();
+    }
+    else{
+      alertContainer.hide();
+      preferenceActionContainer.show();
+    }
+  },
+
+  handleFocusOnQuestionSelector: function(){
+    jQuery(document).on("click", ".cjs_help_add_preference", function(){
+      ExplicitPreference.showCreateContainerInMobile(".cjs_open_preference_creator");
+      jQuery(".cjs-explicit-preference-rows-creation-container").find(".cjs_explicit_preference_question_selector").select2('open');
+    });
+  },
+
+  setChoicesDataForQuestions: function(){
+    jQuery.each(ExplicitPreference.questionsData, (function(index, obj){
+      ExplicitPreference.questionChoicesHash[obj.id] = obj.choices;
+      ExplicitPreference.questionTypeHash[obj.id] = obj.type;
+    }));
+  },
+
+  resetCreationForm: function(){
+    var creationContainer = jQuery(".cjs-explicit-preference-rows-creation-container");
+    creationContainer.find(".cjs_explicit_preference_question_selector").select2("val", null);
+    creationContainer.find(".cjs_explicit_preference_option_selector").select2("val", null).hide();
+    creationContainer.find(".cjs_explicit_preference_string_selector").select2("val", null).hide();
+  },
+
+  handleOpenUpdateExplicitPreference: function(){
+    jQuery(document).on("click", ".cjs_open_update_explicit_preference", function(){
+      ExplicitPreference.openEditExplicitPreference(jQuery(this));
+    });
+  },
+
+  handleExplicitPreferenceChoicesClick: function(){
+    jQuery(document).on("click", "div.cjs_explicit_preferences_choices_show", function(){
+      ExplicitPreference.openEditExplicitPreference(jQuery(this));
+    });
+  },
+
+  openEditExplicitPreference: function(element){
+    element.closest(".cjs_explicit_preference_inline_show").slideUp();
+    var parentElement = element.closest(".cjs_explicit_preference_row")
+    parentElement.find(".cjs_explicit_preference_inline_update").slideDown();
+    parentElement.siblings().slideUp();
+    jQuery(".cjs-mobile-modal-cancel").addClass('hidden');
+    jQuery('.cjs_preference_popup_actions').slideUp();
+    jQuery(".cjs-explicit-preference-rows-creation-container").slideUp();
+    setTimeout(function(){
+      jQuery(".cjs_explicitpreferences_content").slimScroll({ scrollTo : (jQuery(".cjs_explicitpreferences_content").scrollTop() + parentElement.position().top) + 'px' });
+    }, 500);
+  },
+
+  handleCloseUpdateExplicitPreference: function(){
+    jQuery(document).on("click", ".cjs_close_update_explicit_preference", function(){
+      jQuery(this).closest(".cjs_explicit_preference_inline_update").slideUp();
+      var parentElement = jQuery(this).closest(".cjs_explicit_preference_row")
+      parentElement.find(".cjs_explicit_preference_inline_show").slideDown();
+      ExplicitPreference.closeUpdateExplicitPreferenceHandleOtherElements(parentElement);
+    });
+  },
+
+  closeUpdateExplicitPreferenceHandleOtherElements: function(parentElement){
+    parentElement.siblings().slideDown();
+    jQuery('.cjs_preference_popup_actions').slideDown();
+    jQuery(".cjs-mobile-modal-cancel").removeClass('hidden');
+    jQuery(".cjs-explicit-preference-rows-creation-container").slideDown();
+  },
+
+  handleCreationContainerVisibility: function(){
+    if(jQuery(".cjs_preference_in_use").length == 0){
+      jQuery(".cjs-explicit-preference-rows-creation-container").slideDown();
+    }
+    else{
+      jQuery(".cjs-explicit-preference-rows-creation-container").slideUp();
+    }
+  },
+
+  handlePreferenceWeightChange: function(){
+    jQuery(document).on("slidechange", ".cjs_explicit_preference_weight_selector", function(event, ui){
+      var preferenceRow = jQuery(this).closest(".cjs_explicit_preference_row .cjs_explicit_preference_inline_show");
+      var dataUrl = jQuery(this).data('url')
+      var weight = ui.value
+      ExplicitPreference.changePreferenceWeight(dataUrl, weight);
+      preferenceRow.find(".cjs_hidden_preference_weight").val(weight);
+      ExplicitPreference.changeColorOfSliderComponents(preferenceRow, weight);
+    });
+  },
+
+  changePreferenceWeight: function(dataUrl, weight){
+    jQuery.ajax({
+              url: dataUrl,
+              data: {explicit_user_preference: {preference_weight: weight}},
+              type: "patch"
+            })
+  },
+
+  changeColorOfSliderComponents: function(preferenceRow, value){
+    preferenceRow.find(".ui-slider-handle").css('background-color', ExplicitPreference.sliderColors[value]);
+    preferenceRow.find(".cjs_explicit_preference_weight_string").html(ExplicitPreference.priorityValues[value]).css('color', ExplicitPreference.sliderColors[value]);
+  },
+
+  handleNewQuestionSelectorChange: function(){
+    jQuery(document).on("change", ".cjs_explicit_preference_question_selector", function() {
+      if(ExplicitPreference.isSelectorEmpty(jQuery(this))){
+        jQuery(this).closest(".cjs_explicit_preference_row").find(".cjs_explicit_preference_option_selector_row, .cjs_explicit_preference_string_selector_row").hide();
+      }
+      else{
+        jQuery(this).closest(".cjs_explicit_preference_row").find(".cjs_explicit_preference_option_selector_row, .cjs_explicit_preference_string_selector_row").show();
+      }
+    });
+  },
+
+  handleStartOver: function(){
+    jQuery(document).on("click", ".cjs_explicit_preference_start_over", function() {
+      jQuery("#cjs_preferences_loading_result_id").show();
+    });
+  },
+
+  handleExplicitPreferenceValidation: function(){
+    jQuery(document).on("click", ".cjs_create_explicit_preference, .cjs_update_explicit_preference", function(){
+
+      var preferenceRow = jQuery(this).closest(".cjs_explicit_preference_row");
+      var emptyQuestionSelector = false;
+      var emptyPreferenceFieldSelector = false;
+
+      var questionSelector = preferenceRow.find(".cjs_explicit_preference_question_selector");
+      var questionSelectorContainer = preferenceRow.find("div.cjs_explicit_preference_question_selector");
+
+      if(ExplicitPreference.isSelectorEmpty(questionSelector)){
+        emptyQuestionSelector = true;
+        ChronusValidator.ErrorManager.ShowFieldError(questionSelectorContainer);
+      }
+      else{
+        ChronusValidator.ErrorManager.HideFieldError(questionSelectorContainer);
+      }
+
+      emptyPreferenceFieldSelector = ExplicitPreference.handleExplicitPreferenceFieldValidation(preferenceRow, questionSelector);
+
+      return !emptyQuestionSelector && !emptyPreferenceFieldSelector;
+    });
+  },
+
+  handleExplicitPreferenceFieldValidation: function(preferenceRow, questionSelector){
+    var emptyOptionsSelector = false;
+    var emptyPreferenceStringSelector = false;
+
+    var optionsSelector = preferenceRow.find(".cjs_explicit_preference_option_selector");
+    var preferenceStringSelector = preferenceRow.find(".cjs_explicit_preference_string_selector");
+    var optionsSelectorContainer = preferenceRow.find("div.cjs_explicit_preference_option_selector");
+    var preferenceStringSelectorContainer = preferenceRow.find("div.cjs_explicit_preference_string_selector");
+    var questionId = questionSelector.select2("val");
+
+    if(ExplicitPreference.questionTypeHash[questionId] != ExplicitPreference.locationQuestionType){
+      if(optionsSelector.select2("val").length == 0){
+        emptyOptionsSelector = true;
+        ChronusValidator.ErrorManager.ShowFieldError(optionsSelectorContainer);
+      }
+      else{
+        ChronusValidator.ErrorManager.HideFieldError(optionsSelectorContainer);
+      }
+      return emptyOptionsSelector;
+    }
+    else{
+      if(ExplicitPreference.isSelectorEmpty(preferenceStringSelector)){
+        emptyPreferenceStringSelector = true;
+        ChronusValidator.ErrorManager.ShowFieldError(preferenceStringSelectorContainer);
+      }
+      else{
+        ChronusValidator.ErrorManager.HideFieldError(preferenceStringSelectorContainer);
+      }
+      return emptyPreferenceStringSelector;
+    }
+  },
+
+  configureNewPreference: function(){
+    var creationContainer = jQuery(".cjs-explicit-preference-rows-creation-container");
+    var questionSelector = creationContainer.find(".cjs_explicit_preference_question_selector")
+    ExplicitPreference.generatePreferenceQuestionField(questionSelector, null, false);
+    ExplicitPreference.generatePreferenceOptionsField(questionSelector, false);
+  },
+
+  configureExistingPreferences: function(){
+    var showContainer = jQuery(".cjs-explicit-preference-rows-show-container");
+    var questionDropdowns = showContainer.find(".cjs_explicit_preference_question_selector");
+    for(i = 0; i < questionDropdowns.length; i++){
+      questionSelector = questionDropdowns.eq(i);
+      if(!questionSelector.data('select2')){
+        questionId = questionSelector.val();
+        ExplicitPreference.generatePreferenceQuestionField(questionSelector, questionId, true);
+        ExplicitPreference.generatePreferenceOptionsField(questionSelector, false);
+      }
+    }
+    ExplicitPreference.configureWeightSliders(jQuery(".cjs_explicit_preference_inline_show .cjs_explicit_preference_weight_selector"));
+  },
+
+  configureWeightSliders: function(weightSliders){
+    for(i = 0; i < weightSliders.length; i++){
+      weightSelector =  weightSliders.eq(i);
+      if(!weightSelector.hasClass("cjs_slider_initialized")){
+        ExplicitPreference.generatePreferenceWeightField(weightSelector);
+      }
+    }
+  },
+
+  showExplicitUserPreferenceFields: function(){
+    var creationShowContainer = jQuery(".cjs-explicit-preference-rows-creation-container, .cjs-explicit-preference-rows-show-container");
+    creationShowContainer.removeClass("hide");
+    jQuery("#cjs_preferences_page_loading_result_id").hide();
+  },
+
+  handleQuestionSelectorChange: function(){
+    jQuery(document).on("change", ".cjs_explicit_preference_question_selector", function(e) {
+      ExplicitPreference.generatePreferenceOptionsField(jQuery(this), true);
+      var questionSelectorContainer = jQuery(this).closest(".cjs_explicit_preference_row").find("div.cjs_explicit_preference_question_selector");
+      ChronusValidator.ErrorManager.HideFieldError(questionSelectorContainer);
+    });
+  },
+
+  generatePreferenceQuestionField: function(questionSelector, val, disabled){
+    questionSelector.select2({
+      allowClear: true,
+      multiple: ExplicitPreference.isIosApp,
+      data: { results: ExplicitPreference.questionsData }
+    });
+    questionSelector.prop('disabled', disabled);
+    questionSelector.select2("val", parseInt(val));
+    ExplicitPreference.removeSelectedItemListener(questionSelector);
+  },
+
+  removeSelectedItemListener: function(selector){
+    if(ExplicitPreference.isIosApp){
+      selector.on("select2-selecting", function (e) {
+        jQuery(this).select2("val", null);
+      });
+    }
+  },
+
+  generatePreferenceOptionsField: function(questionSelector, select2Initialized){
+    var questionId = questionSelector.select2("val");
+    var preferenceRow = questionSelector.closest(".cjs_explicit_preference_row");
+    var preferenceStringSelector = preferenceRow.find(".cjs_explicit_preference_string_selector");
+    var optionsSelector = preferenceRow.find(".cjs_explicit_preference_option_selector");
+    if(ExplicitPreference.questionTypeHash[questionId] == ExplicitPreference.locationQuestionType){
+      ExplicitPreference.generatePreferenceLocationField(preferenceRow, preferenceStringSelector, optionsSelector);
+    }
+    else{
+      ExplicitPreference.generatePreferenceChoicesField(preferenceRow, preferenceStringSelector, optionsSelector, questionId, select2Initialized);
+    }
+  },
+
+  generatePreferenceLocationField: function(preferenceRow, preferenceStringSelector, optionsSelector){
+    preferenceRow.find(".cjs_explicit_preference_option_selector_row").hide();
+    optionsSelector.select2("val", null);
+    preferenceStringSelector.show();
+    var selectedPreferenceString = preferenceStringSelector.val();
+    preferenceStringSelector.select2('destroy');
+    preferenceStringSelector.select2({
+      multiple: ExplicitPreference.isIosApp,
+      initSelection: function(element, callback) {
+        return callback({id: selectedPreferenceString, text: selectedPreferenceString});
+      },
+      ajax: {
+        url: ExplicitPreference.locationAutocompleteUrl,
+        data: function (searchText) {
+          var query = {
+            loc_name: searchText
+          }
+          return query;
+        },
+        results: function (data, params) {
+          var ans = jQuery.map(data, (function(obj){
+            return {id: obj, text: obj};
+          }));
+          return {
+            results: ans
+          };
+        }
+      }
+    });
+    ExplicitPreference.removeSelectedItemListener(preferenceStringSelector);
+  },
+
+  generatePreferenceChoicesField: function(preferenceRow, preferenceStringSelector, optionsSelector, questionId, select2Initialized){
+    var questionChoices = ExplicitPreference.questionChoicesHash[questionId];
+    preferenceRow.find(".cjs_explicit_preference_string_selector_row").hide();
+    preferenceStringSelector.select2("val", null);
+    optionsSelector.show();
+    var questionChoiceIds = optionsSelector.val().split(" ");
+    if(select2Initialized){
+      optionsSelector.select2('destroy');
+    }
+    optionsSelector.empty().select2({
+      allowClear: true,
+      multiple: true,
+      data: { results: questionChoices }
+    });
+    optionsSelector.select2("val", questionChoiceIds);
+  },
+
+  generatePreferenceWeightField: function(weightSelector){
+    var preferenceWeightContainer = weightSelector.closest(".cjs_explicit_preference_weight_container");
+    var preferenceWeight = weightSelector.closest(".cjs_explicit_preference_weight_container").find(".cjs_hidden_preference_weight").val();
+    weightSelector.addClass("cjs_slider_initialized");
+    weightSelector.slider({
+        min: 1,
+        max: 5,
+        value: preferenceWeight
+    }).slider("pips", {
+        first: 'pip',
+        last: 'pip',
+        rest: 'pip'
+    })
+    ExplicitPreference.changeColorOfSliderComponents(preferenceWeightContainer, preferenceWeight);
+  },
+
+  getGaEventDetails: function(){
+    var eventLabel;
+    var eventLabelId;
+    switch (parseInt(ExplicitPreference.gaSrc)){
+      case 0:
+        eventLabel = chrGoogleAnalytics.eventLabel.GA_HOME_PAGE;
+        eventLabelId = chrGoogleAnalytics.eventLabelId.GA_HOME_PAGE_LABEL_ID;
+        break;
+      case 1:
+        eventLabel = chrGoogleAnalytics.eventLabel.GA_MENTOR_LISTING_PAGE_ACTION;
+        eventLabelId = chrGoogleAnalytics.eventLabelId.GA_MENTOR_LISTING_PAGE_ACTION_LABEL_ID;
+        break;
+      case 2:
+        eventLabel = chrGoogleAnalytics.eventLabel.GA_MENTOR_LISTING_BOTTOM_BAR;
+        eventLabelId = chrGoogleAnalytics.eventLabelId.GA_MENTOR_LISTING_BOTTOM_BAR_LABEL_ID;
+        break;
+      case 3:
+        eventLabel = chrGoogleAnalytics.eventLabel.GA_MATCH_DETAILS;
+        eventLabelId = chrGoogleAnalytics.eventLabelId.GA_MATCH_DETAILS_LABEL_ID;
+      break;
+    }
+    return [eventLabel, eventLabelId];
+  },
+
+  trackGaDismissedPopupAndHandleClosePopupExperience: function(){
+    jQuery(document).on("click", ".cjs_close_preference_popup", function(){
+      ExplicitPreference.closePopupExperienceAndtrackGa();
+    });
+
+    jQuery(document).keyup(function(e) {
+      if (e.keyCode == 27) {
+        if(jQuery('.explicit_preferences_popup').length > 0 && jQuery('#remoteModal').is(':visible')) {
+          closeQtip();
+          ExplicitPreference.closePopupExperienceAndtrackGa();
+        }
+      }
+    });
+  },
+
+  closePopupExperienceAndtrackGa: function(){
+    ExplicitPreference.addGaEvent(chrGoogleAnalytics.action.GA_DISMISSED_PREFERENCES_POPUP);
+    if(ExplicitPreference.preferencesChanged){
+      jQuery("#loading_results").show();
+      window.location.reload();
+    }
+    else{
+      if(ExplicitPreference.preferencesAutoPopulated){
+        jQuery.ajax({
+          type: "DELETE",
+          url: jQuery(".cjs_explicit_preference_start_over").attr("href"),
+          data: {'destroy_one_time_flag' : true},
+        });
+      }
+    }
+  },
+
+  trackGaOpenedPopup: function(){
+    ExplicitPreference.addGaEvent(chrGoogleAnalytics.action.GA_OPENED_PREFERENCES_POPUP);
+  },
+
+  trackGaShowRecommendationsAndHandleExperience: function(){
+    jQuery(document).on("click", ".cjs_explicit_show_recommendations", function(){
+      ExplicitPreference.addGaEvent(chrGoogleAnalytics.action.GA_VIEWED_RECOMMENDATIONS);
+      closeQtip();
+      if(!ExplicitPreference.preferencesChanged && !ExplicitPreference.preferencesAutoPopulated && ExplicitPreference.isListingPage){
+        return false;
+      }
+      else{
+        jQuery("#loading_results").show();
+      }
+    });
+  },
+
+  addGaEvent: function(action){
+    var eventDetails = ExplicitPreference.getGaEventDetails();
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.EXPLICIT_PREFERENCES, action, eventDetails[0], eventDetails[1]);
+  },
+
+  openPreferencePopup: function(url, selector, attachToSelector){
+    if(attachToSelector){
+      jQuery(selector).on("click", function() {
+        jQueryShowQtip('', 850, url, '',{largeModal: true});
+      });
+    }
+    else{
+      jQuery(document).on("click", selector, function() {
+        jQueryShowQtip('', 850, url, '',{largeModal: true});
+      });
+    }
+  },
+
+  isSelectorEmpty: function(selector){
+    if(ExplicitPreference.isIosApp){
+      return (selector.select2("val").length == 0);
+    }
+    else{
+      return selector.select2("val").blank();
+    }
+  }
+}

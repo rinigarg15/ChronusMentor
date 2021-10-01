@@ -1,0 +1,9 @@
+<% modal_container "feature.match_report.content.filters_applied".translate(Mentees: _Mentees), modal_id: "cjs_applied_filters_modal" do %>
+  <div class="cjs_table_enclosure clearfix">
+    <div id="cjs_applied_filters_listing">
+    </div>
+  </div>
+<% end %>
+<%= javascript_tag do %>
+  MatchReport.initializeKendoGrid("#cjs_applied_filters_listing", <%= raw get_kendo_options_for_filters(filter_data).to_json %>);
+<% end %>

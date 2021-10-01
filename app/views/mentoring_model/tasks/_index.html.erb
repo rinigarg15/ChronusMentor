@@ -1,0 +1,51 @@
+<div class="<%= @home_page_view ? 'no-padding' : 'ibox' %> cjs-display-tasks" data-mode="all">
+  <% unless @home_page_view %>
+    <div class="ibox-title table-bordered clearfix">
+      <div class="pull-right">
+        <%= link_to(get_task_filter_title(:no_type_filter => true), "#", "data-target" => "#cjs_group_filter_modal", "data-toggle" => "modal") %>
+      </div>
+      <div class="font-600 h4 no-margins hide">
+        <%= content_tag(:span, "feature.mentoring_model.header.mentoring_plan".translate(:Mentoring_Connection => _Mentoring_Connection)) %>
+      </div>
+    </div>
+  <% end %>
+  <div class="ibox-content clearfix no-padding" id="cjs_connection_milestones_container">
+    <%= render partial: "mentoring_model/connection_filters", locals: {group: group} unless @home_page_view %>
+    <div class="cjs-mm-task-list-container elements-list cjs-sortable-list cjs-connection-plan-container b-t">
+      <%= render partial: "mentoring_model/tasks/task", collection: tasks, locals: {group: group} if tasks.present?%>
+    </div>
+
+    <% if @page_controls_allowed && !@home_page_view %>
+      <div class="list-group-item p-t-sm p-b-sm clearfix">
+        <%= render partial: "mentoring_model/tasks/add_action_item", locals: {tasks: tasks, group: group} %>
+      </div>
+    <% elsif tasks.empty? %>
+      <%= no_mentoring_model_entities("feature.mentoring_model.description.no_tasks".translate) %>
+    <% end %>
+
+    <% if @home_page_view %>
+      <div class="well well-sm light-yellow-bg clearfix text-center no-margins">
+        <%= content_tag(:span, "feature.group.content.tasks_footer_text_homepage_v1_html".translate(Mentoring_Area: link_to("feature.connection.action.Visit_Mentoring_Area_v1".translate(Mentoring_Area: _Mentoring_Connection), group_path(group, {show_plan: true, src: EngagementIndex::Src::AccessMentoringArea::HOME_PAGE_FOOTNOTE, sub_src: EngagementIndex::Src::AccessMentoringArea::SubSource::TASKS_TAB}), class: "m-l-xs font-bold btn btn-outline btn-xs btn-primary hidden-xs") + link_to("feature.connection.action.Visit_Mentoring_Area_v1".translate(Mentoring_Area: _Mentoring_Connection), group_path(group, {show_plan: true, src: EngagementIndex::Src::AccessMentoringArea::HOME_PAGE_FOOTNOTE, sub_src: EngagementIndex::Src::AccessMentoringArea::SubSource::TASKS_TAB}), class: "font-bold visible-xs"))) %>
+      </div>
+      <% if render_past_meeting_modal %>
+        <% modal_container "feature.mentoring_model.button.record_past_meeting".translate(Meeting: _Meeting), { modal_id: "cjs_past_meeting_modal" } do %>
+          <%= render(:partial => 'meetings/new_form',:locals => { :common_form => true, :past_meeting => true } )%>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<div class="filter_loading_results cjs-sortable-spinner hide">
+  <%= content_tag :span, "common_text.prompt_text.updating".translate %>
+  <i class="fa fa-spinner fa-pulse fa-fw"></i>
+</div>
+
+<%= javascript_tag do %>
+jQuery(function(){
+  MentoringModelTask.initializeSortable();
+  MentoringModelTask.adjustBorders();
+  MentoringModelTask.showMenuOnClick();
+  MentoringModelTask.hideMenuOnOutsideClick();
+});
+<% end %>

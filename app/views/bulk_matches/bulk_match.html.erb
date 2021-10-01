@@ -1,0 +1,8 @@
+<% @page_action = [] %>
+<% @page_action << {label: "feature.bulk_match.label.drafted_pairs".translate(connections: _mentoring_connections), class: "hide cjs_bulk_match_export cjs_bulk_match_csv_drafted_pairs"} %>
+<% @page_action << {label: "feature.bulk_match.label.all_pairs".translate, class: "hide cjs_bulk_match_export cjs_bulk_match_export_all", btn_class_name: "hide cjs_bulk_match_export cjs_bulk_match_export_all"} %>
+<% @page_action_options = {dropdown_title: "display_string.Export".translate, btn_class: "hide cjs_bulk_match_export"} %>
+<% @page_action2 = {label: "feature.bulk_match.action.view_drafted_pairs".translate, url: groups_path(tab: Group::Status::DRAFTED), class: "btn btn-primary btn-large hide cjs_view_drafted_pairs", target: "_blank"} %>
+<% @title = "manage_strings.program.Administration.Connection.Bulk_Match_v1".translate %>
+
+<%= render partial: "bulk_matches/bulk_match", locals: {orientation_type: @orientation_type, request_notes: @bulk_match.request_notes, mentor_student_hash: @mentor_student_hash, student_mentor_hash: @student_mentor_hash, recommend_mentors: @recommend_mentors, bulk_match_type: @bulk_match.type} %>

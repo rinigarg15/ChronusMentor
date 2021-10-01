@@ -1,0 +1,3 @@
+jQuery("<%= @completed_milestones_link_id%>").html("<%= escape_javascript(render partial: 'mentoring_model/milestones/milestone', collection: @completed_mentoring_model_milestones, locals: {completed: true, target_user_id: @target_user.nil? ? nil : @target_user.id, target_user_type: @target_user_type} ) %>");
+jQuery(".cjs_completed_milestones_container").addClass("hide");
+MentoringModelMilestones.expandCurrentMilestone(<%= @mentoring_model_milestone_ids_to_expand %>, <%= @mentoring_model_milestone_ids_to_expand.size %>, <%=  MentoringModel::Milestone::MINIMUM_COMPLETED_MILESTONES_UNDER_BAR %>);

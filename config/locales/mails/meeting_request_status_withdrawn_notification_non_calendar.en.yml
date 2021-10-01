@@ -1,0 +1,19 @@
+en:
+  email_translations:
+    meeting_request_status_withdrawn_notification_non_calendar:
+      title_v3: "%{_Meeting} request withdrawal notification to the %{_mentor} for a non-calendar %{_meeting}"
+      description_v2: This email is sent to the %{_mentor}, when the %{_mentee} withdraws %{_a_meeting} request the %{_mentee} had sent.
+      subject_v2: "{{meeting_request_status_sender_name}} has withdrawn their request for {{customized_meeting_term_articleized}}"
+      content_v3_html: "<b>{{meeting_request_status_sender_name}}</b> has withdrawn their request for {{customized_meeting_term_articleized}} they sent you on {{meeting_send_date}}.<br/>{{meeting_description_as_quote}}<br/>For any questions, you can reach out to the {{customized_admin_term}} <a href='{{url_contact_admin}}'>here</a>.<br/>"
+      tags:
+        meeting_request_creator_email:
+          description: Email of the creator of the meeting request. Note that the email will be displayed irrespective of the email privacy settings.
+        meeting_request_recepient_email:
+          description: Email of the recepient of the meeting request. Note that the email will be displayed irrespective of the email privacy settings.
+        meeting_send_date:
+          description: Date on which meeting request was sent
+          example: Feb 18, 2015
+        meeting_description_as_quote:
+          description: Description of the meeting as quoted by meeting sender
+        url_contact_admin:
+          description: Url for the user to contact administrator

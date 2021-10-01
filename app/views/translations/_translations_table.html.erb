@@ -1,0 +1,36 @@
+<table class="table pane table-bordered table-vertical-centered" cellpadding="0" cellspacing="0" id="cjs_translation_table">
+  <thead class="top-border bottom-border">
+    <tr>
+      <% present_lang = @enabled_languages.find_by(language_name: second_locale) %>
+      <% remaining_languages = @enabled_languages - [present_lang] %>
+      <td class="col-xs-5 left_column gray-bg font-bold subheader"><%= get_icon_content("fa fa-language fa-lg") %> <%= "feature.translations.label.english".translate %></td>
+      <td class="col-xs-2 middle_column"></td>
+      <td class="col-xs-5 right_column gray-bg font-bold subheader">
+        <div class="btn-group">
+          <div class="<%= 'pointer' if remaining_languages.present? %>" data-toggle='dropdown'>
+            <%= get_icon_content("fa fa-language fa-lg") %> <%= present_lang.get_title_in_organization(@current_organization) %> <%= get_icon_content("m-l-xs fa fa-caret-right") if remaining_languages.present? %>
+          </div>
+          <% if remaining_languages.present? %>
+            <ul class="dropdown-menu">
+              <% remaining_languages.each do |language| %>
+                <li class="wrap pointer word_break cjs_locale_change" data-url="<%= translations_path(format: :js) %>" data-locale="<%= language.language_name %>">
+                    <a href="javascript:void(0)"> <%= language.get_title_in_organization(@current_organization) %> </a>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        </div>
+      </td>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render(:partial => "display_translation_table", :locals => {level_obj: level_obj, second_locale: second_locale, elements: translatable_content, base_id: base_id, attachment_type: attachment_type, program_asset: program_asset}) %>
+  </tbody>
+</table>
+
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    Localization.updateLocale();
+  });
+<% end %>

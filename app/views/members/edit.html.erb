@@ -1,0 +1,68 @@
+<% @page_title = "feature.profile.actions.Edit_Profile".translate %>
+<% is_general_section = (@section == MembersController::EditSection::GENERAL || @is_profile_completion) %>
+<% is_profile_section = (@section == MembersController::EditSection::PROFILE || @is_profile_completion) %>
+<% focus_notification_tab = params[:focus_notification_tab].present? %>
+<% focus_settings_tab = params[:focus_settings_tab].present? %>
+<% @scroll_to = j chronus_sanitize(@scroll_to, sanitization_version: @current_organization.security_setting.sanitization_version) if @scroll_to.present? %>
+
+<div id="edit_profile" class="clearfix">
+  <div id="flash_settings" class="error_flash" style="display:none"></div>
+  <%= render :layout => 'members/profile_wrapper' do %>
+    <%= render :layout => 'members/profile_left_pane_wrapper', locals: { is_edit: true, pdf_name: @pdf_name, show_favorite_ignore_links: false, favorite_preferences_hash: {}, ignore_preferences_hash: {}} do %>
+      <div class="tabs-container-edit-profile">
+        <ul class="tab-links-edit-profile nav nav-tabs h5 no-margins">
+          <li class="text-xs-center cui_fixed_width_100 active"><a data-tab-type="#basic_tab" id ="basic_tab_button" href="javascript:void(0)"><%=edit_tab_title(MembersController::Tabs::PROFILE)%></a></li>
+          <li class="text-xs-center cui_fixed_width_100"><a data-tab-type="#settings_tab" href="javascript:void(0)" id="settings_tab_button"><%= edit_tab_title(MembersController::Tabs::SETTINGS) %></a></li>
+          <li class="text-xs-center cui_fixed_width_100"><a data-tab-type="#notifications_tab" href="javascript:void(0)" id="notifications_tab_button"><%= edit_tab_title(MembersController::Tabs::NOTIFICATIONS)%></a></li>
+        </ul>
+        <div class="m-t-md">
+          <div id="basic_tab">
+            <%= render_basic_information(@profile_member, @profile_user, is_general_section, @program_questions_for_user, grouped_role_questions: @grouped_role_questions) %>
+            <% if is_profile_section %>
+              <% if !@program_questions_for_user.blank?  %>
+                <% profile_sections = get_simple_section_questions(@program_questions_for_user, exclude_basic_section: true) %>
+                <% profile_sections.each do |profile_section| %>
+                  <%= render_section_questions(profile_section, true, profile_sections.last == profile_section)  %>
+                <% end %>
+              <% end %>
+            <% else %>
+              <% if @program_questions_for_user.present? %>
+                <% @profile_sections.each do |profile_section| %>
+                  <%= render_section_questions_xhr(profile_section, false, @profile_sections.last == profile_section)  %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+          <div id="settings_tab" style="display:none">
+            <%= render_settings_section(ei_src: @ei_calendar_connect_src) %>
+          </div>
+          <div id="notifications_tab" style="display:none">
+            <%= render_notifications_section %>
+          </div>
+        </div>
+      </div>
+
+      
+      <%= javascript_tag "jQuery(document).ready(function(){CustomizeSelect.selectExpandContract();CustomizeQuestions.hideSideBarMembersEditIfEmpty();});" %>
+      <%= javascript_tag "jQuery(document).ready(function(){jQuery('ul.tab-links-edit-profile li a').click(function(e){EditUser.tabSelect(this)});});"%>
+
+      <%= javascript_tag("CustomizeProfileQuestions.disableSelectOnLoad()") %>
+      <% if focus_notification_tab %>
+        <%= javascript_tag "jQuery(function(){jQuery('#notifications_tab_button').click()});" %>
+      <% elsif focus_settings_tab %>
+        <%= javascript_tag "jQuery(function(){jQuery('#settings_tab_button').click()});" %>
+      <% end %>
+
+      <% if @scroll_to.present? && focus_settings_tab %>
+        <%= javascript_tag do %>
+          jQuery(document).ready(function(){
+            jQueryScrollTo(jQuery("#"+"<%= @scroll_to %>"), false);
+          });
+        <% end %>
+      <% elsif @is_profile_completion && !@skip_scrolling %>
+        <% scroll_to = @scroll_to ? ".cjs_question_#{@scroll_to}" : ".incomplete_field:first" %>
+        <%= javascript_tag("jQueryScrollTo(jQuery('#{scroll_to}'), false)") %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

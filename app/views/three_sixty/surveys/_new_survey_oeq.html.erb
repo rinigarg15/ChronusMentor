@@ -1,0 +1,27 @@
+<div class="well well-sm cjs_three_sixty_create_and_add_to_survey_container">
+  <div align="center">
+    <%= form_tag(three_sixty_survey_questions_path(survey), :remote => true, :method => :post, :class => "no-margin no-padding cjs_add_three_sixty_survey_competency_or_question", :id =>"new_three_sixty_survey_oeq") do %>
+      <% right  = [
+        { type: "btn",
+          btn_options: {
+            class:'btn btn-primary cjs_new_three_sixty_survey_submit',
+            data: {:disable_with => "display_string.Please_Wait".translate}
+          },
+          content: "display_string.Add".translate
+        }
+      ] %>
+
+    <% right << { type:     "addon",
+                  class:    "gray-bg no-borders",
+                  content:  content_tag(:span, "(#{"display_string.OR".translate})", :class => "m-l-sm m-r-sm") +
+                            link_to(get_icon_content("fa fa-plus") + "feature.three_sixty.question.add".translate, "javascript:void(0);", :id => "new_three_sixty_open_ended_question", :class => "cjs_three_sixty_create_and_add_to_survey_show_link")
+                } if show_actions %>
+
+      <%= construct_input_group([], right, :input_group_class => "col-xs-12 no-padding") do %>
+        <label class="sr-only" for="select_oeq"><%= "feature.three_sixty.survey.open_ended_question".translate %></label>
+        <%= select_tag("question_id", options_for_select(available_oeqs.collect{|c| [c.title, c.id]}.unshift(["feature.three_sixty.survey.select_an_oeq".translate, ""])), :id => "select_oeq", :class => "has-next no-margin-bottom cjs_new_three_sixty_survey_select_box form-control") %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+<%= render :partial => "three_sixty/surveys/create_and_add_question", :locals => { :survey => survey, :question => @current_organization.three_sixty_questions.new } %>

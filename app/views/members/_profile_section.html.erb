@@ -1,0 +1,19 @@
+<div class="cjs_section">
+  <% if answer_mandatory_qs %>
+    <% profile_section = get_first_profile_section(pending_profile_questions) %>
+    <% has_edu_exp_ques = profile_section.present? && profile_section[:questions].present? ? has_importable_question?(profile_section[:questions]) : false %>
+    <% section = profile_section[:section] %>
+    <p class="small p-b-sm cjs_unanswered_profile_section">
+      <%= "feature.member.content.complete_mandatory_fields_desc_v1_html".translate(section_name: section.title) %>
+    </p>
+    <%= render partial: "members/edit/profile", locals: {section_title: section.title, section: section, has_edu_exp_ques: has_edu_exp_ques, questions: profile_section[:questions], file_present: profile_section[:file_present], answer_mandatory_qs: true} %>
+  <% else %>
+    <% profile_sections = get_simple_section_questions(program_questions_for_user, exclude_basic_section: true) %>
+    <% profile_section = profile_sections[0] %>
+    <% has_edu_exp_ques = profile_section.present? && profile_section[:questions].present? ? has_importable_question?(profile_section[:questions]) : false %>
+    <% section = profile_section[:section] %>
+    <% collapsible_content("#{profile_section[:section_title]}", [], false, id: "collapsible_section_content_#{section.id}", additional_header_class: "hide") do %>
+      <%= render partial: "members/edit/profile", locals: {section_title: section.title, section: section, has_edu_exp_ques: has_edu_exp_ques, questions: profile_section[:questions], file_present: profile_section[:file_present], last_section: profile_sections.last == profile_section, experiment: experiment} %>
+    <% end %>
+  <% end %>
+</div>

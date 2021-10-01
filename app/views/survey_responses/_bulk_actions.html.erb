@@ -1,0 +1,9 @@
+<%= form_tag(download_survey_responses_path(survey, format: :xls), :method => :post, :id => "cjs_export_xls_form", :class => "hide") do %>
+  <%= hidden_field_tag("response_ids", nil, :class => "cjs_xls_response_ids") %>
+  <%= hidden_field_tag("responses_sort_field", nil) %>
+  <%= hidden_field_tag("responses_sort_dir", nil) %>
+<% end %>
+<%= survey_responses_page_actions(survey) %>
+<%= javascript_tag do %>
+  EmailReport.initialize();
+<% end %>

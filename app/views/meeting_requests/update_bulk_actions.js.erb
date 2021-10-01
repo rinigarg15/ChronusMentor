@@ -1,0 +1,7 @@
+ChronusValidator.ErrorManager.ShowResponseFlash("", "<%= j(@notice) %>", true);
+closeQtip();
+<% if @back_url %>
+  window.location = "<%= @back_url %>";
+<% else %>
+  commonReportFilters.submitData();  
+<% end %>

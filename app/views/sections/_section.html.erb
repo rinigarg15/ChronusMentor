@@ -1,0 +1,32 @@
+<% program_level = local_assigns[:program_level] %>
+<% visibility_class = local_assigns[:visibility] ? "" : "cjs-section-not-included hide" %>
+<div class="row <%= "cjs-no-drag" if section.default_field? || program_level %> <%= visibility_class %>" id="profile_section_<%= section.id %>">
+  <div class="cjs-profile-question-drop-container clearfix" data-section-id="<%= section.id %>" data-url="<%= update_profile_question_section_profile_question_path %>">
+    <div class="col-xs-12 no-padding">
+      <div class="p-l-sm p-r-xs p-t-sm p-b-sm cjs-section-container cjs-section-click-handle-element <%= get_section_class(program_level, section.default_field?) %>" data-section-id="<%= section.id %>">
+        <% unless program_level %>
+          <div class="m-l-xs pull-right hide cjs-section-actions cjs-section-actions-container">
+            <%= link_to((get_icon_content("m-r-0 fa fa-pencil fa-lg") + set_screen_reader_only_content("display_string.Edit".translate)), "javascript:void(0)", class: "cjs-section-edit-invoker inherit-color") %>
+            <% unless section.default_field? %>
+              <%= link_to(get_icon_content("m-r-0 fa fa-trash fa-lg section_delete_image") + set_screen_reader_only_content("display_string.Delete".translate), section_url(section), {method: :delete, remote: true, data: {confirm: "feature.profile_customization.content.delete_section_confirmation_v1".translate}, class: "inherit-color"}) %>
+            <% end %>
+          </div>
+        <% end %>
+        <% if program_level && section.description.present? %>
+          <div class="m-l-xs pull-right cjs-section-description cjs-section-description-container hide">
+            <%= embed_icon("#{TOOLTIP_IMAGE_CLASS} fa-lg", '', id: "section_description_icon_#{section.id}") %>
+            <%= tooltip("section_description_icon_#{section.id}", section.description, true, placement: :left) %>
+          </div>
+        <% end %>
+        <div class="truncate-with-ellipsis whitespace-nowrap">
+          <span class="cjs-section-title-container h5 font-noraml"><%= section.title %></span>
+          <span class="cjs-section-count cjs-section-count-<%= section.id %> small text-muted"></span>
+        </div>
+        <div class="truncate-with-ellipsis whitespace-nowrap">
+          <div class="cjs-section-count-for-add-pq-at-prg-level cjs-section-count-for-add-pq-at-prg-level-<%= section.id %> small text-muted hide"></div>
+        </div>
+      </div>
+      <%= content_tag(:div, render(partial: 'sections/edit', locals: {section: section})) %>
+    </div>
+  </div>
+</div>

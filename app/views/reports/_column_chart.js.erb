@@ -1,0 +1,65 @@
+var chart;
+jQuery(document).ready(function() {
+  chart_<%= options[:render_to] %> = new Highcharts.Chart({
+    credits: {
+      enabled: false
+    },
+    chart: {
+      renderTo: '<%= options[:render_to] %>',
+      plotBackgroundColor: null,
+      plotBorderWidth: null,
+      plotShadow: false,
+      borderColor: "#FFFFFF",
+      height: <%= options[:height] || 300 %>
+    },
+    title: {
+      <%= options[:title_text] ?  "text: '#{options[:title_text]}'" : "text: null" %>
+    },
+    tooltip: {
+      formatter: function() {
+        return '<b>'+ this.x +'</b>: '+ this.y;
+      }
+    },
+    xAxis: {
+      categories: <%= raw(options[:data].transpose.first) %>,
+      labels: {
+        formatter: function() {
+            return '<b>' + this.value +'</b>';
+        }
+      }
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: '<b>' + jsReportTranslation.count + '</b>',
+        style: {
+          color: '#4d759e'
+        }
+      },
+      labels: {
+        formatter: function() {
+            return '<b>' + this.value +'</b>';
+        }
+      }
+    },
+    plotOptions: {
+      column: {
+        animation: {
+          duration: <%= (format == FORMAT::HTML) ? 1500 : 0 %>
+        }
+      }
+    },
+    legend: {
+      enabled: false
+    },
+    series: [{
+      type: 'column',
+      data: [
+      <% options[:data].each do |data| %>
+        ['<%= data[0] %>', <%= data[1] %>]<%= options[:data].last == data ? '' : ',' %>
+      <% end %>
+      ],
+      color: '#2f7ed8'
+    }]
+  });
+});

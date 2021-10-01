@@ -1,0 +1,10 @@
+<label class="s2id_autogen_label sr-only"><%= "common_text.prompt_text.Select".translate %></label>
+<%= select_tag "profile_question[conditional_match_choices_list]", options_for_select(choice_id_mapping, default_values), id: "cjs_groups_report_multiselect", multiple: true, class: "cjs_conditional_question_options col-xs-12 no-padding", data: {placeholder: "common_text.prompt_text.Select".translate}, title: "feature.profile_customization.label.conditional".translate %>
+
+<%= javascript_tag do %>
+  jQuery(function(){
+    var conditionalOptions = jQuery(".cjs_conditional_question_options");
+    CustomizeProfileQuestions.showHideConditional(conditionalOptions);
+    ProfileConfigUI.adjustUiCommon();
+  });
+<% end %>

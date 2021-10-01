@@ -1,0 +1,22 @@
+<% @title = "feature.three_sixty.competencies_tab_v1".translate %>
+<% if @show_actions %>
+  <% @page_action3 = {:label => "feature.three_sixty.competency.add".translate, :url => "javascript:void(0)", :data => { :url=> new_three_sixty_competency_path}, :class => "btn btn-primary remote-popup-link"} %>
+<% end %>
+<% @page_action2 = {:label => "feature.three_sixty.surveys_tab".translate, :url => dashboard_three_sixty_surveys_path, :class => "btn btn-primary pull-right"} %>
+<% @page_action = {:label => "feature.three_sixty.settings_tab".translate, :url => three_sixty_reviewer_groups_path, :class => "btn btn-primary pull-right"} %>
+
+<%= ibox get_icon_content("fa fa-shield") + "feature.three_sixty.competency.heading.competencies".translate, :ibox_class => "cjs_three_sixty_container" do %>
+  <%= content_tag(:div, "feature.three_sixty.competency.no_competencies".translate, :class => "clearfix text-center text-muted #{'hide' if @competencies.present?}", :id => "cjs_three_sixty_no_competencies_container") %>
+  <div class="clearfix" id="three_sixty_competencies">
+    <%= render :partial => 'three_sixty/competencies/competency', :collection => @competencies, :locals => {:should_collapse => true, :show_actions => @show_actions} %>
+  </div>
+<% end %>
+
+<%= ibox get_icon_content("fa fa-question-circle") + "feature.three_sixty.competency.heading.open_ended_questions".translate, :ibox_id => "three_sixty_oeqs" do %>
+  <%= render :partial => 'three_sixty/competencies/open_ended_questions', :locals => {:show_actions => @show_actions, :open_ended_questions => @open_ended_questions} %>
+<% end %>
+
+<%= javascript_tag do  %>
+  QtipPopup.generateForm();
+  ThreeSixty.initializeCompetencies();
+<% end %>

@@ -1,0 +1,8 @@
+<% content = render partial: "mentoring_model/tasks/progressive_task_form", locals: {
+  group: @group,
+  task: @task,
+  goals_to_associate: @goals_to_associate,
+  as_ajax: true
+} %>
+TaskProgressiveForm.showMenuAndCloseForm();
+MentoringModelTask.appendForm("<%= @task.id.to_s %>", "<%= j(content) %>");

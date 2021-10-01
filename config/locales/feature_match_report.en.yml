@@ -1,0 +1,52 @@
+en:
+  feature:
+    match_report:
+      header:
+        match_report: Match Report
+        current_status: Current Status
+      content:
+        sent_requests: "%{Mentees} who sent requests"
+        accepted_requests: "%{Mentees} with accepted requests"
+        match_rate: "%{Mentee} match rate"
+        drafted: Drafted %{mentees}
+        never_connected: Never connected %{mentees}
+        report_description: "A detailed report to assess the %{mentee} needs and improve the match rate of this %{program}."
+        mentor_mentee_ratio: "%{Mentee} to %{Mentor} ratio"
+        top_applied_filters: "Top applied filters by %{mentee}"
+        top_search_keywords: "Top search keywords"
+        filters_applied: "Filters applied by %{Mentees}"
+        no_filters: "Oops! No %{mentees} from the selected view have applied filters so far."
+        no_search_keywords: "Oops! No %{mentees} from the selected view have tried to search."
+        no_recommendations_text: "There are no %{mentees} in the selected user view or the %{mentees} in the selected user view have not answered the profile questions associated with the matching algorithm."
+      label:
+        mentor_mentees_distributed: "How are the %{mentees} and %{mentors} distributed?"
+        select_two_user_segments: "Select two user segments to compare"
+        role_user_set: "%{role} user set"
+        mentee_actions: "What are the %{mentees} looking for when trying to connect with %{mentor}?"
+        top_applied_filters: "Select the %{mentee} segment to check what they are looking for"
+        mentor_offers: " %{Mentor} Offers"
+        mentee_needs: "%{Mentee} Needs "
+        vs: "vs"
+        no_of_users: "No. of %{role}"
+        discrepancy: "Discrepancy"
+        recommendation_for_mentors: "Recommendation to recruit more %{mentors}"
+        mentor_discrepancy_label_html: "%{Mentors} who have <i>%{mentor_question}<i> as <b>%{choice}<b>"
+        mentor_gap: "%{Mentor} Gap"
+        top_mentors_text: "Top attributes the %{mentee} is looking for in a %{mentor}"
+      tooltips:
+        sent_requests_html: "%{number} of active %{mentees}<br/>sent requests"
+        accepted_requests_html: "%{number} of sent requests<br/>are accepted"
+        matched_html: "%{number} of active %{mentees}<br/>are matched"
+        mentee_actions: This widget reflects data captured only after %{datetime}
+        applied_filters: "Below are the list of filters applied by %{mentees} followed by the corresponding number of times it has been applied."
+        search_keywords: "Below are the list of search keywords used by %{mentees} when they try to connect with %{mentor}"
+        drafted_html: "%{number} of active %{mentees}<br/>are part of drafted %{connection}"
+        never_connected_html: "%{number} of active %{mentees}<br/> never got connected"
+        non_admin_match:
+          sent_request: Number of %{mentees} who have send requests out of total active %{mentees}
+          accepted_request: Number of %{mentees} whose requests have been accepted out of total %{mentees} who have send request
+          match_rate: Number of %{mentees} who were/are connected at least once out of total active %{mentees}
+        admin_match:
+          match_rate: Number of %{mentees} who got connected(past or ongoing) so far out of total active %{mentees}
+          drafted: Number of %{mentees} who are in drafted state out of total active %{mentees}
+          never_connected: Number of %{mentees} who never got connected so far out of total current active %{mentees}

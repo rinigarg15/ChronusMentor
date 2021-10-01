@@ -1,0 +1,97 @@
+<% if projects.any? %>
+  <div class="clearfix">
+    <h4 class="gray-bg clearfix h4 font-600 p-b-sm m-b-0 m-t-0 pull-left">
+      <%= append_text_to_icon("fa fa-fw fa-group m-r-xs", "feature.connection.action.Join_Project".translate(:Mentoring_Connection => _a_Mentoring_Connection)) %>
+      <%= content_tag(:span, "(#{projects.size})", class: "m-l-xxs") %>
+    </h4>
+    <%= link_to("display_string.View_All".translate, find_new_groups_path(src: ProgramsController::SRC_HOME_PAGE_WIDGET), class: "pull-right btn btn-xs btn-white m-l-xs m-b-xs") if show_all_projects_option %>
+    <%= link_to(current_user.can_create_group_without_approval? ? "feature.connection.header.start_a_new".translate(:Mentoring_Connection => _Mentoring_Connection) : "feature.connection.header.propose_a_new".translate(:Mentoring_Connection => _Mentoring_Connection), new_group_path(propose_view: true, src: ProgramsController::SRC_HOME_PAGE_WIDGET), class: "pull-right btn btn-xs btn-white m-b-xs") if current_user.allow_to_propose_groups? %>
+  </div>
+
+  <div class="row">
+    <div class="join-circle-slick">
+      <% projects.each do |group| %>
+        <div class="col-lg-4 col-xs-12 col-sm-6 m-b-xs text-center">
+          <%= ibox nil, ibox_class: "no-margins slick_box", content_class: "no-padding" do %>
+            <div class="contact-box center-version no-margins clearfix">
+              <div class="black-bg p-t-md">
+                <div class="media large">
+                  <div class="media-middle">
+                    <%= link_to(home_page_widget_group_logo(group, {img_class: "m-b-n-xl"}), profile_group_url(group)) %>
+                  </div>
+                </div>
+              </div>
+              <div class="m-t p-m clearfix cjs_connection_description <%= connection_question_answer_in_summary_hash.blank? ? 'height-189' : 'height-239' %>">
+                <div class="p-t-xs p-b-xxs whitespace-nowrap truncate-with-ellipsis h5 no-margins"><%= link_to(group.name, profile_group_url(group)) %></div>
+                <% if connection_question_answer_in_summary_hash.present? %>
+                  <% connection_question_answer_in_summary = connection_question_answer_in_summary_hash[group.id] %>
+                  <%= render partial: "programs/group_summary", locals: {connection_question_answer_in_summary: connection_question_answer_in_summary, group: group} if connection_question_answer_in_summary.present? %>
+                <% end %>
+                <% label, date = get_circle_start_and_available_info(group, wob_member) %>
+                <%= content_tag(:span, (label + DateTime.localize(date, format: :short)).html_safe, class: "small text-muted font-bold") %>
+                <div class="m-t m-b-xxs">
+                  <% if group.members.any? %>
+                    <div class="col-md-12 col-xs-12 no-padding cjs_circle_widget_members_container">
+                      <%= content_tag(:div, "feature.connection.header.Members".translate, class: "h6") %>
+                      <%= group_members_for_users_listing(group, max_project_members_in_home_page_widget_for()-1) %>
+                    </div>
+                  <% else %>
+                    <div class="quick_connect_fixed_height">
+                      <div class="p-t-xs"><%= "feature.connection.content.No_users_yet".translate(mentoring_connection: _mentoring_connection) %></div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+              <div class="contact-box-footer p-t-xxs clearfix">
+                <div class="m-t-xs">
+                  <div class="text-center col-sm-6">
+                    <%= link_to(append_text_to_icon("fa fa-group", "feature.connection.content.view_project".translate(mentoring_connection: _mentoring_connection)), profile_group_url(group), class: "btn btn-default btn-outline btn-block btn-sm p-l-xxs p-r-xxs truncate-with-ellipsis m-b-xs") %>
+                  </div>
+                  <div class="text-center col-sm-6">
+                    <%= link_to(append_text_to_icon("fa fa-sign-in", "display_string.Join".translate), new_project_request_path(group_id: group.id, format: :js, project_request: {from_page: ProgramsController::SRC_HOME_PAGE_WIDGET}), class: "btn btn-sm btn-primary btn-block p-l-xxs p-r-xxs truncate-with-ellipsis cjs_hpw_project_request") %>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <% if projects.size > 3 %>
+    <div class="text-center listing_bottom_bar clearfix p-t-xs">
+      <%= slick_carousel_navigation_buttons(prev_button_class: "join-circle-slick-prev", next_button_class: "join-circle-slick-next") %>
+    </div>
+  <% end %>
+
+  <%= javascript_tag do  %>
+    jQuery(document).ready(function(){
+      HomePageWidget.initNewRequest();
+    });
+    carousel.addCarousel('.join-circle-slick', {dots: false,
+    responsive: [
+      {
+        breakpoint: 1900,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1
+        }
+      },
+      {
+        breakpoint: 991,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ], slidesToShow: 3, slidesToScroll: 1, prevArrow: jQuery('.join-circle-slick-prev'), nextArrow: jQuery('.join-circle-slick-next')});
+  <% end %>
+<% end %>

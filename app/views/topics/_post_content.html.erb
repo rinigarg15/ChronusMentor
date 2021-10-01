@@ -1,0 +1,34 @@
+<% post_body = formatted_post_body(post) %>
+
+<% if post.published? %>
+  <% published_post_actions_dropdown = get_actions_for_published_post(post, btn_class: "pull-right btn-group-sm", dropdown_title: "", is_not_primary: true, btn_group_btn_class: "btn-white") %>
+<% else %>
+  <% unpublished_post_actions_dropdown = get_post_moderation_actions(post, params[:from_moderate_content] == "true", btn_class: "hidden-xs pull-right btn-group-sm") %>
+  <% unpublished_post_actions_dropdown_block = get_post_moderation_actions(post, params[:from_moderate_content] == "true", btn_class: "visible-xs btn-group-sm btn-block clearfix m-t-sm", responsive_primary_btn_class: "col-xs-10", responsive_caret_class: "col-xs-2", dropdown_menu_class: "col-xs-12 table-bordered") %>
+<% end %>
+<% dropdown_actions = published_post_actions_dropdown || unpublished_post_actions_dropdown %>
+
+<% if is_root %>
+  <div id="<%= post_html_id(post) %>" class="break-word word_break">
+    <%= user_media_container(post.user, post.created_at, dropdown_actions, {ie_browser_support: true}) do %>
+      <%= chronus_auto_link(post_body) %>
+      <% if post.attachment? %>
+        <div class="m-t-xs">
+          <%= link_to append_text_to_icon("fa fa-paperclip", post.attachment_file_name), post.attachment.url, target: "_blank", class: 'cjs_android_download_files', data: { filename: post.attachment_file_name, targeturl: post.attachment.url } %>
+        </div>
+      <% end %>
+      <%= unpublished_post_actions_dropdown_block %>
+    <% end %>
+  </div>
+<% else %>
+  <%= render partial: "common/comment", locals: {
+    user_link: link_to_user(post.user, current_user: current_user),
+    user_picture: user_picture(post.user, { no_name: true, size: :small, outer_class: "no-margins" }, { class: "img-circle" } ),
+    comment_body: chronus_auto_link(post_body),
+    comment_created: post.created_at,
+    actions: dropdown_actions,
+    actions_block: unpublished_post_actions_dropdown_block,
+    wrapper_id: "post_#{post.id}",
+    ie_browser_support: true
+  } %>
+<% end %>

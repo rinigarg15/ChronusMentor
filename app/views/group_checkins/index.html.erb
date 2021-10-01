@@ -1,0 +1,37 @@
+<%= include_kendo %>
+
+<% @back_link = back_to_reports_options(@category) %>
+<% @title = "feature.contract_management.title".translate(Mentor: _Mentor) %>
+<% @page_action = [{label: "feature.admin_view.action.Export_to_csv".translate, :class => "btn btn-primary btn-large waves-effect check_in_csv", url: "javascript:void(0)"}] %>
+
+<% content_for_sidebar do %>
+  <% mobile_footer_actions = { see_n_results: {results_link_text:  "feature.reports.label.back_to_report".translate}} %>
+  <%= filter_container_wrapper(mobile_footer_actions) do %>
+    <%= render partial: "group_checkins/checkin_report_actions" %>
+  <% end %>
+<% end %>
+
+<% @loading_results_message = "common_text.prompt_text.filtering_results".translate %>
+<% if @group_checkins.any? %>
+  <div id="check_in_result">
+    <div class="cjs_table_enclosure clearfix merge-top attach-bottom">
+      <div id="cjs_check_in_result" class="k-content">
+        <%= ibox nil do %>
+          <%= top_bar_in_listing({}, { show: true }, {}) %>
+          <%= content_tag :div, "", id: "cjs_check_ins_listing_kendogrid" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <%= ibox nil do %>
+    <div class="text-muted text-center">
+      <%= "feature.contract_management.content.no_checkin".translate %>
+    </div>
+  <% end %>
+<% end %>
+
+<% checkin_details = render partial: "group_checkins/duration_details", locals: {meeting_text: @task_checkin_details[:meetings]} %>
+<%= initialize_check_in_listing_kendo_script(@current_program, checkin_details) %>
+<%= javascript_tag %Q[jQuery(document).ready(function(){
+  CheckinsKendo.getUserCheckins("#{params[:user]}"); });] if params[:user].present? %>

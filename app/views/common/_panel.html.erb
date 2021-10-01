@@ -1,0 +1,41 @@
+<div class="panel <%= options[:panel_class] %>" id='<%= options[:panel_id].present? ? "#{options[:panel_id]}" : "" %>'>
+  <%= link_to_wrapper(options[:collapsible], url: "javascript:void(0)", class: "btn-link #{options[:link_class]}", data: { toggle: "collapse", target: "##{options[:panel_body_wrapper_id]}" } ) do %>
+    <div class="panel-heading <%= options[:panel_heading_class] %>" id='<%= options[:panel_heading_id].present? ? "#{options[:panel_heading_id]}" : "" %>' >
+      <% if options[:show_close_link] || options[:collapsible] || options[:additional_right_links].present? %>
+        <div class="pull-right m-l-xs vertical-align-top">
+          <% if options[:collapsible] && !options[:no_collapse_icon] %>
+            <% drop_down_class = options[:drop_down_icon] || "fa-chevron-down" %>
+            <%= content_tag(:i, set_screen_reader_only_content("display_string.expand_collapse".translate), :class => "cjs_collapse_icon fa #{drop_down_class}") %>
+          <% end %>
+          <% if options[:show_close_link] %>
+            <%= link_to (get_icon_content("fa fa-times no-margins") + set_screen_reader_only_content("display_string.Close".translate)), (options[:close_url] || "javascript:void(0)"), { class: "cjs_close_icon text-default #{options[:close_link_class]}" }.merge(options[:close_html_options] || {}) %>
+          <% end %>
+          <% if options[:additional_right_links].present? %>
+            <%= options[:additional_right_links].html_safe %>
+          <% end %>
+        </div>
+      <% end %>
+      <% if header_title.present? || options[:header_content].present? %>
+        <div class="<%= 'h5 font-600' unless options[:no_bold] %> panel-title no-margins">
+          <% if header_title.present? %>
+            <%= options[:icon_class].present? ? append_text_to_icon(options[:icon_class], header_title) : header_title %>
+          <% elsif options[:header_content].present? %>
+            <%= options[:header_content].html_safe %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class='<%= options[:panel_body_wrapper_class].present? ? "#{options[:panel_body_wrapper_class]}" : "" %>' id='<%= options[:panel_body_wrapper_id].present? ? "#{options[:panel_body_wrapper_id]}" : "" %>' >
+    <div class="panel-body <%= options[:panel_body_class] if options[:panel_body_class].present? %>" id='<%= options[:panel_body_id].present? ? "#{options[:panel_body_id]}" : "" %>'>
+      <%= content_block %>
+    </div>
+  </div>
+
+  <% if options[:footer].present? %>
+    <div class="panel-footer <%= options[:panel_footer_class] %>" id='<%= options[:panel_footer_id].present? ? "#{options[:panel_footer_id]}" : "" %>'>
+      <%= options[:footer] %>
+    </div>
+  <% end %>
+</div>

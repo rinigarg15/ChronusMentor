@@ -1,0 +1,29 @@
+<div>
+  <%= ibox "feature.profile.label.general_settings".translate, {show_collapse_link: true, collapse_link_class: "pull-right", ibox_id: "settings_section_general", ibox_content_id: "settings_content_general"} do%>
+    <%render :partial => "members/edit/settings_general" %>
+  <% end %>
+
+  <div class="clearfix cjs_mentoring_setting_<%= @current_program.id %> cjs_hide_setting_<%= @current_program.id %>_<%= User::MentoringMode::ONE_TIME %> <%= 'hide' if @profile_user.is_available_only_for_one_time_mentoring? %>">
+    <% if @profile_user.allowed_to_edit_max_connections_limit?(@current_program, @is_admin_view) %>
+      <%= ibox "feature.user.content.mentoring_mode.ongoing.name".translate(:Mentoring => _Mentoring), {show_collapse_link: true, collapse_link_class: "pull-right", ibox_id: "settings_section_ongoing", ibox_content_id: "settings_content_onegoing"} do%>
+        <%render :partial => "members/edit/settings_ongoing" %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="clearfix cjs_mentoring_setting_<%= @current_program.id %> cjs_hide_setting_<%= @current_program.id %>_<%= User::MentoringMode::ONGOING %> <%= 'hide' if @profile_user.is_available_only_for_ongoing_mentoring? %>">
+    <% calendar_enabled = @current_program.calendar_enabled? %>
+    <% flag= (calendar_enabled && (@profile_user.is_mentor? || @profile_user.can_set_meeting_preference?))  || (@profile_user.can_set_meeting_availability? && (@profile_user.is_allowed_to_set_all_availability? || @profile_user.is_allowed_to_set_general_availability?)) %>
+
+    <% if flag && (@profile_user.is_mentor? || @profile_member.show_one_time_settings?(@current_program)) %>
+      <%= ibox "feature.user.content.mentoring_mode.one_time.name_v1".translate(:Meeting => _Meeting, :Mentoring => _Mentoring), {show_collapse_link: true, collapse_link_class: "pull-right", ibox_id: "settings_section_onetime", ibox_content_id: "settings_content_onetime"} do%>
+          <%render :partial => "members/edit/settings_onetime" ,:locals => {:calendar_enabled => calendar_enabled}%>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if @current_program.calendar_sync_v2_for_member_applicable? %>
+    <% ibox_options = {header_title: "program_settings_strings.tab.calendar".translate, show_collapse_link: true, collapse_link_class: "pull-right", ibox_id: MembersController::EditSection::CALENDAR_SYNC_V2_SETTINGS} %>
+    <%= render partial: "members/edit/settings_calendar_sync_v2" ,locals: {program: @current_program, user: @profile_user, ibox_options: ibox_options, ei_src: (local_assigns[:ei_src] || EngagementIndex::Src::ConnectCalendar::EDIT_PROFILE_SETTINGS)} %>
+  <% end %>
+</div>

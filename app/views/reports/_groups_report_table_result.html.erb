@@ -1,0 +1,36 @@
+<% role_name_id_hash = @current_program.roles.select(:id, :name).inject({}) { |role_name_id_hash, role| role_name_id_hash[role.name] = role.id; role_name_id_hash } %>
+
+<% right_most_content = link_to("feature.reports.actions.edit_columns".translate, "javascript:void(0);", class: "btn btn-white btn-sm pull-right", id: "cjs_edit_columns_link", data: { url: edit_groups_report_view_path, page: @page, start_date: @start_date, end_date: @end_date } ) %>
+<%= top_bar_in_listing( { collection: groups }, {}, {}, right_most_content: right_most_content) %>
+<%= ibox nil, ibox_class: "no-margins" do %>
+  <div class="cjs_table_enclosure table-responsive table-bordered">
+    <table id="cjs_groups_report_table" class="table pane" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr class="pane-header cui_table_sort cjs_groups_report_table_header">
+          <%= get_groups_report_table_header(report_view_columns, @sort_param, @sort_order, @start_date, @end_date, @custom_term_options) %>
+        </tr>
+        <tr class="gray-bg">
+          <%= get_groups_report_table_totals(report_view_columns, totals_hash) %>
+        </tr>
+      </thead>
+      <tbody>
+        <% groups.each do |group| %>
+          <tr><%= get_groups_report_table_row(group, report_view_columns, groups_report) %></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+<% bottom_bar_content = bottom_bar_in_listing( { collection: groups, params: { filters: {sort: @sort_param, order: @sort_order, date_range: @date_range, sub_filter: sub_filter, search_filters: search_filters, member_filters: member_filters, from: "pagination"} } , ajax: true} ) %>
+<% if bottom_bar_content.present? %>
+  <%= ibox nil, ibox_class: "no-margins", content_class: "no-padding" do %>
+    <%= bottom_bar_content %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    handleDoubleScroll("#cjs_groups_report_table", ".cjs_table_enclosure");
+    GroupsReport.initializeTableView();
+  });
+<% end %>

@@ -1,0 +1,53 @@
+<% mentor = mentor_request.mentor %>
+<% student = mentor_request.student %>
+<% modal_container  'feature.mentor_request.content.choose_connection_popup.title'.translate(connection: _Mentoring_Connection),
+                    :modal_id => "modal_assign_link_#{mentor_request.id}",
+                    :modal_content_class => "animated fadeIn" do %>
+  <div id="select_connection_<%= mentor_request.id %>" class="select_connection_popup">
+    <div id="select_wrapper_<%= mentor_request.id %>">
+      <div class="font-bold">
+        <%= 'feature.mentor_request.content.choose_connection_popup.create_new'.translate(mentoring_connection: _mentoring_connection) %>
+      </div>
+      <div class="clearfix m-t-sm">
+        <div class="form_help create_new col-xs-8 no-padding m-b-sm">
+          <%= link_to_user mentor %> :: <%= link_to_user student %>
+        </div>
+
+        <%= simple_form_for mentor_request, before: "jQuery('.assign_loading_2_#{mentor_request.id}').show()", html: {class: 'select_form', id: "edit_mentor_request_#{mentor_request.id}_new"} do |f| %>
+          <%= f.hidden_field :src, value: source, id: "src_#{mentor_request.id}_new" %>
+          <%= f.hidden_field :status, value: AbstractRequest::Status::ACCEPTED, id: "status_#{mentor_request.id}_new" %>
+          <%= f.button :submit, 'display_string.Create'.translate, class: 'cjs_disable_accept_button pull-right btn btn-primary btn-sm' %>
+        <% end %>
+      </div>
+
+      <%= horizontal_or_separator("m-t-lg m-b-lg") %>
+
+      <div class="form_help select_prompt font-bold m-b-sm">
+        <%= 'feature.mentor_request.content.choose_connection_popup.add_to_existing_v1'.translate(student: student.name, count: @existing_connections_of_mentor.size, :mentoring_connection => _mentoring_connection, :mentoring_connections => _mentoring_connections) %>
+      </div>
+
+      <ul class="list-group no-padding">
+        <% @existing_connections_of_mentor.each do |group| %>
+          <li class="group_preview clearfix list-group-item no-horizontal-padding">
+            <div class="member_links col-xs-8 no-padding">
+              <%= group.name %>
+              <%= link_to_user mentor, :class => 'mentor_link' %> ::
+              <%= safe_join(group.students.collect{|student| link_to_user(student, :class => 'student_link')}, ", ") %>
+            </div>
+            <%= simple_form_for mentor_request, before: "jQuery('.assign_loading_2_#{mentor_request.id}').show()", html: {class: 'select_form col-xs-4 no-padding', id: "edit_mentor_request_#{mentor_request.id}_#{group.id}"} do |f| %>
+              <%= f.hidden_field :src, value: source, id: "src_#{mentor_request.id}_#{group.id}" %>
+              <%= f.hidden_field :group_id, value: group.id, id: "group_id_#{mentor_request.id}_#{group.id}" %>
+              <%= f.hidden_field :status, value: AbstractRequest::Status::ACCEPTED, id: "status_#{mentor_request.id}_#{group.id}" %>
+              <%= f.button :submit, 'display_string.Add'.translate, class: 'cjs_disable_accept_button pull-right btn btn-sm btn-primary' %>
+            <% end %>
+            <div class="text-center clearfix">
+              <i class="icon-all"><%= image_tag "ajax-loader.gif", class: "assign_loading_2_#{mentor_request.id} assign_2_loading", style: 'display: none;' %></i>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+  </div>
+  <%= javascript_tag "MentorRequestForm.init_disable('#{j('display_string.Please_Wait'.translate)}');" %>
+<% end %>

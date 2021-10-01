@@ -1,0 +1,22 @@
+<div id="meeting_edit_options" class="hide">
+  <div>
+    <%= "feature.meetings.content.about_to_modify_html".translate(meeting_topic: meeting.topic, time: DateTime.localize(DateTime.parse(current_occurrence_time), format: :short_date_short_time)) %>
+  </div>
+  <div>
+   <%= "feature.meetings.content.edit_question".translate(:meeting => _meeting, :meetings => _meetings) %>
+  </div>
+  <div class="p-t-sm clearfix">
+    <%= link_to_function "feature.meetings.action.only_this".translate(:meeting => _meeting), "Meetings.submitEditPopup('#{Meeting::EditOption::CURRENT}')", :class => "btn m-r-xs btn-sm btn-white current-option edit col-sm-4 col-xs-12" %>
+    <p class="p-t-xxs no-margins"> <%= "feature.meetings.content.edit_only_this_help_text".translate(:meetings => _meetings) %></p>
+  </div>
+
+  <div class="p-t-sm clearfix">
+    <%= link_to_function "feature.meetings.action.following".translate(:meetings => _meetings, format: :js), "Meetings.submitEditPopup('#{Meeting::EditOption::FOLLOWING}')", :class => "btn m-r-xs btn-sm btn-white following-option edit col-sm-4 col-xs-12" %>
+    <p class="p-t-xxs no-margins"><%= "feature.meetings.content.edit_following_help_text".translate(:meetings => _meetings) %></p>
+  </div>
+
+  <div class="p-t-sm clearfix">
+    <%= link_to_function "feature.meetings.action.all".translate(:meetings => _meetings, format: :js), "Meetings.submitEditPopup('#{Meeting::EditOption::ALL}')", :class => "btn btn-white btn-sm m-r-xs all-option edit col-sm-4 col-xs-12" %>
+    <p class="p-t-xxs no-margins"><%= "feature.meetings.content.edit_all_help_text".translate(:meetings => _meetings) %></p>
+  </div>
+</div>

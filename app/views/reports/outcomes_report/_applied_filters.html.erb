@@ -1,0 +1,22 @@
+<%= chrng_template_cache "appliedFilters.html", element_name: "applied-filters" do %>
+
+  <div class="panel white-bg no-margins b-b" id="cur" ng-show="klass.myFilters.length > 0">
+    <div class="panel-heading p-sm no-borders" id="">
+      <div class="h5 font-600 panel-title no-margins">
+          <%= "common_text.Applied_Filters".translate %>
+      </div>
+    </div>
+
+    <div class="" id="your_filters">
+      <div class="panel-body p-t-0 item " id="">
+        <div>
+          <span ng-repeat="filter in klass.myFilters" class="label inline m-r-xs m-b-xxs label-default {{klass.label_class}}" id="filter_item_{{filter['reset_suffix']}}">
+            {{filter["label"] | truncateWithEllipsis:30}}
+            <span class="pointer p-l-xxs cjs_exec_fn_on_click" data-click_fn="{{klass.clearFilter}}" data-click_fn_args="{{filter['reset_suffix']}}" ng-hide="filter['reset_suffix'] == null || filter['reset_suffix'] == ''">X</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% end %>

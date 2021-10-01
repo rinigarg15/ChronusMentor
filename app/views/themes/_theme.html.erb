@@ -1,0 +1,29 @@
+<% is_this_currently_used = (@current_theme == theme) %>
+
+<tr class="<%= 'active' if is_this_currently_used %>">
+  <td>
+    <%= theme.name %><%= " <i>#{"feature.custom_themes.label.program_specific".translate}</i>".html_safe if super_console? && !theme.is_global? %>
+    <%= " <i>#{"feature.custom_themes.label.active_theme_in_org".translate(org_name: h(@current_organization.name))}</i>".html_safe if @is_themes_sub_program_view && (theme == @current_organization.active_theme) %>
+  </td>
+  <td>
+    <div class="pull-right">
+      <% action_links = [] %>
+      <% if is_this_currently_used %>
+        <% link_text = get_icon_content("fa fa-check") + content_tag(:b, "feature.custom_themes.label.current_theme".translate) %>
+        <% action_links << link_to(link_text, "javascript:void(0)", class: "btn btn-xs btn-primary cui-unclickable-element") %>
+      <% else %>
+        <% if program_view? || @current_organization.standalone? %>
+          <% action_links << link_to("feature.custom_themes.actions.use_theme".translate, theme_path(theme, activate: true), method: :patch, class: "btn btn-xs btn-white use_theme") %>
+        <% else %>
+          <% action_links << link_to_function("feature.custom_themes.actions.use_theme".translate, %Q[jQueryShowQtip('', 600, '#{global_confirm_popup_theme_path(theme, activate: true)}', '', {modal: true})], class: "btn btn-xs btn-white use_theme")
+          %>
+        <% end %>
+      <% end %>
+      <% if super_console? && !theme.is_default? %>
+        <% action_links << link_to("display_string.Edit".translate, edit_theme_path(theme), class: 'btn btn-xs btn-white edit_link') %>
+        <% action_links << link_to("display_string.Delete".translate, theme_path(theme), method: :delete, class: 'btn btn-xs btn-white delete_link', data: { confirm: "common_text.confirmation.sure_to_delete_this".translate(title: "feature.custom_themes.label.theme".translate) } ) %>
+      <% end %>
+      <%= render_button_group(action_links) %>
+    </div>
+  </td>
+</tr>

@@ -1,0 +1,33 @@
+<div id="edit_education_<%= question.id %>" class="edit_education clearfix cjs_question_#{question.id}">
+  <div class="educations">
+    <%= hidden_field_tag "profile_answers[#{question.id}][hidden]" %>
+    <% if question.question_type == ProfileQuestion::Type::MULTI_EDUCATION %>
+      <div class = "text-center hide cjs_empty_message p-sm"><%= "feature.education_and_experience.label.no_education_specified".translate %></div>
+      <div id="edu_cur_list_<%= question.id %>" class="clearfix panel-body list-group p-l-xs p-r-xs">
+        <% educations = answer.educations.empty? ? [Education.new] : answer.educations %>
+        <%= render :partial => "educations/new_education", :collection => educations, :locals => {:question => question, :required => local_assigns[:required]} %>
+      </div>
+
+      <% unless question.help_text.blank? %>
+        <div class="m-t-xs b-t p-l-sm">
+          <%= help_text_content(question.help_text.html_safe, question.id) %>
+        </div>
+      <% end %>
+
+      <div class="add_new m-t-sm panel-footer clearfix">
+        <span class="pull-right">
+          <%= add_education_link(question, embed_icon('fa fa-plus-circle m-r-xs',"feature.education_and_experience.action.add_degree_v1".translate), :required => local_assigns[:required]) %>
+        </span>
+      </div>
+    <% elsif question.question_type == ProfileQuestion::Type::EDUCATION %>
+      <div id="edu_cur_list_<%=question.id%>" class="clearfix panel-body">
+        <%= render :partial => "educations/new_education", :object => answer.educations.first || Education.new, :locals => {:question => question, :required => local_assigns[:required]} %>
+      </div>
+      <% unless question.help_text.blank? %>
+        <div class="m-t-xs b-t p-l-sm">
+         <%= help_text_content(question.help_text.html_safe, question.id) %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

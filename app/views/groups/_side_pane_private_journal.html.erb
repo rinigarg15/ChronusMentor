@@ -1,0 +1,7 @@
+<% note = sidepane_asset %>
+<div class="font-bold word_break">
+  <%= link_to truncate_html(get_safe_string + "\"#{note.text}\"", :max_length => 75), group_connection_private_notes_path(@group, :anchor => "note_#{note.id}") %>
+</div>
+<div class="small m-t-xs">
+  <%= get_icon_content("fa fa-clock-o no-margins") + DateTime.localize(note.created_at, format: :full_display_without_time) %>
+</div>

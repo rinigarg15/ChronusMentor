@@ -1,0 +1,18 @@
+<% @title = "#{@survey.title}#{assessee.present? ? " - #{assessee.name(:name_only => true)}" : ""}" %>
+
+<%= render :partial => "three_sixty/survey/your_details", :locals => {:survey_reviewer => survey_reviewer, :answers => answers} unless is_for_self %>
+<%= three_sixty_survey_rating_instruction(assessee, is_for_self || is_for_preview) %>
+
+<%= render :partial => "three_sixty/survey/survey_competency", :collection => survey_competencies, :locals => {:survey => survey, :answers => answers} %>
+<% if survey_oeqs.any? %>
+  <h3 class="no-margins gray-bg p-sm p-t-xs table-bordered"><%= "feature.three_sixty.survey.open_ended_questions".translate %></h3>
+  <div class="cjs-alt-color-parent">
+    <%= render :partial => "three_sixty/survey/survey_question", :collection => survey_oeqs, :locals => {:survey => survey, :answers => answers} %>
+  </div>
+<% end %>
+
+<%= yield %>
+
+<%= javascript_tag do  %>
+  ThreeSixty.initializeShowSurvey();
+<% end %>

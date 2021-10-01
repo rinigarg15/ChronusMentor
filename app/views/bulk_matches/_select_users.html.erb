@@ -1,0 +1,33 @@
+<% source_info = params.to_unsafe_h.pick(:controller, :action, :id) %>
+
+<div class="clearfix" id ="select_views_content">
+  <%= ibox nil do %>
+    <%= simple_form_for @bulk_match, :url => '#', :html => {:class => "form-horizontal", :id => "bulk_match_step_one"} do |f| %>
+
+      <%= render partial: "bulk_matches/select_match_orientation", locals: {f: f} unless recommend_mentors %>
+      <div class="row m-t">
+        <% role_names = is_mentor_to_mentee_view?(orientation_type) ? [RoleConstants::MENTOR_NAME, RoleConstants::ROLE_DISPLAY_NAME_MAPPING[RoleConstants::STUDENT_NAME]] : [RoleConstants::ROLE_DISPLAY_NAME_MAPPING[RoleConstants::STUDENT_NAME], RoleConstants::MENTOR_NAME] %>
+        <%= render :partial => "admin_views/admin_view_details", :locals => {role_names: role_names, form: f, preview_view_url: preview_view_details_bulk_matches_path(source_info: source_info), id_suffix: "bulk_match"} %>
+
+        <%= f.input "mentor_view_hidden_id", :as => :hidden, :input_html => {id: "bulk_match_mentor_view_hidden_id", :value => @bulk_match.new_record? ? nil : @mentor_view.try(:id)} %>
+        <%= f.input "mentee_view_hidden_id", :as => :hidden, :input_html => {id: "bulk_match_mentee_view_hidden_id", :value => @bulk_match.new_record? ? nil : @mentee_view.try(:id)} %>
+      </div>
+      <div class="pull-left">
+        <% note_class = (@mentor_view.present? || @mentee_view.present?) ? '' : 'hide' %>
+        <div class="small col-xs-12 m-b-xs p-l-0 cjs-drafted-note <%= note_class %>"><b class="p-r-xxs"><%= "display_string.Note_with_colon".translate %></b><%= "feature.bulk_match.content.suspended_note".translate %></div>
+      </div>
+      <% action_set :class => "clearfix col-xs-12 cui_bulk_match_next_button no-padding" do %>
+        <div class="pull-right">
+          <%= f.button :submit, "display_string.Next_raquo_html".translate, :data => {url: recommend_mentors ? bulk_recommendation_path(format: :js) : bulk_match_bulk_matches_path(format: :js)} %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+<% create_admin_view = render(partial: 'admin_views/create_admin_view_link', locals: { source_info: source_info } ) %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    adminViewInitSelect2.initialize(<%= chr_json_escape get_view_options(@admin_view_role_hash, RoleConstants::STUDENT_NAME).to_json %>, "#bulk_match_mentee_view_id", "<%= j(create_admin_view) %>", true);
+    adminViewInitSelect2.initialize(<%= chr_json_escape get_view_options(@admin_view_role_hash, RoleConstants::MENTOR_NAME).to_json%>, "#bulk_match_mentor_view_id", "<%= j(create_admin_view) %>", true);
+  });
+<% end %>

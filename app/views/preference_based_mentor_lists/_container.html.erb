@@ -1,0 +1,24 @@
+<% if current_user.can_view_preferece_based_mentor_lists? %>
+  <% experiment = chronus_ab_test(ProgramAbTest::Experiment::POPULAR_CATEGORIES) %>
+  <% if experiment.show_preference_categories?(params[:show_preference_categories].present?) %>
+    <div class="cjs_preference_based_mentor_lists_container m-b-xl m-t-sm">
+      <div class="gray-bg h5 p-b-sm m-b-0">
+        <span>
+          <%= get_preference_based_mentor_lists_recommendations_title %>
+        </span>
+      </div>
+      <div class="preference_based_mentor_lists cjs_tile_container gray-bg">
+        <%= render(partial: "common/tile_placeholder") %>
+        <div class="hide cjs_no_recommendations_available">
+          <div class="tile-response text-center">
+            <%= "feature.implicit_preference.mentors_lists.no_recommendations_available".translate %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      PreferenceBasedMentorLists.loadMentorLists('<%= preference_based_mentor_lists_path %>')
+    </script>
+  <% end %>
+<% end %>

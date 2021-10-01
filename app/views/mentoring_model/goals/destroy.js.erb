@@ -1,0 +1,6 @@
+jQuery('#<%= "edit_goal_popup_#{@goal.id}" %>').modal('hide');
+jQuery('.<%= "cjs_display_goal_and_task_block_#{@goal.id}" %>').slideUp();
+<% unless @goals.present? %>
+  jQuery('.cjs_display_all_goals').append('<%= j display_no_goals %>');
+<% end %>
+

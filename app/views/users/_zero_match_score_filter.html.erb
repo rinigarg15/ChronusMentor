@@ -1,0 +1,14 @@
+<% checkbox_id = "filter_#{UserSearch::SHOW_NO_MATCH_FILTER}" %>
+<div class="panel-group no-margins hide cjs_hidden_filters b-t">
+  <% profile_filter_wrapper "feature.user.filter.match_score".translate, true, false, false, {} do %>
+    <div class="choices_wrapper">
+      <div><%= link_to_function set_screen_reader_only_content("feature.user.filter.match_score_reset".translate), "jQuery('##{checkbox_id}').prop('checked', false);MentorSearch.applyFilters();", id: "reset_filter_#{"feature.user.filter.match_score".translate.to_html_id}", class: 'hide' %></div>
+      <label class="checkbox">
+        <%= check_box_tag "filter[]", UserSearch::SHOW_NO_MATCH_FILTER, @show_no_match_filter_value, id: checkbox_id, class: "#{UserSearch::SHOW_NO_MATCH_FILTER}" +" " + "#{ei_class}", data: {activity: activity} %>
+        <div><%= "feature.user.filter.include_not_matching_mentors".translate(mentors: _mentors) %></div>
+      </label>
+    </div>
+  <% end %>
+</div>
+
+<%= javascript_tag "jQuery('##{checkbox_id}').change(function(){BBQPlugin.toggleStatusFilter('#{UserSearch::SHOW_NO_MATCH_FILTER}')});" %>

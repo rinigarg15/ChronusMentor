@@ -1,0 +1,232 @@
+en:
+  feature:
+    mentor_request:
+      header:
+        title_v3: Request %{mentor_name} to be my %{mentor}
+        mentor_requests_v1: "%{Mentoring} Requests"
+        received_mentor_requests_v1: Received %{Mentoring} Requests
+        sent_mentor_requests_v1: Sent %{Mentoring} Requests
+        requests_for_mentoring: requests for %{mentoring}
+        Customize_Mentor_Request_Form: Customize %{Mentoring} Request Form
+        request_title: "%{Mentoring_Connection} Request"
+        accepted_request: Welcome to your %{mentoring} area!
+        assign_a_preferred_mentor: Assign a preferred %{mentor}
+        assign_any_mentor: Assign any %{mentor}
+      footer:
+        accepted_request_footer_html:
+          one: You are currently %{mentoring} 1 user and can accept requests from %{connection_limit} more. %{Change}
+          other: You are currently %{mentoring} %{count} users and can accept requests from %{connection_limit} more. %{Change}
+        accepted_request_footer_limit_reached_html:
+          one: You are currently %{mentoring} 1 user and cannot accept requests from more. %{Change}
+          other: You are currently %{mentoring} %{count} users and cannot accept requests from more. %{Change}
+      label:
+        Request: Request
+        Requests: Requests
+        Sender: Sender
+        Receiver: Receiver
+        Sent: Sent
+        SentBy: Sent Between
+        Received: Received
+        Recipient: Recipient
+        to: Notify
+        add_personal_message: Add a personal message
+        csv_headers:
+          mentee_name: "%{Mentee} Name"
+          mentee_email: "%{Mentee} Email"
+          preferred_mentor_name: Preferred %{Mentor} Name
+          preferred_mentor_email: Preferred %{Mentor} Email
+          match_score: Match Score
+          mentee_preference: "%{Mentee}'s Preference"
+          requested_on: Requested On
+        report:
+          request_details: Request details
+          request: Request
+          sent: Sent
+          match: Match
+          reason_for_prefrence: Reason for preference
+          in_order_of_preference: "(in order of preference)"
+          student_profile: "%{student_name}'s profile"
+          preferred_mentors_header: Preferred %{Mentors}
+          mentor_name_header: "%{Mentor} Name"
+          assigned_mentors: Assigned %{Mentors}
+          generated_at: Report generated on %{date}
+          report_name:
+            active: Requests for %{mentoring}
+            accepted: Accepted %{mentoring} Requests
+            rejected: Rejected %{mentoring} Requests
+            withdrawn: Withdrawn %{mentoring} Requests
+            closed: Closed %{mentoring} Requests
+      content:
+        default_message_v4: Hi, I am reaching out to you because I am looking for guidance in the areas that you have experience. If you also think we would be a good fit, I'd be excited to partner with you!
+        empty_text_v1: There are no %{mentoring} requests that match the chosen criteria
+        select_all_label_v1: Select all requests to perform an action
+        select_this_label_v1: Select this request to perform an action
+        instructions_for_mentee: Instructions for the %{mentee} while sending %{mentoring} request
+        open_for_meeting_text: I am open to a %{meeting_duration} %{meeting} with %{mentor_name} if this request cannot be accepted.
+        open_for_meeting_text_v1: I am open to a %{meeting_duration} %{meeting} with %{mentor_name} if the %{mentoring_connection} request cannot be accepted.
+        not_available_for_connection: We understand that you are not available for a %{mentoring_connection}.
+        recommend_meeting_text: Would you like to have a %{meeting_duration} %{meeting} with the %{mentee}?
+        recommend_meeting_text_v1: Would you like to have a %{meeting_duration} %{meeting} with %{mentee_name} instead?
+        filter:
+          status_label: Status
+          requests_to_me_v2: Requests received
+          requests_by_me_v2: Requests initiated
+          requests_all_v1: All requests
+        choose_connection_popup:
+          title: Choose %{connection}
+          create_new: Create a new %{mentoring_connection}
+          add_to_existing_v1:
+            one: Add %{student} to your existing %{mentoring_connection}
+            other: Add %{student} to one of your existing %{mentoring_connections}
+        reject_popup:
+          title_v1: Decline Request
+          message: It is highly recommended that you share the reason for your rejection
+          mail_message_v3: Your message will be mailed to the user. The reason selected from the list above will not.
+        accept_popup:
+          title: Accept Request
+          non_calendar_time_message: "(Optional) Leave a note for %{user_name}. Make sure you mention date and times when you can connect."
+          calendar_time_message: "(Optional) Leave a note for %{user_name}."
+        withdraw_popup:
+          title: Withdraw Request
+          message: It is highly recommended that you share the reason for your withdrawal
+          mail_message: The reason for withdrawal will be mailed to the user
+        close_request_popup:
+          title:
+            one: Close Request
+            other: Close Requests
+          help_text_v1:
+            one: You have selected a request.
+            other: You have selected %{count} requests.
+          placeholder:
+            reason_v1:
+              one: Enter a reason for closing the request.
+              other: Enter a reason for closing the requests.
+          action:
+            close_request:
+              one: Close Request
+              other: Close Requests
+        receiver_unavailable: "%{receiver} is no longer available"
+        rejection_reason_v1: Reason for Declining
+        withdrawal_reason: Reason for withdrawal
+        closing_reason: Reason for closing
+        mentor_assign_popup_text: Type the name of the %{mentor} to be assigned to %{student_name}
+        mentor_name: "%{Mentor} name"
+        see_more_mentors: See more %{mentors}
+        select_atleast_one_request_v2: Please select at least one request
+        no_longer_valid_request:
+          mentor_does_not_allow_ongoing_mentoring_v1: "%{mentor_name} is not available for a %{mentoring_connection} at this time and is not accepting any requests. However, %{mentor_name} is accepting only %{meetings}. %{click_here} to view %{mentor_name}'s profile."
+          already_connected: You are already connected with %{mentor_name} for a %{mentoring_connection}. You can look for other %{mentors} who are available and reach out to them from %{mentors_page}.
+          duplicate_request_to_mentor: You have already sent a request for %{mentoring_connection} to %{mentor_name}. You can look for other %{mentors} who are available and reach out to them from %{mentors_page}.
+          blocked_by_admin: The %{mentors} in this %{program} are not accepting any %{mentoring_connection} requests. Please contact your %{admin} if you have any queries.
+          limit_for_mentee_reached: You cannot send any more %{mentoring_connection} requests as you have reached the limit for the number of concurrent %{mentoring_connections}.
+          request_limit_for_mentee_reached: You cannot send any more %{mentoring_connection} requests as you have reached the limit for the number of concurrent pending requests. %{click_here} to view your pending requests.
+          mentor_slots_unavailable: "%{mentor_name} is not available for a %{mentoring_connection} at this time and is not accepting any requests. You can look for other %{mentors} who are available and reach out to them from %{mentors_page}."
+        requests_dropped: Includes %{mentoring} Requests %{rejected_withdrawn_and_closed}
+      status:
+        Accepted: Accepted
+        Rejected: Rejected
+        Declined: Declined
+        Withdrawn: Withdrawn
+        Pending: Pending
+        accepted: Accepted
+        rejected: Rejected
+        withdrawn: Withdrawn
+        pending: Pending
+        closed: Closed
+      action:
+        batch_assignment_v1_html: Batch assignment of %{mentors} &raquo;
+        export: Export requests as
+        go_to_mentoring_area_v1: Go to %{Mentoring_Area}
+        withdraw_request: Withdraw Request
+        Assign_Mentor: Assign %{Mentor}
+        reject_request_v2: Decline Request
+        close_request: Close Request
+        close_requests: Close Requests
+        Assign: Assign
+        choose_different_mentor_html: "&laquo; Choose a different %{mentor}"
+        send_message_to_sender:
+          one: Send Message to Sender
+          other: Send Message to Senders
+        send_message_to_recipient:
+          one: Send Message to Recipient
+          other: Send Message to Recipients
+        export_as_csv: Export as CSV
+      tasks:
+        expired_message_v1: This request was closed automatically since the %{mentor} did not respond within %{expiration_days} days.
+    mentor_offer:
+      title:
+        all: "%{Mentoring} Offers"
+        by_me: "%{Mentoring} Offers Initiated"
+        me: Received %{Mentoring} Offers
+      header:
+        reject_offer_v2: Decline Offer for %{Mentoring} from %{user}
+        withdraw_offer: Withdraw Offer
+        offers_for_mentoring: offers for %{mentoring}
+      content:
+        mentor_offers_dropped: Includes %{Mentor} Offers Declined, Withdrawn and Closed
+        no_mentoring_offer: There are no mentoring offers matching the chosen criteria
+        no_mentoring_offer_v1: There are no offers for %{mentoring} matching the chosen criteria
+        rejection_reason_help_text: The reason for rejection will be mailed to the %{mentor}
+        rejection_reason_help_text_v1: The reason for rejection will be mailed to the %{sent_to}
+        rejection_reason_help_text_v2: The reason for declining will be mailed to %{sent_to}
+        no_message: No message
+        select_all_label: Select all offers to perform an action
+        withdrawal_reason_help_text: The reason for withdrawal will be mailed to the %{sent_to}
+        select_atleast_one_offer: Please select atleast one offer
+        select_atleast_one_offer_v1: Please select at least one offer
+        close_offer_popup:
+          title:
+            one: Close Offer
+            other: Close Offers
+          help_text:
+            one: You have selected an offer.
+            other: You have selected %{count} offers.
+          help_text_v1:
+            one: You have selected an offer.
+            other: You have selected %{count} offers.
+          notification_help_text:
+            one: A notification will be send to the selected user, with the reason for closing the offer
+            other: A notification will be send to the selected users, with the reason for closing the offers
+          placeholder:
+            reason:
+              one: Enter a reason for closing the  offer.
+              other: Enter a reason for closing the  offers.
+          mail_message: The reason for closing will be mailed to the user
+          action:
+            close_offer:
+              one: Close Offer
+              other: Close Offers
+        closing_reason: Reason for closing
+        filter:
+          title: Filter Offers
+          show_label: Show offers with status
+          requests_to_me_v1: Offers sent to me
+          requests_by_me_v1: Offers sent by me
+          requests_to_me_v2: Offers received
+          requests_by_me_v2: Offers initiated
+          requests_all_v1: All offers
+      label:
+        accept: Accept
+        close: Close
+        withdraw: Withdraw
+        reason: Reason
+        pending: Pending
+        rejection_reason_v1: Reason for Declining
+        withdrawal_reason: Reason for withdrawal
+        offer: Offer
+        Sender: Sender
+        Recipient: Recipient
+        Sent: Sent
+        Message: Message
+        closed_by: Closed by
+        closed_at: Closed at
+      action:
+        close_offers: Close Offers
+        export_as_csv: Export as CSV
+      error:
+        not_mentor: is not %{mentor}
+        provide_rejection_reason: Please provide some reason for rejection
+        reached_connection_limit_v1: has reached the %{mentoring_conection} limit
+        mentoring_offer_not_allowed_v1: doesn't allow you to offer %{mentoring}
+      status:
+        Closed: Closed

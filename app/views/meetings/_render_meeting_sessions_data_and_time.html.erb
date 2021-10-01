@@ -1,0 +1,19 @@
+<div class="clearfix">
+  <% if meeting.calendar_time_available? %>
+    <div>
+      <%= append_text_to_icon("fa fa-calendar", DateTime.localize(current_occurrence_time.in_time_zone(wob_member.get_valid_time_zone), format: :full_display_no_day_short_month)) %>
+    </div>
+    <div>
+      <%= append_text_to_icon("fa fa-clock-o", "#{meeting.formatted_duration}") %>
+    </div>
+  <% else %>
+    <div>
+      <%= append_text_to_icon("fa fa-calendar", content_tag(:span, 'feature.meetings.content.no_meeting_time_set'.translate(:meeting => _meeting), class: 'text-muted')) %>
+    </div>
+  <% end %>
+  <div>
+    <div class = "word_break">
+      <%= append_text_to_icon("fa fa-map-marker", (meeting.location.blank? ? content_tag(:span, 'feature.meetings.content.no_location'.translate, class: 'text-muted') : h(meeting.location))) %>
+    </div>
+  </div>
+</div>

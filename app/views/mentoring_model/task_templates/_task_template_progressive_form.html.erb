@@ -1,0 +1,137 @@
+<% action_item_mapper = {
+      MentoringModel::TaskTemplate::ActionItem::DEFAULT => "feature.mentoring_model.label.task_name".translate,
+      MentoringModel::TaskTemplate::ActionItem::MEETING => "feature.mentoring_model.js_translations.form_meeting_name".translate,
+      MentoringModel::TaskTemplate::ActionItem::GOAL => "feature.mentoring_model.label.goal_title".translate,
+      MentoringModel::TaskTemplate::ActionItem::ENGAGEMENT_SURVEY => "activerecord.attributes.survey.name".translate
+    };
+%>
+<% task_template_id = task_template.id || "new" %>
+<% associatable_task_templates = [["feature.mentoring_model.description.start_of_connection_option".translate(connection: _mentoring_connection), nil, "start"]] + task_templates_to_associate.collect{|t| [t.title, t.id, t.role_id]} %>
+<% duration_unit_list, duration_unit_list_map = generate_duration_unit_list_and_map %>
+<% role_mapping = RoleConstants.program_roles_mapping(@current_program) %>
+<% task_template_duration = task_template.duration < 1 ? 7 : task_template.duration %>
+<% task_template_duration_id = duration_unit_list[0][1] %>
+<% role_id_mapping = {} %>
+<% allowed_roles.each{|r| role_id_mapping[r.id] = " - #{role_mapping[r.name]}"} %>
+<% role_id_mapping[nil] = " - "+"feature.mentoring_model.label.unassigned_capitalized".translate %>
+<% if task_template.duration.present? && !task_template.duration.zero? && task_template.duration % duration_unit_list[1][1] == 0 %>
+  <% task_template_duration = task_template.duration/duration_unit_list[1][1] %>
+  <% task_template_duration_id = duration_unit_list[1][1] %>
+<% end %>
+<% date_assigner_mapping = [["feature.mentoring_model.js_translations.predecessor".translate, MentoringModel::TaskTemplate::DueDateType::PREDECESSOR], ["feature.mentoring_model.js_translations.specific_date".translate, MentoringModel::TaskTemplate::DueDateType::SPECIFIC_DATE]] %>
+<% default_date_assigner = task_template.specific_date.present? ? MentoringModel::TaskTemplate::DueDateType::SPECIFIC_DATE : MentoringModel::TaskTemplate::DueDateType::PREDECESSOR %>
+
+
+<%= simple_form_for task_template, url: (task_template.new_record? ? mentoring_model_task_templates_path(@mentoring_model) : mentoring_model_task_template_path(@mentoring_model, task_template)), html: {method: (task_template.new_record? ? "post" : "patch"), class: "clearfix form-horizontal cjs-mentoring-model-template-form cjs_ckeditor_dont_register_for_insecure_content", id: "cjs_new_mentoring_model_task_template_#{task_template_id}"}, remote: true do |f| %>
+  <input name="mentoring_model_task_template[milestone_template_id]" type="hidden" value="<%= task_template.milestone_template_id %>">
+  <input name="mentoring_model_task_template[action_item_type]" type="hidden" value="<%= task_template.action_item_type %>">
+  <div class="cjs-elements-container">
+    <%= control_group do %>
+      <label class="col-sm-2 control-label" for="mentoring_model_task_template_title"><%= action_item_mapper[task_template.action_item_type] %></label>
+      <div class="col-sm-10">
+        <input class="string required form-control cjs-mentoring-connections-v2-title-textbox" name="mentoring_model_task_template[title]" id="mentoring_model_task_template_title" size="50" type="text" value="<%= task_template.title %>" >
+      </div>
+    <% end %>
+    <%= control_group do %>
+      <label class="col-sm-2 control-label" for="cjs-mentoring-model-task-template-description-new"><%= "feature.mentoring_model.js_translations.description_label".translate %></label>
+      <div class="col-sm-10">
+        <textarea id="cjs-mentoring-model-task-template-description-new" name="mentoring_model_task_template[description]"><%= object_description_content(task_template) %></textarea>
+      </div>
+    <% end %>
+    <%= control_group do %>
+      <label class="col-sm-2 control-label" for="mentoring_model_task_template_role_id"><%= "feature.mentoring_model.label.assign_to".translate %></label>
+      <div class="col-sm-5">
+        <% options = content_tag(:option, "feature.mentoring_model.label.unassigned_capitalized".translate, :value => "") %>
+        <% options += options_for_select(allowed_roles.collect{|r| [role_mapping[r.name], r.id]}, task_template.role_id) %>
+        <%= select_tag("mentoring_model_task_template[role_id]", options, {:class => "form-control"}) %>
+      </div>
+    <% end %>
+    <% if milestone_templates_to_associate.present? %>
+      <%= control_group do %>
+        <label class="col-sm-2 control-label" for="mentoring_model_task_template_milestone_template_id"><%= "feature.mentoring_model.js_translations.apply_to_milestone_label".translate %></label>
+        <div class="col-sm-5">
+          <%= select_tag("mentoring_model_task_template[milestone_template_id]", options_for_select(milestone_templates_to_associate.collect{|m| [m.title, m.id]}, task_template.milestone_template_id), {:class => "form-control"}) %>
+        </div>
+      <% end %>
+    <% end %>
+    <% if action_items_to_associate.present? %>
+      <%= control_group do %>
+        <label class="col-sm-2 control-label" for="mentoring_model_task_template_action_item_id"><%= "feature.mentoring_model.js_translations.select_survey".translate %>*</label>
+        <div class="col-sm-5">
+          <% options = options_for_select(action_items_to_associate.collect{|a| [a.name, a.id]}, task_template.action_item_id ) %>
+          <%= select_tag("mentoring_model_task_template[action_item_id]", options , {:class => "form-control", :required => "required"}) %>
+        </div>
+      <% end %>
+    <% end %>
+    <%= control_group do %>
+      <div class="col-sm-10 col-sm-offset-2 cjs-required-container cjs-required-box cjs-hide-on-outside-click-root pointer">
+        <label class="checkbox-inline">
+          <input value="<%= task_template.required %>" class="cjs-mentoring-model-task-required-checkbox no-margin" id="mentoring_model_task_template_required" type="checkbox" <%= task_template.required? ? 'checked' : '' %> >
+
+          <input value="<%= task_template.required ? "1" : "0" %>" class="cjs-mentoring-model-task-required-input" name="mentoring_model_task_template[required]" type="hidden">
+          <span class="pointer"><%= "feature.mentoring_model.js_translations.required_task".translate %> </span>
+        </label>
+      </div>
+    <% end %>
+    <div class="cjs-required-checkbox-true">
+      <%= control_group do %>
+        <label class="col-sm-2 control-label" for="mentoring_model_task_template_date_assigner"><%= "feature.mentoring_model.js_translations.due_date_connected_to".translate %></label>
+        <div class="col-sm-5">
+
+          <%= select_tag("mentoring_model_task_template[date_assigner]", options_for_select(date_assigner_mapping, default_date_assigner), {:class => "form-control mentoring_model_task_template_date_assigner"}) %>
+        </div>
+      <% end %>
+      <%= control_group(:class => "hide cjs-predecessor-handler") do %>
+        <label class="col-sm-2 control-label" for="mentoring_model_task_template_duration"><%= "display_string.Due_Date".translate %></label>
+        <div class="col-sm-10">
+          <%= construct_input_group([], [], :input_group_class => "col-xs-6 col-sm-2 no-padding pull-left m-b-xs") do %>
+            <input name="mentoring_model_task_template[duration]" id="mentoring_model_task_template_duration" type="text" value="<%= task_template_duration %>" class="form-control">
+          <% end %>
+          <%= construct_input_group([], [], :input_group_class => "col-xs-6 col-sm-2 no-padding pull-left m-b-xs") do %>
+            <label class="col-sm-2 sr-only" for="duration_id_input"><%= "feature.meetings.content.repeat".translate %></label>
+            <%= select_tag("duration_id_input", options_for_select(duration_unit_list, task_template_duration_id), {:class => "form-control"}) %>
+          <% end %>
+          <%= construct_input_group([{type: "addon", content: "feature.mentoring_model.js_translations.after".translate, class: "no-border no-background font-600"}], [{type: "addon", content: "feature.mentoring_model.js_translations.is_due".translate, class: "no-border no-background cjs-is-due font-600"}], :input_group_class => "col-xs-12 col-sm-8 no-padding pull-left m-b-xs") do %>
+            <label class="control-label sr-only" for="cjs-task-list-select2"><%= "feature.mentoring_model.header.task".translate %></label>
+            <% options = "".html_safe %>
+            <% associatable_task_templates.each do |item| %>
+              <% select_options = {} %>
+              <% select_options[:value] = (item[1]==nil ? "" : item[1]) %>
+              <% select_options[:isduerequired] = item[1].present? %>
+              <% select_options["role-text"] = ((item[2] == "start") ? "" : role_id_mapping[item[2]]) %>
+              <% select_options[:selected] = "selected" if (task_template.associated_id == item[1]) %>
+              <% options += content_tag(:option, item[0], select_options) %>
+            <% end %>
+            <%= select_tag("mentoring_model_task_template[associated_id]", options, {:class => "cjs-task-list-select2-dropdown col-xs-12 no-padding", :id => "cjs-task-list-select2"}) %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= control_group(:class => "hide cjs-specific-date-handler") do %>
+        <label class="col-sm-2 control-label" for="mentoring_model_task_template_specific_date"><%= "display_string.Due_Date".translate %></label>
+        <div class="col-sm-5">
+          <%= construct_input_group([type: "addon", icon_class: "fa fa-calendar"], []) do %>
+            <%= f.input_field :specific_date, :as => :string, :id => "mentoring_model_task_template_specific_date", :class => "form-control", data: date_picker_options, value:  DateTime.localize((task_template.specific_date.present? ? task_template.specific_date : Time.current), format: :full_display_no_time) %>
+          <% end %>
+        </div>
+      <% end %>
+      <% if goal_templates_to_associate.present? %>
+      <%= control_group do %>
+        <label class="col-sm-2 control-label" for="mentoring_model_task_template_goal_template_id"><%= "feature.mentoring_model.js_translations.apply_to_goal_label".translate %></label>
+        <div class="col-sm-5">
+          <% options = content_tag(:option, "feature.mentoring_model.js_translations.select".translate, :value => "") %>
+          <% options += options_for_select(goal_templates_to_associate.collect{|g| [g.title, g.id]}, task_template.goal_template_id ) %>
+          <%= select_tag("mentoring_model_task_template[goal_template_id]", options , {:class => "form-control"}) %>
+        </div>
+      <% end %>
+    <% end %>
+    </div>
+
+    <div class="pull-right">
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", class: "cjs-task-template-cancel-btn btn btn-white" %>
+      <%= f.button :submit, "feature.mentoring_model.js_translations.save_task".translate, class: "cjs-hide-on-outside-click-root cjs-task-template-submit-btn", data: {url: check_chronological_order_is_maintained_mentoring_model_task_templates_path(@mentoring_model)} %>
+    </div>
+  </div>
+<% end %>
+<%= javascript_tag do %>
+  TaskTemplateProgressiveForm.initialize("<%= task_template_id %>", <%= (@ongoing_connections_count > 0) %>);
+<% end %>

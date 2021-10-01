@@ -1,0 +1,31 @@
+<%= simple_form_for @admin_view, :url => add_role_admin_view_path(@admin_view), :html => {:method => :post, :class => "no-margin", :id => "form_admin_view_bulk_actions"} do |f| %>
+  <%= f.input "users", :as => :hidden, :input_html => {:value => @users.collect(&:id).join(",")} %>
+  <p class="m-b-0">
+    <%= "feature.admin_view.content.add_role_select_role".translate(:user => "feature.admin_view.content.user".translate(:count => @users.size)) %>
+  </p>
+  <%= render(:partial => "admin_views/selected_users", :locals => {:users_or_members => @users}) %>
+  <%= controls(:id =>"roles_list") do %>
+    <%= choices_wrapper("display_string.Roles".translate) do %>
+      <% @current_program.roles.each do |role| %>
+        <%= content_tag(:label, check_box_tag("admin_view[role_names][]", role.name, false, id: role.name.capitalize) + " #{role.customized_term.term}", class: "checkbox inline") %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <% reason_place_holder = "feature.admin_view.content.reason_placeholder".translate(:user => "feature.admin_view.content.user".translate(:count => @users.size)) %>
+  <%= control_group do %>
+    <label class="control-label" for="admin_view_reason"><%= "display_string.Reason".translate %></label>
+    <%= controls do %>
+      <%= text_area_tag "admin_view[reason]", nil, :class => "form-control", :placeholder => reason_place_holder %>
+    <% end %>
+  <% end %>
+  <%= get_note_for_actions_on_suspended %>
+  <%= horizontal_line(class: "m-b-sm m-t-xs") %>
+  <% action_set(class: "form-group") do %>
+    <div class="pull-right">
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "display_string.Submit".translate %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[AdminViews.validateFields("form_admin_view_bulk_actions", "roles_list","multiInput");] %>

@@ -1,0 +1,21 @@
+<% modal_container "program_settings_strings.content.change_connection_limit".translate(Mentors: _Mentors, :mentoring_connection => _Mentoring_Connection), :modal_id => "modal_connection_limit_popup" do %>
+  <div class="popup_content clearfix">
+    <%= "program_settings_strings.content.connection_limit_popup_content_html".translate(:mentoring_connection => _mentoring_connection, mentors: _mentors, :program => _program) %><br /><br />
+    <%= control_group(class: "clearfix") do %>
+      <div class="col-sm-3">
+        <%= content_tag(:div, "program_settings_strings.content.all_mentors".translate(Mentors: _Mentors), :class => "btn btn-primary btn-block cjs_connection_limit_actions", :id => "cjs_all_mentors", :data => {:action_type => true}) %>
+      </div>
+      <div class="col-sm-9">
+        <%= "program_settings_strings.content.all_mentors_help_text".translate(mentors: _mentors, :mentoring_connection => _mentoring_connection,  :mentoring_connections => _mentoring_connections) %>
+      </div>
+    <% end %>
+    <%= control_group(class: "clearfix") do %>
+      <div class="col-sm-3">
+        <%= content_tag(:div, "program_settings_strings.content.new_mentors".translate(Mentors: _Mentors), :class => "btn btn-primary btn-block cjs_connection_limit_actions", :id => "cjs_only_new_mentors", :data => {:action_type => false}) %>
+      </div>
+      <div class="col-sm-9">
+        <%= "program_settings_strings.content.new_mentors_help_text".translate(mentors: _mentors, :mentoring_connection => _mentoring_connection) %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

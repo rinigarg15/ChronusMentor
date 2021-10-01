@@ -1,0 +1,14 @@
+<% question = survey_question.question %>
+<li id="cjs_three_sixty_survey_question_<%= survey_question.id %>" class="well animated fadeInDown clearfix noshadow no-margins draggable sortable_item cjs-alt-color-actions cjs_three_sixty_parent cjs_three_sixty_survey_question_sortable">
+  <div class="col-md-8">
+    <%= question.title %>
+  </div>
+  <div class="col-md-2">
+    <%= ThreeSixty::Question.question_type_as_string(question.question_type) %>
+  </div>
+  <div class="col-md-2 no-padding">
+    <%= link_to(get_icon_content("fa fa-trash m-r-0") + set_screen_reader_only_content("display_string.Delete".translate), three_sixty_survey_question_path(survey ,survey_question), :remote => true, :method => :delete, data: {:confirm => "feature.three_sixty.survey_question.delete_warning_v1".translate}, :class => "pull-right btn btn-xs btn-white") %>
+  </div>
+</li>
+<%= javascript_tag %Q[jQuerySortable.makeSortable('three_sixty_survey_competency_questions_#{survey_competency.id}', '', '#{reorder_questions_three_sixty_survey_competency_path(survey, survey_competency)}', '', '', '')] %>
+<%= javascript_tag %Q[jQuery('#three_sixty_survey_competency_questions_#{survey_competency.id}').on("sortupdate", function(){ ThreeSixty.alternateColor('#three_sixty_survey_competency_#{survey_competency.id}'); });] %>

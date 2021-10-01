@@ -1,0 +1,49 @@
+<% can_display_match_label = current_user.can_send_mentor_request? || (@current_program.calendar_enabled? && @current_user.is_student?) && current_user.present? && current_user.student_document_available? %>
+<% can_display_score = can_display_match_label && @current_program.allow_user_to_see_match_score?(current_user) %>
+<% program_questions_for_user = current_user.get_visibile_match_config_profile_questions_for(mentor) %>
+<% match_details, tags_count = get_match_details_for_display(current_user, mentor, program_questions_for_user) if current_user.present? %>
+<% match_score = current_user.match_score(mentor.id) if can_display_match_label %>
+<% user_match_score = content_tag(:div, display_match_score(match_score, in_listing: true, mentor_id: mentor.id), class: "m-t-xs") if can_display_score %>
+<% icon_content = get_icon_content_based_on_request_type(request_type) %>
+
+<div class="m-t-sm mentor_<%= mentor.id %>">
+  <div class="clearfix pull-right hidden-xs">
+    <%= link_to((get_icon_content(icon_content) + "common_text.send_request".translate).html_safe, "javascript:void(0)", class: "btn btn-sm btn-primary waves-effect cjs_request_action_#{mentor.id}") %>
+  </div>
+  <div class="pull-left p-r-xs">
+    <%= user_picture(mentor, { no_name: true, size: :large, src: EngagementIndex::Src::SendRequestOrOffers::FAVORITE_MENTORS_POPUP }, { class: "cui_large_to_medium img-circle" } ) %>
+  </div>
+  <div class="pull-left col-xs-6 overflow-hidden no-padding cjs_profile_other_summary">
+    <% user_link = link_to_user mentor, content_text: mentor.name(name_only: true), no_hovercard: true, params: {src: EngagementIndex::Src::SendRequestOrOffers::FAVORITE_MENTORS_POPUP}, show_favorite_links: true, favorite_preferences_hash: favorite_preferences_hash %>
+    <div class="<%= hidden_on_mobile %>">
+      <h3 class="m-b-0 clearfix">
+        <%= user_link %>
+      </h3>
+      <%= user_match_score %>
+    </div>
+    <div class="<%= hidden_on_web %>">
+      <h4 class="m-b-0 clearfix">
+        <%= user_link %>
+      </h4>
+      <%= user_match_score %>
+    </div>
+    <div class="m-t-xs">
+      <%= match_details %>
+    </div>
+  </div>
+  <div class='col-xs-12 visible-xs'>
+    <div class="text-center m-t-sm ">
+      <%= link_to((get_icon_content(icon_content) + "common_text.send_request".translate).html_safe, "javascript:void(0)", class: "btn-sm dropdown-toggle btn-block  btn-primary waves-effect cjs_request_action_#{mentor.id}") %>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  jQuery(document).on("click", ".cjs_request_action_<%= mentor.id%>", function(){
+    <% if request_type == UserPreferenceService::RequestType::MEETING %>
+      FavoritePreference.showDelayedMeetingPopup("<%= mini_popup_meetings_path(member_id: mentor.member_id, src: EngagementIndex::Src::SendRequestOrOffers::FAVORITE_MENTORS_POPUP) %>");
+    <% else %>
+      FavoritePreference.showDelayedGroupPopup("<%= new_mentor_request_path(mentor_id: mentor.id, format: :js, src: EngagementIndex::Src::SendRequestOrOffers::FAVORITE_MENTORS_POPUP) %>");
+    <% end %>
+  });
+</script>

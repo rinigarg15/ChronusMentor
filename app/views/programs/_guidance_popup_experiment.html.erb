@@ -1,0 +1,11 @@
+<% experiment = chronus_ab_test(ProgramAbTest::Experiment::GUIDANCE_POPUP) %>
+<% if experiment.show_guidance_popup?(params[:show_guidance_popup].present?) %>
+  <%= render :partial => 'programs/show_guidance_popup' %>
+<% end %>
+
+<% if experiment.running? %>
+  <%= javascript_tag do %>
+    GuidancePopup.showGuidancePopup("<%= one_time_flags_path(format: :js) %>", "<%= OneTimeFlag::Flags::Popups::MENTEE_GUIDANCE_POPUP_TAG %>");
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.AB_TEST_GUIDANCE_POPUP, chrGoogleAnalytics.action.GA_START_GUIDANCE_POPUP_EXPERIMENT, '<%= experiment.alternative %>', '<%= experiment.event_label_id_for_ga %>');
+  <% end %>
+<% end %>

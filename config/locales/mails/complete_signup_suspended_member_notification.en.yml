@@ -1,0 +1,10 @@
+en:
+  email_translations:
+    complete_signup_suspended_member_notification:
+      title: Notification to suspended member applying to join a new %{_program}
+      description_v2: This email is generated when a member, who has been suspended at the global level fills in a Captcha and applies to join %{_a_program}.
+      subject: Your membership has been suspended
+      content_v1_html: Thank you for applying to join {{subprogram_name}}. Unfortunately, the {{customized_admin_term}} has suspended your membership in {{program_name}}, and therefore your access to {{subprogram_name}} is restricted.<br/><br/>Contact the {{subprogram_name}} {{customized_admin_term}} <a href='{{url_contact_admin}}'>here</a> for more information or to request to reactivate your membership.<br/>
+      tags:
+        url_contact_admin:
+          description: Url for the user to contact administrator

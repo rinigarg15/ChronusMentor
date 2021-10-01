@@ -1,0 +1,19 @@
+<% post_url = milestone_template.new_record? ? mentoring_model_milestone_templates_path(@mentoring_model) : mentoring_model_milestone_template_path(@mentoring_model, milestone_template) %>
+<% show_position_options = milestone_template.new_record? %>
+
+<%= simple_form_for milestone_template, url: post_url, remote: true, html: {class: ""} do |milestone_template_form| %>
+  <%= milestone_template_form.input :title, as: :string, required: true, input_html: { class: "cjs_milestone_template_title #{control_class(milestone_template)}", id: "cjs_milestone_template_form_title_#{milestone_template.id}" } %>
+  <%= milestone_template_form.input :description, as: :text, input_html: {rows: 5, class: "#{control_class(milestone_template)}", id: "cjs_milestone_template_form_description_#{milestone_template.id}"} %>
+
+  <% if show_position_options %>
+    <%= render_milestone_position_choices(@mentoring_model) %>
+  <% end %>
+
+  <% action_set(class: "pull-right") do %>
+    <%= cancel_link(nil, additional_class: "cjs_milestone_template_cancel_link") %>
+    <%= milestone_template_form.button :submit, "display_string.Save".translate, :class => "cjs_milestone_template_submit_btn" %>
+  <% end %>
+<% end %>
+<%= javascript_tag do %>
+  initialize.autoResizeTextAreas();
+<% end %>

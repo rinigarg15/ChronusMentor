@@ -1,0 +1,17 @@
+<% if @error_flash %>
+  ChronusValidator.ErrorManager.ShowResponseFlash('', '<%= @error_flash %>', false);
+<% else %>
+  <% user_id = group_params[:user_id] %>
+  if(!(jQuery(".cjs_display_member_handler_<%= @new_user.id %>_<%= @role.id %>").length > 0)) {
+    jQuery(".cjs_display_member_handler_<%= user_id %>_<%= @role.id %>").replaceWith("<%= j(render partial: 'groups/display_member', locals: { role: @role, user: @new_user, group: @group, modified: Group::MemberUpdateAction::REPLACE } ) %>");
+    jQuery('#connection_users_<%= user_id %>_<%= @role.id %>__id_').val("<%= user_id %>");
+    jQuery('#connection_users_<%= user_id %>_<%= @role.id %>__action_type_').val("<%= Group::MemberUpdateAction::REPLACE %>");
+    jQuery('#connection_users_<%= user_id %>_<%= @role.id %>__replacement_id_').val("<%= @new_user.id %>");
+  } else {
+    jQuery(".cjs_replace_member_handler.cjs_replace_member_handler_<%= user_id %>_<%= @role.id %>").addClass("hide");
+    jQuery(".cjs_display_member_handler_<%= @new_user.id %>_<%= @role.id %>").find(".cjs_remove_replace_" + "<%= @new_user.id %>").removeClass("hide");
+  }
+  jQuery(".cjs_member_update_info").removeClass("hide");
+  jQuery(".cjs_existing_groups_alert").html("<%= j existing_groups_alert([@group.id], [@student_ids_mentor_ids], Group::Status::DRAFTED, :user) %>");
+  jQueryHighlight(".cjs_display_member_handler_<%= @new_user.id %>_<%= @role.id %>");
+<% end %>

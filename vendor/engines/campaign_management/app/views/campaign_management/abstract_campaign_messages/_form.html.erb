@@ -1,0 +1,64 @@
+<%= include_ckeditor_tag %>
+<div class="new_campaign_message">
+  <% @title = @campaign_message.new_record? ? @new_campaign_email_title : @edit_campaign_email_title %>
+  <% if @campaign.is_user_campaign? %>
+    <% @sub_title = content_tag(:span, get_page_subtitle("cui-campaign-take-tour", "feature.campaign.tour.take_tour".translate), class: "cjs-tool-tip", data: {desc: "feature.campaign.tour.tip".translate}) %>
+    <% @hide_sub_title_arrow = true %>
+  <% end %>
+  <%= response_flash "campaign_message_flash", :class => "alert-success" %>
+  <% post_url = @campaign_message.new_record? ? campaign_management_user_campaign_abstract_campaign_messages_path(@campaign) : campaign_management_user_campaign_abstract_campaign_message_path(@campaign, @campaign_message) %>
+  <% campaign_message_type = get_campaign_message_type(@campaign)%>
+  <% max_days = @campaign.is_program_campaign? ? campaign_message_type::CAMPAIGN_MESSAGE_DURATION_MAX_IN_DAYS : "" %>
+  <%= simple_form_for [@campaign, @campaign_message],
+    :url => post_url, :as => :campaign_management_abstract_campaign_message, :html => { :class => "form-horizontal campaign_management_abstract_campaign_message_form #{get_ckeditor_type_classes(CampaignManagement::AbstractCampaign.name)} has-above"} do |f| %>
+
+    <% if @campaign.is_user_campaign? %>
+      <%= render :partial => "add_from_option_select2_auto_complete"%>
+    <% end %>
+    <%= f.fields_for(@campaign_message.email_template) do |et| %>
+      <%= et.input :subject, as: :string, :wrapper => :horizontal_input, input_html: {class: "form-control"} %>
+      <%= et.input :source, as: :text, :wrapper => :horizontal_input, :label => "feature.campaigns.label.Message".translate %>
+    <% end %>
+    <%= control_group do %>
+      <%= f.label "", "feature.campaigns.label.Schedule".translate, :class => "control-label col-sm-3", :for => "campaign_message_duration" %>
+      <%= controls(class: "col-sm-9") do %>
+        <div class="no-padding col-sm-2">
+
+          <%= f.number_field :duration, min: campaign_message_type::CAMPAIGN_MESSAGE_DURATION_MIN_IN_DAYS, max: max_days, step: 1, class: "input-duration form-control col-md-3", id: "campaign_message_duration", :readonly => @campaign_message.new_record? ? false : !@campaign_message.is_duration_editable? %>
+        </div>
+        <div class="pull-left m-sm">
+          <%= campaign_message_schedule_help_text(@campaign) %>
+          <%= get_icon_content("fa fa-info-circle m-r-0 ", id: "email_schedule", data: { toggle: "tooltip", title: "feature.campaigns.content.schedule_description_add_email_help_text".translate }) %>
+        </div>
+        <div id="flash_duration_error">
+          <span></span>
+        </div>
+      <% end %>
+    <% end %>
+
+    <%= hidden_field_tag "start_campaign", false, id: "cjs_start_campaign" if @campaign.drafted? %>
+
+    <%= render :partial => "campaign_management/abstract_campaign_messages/test_email" %>
+    <% action_set fields_required: :all, class: "pull-right" do %>
+      <%= link_to "feature.campaigns.label.Cancel".translate, @back_url, :class => "btn cancel btn-white" %>
+      <%=  f.submit "feature.campaign_message.label.Save".translate, :class => "btn  btn-primary cjs_campaign_message_submit #{get_class_for_add_email(@campaign, @campaign_message.new_record?)}", :name => "submit[]", data: {type: get_campaign_survey_type(@campaign)} %>
+    <% end %>
+  <% end %>
+</div>
+<%= javascript_tag %Q[CampaignManagement.initCkeditorOptions("#{j(fetch_placeholders(@all_tags, @current_program))}", "#{'feature.campaigns.label.Insert_variable'.translate}");] %>
+
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    AdminViews.initalizeSelect2(false, false);<!-- (multiple?, show_description_in_dropdown?)-->
+    CampaignManagement.handleCmapaignMessageSave(<%= campaign_message_type::CAMPAIGN_MESSAGE_DURATION_MIN_IN_DAYS %>, '<%= max_days %>', '<%= j(invalid_duration_message(@campaign, campaign_message_type))  %>', '<%= j("feature.campaigns.content.start_confirmation_text".translate)  %>', '<%= j("display_string.Yes".translate)  %>', '<%= j("feature.campaigns.content.just_save_email".translate)  %>', <%= @campaign.drafted? %>);
+    CampaignManagement.submitPreviewEmail();
+    CampaignManagement.setAdminNameSelect2('<%= render_campaign_message_sender(@campaign_message.sender_id) %>', '<%= @campaign_message.sender_id %>');
+
+    if(<%= @campaign.is_user_campaign? %>){
+      CKEDITOR.on('instanceReady', function(event) {
+        CampaignManagement.initializeTourForCampaignEmailsPage(<%= @tour_taken %>, "<%= one_time_flags_path(format: :js) %>", "<%= get_campaign_message_tour_tag(@campaign) %>", "<%= @less_than_ie9 %>");
+      });
+    }
+  });
+<% end %>

@@ -1,0 +1,29 @@
+<% modal_v3_popup "feature.connection.action.manage_members_v1".translate do %>
+  <div class="update_group_members clearfix", id="update_group_members_<%=group.id%>">
+    <div class="update_members_actions clearfix no-margin">
+      <% url = get_url_for_group_actions_form(@source, :update, {id: group.id}) %>
+      <%= render :partial => "groups/show_group_members", locals: {group: group}%>
+      <%= simple_form_for group, :url => url, :remote => (@source != "profile"), :html => {:class => "group_update_form"} do |f| %>
+        <%= hidden_field_tag "tab", tab %>
+        <%= hidden_field_tag "is_table_view", is_table_view %>
+        <%= hidden_field_tag "view", view %>
+        <%= hidden_field_tag "profile_user", profile_user %>
+        <% roles =  @current_program.roles.for_mentoring %>
+        <% roles.each do |role| %>
+          <% members_with_role = group.memberships.where(role_id: role.id) %>
+          <% members_with_role.each do |membership| %>
+            <%= hidden_field_tag "connection[users][#{membership.user.id}][#{role.id}]['id']" %>
+            <%= hidden_field_tag "connection[users][#{membership.user.id}][#{role.id}]['role_id']", role.id %>
+            <%= hidden_field_tag "connection[users][#{membership.user.id}][#{role.id}]['action_type']" %>
+            <%= hidden_field_tag "connection[users][#{membership.user.id}][#{role.id}]['option']" %>
+            <%= hidden_field_tag "connection[users][#{membership.user.id}][#{role.id}]['replacement_id']" %>
+          <% end %>
+        <% end %>
+        <% action_set(:class=>"pull-right") do %>
+          <%= link_to_function "display_string.Cancel".translate, "closeQtip();", :class => "btn cancel btn-white" %>
+          <%= f.button :submit, "display_string.Save".translate, :class => "has-next" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

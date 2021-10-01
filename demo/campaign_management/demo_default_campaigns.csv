@@ -1,0 +1,14 @@
+"#Campaign",,,
+"Name","AdminView","Enable",
+"Get users to sign up","Application Accepted, Awaiting Signup","Yes",
+,,,
+"#Emails",,,
+"Subject","Message","Schedule","Campaign"
+"{{user_firstname}}, finish signing up today!","Dear {{user_firstname}},<br />
+<br />
+We see you have not yet completed the sign-up process in the program. Click on the following link to get started with mentoring:<br />
+<br />
+{{url_signup}}<br />
+<br />
+If you have any trouble signing up or have any questions, feel free to reply to this email.<br />
+<br />",7,"Get users to sign up"

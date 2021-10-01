@@ -1,0 +1,128 @@
+en:
+  footer:
+    powered_by_v1: Powered by
+    powered_by: Powered by %{brand}
+    privacy_policy: Privacy Policy
+    terms_and_conditions: Terms & Conditions
+    about_chronus: About Chronus
+  autologout:
+    header:
+      session_expiry_warning: Warning! Your Session is About to Expire
+    content:
+      logout_in: You will be logged out in
+      seconds: seconds.
+      minutes: minutes.
+      trying_session_refresh: Trying to refresh session ...
+      session_expired_redirecting: Your session expired, you are being redirected ...
+    action:
+      continue_work: Continue to Work
+      logout_now: Logout now
+  join_now_page:
+    common_instruction: Please complete the registration form provided below. Fields marked with asterisks (“*”) are mandatory.
+    common_instruction_help_text: You can edit your profile anytime after signing up.
+    no_questions_to_answer: Please click on the button below to submit your application.
+    content:
+      fill_details_v1: Fill in the details below
+    form:
+      label:
+        join_as: Join as
+  captcha:
+    help_text: Type the characters you see in the picture
+    label_v1: Code Verification
+    placeholder: Captcha
+  terms_and_conditions_page:
+    title: Terms and Conditions
+    organization_terms_and_conditions: "%{org_name} Terms & Conditions"
+    chronus_terms: Chronus Terms of Service
+  privacy_policy_page:
+    title: Privacy Policy
+    organization_privacy_policy: "%{org_name} Privacy Policy"
+    chronus_privacy_policy: Chronus Privacy Policy
+  feature_password:
+    title:
+      forgot: Forgot Your Password?
+      reactivate: Reactivate Account
+      reset: Reset Password
+      change: Change Password
+    content:
+      enter_email_v1_html: Enter the <b>email</b> you provided during signup.
+      send_instructions: We will send you the instructions to reset your password.
+      send_instructions_v1: Send Instructions
+  registration_page:
+    title:
+      welcome_with_roles: Welcome! You have been invited to join %{current_program_name}%{invite_role_names}.
+      welcome_general: Welcome! You have been invited to join %{current_program_name}.
+      fill_the_form: Please fill out the simple form below to create your account.
+      sign_up_multi_auth: Please sign up using one of the below options to proceed.
+    action:
+      sign_up_next_html: Sign up &raquo;
+    content:
+      login_id_help_text: This will be your login id
+      join_as: Join as
+      choose_roles: Choose roles in this %{program}*
+      provide_csv_file: Provide CSV file with profile questions that will be created for your organization.
+      use_template_for_csv_html: Please use %{template} for CSV format.
+      please_read_specification_html: Also please read %{specification} for more details.
+      dont_include_name_and_email: Name and email fields will be added by default and please dont include it in CSV.
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " and "
+      last_word_connector: " and "
+  search:
+    header:
+      Search_results: Search results
+    categories:
+      All_results: All results
+      Questions_and_Answers: Questions & Answers
+    content:
+      no_results_found: No matches found for your search "%{query}"
+      help_text:
+        check_spelling: Make sure the search term is spelled correctly
+        try_general_search: Try more general search terms
+  mobile_prompt:
+    content:
+      get_app_header: Get the Chronus App !
+      get_app_text: Now with real time notifications and an improved on the go experience
+      app_present: Already Have it ?
+      open_app: Open the App
+      or: OR
+      continue_to_site: continue to the mobile site
+      open_app_flash_android: Your app should be opened in a moment. Please %{download_link} the app if you continue to see this message.
+      install: install
+  verify_organization_page:
+    label:
+      select_organization: Enter Your Program URL
+      get_started: Get Started
+      change_organization_url: Change Program URL
+      install_old_app: Install old app
+      install_app: Install app
+    content:
+      example_program: 'Ex: %{ex_program}'
+      empty_org_message: The URL cannot be empty. Please enter a valid program URL
+      invalid_org_message: The entered URL is not a valid program URL
+      dont_know_url: I don't know the URL
+      find_your_program_url: Find your program URL
+  verify_email_page:
+    label:
+      select_email: Enter your registered email address
+    content:
+      empty_email_address_message: The email address cannot be empty. Please enter a proper email address.
+      invalid_email_address_message: Please enter a proper email address.
+      valid_email_address: If you are a registered member, you will receive an email shortly. To confirm your email address, tap the button in the email you received at 
+      not_a_member_fakedoor: "Not a member? Click here to sign up"
+      enter_program_url_fakedoor: "Know your program URL? Enter it and login here"
+      confirm_email_address: "Confirm email address"
+  fakedoor_page:
+    label:
+      history: history
+    content:
+      header_browser: I have accessed my program on a browser before
+      text_browser: If you have already accessed your program from a browser before, you can browse through the %{history} to identify your program URL that you can trim, copy and use it to get started with your program from the app
+      header_email: I have received emails from my program before
+      text_email: If you have received emails from your program before, some of your emails might have the program URL embedded as part of the email that you can trim, copy and use to get started with your program from the app
+      header_url: I still can't get my program URL
+      text_url: Please contact your program administrator
+      get_url: Ways to Get My URL
+  documents_page:
+    title: Chronus Mentor Documents

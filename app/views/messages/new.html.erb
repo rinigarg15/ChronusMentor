@@ -1,0 +1,35 @@
+<% @title = @message.parent_id.nil? ? "feature.messaging.title.new_message".translate : "feature.messaging.title.reply".translate %>
+<% @back_link = {:label => "feature.messaging.label.the_message".translate, :link => message_path(@message.parent_id)} if @message.parent %>
+
+<%= response_flash ("send_msg_flash_" + @receiver.id.to_s) %>
+<%= ibox @title do %>
+  <%= simple_form_for @message, :html => {:class => "form-horizontal"}, :wrapper => :horizontal_input do |f| %>
+    <%= f.input :receiver, :as => :string, :label => "feature.messaging.label.to".translate, :input_html => {:value => @receiver.name, :disabled => true, :class => "form-control" } %>
+    <%= hidden_field_tag "message[receiver_ids]", @receiver.id %>
+    <%= f.input :subject, :as => :string, :input_html => {:class => 'form-control'} %>
+    <%= f.input :content, :as => :text, :input_html => {:class => 'form-control', :rows => 5} %>
+
+    <%= f.input :attachment, :as => :file, :label => "feature.announcements.label.add_an_attachment".translate %>
+    <%= f.hidden_field :sender_id %>
+    <%= f.hidden_field :src, value: @src %>
+
+    <% action_set do %>
+      <div class="pull-right">
+        <%= cancel_link back_url %>
+        <%= f.button :submit, "display_string.Send".translate, :onclick => "windowUnloadAlert.clearAlert();", :class => "cjs_send_message_btn" %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if program_view? && @receiver.user_in_program(current_program).is_mentor? %>
+  <% guidance_experiment = chronus_ab_test_get_experiment(ProgramAbTest::Experiment::GUIDANCE_POPUP) %>
+  <% if guidance_experiment.running? %>
+    <%= javascript_tag(%Q[Messages.guidancePopupExperimentAlternative="#{guidance_experiment.alternative}";Messages.guidancePopupExperimentAlternativeId="#{guidance_experiment.event_label_id_for_ga}";]) %>
+  <% end %>
+  <% popular_categories_experiment = chronus_ab_test_get_experiment(ProgramAbTest::Experiment::POPULAR_CATEGORIES) %>
+  <% if popular_categories_experiment.running? %>
+    <%= javascript_tag(%Q[Messages.popularCategoriesExperimentAlternative="#{popular_categories_experiment.alternative}";Messages.popularCategoriesExperimentAlternativeId="#{popular_categories_experiment.event_label_id_for_ga}";]) %>
+  <% end %>
+<% end %>
+<%= javascript_tag %Q[Messages.validateNewMessage("#{'common_text.error_msg.required_missing'.translate}", "#{('send_msg_flash_' + @receiver.id.to_s)}");] %>

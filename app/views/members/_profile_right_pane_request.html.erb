@@ -1,0 +1,10 @@
+<% if sidepane_asset.is_a?(MeetingRequest) %>
+  <%= render :partial => "meeting_requests/meeting_request", :locals => {meeting_request: sidepane_asset, filter_field: MeetingRequest::Filter::TO_ME, source: EngagementIndex::Src::AcceptMentorRequest::USER_PROFILE_PAGE } %>
+<% else %>
+  <% @existing_connections_of_mentor = current_user.mentoring_groups.active %>
+  <%= render :partial => "mentor_requests/mentor_request_content", :locals => { :mentor_request => sidepane_asset, :member => sidepane_asset.student, :is_mentor_action => true, :source => EngagementIndex::Src::AcceptMentorRequest::USER_PROFILE_PAGE } %>
+  <%= javascript_tag "MentorRequestForm.init_disable('#{j('display_string.Please_Wait'.translate)}');" %>
+<% end %>
+<script>
+  MemberProfilePage.initializeSidePaneRequestScroll();
+</script>

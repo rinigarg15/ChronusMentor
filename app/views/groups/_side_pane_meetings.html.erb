@@ -1,0 +1,26 @@
+<% meetings_index_path = meetings_path(:group_id => @group.id) %>
+<% add_new_meeting = mentoring_area_right_pane_add_new("javascript:void(0)", _Meeting, {:class => "cjs_set_ei_src", onclick: %Q[jQueryShowQtip('', 600, '#{setup_meeting_group_path(@group.id, {format: :js, :common_form => !local_assigns[:meetings_tab], ei_src: EngagementIndex::Src::CreateGroupMeeting::MENTORING_AREA_SIDE_PANE})}','',{modal: true, successCallback: function(){CalendarAvailabilityInfo.initialize()}})]}) %>
+<% record_past_meeting = content_tag(:span, link_to("feature.mentoring_model.button.record_past_meeting".translate(Meeting: _Meeting), "javascript:void(0)", onclick: %Q[jQueryShowQtip('', 600, '#{setup_meeting_group_path(@group.id, {format: :js, :common_form => true, :past_meeting => true })}','',{modal: true, successCallback: function(){CalendarAvailabilityInfo.initialize()}})]), :class => "font-bold cjs_reset_auto_update_task_id") %>
+<% empty_pane_message = content_tag(:span, "feature.connection.content.help_text.no_upcoming_meetings_v1".translate(:meetings => _meetings)) %>
+<% additional_left_links = (@page_controls_allowed ? (add_new_meeting + circle_separator + record_past_meeting) : "") %>
+<% empty_pane_message << (additional_left_links.present? ? (circle_separator + additional_left_links) : "") %>
+<div id= <%= local_assigns[:mobile_only].to_s.to_boolean ? "side_pane_meetings_mobile" : "side_pane_meetings"%> >
+  <%= sidepane_assets_pane(upcoming_meetings,
+    :pane_header => "feature.meetings.header.upcoming_meetings_v1".translate(:Meetings => _Meetings),
+    :asset_icon_class => "fa-calendar",
+    :see_all_url => meetings_index_path,
+    :additional_left_links => additional_left_links,
+    :empty_pane_message => empty_pane_message,
+    :sidepane_asset_partial => "groups/group_side_pane_meeting",
+    :asset_type => local_assigns[:mobile_only].to_s.to_boolean ? "meeting_mobile" : "meeting",
+    :show_close_link => local_assigns[:show_close_icon]
+  ) %>
+</div>
+
+<%= javascript_tag do %>
+  jQuery(document).ready(function() {
+    <% if initialize_rsvp_js %>
+      Meetings.handleRsvpPopup();    
+    <% end %>
+  });
+<% end %>

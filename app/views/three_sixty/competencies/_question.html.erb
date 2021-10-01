@@ -1,0 +1,10 @@
+<div class="well no-margins flat-border animated fadeInDown clearfix noshadow cjs-alt-color-actions cjs_three_sixty_parent" id="competency_question_row_<%= question.id %>">
+  <div class="col-md-7"><%= question.title %></div>
+  <div class="col-md-2"><%= ThreeSixty::Question.question_type_as_string(question.question_type) %></div>
+  <% if show_actions %>
+    <div class="col-md-3 no-padding">
+      <%= link_to(get_icon_content("fa fa-trash m-r-0") + set_screen_reader_only_content("display_string.Delete".translate), three_sixty_question_path(question), :remote => true, :method => :delete,  data: {:confirm => "feature.three_sixty.question.delete_warning".translate}, :class => "btn btn-xs btn-white pull-right")%>
+      <%= link_to(get_icon_content("fa fa-pencil m-r-0") + set_screen_reader_only_content("display_string.Edit".translate), edit_three_sixty_question_path(question), :remote => true, :class => "btn btn-xs btn-white pull-right", data: {:confirm => "feature.three_sixty.question.edit_warning".translate})%>
+    </div>
+  <% end %>
+</div>

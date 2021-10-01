@@ -1,0 +1,12 @@
+en:
+  email_translations:
+    group_conversation_creation_notification:
+      title: "New discussion board conversation notification to %{_mentoring_connection} members"
+      description: "This email is sent to %{_mentoring_connection} members notifying them that there is a new conversation in the %{_mentoring_connection} area."
+      subject: "{{initiator_name}} posted in '{{group_name}}'- Join the conversation!"
+      content_html: "<a href='{{link_to_initiator}}'>{{initiator_name}}</a> started a conversation <b>'{{conversation_title}}'</b> in the {{customized_mentoring_connection_term}} <b>'{{group_name}}'</b>.<br/>{{reply_to_conversation_button}}"
+      reply_to_conversation: Reply to conversation
+      tags:
+        group_name:
+          description: Name of the mentoring area
+          example: Smith and Doe

@@ -1,0 +1,30 @@
+<% header_content = capture do %>
+  <%= append_text_to_icon("fa fa-users","feature.connection.header.proposed_circles".translate(Mentoring_Connection: _Mentoring_Connections)) %>
+  <%= link_to("feature.connection.header.view_all".translate, groups_path(:show => 'my', :view => 0, src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), :class => "label label-success text-white pull-right") %>
+<% end %>
+<% modal_v3_popup(_Mentoring_Connections, modal_body_class: "no-padding") do %>
+  <%= ibox nil, :ibox_class => "ibox-content noshadow clearfix no-margins", :ibox_id => "cjs_circle_info_mobile_action" do %>
+    <div id="action_circles_listing" class="text-center">
+      <% if @current_user.allow_to_propose_groups? %>
+        <span class="btn btn-sm btn-primary m-r-xs">
+          <%= link_to(append_text_to_icon("fa fa-plus", @current_user.can_create_group_without_approval? ? "feature.connection.header.start_new".translate : "feature.connection.header.propose_new".translate), new_group_path(propose_view: true, src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), :class => "text-white font-bold")%>
+        </span>
+      <% end %>
+      <span class="btn btn-sm btn-primary">
+        <%= link_to(append_text_to_icon("fa fa-search", "feature.connection.header.discover_new".translate), find_new_groups_path(src: EngagementIndex::Src::BrowseMentors::FOOTER_NAVIGATION), :class => "text-white font-bold") %>
+      </span>
+    </div>
+  <% end %>
+  <% if my_groups.present? %>
+    <%= panel "feature.connection.header.ongoing_circles".translate(Mentoring_Connection: _Mentoring_Connections), { panel_class: "panel-default no-margins", icon_class: "fa fa-users", panel_body_class: "no-padding", panel_heading_class: "text-muted"} do %>
+      <%= render :partial => 'groups/my_group_mobile', collection: my_groups, as: :group %>
+    <% end %>
+  <% else %>
+    <%= render :partial => 'groups/no_connections' %>
+  <% end %>
+  <% if proposed_groups.present? %>
+    <%= panel nil, { panel_class: "panel-default no-margins", panel_body_class: "no-padding", panel_heading_class: "text-muted", :header_content => header_content } do %>
+      <%= render :partial => 'groups/my_group_mobile', collection: proposed_groups, as: :group %>
+    <% end %>
+  <% end %>
+<% end %>

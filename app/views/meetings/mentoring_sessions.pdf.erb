@@ -1,0 +1,9 @@
+<div id="meeting_session_report">
+  <div id="meeting_report_container">
+    <% if @meetings.blank? %>
+      <%= render :partial => "meetings/mentoring_sessions_no_results", formats: [FORMAT::HTML]%>
+    <% else %>
+      <%= render :partial => "meetings/render_mentoring_sessions_data", :locals => {:format => FORMAT::PDF, meetings: @meetings, filter_params: @filter_params}, :formats => [FORMAT::HTML] %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<% if meeting.group.present? %>
+  <% attendees = group.members.includes(:member).collect(&:member) - [wob_member] %>
+  <% if attendees.size > 1 %>
+    <% members_attending_meeting = {} %>
+    <% unless local_assigns[:is_new_meeting] %>
+      <% meeting.members.each{ |member| members_attending_meeting[member] = true } %>
+    <% end %>
+    <%= control_group(class: "attendees_in_form") do %>
+      <div class="false-label control-label">
+        <%= set_required_field_label(label) %>
+      </div>
+      <% if attendees.size >= Meeting::MIN_ATTENDEES_FOR_SELECT_ALL %>
+        <div>
+          <%= render_select_all_clear_all("Meetings.updateAllInvitees('.#{checkbox_class}', true)", "Meetings.updateAllInvitees('.#{checkbox_class}', false)") %>
+        </div>
+      <% end %>
+      <div class="choices_wrapper controls" id="<%= local_assigns[:id] %>">
+        <%= choices_wrapper("feature.connection.header.Members".translate) do %>
+          <% attendees.each do |member| %>
+            <label class="checkbox">
+              <%= check_box_tag("meeting[attendee_ids][]", member.id, local_assigns[:is_new_meeting] || members_attending_meeting[member], id: nil, class: "multi_select_check_box #{checkbox_class}") %>
+              <%= member.name %>
+            </label>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,72 @@
+en:
+  feature:
+    abstract_view:
+      program_invitation_view:
+        pending_title: "Invitations Awaiting Acceptance"
+        pending_description: "Users who have been invited to join the %{program}, but have not finished their registration"
+      admin_view:
+        accepted_not_signed_up_title: "Application Accepted, Awaiting Signup"
+        accepted_not_signed_up_description: "%{Program} applicants who have been accepted to the %{program}, but have not completed their profile or set a password"
+        registered_not_active_title: "Registered Users with Unpublished Profiles"
+        registered_not_active_description: "Users who have set up a password in the system, but still need to complete and publish their profile"
+        never_connected_mentees_title: "Never Connected %{Mentees}"
+        never_connected_mentees_description: "%{Mentees} who have never been connected"
+        never_connected_mentors_title: "Never Connected %{Mentors}"
+        never_connected_mentors_description: "%{Mentors} who have never been connected"
+        available_mentors_title: "Available %{Mentors}"
+        available_mentors_description: "%{Mentors} who are available for %{connections}"
+        currently_not_connected_mentees_title: "Currently Unconnected %{Mentees}"
+        currently_not_connected_mentees_description: "%{Mentees} who are currently not connected"
+        users_with_low_profile_scores_title: "Users With Low Profile Scores"
+        users_with_low_profile_scores_description: "Users whose profile score is less than 60%"
+        registered_mentors_not_active_title: "Registered %{Mentors} with Unpublished Profiles"
+        registered_mentors_not_active_description: "%{Mentors} who have set up a password in the system, but still need to complete and publish their profile"
+        registered_mentees_not_active_title: "Registered %{Mentees} with Unpublished Profiles"
+        registered_mentees_not_active_description: "%{Mentees} who have set up a password in the system, but still need to complete and publish their profile"
+        mentors_with_low_profile_scores_title: "%{Mentors} With Low Profile Scores"
+        mentors_with_low_profile_scores_description: "%{Mentors} whose profile score is less than 80%"
+        mentees_with_low_profile_scores_title: "%{Mentees} With Low Profile Scores"
+        mentees_with_low_profile_scores_description: "%{Mentees} whose profile score is less than 80%"
+        mentors_in_drafted_connections_title: "%{Mentors} In Drafted %{Connections}"
+        mentors_in_drafted_connections_description: "%{Mentors} who are currently part of drafted %{connections}"
+        mentees_in_drafted_connections_title: "%{Mentees} In Drafted %{Connections}"
+        mentees_in_drafted_connections_description: "%{Mentees} who are currently part of drafted %{connections}"
+        mentors_yet_to_be_drafted_title: "%{Mentors} Yet To Be Drafted"
+        mentors_yet_to_be_drafted_description: "%{Mentors} who are neither part of ongoing %{connections} nor a part of drafted %{connections}"
+        mentees_yet_to_be_drafted_title: "%{Mentees} Yet To Be Drafted"
+        mentees_yet_to_be_drafted_description: "%{Mentees} who are neither part of ongoing %{connections} nor a part of drafted %{connections}"
+        mentors_with_pending_mentor_requests_title: "%{Mentors} With Pending %{Mentoring} Requests"
+        mentors_with_pending_mentor_requests_description: "%{Mentors} who are having at least one pending %{mentoring} request"
+        mentees_who_sent_request_but_not_connected_title: "%{Mentees} Who Sent %{Mentoring} Request But Not Connected"
+        mentees_who_sent_request_but_not_connected_description: "%{Mentees} who sent at least one %{mentoring} request but are still not connected"
+        mentees_who_havent_sent_mentoring_request_title: "%{Mentees} Who Haven't Sent %{Mentoring} Request"
+        mentees_who_havent_sent_mentoring_request_description: "Active %{Mentees} who haven't sent even one %{mentoring} request"
+      flag_view:
+        pending_title: "Flagged Content"
+        pending_description: "Content in community areas that has been flagged by users as inappropriate"
+        resolved_title: Resolved Flags
+        resolved_description: A list of all resolved flags
+      connection_view:
+        inactive_title: "%{Connections} with no Recent Activity"
+        inactive_description: "%{Connections} with no activity in the last month"
+        connections_never_got_going_title: "%{Connections} with no Activity"
+        connections_never_got_going_description: "%{Connections} that have never had activity via the %{mentoring} system"
+        active_behind_connections_title: "%{Connections} with Overdue Tasks"
+        active_behind_connections_description: "%{Connections} with tasks that are overdue"
+        drafted_title: "Drafted %{Connections}"
+        drafted_description: "%{Connections} which are in drafted state"
+      meeting_request_view:
+        pending_title: "Pending %{Meeting} Requests"
+        pending_description: "%{Meeting} requests that have not yet been accepted or declined"
+      admin_message_view:
+        unread_title: "Unread Admin Messages"
+        unread_description: "Messages in the shared admin inbox"
+      mentoring_request_view:
+        pending_title: "Pending %{Mentoring} Requests"
+        pending_description: "%{Mentoring} requests that have not yet been accepted or declined"
+      pending_request_view:
+        pending_title: "Pending %{Connections} Requests"
+        pending_description: "%{Connections} requests that have not yet been accepted or declined"
+      mebership_request_view:
+        pending_title: "Pending Membership Applications"
+        pending_description: "%{Program} applicants who are awaiting your acceptance"

@@ -1,0 +1,267 @@
+---
+  - title: "Leadership"
+    description: "Uses appropriate interpersonal styles and methods to guide individuals or groups toward achieving results."
+
+    questions:
+      - title: "Is effective at planning, reporting & compliance activities (accounting, logistics, etc.)"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Listens to truly understand people, not just to respond."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Actively recognizes people publicly and privately for their contributions."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Identifies and evaluates people's strengths and assigns them where they are most effective"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Systematically coaches and mentors staff toward self-reliance and interdependence"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Encourages others to work to the best of their potential - provides assignments that are stretching but achievable"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Is consistent and impartial in their behavior towards others."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Defines strategies for the team, organizes resources to achieve goals and achieves results through realistic planning"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+  - title: "Persuasiveness"
+    description: "Utilizes appropriate interpersonal styles and methods to gain agreement or acceptance of an idea, plan, activity or product."
+
+    questions:
+      - title: "Gains approval of a plan or idea by focusing on the benefits of the proposal to the audience."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Persuades people from various levels, positions or backgrounds by using a variety of interpersonal techniques and approaches."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Improvises, thinks quickly on their feet."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Sells ideas despite resistance."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+  - title: "Communication"
+    description: "Takes the initiative to communicate accurate, up-to-date plans and information to subordinates, peers, and management. Expresses thoughts clearly, both verbally and in writing. Listens and understands the views of others."
+
+    questions:
+      - title: "Written communication: Expresses written thoughts and ideas in a clear and concise manner"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Two way feedback: Keeps others informed in a timely manner"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Oral Communication: Conveys oral thoughts in a clear and concise manner"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Oral Presentation: Presents indivaidual and organization viewpoints to groups in a clear and persuasive manner"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Listening: Listens attentively and understands the verbal communications of others"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Conducts effective meetings"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+  - title: "Coaching"
+    description: ""
+
+    questions:
+      - title: "People finish coaching sessions re-energized, focused and committed."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Uses and fully understands the application of assessment tools and processes as a coach"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Is great at keeping conversation focused and on track."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Facilitates the process of problem solving with people in coaching sessions rather than giving them the answer."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Listens to truly understand others unique point of view - is an effective listener."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+  - title: "Self-Management"
+    description: ""
+
+    questions:
+      - title: "Manages own time, energy and abilities for continuous personal growth and maximum performance"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Maintains balance and performance under stress"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Copes with ambiguits and change in a contructive manner"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Manages and controls emotions and behaviors in the face of interpersonal conflict. Rarely overreacts or loses control"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Displays honesty and candor. Demonstrates and practices high standards of personal and professional integrity"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+  - title: "Time Management"
+    description: "Manages a variety of responsibilities in a timely, efficient manner."
+
+    questions:
+      - title: "Allocates time to planning, thinking and mapping out tasks."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Assigns priorities to tasks."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Controls time spent in attending meetings."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+
+  - title: "Presentation Skills"
+    description: "Expresses oneself in a clear, concise manner during individual or group situations."
+
+    questions:
+      - title: "Demonstrates a sound knowledge of the subject matter."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Delivers information in a clear, concise, and logical manner."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Gains acknowledgment of audience and is able to understand the communication level required"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Presents in a confident and enthusiastic manner when addressing people in a large or small group."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Effectively uses various audio-visual media to enhance presentations."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+  - title: "Negotiation"
+    description: ""
+
+    questions:
+      - title: "Effectively resolves interpersonal differences with others in a collaborative 'win-win' manner"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Develops a strategy for giving on some points and standing firm on others to achieve desired outcomes."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Responds to opposing views in a non-defensive manner."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Keeps arguments issue-oriented."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Offers compromises and trade-offs to others, as necessary, in exchange for cooperation."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+  - title: "Motivation"
+    description: "Maintains a high level of interest and enthusiasm for job responsibilities. Demonstrates record of being a self-starter and self-motivated."
+
+    questions:
+      - title: "Takes pride and derives satisfaction in one’s job."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Assumes ownership for getting the job done."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Goal oriented; concerned with achievement & doing better."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Makes plans and follows through."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Enthusiastic about taking on challenging projects."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+  - title: "Interpersonal Skills"
+    description: "Establishes productive, cooperative relationships with subordinates, peers and management. Understands and responds to others’ needs and priorities. Resolves conflict in positive ways"
+
+    questions:
+      - title: "Ability to effectively manage interpersonal relations in a cooperative, sensitive and collaborative manner"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Seeks to listen and understand diverse viewpoints"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Expresses sensivity and empathy towards others"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Takes actions that demonstrate consideration for the feelings and needs of others"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Negotiates and effectively resolves interpersonal differences with others"
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+  - title: "Team Work"
+    description: "Promotes cooperation within the department and in interactions with other departments. Values differences among team members and can manage work groups with diverse influences."
+
+    questions:
+      - title: "Promotes open participation and communication within department and throughout the organization."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Provides opportunities for subordinates to participate in project teams, task forces, etc., for development purposes."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Promotes a team spirit within and outside department; partners with other groups."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Shares pertinent information with all members of the team."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Adapts to other people’s behavior style in order to achieve the desired goals of the team."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+  - title: "Initiative"
+    description: "Actively seeks opportunities to make a contribution rather than passively accepting situations. Takes action to achieve goals beyond what is necessarily called for; originates action."
+
+    questions:
+      - title: "Questions the way a process is done and suggests changes."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Initiates self-development efforts."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Actively seeks solutions to problems before being asked or directed."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Seeks out and/or accepts additional responsibilities in the context of the job."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Looks for new ways to contribute to the business."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+  - title: "Delegation"
+    description: "Allocating decision-making authority and/or task responsibility to appropriate others to maximize the organization’s and individuals’ effectiveness."
+
+    questions:
+      - title: "Allocates decision-making authority and/or task responsibility in appropriate areas to appropriate individuals."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Clearly communicates the parameters of the delegated responsibility, including decision-making authority and any required actions, constraints, or deadlines."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Suggests resources and provides assistance or coaching as needed; expresses confidence in the individual."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Establishes appropriate procedures to keep informed of issues and results in areas of shared responsibility."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+  - title: "Decision-Making Skills"
+    description: "Makes decisions while exhibiting judgment and a realistic understanding of issues; ability to use reason, even when dealing with emotional topics."
+
+    questions:
+      - title: "Identifies purpose and objectives."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Gathers and analyzes data and develops rationale for decision."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "As appropriate, involves subordinates and others in making decisions."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Considers alternatives and assesses their impact and potential problems."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>
+
+      - title: "Implements decision and evaluates results."
+        question_type: <%= ThreeSixty::Question::Type::RATING %>

@@ -1,0 +1,23 @@
+<% @sub_title = "feature.coaching_goal.header.Goals".translate %>
+
+<%= render :layout => 'groups/show_layout' do %>
+  <%= render :partial => "coaching_goals/coaching_goal", :locals => { :coaching_goal => @coaching_goal, :is_show_page => true } %>
+  <%= content_tag(:h3, "feature.coaching_goal.header.Goal_Activity".translate, :class => "has-below-1 has-above-1") %>
+  <% if @page_controls_allowed %>
+    <div class="well attach-bottom cjs_coaching_goal_activity_feed">
+      <%= simple_form_for [@group, @coaching_goal, @coaching_goal_activity], :url => group_coaching_goal_coaching_goal_activities_path(@group, @coaching_goal, :refresh_ra => true, :is_show_page => true), :remote => true, :html => {:class => "has-below has-above cjs_new_message_coaching_goal_activity_form"} do |f| %>
+        <%= coaching_goal_activity_message_box(f, :size => "col-md-12") %>
+        <% action_set do %>
+          <%= f.button :submit, "display_string.Post".translate, :class => "cjs_new_coaching_goal_activity_submit" %>
+        <% end %>
+      <% end %>  
+    </div>
+  <% end %>  
+  <%= render_coaching_goal_activity_feed(@group, @coaching_goal, @new_offset_id, @coaching_goal_activities) %>
+<% end %>
+<%= bind_event_to_update_link %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    CoachingGoals.validateNewMessageForm();
+  });
+<% end %>

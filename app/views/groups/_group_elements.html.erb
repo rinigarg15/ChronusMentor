@@ -1,0 +1,93 @@
+<% profile_view = (@profile_tab == MembersController::ShowTabs::MANAGE_CONNECTIONS) %>
+<% show_manage_connections_view = @is_manage_connections_view || (@profile_user && current_user.can_manage_connections?) %>
+<% @mentoring_model_v2_enabled ||= @current_program.mentoring_connections_v2_enabled? %>
+<% if @mentoring_model_v2_enabled %>
+  <% group_roles = @current_program.roles.for_mentoring.includes(:permissions) %>
+  <% role_terms_hash = RoleConstants.program_roles_mapping(@current_program, pluralize: true) %>
+<% end %>
+<% survey_exists = show_manage_connections_view && @current_program.surveys.of_engagement_type.present? %>
+<% mentoring_model_roles = @current_program.roles.for_mentoring_models %>
+<% columns_to_show = @current_program.group_view.get_group_view_columns(@tab_number) if view == Group::View::LIST %>
+
+<% if !profile_view && @groups.present? %>
+  <%= ibox nil, ibox_class: "no-margins", content_class: "no-padding" do %>
+    <% top_bar_left_most_content = "".html_safe %>
+    <% if @is_manage_connections_view %>
+      <div class="p-sm clearfix b-b bulk_actions_bar">
+        <div class="pull-left">
+          <%= get_groups_bulk_actions_box(@tab_number, view, current_program) %>
+        </div>
+        <%= get_detailed_list_toggle_buttons(%Q[GroupSearch.changeView(#{Group::View::DETAILED})], %Q[GroupSearch.changeView(#{Group::View::LIST})], (view == Group::View::LIST)) %>
+        <div class="pull-right m-l-sm">
+          <%= link_to("feature.group.action.edit_columns".translate, "javascript:void(0)", :class => "btn btn-white btn-sm #{'hide' if view == Group::View::DETAILED}", :id => "group_view_columns_update_link", :data => { url: edit_columns_groups_path, view: view, tab: @tab_number } ) %>
+        </div>
+      </div>
+      <% top_bar_left_most_content += capture do %>
+        <% if view == Group::View::DETAILED %>
+          <div class="pull-left m-r m-l-xs p-t-xxs">
+            <label for ="cjs_groups_primary_checkbox" class="sr-only">
+              <%= "feature.group.label.select_all".translate(mentoring_connections: _mentoring_connections) %>
+            </label>
+            <input id="cjs_groups_primary_checkbox" type="checkbox"/>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% if (view == Group::View::DETAILED) && (@tab_number != Group::Status::ACTIVE || !@is_open_connections_view) %>
+      <% sort_fields = groups_sort_fields(@is_my_connections_view || @is_global_connections_view) %>
+      <% sort_options = { sort_url: groups_path, sort_field: @sort_field, sort_order: @sort_order, sort_info: sort_fields, use_ajax: true, is_groups_page: true } unless @drafted_connections_view %>
+    <% end %>
+    <%= top_bar_in_listing( { collection: @groups }, { show: true, applied_count: @my_filters.try(:size) }, sort_options, { left_most_content: top_bar_left_most_content } ) %>
+  <% end %>
+<% end %>
+
+<% if @groups.empty? %>
+  <div id="no_connections">
+    <% if @profile_user %>
+      <%= ibox nil do %>
+        <% status_string = get_groups_status_string(@status_filter) %>
+        <%= content_tag(:div, "feature.connection.content.help_text.no_connection_filter_v2".translate(status: status_string, :mentoring_connections => _mentoring_connections), class: "text-center") %>
+      <% end %>
+    <% else %>
+      <%= render :partial => "groups/no_groups", :locals => {:view => view } %>
+    <% end %>
+  </div>
+
+<% else %>
+  <div id ="groups">
+    <% if (view == Group::View::DETAILED) && !profile_view && @is_manage_connections_view && @groups.total_entries > @groups.size %>
+      <%= render :partial => "groups/select_all_groups" , :locals => {:group_size => @groups.size, :total_size => @groups.total_entries, :filter_field => @filter_field} %>
+    <% end %>
+    <% if view == Group::View::DETAILED %>
+      <%= render :partial => "groups/group", :collection => @groups, :locals => { :is_table_view => !profile_view && @is_manage_connections_view, :group_roles => group_roles, :role_terms_hash => role_terms_hash, :show_manage_connections_view => show_manage_connections_view, :survey_exists => survey_exists, :mentoring_model_roles => mentoring_model_roles, per_page_count: @groups.size, from_group_listing: true } %>
+    <% end %>
+    <% if view == Group::View::LIST && @is_manage_connections_view %>
+      <% if columns_to_show.present? %>
+        <%= render partial: "groups/group_list_results", locals: { groups: @groups, tab_number: @tab_number, columns_to_show: columns_to_show } %>
+      <% else %>
+        <%= render partial: "groups/no_columns" %>
+      <% end %>
+    <% end %>
+  </div>
+  <% unless profile_view %>
+    <% bottom_bar_content = bottom_bar_in_listing( { collection: @groups, params: { tab: @tab_number }, ajax: true } ) %>
+    <% if bottom_bar_content.present? %>
+      <%= ibox nil, ibox_class: "no-margins", content_class: "no-padding" do %>
+        <%= bottom_bar_content %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag %Q[GroupSearch.initializeMaxLength(#{@groups.total_entries}); GroupSearch.initializeActions('#{j "feature.connection.content.help_text.please_select_atleast_one".translate(mentoring_connection: _mentoring_connection)}');] if !profile_view %>
+<%= javascript_tag do %>
+  <% if @groups.present? && view == Group::View::DETAILED %>
+    GroupSearch.getSurveyResponse();
+  <% end %>
+  ShowAndHideToggle();
+  jQuery(function(){
+    jQuery(document).on('ajax:beforeSend', "#sort_form, #detailed_view, #list_view", function(){
+      GroupSearch.showLoading();
+    });
+  });
+<% end %>

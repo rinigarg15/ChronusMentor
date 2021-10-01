@@ -1,0 +1,123 @@
+<% mentoring_model_v2_enabled = @current_program.mentoring_connections_v2_enabled? %>
+<% is_alert_showing = @assign_template_alert.present? %>
+<% case @action_type.to_i %>
+<% when Group::BulkAction::PUBLISH %>
+  <% publish_groups = @groups %>
+  <% if @error_flash.present? %>
+    <% publish_groups = @groups - @error_groups %>
+    closeQtip();
+  <% end %>
+  <% publish_groups.each do |group| %>
+    GroupSearch.publishCallback('<%= group.id %>');
+  <% end %>
+  chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.CIRCLES, chrGoogleAnalytics.action.GA_PUBLISH_CIRCLE, chrGoogleAnalytics.eventLabel.GA_CIRCLES_LISTING, chrGoogleAnalytics.eventLabelId.GA_CIRCLES_LISTING_LABEL_ID);
+  var tabId = jQuery("#tab-box").find(".active a span").attr("id");
+  <% message = "feature.connection.content.publish_success".translate(Mentoring_Connections: _Mentoring_Connections) %>
+<% when Group::BulkAction::DISCARD %>
+  <% @groups.each do |group| %>
+    GroupSearch.discardCallback('<%= group.id %>');
+  <% end %>
+  var tabId = "cjs_drafted_count";
+  <% message = "feature.connection.content.discard_success".translate(Mentoring_Connections: _Mentoring_Connections) %>
+<% when Group::BulkAction::REACTIVATE %>
+  <% reactivated_groups = @error_flash.present? ? @groups-@error_groups : @groups %>
+  <% reactivated_groups.each do |group| %>
+    GroupSearch.reactivateCallback('<%= group.id %>');
+  <% end %>
+  var tabId = "cjs_closed_count";
+  <% message = "feature.connection.content.reactivate_success".translate(Mentoring_Connections: _Mentoring_Connections) %>
+<% when Group::BulkAction::SET_EXPIRY_DATE %>
+  <% if @view == Group::View::LIST %>
+    <% columns_to_show = @current_program.group_view.get_group_view_columns(@tab_number) %>
+    <% role_based_activity = Group.get_role_based_details(@groups, columns_to_show) %>
+    <% @groups.each do |group| %>
+      <% content = get_group_row_values(group, columns_to_show, @tab_number, build_role_based_activity_hash(role_based_activity, group.id)) %>
+      jQuery('#group_pane_<%= group.id %>').replaceWith('<%= j(content) %>');
+      jQueryHighlight("#group_pane_<%= group.id %>");
+      jQuery(document).ready(function() {GroupSearch.inspectSubCheckBox(); GroupSearch.resetTriStateCheckbox(); initialize.initializeTooltip();})
+    <% end %>
+  <% else %>
+    <% @groups.each do |group| %>
+      <% expiry_date_content = get_group_expiry_content(group, mentoring_model_v2_enabled) %>
+      jQuery('#cjs_expiry_<%= "#{group.id}" %>').html('<%= escape_javascript(expiry_date_content) %>');
+    <% end %>
+  <% end %>
+  var tabId = "cjs_ongoing_count";
+  <% message = "feature.connection.content.set_expiration_success".translate %>
+<% when Group::BulkAction::TERMINATE %>
+  <% @groups.each do |group| %>
+    GroupSearch.destroyCallback('<%= group.id %>');
+  <% end %>
+  var tabId = "cjs_ongoing_count";
+  <% message = "feature.connection.content.close_success".translate(Mentoring_Connections: _Mentoring_Connections) %>
+<% when Group::BulkAction::ASSIGN_TEMPLATE %>
+  <% if @assign_template_alert.present? %>
+    GroupSearch.displayGroupsAlert("<%= j @assign_template_alert %>", ".cjs_bulk_groups_assign_template_modal", "form#bulk_groups_assign_template", ".cjs_groups_assign_template_submit_button")
+  <% else %>
+    <% multiple_groups = (@groups.size > 1) %>
+    <% is_detailed = (@view == Group::View::DETAILED) %>
+    <% display_vertically = mentoring_model_v2_enabled && !@groups.first.published? %>
+    <% content_text = display_mentoring_model_info(@mentoring_model, !is_detailed, false, display_vertically: display_vertically) %>
+    <% if multiple_groups || !is_detailed %>
+      GroupSearch.updateMentoringModelsInfo("<%= j content_text %>", <%= is_detailed %>);
+    <% else %>
+      var groupEnclosure = jQuery("#group_" + <%= j @groups.first.id.to_s %>);
+      groupEnclosure.find(".cjs_mentoring_model_title").html("<%= j content_text %>");
+    <% end %>
+    <% message = "feature.connection.content.template_success".translate(Mentoring_Connections: multiple_groups ? _Mentoring_Connections : _Mentoring_Connection) %>
+    var tabId = jQuery("#tab-box").find(".active a span").attr("id");
+  <% end %>
+<% when Group::BulkAction::MAKE_AVAILABLE %>
+  <% unless @error_flash.present? %>
+    <% @groups.each do |group| %>
+      GroupSearch.tabSwitcher('<%= group.id %>', "#cjs_drafted_count", "#cjs_pending_count");
+    <% end %>
+    <% message = "feature.connection.content.make_available_success".translate(Mentoring_Connections: (@groups.size > 1) ? _Mentoring_Connections : _Mentoring_Connection) %>
+    var tabId = "cjs_drafted_count";
+  <% end %>
+<% when Group::BulkAction::ACCEPT_PROPOSAL %>
+  <% unless @error_flash.present? %>
+    <% @groups.each do |group| %>
+      GroupSearch.tabSwitcher('<%= group.id %>', "#cjs_proposed_count", "#cjs_pending_count");
+    <% end %>
+    <% message = "feature.connection.content.accept_and_make_available_success".translate(count: @groups.size, Mentoring_Connections: (@groups.size > 1) ? _Mentoring_Connections : _Mentoring_Connection) %>
+    var tabId = "cjs_proposed_count";
+  <% end %>
+<% when Group::BulkAction::REJECT_PROPOSAL %>
+  <% @groups.each do |group| %>
+    GroupSearch.tabSwitcher('<%= group.id %>', "#cjs_proposed_count", "#cjs_rejected_count");
+  <% end %>
+  <% message = "feature.connection.content.reject_group_success".translate(Mentoring_Connections: (@groups.size > 1) ? _Mentoring_Connections : _Mentoring_Connection) %>
+  var tabId = "cjs_proposed_count";
+<% when Group::BulkAction::WITHDRAW_PROPOSAL %>
+  <% @groups.each do |group| %>
+    GroupSearch.tabSwitcher('<%= group.id %>', "#cjs_pending_count", "#cjs_withdrawn_count");
+  <% end %>
+  <% message = "feature.connection.content.withdrawn_group_success".translate(count: @groups.size, Mentoring_Connections: (@groups.size > 1) ? _Mentoring_Connections : _Mentoring_Connection) %>
+  <% if @groups.size > 1 || @ga_src == EngagementIndex::Src::GROUP_LISTING %>
+    chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.CIRCLES, chrGoogleAnalytics.action.GA_WITHDRAW_CIRCLE, chrGoogleAnalytics.eventLabel.GA_CIRCLES_LISTING, chrGoogleAnalytics.eventLabelId.GA_CIRCLES_LISTING_LABEL_ID);
+  <% end %>
+  var tabId = "cjs_pending_count";
+<% when Group::BulkAction::DUPLICATE %>
+  <% unless @error_flash.present? %>
+    <% message = @success_flash %>
+    var tabId = "<%= @tab_id %>";
+    var tabElement = jQuery("#"+tabId);
+    tabElement.html(parseInt(tabElement.html()) + <%= @number_of_groups_duplicated %>);
+  <% end %>
+<% end %>
+
+<% if @error_flash.present? %>
+  closeQtip();
+  ChronusValidator.ErrorManager.ShowResponseFlash('cjs_groups_flash', '<%= j(@error_flash.join('. ').html_safe) %>', false);
+<% elsif !is_alert_showing %>
+  <% content = render :partial => "groups/no_groups", :locals => {:view => @view} %>
+  GroupSearch.updateNoGroupText(tabId, '<%= escape_javascript content %>');
+  closeQtip();
+  ChronusValidator.ErrorManager.ShowResponseFlash('cjs_groups_flash', '<%= j(message) %>', true);
+<% end %>
+<% unless is_alert_showing %>
+  jQuery("#cjs_groups_primary_checkbox").prop("checked", false);
+  jQuery("#cjs_groups_primary_checkbox").trigger('change');
+  <%= render :partial => "groups/update_member_group_tabs_counts" %>
+<% end %>

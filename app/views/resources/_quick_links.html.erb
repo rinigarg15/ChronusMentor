@@ -1,0 +1,7 @@
+<%= ibox _Resources, {:ibox_class => "m-b-sm", :content_class => "no-padding", :show_collapse_link => true} do %>
+  <ul id='quick_links_resources' class="list-group p-xs no-margins">
+    <% quick_link_resources.each do |resource| %>
+      <%= quick_link(h(resource.title), resource_path(resource), 'fa fa-fw fa-book p-r-md', nil) %>
+    <% end %>
+  </ul>
+<% end %>

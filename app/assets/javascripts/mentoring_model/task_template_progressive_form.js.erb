@@ -1,0 +1,272 @@
+var TaskTemplateProgressiveForm = {
+  initializeCommonValues: function(formId) {
+    TaskTemplateProgressiveForm.formId = formId;
+    TaskTemplateProgressiveForm.currentForm = jQuery('#cjs_new_mentoring_model_task_template_' + formId);
+    TaskTemplateProgressiveForm.descriptionTextArea = TaskTemplateProgressiveForm.currentForm.find("#cjs-mentoring-model-task-template-description-new");
+    TaskTemplateProgressiveForm.noError = true;
+  },
+
+  assignAndInitializeAddActionContainer: function() {
+    TaskTemplateProgressiveForm.addNewActionContainer = TaskTemplateProgressiveForm.targetResponseContainer.prevAll(".cjs-add-new-action-container");
+    jQuery(".cjs-add-new-action-container").show();
+    TaskTemplateProgressiveForm.addNewActionContainer.hide();
+  },
+
+  initialize: function(formId, ongoingConnectionsPresent) {
+    initialize.setDatePicker();
+    TaskTemplateProgressiveForm.initializeCommonValues(formId);
+    TaskTemplateProgressiveForm.assignAndInitializeAddActionContainer();
+    TaskTemplateProgressiveForm.showOrHideIsDue();
+    TaskTemplateProgressiveForm.handlePredecessorAndSpecificDateToggle();
+    TaskTemplateProgressiveForm.handleRequiredSelector();
+    TaskTemplateProgressiveForm.validateForm(ongoingConnectionsPresent);
+    TaskTemplateProgressiveForm.handleOutsideClickMenuHiders();
+    TaskTemplateProgressiveForm.buildSelect2Form();
+    TaskTemplateProgressiveForm.toggleDraggableClass();
+    TaskTemplateProgressiveForm.cancelTaskTemplateHandler();
+    MentoringModels.initializeCKEditor(TaskTemplateProgressiveForm.descriptionTextArea.attr('id'), {width: '100%'});
+    TaskTemplateProgressiveForm.ckeditor = CKEDITOR.instances[TaskTemplateProgressiveForm.descriptionTextArea.attr('id')];
+    jQuery(".cjs-mentoring-connections-v2-title-textbox").focus();
+  },
+
+  toggleDraggableClass: function() {
+    if((TaskTemplateProgressiveForm.currentForm.attr('id') != "cjs_new_mentoring_model_task_template_new") && TaskTemplateProgressiveForm.requiredInput.val()=="0"){
+      TaskTemplateProgressiveForm.containerToggleDraggableClass(jQuery(".cjs-task-template-edit-action-"+TaskTemplateProgressiveForm.formId));
+    }
+  },
+
+  containerToggleDraggableClass: function(container) {
+    container.toggleClass("draggable cursor-move cjs-sortable-list-item-handle");
+  },
+
+  handleOutsideClickMenuHiders: function() {
+    jQuery(".cjs-hide-on-outside-click, .cjs-invisible-on-outside-click, .cjs-hide-on-outside-click-root, .cjs-invisible-on-outside-click-root").on('click', function(event) {event.stopPropagation();});
+    jQuery('html').on('click', function() {
+      jQuery('.cjs-hide-on-outside-click').hide();
+      jQuery('.cjs-invisible-on-outside-click').addClass('invisible');
+    });
+  },
+
+  cancelTaskTemplateHandler: function() {
+    jQuery(".cjs-task-template-cancel-btn").on('click', function(){ 
+      TaskTemplateProgressiveForm.showMenuInvokerAndCloseForm();
+      return false;
+    });
+  },
+
+  validateForm: function(ongoingConnectionsPresent) {
+    jQuery(".cjs-task-template-submit-btn").on("click", function(){
+      var durationContainer = TaskTemplateProgressiveForm.currentForm.find("#mentoring_model_task_template_duration");
+      var specificDateInput = TaskTemplateProgressiveForm.currentForm.find("#mentoring_model_task_template_specific_date");
+      var dueDateAssignerVal = TaskTemplateProgressiveForm.currentForm.find(".mentoring_model_task_template_date_assigner").val();
+      var duration = durationContainer.val();
+      var n = ~~Number(duration);
+      var validPositiveInteger = (String(n) === duration && n > 0);
+      if(TaskTemplateProgressiveForm.requiredInput.val() == '1' && dueDateAssignerVal == 'specificDate'){
+        isValidDueDate = ValidateRequiredFields.checkNonMultiInputCase(specificDateInput);
+        if(!isValidDueDate){
+          return false;
+        }
+      }
+      else if(TaskTemplateProgressiveForm.requiredInput.val() == '1' && dueDateAssignerVal == 'predecessor') {
+        if(validPositiveInteger) {
+          ChronusValidator.ErrorManager.HideFieldError(durationContainer);
+        }
+        else {
+          ChronusValidator.ErrorManager.ShowFieldError(durationContainer);
+          return false;
+        }
+      }
+      else {
+        durationContainer.val('1');
+      }
+
+      var addingTaskTemplateInsideMilestone = jQuery(this).closest("div.cjs_milestone_template_entity").length > 0;
+
+      if(MentoringModels.should_sync || addingTaskTemplateInsideMilestone) {
+        if(addingTaskTemplateInsideMilestone && TaskTemplateProgressiveForm.requiredInput.val() == '1'){
+          jQuery.ajax({
+            url: jQuery(this).data("url"),
+            data: TaskTemplateProgressiveForm.currentForm.serialize(),
+            type: "patch",
+            success: function(data){
+              var showWarning = data.show_warning;
+              if(showWarning){
+                TaskTemplateProgressiveForm.handleFormSubmitionWithConfirmation(MentoringModelTranslations.milestoneOrderDestroyed);
+              }
+              else if(ongoingConnectionsPresent){
+                TaskTemplateProgressiveForm.handleFormSubmitionWithConfirmation(MentoringModelTranslations.syncToGroupConfirmation);      
+              }
+              else{
+                TaskTemplateProgressiveForm.submitTaskTemplateForm();
+              }
+            }
+          });
+        }
+        else if(ongoingConnectionsPresent){
+          TaskTemplateProgressiveForm.handleFormSubmitionWithConfirmation(MentoringModelTranslations.syncToGroupConfirmation);
+        }
+        else{
+          TaskTemplateProgressiveForm.submitTaskTemplateForm();
+        }
+        return false;
+      }
+    });
+  },
+
+  submitTaskTemplateForm: function(){
+    TaskTemplateProgressiveForm.descriptionTextArea.val(TaskTemplateProgressiveForm.ckeditor.getData());
+    TaskTemplateProgressiveForm.currentForm.submit();
+  },
+
+  handleFormSubmitionWithConfirmation: function(confirmationMsg){
+    chronusConfirm(
+      confirmationMsg,
+      function() {
+        TaskTemplateProgressiveForm.submitTaskTemplateForm();
+      },
+      function(){
+        return false;
+      }
+    );
+  },
+
+  showMenuInvokerAndCloseForm: function() {
+    TaskTemplateProgressiveForm.addNewActionContainer.show();
+    jQuery(".cjs-add-new-action-container").show();
+    if(TaskTemplateProgressiveForm.targetHeaderContainer) TaskTemplateProgressiveForm.targetHeaderContainer.show();
+    if(TaskTemplateProgressiveForm.ckeditor) { TaskTemplateProgressiveForm.ckeditor.destroy(true); }
+    TaskTemplateProgressiveForm.currentForm.closest(".cjs-task-template-container").removeClass("no-background");
+    TaskTemplateProgressiveForm.toggleDraggableClass();
+    TaskTemplateProgressiveForm.currentForm.remove();
+  },
+
+  handleRequiredSelector: function() {
+
+    // required elements
+    TaskTemplateProgressiveForm.requiredInput = TaskTemplateProgressiveForm.currentForm.find('.cjs-mentoring-model-task-required-input');
+    TaskTemplateProgressiveForm.requiredCheckbox = TaskTemplateProgressiveForm.currentForm.find('.cjs-mentoring-model-task-required-checkbox')
+    TaskTemplateProgressiveForm.showOnTrueDoms = TaskTemplateProgressiveForm.currentForm.find('.cjs-required-checkbox-true');
+    if(TaskTemplateProgressiveForm.requiredCheckbox.val() == 'true') {
+      TaskTemplateProgressiveForm.requiredInput.val('1');
+      TaskTemplateProgressiveForm.requiredCheckbox.prop('checked', true);
+      TaskTemplateProgressiveForm.showOnTrueDoms.show();
+    } else {
+      TaskTemplateProgressiveForm.requiredInput.val('0');
+      TaskTemplateProgressiveForm.requiredCheckbox.prop('checked', false);
+      TaskTemplateProgressiveForm.showOnTrueDoms.hide();
+    }
+
+      TaskTemplateProgressiveForm.requiredCheckbox.on('click', function() {
+        var thisElement = jQuery(this);
+        if (thisElement.is(':checked')) {
+          jQuery(".cjs-required-checkbox-true").show();
+          TaskTemplateProgressiveForm.requiredInput.val('1');
+        } else {
+          jQuery(".cjs-required-checkbox-true").hide();
+          TaskTemplateProgressiveForm.requiredInput.val('0');
+        }
+      });
+    FacilitationTemplateProgressiveForm.requiredCheckboxLabel = jQuery("<label/>", {'class': 'sr-only', 'for': 'mentoring_model_task_template_required', text: TaskTemplateProgressiveFormTranslations.requiredLabel});
+    TaskTemplateProgressiveForm.requiredContainer = jQuery("<span/>", {
+      'class': 'cjs-hide-on-outside-click-root pointer',
+      text: " " + TaskTemplateProgressiveFormTranslations.requiredText,
+      click: function() {
+        if (!TaskTemplateProgressiveForm.requiredCheckbox.is(':checked')) {
+          TaskTemplateProgressiveForm.requiredCheckbox.attr('checked', true);
+          jQuery(".cjs-required-checkbox-true").show();
+          TaskTemplateProgressiveForm.alignCalendarDropdownOptionsContainer(true);
+          TaskTemplateProgressiveForm.requiredInput.val('1');
+        } else {
+          TaskTemplateProgressiveForm.requiredCheckbox.attr('checked', false);
+          jQuery(".cjs-required-checkbox-true").hide();
+          TaskTemplateProgressiveForm.requiredInput.val('0');
+        }
+      }
+    });
+  },
+
+  handlePredecessorAndSpecificDateToggle: function() {
+    var dateAssigner = TaskTemplateProgressiveForm.currentForm.find(".mentoring_model_task_template_date_assigner");
+    var predecessorHandler = TaskTemplateProgressiveForm.currentForm.find(".cjs-predecessor-handler");
+    var specificDateHandler = TaskTemplateProgressiveForm.currentForm.find(".cjs-specific-date-handler");
+    if(dateAssigner.val() == "specificDate") {
+      specificDateHandler.show();
+    }
+    else{
+      predecessorHandler.show();
+    }
+    dateAssigner.live('change', function() {
+      if(jQuery(this).val() == "specificDate") {
+        predecessorHandler.hide();
+        specificDateHandler.show();
+      }
+      else{
+        predecessorHandler.show();
+        specificDateHandler.hide();
+      }
+    });
+  },
+
+  showOrHideIsDue: function() {
+    if(jQuery("#cjs-task-list-select2").find(":selected").attr('isduerequired') == "false"){
+      TaskTemplateProgressiveForm.currentForm.find(".cjs-is-due").addClass("invisible");
+    }
+    else{
+      TaskTemplateProgressiveForm.currentForm.find(".cjs-is-due").removeClass("invisible");
+    }
+    jQuery("#cjs-task-list-select2").live('change', function(event) {
+      if(event.added.element[0].getAttribute('isduerequired') == "true") {
+        TaskTemplateProgressiveForm.currentForm.find(".cjs-is-due").removeClass("invisible");
+      } else {
+        TaskTemplateProgressiveForm.currentForm.find(".cjs-is-due").addClass("invisible");
+      }
+    });
+  },
+
+  applyOptGroup: function() {
+    var select2Dropdown = jQuery("#cjs-task-list-select2");
+    var startOptGroup = jQuery('<optgroup/>');
+    var taskTemplateOptGroup = jQuery('<optgroup/>');
+    startOptGroup.attr('label', TaskTemplateProgressiveFormTranslations.Start);
+    startOptGroup.attr('role-text', "");
+    taskTemplateOptGroup.attr('label', TaskTemplateProgressiveFormTranslations.Tasks);
+    taskTemplateOptGroup.attr('role-text', "");
+    jQuery(select2Dropdown).find("option[isduerequired = 'false']").wrapAll(startOptGroup);
+    jQuery(select2Dropdown).find("option[isduerequired = 'true']").wrapAll(taskTemplateOptGroup);
+  },
+
+  formatSelect2Text: function(item) {
+    var originalOption = item.element;
+    var originalText = item.text;
+    return originalText + " <span class='text-muted'><i>" + jQuery(originalOption).attr('role-text') + "</i></span> ";
+  },
+
+  buildSelect2Form: function() {
+    jQuery("#cjs-task-list-select2").select2({
+      dropdownCssClass: "cui-progressive-select2-dropdown",
+      formatResult: TaskTemplateProgressiveForm.formatSelect2Text,
+      formatSelection: TaskTemplateProgressiveForm.formatSelect2Text,
+      escapeMarkup: function(m) { return m; }
+    });
+    
+    // Fix : Unable to click due date dropdown
+    jQuery("#cjs-task-list-select2").on("select2-open", function() {
+      jQuery(".select2-drop-mask").data("previous-z-index", jQuery(".select2-drop-mask").css("z-index"));
+      if(jQuery(".cui-progressive-select2-dropdown").length) {
+        jQuery(".select2-drop-mask").css("z-index", 1000);
+      }
+    }).on("select2-close", function() {
+      jQuery(".select2-drop-mask").css("z-index", jQuery(".select2-drop-mask").data("previous-z-index"));
+    })
+
+    taskListDropdownLabel = jQuery("<label/>", {'class': 'sr-only', 'for': 'cjs-task-list-select2', text: TaskTemplateProgressiveFormTranslations.task_select_drop_down});
+    jQuery("#cjs-task-list-select2").before(taskListDropdownLabel);
+
+    jQuery(".select2-input").attr('id', 'select2-input');
+    taskListAutoCompleteLabel = jQuery("<label/>", {'class': 'sr-only', 'for': 'select2-input', text: preJsTranslations.outComesReport.search});
+    jQuery("#select2-input").before(taskListAutoCompleteLabel);
+
+    TaskTemplateProgressiveForm.applyOptGroup();
+  }
+};

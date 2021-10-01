@@ -1,0 +1,22 @@
+closeQtip();
+<% mentoring_model_v2_enabled = @current_program.mentoring_connections_v2_enabled? %>
+<% if @error_flash.present? %>	
+  ChronusValidator.ErrorManager.ShowResponseFlash('cjs_groups_flash', '<%= @error_flash %>', false);
+<% elsif @view == Group::View::LIST %>
+  <% columns_to_show = @current_program.group_view.get_group_view_columns(@tab_number) %>
+  <% content = get_group_row_values(@group, columns_to_show, @tab_number) %>
+  jQuery('#group_pane_<%= @group.id %>').replaceWith('<%= j(content) %>');
+  jQueryHighlight("#group_pane_<%= @group.id %>");
+  jQuery(document).ready(function() {GroupSearch.inspectSubCheckBox(); GroupSearch.resetTriStateCheckbox(); initialize.initializeTooltip();})
+<% else %>
+  <% expiry_date_content = get_group_expiry_content(@group, mentoring_model_v2_enabled) %>
+  <% expiry_date_content_in_group = formatted_time_in_words(@group.expiry_time, :no_ago => true, :no_time => true) %>  
+  jQuery("#cjs_expiry_<%= @group.id %>").html("<%= escape_javascript(expiry_date_content) %>");
+  jQuery(".cjs_expiry_in_group").html("<%= escape_javascript(expiry_date_content_in_group) %>");
+  jQueryHighlight("#group_<%= @group.id %>");
+  if(jQuery(".cjs_homepage_connection_details_<%= @group.id %>").length > 0){
+    <% content = render partial: "groups/home_page_widget_connection_details.html.erb", locals: {group: @group} %>
+    jQuery(".cjs_homepage_connection_details_<%= @group.id %>").replaceWith('<%= j(content) %>');
+  }
+<% end %>
+ChronusValidator.ErrorManager.ShowResponseFlash('cjs_groups_flash', '<%= "#{'flash_message.group_flash.expiration_date_set'.translate(:mentoring_connection => _mentoring_connection)}" %>', true);

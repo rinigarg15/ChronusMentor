@@ -1,0 +1,10 @@
+<% subtab_class = "active" if @select_connection_tab %>
+<li class="<%= subtab_class %>">
+  <ul class="nav in">
+    <% if @current_program.project_based? %>
+      <%= get_pbe_subtabs(current_user, @current_program) %>
+    <% else %>
+      <%= get_non_pbe_subtabs(current_user) %>
+    <% end %>
+  </ul>
+</li>

@@ -1,0 +1,65 @@
+<% id_suffix = local_assigns[:use_html_id_suffix].present? ? "_#{local_assigns[:use_html_id_suffix]}" : "" %>
+<div id=<%= (local_assigns[:not_title] ? "report_actions" : "title_actions") + id_suffix %> class="pull-right report-actions big">
+  <% if report_actions[:export].present? %>
+    <% export_actions = report_actions[:export] %>
+    <%= get_reports_export_options(export_actions) %>
+    <% tooltip_string = export_actions.size == 1 ? export_actions.first[:label] : "display_string.Export".translate %>
+    <%= tooltip("cjs_reports_export", tooltip_string, false, placement: 'bottom') %>
+  <% end %>
+
+  <% if report_actions[:other_filters_partial].present? %>
+    <%= link_to(content_tag(:span, get_icon_content("fa fa-filter no-margins") + get_filter_count_label(0) + content_tag(:span, "feature.reports.content.filters".translate, class: "sr-only"), class: "relative"), "javascript:void(0)", class: "cjs_filter_report_link pull-right big count-info m-r-sm m-l-sm", id: "filter_report") %>
+    <%= tooltip("filter_report", "display_string.Filters".translate, false, placement: 'bottom') %>
+    <% modal_container "feature.reports.content.filter_report".translate, modal_id: "cjs_filter_report", modal_body_class: "gray-bg scrollable-modal-body", modal_footer_content: get_report_actions_modal_footer_content  do %>
+      <%= form_tag("javascript:void(0)", id: ("other_report_filters" + id_suffix)) do %>
+        <%= render(partial: report_actions[:other_filters_partial]) %>
+      <% end %>
+    <% end %>
+
+    <script type="text/javascript">
+      commonReportFilters.initializeOtherFilters();
+    </script>
+  <% end %>
+
+  <%# data_submit_js is used to avoid conflicts when multiple time_filters are used in same page %>
+  <%# every time filter can have individual submit function which can be sent through report_actions[:time_filter][:data_submit_js] %>
+  <% if report_actions[:time_filter].present? %>
+    <% right_addon = {
+      type: "btn",
+      btn_options: {
+        type: "submit",
+        class: "btn btn-primary cjs-report-time-filter-submit",
+        data: {submit_js: report_actions[:time_filter][:data_submit_js]}
+      },
+      content: "display_string.Go".translate
+    } %>
+    <% daterange_values = report_actions[:time_filter][:time] %>
+    <% time_filter_position = "pull-right" unless report_actions[:time_filter][:keep_left] %>
+    <div class="dropdown dropdown-with-datepicker keep-open m-r-sm m-t-3 hidden-xs <%= time_filter_position %>">
+      <%= date_range_filter_header(daterange_values, id_suffix: id_suffix, header_date_format: report_actions[:time_filter][:header_date_format], additional_header_class: local_assigns[:additional_header_class]) %>
+      <div class="dropdown-menu menu-wide animated fadeIn cjs-dropdown-datepicker-menu">
+        <%= form_tag("javascript:void(0)", id: ("report_time_filter_form" + id_suffix)) do %>
+          <% ibox "", ibox_class: "noshadow no-vertical-margins" do %>
+            <h4><%= report_actions[:time_filter][:label] %></h4>
+            <%= construct_daterange_picker("reports_filter[date_range]", daterange_values, presets: (local_assigns[:use_presets] || DateRangePresets.for_reports), date_range_preset: report_actions[:time_filter][:date_range_preset], date_format: report_actions[:time_filter][:date_format], min_date: report_actions[:time_filter][:min_date], max_date: report_actions[:time_filter][:max_date], right_addon: right_addon, use_text_field_tag_id: ("reports_filter_date_range" + id_suffix), force_set_date_picker: local_assigns[:force_set_date_picker], no_clear_selection: local_assigns[:no_clear_selection]) %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      commonReportFilters.initializeTimeFilter();
+    </script>
+  <% end %>
+
+  <script type="text/javascript">
+    commonReportFilters.dataUrl = '<%= report_actions[:url] %>';
+    commonReportFilters.dataParams = '<%= report_actions[:data_js].present? ? report_actions[:data_js] : %Q[commonReportFilters.defaultFilterData();] %>'
+    commonReportFilters.resetFunction = '<%= report_actions[:reset_js].present? ? report_actions[:reset_js] : %Q[commonReportFilters.resetOtherFilters();] %>'
+    commonReportFilters.submitFunction = '<%= report_actions[:submit_data_js].present? ? report_actions[:submit_data_js] : %Q[commonReportFilters.commonSubmitFunction();] %>'
+    commonReportFilters.gaLabel = '<%= report_actions[:ga_label] %>'
+    commonReportFilters.gaLabelId = '<%= ReportsController::GoogleAnalytics::LABEL_ID_MAPPING[report_actions[:ga_label]] %>'
+    commonReportFilters.preFilterFunction = '<%= report_actions[:pre_filter_js] %>'
+    commonReportFilters.initializeExport();
+  </script>
+</div>

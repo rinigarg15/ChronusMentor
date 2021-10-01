@@ -1,0 +1,95 @@
+#mobile_header_links input:-webkit-autofill, #search_wrapper input:-webkit-autofill {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-box-shadow: 0 0 0px 1000px darken($tab-bgcolor, 5%) inset;
+  -webkit-text-fill-color: $tab-color !important;
+}
+
+.fixed-nav .minimalize-styl-2 {
+  margin: 13px 5px 5px 15px;
+}
+
+body.fixed-nav.working_on_behalf #wrapper .navbar-static-side,
+body.fixed-nav.working_on_behalf #wrapper #page-wrapper
+{
+  margin-top: 90px;
+}
+.navbar-fixed-top {
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  -webkit-overflow-scrolling: touch;
+}
+
+.navbar-top-links li:last-child {
+  margin-right: 20px;
+}
+
+@media (max-width: 991px) {
+    .navbar-form-custom {
+      width: 100%;
+      display: block;
+      height: 60px;
+    }
+}
+
+@media (max-width: 991px) {
+  .fixed-nav .minimalize-styl-2 {
+    margin: 13px 5px;
+  }
+
+  .md-skin .navbar-top-links li a {
+    padding: 20px 5px;
+  }
+}
+
+// Hiding the other navigation links while navigating the menu
+ .body-small.mini-navbar #mobile_header_links{
+  display: none;
+}
+
+body.body-small.fixed-sidebar.mini-navbar {
+  #sidebarLeft {
+    box-shadow: 5px 0px 5px 0px #CCC;
+    -webkit-box-shadow: 5px 0px 5px 0px #CCC;
+  }
+
+  #content_wrapper {
+    opacity: 0.1;
+  }
+}
+
+@media (min-width: 768px) {
+    #non_logged_in #page-wrapper {
+      margin: 0;
+    }
+}
+
+.cui_overview_pages {
+  background: #FFF;
+}
+
+.nav.nav-tabs > li {
+  a {
+    background: transparent;
+  }
+
+  &.active {
+    background: #FFF;
+  }
+}
+
+.nav#tabs > li > a {
+  padding: 14px ;
+}
+
+.navbar-form-custom .form-control {
+  height: 40px;
+}
+
+.nav.nav-bottom-links a:hover, .nav.nav-bottom-links a:focus {
+  background-color: transparent;
+  color: inherit;
+}
+
+.profile_header_image img {
+  font-size: 0.1px;
+}

@@ -1,0 +1,84 @@
+en:
+  email_translations:
+    digest_v2:
+      connection_membership_notification:
+        user_suspension: "%{name} has been suspended"
+        member_leaving: "%{name} has left"
+        member_update: Members have been updated
+        change_expiry_date: Expiry date changed to %{date}
+        task_creation: Task '%{title}' was added
+        topic_discussion: "'%{topic_name}' was discussed"
+      by_authors: by %{list_of_authors}
+      card_heading:
+        comment:
+          one: Posted a reply
+          other: Posted replies
+        post:
+          one: Posted a comment
+          other: Posted comments
+        qa_answer:
+          one: Posted an answer
+          other: Posted answers
+        article_creation: Posted %{a_article}
+        announcement_created: Posted a new announcement
+        announcement_updated: Updated the announcement
+      popular_content:
+        heading:
+          topic: Started a new conversation
+          article: Posted a %{_article}
+          qa_question: Posted a new question
+        subject:
+          topic: Popular Discussion
+          article: Popular %{_Article}
+          qa_question: Popular Question
+      title: "%{_Program} participant digest email"
+      description_html: This is a 'what's going on' digest email sent to all %{_program} participants. It can be generated on a weekly or daily basis.<br /><br >The digest contains notifications about %{_program}-specific information such as announcements, forum updates, Q&A, and %{_article} comments.<br /><br />For connected users, the digest also includes %{_mentoring_connection} information like %{_mentoring_connection} summary; upcoming and overdue tasks; changes in expiration date; and members of the %{_mentoring_connection} updated or unavailable, If a participant is part of multiple %{_mentoring_connections}, the digest will consolidate this information for each %{_mentoring_connection} in the same email.
+      subject:
+        default: Digest Email
+        suggested_next_steps_v2:
+          one: "[%{group_name}] %{user_name}, 1 activity needs your attention"
+          other: "[%{group_name}] %{user_name}, %{count} activities need your attention"
+        and_n_updates:
+          one: and 1 more update!
+          other: and %{count} more updates!
+        group_members_change: "[%{group_name}] %{user_name}, %{_Mentoring_Connection} members was updated"
+        change_expiry_date: "[%{group_name}] %{user_name}, The expiry date was changed"
+        task_created_to_you:
+          one: "[%{group_name}] %{user_name}, 1 new activity assigned to you"
+          other: "[%{group_name}] %{user_name}, %{count} new activities assigned to you"
+        new_post_or_comment: "%{authors} discussed '%{topic_name}'"
+        qa_answer: 'New answer posted for the question: ''%{question_summary}'''
+        new_article: New %{article} '%{article_title}'
+        new_article_comment: New activity in '%{article_title}'
+        announcement_created: New announcement was posted
+        announcement_updated: An announcement was updated
+        profile_viewed:
+          one: "%{user_name}, 1 user viewed your profile"
+          other: "%{user_name}, %{count} users viewed your profile"
+        discussion_board_new_post_or_topic:
+          one: "[%{group_name}] %{user_name}, 1 conversation was discussed"
+          other: "[%{group_name}] %{user_name}, %{count} conversations were discussed"
+      content:
+        your_week: Here are your updates in a %{nutshell}
+        your_week_v1: Here's a snapshot of your updates!
+        nutshell: Nutshell!
+        updates_and_activites: UPDATES AND ACTIVITIES
+        ends_on: Ends on %{date}
+        days_to_go: days to go
+        suggested_next_steps: Suggested next steps
+        upcoming: Upcoming
+        pending: Pending
+        connection_updates: "%{connection} updates"
+        pending_request: Pending Requests
+        unread_messages: Unread Messages
+        upcoming_meeting: Pending RSVP
+        popular_caps: POPULAR
+        school_name: From %{school_name}
+        view_x_more: View %{count} more
+        and_x_more: and %{count} more
+        view_details: View Details
+        experience_with_job_title: "%{job_title} at %{company}"
+        experience_without_job_title: Works at %{company}
+        most_recent_viewers:
+          one: 1 USER VIEWED YOUR PROFILE
+          other: "%{count} USERS VIEWED YOUR PROFILE"

@@ -1,0 +1,35 @@
+<% unless disabled_for_editing %>
+  <% modal_container "feature.profile_question.choices.add_choices_in_bulk".translate, :modal_id => "question_choice_bulk_add_#{id_used}" do %>
+    <%= form_tag("javascript:void(0)", id: "cjs_#{question_type}_question_bulk_add_#{id_used}") do %>
+      <div class="">
+        <%= "feature.profile_question.choices.enter_list_of_choices".translate %>
+      </div>
+      <br/>
+      <label>
+        <%= set_required_field_label("feature.profile_question.choices.label.list_of_choices".translate) %>
+      </label>
+      <%= text_area_tag "#{question_type}_question[#{id_used}][new_options]", "", class: "form-control" %>
+      <%= control_group do %>
+        <%= controls(class: "cjs_bulk_add_choices_radio_group") do %>
+          <%= choices_wrapper("feature.profile_question.choices.label.actions_to_be_performed".translate) do %>
+            <label class="radio">
+              <%= radio_button_tag "bulk_add_mode_#{id_used}", nil, true, id: "bulk_add_mode_#{id_used}_add_options" %>
+              <%= "feature.profile_question.choices.label.append_choices".translate %>
+            </label>
+            <label class="radio">
+              <%= radio_button_tag "bulk_add_mode_#{id_used}", nil, false, id: "bulk_add_mode_#{id_used}_replace_options" %>
+              <%= "feature.profile_question.choices.label.replace_choices_v1".translate %>
+            </label>
+          <% end %>
+        <% end %>
+      <% end %>
+      <div class="pull-right">
+        <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn btn-white cancel", "data-dismiss" => "modal" %>
+        <%= submit_tag "display_string.Add".translate, :class => 'btn btn-primary', data: {:disable_with => "display_string.Please_Wait".translate}, "data-dismiss" => "modal" %>
+      </div>
+    <% end %>
+    <script type="text/javascript">
+      CustomizeQuestionChoices.addOrReplaceChoices("<%= id_used %>", "<%= question_type %>" );
+    </script>
+  <% end %>
+<% end %>  

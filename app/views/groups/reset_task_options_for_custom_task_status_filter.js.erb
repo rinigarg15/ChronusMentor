@@ -1,0 +1,4 @@
+jQuery('#custom_filter_template_loading').hide();
+<% content = j(render(partial: "groups/custom_task_status_filter_cloner", locals: {selected_template: @selected_template})) %>
+jQuery(".cjs_task_options_container").html("<%= content %>")
+GroupSearch.customTaskStatusLoadFirstTaskSelectionRow();

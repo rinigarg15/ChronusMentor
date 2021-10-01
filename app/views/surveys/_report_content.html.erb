@@ -1,0 +1,31 @@
+<% @title = @show_tabs ? @survey.name : "feature.survey.header.survey_report".translate(Survey_label: @survey.name.term_titleize) %>
+<% @back_link = {:label => "feature.survey.header.Surveys".translate, :link => surveys_path} %>
+<% @page_action =
+  if @show_tabs
+    if @survey.program_survey?
+      {:label => "feature.survey.action.Share_Survey".translate, :url => publish_survey_path(@survey), :class => "btn btn-primary btn-large"}
+    elsif @survey.engagement_survey? && @survey.program.mentoring_connections_v2_enabled?
+      {:label => "feature.survey.action.Add_to_engagement_plan_v1".translate(:Mentoring_Connection => _Mentoring_Connection), :url => add_to_engagement_plan_link(@survey), :class => "btn btn-primary btn-large"}
+    end
+  end %>
+<% @page_action = {:label => "feature.survey.action.View_Survey".translate, :url =>  survey_survey_questions_path(@survey), :class => "btn btn-primary btn-large"} if !@show_tabs && current_user.can_manage_surveys? %>
+<% @back_link = back_to_reports_options(@category) unless @show_tabs%>
+
+<div class="cjs_loading_filters_result hide">
+  <%= render partial: "common/loading_results", locals: { message: "common_text.prompt_text.filtering_results".translate, loading_result_id: "survey_report_loading_results", page_loading_result_id: "survey_report_page_loading_results"} %>
+</div>
+
+<% if format == FORMAT::PDF %>
+  <%= content_tag(:div, "feature.survey.content.export_pdf_info".translate(response_count: @filtered_responses_count, total_responses_count: @survey.total_responses, date: formatted_date_in_words(Time.now)), class: "p-l-m") %>
+<% else %>
+  <%= render :partial => 'surveys/survey_tabs', locals: {reminders_count: @survey.reminders_count, questions_count: @survey_questions.count} if @show_tabs %>
+<% end %>
+
+<%= ibox nil, :ibox_id => "survey_results" do %>
+  <% unless format == FORMAT::PDF %>
+    <div class="m-b-xl">
+      <%= render :partial => "common/report_actions", locals: {report_actions: report_actions, not_title: true} %>
+    </div>
+  <% end %>
+  <%= render :partial => 'surveys/report_main_content', :locals => {format: format} %>
+<% end %>

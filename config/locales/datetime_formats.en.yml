@@ -1,0 +1,98 @@
+# datetime formats translations
+
+en:
+  time:
+    formats:
+      full_display: "%A, %B %d, %Y, %I:%M %P"
+      full_display_with_zone: "%A, %B %d, %Y, %I:%M %P %Z"
+      full_display_with_zone_without_month: "%b %d, %Y %I:%M %P %Z"
+      full_display_without_time: "%A, %B %d, %Y"
+      month_year: "%b %Y"
+      month: "%b"
+      milliseconds: "%Q"
+      full_month_year: "%B %Y"
+      default:  "%d %b %Y"
+      full_display_no_date: "%B %Y at %I:%M %p"
+      full_display_no_time: "%B %d, %Y"
+      full_display_no_day: "%B %d, %Y at %I:%M %p"
+      full_display_no_day_short_month: "%b %d, %Y, %I:%M %P"
+      full_display_no_year_short_month: "%d, %b at %I:%M %p"
+      full_display_no_time_with_day: "%A, %B %d, %Y"
+      full_display_no_time_with_day_short: "%a, %b %d, %Y"
+      date_time_aabr_month_display: "%b %d, %I:%M %p"
+      short_time: "%I:%M %p"
+      short_time_small: "%I:%M %P"
+      short_time_small_with_zone: "%I:%M %P %Z"
+      abbr_short: "%b %d, %Y"
+      abbr_short_no_year: "%b %d"
+      short: "%B %d, %Y"
+      short_month_with_date_and_day: "%b %e, %A"
+      short_month_with_date_year_and_day: "%b %e, %Y, %A"
+      date_range: "%m/%d/%Y"
+      full_date_full_time: "%Y-%m-%d %H:%M:%S"
+      short_date_short_time: "%B %d, %Y %I:%M %P"
+      default_dashed: "%d-%b-%Y"
+      full_date_full_time_utc: "%Y-%m-%dT%H:%M:%SZ"
+      full_date_full_time_cal_sync: "%Y-%m-%dT%H:%M:%S"
+      short_year: "%B %d, %y"
+      abbr_short_with_time: "%b %d, %Y at %I:%M %p"
+      full_display_short_month: "%b %d, %Y at %I:%M %p"
+      day_month: "%d %b"
+      csv_timestamp: "%Y_%m_%d"
+      report_timestamp: "%d_%B_%Y"
+      pdf_timestamp: "%Y-%b-%d"
+      full_date_timezone: "%Y-%m-%d %z"
+      abbr_short_day_first: "%d %b, %Y"
+      ics_full_time: "%Y%m%dT%H%M%S"
+      month_day: "%b %d"
+      time_zone: "%Z"
+      abbr_short_day_first_full_month: "%d %B, %Y"
+    am: "AM"
+    pm: "PM"
+  date:
+    formats:
+      date_range: "%m/%d/%Y"
+      date_range_js: "mm/dd/yy"
+      short: "%B %d, %Y"
+      abbr_short: "%b %d, %Y"
+      full_display_no_time: "%B %d, %Y"
+      full_display_no_time_js: "MM dd, yy"
+      full_display_no_time_highcharts_js: "%B %e, %Y"
+      default:  "%d %b %Y"
+      default_with_day: "%a, %d %b %Y"
+      short_no_year: "%a, %d %b"
+      time_zone: "%Z"
+      abbr_short_day_first: "%d %b, %Y"
+      abbr_short_day_first_full_month: "%d %B, %Y"
+      fullcalendar_title_day_js: "MMM d"
+      fullcalendar_title_week_js: "MMM d[]{ - [ MMM] d}"
+      month_year: "%B %Y"
+      year_only: "%Y"
+      month_day: "%b %d"
+      day_month_no_year: "%a %b %d"
+
+    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+    day_names_plural: [Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, Saturdays]
+    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
+
+    month_names_array: [January, February, March, April, May, June, July, August, September, October, November, December]
+    abbr_month_names_array: [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+
+    # Don't forget the nil at the beginning; there's no such thing as a 0th month
+    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
+    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+  kendo_date_picker:
+    formats:
+      date_range: "MM/dd/yyyy"
+      full_display_no_time: "MMMM dd, yyyy"
+  fullcalendar:
+    formats:
+      title_day: "MMMM D, YYYY"
+      title_month: "MMMM D, YYYY"
+      title_week: "MMM D, YYYY"
+      hour_format: "ha"
+      medium_time_format: "h:mma"
+      small_time_format: "h(:mm)a"
+      event_time_format: "h:mm"
+      extra_small_time_format: "h(:mm)t"
+      no_meridiem_time_format: "h:mm"

@@ -1,0 +1,22 @@
+<%= render layout: 'members/profile_left_pane_wrapper', locals: { pdf_name: local_assigns[:pdf_name], open_connect_popup: local_assigns[:open_connect_popup], show_favorite_ignore_links: show_favorite_ignore_links, favorite_preferences_hash: favorite_preferences_hash, ignore_preferences_hash: ignore_preferences_hash} do %>
+  <div id="program_role_info">
+    <% unless @global_profile_view %>
+      <% sections = get_simple_section_questions(@program_questions_for_user) %>
+      <% if program_view? && (@is_admin_view || @is_self_view) %>
+        <%= render :partial => "members/connections_and_activity" %>
+      <% end %>
+      <% if program_view? && @current_program.project_based? && !(@is_admin_view || @is_self_view) && @profile_user.public_groups_available_for_others_to_join.any? && current_user.present? %>
+        <%= render :partial => "members/mentoring_connections" %>
+      <% end %>
+      <%= render :partial => "members/section_questions", :locals => {:sections => sections} %>
+    <% else %>
+      <% if @current_organization.org_profiles_enabled? && wob_member.show_admin_dashboard? %>
+        <% sections = get_simple_section_questions(@program_questions_for_user) %>
+        <div class="m-t-sm">
+          <%= render partial: "members/section_questions", locals: {sections: sections} %>
+          <%= render(partial: "members/add_to_program", locals: {member: @profile_member}) if wob_member.admin? %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

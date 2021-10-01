@@ -1,0 +1,26 @@
+<% prefix_id = 1 %>
+<% surveys = Survey.by_type(program).values.flatten %>
+<% processed_filter_params = get_processed_filter_params(filter_params, surveys) if filter_params_for_survey_questions_present(filter_params) %>
+<% rows_size = calculate_rows_size(processed_filter_params) %>
+<% empty_filter_params =  {:survey_id => "", :question => "", :operator => "", :choice => "", :value => ""} %>
+
+<div class="cjs_controls_enclosure col-sm-10 p-l-2">
+  <% if filter_params_for_survey_questions_present(processed_filter_params)%>
+    <% processed_filter_params[:survey][:survey_questions].each_pair do |key, filter_params| %>
+      <%= render :partial => "admin_views/filter_by_survey_response_list_container", :locals => {:prefix_id => prefix_id, :filter_params => filter_params, rows_size: rows_size, :program => program, :surveys => surveys} %>
+      <% prefix_id += 1 %>
+    <% end %>
+  <% else %>
+    <%= render :partial => "admin_views/filter_by_survey_response_list_container", :locals => {:prefix_id => prefix_id, :filter_params => empty_filter_params, rows_size: rows_size, :program => program, :surveys => surveys} %>
+    <% prefix_id += 1 %>
+  <% end %>
+</div>
+
+<%= content_tag(:div, add_one_more_link({:data => {:prefix => "[survey][survey_questions]", :cloning_id => prefix_id.to_s, :type => "questions", 
+  :questions_options => "feature.admin_view.label.select_survey_question_placeholder".translate, :url => fetch_survey_questions_admin_views_path(format: :js)}}), :class => "col-sm-10 col-sm-offset-2 survey_filter m-l-0 pull-right") %>
+
+
+<%= javascript_tag do %>
+  AdminViewsNewView.displaySurveyQuestions();
+  AdminViewsNewView.showInputField("<%= CommonQuestion::SELECT2_SEPARATOR  %>");
+<% end %>

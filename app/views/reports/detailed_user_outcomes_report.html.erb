@@ -1,0 +1,114 @@
+<% @angularjs_page = {app: 'detailedUserOutcomesReportApp', controller: 'detailedUserOutcomesReportCtrl'} %>
+<% @skip_rounded_white_box_for_content = true %>
+<% @back_link = { label: "feature.reports.header.program_outcomes_report".translate(Program: _Program), link: outcomes_report_path(category: Report::Customization::Category::OUTCOME, report: true) } %>
+<% @title = "feature.outcomes_report.title.membership_outcomes_report".translate %>
+<% content_for_sidebar do %>
+ <%= render partial: "reports/outcomes_report/filter_pane", :locals => {:start_date => @start_date, :end_date => @end_date, program_start_date: @program_start_date} %>
+<% end %>
+
+<%= render :partial => "reports/high_charts" %>
+<%= render partial: "reports/outcomes_report/js_routes" %>
+<%= render partial: "reports/outcomes_report/applied_filters" %>
+<%= render partial: "reports/outcomes_report/loading_results" %>
+<%= top_bar_in_listing({}, { show: true }, {}) %>
+
+<loading-results ng-show="loadingData" ng-cloak></loading-results>
+
+<div class="clearfix">
+  <div class="row m-b-sm m-n-t-sm" ng-show="dateRangeAlert">
+    <div class="col-xs-12">
+      <div class ="cui-detailed-user-outcomes-report-alert pull-right">
+        <%= "feature.outcomes_report.content.percent_previous_window_help_text".translate(days_count_text: "{{daysCountText}}") %>.
+      </div>
+    </div>
+  </div>
+  <div class="m-b-sm" ng-hide="dateRangeAlert">
+  </div>
+
+  <div class="row">
+    <div ng-class='spanClassForSectionOne'>
+      <%= ibox "feature.outcomes_report.title.user_outcomes_report".translate do %>
+        <h1 class="no-margins">
+          {{registeredUsersData.totalCount}}
+          <i class="cjs-users-detail-toolitp fa fa-info-circle small m-r-xs"></i>
+          <%= javascript_tag %Q[jQuery(".cjs-users-detail-toolitp").tooltip('hide').attr('data-original-title', "#{"feature.outcomes_report.tooltip.users_total_v1".translate(program: _program)}").tooltip('fixTitle')] %>
+        </h1>
+        <%= render partial: "reports/change_difference_percent_and_arrow", locals: {value_name: 'registeredUsersData.overallChange', change_count: 'cui-detailed-user-outcomes-report-percent', change_percent: 'cui-detailed-user-outcomes-report-percent', change_arrow: 'cui-detailed-user-outcomes-report-arrow', show_change: 'dateRangeAlert'} %>
+        <span class="m-r-xxs h5">
+          {{registeredUsersData.userState.new_users }}
+        </span>
+        <span class="m-r-xs text-muted">
+          <%= "feature.outcomes_report.content.new_users_count".translate %>,
+        </span>
+        <span class="m-r-xxs h5">
+          {{registeredUsersData.userState.suspended_users }}
+        </span>
+        <span class="text-muted">
+          <%= "feature.outcomes_report.content.suspended_users_count_v1".translate %>
+        </span>
+      <% end %>
+    </div>
+    <div ng-class='spanClassForSectionOne' ng-repeat="role in rolewiseSummary" >
+      <%= ibox "{{role.name}}" do %>
+        <h1 class="no-margins">{{role.count}}</h1>
+        <%= render partial: "reports/change_difference_percent_and_arrow", locals: {value_name: 'role.change', change_count: 'cui-detailed-user-outcomes-report-percent', change_percent: 'cui-detailed-user-outcomes-report-percent', change_arrow: 'cui-detailed-user-outcomes-report-arrow', show_change: 'dateRangeAlert'} %>
+        <span class="m-r-xxs h5">
+          {{role.new_roles }}
+        </span>
+        <span class="m-r-xs text-muted">
+          <%= "feature.outcomes_report.content.new_users_count".translate %>,
+        </span>
+        <span class="m-r-xxs h5">
+          {{role.suspended_roles }}
+        </span>
+        <span class="text-muted">
+          <%= "feature.outcomes_report.content.suspended_users_count_v1".translate %>
+        </span>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= ibox "feature.outcomes_report.header.registered_users_graph".translate do %>
+  <highchart id="registered-user-chart" config="registeredUsersChartConfig" class="col-sm-12 cui-outcomes-dashboard-chart no-padding">
+  </highchart>
+<% end %>
+<%= ibox "feature.outcomes_report.header.registered_users_table".translate do %>
+  <div class="clearfix">
+    <div class="col-sm-12" ng-show="registeredUsersData.totalCount">
+      <div class="cui-detailed-user-outcomes-report">
+        <div ng-show="loadingData" class="large text-center height-600">
+          <%= "display_string.Please_Wait".translate %>
+        </div>
+      </div>
+      <div ng-hide="loadingData" class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr class="cjs_list_view_header cui_table_sort">
+              <th class="pointer cjs_sortable_element p-r-xs"  ng-repeat="column in usersTableHeader" ng-class='order($index, column.key)' ng-click="applySorting(column.key, $index)">
+                {{column.value}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="user in detailedUsersData">
+              <td ng-repeat="column in usersTableHeader">
+                <span ng-show="addUrl(column.key)">
+                  <a href ="/members/{{user.id}}">
+                    {{user[usersTableHeader[$index].key]}}
+                  </a>
+                </span>
+                <span ng-hide="addUrl(column.key)">
+                  {{user[usersTableHeader[$index].key]}}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="detailed_report_pagination_links">
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<%= javascript_tag %Q[jQuery(function() {isProgramOutcomesReportSearch = true;});] %>

@@ -1,0 +1,4 @@
+jQuery(".cjs-info-diversity-report-<%= @diversity_report.id %>").html('<%= j(render partial: "diversity_reports/show", locals: {diversity_report: @diversity_report, start_date: @start_date, end_date: @end_date, hide_previous_period: (@start_date == ReportsFilterService.program_created_date(@current_organization))}) %>');
+jQuery(".cjs-container-diversity-report-<%= @diversity_report.id %> .cjs_reports_time_filter").text('<%= get_reports_time_filter(get_daterange_values(@start_date, @end_date)) %>');
+jQuery(".cjs-diversity-report-actions, .cjs-diversity-report-time-filter").show();
+jQuery(".dropdown-with-datepicker.open").removeClass("open");

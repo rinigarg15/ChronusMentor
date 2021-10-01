@@ -1,0 +1,8 @@
+<div class="cjs_quick_connect_box system_recommendations m-b-xl cjs_tile_container">
+  <%= tooltip("cjs_hide_quick_connect_box", "feature.meetings.content.hide_for_this_session_tooltip".translate) %>
+  <div class="cjs_quick_connect_items">
+    <%= get_quick_connect_title(recommendations_view: AbstractPreference::Source::SYSTEM_RECOMMENDATIONS) %>
+    <%= render(partial: "programs/quick_connect_loader") %>
+  </div>
+  <%= javascript_tag(%Q[Meetings.QuickConnect.initializeQuickConnectElements("#{quick_connect_box_path}");]) %>
+</div>

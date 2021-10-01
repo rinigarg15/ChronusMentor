@@ -1,0 +1,5 @@
+<% content = render partial: "mentoring_model/task_templates/task_template", collection: @all_task_templates %>
+MilestoneTemplates.refreshTasks("<%= @task_template.milestone_template_id.to_s %>", "<%= j(content) %>", "true");
+jQuery(".cjs-action-item-response-container").slideUp(function(){
+  MentoringModels.removeMentoringModelForms();
+});

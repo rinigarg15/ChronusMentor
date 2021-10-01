@@ -1,0 +1,13 @@
+<% entry_id = "new_#{Time.now.to_i}" %>
+<div id="student_container_<%= entry_id %>" class="<%= 'help-block' unless defined?(no_delete) %> ">
+  <%= label_tag(:group, "#{_Mentee}", :class => "sr-only", :for => "group_students_#{entry_id}") %>
+  <%= text_field_with_auto_complete(:group, "students_#{entry_id}",
+    {:class => 'required-field form-control', :value => "", :name => "group[student_names][]", :autocomplete => "off"},
+    {:min_chars => 3,
+      :url => auto_complete_for_name_users_path(format: :json, role: RoleConstants::STUDENT_NAME, show_all_users: true, for_autocomplete: true),
+      :param_name => 'search', :highlight => true}) %>
+
+  <% unless defined?(no_delete) %>
+    <%= link_to_function embed_icon("icon-trash"), "jQuery('#student_container_#{entry_id}').remove();", :id => 'student_master_remove_link' %>
+  <% end %>
+</div>

@@ -1,0 +1,14 @@
+<% programs_count = programs.size %>
+<div class="clearfix hidden-xs row">
+	<%= render_multi_column_variable_height_blocks(2, :additional_class => "p-l-sm p-r-sm") do |renderable_items| %>
+	  <% programs.each_with_index do |program, index| %>
+	    <% renderable_items[index % 2] <<  render(:partial => "organizations/programs_listing", :locals => {:program => program}) %>
+	  <% end %>
+	<% end %>
+</div>
+
+<div class="clearfix visible-xs">
+  <% programs.each_with_index do |program, index| %>
+    <%= render(:partial => "organizations/programs_listing", :locals => {:program => program}) %>
+  <% end %>
+</div>

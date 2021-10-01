@@ -1,0 +1,63 @@
+<% can_see_match_score = program.allow_user_to_see_match_score?(current_user) %>
+<% mentor_user = member.user_in_program(program) %>
+<% program_questions_for_user = current_user.get_visibile_match_config_profile_questions_for(mentor_user) %>
+<% match_details_content, tags_count, matched_configs_or_preferences_count, total_match_configs_or_preferences_count = get_match_details_for_display(current_user, mentor_user, program_questions_for_user) %>
+
+<div class="col-sm-6 p-b-xxs cjs_mentor_recommendation" id= "user_<%= mentor_user.id %>">
+  <div class="contact-box center-version no-margins slick_box  b-l b-r thick-border" id="quick_connect_user_<%= mentor_user.id %>">
+
+    <% quick_info = content_tag(:div, quick_connect_mentor_info(mentor_user, current_user, program, from_quick_connect: true), class: "cjs_quick_connect_user_details quick_connect_fixed_height m-b-xs small text-quick-info") %>
+
+    <% image_options = {class: "img-circle table-bordered", size: "50x50"} %>
+    <% member_picture_options = {size: :medium, new_size: :medium, no_name: true, dont_link: false, item_link: member_path(member, src: src)} %>
+
+    <div class="p-t-sm p-l-sm p-r-sm b-b cui_quick_connect_background">
+      <div class="media-left p-b-xxs">
+        <%= member_picture_v3(member, member_picture_options, image_options) %>
+      </div>
+      <div class="media-body p-l-xxs">
+        <% options.merge!({mentor_id: mentor_user.id, src: src})%>
+        <%= content_tag(:div, render_show_favorite_links(options) + render_ignore_preference_dropdown(options), class: "pull-right cjs_quick_connect_preference_links") if options[:show_favorite_ignore_links] %>
+        <div class="media-heading m-0">
+        <%= content_tag(:h4, link_to_user(member, content_text: member.name(name_only: true), params: { src: src }, class: "text-white", no_hovercard: true), class: "cjs_quick_connect_user_name whitespace-nowrap truncate-with-ellipsis h4 m-0 p-b-xxs") %>
+        </div>
+        <%= quick_info %>
+      </div>
+    </div>
+
+    <% explicit_preferences_configured = current_user.explicit_preferences_configured? %>
+    <% hide_match_details = explicit_preferences_configured && !options[:show_match_config_matches] && options[:recommendations_view] == AbstractPreference::Source::ADMIN_RECOMMENDATIONS %>
+
+    <% if can_see_match_score %>
+      <% score_content = display_match_score(match_score, options.merge!({in_listing: true, mentor_id: mentor_user.id, src: src, from_quick_connect: true})) %>
+    <% elsif explicit_preferences_configured && !hide_match_details %>
+      <% score_content = get_matched_preferences_label(matched_configs_or_preferences_count, total_match_configs_or_preferences_count, false, {show_no_match_label: get_show_match_lable_value(match_score), quick_connect: true}) %>
+    <% end %>
+
+    <% unless hide_match_details %>
+      <div class="p-sm p-l-m p-r-m b-b cjs_tags_container">
+        <%= content_tag(:div, content_tag(:span, get_icon_content("fa fa-handshake-o fa-lg m-r text-navy"), class: "media-left p-r-0-important") + content_tag(:span, score_content, class: "media-body")) if score_content.present? %>
+        <% matched_content = get_matched_tags_content(current_user, mentor_user, match_score, options.merge!({matched_content: match_details_content})) %>
+        <div class="quick_connect_score_fixed_height <%= 'm-t' if score_content.present? %>">
+          <% if matched_content.present? %>
+            <%= matched_content %>
+          <% else %>
+            <%= content_tag(:div, append_text_to_icon("fa fa-user-circle m-r fa-lg text-navy", link_to_user(member, content_text: "display_string.view_full_profile".translate, params: { src: src, no_hovercard: true }, no_hovercard: options[:no_hovercard])), class: "font-bold") %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <% unless @current_program.matching_by_mentee_and_admin_with_preference? %>
+      <div class="text-center light-gray-bg p-xs cjs_quick_connect_container clearfix">
+        <span class='m-r-xs'>
+        <%= link_to(append_text_to_icon("fa fa-user-circle", "display_string.upcase_profile".translate), member_path(member, src: src), class: "white-bg btn btn-outline btn-info btn-sm no-vertical-margins font-600") %>
+        </span>
+        <span class='m-l-xs'>
+          <% actions, dropdown_title = get_links_for_banner(mentor_user, mentors_score, {quick_connect: true}) %>
+          <%= dropdown_buttons_or_button(actions, { dropdown_title: dropdown_title, btn_class: '', btn_group_btn_class: 'btn-primary btn-sm text-center no-vertical-margins font-600', dropdown_menu_class: 'pull-right', dropup: true, small: true} )%>
+        </span>
+      </div>
+    <% end %>
+  </div>
+</div>

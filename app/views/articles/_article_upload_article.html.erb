@@ -1,0 +1,10 @@
+<div id="uploaded_article">
+  <div>
+    <%= display_uploaded_article_content(@article) %>
+  </div>
+  <% if @article.body.present? %>
+    <div class="m-t-md">
+      <%= sanitize(auto_link @article.body) %>
+    </div>
+  <% end %>
+</div>

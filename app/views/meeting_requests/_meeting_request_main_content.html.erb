@@ -1,0 +1,39 @@
+<% listing_info_options = {} %>
+<% if @meeting_requests.any? %>
+  <% listing_info_options = { collection: @meeting_requests } %>
+<% end %>
+
+<div id="results_pane" class="clearfix">
+  <%= inner_tabs(get_tabs_for_meeting_requests_listing(@status_type), {}) if @is_manage_view%>
+  <%= ibox nil, :ibox_class=>'listing clearfix', :content_class => "no-padding" do %>
+    <% if @meeting_requests.present? && @with_bulk_actions %>
+      <div class='pagination_box  p-xs p-l-sm p-r-sm b-b clearfix'>
+        <%= meeting_requests_bulk_actions %>
+      </div>
+
+      <label for="cjs_primary_checkbox" class="sr-only"><%= "feature.mentor_request.content.select_all_label_v1".translate %></label>
+      <div class='pull-left m-t-md m-l-md m-r-lg'><%= check_box_tag :cjs_primary_checkbox %></div>
+    <% end %>
+    <%= top_bar_in_listing(listing_info_options, { show: true, applied_count: @my_filters.try(:size) }, basic_sort_by_id_options_for_top_bar(@meeting_requests.any?, @filter_params)) %>
+
+    <% if @meeting_requests.empty? %>
+      <div class="p-sm text-muted text-center">
+        <%= "feature.meeting_request.content.empty_reqs_v1".translate(:meeting => _meeting) %>
+      </div>
+    <% else %>
+      <%= response_flash("cjs_meeting_requests_flash") %>
+      <%= render :partial => 'meeting_requests/select_all', :locals => {meeting_requests: @meeting_requests, filter_params: @filter_params} %>
+      <%= listing_page(@meeting_requests, :partial => "meeting_requests/meeting_request", :collection_key => :meeting_request, locals: { filter_field: @filter_field, source: EngagementIndex::Src::AcceptMentorRequest::MENTOR_REQUEST_LISTING_PAGE}) %>
+      <%= bottom_bar_in_listing( { collection: @meeting_requests, params: {filters: @filter_params, sort_field: @filter_params[:sort_field], sort_order: @filter_params[:sort_order], list: @status_type}, ajax: true }) if @meeting_requests.any? %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag do  %>
+  MeetingRequests.initializeMaxLength(<%= @meeting_requests.total_entries %>);
+  MeetingRequests.inspectActions("<%= j('feature.meeting_request.content.select_atleast_one_request_v1'.translate) %>");
+  <% if action_popup_id.present? %>
+    jQuery("#<%= action_popup_id %>").modal('show');
+  <% end %>
+  MeetingRequest.trackMeetingRequestActions('<%= @source %>');
+<% end %>

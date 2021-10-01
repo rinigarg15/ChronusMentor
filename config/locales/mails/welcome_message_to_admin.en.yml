@@ -1,0 +1,23 @@
+en:
+  email_translations:
+    welcome_message_to_admin:
+      title_v3: Welcome message to new %{_admin} after joining
+      description_v2: This email is sent to a new %{_admin} to welcome them and introduce them to the %{_program}.
+      subject_v1: "{{receiver_first_name}}, welcome to {{subprogram_or_program_name}}!"
+      content_v3_html: 'Congratulations! You are now {{customized_admin_term_articleized}} in {{subprogram_or_program_name}}. <br /> <br /> Get started by visiting the <a href=''{{url_customer_support}}''>Customer Support Center (CSC)</a>, where you can browse through comprehensive articles on the different features of the {{customized_subprogram_term}}. <br /> <br /> Here are two articles we think you''ll find helpful: <ul> <li> <a href ={{url_program_health}}>Measuring the health of your {{customized_subprogram_term}}</a></li> <li><a href =''http://chronusmentor.chronus.com/entries/23313057-Why-custom-user-views-are-crucial''>Why custom user views are helpful</a></li></ul><br/>'
+      program_health_url: http://chronusmentor.chronus.com/entries/29618078-Measuring-the-health-of-your-program
+      tags:
+        url_invite_mentors:
+          description: Url to invite mentors
+        url_add_mentor:
+          description: Url to add a mentor directly
+        url_invite_mentees:
+          description: Url to invite mentees
+        url_customize_profile_form:
+          description: Url to customize the profile fields of users
+        url_customize_program:
+          description: Url to customize the program
+        url_customer_support:
+          description: Url to Customer Support Center
+        url_program_health:
+          description: Url to Program health document

@@ -1,0 +1,6 @@
+<% if @page == 1 %>
+  jQuery("#cjs_connections_widget").html("<%= j (render partial: 'programs/mentoring_connections_widget_content', locals: {groups: @groups, group: @group}) %>");
+<% else %>
+  jQuery('.connections-slick .slick-slide[data-slick-index="'+<%= (@page-1) %>+'"]').html("<%= j (render partial: 'programs/mentoring_connection_content_home', locals: {groups: @groups, group: @group}) %>");
+<% end %>
+GroupTabs.initializeConnectionWidgetMeetingPopup("cjs_connection_widget_add_meeting");

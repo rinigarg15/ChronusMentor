@@ -1,0 +1,230 @@
+common: &common
+  CronTasks::Monitor:
+    run_every: <%= 1.day %>
+    run_at: <%= (0..23).map { |h| ["#{h}:00", "#{h}:15", "#{h}:30", "#{h}:45"] }.flatten %>
+    queue: <%= DjQueues::HIGH_PRIORITY %>
+  CronTasks::ProductDashboard::AccountNamesUpdater:
+    run_every: <%= 1.day %>
+    run_at: '17:30'
+  CronTasks::ActiveAdminsNotifier:
+    run_every: <%= 1.month %>
+    run_at: '15 0:00'
+  CronTasks::BackupServerDetector:
+    run_every: <%= 1.day %>
+    run_at: <%= (0..23).map { |h| ["#{h}:00", "#{h}:15", "#{h}:30", "#{h}:45"] }.flatten %>
+  CronTasks::DelayedJobStatusNotifier:
+    run_every: <%= 1.day %>
+    run_at: <%= (0..23).map { |h| ["#{h}:00", "#{h}:29"] }.flatten %>
+  CronTasks::EmailMonitor:
+    run_every: <%= 1.day %>
+    run_at: <%= (0..23).map { |h| "#{h}:45" } %>
+  CronTasks::AdminViewCacheRefresher:
+    run_every: <%= 1.day %>
+    run_at: <%= (0..23).step(2).map { |h| "#{h}:05" } %>
+  CronTasks::MatchConfigDiscrepancyCacheRefresher:
+    run_every: <%= 1.day %>
+    run_at: <%= (0..23).step(2).map { |h| "#{h}:10" } %>
+  CronTasks::Elasticsearch::DocumentCountChecker:
+    run_every: <%= 1.day %>
+    run_at: <%= [1, 3, 11, 13, 15, 17, 19, 21, 23].map { |h| "#{h}:00" } %> # Runs every 2 hours excluding the weekly & daily feed migrator window (3 AM - 11AM UTC)
+  CronTasks::Reminder::MentorRequestMailer:
+    run_every: <%= 1.day %>
+    run_at: '8:01'
+  CronTasks::Reminder::MeetingRequestMailer:
+    run_every: <%= 1.day %>
+    run_at: '8:00'
+  CronTasks::Reminder::ProjectRequestMailer:
+    run_every: <%= 1.day %>
+    run_at: '8:30'
+  CronTasks::CalendarNotificationChannelEstablisher:
+    run_every: <%= 1.day %>
+    run_at: '0:01'
+  CronTasks::CirclesAutoPublisher:
+    run_every: <%= 1.day %>
+    run_at: ['8:33', '20:33']
+  CronTasks::CampaignManagement::CampaignsStarter:
+    run_every: <%= 1.day %>
+    run_at: <%= [0, 2, 4, 10, 12, 14, 16, 18, 20, 22].map { |h| "#{h}:00" } %> # Runs every 2 hours excluding the deployment window (6AM - 9 AM UTC / 2 AM - 5 AM EDT)
+  CronTasks::CampaignManagement::AnalyticsSynchronizer:
+    run_every: <%= 1.day %>
+    run_at: <%= [0, 2, 4, 10, 12, 14, 16, 18, 20, 22].map { |h| "#{h}:45" } %> # Runs every 2 hour excluding the deployment window (6AM - 9 AM UTC / 2 AM - 5 AM EDT)
+  CronTasks::MeetingsCheckinCreator:
+    run_every: <%= 1.day %>
+    run_at: <%= (0..23).map { |h| "#{h}:17" } %>
+  CronTasks::DigestV2Trigger:
+    run_every: <%= 1.day %>
+    run_at: <%= (0..23).map { |h| ["#{h}:00", "#{h}:30"] }.flatten %>
+    queue: <%= DjQueues::WEEKLY_DIGEST %>
+  CronTasks::Reminder::MeetingMailer:
+    run_every: <%= 1.day %>
+    run_at: <%= (0..23).map { |h| (2..59).step(5).map { |m| "#{h}:#{'%02d' % m}" } }.flatten %>
+    queue: <%= DjQueues::HIGH_PRIORITY %>
+  CronTasks::Reminder::ProgramEventMailer:
+    run_every: <%= 1.day %>
+    run_at: <%= (0..23).map { |h| (4..59).step(5).map { |m| "#{h}:#{'%02d' % m}" } }.flatten %>
+    queue: <%= DjQueues::HIGH_PRIORITY %>
+  CronTasks::Globalization::PhraseappTranslationIssuesNotifier:
+    run_every: <%= 1.day %>
+    run_at: '1.25'
+    use_region_specific_tz: true
+  CronTasks::Globalization::TranslationsBackup:
+    run_every: <%= 1.day %>
+    run_at: '1:25'
+    use_region_specific_tz: true
+  CronTasks::Globalization::UntranslatedStringsNotifier:
+    run_every: <%= 1.day %>
+    run_at: '1:25'
+    use_region_specific_tz: true
+  CronTasks::Mailgun::FailedEventSummarizer:
+    run_every: <%= 1.day %>
+    run_at: '1:25'
+    use_region_specific_tz: true
+  CronTasks::ActiveMembersMonitor:
+    run_every: <%= 1.day %>
+    run_at: '1:25'
+    use_region_specific_tz: true
+  CronTasks::Elasticsearch::SnapshotCreator:
+    run_every: <%= 1.day %>
+    run_at: '22:30'
+    use_region_specific_tz: true
+  CronTasks::SamlCertExpiryNotifier:
+    run_every: <%= 1.week %>
+    run_at: 'sunday 1:47'
+    use_region_specific_tz: true
+  CronTasks::SessionsCleaner:
+    run_every: <%= 1.day %>
+    run_at: '1:25'
+    use_region_specific_tz: true
+  CronTasks::ExpiredPasswordsCleaner:
+    run_every: <%= 1.day %>
+    run_at: '1:25'
+    use_region_specific_tz: true
+  CronTasks::GroupsExpirer:
+    run_every: <%= 1.day %>
+    run_at: '1:25'
+    use_region_specific_tz: true
+  CronTasks::GroupActivitiesTracker:
+    run_every: <%= 1.day %>
+    run_at: '1:25'
+    use_region_specific_tz: true
+  CronTasks::ExpiredMentorRequestsCloser:
+    run_every: <%= 1.day %>
+    run_at: '1:25'
+    use_region_specific_tz: true
+  CronTasks::ExpiredMeetingRequestsCloser:
+    run_every: <%= 1.day %>
+    run_at: '1:25'
+    use_region_specific_tz: true
+  CronTasks::ExpiredProjectRequestsCloser:
+    run_every: <%= 1.day %>
+    run_at: '1:25'
+    use_region_specific_tz: true
+  CronTasks::Mailgun::CalendarNotificationsSync:
+    run_every: <%= 1.day %>
+    run_at: '1:25'
+    use_region_specific_tz: true
+  CronTasks::ProductDashboard::Updater:
+    run_every: <%= 1.day %>
+    run_at: '5:30'
+    queue: <%= DjQueues::LONG_RUNNING %>
+  CronTasks::MatchingIndexer:
+    run_every: <%= 1.day %>
+    run_at: '0:00'
+    use_region_specific_tz: true
+    queue: <%= DjQueues::LONG_RUNNING %>
+  CronTasks::FeedMigrator:
+    - run_every: <%= 1.day %>
+      run_at: '23:00'
+      use_region_specific_tz: true
+      queue: <%= DjQueues::LONG_RUNNING %>
+      job_matching_param: 'frequency'
+      frequency: <%= FeedImportConfiguration::Frequency::DAILY %>
+    - run_every: <%= 1.week %>
+      run_at: 'wednesday 1:00'
+      use_region_specific_tz: true
+      queue: <%= DjQueues::LONG_RUNNING %>
+      job_matching_param: 'frequency'
+      frequency: <%= FeedImportConfiguration::Frequency::WEEKLY %>
+  CronTasks::CampaignManagement::JobsProcessor:
+    run_every: <%= 1.day %>
+    run_at: <%= [0, 2, 4, 10, 12, 14, 16, 18, 20, 22].map { |h| "#{h}:15" } %> # Runs every 2 hour excluding the deployment window (6AM - 9 AM UTC / 2 AM - 5 AM EDT)
+    queue: <%= DjQueues::LONG_RUNNING %>
+  CronTasks::FacilitationMessagesMailer:
+    run_every: <%= 1.day %>
+    run_at: '1:25'
+    use_region_specific_tz: true
+    queue: <%= DjQueues::LONG_RUNNING %>
+  CronTasks::ManagementReportAlertsNotifier:
+    run_every: <%= 1.week %>
+    run_at: 'monday 0:00'
+    queue: <%= DjQueues::LONG_RUNNING %>
+  CronTasks::WeeklyStatusMailer:
+    run_every: <%= 1.week %>
+    run_at: 'sunday 1:47'
+    use_region_specific_tz: true
+    queue: <%= DjQueues::LONG_RUNNING %>
+  CronTasks::FeedExporter:
+    - run_every: <%= 1.day %>
+      run_at: '5:00'
+      use_region_specific_tz: true
+      job_matching_param: 'frequency'
+      frequency: <%= FeedExporter::Frequency::DAILY %>
+    - run_every: <%= 1.week %>
+      run_at: 'wednesday 4:00'
+      use_region_specific_tz: true
+      job_matching_param: 'frequency'
+      frequency: <%= FeedExporter::Frequency::WEEKLY %>
+
+development:
+  <<: *common
+
+test:
+  <<: *common
+
+staging:
+  <<: *common
+  CronTasks::Globalization::PhraseappTranslationIssuesNotifier:
+    run_every: <%= 1.day %>
+    run_at: <%= ["0:00", "6:00", "12:00", "18:00"] %>
+
+production:
+  <<: *common
+
+standby:
+  <<: *common
+
+performance:
+  <<: *common
+
+productioneu:
+  <<: *common
+  CronTasks::Elasticsearch::DocumentCountChecker:
+    run_every: <%= 1.day %>
+    run_at: <%= (4..20).step(2).map { |h| "#{h}:30" } %> # Runs every 2 hours excluding the weekly & daily feed migrator window (20:30 - 04:30 UTC)
+
+generalelectric:
+  <<: *common
+
+veteransadmin:
+  <<: *common
+
+nch:
+  <<: *common
+
+demo:
+  <<: *common
+
+opstesting:
+  <<: *common
+
+scanner:
+  <<: *common
+
+training:
+  <<: *common
+
+releasestaging1:
+  <<: *common
+
+releasestaging2:
+  <<: *common

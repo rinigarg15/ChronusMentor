@@ -1,0 +1,36 @@
+<div id="select_meeting_time_tab_content" class="tab-pane no-padding">
+  <% if available_slots.present? %>
+    <div class="cjs_mentor_available_slots_listing scroll-4 overflow-y-auto">
+      <%= render :partial => "meetings/mentor_available_slots", :locals => {:member => member, :available_slots => available_slots, src: src} %>
+    </div>
+
+    <div class="cjs_selected_meeting_slot_info hide">
+    </div>
+
+    <div class="cjs_propose_slot_button_container">
+      <div class="col-xs-12 no-padding m-t-md m-b-lg">
+        <%= horizontal_or_separator("", "display_string.OR".translate) %>
+      </div>
+
+      <% action_set(class: "text-center") do %>
+        <%= link_to "feature.meetings.content.propose_other_times".translate, "javascript:void(0)", class: 'btn btn-white cjs_propose_slot_button' %>
+      <% end %>
+
+      <div class="m-l-sm m-t-md m-b-sm small text-center">
+        <%= image_tag asset_path('reporting/alert_icon.png'), width: "15px", height: "15px", class: "m-b-xs m-r-xs" %>
+        <%= "feature.meetings.content.meeting_select_time_help_text".translate(mentor_name: member.name(name_only: true)) %>
+      </div>
+    </div>
+  <% end %>
+  <%= hidden_field_tag :src, src, id: "", class: "cjs_meeting_request_source" %>
+  <div class="cjs_propose_meeting_slot_content <%= 'hide' if available_slots.present? %>">
+    <%= render :partial => "meetings/propose_meeting_slots", :locals => {:member => member, :slots_present => available_slots.present?, user: user} %>
+  </div>
+</div>
+
+<%= javascript_tag do  %>
+  jQuery(document).ready(function() {
+    MeetingRequest.selectProposeSlot();
+    MeetingRequest.gaInitializeTrackingEvents();
+  });
+<% end %>

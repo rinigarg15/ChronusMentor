@@ -1,0 +1,10 @@
+<%= ibox nil, :ibox_id => "cjs_lockout_listing_enclosure", :content_class => "no-padding" do %>
+	<% if @locked_out_members.present? %>
+		<%= listing_page(@locked_out_members, :partial => "locked_out_member", :collection_key => :locked_out_member) %>
+	<% else %>
+	  <div class="text-muted p-sm text-center">
+	    <%= "feature.user.content.no_blocked_users".translate %>
+	  </div>
+	<% end %>
+<% end %>
+<%= javascript_tag %Q[AccountLockout.inspectUnblocklinks();] %>

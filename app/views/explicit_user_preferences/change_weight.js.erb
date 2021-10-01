@@ -1,0 +1,6 @@
+jQuery('.cjs_explicit_preference_<%= @explicit_preference.id %>').effect('highlight', {color: '#f8f8f9'}, 1500);
+ExplicitPreference.preferencesChanged = true;
+var eventDetails = ExplicitPreference.getGaEventDetails("<%= @ga_src %>");
+<% if @updated_preference_weight %>
+  chrGoogleAnalytics.addEvent(chrGoogleAnalytics.category.EXPLICIT_PREFERENCES, chrGoogleAnalytics.action.GA_CHANGED_IMPORTANCE, eventDetails[0], eventDetails[1]);
+<% end %>

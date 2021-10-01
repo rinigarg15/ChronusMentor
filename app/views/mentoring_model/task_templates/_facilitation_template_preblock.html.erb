@@ -1,0 +1,4 @@
+<div class="pull-left m-r-sm <%= block_class %>">
+  <%= get_icon_content("fa fa-lg fa-envelope") + set_screen_reader_only_content("feature.mentoring_model.header.facilitation_message".translate) %>
+  <%= content_tag :span, UnicodeUtils.upcase(facilitation_template.formatted_role_names), class: "text-muted" %>
+</div>

@@ -1,0 +1,19 @@
+<% if @export_format.present? %>
+  <% if @mentor_requests_ids.any? %>
+    ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", '<%= "flash_message.mentor_request_flash.export_successful_v1".translate(file_format: @export_format.to_s.upcase, :mentoring => _mentoring) %>', true);
+  <% else %>
+    ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", '<%= "flash_message.mentor_request_flash.no_data_to_export_v1".translate %>', false);
+  <% end %>
+<% else %>
+  jQuery('.cjs_reports_time_filter').html('<%= j get_reports_time_filter({start: @start_time, end: @end_time}) %>');
+  jQuery('.dropdown-with-datepicker.open').removeClass('open');
+  jQuery('#mentor_requests').html("<%= j(render(:partial => 'mentor_requests/manage', :locals => {filter_params: @filter_params, action_params: @action_params, is_request_manager_view_of_all_requests: true, mentor_requests: @mentor_requests, match_results_per_mentor: @match_results_per_mentor, tiles_data: @tiles_data, list_field: @list_field})) %>");
+  jQuery('#loading_results').hide();
+  MentorRequests.maintainTriStateCheckbox(true);
+  <% if @filters_count.zero? %>
+    jQuery('.cjs-report-filter-count').hide();
+  <% else %>
+    jQuery('.cjs-report-filter-count').show();
+    jQuery('.cjs-report-filter-count').text('<%= @filters_count %>');
+  <% end %>
+<% end %>

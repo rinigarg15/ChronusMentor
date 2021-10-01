@@ -1,0 +1,83 @@
+<% non_administrative_role = @current_program.roles.non_administrative.collect(&:name).include?(@role) %>
+<% @title = @user_reference_plural %>
+
+<% @page_action2 = {label: "feature.user.label.see_mentoring_calendar_v1".translate(Mentoring: _Mentoring), url: mentoring_calendar_users_path(src: Meeting::AnalyticsParams::MENTORING_CALENDAR_LINK), class: "btn btn-primary btn-large cjs_title_link"} if current_user.try(:can_render_calendar_ui_elements?, @role) && current_user.program.calendar_setting.allow_mentor_to_configure_availability_slots? %>
+<% @page_action = users_listing_page_actions(current_user, @role, @current_program) if non_administrative_role %>
+<% if current_user.can_configure_explicit_preferences? && @role == RoleConstants::MENTOR_NAME %>
+  <% @page_action3 = {label: append_text_to_icon("fa fa-sliders #{hidden_on_mobile}", "feature.explicit_preference.label.personalize_recommendations".translate), url: "javascript:void(0)", class: 'btn btn-primary cjs_show_explicit_preference_popup', js_class: "cjs_show_explicit_preference_popup"} %>
+<% end %>
+
+<div id='mentors_index' class="<%= 'unloggedin' unless logged_in_program? %>">
+  <%# Show 'no users' message if any of the following is true
+      1. Unloggedin
+      2. Logged in, and no special scoping like search, filters, etc., is applied, which means, @filter_field is 'all' view for non-admins and nil for admins
+      3. Total paginated result count is 0 which means, not just current page, but no records in the whole collection. %>
+  <% if @users.empty? && (!current_user || @filter_field.nil? || @filter_field == UsersIndexFilters::Values::ALL) && !search_view? && @users.total_entries == 0 && @state.nil? %>
+    <%= ibox nil, content_class: "no-padding" do %>
+      <% add_or_invite = current_user && current_user.is_admin? && non_administrative_role && (current_user.send("can_invite_#{@role.pluralize}?") || current_user.can_add_non_admin_profiles?) %>
+      <div class="empty_listing no_mentors p-sm <%= 'text-center' unless add_or_invite %>">
+        <p><%= "feature.user.content.no_user_in_program_yet".translate(:role => @user_references_downcase, :program => _program) %></p>
+        <% if add_or_invite %>
+          <ul class="no-margins">
+            <% if current_user.send("can_invite_#{@role.pluralize}?") %>
+              <li>
+                <%= link_to "feature.user.action.invite_role".translate(:role => @user_reference_plural), invite_users_path(:role => @role), class: "font-bold" %>
+                <%= "display_string.or".translate if current_user.can_add_non_admin_profiles? %>
+              </li>
+            <% end %>
+            <% if current_user.can_add_non_admin_profiles? %>
+              <li><%= link_to "feature.user.action.add_user_profiles".translate(:role => @user_reference), new_user_path(:role => @role), class: "font-bold" %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <% preferred_mentors_container = render(partial: "users/preferred_mentors") if current_program.matching_by_mentee_and_admin_with_preference? %>
+    <% if preferred_mentors_container.present? %>
+      <div class="<%= hidden_on_web %>">
+        <%= preferred_mentors_container %>
+      </div>
+    <% end %>
+
+    <% sidebar_content = capture do %>
+      <% if preferred_mentors_container.present? %>
+        <div class="<%= hidden_on_mobile %>">
+          <%= preferred_mentors_container %>
+        </div>
+      <% end %>
+      <div id="mentors_filters">
+        <%= render(:partial => "users/filter_pane", locals: {role: @role, current_user_is_student: current_user.is_student?}) %>
+      </div>
+    <% end %>
+    <% search_results_wrapper(@search_query, sidebar_content) do %>
+      <div id="search_panes" class="clearfix">
+        <div id="results_pane">
+          <%= render(:partial => "users/results_pane", locals: {highlight_filters: @highlight_filters, show_favorite_ignore_links: @show_favorite_ignore_links, favorite_preferences_hash: @favorite_preferences_hash, ignore_preferences_hash: @ignore_preferences_hash, my_filters: @my_filters}) %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<% unless search_view? || sidebar_content.blank? %>
+  <% content_for_sidebar do %>
+    <%= sidebar_content %>
+  <% end %>
+<% end %>
+
+<%= render partial: "users/mentors_guidance_popup" if @current_program.self_match_and_not_pbe? && current_user.is_student? && @role == RoleConstants::MENTOR_NAME %>
+
+<%= javascript_tag "jQuery(document).ready(function(){ #{@initialize_filter_fields_js.join(";\n")}; })" if @initialize_filter_fields_js %>
+<%= javascript_tag %Q[ShowAndHideToggle();] %>
+<%= javascript_tag do %>
+  jQuery(document).on('click',".get_started_action_label", function(){
+    event.preventDefault();
+    jQuery(".cjs-web-modal-cancel").trigger('click');
+  });
+  ExplicitPreference.openPreferencePopup("<%= new_explicit_user_preference_path(src: EngagementIndex::Src::ExplicitPreferences::MENTOR_LISTING_PAGE_ACTION) %>", ".cjs_show_explicit_preference_popup");
+  ExplicitPreference.isListingPage = true;
+  <% if params[:src] == EngagementIndex::Src::BrowseMentors::POPULAR_CATEGORIES %>
+    PreferenceBasedMentorLists.initializeTrackingNoMentors();
+  <% end %>  
+<% end %>

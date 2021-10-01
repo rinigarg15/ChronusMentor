@@ -1,0 +1,9 @@
+<%= response_flash "mentor_request_response_flash" %>
+<div id="new_mentor_request" class="clearfix">
+  <%= render partial: 'mentor_requests/mentor_request_help' %>
+  <% if @current_program.matching_by_mentee_and_admin? %>
+    <%= render partial: 'mentor_requests/new_for_mentee_to_admin', locals: locals %>
+  <% elsif @current_program.matching_by_mentee_alone? %>
+    <%= render partial: 'mentor_requests/new_for_mentee_to_mentor', locals: locals %>
+  <% end %>
+ </div>

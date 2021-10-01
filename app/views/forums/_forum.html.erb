@@ -1,0 +1,42 @@
+<% forum_actions = [] %>
+<% delete_confirmation_text = "#{'feature.forum.content.remove_warning'.translate} " if forum.topics_count > 0 %>
+<% delete_confirmation_text = "#{delete_confirmation_text}#{'feature.forum.content.remove_confirm'.translate}" %>
+<% forum_actions << { label: append_text_to_icon("fa fa-pencil", "display_string.Edit".translate), url: edit_forum_path(forum) } %>
+<% forum_actions << { label: append_text_to_icon("fa fa-trash", "display_string.Delete".translate), url: forum_path(forum), method: :delete, data: {confirm: delete_confirmation_text} } %>
+
+<%= dropdown_buttons_or_button(forum_actions, dropdown_title: "", btn_group_btn_class: "btn-white btn-sm", btn_class: "pull-right", is_not_primary: true) %>
+<div class="media-left">
+  <%= get_icon_content("fa fa-comments m-r-0", container_class: "fa-circle", stack_class: "fa-2x") %>
+</div>
+<div class="media-body">
+  <h4>
+    <%= link_to forum.name, forum_path(forum) %>
+    <% last_post = forum.recent_post %>
+    <% if last_post.present? %>
+      <div class="m-t-xs small text-muted">
+        <%= append_text_to_icon("fa fa-clock-o no-margins", "feature.forum.content.last_post_description_html".translate(time: formatted_time_in_words(last_post.created_at, show_time: true), user: link_to_user(last_post.user))) %>
+      </div>
+    <% end %>
+  </h4>
+</div>
+<div class="m-t-sm">
+  <%= chronus_auto_link(truncate(forum.description, length: 300, separator: TRUNCATE_SPACE_SEPARATOR)) %>
+</div>
+
+<div class="btn-group btn-group-sm m-t-md">
+  <% stat_class = "btn btn-sm btn-white noshadow" %>
+  <%# Members %>
+  <% members_content = content_tag(:span, @forum_subscriptions[forum.id].to_i, class: "m-r-xs") %>
+  <% members_content += content_tag(:span, "feature.forum.content.n_members".translate(count: @forum_subscriptions[forum.id].to_i), class: "hidden-xs") %>
+  <%= content_tag(:span, append_text_to_icon("fa fa-users", members_content), class: "#{stat_class} no-waves cursor-default") %>
+
+  <%# Topics %>
+  <% topics_content = content_tag(:span, forum.topics_count, class: "m-r-xs") %>
+  <% topics_content += content_tag(:span, "feature.forum.content.n_conversations".translate(count: forum.topics_count), class: "hidden-xs") %>
+  <%= link_to append_text_to_icon("fa fa-comments", topics_content), forum_path(forum), class: stat_class %>
+
+  <%# Posts %>
+  <% posts_content = content_tag(:span, @forum_posts[forum.id].to_i, class: "m-r-xs") %>
+  <% posts_content += content_tag(:span, (@forum_posts[forum.id].to_i == 1) ? "feature.forum.label.Post".translate : "feature.forum.label.Posts".translate, class: "hidden-xs") %>
+  <%= link_to append_text_to_icon("fa fa-comment", posts_content), forum_path(forum), class: stat_class %>
+</div>

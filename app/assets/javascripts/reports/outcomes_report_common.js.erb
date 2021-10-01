@@ -1,0 +1,131 @@
+function outcomesReportCommon($scope, $http) {
+  // Common items
+  DAY_TEXT = preJsTranslations.outComesReport.dayText;
+  DAYS_TEXT = preJsTranslations.outComesReport.daysText;
+
+  $scope.defaultPointInterval = 86400000; // one day
+  $scope.commonChartOptions = {
+    options: {
+      chart: { zoomType: 'x' },
+      legend: { borderWidth: 0 },
+      plotOptions: {
+        line: { marker: { enabled: false } },
+        column: { events: { afterAnimate: function(event){ jQuery(window).resize(); } } }
+      },
+      tooltip: { pointFormat: '{series.name}: <b>{point.y}</b>' }
+    },
+    credits: { enabled: false },
+    title: { text: null },
+    xAxis: { type: 'datetime' },
+    yAxis: { min: 0, title: { text: null } },
+    series: []
+  };
+
+  $scope.commonBarChartOptions = {
+    options: {
+      chart: { zoomType: 'x', type: 'column' },
+      legend: { borderWidth: 0 },
+      plotOptions: {
+        line: { marker: { enabled: false } },
+        column: { events: { afterAnimate: function(event){ jQuery(window).resize(); } } }
+      },
+      tooltip: { pointFormat: '{series.name}: <b>{point.y}</b>' }
+    },
+    credits: { enabled: false },
+    title: { text: null },
+    xAxis: { type: 'datetime' },
+    yAxis: { min: 0, title: { text: null } },
+    series: []
+  };
+
+  $scope.AppliedProfileFilters = {
+    myFilters: [],
+    newFilter: true,
+    clearFilter: 'MentorSearch.clearFilter',
+    labelClass: 'm-r-xs',
+    appliedFiltersLabel: preJsTranslations.outComesReport.appliedFiltersLabel,
+    containerClass: "cjs-outcomes-report-applied-filters"
+  };
+ 
+  $scope.toggleProfileFilterBox = function() {
+    $scope.showProfileFilterBox = !$scope.showProfileFilterBox;
+    $scope.showDateRangeBox = false;
+  };
+
+  $scope.toggleDateRangeBox = function() {
+    $scope.showDateRangeBox = !$scope.showDateRangeBox;
+    $scope.showProfileFilterBox = false;
+  };
+
+  $scope.computePercentage = function(count, total) {
+    if(total>0) { return (count/total)*100; }
+    else { return null; }
+  };
+
+  $scope.updateDateRange = function() {
+    $scope.startDate = jQuery(".cjs_daterange_picker_start").val();
+    $scope.endDate = jQuery(".cjs_daterange_picker_end").val();
+    $scope.dateRange = jQuery('.cjs_daterange_picker_value').val();
+  };
+
+  $scope.ProfileFilterCache = {
+    key: null,
+    expireAfter: 0,
+    dismissCache: function() {
+      $scope.ProfileFilterCache.key = null;
+      $scope.ProfileFilterCache.expireAfter = 0;
+    },
+    setCache: function(key, timeToLive){
+      $scope.ProfileFilterCache.key = key;
+      $scope.ProfileFilterCache.expireAfter = Math.round(new Date().getTime()/1000) + timeToLive;
+    },
+    isValid: function(){
+      return (Math.round(new Date().getTime()/1000) < $scope.ProfileFilterCache.expireAfter);
+    }
+  };
+
+  $scope.GroupTableCache = {
+    key: null,
+    expireAfter: 0,
+    dismissCache: function() {
+      $scope.GroupTableCache.key = null;
+      $scope.GroupTableCache.expireAfter = 0;
+    },
+    setCache: function(key, timeToLive){
+      $scope.GroupTableCache.key = key;
+      $scope.GroupTableCache.expireAfter = Math.round(new Date().getTime()/1000) + timeToLive;
+    },
+    isValid: function(){
+      return (Math.round(new Date().getTime()/1000) < $scope.GroupTableCache.expireAfter);
+    }
+  };
+
+  $scope.UserTableCache = {
+    key: null,
+    expireAfter: 0,
+    dismissCache: function() {
+      $scope.UserTableCache.key = null;
+      $scope.UserTableCache.expireAfter = 0;
+    },
+    setCache: function(key, timeToLive){
+      $scope.UserTableCache.key = key;
+      $scope.UserTableCache.expireAfter = Math.round(new Date().getTime()/1000) + timeToLive;
+    },
+    isValid: function(){
+      return (Math.round(new Date().getTime()/1000) < $scope.UserTableCache.expireAfter);
+    }
+  };
+
+  $scope.setErrorMessagesForLocationFilter = function(locationHash){
+    var locationError = locationHash["invalid_location_filter"];
+    if (locationError) {
+      ChronusValidator.ErrorManager.ShowResponseFlash("loc_error", locationHash["error_message"]);
+    } else {
+      ChronusValidator.ErrorManager.ClearResponseFlash("loc_error");
+    }
+  };
+
+  $scope.setDaysCountText = function() {
+    $scope.daysCountText = ($scope.daysCount == 1) ? ($scope.daysCount + " " + DAY_TEXT) : ($scope.daysCount + " " + DAYS_TEXT);
+  };
+}

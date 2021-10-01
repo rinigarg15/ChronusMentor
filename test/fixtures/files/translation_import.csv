@@ -1,0 +1,11 @@
+﻿English(US),Canadian French
+For Mentors,For Mentors
+"<object classid=""clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"" codebase=""http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0""><param name=""quality"" value=""high"" /><param name=""movie"" value=""http://www.youtube.com/user/hooplakidz?v=yGSbf5GUWO8"" /><embed pluginspage=""http://www.macromedia.com/go/getflashplayer"" quality=""high"" src=""http://www.youtube.com/user/hooplakidz?v=yGSbf5GUWO8"" type=""application/x-shockwave-flash""></embed></object>","<object classid=""clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"" codebase=""http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0""><param name=""quality"" value=""high"" /><param name=""movie"" value=""http://www.youtube.com/user/hooplakidz?v=yGSbf5GUWO8"" /><embed pluginspage=""http://www.macromedia.com/go/getflashplayer"" quality=""high"" src=""http://www.youtube.com/user/hooplakidz?v=yGSbf5GUWO8"" type=""application/x-shockwave-flash""></embed></object>"
+"{{user_firstname}}, finish signing up today!","{{user_firstname}}, finish signing up today!"
+Invitation to join {{subprogram_or_program_name}} {{as_role_name_articleized}},Invitation to join {{subprogram_or_program_name}} {{as_role_name_articleized}}
+"Dear {{user_name}}<br />
+<br />
+{{url_signup}}","Dear {{user_name}}<br />
+<br />
+{{url_signup}}"
+staples_prod.png,staples_prod.png

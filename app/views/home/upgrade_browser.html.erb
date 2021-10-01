@@ -1,0 +1,10 @@
+<%= ibox do %>
+  <div class="lead text-center">
+    <%= @current_organization.present? ? "app_layout.header.update_your_browser_program".translate(program_name: h( program_context.name)) : "app_layout.header.update_your_browser_nil_organization".translate  %>
+  </div>
+
+  <hr class="m-b-md m-t-xs" />
+  <%= content_tag(:div, :class => "ckeditor_generated row-fluid") do %>
+    <%= auto_link(@browser_warning_content.html_safe) %>
+  <% end %>
+<% end %>

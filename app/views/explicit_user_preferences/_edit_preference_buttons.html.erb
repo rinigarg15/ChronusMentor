@@ -1,0 +1,3 @@
+<% action_set(class: "pull-right") do %>
+  <%= link_to(get_icon_content("fa fa-trash fa-lg no-margins").html_safe + content_tag(:span, "display_string.Delete".translate, class: "sr-only"), explicit_user_preference_path(explicit_preference, src: src), remote: true, method: :delete, data: { confirm: "feature.explicit_preference.content.preference_delete_message_v2".translate }, class: "text-primary pointer") %>
+<% end %>

@@ -1,0 +1,10 @@
+<% content = render(partial: 'groups/individual_details', locals: {
+  group: @group,
+  login_activity: @login_activity,
+  scraps_activity: @scraps_activity,
+  posts_activity: @posts_activity,
+  meetings_activity: @meetings_activity,
+  survey_answers: @survey_answers,
+  tasks_activity: @tasks_activity
+}) %>
+GroupActivity.showActivityDetails("<%= j content %>", "<%= @group.id %>");

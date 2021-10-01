@@ -1,0 +1,13 @@
+<% popup "feature.article.action.delete_article".translate(Article: _Article), "delete_article", :position => :center do %>
+  <%= form_tag(article_path(@article), :method => :delete, :id => "article_delete_form") do %>
+    <div class="header clearfix has-below-1">
+        <%= embed_icon("icon-warning-sign") %>
+        <%= "feature.article.content.delete_warning".translate(article: _article) %>
+    </div>
+
+    <% action_set do %>
+      <%= submit_tag "feature.article.action.delete_article".translate(Article: _Article), :class => 'list_action btn btn-primary', data: { :disable_with => "display_string.Please_Wait".translate } %>
+      <a class='popup_closebox btn-white cancel btn'><%= "display_string.Cancel".translate %></a>
+    <% end %>  
+  <% end %>
+<% end %>

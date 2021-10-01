@@ -1,0 +1,47 @@
+<% @title = "feature.translations.label.localization".translate %>
+
+<% if @current_organization.standalone? || !program_view? %>
+  <% @page_action = {:label => "feature.translations.label.edit_languages.".translate, :url =>  organization_languages_path, :class => "btn btn-primary btn-large"} %>
+  <% @page_action2 = get_translations_dropdown_options(@second_locale) if super_console? %>
+<% elsif super_console? %>
+  <% @page_action = get_translations_dropdown_options(@second_locale) %>
+<% end %>
+
+<% modal_container "feature.translations.label.import_modal_heading".translate, { modal_id: "cjs_translations_import_modal" } do %>
+  <%= render(:partial => 'translations/import_form')%>
+<% end %>
+
+<%if super_console? %>
+  <% modal_container "feature.translations.label.import_errors_modal_heading".translate, { modal_id: "cjs_translations_import_errors" } do %>
+    <%= render(:partial => 'translations/import_errors_list')%>
+  <% end %>
+<% end %>
+
+<%= hidden_field_tag "abstract_program_id", @level_obj.id, {id: "cjs_abstract_program_id"} %>
+<%= hidden_field_tag "locale", @second_locale, {id: "cjs_locale"} %>
+<%= hidden_field_tag "category", @category, {id: "cjs_category"} %>
+<%= hidden_field_tag "id", @base_id, {id: "cjs_category_content_id"} %>
+<%= response_flash "errors_container" %>
+<%= ibox nil, :ibox_id => "three_column_container", :content_class => "p-lg" do %>
+  <div id="table_column" class="table-container">
+    <%= render partial: 'translations_table', :locals => {translatable_content: @translatable_content, second_locale: @second_locale, chosen_category: @category, level_obj: @level_obj, base_id: @base_id, attachment_type: @attachment_type, program_asset: @program_asset} %>
+  </div>
+<% end %>
+
+<% content_for_sidebar do %>
+  <%= ibox nil do %>
+    <div id="list_column">
+      <%= render partial: 'left_list_pane', :locals => {chosen_category: @category, category_with_scores: @category_with_scores, chosen_category_detail: @category_with_items, level_obj: @level_obj, progs: @progs} %>
+    </div>
+  <% end %>
+<% end %>
+
+
+
+<% if @rich_content_save %>
+  <%= javascript_tag do %>
+    jQuery(document).ready(function(){
+      jQueryHighlight(jQuery('.cjs_ele_highlight_on_rich_update_content'));
+    });
+  <% end %>
+<% end %>

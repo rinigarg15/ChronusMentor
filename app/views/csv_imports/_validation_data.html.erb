@@ -1,0 +1,23 @@
+<% headdings = @user_csv_import.original_csv_headers %>
+<% field_to_csv_mapping = @user_csv_import.field_to_csv_column_mapping %>
+<%= top_bar_in_listing({collection: @data, params: {remote: true}}, {}, {}, {:additional_class => "p-b-sm p-l-0 p-t-0 p-r-0 no-border"}) %>
+<div class="cjs_table_enclosure clearfix cui_csv_import_data_scroll_content table-bordered" style="overflow-x: scroll">
+  <table id = "cjs_csv_import_result" class="table no-border table-striped table-vertical-centered">
+    <thead>
+      <% headdings.each do |headding| %>
+        <th class='text-navy'><%= headding %></th>
+      <% end %>
+    </thead>
+    <% @data.each_with_index do |row, row_index| %>
+      <tr>
+        <% row_data = row.raw_data %>
+        <% errors = show_errors ? row.errors : {} %>
+        <% error_columns = get_original_error_columns(errors, field_to_csv_mapping) %>
+        <% row_data.each_with_index do |(key, value), col_index| %>
+          <%= csv_imports_cell_data(key, value, row_index, error_columns, col_index) %>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+</div>
+<%= bottom_bar_in_listing( { collection: @data, params: {format: :js}, ajax: true }, {}, { :additional_class => "p-t-sm p-l-0 p-b-0 p-r-0 no-border" } ) %>

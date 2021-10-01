@@ -1,0 +1,110 @@
+---
+ milestones:
+  - title: "Preparing for a successful partnership"
+    description: "The mentor and the mentee become acquainted and informally clarify their common interests, shared values, and future goals and aspirations. If taking time to become acquainted with one another's interests, values, and goals is given a high priority, the relationship seems to get off to a better start. During the first stage of the relationship, it’s important to establish confidentiality, which helps to develop trust."
+    duration: 14
+    resources: "<ul>\n\t<li>\n\t\t<a href=\"//chronus-mentor-assets.s3.amazonaws.com/global-assets/files/Default_Mentoring_Template/Mentoring_Partnership_Agreement.docx\" target=\"_blank\">Mentoring Partnership Agreement</a></li>\n\t<li>\n\t\t<a href=\"//chronus-mentor-assets.s3.amazonaws.com/global-assets/files/Default_Mentoring_Template/Start_Your_Mentoring_Relationship.docx\" target=\"_blank\">Guide for mentor and mentees to understand each other</a></li>\n\t<li>\n\t\t<a href=\"//chronus-mentor-assets.s3.amazonaws.com/global-assets/files/Default_Mentoring_Template/The_Initial_Meeting.docx\" target=\"_blank\">Checklist for first meeting between mentor and mentee</a></li>\n</ul>\n"
+    draft: false
+    
+  - title: "Building the Relationship and Establishing Goals"
+    description: "Consider using the Initial Assessment tool to identify areas that the mentee may need to focus on. Start by understanding the mentee’s priorities. There are many activities that may contribute to a successful mentoring relationship. It will be up to both of you to determine the best path to follow. \n\nTo start off, here are a few ways in which the mentor might support the mentee: \n\n1. Setting goals\n2. Developing an action plan\n3. Problem-solving\n\nFollowing through with a plan or commitment \n\n1. Take the time to identify Top priorities\n2. Determining whether additional training is required\n3. Current and potential challenges and barriers"
+    duration: 14
+    resources: "<ul>\n\t<li>\n\t\t<a href=\"//chronus-mentor-assets.s3.amazonaws.com/global-assets/files/Default_Mentoring_Template/Self_Assesment_for_Mentee.docx\" target=\"_blank\">Self Assessment for Mentee</a></li>\n\t<li>\n\t\t<a href=\"//chronus-mentor-assets.s3.amazonaws.com/global-assets/files/Default_Mentoring_Template/Guide_To_Timely_and_Efficient_Goal_Setting.docx\">Guide to timely and efficient goal setting</a></li></ul>\n"
+    draft: false
+
+  - title: "The Middle - Working towards the goals"
+    description: "During this stage, the mentor and mentee can begin to start working toward the goals they set during the second stage of the relationship. The mentor and the mentee begin to accomplish the actual purposes of mentoring. Gradually, needs become fulfilled, objectives are met, and intrinsic growth takes place. New challenges are presented and achieved."
+    duration: 120
+    resources: "<ul>\n\t<li>\n\t\t<a href=\"//chronus-mentor-assets.s3.amazonaws.com/global-assets/files/Default_Mentoring_Template/Mentee_Handbook.pdf\" target=\"_blank\">Mentee Handbook</a></li>\n\t<li>\n\t\t<a href=\"//chronus-mentor-assets.s3.amazonaws.com/global-assets/files/Default_Mentoring_Template/Mentor_Handbook.pdf\" target=\"_blank\">Mentor Handbook</a></li>\n</ul>\n"
+    draft: false
+
+  - title: "Your Last Meeting and Beyond"
+    description: "Closures are important moments in our lives, so take the time to acknowledge and celebrate your journey together. Your last meeting is not the end of your involvement in the program. Whether you will stay in touch with each other is up to you. You may want to maintain your relationship; however, remember that there is no ongoing obligation to offer or receive support after your formal mentoring relationship is over."
+    duration: 30
+    resources: "<ul>\n\t<li>\n\t\t<a href=\"//chronus-mentor-assets.s3.amazonaws.com/global-assets/files/Default_Mentoring_Template/Wrapping_Up_the_Relationship.docx\" target=\"_blank\">Wrapping Up the Relationship - Tips for Closure in the Mentoring Relationship</a></li>\n</ul>\n"
+    draft: false
+
+ tasks:
+  - milestone_tasks_1:
+    - title: "Meeting Pre-requisites: Mentor to review mentee profile/resume"
+      role_id: "mentor"
+      position: 1
+
+    - title: "Meeting Pre-requisites: Review the online Handbook"
+      role_id: "mentor"
+      position: 2
+
+    - title: "Meeting Pre-requisites: Review the online Handbook"
+      role_id: "student"
+      position: 3
+
+    - title: "Meeting Pre-requisites: Review Mentoring agreement"
+      role_id: "mentor"
+      position: 4
+
+    - title: "Meeting Pre-requisites: Review Mentoring agreement"
+      role_id: "student"
+      position: 5
+
+    - title: "Setup the first meeting"
+      role_id: "mentor"
+      position: 6
+
+  - milestone_tasks_2:
+    - title: "Take Assessments"
+      role_id: "student"
+      position: 1
+
+    - title: "Establish goals of the mentoring partnership"
+      role_id: "student"
+      position: 2
+
+    - title: "Establish regular meeting with mentor to work towards the goal"
+      role_id: "student"
+      position: 3
+
+  - milestone_tasks_3:
+    - title: "Setup tasks to support your mentoring objective"
+      role_id: "student"
+      position: 1
+
+    - title: "Check Point: Complete Relationship Health Survey"
+      role_id: "mentor"
+      position: 2
+
+    - title: "Check Point: Complete Relationship Health Survey"
+      role_id: "student"
+      position: 3
+
+  - milestone_tasks_4:
+    - title: "Review your work of the last few months: What have each of you learned?"
+      role_id: "mentor"
+      position: 1
+
+    - title: "Review your work of the last few months: What have each of you learned?"
+      role_id: "student"
+      position: 2
+
+    - title: "Talk a bit about the future: What will the mentee’s next steps be? Any parting words of advice from the mentor?"
+      role_id: "mentor"
+      position: 3
+
+    - title: "Talk a bit about the future: What will the mentee’s next steps be? Any parting words of advice from the mentor?"
+      role_id: "student"
+      position: 4
+
+    - title: "Thank each other and acknowledge your partner’s contribution."
+      role_id: "mentor"
+      position: 5
+
+    - title: "Thank each other and acknowledge your partner’s contribution."
+      role_id: "student"
+      position: 6
+
+    - title: "Complete Closure Survey"
+      role_id: "mentor"
+      position: 7
+
+    - title: "Complete Closure Survey"
+      role_id: "student"
+      position: 8

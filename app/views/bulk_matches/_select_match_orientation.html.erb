@@ -1,0 +1,30 @@
+<% if @current_program.mentor_to_mentee_matching_enabled? %>
+  <%= control_group(:id => "cjs_bulk_match_orientation_type", class: "m-b-0") do %>
+    <% label = "feature.bulk_match.label.bulk_match".translate %>
+    <%= content_tag(:div, label, :class => "false-label control-label col-sm-3") %>
+    <%= controls(:class => "col-sm-9") do %>
+      <%= choices_wrapper(label) do %>
+        <div class="col-xs-12 panel panel-default p-xs clearfix gray-bg">
+          <div>
+            <div class="media-left">
+              <%= label_tag(:orientation_type, _Mentees, class: "sr-only", for: "orientation_type_mentee_to_mentor") %>
+              <%= f.radio_button :orientation_type, BulkMatch::OrientationType::MENTEE_TO_MENTOR, id: "orientation_type_mentee_to_mentor", data: {url: change_match_orientation_bulk_matches_path(format: :js)} %>
+            </div>
+            <div class="media-body">
+              <div class="m-b-xxs font-600"><%= _Mentees %></div><p class="text-muted font-noraml"><%= "feature.bulk_match.content.match_one_role_to_other_help_text".translate(role: _mentee, suggested_role: _mentor) %></p>
+            </div>
+          </div>
+          <div>
+            <div class="media-left">
+              <%= label_tag(:orientation_type, _Mentors, :class => "sr-only", :for => "orientation_type_mentor_to_mentee") %>
+              <%= f.radio_button :orientation_type, BulkMatch::OrientationType::MENTOR_TO_MENTEE, id: "orientation_type_mentor_to_mentee", data: {url: change_match_orientation_bulk_matches_path(format: :js)} %>
+            </div>
+            <div class="media-body">
+              <div class="m-b-xxs font-600"><%= _Mentors %></div><p class="text-muted font-noraml"><%= "feature.bulk_match.content.match_one_role_to_other_help_text".translate(role: _mentor, suggested_role: _mentee) %></p>
+            </div>
+          </div>              
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

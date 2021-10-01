@@ -1,0 +1,309 @@
+var ThreeSixty = {
+  sortBoth: "sort_both",
+  sortAsc: "sort_asc",
+  sortDesc: "sort_desc",
+
+  initializeCompetencies: function(){
+    ThreeSixty.toggleHiddenActions();
+    ThreeSixty.showNewForm();
+    ThreeSixty.hideNewForm();
+    ThreeSixty.alternateColor();
+  },
+
+  initializeAddSurveyQuestions: function(){
+    ThreeSixty.toggleHiddenActions();
+    ThreeSixty.createSurveyCompetencyOrQuestionValidation();
+    ThreeSixty.alternateColor();
+    ThreeSixty.makeCompetenciesUnsortableOnSortingQuestions();
+    ThreeSixty.handleCreateAndAddToSurvey();
+  },
+
+  initializeAddSurveyAssessees: function(){
+    ThreeSixty.toggleHiddenActions();
+    ThreeSixty.showNewForm();
+  },
+
+  initializeAddSurveyReviewers: function(){
+    ThreeSixty.toggleHiddenActions();
+    ThreeSixty.showNewForm();
+  },
+
+  initializeDashboard: function(){
+    ThreeSixty.toggleElements();
+    ThreeSixty.inspectSortableElements();
+    ThreeSixty.inspectPaginationLinks();
+  },
+
+  initializeReviewerGroups: function(){
+    ThreeSixty.toggleHiddenActions();
+    ThreeSixty.onHoverActions();
+    ThreeSixty.showNewForm();
+    ThreeSixty.cancelNewForm();
+  },
+
+  initializeSurveyForm: function(reviewerGroupNames, placeholderText, errorMessage){
+    ThreeSixty.validateReviewerGroupSelected(errorMessage);
+    jQuery("#survey_reviewer_group_names").select2({
+      placeholder: placeholderText,
+      allowClear: true,
+      multiple: true,
+      tags: reviewerGroupNames,
+      formatResult: function(result, container){
+        removeFastClickForSelect2(container);
+        return result.text;
+      },
+      createSearchChoice: function() { return null; }
+    });
+    CampaignManagement.bindAccessibilityAttributes();
+  },
+
+  highlightAndBlind: function(elementId, time, options){
+    jQueryHighlight(elementId, time);
+    jQueryBlind(elementId, options);
+  },
+
+  initializeShowSurvey: function(){
+    ThreeSixty.surveyRatingBoxHoverColor();
+    ThreeSixty.alternateColor();
+  },
+
+  toggleHiddenActions: function(){
+    jQuery('.cjs_three_sixty_container').on('mouseenter', '.cjs_three_sixty_parent', function() {
+      jQuery(this).find(".cjs_three_sixty_actions").show();
+    });
+    jQuery('.cjs_three_sixty_container').on('mouseleave', '.cjs_three_sixty_parent', function() {
+      jQuery(this).find(".cjs_three_sixty_actions").hide();
+    });
+  },
+
+  showNewForm: function(){
+    jQuery('.cjs_three_sixty_container').on('click', '.cjs_new_three_sixty_object_link', function() {
+      jQuery(this).hide();
+      jQuery(this).parent().find(".cjs_new_three_sixty_object").show();
+      return false;
+    });
+  },
+
+  hideNewForm: function(){
+    jQuery('.cjs_three_sixty_container').on('click', '.cjs_new_three_sixty_object_cancel_link', function() {
+      var newThreeSixtyObject = jQuery(this).closest(".cjs_new_three_sixty_object")
+      newThreeSixtyObject.hide();
+      newThreeSixtyObject.parent().find(".cjs_new_three_sixty_object_link").show();
+      return false;
+    });
+  },
+
+  hideAndRefreshNewForm: function(element_id, content){
+    var ele = jQuery('#'+element_id)
+    var newForm = ele.find(".cjs_new_three_sixty_object")
+    var newFormLink = ele.find(".cjs_new_three_sixty_object_link")
+    newForm.html(content);
+  },
+
+  createSurveyCompetencyOrQuestionValidation: function(){
+    jQuery('.cjs_three_sixty_container').on('click', '.cjs_new_three_sixty_survey_submit', function() {
+      var selectBox = jQuery(this).closest(".cjs_add_three_sixty_survey_competency_or_question").find(".cjs_new_three_sixty_survey_select_box");
+      if(selectBox.val().blank()){
+        selectBox.addClass("cui_error");
+        return false;
+      }
+      else{
+        selectBox.removeClass("cui_error");
+        return true;
+      }
+    });
+  },
+
+  alternateColor: function(element){
+    if(typeof(element) == 'undefined')
+      element = '.cjs-alt-color-parent';
+    jQuery.each(jQuery(element), function(index, value){
+      jQuery(this).find('.cjs-alt-color-actions:odd').css('background-color', '#F4F4F8');
+      jQuery(this).find('.cjs-alt-color-actions:even').css('background-color', '#FEFCFF');
+    });
+  },
+
+  adjustTopBar: function(){
+    ThreeSixty.setTopBarDivisionWidth();
+    jQuery(window).bind("resize", function(){
+      ThreeSixty.setTopBarDivisionWidth();
+    });
+  },
+
+  setTopBarDivisionWidth: function(){
+    var wizardContainer = jQuery("#three_sixty_survey_top_bar");
+    WizardView.configureHeaders(wizardContainer);
+  },
+
+  surveyRatingBoxHoverColor: function(){
+    jQuery(".three-sixty-survey-from-rating").on( "click", function() {
+      jQuery(this).find("input[type=radio]").addClass("cjs_three_sixty_input_checked");
+      jQuery(this).siblings(".three-sixty-survey-from-rating").find("input[type=radio]").removeClass("cjs_three_sixty_input_checked");
+
+      jQuery.each(jQuery(".three-sixty-survey-from-rating"), function(index, element) {
+        if (jQuery(this).find("input[type=radio]").hasClass("cjs_three_sixty_input_checked")){
+          jQuery(this).removeClass("btn-white").addClass('btn-default');
+        }
+        else{
+          jQuery(this).removeClass('btn-default').addClass("btn-white");
+        }
+      });
+    });
+  },
+
+  validateReviewerGroupSelected: function(message){
+    jQuery("#new_three_sixty_survey_submit").on('click', function(){
+      if(jQuery("#survey_reviewer_group_names").val() != ""){
+        ChronusValidator.ErrorManager.ClearResponseFlash("flash_container")
+        return true;
+      }
+      else{
+        ChronusValidator.ErrorManager.ShowResponseFlash("flash_container", message)
+        return false;
+      }
+    });
+  },
+
+  toggleElements: function(){
+    jQuery('.cjs_three_sixty_container').on('click', '.three_sixty_toggle_class', function() {
+      jQuery(".three_sixty_toggle_class").parent().toggle();
+      return false;
+    });
+  },
+
+  removeDestroyedElementFromTable: function(element_id){
+    jQuery("#"+element_id).effect('highlight', {}, 1000, function(){
+      jQuery(this).fadeOut('fast', function(){
+        jQuery(this).remove();
+      });
+    });
+  },
+
+  addAssesseeError: function(errorMessage){
+    var container = jQuery('#three_sixty_add_new_assessee_container');
+    if(container.find('.text-danger').length > 0) {
+      container.find('.text-danger').html(errorMessage);
+    }
+    else{
+      jQuery('<div class="m-l-sm text-danger">'+errorMessage+'</div>').appendTo(container);
+      jQuery('#three_sixty_survey_assessee_text_field_container').addClass("has-error");
+    }
+  },
+
+  inspectSortableElements: function(){
+    var sortableElementsSelector = '.cjs_sortable_view_result tr.cjs_list_view_header th.cjs_sortable_element';
+    var sortableElements = jQuery(sortableElementsSelector);
+    jQuery(document).on('click', sortableElementsSelector, function(){
+      var sortParam = jQuery(this).data("sort-param");
+      var sortOrder = "";
+      var published = jQuery(this).data("published");
+      ThreeSixty.resetSortImages(sortableElements.not(jQuery(this)));
+      if(jQuery(this).hasClass(ThreeSixty.sortBoth)){
+        jQuery(this).removeClass(ThreeSixty.sortBoth).addClass(ThreeSixty.sortAsc);
+        sortOrder = "asc";
+      }
+      else if(jQuery(this).hasClass(ThreeSixty.sortAsc)){
+        jQuery(this).removeClass(ThreeSixty.sortAsc).addClass(ThreeSixty.sortDesc);
+        sortOrder = "desc";
+      }
+      else if(jQuery(this).hasClass(ThreeSixty.sortDesc)){
+        jQuery(this).removeClass(ThreeSixty.sortDesc).addClass(ThreeSixty.sortBoth);
+        sortOrder = "asc";
+        sortParam = "title";
+      }
+      jQuery.ajax({
+        url: jQuery(this).data("url"),
+        data: {sort_order: sortOrder, sort_param: sortParam, published: published},
+        beforeSend: function(){
+          jQuery("#loading_results").show();
+        }
+      });
+    });
+  },
+
+  resetSortImages: function(headElements){
+    headElements.removeClass(ThreeSixty.sortDesc).removeClass(ThreeSixty.sortAsc).addClass(ThreeSixty.sortBoth);
+  },
+
+  inspectPaginationLinks: function(){
+    var paginationLinks = jQuery(".pagination_box").find("a")
+    if(paginationLinks.length > 0){
+      jQuery(document).on('click', ".pagination_box a",function(event){
+        event.preventDefault();
+        published = jQuery(this).data()['published']
+        jQuery.ajax({
+          data: {published: published},
+          url: jQuery(this).attr("href"),
+          beforeSend: function(){
+            jQuery("#loading_results").show();
+          }
+        });
+      });
+    }
+  },
+
+  cancelNewForm: function(){
+    jQuery('.new_three_sixty_object_container').on('click', '.cjs_three_sixty_new_object_cancel', function() {
+      var ele = jQuery('.new_three_sixty_object_container');
+      var newForm = ele.find(".cjs_new_three_sixty_object");
+      var newFormLink = ele.find(".cjs_new_three_sixty_object_link");
+      // to remove error messages
+      newForm.find(".red").remove();
+      newForm.find("input").each(function(){
+        if(jQuery(this).parent().is('div .has-error')){
+          jQuery(this).unwrap();
+        }
+      });
+      // to reset the value field
+      newForm.find('.cjs_three_sixty_input_element').val('');
+      newForm.hide();
+      newFormLink.show();
+      return false;
+    });
+  },
+
+  onHoverActions: function(){
+    jQuery(".cjs_three_sixty_hover_parent").on('mouseleave', ".cjs_three_sixty_hover", function() {
+      jQuery(this).removeClass('bg-highlight');
+    });
+    jQuery(".cjs_three_sixty_hover_parent").on('mouseenter', ".cjs_three_sixty_hover", function() {
+      jQuery(this).addClass('bg-highlight');
+    });
+  },
+
+  displayErrorMessage: function(selector, errorMessage, classOption){
+    var container = jQuery(selector);
+    if(container.find('.red').length > 0) {
+      container.find('.red').text(errorMessage);
+    }
+    else{
+      container.append('<div class="red '+classOption+'">'+errorMessage+'</div>');
+    }
+  },
+
+  //Added due to issues with ie8
+  makeCompetenciesUnsortableOnSortingQuestions: function(){
+    jQuery("#three_sixty_survey_competencies").on('mouseenter', '.cjs_three_sixty_survey_question_sortable', function(){
+      jQuerySortable.makeUnSortable('#three_sixty_survey_competencies');
+    });
+    jQuery("#three_sixty_survey_competencies").on('mouseleave', '.cjs_three_sixty_survey_question_sortable', function(){
+      jQuery('#three_sixty_survey_competencies').sortable({disabled: false});
+    });
+  },
+
+  removeTopMerge: function(element){
+    jQuery("#" + element).removeClass('merge-top');
+  },
+
+  handleCreateAndAddToSurvey: function(){
+    jQuery('.cjs_three_sixty_container').on('click', '.cjs_three_sixty_create_and_add_to_survey_show_link', function() {
+      jQuery('.cjs_three_sixty_create_and_add_to_survey_container').hide();
+      jQuery('.cui_three_sixty_inline_question').show();
+    });
+
+    jQuery('.cjs_three_sixty_container').on('click', '.cjs_three_sixty_create_and_add_to_survey_cancel_link', function() {
+      jQuery('.cjs_three_sixty_create_and_add_to_survey_container').show();
+      jQuery('.cui_three_sixty_inline_question').hide();
+    });
+  }
+}

@@ -1,0 +1,6 @@
+jQuery('.cjs_reports_time_filter').html('<%= j get_reports_time_filter({start: @start_time, end: @end_time}) %>');
+jQuery('.dropdown-with-datepicker.open').removeClass('open');
+jQuery('#project_requests').html("<%= j render(partial: 'project_requests/manage') %>");
+jQuery('#loading_results').hide();
+ProjectRequests.maintainTriStateCheckbox(true);
+ProjectRequests.setFiltersCount('<%= @filters_count %>');

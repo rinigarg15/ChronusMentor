@@ -1,0 +1,4 @@
+<%= user_name_search_filter_for_mentor_request("feature.mentor_request.label.Sender".translate, :sender) %>
+<% if !@current_program.matching_by_mentee_and_admin? %>
+  <%= user_name_search_filter_for_mentor_request("feature.mentor_request.label.Recipient".translate, :receiver) %>
+<% end %>

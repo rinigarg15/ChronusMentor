@@ -1,0 +1,7 @@
+<div class="middle-box text-center no-vertical-margins no-padding">
+  <% if (@auth_configs.size == 1) && @auth_configs[0].indigenous? %>
+    <%= render partial: "membership_requests/signup_options_form" %>
+  <% else %>
+    <%= render partial: "sessions/login_section", collection: @login_sections, locals: { total_count: @login_sections.size, auth_config_locals: { join_now_page: true } } %>
+  <% end %>
+</div>

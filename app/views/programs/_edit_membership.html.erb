@@ -1,0 +1,18 @@
+<!-- Multiselect javascript files -->
+<%= javascript_include_tag "jquery.tmpl.1.1.1.js" %>
+<%= javascript_include_tag "jquery.blockUI.js" %>
+<%= javascript_include_tag "ui.multiselect" %>
+
+<% @current_program.roles_without_admin_role.each do |role| %>
+  <%= control_group do %>
+    <%= content_tag(:h3, role.customized_term.term, class: "has-below-2") %>
+    <%= render partial: "programs/role_description", locals: { role: role, klass: "false-label control-label" } %>
+    <%= content_tag(:div, "program_settings_strings.content.joining_option".translate, class: "false-label control-label") %>
+    <%= role_join_settings(role) %>
+  <% end %>
+<% end %>
+
+<%= render partial: "membership_role_settings", locals: {form: f} %>
+
+
+<%= javascript_tag %Q[ProgramSettings.toggleCheckboxTree();toggleCheckboxes();ProgramSettings.showMultipleRolesOption();] %>

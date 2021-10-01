@@ -1,0 +1,3 @@
+jQuery("#remoteModal").modal('hide');
+jQuery(".cjs-diversity-reports-container").append('<%= j(render partial: "diversity_reports/container", locals: {diversity_report: @diversity_report}) %>');
+jQuery('.cjs-no-diversity-reports-container').toggle(jQuery(".cjs-container-diversity-report").length == 0);

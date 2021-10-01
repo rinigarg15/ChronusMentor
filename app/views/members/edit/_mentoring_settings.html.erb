@@ -1,0 +1,57 @@
+<% if @is_first_visit && program_view? %>
+  <%= fields_for @profile_user do |user_form| %>
+    <%= hidden_field_tag :first_visit, @is_first_visit, id: nil %>
+    <%= hidden_field_tag :section, MembersController::EditSection::MENTORING_SETTINGS %>
+    <%= hidden_field_tag :section_id, MembersController::EditSection::MENTORING_SETTINGS %>
+    <%= hidden_field_tag :last_section, true %>
+    <%= response_flash "settings_errors_flash_#{@current_program.id}" %>
+    <%= render :partial => "members/edit/select_mentoring_mode", :locals => {:form => user_form, program: @current_program} if @profile_user.is_mentor? %>
+    <% if @profile_user.allowed_to_edit_max_connections_limit?(@current_program) %>
+      <div class="cjs_mentoring_setting_<%= @current_program.id %> cjs_hide_setting_<%= @current_program.id %>_<%= User::MentoringMode::ONE_TIME %> <%= 'hide' if @profile_user.is_available_only_for_one_time_mentoring? %>">
+        <div class="text-uppercase text-muted">
+          <%= content_tag :h4, "feature.user.content.mentoring_mode.ongoing.name".translate(:Mentoring => _Mentoring) %>
+        </div>
+        <hr class="m-b-md hr-line-solid">
+        <%= render_max_connections_limit(user_form, current_program, text_field_id: "max_connections_limit", from_first_visit: true) %>
+      </div>
+    <% end %>
+
+    <div class="cjs_mentoring_setting_<%= @current_program.id %> cjs_hide_setting_<%= @current_program.id %>_<%= User::MentoringMode::ONGOING %> <%= 'hide' if @profile_user.is_available_only_for_ongoing_mentoring? %>">
+      <% if @current_program.calendar_enabled? %>
+        <% if @profile_user.is_mentor? %>
+          <div class="text-uppercase text-muted">
+            <%= content_tag :h4, "feature.user.content.mentoring_mode.one_time.name_v1".translate(:Meeting => _Meeting, :Mentoring => _Mentoring) %>
+          </div>
+          <hr class="m-b-md hr-line-solid">
+          <%= render :partial => "members/edit/user_setting_form", :locals => {:user => @profile_user, :parent_form => user_form} %>
+        <% end %>
+        <% if @profile_member.show_one_time_settings?(@current_program) %>
+          <%= fields_for @profile_member do |member_form| %>
+            <% if @profile_user.can_set_meeting_availability? %>
+              <%= render :partial => "members/edit/will_set_availability_setting", :locals => {:member => @profile_member, :form => member_form, :first_visit => true, :user => @profile_user} %>
+            <% end %>
+            <%= render :partial => "members/mentee_availability_text", :locals => {:user => @profile_user, :member_form => member_form} %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+    
+    <% if !local_assigns[:no_action] %>
+      <% action_set do %>
+        <div class="pull-right">
+          <% submit_label = @is_first_visit ?  "display_string.Save_Proceed_html".translate : "display_string.Save".translate %>
+          <% section_id = @section %>
+          <%# Don't render the cancel link during profile creation %>
+          <% if local_assigns[:ajax_form] %>
+            <%= link_to('display_string.Cancel'.translate, "javascript:void(0)", :class => 'cjs-cancel-ibox btn btn-white') %>
+          <% else %>
+            <%= cancel_link unless @is_first_visit %>
+          <% end %>
+          <%= user_form.submit submit_label, :class => "btn btn-primary",
+            :id => "submit_#{section_id}_profile", :disable_with => "display_string.Please_Wait".translate %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+

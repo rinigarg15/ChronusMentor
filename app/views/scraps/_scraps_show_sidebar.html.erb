@@ -1,0 +1,24 @@
+<% footer_content = capture do %>
+  <%= render :partial => "common/sidepane_msg_footer", locals: { footer_content: "feature.meeting_request.label.reply_message".translate, footer_class: "cjs_add_message_sidepane" } %>
+<% end %>
+
+<% mobile_view = (mobile_app? || mobile_device?) %>
+<% header_content = capture do %>
+  <div class="clearfix p-sm p-b-xs">
+    <%= content_tag(:h5, truncate(scrap.subject, length: MentoringModel::Task::SIDEPANE_TITLE_TRUNCATE_LENGTH), title: scrap.subject, :class => "font-600 no-padding col-xs-10") %>
+    <%= link_to("javascript:void(0)", {class: "close-link col-xs-2 no-padding", :onclick => mobile_view ? %Q[GroupTabs.mobileToggleToMainContent();jQuery('#scrap_item_#{scrap.root_id}').removeClass("gray-bg cjs_selected_scrap");] : %Q[jQuery('.row-offcanvas-right').toggleClass('active');jQuery('#scrap_item_#{scrap.root_id}').removeClass("gray-bg cjs_selected_scrap");]}) do %>
+      <%= get_icon_content("fa fa-times fa-lg no-margins text-muted pull-right")  + set_screen_reader_only_content("display_string.Close".translate) %>
+    <% end %>
+  </div>
+  <%= content_tag(:div, horizontal_line(class: "no-margins")) %>
+<% end %>
+
+<%= ibox nil, :no_collapse => true, scroll_required: !mobile_view, scroll_height_class: "", ibox_class: mobile_view ? "" : "cui-full-height-sidebar white-bg m-r", footer: footer_content, header_content: header_content, footer_class: "no-borders no-padding", title_class: "no-padding" do %>
+  <%= render partial: "scraps/child_scrap", :collection => scraps_siblings_index[scrap.root_id] , as: :scrap %>
+<% end %>
+
+<%= javascript_tag do %>
+  GroupTabs.setSlimScrollRightSideBar();
+  GroupTabs.affixTabContentSideBar();
+  Discussions.showHideReplyForm();
+<% end %>

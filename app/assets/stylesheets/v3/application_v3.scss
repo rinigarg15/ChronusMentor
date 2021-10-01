@@ -1,0 +1,27 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require animate/animate.css
+ *= require v3/plugins/toastr
+ *= require jquery-ui-1.8.16.custom
+ *= require font-awesome
+ *= require cropper/cropper
+ *= require select2/select2
+ *= require v3/plugins/bootstrap-tour
+ *= require_directory ./../v3/plugins/bootstrap-file-input
+ *= require v3/plugins/waves/waves
+ *= require jquery.minicolors
+ *= require v3/style.css
+ *= require grid/new_groups
+ *= require profile_picture
+ *= require v3/plugins/spinner
+ *= require dropzone.min
+ */

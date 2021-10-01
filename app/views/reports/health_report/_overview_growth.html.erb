@@ -1,0 +1,10 @@
+<% if growth.no_graph_data? %>
+  <div class="no_graph dim text-center">
+    <%= "common_text.info.No_data_available".translate %>
+  </div>
+<% else %>
+  <div id="health_report_growth_chart" class="trend_chart"></div>
+  <%= javascript_tag do %>
+    <%= render :partial => 'reports/trend_chart.js', :locals => {:render_to => "health_report_growth_chart", :chart_series_data => health_report_growth_chart_data(growth), :start_time => @start_time, :format => format, :width => is_pdf_request ? 550 : ''} %>
+  <% end %>
+<% end %>

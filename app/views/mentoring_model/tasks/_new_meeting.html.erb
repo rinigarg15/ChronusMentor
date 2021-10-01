@@ -1,0 +1,92 @@
+<% current_occurrence_date = time_to_calendar_date_format(Meeting.parse_occurrence_time(current_occurrence_time)) %>
+<div id="new_meeting" class="cjs_meeting_forms">
+  <p id = "record_past_meeting_text" %>
+    <%= content_tag(:span, "feature.meetings.content.record_past_meeting_text".translate(meeting: _meeting)) %>
+    <%= link_to("display_string.click_here".translate, "javascript:void(0)", :class => "cjs_record_past_meeting_popup", onclick: %Q[jQueryShowQtip('', 600, '#{setup_meeting_group_path(@group.id, {format: :js, :common_form => true, :past_meeting => true, task_id: local_assigns[:auto_update_task_id] || 0 })}','',{modal: true, successCallback: function(){CalendarAvailabilityInfo.initialize()}})]) %>
+    </p>
+  
+  <% form_options = @quick_connect_popup ? {} : {:remote => true} %>
+  <% rand_id = SecureRandom.hex(3) %>
+  <% meeting_form_id = "new_meeting_form_#{rand_id}" %>
+  <% attendees_list_id = "attendees_list_#{rand_id}" %>
+  <%= simple_form_for @new_meeting, html: {id: meeting_form_id, 
+    class: "meeting_form clearfix" }, remote: true do |f| %>
+    <%= response_flash "meeting_create_flash" %>
+    <%= hidden_field_tag(Meeting::AnalyticsParams::QUICK_MEETING, true, id: nil) if @request_meeting_popup || @quick_meeting_popup %>
+    <%= hidden_field_tag(:common_form, true, id: nil) %>
+    <%= hidden_field_tag(:from_goal, local_assigns[:from_goal], id: nil) %>
+    <%= hidden_field_tag("meeting[current_occurrence_time]", current_occurrence_time) %>
+    <%= hidden_field_tag("meeting[current_occurrence_date]", current_occurrence_date) %>
+    <%= hidden_field_tag(:auto_update_task_id, local_assigns[:auto_update_task_id] || 0, id: nil, class: "cjs_auto_update_task_id") %>
+    <%= hidden_field_tag(:ei_src, EngagementIndex::Src::CreateGroupMeeting::MENTORING_AREA_TASK) %>
+
+    <%= f.input :topic, :input_html => { :id => "new_meeting_title", class: "form-control cjs-meeting-title", :value => @new_meeting.topic }, required: true %>
+    <%= f.input :description, input_html: { rows: 5, class: "form-control", :id => "meeting_description", :value => @new_meeting.description } %>
+    
+
+    <% st_time = Meeting.valid_start_time_boundaries %>
+    <% en_time = Meeting.valid_end_time_boundaries %>
+    <% all_time = get_all_time_for_end_time((st_time + en_time)) %>
+    <% start_time_element = "form##{meeting_form_id} select#meeting_start_time_of_day" %>
+    <% end_time_element = "form##{meeting_form_id} select#meeting_end_time_of_day" %>
+
+    <% st_time_index = @new_meeting.start_time.blank? ? 0 : st_time.index(DateTime.localize(@new_meeting.start_time, format: :short_time_small)) %>
+    <% en_time_index = @new_meeting.end_time.blank? ? 0 : en_time.index(DateTime.localize(@new_meeting.end_time, format: :short_time_small)) %>
+    <% onchange_function = "calendarSlot.changeEndTime('#{escape_javascript(all_time.join(','))}', '0', '#{start_time_element}', '#{end_time_element}')" %>
+    <div class="cjs-meeting-date-time-container clearfix">
+      <div class="pull-left cjs-common-align-labels">
+      </div>
+    </div>
+
+    <!-- unlimited_slot is set to true by default because this is meeting inside connection area -->
+    <% partial_options = {unlimited_slot: true, start_time_label: {class: "", for: "meeting_start_time_of_day"}, end_time_label: {class: "", for: "meeting_end_time_of_day"}, start_time_attributes: {name: "meeting[start_time_of_day]", class: "cjs-meeting-start-time-input", data: {index: st_time_index}}, end_time_attributes: {name: "meeting[end_time_of_day]", class: "cjs-meeting-end-time-input", data: {index: en_time_index}}, meeting_date_container_class: "meeting_date_container ", additional_classes: {addon_class: "white-bg", text_class: "h5"}, input_group_class: {start: "col-sm-6 col-xs-12 pull-left m-b-xs", end: " "}} %>
+    <% path_options = {partial_options: partial_options, slot_time_in_minutes: Meeting::SLOT_TIME_IN_MINUTES} %>
+
+    <div class="<%= 'hide' if @current_program.enhanced_meeting_scheduler_enabled? %>">
+      <%= content_tag(:div, set_required_field_label("feature.meeting_request.label.pick_a_date".translate), class: "control-label false-label m-b-xs") %>
+      <%= f.input :date, as: :string, label: false, required: true, wrapper: :vertical_input_group do %>
+        <%= construct_input_group_addon(type: "addon", icon_class: "fa fa-calendar", class: "gray-bg") %>
+        <label class="sr-only" for="meeting_date"><%= "display_string.Date".translate %></label>
+        <% date = @new_meeting.new_record? ? "" : current_occurrence_date %>
+        <%= text_field_tag("meeting[date]", date, class: "cjs-meeting-date-input form-control cjs_calendar_sync_v2_date", data: date_picker_options(min_date: Date.current, max_date: group.expiry_time).merge(url: valid_free_slots_meetings_path(path_options))) %>
+      <% end %>
+    </div>
+    <%= render partial: "meetings/propose_slot_date_form", locals: {target_url: valid_free_slots_for_range_meetings_path(path_options), target_input_class: "cjs_calendar_sync_v2_date"} if @current_program.enhanced_meeting_scheduler_enabled? %>
+
+    <%= content_tag(:div, set_required_field_label("feature.meeting_request.label.#{get_choose_time_label_key}".translate(time_zone: wob_member.short_time_zone)), class: "control-label false-label m-b-xs") %>
+    <div class="clearfix form-group form-group-sm col-xs-12 no-horizontal-padding text optional">
+      <div class="meeting_slot_time_form">
+        <%= render partial: "meetings/propose_slot_time_form", locals: {start_time: st_time, end_time: en_time, slot_start_time: st_time[st_time_index], slot_end_time: en_time[en_time_index], disable_start_end_times: false, start_time_onchange: onchange_function}.merge(partial_options) %>
+      </div>
+    </div>
+
+    <% if @new_meeting.new_record? %>
+      <div class="cjs-common-align-labels cjs-location-label-container"></div>
+      <div class="cjs-location-input">
+        <%= render partial: "meetings/meeting_repeat_section", :locals => {:group => group, :f => f, :section_class => ''} %>
+      </div>
+    <% end %>
+
+    <% if @new_meeting.new_record? %>
+      <%= render partial: "meetings/attendees_form", locals: { id: attendees_list_id, meeting: @new_meeting, group: @group, label: "feature.meetings.form.Invite".translate, is_new_meeting: true, checkbox_class: "cjs_new_meeting_checkbox" } %>
+    <% end %>
+
+    <%= f.input :location, input_html: { rows: "3", class: "form-control", :placeholder => 'feature.meetings.content.location_help_text'.translate, :value => @new_meeting.location } %>
+
+    <%= f.input :group_id, :as => :hidden if @new_meeting.group %>
+    <%= hidden_field_tag :common_form, true, id: nil %>
+    <div class="pull-right">
+      <%= link_to "display_string.Cancel".translate, "javascript:void(0)", :class => "btn cancel btn-white", "data-dismiss" => "modal" %>
+      <%= f.button :submit, "display_string.Create".translate, :onclick => "return MeetingForm.validateTitleAndDate('#{meeting_form_id}', 'new_meeting_title', 'meeting_date' ,'meeting_description','meeting_location', '#{attendees_list_id}', false, 'meeting_create_flash');", disable_with: "display_string.Please_Wait".translate %>
+    </div>
+  <% end %>
+</div>
+
+<%= javascript_tag "initialize.setDatePicker();" %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function() {
+    MeetingForm.submitMeetingForm('<%= meeting_form_id %>', 'remoteModal');
+    MeetingRequest.getValidTimeSlots();
+    MeetingForm.updateMeetingRepeatSection('.cjs-meeting-date-input', '#meeting_schedule_rule');
+  });
+<% end %>

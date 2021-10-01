@@ -1,0 +1,31 @@
+<% messages_condn = (current_organization.active? && logged_in_organization? && (!working_on_behalf? && !(current_user && current_user.profile_pending?)) || (working_on_behalf? && current_member && current_member.admin?))%>
+<% admin_messages_condn = (organization_view? ? !current_organization.standalone? && logged_in_organization? && wob_member.admin?  : logged_in_program? && current_user.view_management_console?) %>
+
+<% if messages_condn %>
+  <% message_count = wob_member.inbox_unread_count %>
+  <% icon_content = get_icon_content("fa fa-envelope") %>
+    
+  <% if admin_messages_condn %>
+    <% admin_message_count = current_program_or_organization.admin_messages_unread_count %>
+    <% total_count = message_count + admin_message_count %>
+    <li class="dropdown pogram-header-icons cui_requests_notification_dropdown word_break p-r-sm <%= hidden_on_mobile if program_view? %>">
+      <%= link_to content_tag(:big, icon_content + content_tag(:span, total_count > 0 ? "#{total_count}" : "", class: "label label-danger m-b-md")) + content_tag(:span, "app_layout.label.messages".translate, :class => "#{hidden_on_mobile}") + content_tag(:span, "", :class => "caret #{hidden_on_mobile}"), "javascript:void(0)", id: "inbox", class: "dropdown-toggle no-waves count-info item", data: { toggle: "dropdown" } %>
+      <ul class="dropdown-menu animated fadeIn pull-right cui_notification_icon_dropdown_in_header">
+        <li>
+        <%# Link to organization level Inbox always, except when working on behalf. %>
+          <%= link_to content_tag(:div, content_tag(:div, "feature.reports.groups_report_columns.messages_count_v1".translate, class: "col-xs-10 p-l-0") + content_tag(:div, content_tag(:span, message_count > 0 ? "#{message_count}" : "", class: "label label-danger pull-right m-t-xs"), class: "col-xs-2 no-padding"), class: "row"), messages_path(:organization_level => true), :id => "message_inbox", :class => "no-waves item" %>
+        </li>
+
+        <% if admin_messages_condn %>
+          <li>
+            <%= link_to content_tag(:div, content_tag(:div, "feature.org_home_page.program_tile.admin_content.admin_messages".translate(admin: _Admin), class: "col-xs-10 p-l-0") + content_tag(:div, content_tag(:span, admin_message_count > 0 ? "#{admin_message_count}" : "", class: "label label-danger pull-right m-t-xs"), class: "col-xs-2 no-padding"), class: "row") , admin_messages_path(root: current_program_or_organization.root), :id => "admin_message_inbox", :class => "no-waves item" %>
+          </li>
+        <% end %>
+      </ul>
+    </li>
+  <% else %>
+    <li class ="pogram-header-icons p-r-sm <%= hidden_on_mobile if program_view? %>">
+      <%= link_to content_tag(:big, icon_content + content_tag(:span, message_count > 0 ? "#{message_count}" : "", class: "label label-danger m-b-md")) + content_tag(:span, "app_layout.label.messages".translate, :class => "#{hidden_on_mobile}"), messages_path(:organization_level => true), id: "inbox", class: "no-waves count-info item" %>
+    </li>
+  <% end %>
+<% end %>

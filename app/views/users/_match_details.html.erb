@@ -1,0 +1,49 @@
+<% any_answers_present = match_details.collect{|detail| detail[:answers]}.flatten.present? %>
+<% mentor_name_link = get_safe_string %>
+<% mentor_name_link += link_to_user(mentor, current_user: current_user, show_favorite_links: show_favorite_ignore_links, favorite_preferences_hash: favorite_preferences_hash) %>
+<% picture_content = member_picture_v3 mentor.member, {no_name: true, size: :large}, {class: "img-circle circle-border m-b-xs"} %>
+<% mentor_name = mentor.name(name_only: true) %>
+<% contact_admin_path = get_contact_admin_path(@current_program)  %>
+<% actions, dropdown_title = get_links_for_banner(mentor, mentors_score, analytics_param: EngagementIndex::Src::SendRequestOrOffers::MATCH_DETAILS, show_send_message: true) %>
+<% modal_v3_footer_content = "".html_safe %>
+<% show_change_explicit_preferences = current_user.explicit_preferences_configured? && !show_match_config_matches %>
+<% modal_v3_footer_content += content_tag(:div, link_to(append_text_to_icon("fa fa-sliders", "feature.explicit_preference.label.personalize_matching_criteria".translate), "javascript:void(0)", class: "btn btn-sm btn-primary btn-outline cjs_show_explicit_preference_popup_match_details"), class: "pull-left") if show_change_explicit_preferences %>
+<% modal_v3_footer_content += content_tag(:div, dropdown_buttons_or_button(actions, { dropdown_title: dropdown_title, btn_class: '', btn_group_btn_class: ' btn-sm', dropdown_menu_class: 'pull-right', small: true, dropup: true} ), class: "#{'pull-right' if show_change_explicit_preferences}") %>
+<% modal_v3_footer_content = content_tag(:div, modal_v3_footer_content, class: "text-center") %>
+
+<% modal_v3_popup "feature.bulk_recommendation.header.match_config_summary".translate, modal_v3_footer_content: modal_v3_footer_content do %>
+  <div class="summary_container text-center">
+    <%= picture_content %>
+    <h3 class="clearfix"><%= mentor_name_link %></h3>
+    <% if any_answers_present %>
+      <div>
+        <div class="p-b-xs small muted"><%= "feature.match_config.content.details_text".translate(mentor_name: mentor_name) %></div>
+      </div>
+      <hr class="m-t-0 m-b-0">
+      <div>
+        <% match_details.each do |detail| %>
+          <% if detail[:answers].flatten.present? %>
+            <div class="detail_container p-t-xs text-center">
+              <div class="p-b-xxs font-bold"><em><%= detail[:question_text] %></em></div>
+              <div>
+                <% detail[:answers].flatten.each do |answer| %>
+                  <%= content_tag(:span, get_icon_content("fa fa-tags fa-sm fa-fw m-r-xs") + answer, class: "label small label-info status_icon m-r-xs inline m-b-xs")%>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="p-b-sm p-t-sm">
+        <%= "feature.match_config.content.no_details_text_v1_html".translate(mentor_name: mentor_name, Contact_admin: contact_admin_path) %></div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  Meetings.QuickConnect.inspectQuickConnect();
+  MentorRequests.showRequestConnectionPopup();
+  ExplicitPreference.openPreferencePopup("<%= new_explicit_user_preference_path(src: EngagementIndex::Src::ExplicitPreferences::MATCH_DETAILS) %>", ".cjs_show_explicit_preference_popup_match_details", true);
+</script>

@@ -1,0 +1,10 @@
+<% modal_v3_popup "feature.coach_rating.label.popup_title".translate(:Mentor => _Mentor), {modern_qtip: true, width: 650, container_class: "coach-rating-popup"} do %>
+  <div id="coach_rating">
+    <%= render :partial => 'feedback/responses/form', :locals => {:feedback_response => @feedback_response, :feedback_questions => @feedback_questions, :answers_map => @answers_map, :mentor_name => @recipient.name} %>
+  </div>
+<% end %>
+<%= javascript_tag do %>
+  jQuery(document).ready(function(){
+    CoachFeedback.addIdToRatingInput();
+  });
+<% end %>

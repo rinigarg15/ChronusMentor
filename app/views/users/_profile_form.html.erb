@@ -1,0 +1,26 @@
+<% div_id = @user.is_mentor? ? "new_mentor" : "new_student" %>
+<div id= <%= div_id %> >
+  <%= simple_form_for @user, :url => users_path, :method => :post, :html => {:class => 'form-horizontal new_user profile_details', :multipart => true, :id => "new_user_form_#{@user.id}"} do |person| %>
+    <div class="<%= 'no-margins' unless import_members_enabled? %>">
+      <% if !@existing_member %>
+        <%= render :partial => "new_user_form", :locals => {:person => person} %>
+      <% else %>
+        <%= render :partial => "existing_member_details" %>
+      <% end %>
+
+      <%= hidden_field_tag :add_another, 1, :id => 'add_another' %>
+      <%= hidden_field_tag :role, @role %>
+      <%= ibox nil, :ibox_class => "m-t-n-mlg" do %>
+        <div class="text-muted m-b-sm">
+          <%= "feature.user.content.add_user_emails_note_v1_html".translate(catogory_link: link_to_admin_adding_users) %>
+        </div>
+        <% action_set :fields_required => true, :class => "" do %>
+          <%= cancel_link program_root_path %>
+          <%= submit_tag "feature.user.action.publish_and_finish_html".translate, :id => 'save_and_finish', :class => "btn btn-primary", :onclick => ("EditUser.renameEducationExperienceFields();jQuery(\"#add_another\").val(0);NewMember.openRequiredFieldSectionHeaders('#{j(@role)}');return (NewMember.validate(#{@existing_member.present?}) && ProfileFields.validateTextOnly('#{j(@role)}'));"), data: {:disable_with => "display_string.Please_Wait".translate} %>
+          <%= submit_tag "feature.user.action.publish_and_add_another_html".translate, :class => "btn btn-primary", :id => "save_and_add", :onclick => "EditUser.renameEducationExperienceFields();NewMember.openRequiredFieldSectionHeaders('#{j(@role)}');return (NewMember.validate(#{@existing_member.present?}) && ProfileFields.validateTextOnly('#{j(@role)}'));", data: {:disable_with => "display_string.Please_Wait".translate} %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<%= javascript_tag "jQuery(document).ready(function(){CustomizeSelect.selectExpandContract();});" %>

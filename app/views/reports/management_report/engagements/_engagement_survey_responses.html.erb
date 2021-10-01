@@ -1,0 +1,20 @@
+<div class="<%= current_program.is_report_enabled?(DashboardReportSubSection::Type::Engagements::ENGAGEMENTS_HEALTH) ? "col-md-6" : "col-md-12" %> p-l-0">
+  <% total_count = data[:survey_responses_count] %>
+  <% survey_responses_string = "feature.reports.content.survey_responses_count_v1".translate(count: total_count) %>
+  <h4><%= survey_responses_string %></h4>
+  <div class="no-border m-t-md p-t-sm scroll-4 overflow-y-auto cjs_infinite_scroll">
+    <div class="dim text-center"><%= "feature.reports.content.no_survey_responses".translate if data[:survey_responses_count] == 0 %></div>
+    <% survey_responses = data[:survey_responses] %>
+    <% if survey_responses.present? %>
+      <% next_page_index = survey_responses.next_page %>
+      <%= hidden_field_tag("next_page_index", next_page_index) %>
+      <ul class="list-group">
+        <%= render(partial: "reports/management_report/engagements/survey_responses_with_scroll", locals: {survey_responses: survey_responses, next_page_index: next_page_index}) %>
+      </ul>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  ManagementReport.scrollSurveyResponses(<%= SurveyAnswer::SCROLL_SURVEY_ANSWER_LIMIT %>);
+<% end %>

@@ -1,0 +1,54 @@
+<% sections_to_load = [ReportsController::ManagementReportConstants::AsyncLoadingSections::ENROLLMENT, ReportsController::ManagementReportConstants::AsyncLoadingSections::MATCHING] %>
+<div id="dashboard" class="cjs_tile_container">
+  <div id="current_status">
+    <%= render(partial: "reports/management_report/current_status") %>
+  </div>
+
+  <div class="row m-t-md">
+    <%= render(partial: "reports/management_report/enrollment_health_report_container") %>
+    <%= render(partial: "reports/management_report/matching_health_report_container") %>
+  </div>
+
+  <div class="row m-t-md">
+    <% engagements_report = current_program.get_engagements_reports_to_display %>
+    <% if engagements_report.any? %>
+      <% sections_to_load << ReportsController::ManagementReportConstants::AsyncLoadingSections::ENGAGEMENTS %>
+    <% end %>
+
+    <% groups_activity_report = current_program.get_groups_activity_report_to_display %>
+    <% if groups_activity_report.present? %>
+      <% sections_to_load << ReportsController::ManagementReportConstants::AsyncLoadingSections::GROUPS_ACTIVITY %>
+    <% end %>
+
+    <% if current_program.only_one_time_mentoring_enabled? %>
+      <%= render(partial: "reports/management_report/display_group_activity_report_container") if groups_activity_report.present? %>
+      <%= render(partial: "reports/management_report/display_engagements_report_container") if engagements_report.any? %>
+    <% else %>
+      <%= render(partial: "reports/management_report/display_engagements_report_container") if engagements_report.any? %>
+      <%= render(partial: "reports/management_report/display_group_activity_report_container") if groups_activity_report.present? %>
+    <% end %>
+  </div>
+
+  <div class="row m-t-md">
+    <% reports = get_community_tile_reports_to_display(program) %>
+    <% if reports.any? %>
+      <% sections_to_load << ReportsController::ManagementReportConstants::AsyncLoadingSections::COMMUNITY %>
+      <%= render(partial: "reports/management_report/display_community_report_content") %>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  ManagementReport.initializeTips();
+  ManagementReport.sectionSettingsPath = '<%= tile_settings_dashboard_report_sub_sections_path %>';
+  ManagementReport.initializeSectionSettings();
+  ManagementReport.initializeLinks();
+  ManagementReport.dataUrl = '<%= filter_management_report_path %>';
+  ManagementReport.timeFilterOnReport();
+  GroupSearch.getSurveyResponse();
+  ReportSection.loadSectionPath = '<%= management_report_async_loading_path %>';
+  ReportSection.loadSections(<%= raw sections_to_load.to_json %>);
+  jQuery(document).ready(function() {
+    ManagementReport.fixTileHeights();
+  });
+<% end %>

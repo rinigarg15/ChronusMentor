@@ -1,0 +1,9 @@
+<% if @current_organization.active? && logged_in_organization? %>
+  <% if organization_view? || (logged_in_program? && current_user.active?) %>
+    <li id="my_profile" class="dropdown <%= local_assigns[:container_class] || "" %>">
+      <% icon_content = get_icon_content(local_assigns[:iconclass]) %>
+      <%= link_to(get_safe_string + icon_content + "#{local_assigns[:parent_label] || wob_member.name(:name_only => true)}" + content_tag(:span,"", :class => "#{local_assigns[:caret_class] || 'caret'}"), "#", :class => "dropdown-toggle") %>
+      <%= render :partial => "layouts/nav_profile_dropdown", :locals => {:ui_pattern => local_assigns[:ui_pattern], :signout_class => local_assigns[:signout_class]} %>
+    </li>
+  <% end %>
+<% end %>

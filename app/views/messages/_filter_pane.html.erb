@@ -1,0 +1,6 @@
+<%= form_tag url_for(params.to_unsafe_h.slice(:include_system_generated, :date_range_preset).merge(:search_filters => {}, :src => 'messages_listing')), :remote => true, :method => :get, :id => 'search_filter_form', :class => 'search-icon search_container navbar-search clearfix' do %>
+  <% @my_filters << {label: "feature.messaging.label.search".translate, reset_suffix: "search"} if @messages_presenter.search_params_hash[:search_content].present? %>
+
+  <%= render 'common/your_filters', onclick_function: "MessageSearch.clearFilter", new_filter: true, label_class: 'label-filter' %>
+  <%= render('messages/filter_form', from_messages: local_assigns[:from_messages]) %>
+<% end %>

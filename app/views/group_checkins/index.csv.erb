@@ -1,0 +1,6 @@
+<% translated_headers = get_column_names %>
+<% headers = [translated_headers[:mentorName], translated_headers[:mentoringConnection], translated_headers[:date], translated_headers[:duration], translated_headers[:checkin_type], translated_headers[:comment], translated_headers[:titleName] ] %>
+<%= UTF8_BOM %><%= CSV.generate_line headers %>
+<% @group_checkins.each do |check_in| %>
+  <%= CSV.generate_line([get_mentor_name_from_group_checkin(check_in), get_group_name_from_group_checkin(check_in), check_in.date.strftime("%m/%d/%Y"), check_in.duration.to_s, get_group_checkin_type(check_in), check_in.comment, check_in.title]).strip.html_safe %>
+<% end %>

@@ -1,0 +1,22 @@
+en:
+  chronus_date_range_picker_strings:
+    preset_ranges:
+      today: Today
+      last_7_days: Last 7 days
+      month_to_date: Month to date
+      year_to_date: Year to date
+      quarter_to_date: Quarter to date
+      the_previous_month: The previous Month
+      never: Never
+      program_to_date: Program start to date
+      last_month: Last Month
+      last_quarter: Last Quarter
+      last_year: Last Year
+    presets:
+      date_range: Date Range
+    range_start_title: Start date
+    range_end_title: End date
+    next_link_text: Next
+    prev_link_text: Prev
+    done_button_text: Done
+    custom: Custom

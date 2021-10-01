@@ -1,0 +1,13 @@
+<% content = fetch_status_icon(@email_hash, update_status_mailer_template_path(@uid, :enabled => "false"), update_status_mailer_template_path(@uid, :enabled => "true"), @mailer_template.enabled?) %>
+jQuery("#status_icon_<%= @uid %>").replaceWith('<%= escape_javascript content %>');
+jQueryHighlight("#mailer_template_<%= @uid %>");
+
+<% if @mailer_template.enabled? %>
+    jQuery("#subcategory_<%= @email_hash[:subcategory] %> .cjs_subtegory_enabled_disabled_info .cjs_enabled_count").html(Number(jQuery("#subcategory_<%= @email_hash[:subcategory] %> .cjs_subtegory_enabled_disabled_info .cjs_enabled_count").html())+1);
+    jQuery("#subcategory_<%= @email_hash[:subcategory] %> .cjs_subtegory_enabled_disabled_info .cjs_disabled_count").html(Number(jQuery("#subcategory_<%= @email_hash[:subcategory] %> .cjs_subtegory_enabled_disabled_info .cjs_disabled_count").html())-1);
+    jQuery("#mailer_template_<%= @uid %>").switchClass("cjs_disabled_mail", "cjs_enabled_mail");
+<% else %>
+    jQuery("#subcategory_<%= @email_hash[:subcategory] %> .cjs_subtegory_enabled_disabled_info .cjs_enabled_count").html(Number(jQuery("#subcategory_<%= @email_hash[:subcategory] %> .cjs_subtegory_enabled_disabled_info .cjs_enabled_count").html())-1);
+    jQuery("#subcategory_<%= @email_hash[:subcategory] %> .cjs_subtegory_enabled_disabled_info .cjs_disabled_count").html(Number(jQuery("#subcategory_<%= @email_hash[:subcategory] %> .cjs_subtegory_enabled_disabled_info .cjs_disabled_count").html())+1);
+    jQuery("#mailer_template_<%= @uid %>").switchClass("cjs_enabled_mail", "cjs_disabled_mail");
+<% end %>

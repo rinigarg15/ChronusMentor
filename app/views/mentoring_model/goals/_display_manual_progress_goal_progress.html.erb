@@ -1,0 +1,11 @@
+<div class = "p-sm b-b" id="<%= "manual_progress_goal_#{goal.id}" %>">
+  <%= manual_progress_goal_progress_bar(group, goal) %>
+  <div class="p-t-xs">
+    <%= "feature.mentoring_model.information.goal_complete".translate(percent: goal_status) %>
+    <% if current_user.can_update_goal_progress?(group) %>
+      <div class="pull-right">
+        <%= display_update_link(goal) %>
+      </div>
+    <% end %>
+  </div>
+</div>

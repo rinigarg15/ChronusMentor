@@ -1,0 +1,5 @@
+<div class="row cjs-diversity-reports-container">
+  <% diversity_reports.each do |diversity_report| %>
+    <%= render partial: "diversity_reports/container", locals: {diversity_report: diversity_report} %>
+  <% end %>
+</div>

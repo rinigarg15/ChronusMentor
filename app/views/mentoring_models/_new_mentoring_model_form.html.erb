@@ -1,0 +1,20 @@
+<% @title = @mentoring_model.new_record? ? "feature.multiple_templates.header.new_mentoring_model_template_v1".translate(Mentoring_Connection: _Mentoring_Connection) : mentoring_model_pane_title(@mentoring_model) %>
+<% @skip_rounded_white_box_for_content = true %>
+<%= wizard_headers(@mentoring_model.new_record? ? mentoring_model_new_wizard(super_console?) : mentoring_model_wizard_edit_view(super_console?, @mentoring_model), MentoringModelsHelper::Headers::DESCRIBE_TEMPLATE, { disable_unselected: @mentoring_model.new_record? } ) do %>
+  <div>
+    <%= simple_form_for @mentoring_model, html: {class: "form-horizontal"}, :wrapper => :horizontal_input do |form| %>
+      <%= response_flash("cjs_mentoring_models_flash") %>
+      <%= form.input :mentoring_model_type, as: :hidden %>
+      <%= form.input :title, as: :string, label_html: {:class => "no-padding"}, input_html: {id: "cjs_title_field", class: "required-field form-control", "data-existing_mentoring_models" => @mentoring_model_titles.join(",")} %>
+      <%= form.input :description, as: :text, input_html: {rows: "4", class: "form-control"}, label_html: {:class => "no-padding"} %>
+      <% action_set(class: "pull-right") do %>
+        <%= form.submit "display_string.Save_and_Continue_Later".translate, name: "set_up_and_continue_later", class: "form-submit-validation btn btn-white", disable_with: "display_string.Please_Wait".translate %>
+        <%= form.button :submit, "display_string.Proceed_to_Next_Step_html".translate(label: super_console? ? "feature.multiple_templates.button_labels.configure_features".translate : "feature.multiple_templates.button_labels.add_content".translate), class: "form-submit-validation" %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  MentoringModels.validateTitlesUniqueness();
+<% end %>

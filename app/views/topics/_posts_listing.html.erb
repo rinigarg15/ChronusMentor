@@ -1,0 +1,38 @@
+<div class="cjs_posts_listing">
+  <% if posts.any? %>
+    <div class="no-padding">
+      <%= ibox nil, ibox_class: "no-margins", content_class: "no-padding" do %>
+        <% sort_options = basic_sort_by_id_options_for_top_bar(true, @sort_fields.merge(on_select_function: "updateSortForMentorOffersAjax")) %>
+        <% if show_in_sidepane %>
+          <%= content_tag(:div,  append_text_to_icon("fa fa-comment", "feature.forum.content.Replies".translate), class: "col-xs-6 p-m") %>
+          <div class="col-xs-6">
+            <%= top_bar_in_listing( {}, {}, sort_options, additional_class: "no-borders") %>
+          </div>
+        <% else %>
+          <%= top_bar_in_listing( {}, {}, sort_options) %>
+        <% end %>
+      <% end %>
+      <%= render partial: "topics/post", collection: posts, as: :root, locals: { per_page_count: posts.size } %>
+    </div>
+
+    <%= form_tag forum_topic_path(topic.forum, topic), method: :get, id: "search_filter_form", remote: true do %>
+      <%= include_common_sort_by_id_fields(@sort_fields.merge(suffix_id: "posts")) %>
+    <% end %>
+  <% else %>
+    <%= ibox nil, ibox_class: "no-margin", content_class: "no-padding" do %>
+      <%= content_tag(:div, class: "media-body") do %>
+        <div class="text-center p-t-xs p-b-xs">
+          <div class="p-sm text-center clearfix">
+            <span class="fa-stack fa-lg fa-3x text-navy">
+              <i class="fa fa-circle fa-stack-2x"></i>
+              <i class="fa fa-comment fa-stack-1x fa-inverse"></i>
+            </span>
+          </div>
+          <%= "feature.forum.content.no_replies".translate  %>
+          <%= link_to("feature.forum.content.add_reply".translate, "javascript:void(0)", class: "cjs_add_comment_link") %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
+</div>

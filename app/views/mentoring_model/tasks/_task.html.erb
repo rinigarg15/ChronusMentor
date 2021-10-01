@@ -1,0 +1,7 @@
+<% task_id = task.id %>
+
+<div class="list-group-item no-padding clearfix cjs-mentoring-model-filter-for-task-and-meetings-all <%= generate_mentoring_model_filter_class(task) %> cjs-completed-checkbox-filter-show  cjs-form-and-menu-link-container cjs-hover-container cjs-sortable-list-item cjs-task-container-<%= task_id %> <%= 'cjs-sortable-list-item-disabled' if task.required? || !@page_controls_allowed %>" id="<%= task.class.name.underscore.gsub("/", "_") %>_<%= task_id %>" data-update-position-url="<%= task.is_a?(MentoringModel::Task) && task.optional? ? update_positions_group_mentoring_model_task_path(group, task, format: :js, :target_user_id => params[:target_user_id], :target_user_type => params[:target_user_type]) : "" %>">
+  <div class="cjs-sortable-list-item-inner-container cjs-task-edit-action-<%= task_id %> cjs-mentoring-model-hover-well"> 
+    <%= render partial: "mentoring_model/tasks/task_content", locals: {task: task, group: group, goal_id: local_assigns[:goal_id], from_goal: local_assigns[:from_goal]} %>
+  </div>
+</div>

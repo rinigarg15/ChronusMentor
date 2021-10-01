@@ -1,0 +1,23 @@
+<% if activities.present? %>
+  <% rendered_count = 0 %>
+  <% activities.each_with_index do |act, index| %>
+    <% str = format_recent_activity(act, nil, true, hide_links: true) %>
+    <% rendered_count += 1 if str.present? %>
+    <%= str %>
+  <% end %>
+
+  <% if rendered_count.zero? %>
+    <%= content_tag(:div, "common_text.info.No_activity_to_show".translate, :class => 'text-muted p-sm text-center b-t') %>
+  <% else %>
+    <div id="show_more_activities" class="show_more p-sm text-center b-t">
+      <b><%= link_to "display_string.Show_more".translate,  more_url, :remote => :true, :class => 'more_link', :onclick => "jQuery('#show_more_activities .loading_ra').show(); jQuery('#show_more_activities .more_link').hide()" %></b>
+      <%= image_tag('ajax-loader.gif', :class => 'loading_ra', :style => 'display: none', :height => "18") %>
+    </div>
+  <% end %>
+<% else %>
+  <% if @offset_id.present? && @offset_id != 0 %>
+    <%= content_tag(:div, "common_text.info.No_more_activity_to_show".translate, :class => 'text-muted p-sm text-center b-t') %>
+  <% else %>
+    <%= content_tag(:div, "common_text.info.No_activity_yet".translate, :class => 'text-muted p-sm text-center b-t') %>
+  <% end %>
+<% end %>

@@ -1,0 +1,20 @@
+<% if [EngagementIndex::Src::AcceptMentorRequest::USER_PROFILE_PAGE, EngagementIndex::Src::AcceptMentorRequest::USER_LISTING_PAGE].include?(local_assigns[:source]) %>
+  <% actions = get_actions_for_mentor_requests_listing(mentor_request, :is_mentor_action => is_mentor_action, :accept_button_class => 'btn btn-primary btn-block cjs_accept_request', :source => local_assigns[:source]) %>
+  <div class="row m-t-sm">
+    <div class="col-xs-6">
+      <%= dropdown_buttons_or_button([actions[1]], {primary_btn_class: 'btn-white', btn_class: 'btn-block'}) %>
+    </div>
+    <div class="col-xs-6">
+      <%= dropdown_buttons_or_button([actions[0]], {:btn_class => "btn btn-primary btn-block #{actions[0][:js].present? ? '' : 'cjs_accept_request' }"}) %>
+    </div>
+  </div>
+<% else %>
+  <%= actions_for_mentor_requests_listing(mentor_request, :link_class => "list_action button", :is_mentor_action => is_mentor_action, :btn_class => local_assigns[:btn_class], :btn_group_btn_class => local_assigns[:btn_group_btn_class], :dropdown_menu_class => local_assigns[:dropdown_menu_class]) %>
+<% end %>
+<% if is_mentor_action %>
+  <%= render :partial => "mentor_requests/choose_mentoring_connection", :locals => {:mentor_request => mentor_request, :source => local_assigns[:source]} %>
+<% end %>
+<%= render :partial => "mentor_requests/reject_or_withdraw_popup", :locals => {:mentor_request => mentor_request, :reject => is_mentor_action, :source => local_assigns[:source] } %>
+<script>
+  AbstractRequestRejectOrWithdraw.gaTrackRequestActions('<%= local_assigns[:source].to_s %>')
+</script>

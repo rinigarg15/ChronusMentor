@@ -1,0 +1,516 @@
+var MentoringModelTask = {
+  formPrefix: "#cjs-mentoring-model-task-form-",
+  descriptionPrefix: "cjs-mentoring-model-task-description-",
+  taskSectionContainer: ".cjs_task_section_container",
+
+  initialize: function(taskId) {
+    var taskForm = jQuery(MentoringModelTask.formPrefix + taskId);
+    var descriptionEditor = MentoringModelTask.descriptionPrefix + taskId;
+
+    MentoringModels.closeFormAction(taskForm);
+    MentoringModels.initializeCKEditor(descriptionEditor, {width: "410px"});
+    MentoringModelTask.formValidate(taskForm, taskId, descriptionEditor);
+    MentoringModels.toggleAdvancedOptions(taskForm);
+  },
+
+  truncateTaskTitle: function(){
+    jQuery(document).on("click", ".cjs-task-title-handler", function(){
+      var truncatedTitle = jQuery(this).find(".cjs_truncated_task_title");
+      var fullTitle = jQuery(this).find(".cjs_untruncated_task_title");
+      truncatedTitle.toggle();
+      fullTitle.toggle();
+    });
+  },
+
+  hideMenuOnOutsideClick: function() {
+    jQuery('html').on('click', function() {
+      jQuery('.cjs-add-items-dropdown').hide();
+    });
+  },
+
+  showTasksHandler: function(zeroUpcomingTasks){
+    jQuery(".cjs_tasks_list_handler_0").click();
+    jQuery(".cjs_tasks_list_handler_1").click();
+    if(zeroUpcomingTasks){
+      jQuery(".cjs_tasks_list_handler_2").click();
+    }
+  },
+
+  tasksListHandler: function(upcomingSection, pendingSection){
+    jQuery(document).on("click", ".cjs_tasks_list_handler", function(event){
+      event.preventDefault();
+      var linkObject = jQuery(this);
+      var sectionType = linkObject.data('section-type');
+      var linkObjectSection = jQuery(".cjs_tasks_list_handler_" + sectionType);
+      var sectionContainer = linkObjectSection.closest(MentoringModelTask.taskSectionContainer);
+      var descriptionEnclosure = sectionContainer.find(".cjs_section_task_list");
+
+      if(linkObjectSection.hasClass("open")){
+        linkObjectSection.removeClass("open");
+        if(sectionType == upcomingSection || sectionType == pendingSection){
+          sectionContainer.find(".cjs_add_section_task").addClass("hide");
+        }
+      }
+      else{
+        jQuery("#loading_results_" + sectionType).show();
+        var dataurl = jQuery(this).attr('data-url');
+        jQuery.ajax({
+          url: dataurl,
+          complete: function(){
+            if(sectionType == upcomingSection || sectionType == pendingSection){
+              sectionContainer.find(".cjs_add_section_task").show();
+            }
+            jQuery("#loading_results_" + sectionType).hide();
+          }
+        });
+        linkObjectSection.addClass("open");
+
+      }
+    });
+  },
+
+  showMenuOnClick: function() {
+    jQuery(document).on('click', ".cjs-add-actions-opener", function(event){
+      var clickIdentifier = jQuery(this);
+      clickIdentifier.closest('div').next('.cjs-add-items-dropdown').show();
+      if(clickIdentifier.hasClass('cjs-add-bottom-margin-on-click')) {
+        jQuery('#page_canvas').addClass('cui-add-margin-bottom-to-page-canvas');
+      }
+      event.stopPropagation();
+      return false;
+    });
+  },
+
+
+  formValidate: function(taskForm, taskId, ckSelector) {
+    taskForm.find("#mentoring_model_task_required_true").on("change", function(){
+      taskForm.find(".cjs-mentoring-model-task-due-date-container").show();
+    });
+
+    taskForm.find("#mentoring_model_task_required_false").on("change", function(){
+      taskForm.find(".cjs-mentoring-model-task-due-date-container").hide();
+    });
+
+    taskForm.find("input[type=submit]").on('click', function(){
+      MentoringModels.updateCKEditorInputs(jQuery("#" + ckSelector), ckSelector);
+      var retValue = ValidateRequiredFields.checkNonMultiInputCase(taskForm.find("#mentoring_model_task_title"));
+      if(taskForm.find("#mentoring_model_task_required_true").is(':checked')) {
+        retValue = ValidateRequiredFields.checkNonMultiInputCase(taskForm.find("#cjs-mentoring-model-task-due-date-" + taskId)) && retValue;
+      }
+      var milestonesSelectBox = taskForm.find(".cjs_milestones_select_box");
+      if(milestonesSelectBox.length){
+        if(milestonesSelectBox.val().blank()){
+          ChronusValidator.ErrorManager.ShowFieldError(milestonesSelectBox);
+          retValue = false;
+        }
+        else{
+          ChronusValidator.ErrorManager.HideFieldError(milestonesSelectBox);
+        }
+      }
+      return retValue;
+    });
+  },
+
+  appendForm: function(taskId, content){
+    var editFormEnclosure = jQuery(".cjs-task-edit-action-" + taskId);
+    MentoringModels.actionItemFormReset();
+    editFormEnclosure.append(content);
+    editFormEnclosure.find(".cjs-mentoring-model-task-form").show();
+    jQuery(".cjs-task-container-" + taskId).addClass("no-background");
+    jQuery(".cjs-task-edit-action-" + taskId).addClass("p-sm");
+  },
+
+
+  addForm: function(selector, content) {
+    MentoringModels.actionItemFormReset();
+    jQuery(selector).hide().html(content);
+    jQuery('.cjs-mentoring-model-task-form').show();
+    jQuery(selector).show();
+    jQueryScrollTo(selector, false);
+  },
+
+  toggleShowCurrentAllLinks: function() {
+    jQuery(".cjs-all-tasks-current-tasks-togglers a").toggle();
+  },
+
+  adjustBorders: function() {
+    var mode = jQuery(".cjs-display-tasks").data("mode");
+    jQuery(".cjs-sortable-list").find(".cjs-sortable-list-item .cjs-sortable-list-item-inner-container").addClass("merge-top");
+  },
+
+  initializeSortable: function() {
+    jQuery(".cjs-sortable-list").sortable({
+      items: ".cjs-sortable-list-item",
+      cancel: ".cjs-sortable-list-item-disabled",
+      handle: ".cjs-sortable-list-item-handle",
+      start: function(event, ui) {
+        jQuery(".cjs-display-tasks").data("initial-mode", jQuery(".cjs-display-tasks").data("mode"));
+        jQuery(".cjs-display-tasks").data("mode", "all");
+      },
+      stop: function(item, container, _super) {
+        MentoringModelTask.adjustBorders();
+        jQuery(".cjs-display-tasks").data("mode", jQuery(".cjs-display-tasks").data("initial-mode"));
+        var data = jQuery(this).sortable("serialize");
+        jQuery(".cjs-sortable-spinner").show();
+        jQuery.ajax({data: data, type: 'POST', url: container.item.data('update-position-url')});
+      },
+      change: function(event, ui) {
+        jQuery(ui.item).find(".cjs-sortable-list-item-inner-container").removeClass("merge-top");
+      }
+    });
+  },
+
+  initializeTaskStatusCheckbox: function(selector, urlToPost, tooltipEnabled, UnassignedTaskCompletedByPrevAssignee) {
+    var thisTaskStatusCheckbox = jQuery(selector);
+    var notOwnerText = jQuery(selector).data('disabled-text'), markedText = preJsTranslations.mentoringModelTasks.markCompleteText, unmarkText = UnassignedTaskCompletedByPrevAssignee ? preJsTranslations.mentoringModelTasks.markInCompleteForPrevAssigneeText : preJsTranslations.mentoringModelTasks.markInCompleteText;
+    thisTaskStatusCheckbox.on('click', function(){
+      var isStateChecked = jQuery(this).is(":checked");
+      jQuery.ajax({
+        url: urlToPost,
+        type: "POST",
+        data: {completed: isStateChecked}
+      });
+      jQuery(this).parent().tooltip('destroy');
+      jQuery(this).parent().tooltip({title: isStateChecked ? unmarkText : markedText, container: "body", placement: 'right'});
+    });
+    if(tooltipEnabled){
+      var initialFillText = thisTaskStatusCheckbox.is(":disabled") ? notOwnerText : thisTaskStatusCheckbox.is(":checked") ? unmarkText : markedText;
+      var tooltipElement = thisTaskStatusCheckbox.parent();
+      tooltipElement.addClass("cjs-tool-tip").data("desc", initialFillText);
+      tooltipElement.data('tooltip', false).tooltip({title: tooltipElement.data("desc"), container: "body", placement: 'right'});
+    }
+  },
+
+  initializeTaskStatusCheckboxforGroupProfile: function(selector) {
+    var thisTaskStatusCheckbox = jQuery(selector);
+    if(!isIEVersionLessThan(9)){
+      thisTaskStatusCheckbox.iCheck({
+        checkboxClass: 'icheckbox_flat-blue inline-block vertical-align-middle'
+      });
+    }
+  },
+
+  expandMentoringModelTask: function() {
+    jQuery(document).on("click", ".cjs_expand_mentoring_model_task", function(e){
+      var dataurl = jQuery(this).attr('data-url');
+      if(!jQuery(e.target).is('input') && !jQuery(e.target).is('a')){
+        jQuery.ajax({
+          url: dataurl
+        });
+      }
+    });
+  },
+
+  setButtonColor: function(selector, done){
+    var btn = jQuery(selector).find(".cjs-task-action-btn")
+    if(btn.length > 0){
+      if(done){
+        btn.addClass("btn-white")
+        btn.removeClass("btn-primary")
+      }
+      else{
+        btn.addClass("btn-primary")
+        btn.removeClass("btn-white")
+      }
+    }
+  }
+};
+
+var TaskProgressiveForm = {
+  initialize: function(formId, editAssigneeOrDueDate) {
+    TaskProgressiveForm.currentForm = jQuery('#' + formId);
+    jQuery(".cjs-menu-link-holder, .cjs-edit-content-header").show();
+    TaskProgressiveForm.editAssigneeOrDueDate = editAssigneeOrDueDate;
+    TaskProgressiveForm.currentMenu = TaskProgressiveForm.currentForm.closest("div.cjs-form-and-menu-link-container").find(".cjs-menu-link-holder, .cjs-edit-content-header");
+    TaskProgressiveForm.taskDetails = TaskProgressiveForm.currentForm.closest(".cjs-form-and-menu-link-container").next(".cjs-task-details")
+    TaskProgressiveForm.dueDateInput = TaskProgressiveForm.currentForm.find(".cjs_mentoring_model_task_due_date");
+    TaskProgressiveForm.currentMenu.hide();
+    TaskProgressiveForm.taskDetails.hide();
+    TaskProgressiveForm.cancelLink = TaskProgressiveForm.currentForm.find(".cjs-mentoring-model-cancel-btn");
+    TaskProgressiveForm.cancelLink.on('click', function() { TaskProgressiveForm.showMenuAndCloseForm();
+     });
+    TaskProgressiveForm.submitBtn = TaskProgressiveForm.currentForm.find(".cjs-mentoring-model-submit-btn");
+    TaskProgressiveForm.currentForm.on('submit', function() {
+      isRequiredTask = (TaskProgressiveForm.requiredCheckbox.is(':checked') && TaskProgressiveForm.requiredInput.val() == "true");
+      isDueDateValid = !isRequiredTask || (isRequiredTask && ValidateRequiredFields.checkNonMultiInputCase(TaskProgressiveForm.dueDateInput));
+      if(!TaskProgressiveForm.editAssigneeOrDueDate) {
+        TaskProgressiveForm.descriptionTextArea.val(TaskProgressiveForm.ckeditor.getData());
+      }
+      if(isDueDateValid) {
+        jQuery("#loading_results").show();
+        jQuery(this).trigger('submit.rails');
+        TaskProgressiveForm.showMenuAndCloseForm();
+      }
+      return false;
+    });
+    TaskTemplateProgressiveForm.handleOutsideClickMenuHiders();
+    TaskProgressiveForm.adjustTitleInput();
+    TaskProgressiveForm.handleRequiredEvents();
+    TaskProgressiveForm.descriptionTextArea = TaskProgressiveForm.currentForm.find(".cjs-task-description-input");
+    MentoringModels.initializeCKEditor(TaskProgressiveForm.descriptionTextArea.attr('id'), {width: "100%"});
+    TaskProgressiveForm.ckeditor = CKEDITOR.instances[TaskProgressiveForm.descriptionTextArea.attr('id')];
+    TaskProgressiveForm.handleAssociatedGoalDropdown();
+    TaskProgressiveForm.handleAssociatedMilestoneDropdown();
+    TaskProgressiveForm.setViewMode();
+    jQuery(window).resize(function() {
+      if(TaskProgressiveForm.associatedGoalToggler.length > 0) TaskProgressiveForm.alignAssociatedGoalDropdownContainer();
+      if(TaskProgressiveForm.associatedMilestoneToggler.length > 0) TaskProgressiveForm.alignAssociatedMilestoneDropdownContainer();
+    });
+    setTimeout(function(){jQuery(".cjs-mentoring-connections-v2-title-textbox").focus();}, 100);
+  },
+
+  setViewMode: function() {
+    var targetUserType = jQuery(".cjs-target-filter-type-holder").data("target-user-type");
+    var targetUserId = jQuery(".cjs-target-filter-type-holder").data("target-user-id");
+    TaskProgressiveForm.viewModeInput = jQuery("<input/>", {"name": "view_mode", "type": "hidden", "value": MentoringModels.viewMode});
+    TaskProgressiveForm.targetUserType = jQuery("<input/>", {"name": "target_user_type", "type": "hidden", "value": targetUserType});
+    TaskProgressiveForm.targetUserId = jQuery("<input/>", {"name": "target_user_id", "type": "hidden", "value": targetUserId});
+    TaskProgressiveForm.currentForm.prepend(TaskProgressiveForm.viewModeInput);
+    TaskProgressiveForm.currentForm.prepend(TaskProgressiveForm.targetUserId);
+    TaskProgressiveForm.currentForm.prepend(TaskProgressiveForm.targetUserType);
+  },
+
+  handleAssociatedGoalDropdown: function() {
+    TaskProgressiveForm.associatedGoalToggler = TaskProgressiveForm.currentForm.find(".cjs-associated-goal-toggler");
+    if(TaskProgressiveForm.associatedGoalToggler.length > 0) {
+      TaskProgressiveForm.associatedGoalDropdownHeader = TaskProgressiveForm.currentForm.find(".cjs-associated-goal-header");
+      TaskProgressiveForm.associatedGoalDropdownContainer = TaskProgressiveForm.currentForm.find(".cjs-associated-goal-dropdown-container");
+      TaskProgressiveForm.associatedGoalToggler.on('click', function() {
+        TaskProgressiveForm.associatedGoalDropdownContainer.toggle();
+        TaskProgressiveForm.alignAssociatedGoalDropdownContainer();
+      });
+      TaskProgressiveForm.associatedGoalDropdownItems = TaskProgressiveForm.currentForm.find(".cjs-associated-goal-dropdown-item");
+      TaskProgressiveForm.associatedGoalInput = TaskProgressiveForm.currentForm.find(".cjs-associated-goal-input");
+      TaskProgressiveForm.associatedGoalDropdownItems.css({'background-color': 'white', 'border-bottom': '1px solid #E6E6E6', 'padding': '4px'});
+      TaskProgressiveForm.associatedGoalDropdownContainer.css({'border-top': '1px solid #E6E6E6', 'border-left': '1px solid #E6E6E6', 'border-right': '1px solid #E6E6E6', 'margin-top': '2px', 'z-index': '1000'});
+      TaskProgressiveForm.associatedGoalDropdownItems.on('click', function() {
+        TaskProgressiveForm.associatedGoalDropdownContainer.hide();
+        TaskProgressiveForm.associatedGoalInput.val(jQuery(this).data('goal-id'));
+        TaskProgressiveForm.associatedGoalDropdownHeader.text(jQuery(this).text());
+      });
+    }
+  },
+
+  alignAssociatedGoalDropdownContainer: function() {
+    var offset = TaskProgressiveForm.associatedGoalToggler.offset();
+    offset.top += (TaskProgressiveForm.associatedGoalToggler.height() + 9);
+    TaskProgressiveForm.associatedGoalDropdownContainer.offset(offset);
+  },
+
+  handleAssociatedMilestoneDropdown: function() {
+    TaskProgressiveForm.associatedMilestoneToggler = TaskProgressiveForm.currentForm.find(".cjs-associated-milestone-toggler");
+    if(TaskProgressiveForm.associatedMilestoneToggler.length > 0) {
+      TaskProgressiveForm.associatedMilestoneDropdownHeader = TaskProgressiveForm.currentForm.find(".cjs-associated-milestone-header");
+      TaskProgressiveForm.associatedMilestoneDropdownContainer = TaskProgressiveForm.currentForm.find(".cjs-associated-milestone-dropdown-container");
+      TaskProgressiveForm.associatedMilestoneToggler.on('click', function() {
+        TaskProgressiveForm.associatedMilestoneDropdownContainer.toggle();
+        TaskProgressiveForm.alignAssociatedMilestoneDropdownContainer();
+      });
+      TaskProgressiveForm.associatedMilestoneDropdownItems = TaskProgressiveForm.currentForm.find(".cjs-associated-milestone-dropdown-item");
+      TaskProgressiveForm.associatedMilestoneInput = TaskProgressiveForm.currentForm.find(".cjs-associated-milestone-input");
+      TaskProgressiveForm.associatedMilestoneDropdownItems.css({'background-color': 'white', 'border-bottom': '1px solid #E6E6E6', 'padding': '4px'});
+      TaskProgressiveForm.associatedMilestoneDropdownContainer.css({'border-top': '1px solid #E6E6E6', 'border-left': '1px solid #E6E6E6', 'border-right': '1px solid #E6E6E6', 'margin-top': '2px', 'z-index': '1000'});
+      TaskProgressiveForm.associatedMilestoneDropdownItems.on('click', function() {
+        TaskProgressiveForm.associatedMilestoneDropdownContainer.hide();
+        TaskProgressiveForm.associatedMilestoneInput.val(jQuery(this).data('milestone-id'));
+        TaskProgressiveForm.associatedMilestoneDropdownHeader.text(jQuery(this).text());
+      });
+    }
+  },
+
+  alignAssociatedMilestoneDropdownContainer: function() {
+    var offset = TaskProgressiveForm.associatedMilestoneToggler.offset();
+    offset.top += (TaskProgressiveForm.associatedMilestoneToggler.height() + 9);
+    TaskProgressiveForm.associatedMilestoneDropdownContainer.offset(offset);
+  },
+
+  showMenuAndCloseForm: function() {
+    if(TaskProgressiveForm.currentMenu) TaskProgressiveForm.currentMenu.show();
+    if(TaskProgressiveForm.taskDetails) TaskProgressiveForm.taskDetails.show();
+    if(TaskProgressiveForm.ckeditor) { TaskProgressiveForm.ckeditor.destroy(true); }
+    if(TaskProgressiveForm.currentForm){
+      TaskProgressiveForm.currentForm.closest(".cjs-form-and-menu-link-container").removeClass("no-background");
+      TaskProgressiveForm.currentForm.closest(".cjs-sortable-list-item-inner-container").removeClass("p-sm");
+      TaskProgressiveForm.currentForm.remove();
+    }
+  },
+
+  adjustTitleInput: function() {
+    TaskProgressiveForm.titleinputBox = TaskProgressiveForm.currentForm.find(".cjs-title-input-box");
+    TaskProgressiveForm.titleinputBox.css({'position': 'relative', 'top': '-2px'});
+  },
+
+  handleRequiredEvents: function() {
+    TaskProgressiveForm.requiredInput = TaskProgressiveForm.currentForm.find('.cjs-mentoring-model-task-required-input');
+    TaskProgressiveForm.requiredCheckbox = TaskProgressiveForm.currentForm.find('.cjs-mentoring-model-task-required-checkbox');
+    TaskProgressiveForm.showOnTrueDoms = TaskProgressiveForm.currentForm.find('.cjs-task-required-checkbox-true');
+    if(TaskProgressiveForm.requiredCheckbox.val() == 'true') {
+      TaskProgressiveForm.requiredInput.val('true');
+      TaskProgressiveForm.requiredCheckbox.prop('checked', true);
+      TaskProgressiveForm.showOnTrueDoms.show();
+    } else {
+      TaskProgressiveForm.requiredInput.val('false');
+      TaskProgressiveForm.requiredCheckbox.prop('checked', false);
+      TaskProgressiveForm.showOnTrueDoms.hide();
+    }
+    TaskProgressiveForm.requiredCheckbox.on('click', function() {
+      var thisElement = jQuery(this);
+      if (thisElement.is(':checked')) {
+        TaskProgressiveForm.showOnTrueDoms.show();
+        TaskProgressiveForm.requiredInput.val('true');
+        TaskProgressiveForm.requiredCheckbox.prop('checked', true);
+      } else {
+        TaskProgressiveForm.showOnTrueDoms.hide();
+        TaskProgressiveForm.requiredInput.val('false');
+        TaskProgressiveForm.requiredCheckbox.prop('checked', false);
+      }
+    });
+  }
+};
+
+var TaskComment = {
+
+  inspectAttachFile: function(){
+    jQuery(".cjs-task-comment-attachment-link").on("click", function(){
+      jQuery(this).toggleClass("muted");
+      var taskId = jQuery(this).data("taskId");
+      jQuery("#cjs-task-comment-attachment-"+taskId).toggle();
+    });
+  },
+
+  showHideCommentForm: function(taskId, homePageView){
+    jQuery(document).on("click", ".cjs_add_task_comment_sidepane", function(){
+      MentoringAreaTracking.gaTrackTaskCommentClicked(homePageView);
+      jQuery('.cjs_add_task_comment_sidepane').hide();
+      jQuery('.cjs_add_comment_or_checkin_link').hide();
+      jQuery('.cjs_new_comment_and_checkin_form_container').show();
+      jQuery('#new-checkin-container-' + taskId).hide();
+      jQuery('#new-comment-container-' + taskId).show();
+      jQuery("#mentoring_model_task_comment_content_" + taskId).focus();
+      GroupTabs.scrollToSidebarBottom('.cjs_comment_form_container');
+    })
+    jQuery(document).on("click", ".cjs_comment_cancel", function(){
+      jQuery('.cjs_add_task_comment_sidepane').show();
+      jQuery('.cjs_add_comment_or_checkin_link').show();
+      jQuery('.cjs_new_comment_and_checkin_form_container').hide();
+    })
+  },
+
+  toggleNewCommentForm: function(homePageView){
+    jQuery(document).on("click", ".cjs-toggle-new-comment-form", function(){
+      var taskId = jQuery(this).data("taskId");
+      MentoringAreaTracking.gaTrackTaskCommentClicked(homePageView);
+      if(jQuery('#mentoring_model_task_sidepane_' + taskId).length == 0){
+        var dataurl = jQuery(this).attr('data-url');
+        jQuery.ajax({
+            url: dataurl,
+            beforeSend: function(){
+              jQuery("#loading_results").show();
+            },
+            complete: function(){
+              jQuery('#new-checkin-container-' + taskId).hide();
+              TaskComment.resetNewCommentForm(taskId);
+              jQuery(".cjs_add_comment_or_checkin_link").hide();
+              jQuery('.cjs_add_task_comment_sidepane').hide();
+              jQuery('.cjs_new_comment_and_checkin_form_container').show();
+              jQuery('#new-comment-container-' + taskId).show();
+              setTimeout(function() {
+                jQuery("#mentoring_model_task_comment_content_"+taskId).focus();
+                GroupTabs.scrollToSidebarBottom('.cjs_comment_form_container');
+              }, 500);
+              jQuery("#loading_results").hide();
+          }
+        });
+      }
+      else{
+        jQuery('#new-checkin-container-' + taskId).hide();
+        jQuery('.cjs_add_task_comment_sidepane').click();
+      }
+    });
+  },
+  resetNewCommentForm: function(taskId){
+    jQuery('#new-comment-container-' + taskId + ' .mentoring_model_task_comment_content').val('');
+    jQuery('#new-comment-container-' + taskId + ' #mentoring_model_task_comment_attachment').val('');
+  }
+};
+
+var TaskCheckin = {
+
+  showHideCheckinForm: function(taskId){
+    jQuery(document).on("click", ".cjs_add_task_checkin_sidepane", function(){
+      jQuery('.cjs_add_task_comment_sidepane').hide();
+      jQuery('.cjs_add_comment_or_checkin_link').hide()
+      jQuery('.cjs_new_comment_and_checkin_form_container').show();
+      jQuery('#new-checkin-container-' + taskId).show();
+      jQuery('#new-comment-container-' + taskId).hide();
+    });
+    jQuery(document).on("click", ".cjs_cancel_checkin", function(){
+      jQuery('.cjs_new_comment_and_checkin_form_container').hide();
+      jQuery('.cjs_add_comment_or_checkin_link').show();
+      jQuery('.cjs_add_task_comment_sidepane').show();
+    });
+  },
+
+  toggleNewCheckInForm: function(){
+    jQuery(document).on("click", ".cjs-toggle-checkin-form", function(){
+      var taskId = jQuery(this).data("taskId");
+      if(jQuery('#task_'+taskId+'_show_container').length == 0){
+        var dataUrl = jQuery(this).attr('data-url');
+        jQuery.ajax({
+          url: dataUrl,
+          beforeSend: function(){
+            jQuery("#loading_results").show();
+          },
+          complete: function(){
+            TaskCheckin.showCheckInForm(taskId);
+            jQuery(".cjs_add_comment_or_checkin_link").hide();
+            GroupTabs.scrollToSidebarBottom('.cjs_checkin_form_container');
+          }
+        });
+      }
+      else {
+        TaskCheckin.showCheckInForm(taskId);
+      }
+    });
+  },
+
+  showCheckInForm: function(taskId){
+    jQuery('.cjs_add_task_comment_sidepane').hide()
+    jQuery('.cjs_new_comment_and_checkin_form_container').show();
+    TaskCheckin.resetCheckInForm(taskId);
+    jQuery('#new-checkin-container-' + taskId).show();
+    jQuery('#new-comment-container-' + taskId).hide();
+    jQuery("#loading_results").hide();
+  },
+
+  resetCheckInForm: function(taskId){
+    jQuery('#new-checkin-container-' + taskId + ' #checkin_comment_' + taskId + '_').val('');
+    jQuery('#new-checkin-container-' + taskId + ' #checkin_hours_' + taskId + '_').val('0');
+    jQuery('#new-checkin-container-' + taskId + ' #checkin_minutes_' + taskId + '_').val('30');
+    var currentDate = jQuery('#new-checkin-container-' + taskId + ' #checkin_date_' + taskId + '_').data('current-date');
+    jQuery('#checkin_' + taskId + '_new_form_container' + ' #checkin_date_' + taskId + '_').data("kendoDatePicker").value(currentDate);
+  },
+
+  validateCheckInForm: function(taskId, checkinId, formType){
+    jQuery('#checkin_' + taskId + '_' + formType + '_form_container').submit(function(){
+      var hours = jQuery('.cjs-' + formType + '-checkin-form #checkin_hours_' + taskId + '_' + checkinId).val();
+      var minutes = jQuery('.cjs-' + formType + '-checkin-form #checkin_minutes_' + taskId + '_' + checkinId).val();
+      var date = jQuery('.cjs-' + formType + '-checkin-form #checkin_date_' + taskId + '_' + checkinId).val();
+      errorDiv = formType + "_checkin_duration_error_" + taskId + '_' + checkinId
+      var errorFlashMessage = "";
+      if(hours == 0 && minutes == 0) {
+        errorFlashMessage = GroupCheckinTranslations.ZeroDurationError;
+      }
+      if(date == "") {
+        errorFlashMessage = GroupCheckinTranslations.EmptyDetails;
+      }
+
+      if(errorFlashMessage.length > 0){
+        ChronusValidator.ErrorManager.ShowResponseFlash(errorDiv, errorFlashMessage);
+        return false;
+      }
+      else
+        return true;
+    });
+  }
+};
